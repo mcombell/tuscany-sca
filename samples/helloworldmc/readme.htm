@@ -1,0 +1,151 @@
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Tuscany Hello World Multi-Component Sample</title>
+    <!-- LINK rel="stylesheet" href="ait.css" type="text/css" --></head>
+
+<body>
+
+<h2>Tuscany Hello World Multi-Component Sample</h2>
+
+<h3>Overview</h3>
+
+<p>The Tuscany hello world multi-component sample shows using the Tuscany SCA
+    runtime in a J2SE environment &nbsp;loading a component that
+    implements the classic introductory hello world example. This sample
+    shows the wiring of &nbsp;multiple components in a single SCA module. </p>
+
+
+<h3>Setup</h3>The jars for a <a href="../readme.htm#J2SE_setup" target="_blank">J2SE setup</a> &nbsp;not requiring web
+services are required including the sample's own jar <span style="font-weight: bold;">tuscany-samples-helloworldmc-SNAPSHOT.jar</span>.
+
+<h3>Running</h3>
+Using JDK 1.5 java command with the previous jars run the class
+org.apache.tuscany.samples.helloworldmc.HelloWorldServiceComponentImpl<br>
+
+<h3>Results</h3>
+
+<p>The sample when run should simply display to the standard
+    output:<br>
+
+    <code>Hello SCA World</code></p>
+
+
+<h3>Code Overview</h3>
+
+The source files are physically organized as shown below:<br>
+
+<table style="text-align: left; width: 1206px; height: 238px;" border="1" cellpadding="2" cellspacing="2">
+
+    <tbody>
+
+        <tr>
+
+            <td>
+                <pre>main<br>+---java<br>    &brvbar;   sca.module<br>    &brvbar;<br> +---org<br> +---apache<br>
+                    +---tuscany<br> +---samples<br> +---helloworldmc<br> GreetingPortionProvider.java<br>
+                    GreetingPortionProviderImpl.java<br> HelloWorldServiceComponent.java<br>
+                    HelloWorldServiceComponentImpl.java<br><br></pre>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+</table>
+
+<br>
+
+<p>&nbsp;</p>
+
+<table style="text-align: left; width: 100%; height: 154px;" border="0" cellpadding="2" cellspacing="2">
+
+    <tbody>
+
+        <tr>
+
+            <td style="vertical-align: top;">sca.module</td>
+
+            <td>Defines the SCA module and&nbsp; the
+                <span style="font-weight: bold;">HelloWorldServiceComponent</span>,&nbsp;
+                <span style="font-weight: bold;">GreetingPrefixComponent</span>
+                and&nbsp;<span style="font-weight: bold;">GreetingSuffixComponent
+      </span>components&nbsp; Wires the <span style="font-weight: bold;">HelloWorldServiceComponent</span>
+                to reference the&nbsp;<span style="font-weight: bold;">GreetingPrefixComponent</span>
+                and <span style="font-weight: bold;">GreetingSuffixComponent</span>.
+                &nbsp;Customizes the&nbsp;<span style="font-weight: bold;">GreetingPrefixComponent</span>
+                and <span style="font-weight: bold;">GreetingSuffixComponent</span>
+                components with the greetings.&nbsp; &nbsp; &nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+            <td style="vertical-align: top;">GreetingPortionProvider.java</td>
+
+            <td>Defines the Java interface implemented by the
+                component. <span style="font-weight: bold;">GreetingPrefixComponent</span>
+                and <span style="font-weight: bold;">GreetingSuffixComponent</span></td>
+
+        </tr>
+
+        <tr>
+
+            <td style="vertical-align: top;">GreetingPortionProviderImpl.java</td>
+
+            <td>Implements the SCA components <span style="font-weight: bold;">GreetingPrefixComponent</span>
+                and&nbsp;<span style="font-weight: bold;">GreetingSuffixComponent</span>
+                . Uses the SCA service
+                annotation tag on the class to show what SCA interface is being
+                implemented. Uses the SCA defined <span style="font-weight: bold;">Property</span>
+                Java annotation on the <code>greetingPortion </code>Java
+                field to customize the component in the sca.module file.</td>
+
+        </tr>
+
+        <tr>
+
+            <td style="vertical-align: top;">HelloWorldServiceComponent.java</td>
+
+            <td>Defines the Java interface implemented by the
+                component. <span style="font-weight: bold;">HelloWorldServiceComponent</span>.&nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+            <td style="white-space: nowrap;">HelloWorldServiceComponentImpl.java&nbsp;<br>
+
+            </td>
+
+            <td>Implements the <span style="font-weight: bold;">HelloWorldServiceComponent</span>
+                component. Shows two Java fields being used to reference the
+                and&nbsp;<span style="font-weight: bold;">GreetingPrefixComponentGreetingSuffixComponent</span>
+                components.</td>
+
+        </tr>
+
+    </tbody>
+</table>
+
+<br>
+
+</body></html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<html><head>
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type"> <meta content="text/css" http-equiv="Content-Style-Type"><title>Tuscany Samples</title><!-- LINK rel="stylesheet" href="ait.css" type="text/css" --></head>
+<body><h2>Tuscany&nbsp;Samples</h2><br><h3>Setup</h3><h4><a name="J2SE_setup"></a>J2SE
+setup</h4>Samples&nbsp;not requiring invoking web services
+need at least the following jars in their classpath<br><a name="#J2SEJARSNWS"></a><pre style="margin-left: 40px;">tuscany-container-java-SNAPSHOT.jar<br>tuscany-core-SNAPSHOT.jar<br>tuscany-model-SNAPSHOT.jar<br>tuscany-common-SNAPSHOT.jar<br>sca-api-SNAPSHOT.jar<br>axis-wsdl4j-1.5.1.jar<br>commonj-sdo-2.1.0.jar<br>emf-common-2.1.0.jar<br>emf-ecore-2.1.0.jar<br>emf-ecore-change-2.1.0.jar<br>emf-ecore-sdo-2.1.1.jar<br>emf-ecore-xmi-2.1.0.jar<br>wsdl-0.7.jar<br>xsd-2.1.1.jar<br></pre>The
+following jars will also be needed if your runtime will be using web
+services:<br><div style="margin-left: 40px;">axis-1.2.1.jar<br>axis-jaxrpc-1.2.1.jar<br>axis-saaj-1.2.1.jar<br>commons-discovery-0.2.jar<br>commons-logging-1.0.4.jar<br>tuscany-binding-axis-SNAPSHOT.jar<br><br></div><h4><a name="Tomcat_Setup"></a>Tomcat
+Setup</h4>
+<p>The setup and configuration of &nbsp;the
+Tomcat web server is a little more complex. &nbsp;If you are not
+interested in the details the easiest means of &nbsp;configuring
+this environment is by running the the<a href="../acceptance/readme.htm" target="_blank">
+Tuscany acceptance tests</a> that will configure a server that is
+ready to run the samples and deploy your own SCA applications..</p><p>For
+any other&nbsp;SCA application that is run in a Tomcat environment,
+package it&nbsp;as a standard J2EE war file and deploy it as
+usual. For
+Tomcat this is simply done by copying them to its webapps
+directory.&nbsp; </p><p>The
+details:</p>
+<ul compact="compact"><li>Unzip
+Tomcat to acceptance\target\apache-tomcat-5.5.12 </li><li>Add
+org.apache.Tuscany.tomcat.lifecycle.listener.TomcatServerLifecycleListener
+to conf\server.xml<br>
+<table style="width: 100%; text-align: left; margin-left: auto; margin-right: auto;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="background-color: rgb(204, 204, 204);"><code>Add
+this line after Server element:<br>&lt;Listener
+className="org.apache.tuscany.tomcat.lifecycle.listener.TomcatServerLifecycleListener"/&gt;</code></td></tr></tbody>
+</table></li>
+<li>Add
+org.apache.Tuscany.tomcat.lifecycle.listener.TomcatWebAppLifecycleListener
+to conf\context.xml<br>
+<table style="width: 100%; text-align: left; margin-left: auto; margin-right: auto;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="background-color: rgb(204, 204, 204);"><code>Add
+this line after Context element:<br>&lt;Listener
+className="org.apache.tuscany.tomcat.lifecycle.listener.TomcatWebAppLifecycleListener"/&gt;</code></td></tr></tbody>
+</table></li><li>Copy all the runtime jars
+needed for the J2SE environment listed above (including those needed
+for web services)&nbsp; to Tomcat's common\lib directory</li><li>Copy
+tuscany-tomcat-SNAPSHOT.jar to Tomcat's server\lib directory.</li><li>For
+the samples copy their war files to Tomcat's webapps
+directory.</li></ul>
+<h3>Sample Summary</h3>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2"><caption style="text-decoration: underline;">Tuscany
+samples summary</caption><tbody>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworld/readme.htm" target="_blank">helloworld</a></td><td>Shows
+using the Tuscany SCA runtime in a J2SE environment &nbsp;loading a
+component.<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldaxis/readme.htm" target="_blank">helloworldaxis</a>&nbsp;</td><td>This&nbsp;&nbsp;sample
+is not an SCA application.&nbsp;The purpose for it's inclusion
+in the samples is to demonstrate the interoperability of
+&nbsp;Tuscany's web service binding with another SOAP
+implementation.<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldaxissvc/readme.htm" target="_blank">helloworldaxissvc</a>&nbsp;</td><td>This
+sample generates the war for the Axis implemented hello world sample.
+&nbsp;It is not an SCA application.<br>&nbsp;</td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldmc/readme.htm" target="_blank">helloworldmc</a>&nbsp;</td><td>This
+sample shows in a J2SE environment the wiring of multiple components
+and customizing components.<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldweb/readme.htm" target="_blank">helloworldweb</a>&nbsp;</td><td>This
+sample shows in a J2EE environment using SCA components to handle HTML
+forms.<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="customers/readme.htm" target="_blank">customers</a>&nbsp;</td><td>This sample is a variation on 'HelloWorldWeb' and employs 
+the Relational Database Data Access Service to read customer records from a Derby database.
+<br><br></td></tr><tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldws/readme.htm" target="_blank">helloworldws</a>&nbsp;</td><td>Sample
+shows using the Tuscany SCA runtime in a Tomcat&nbsp; environment providing a
+web service&nbsp;<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;"><a href="helloworldwsclient/readme.htm" target="_blank">helloworldwsclient</a>&nbsp;</td><td>Sample
+shows using the Tuscany SCA runtime in a J2SE environment using a
+web service&nbsp;<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;">bigbank.account&nbsp;</td><td>Sample
+contains an implementation of the bigbank.account module; see "Building
+Your First Application" document.
+&nbsp;<br><br></td></tr>
+<tr><td style="vertical-align: top; white-space: nowrap;">bigbank.webclient&nbsp;</td><td>Sample
+contains an implementation of the bigbank.webclient module; see
+"Building Your First Application" document.
+&nbsp;<br><br></td></tr>
+</tbody></table><br></body></html>
