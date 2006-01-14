@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+  <Table name="CUSTOMER" propertyName="Customer">
+    <Column name="ID" propertyName="id" primaryKey="true"/>
+    <Column name="LASTNAME" propertyName="lastname"/>
+    <Column name="ADDRESS" propertyName="address"/>
+  </Table>
+</Config>

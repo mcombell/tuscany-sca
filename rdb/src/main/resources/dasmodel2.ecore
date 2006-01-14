@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="config"
+    nsURI="http:///org.apache.tuscany.das.rdb/config.xsd" nsPrefix="org.apache.tuscany.das.rdb.config">
+  <eClassifiers xsi:type="ecore:EClass" name="Config">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="CommandConfig" upperBound="-1"
+        eType="#//CommandConfig" containment="true" eOpposite="#//CommandConfig/Config"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ConnectionProperties" eType="#//ConnectionProperties"
+        containment="true" eOpposite="#//ConnectionProperties/Config"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Table" upperBound="-1"
+        eType="#//Table" containment="true" eOpposite="#//Table/Config"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relationship" upperBound="-1"
+        eType="#//Relationship" containment="true" eOpposite="#//Relationship/Config"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandConfig">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Config" eType="#//Config"
+        transient="true" eOpposite="#//Config/CommandConfig"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ParameterConfig" upperBound="-1"
+        eType="#//ParameterConfig" containment="true" eOpposite="#//ParameterConfig/CommandConfig"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ResultDescriptor" upperBound="-1"
+        eType="#//ResultDescriptor" containment="true" eOpposite="#//ResultDescriptor/CommandConfig"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionProperties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverUserName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Config" eType="#//Config"
+        transient="true" eOpposite="#//Config/ConnectionProperties"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterConfig">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="CommandConfig" eType="#//CommandConfig"
+        transient="true" eOpposite="#//CommandConfig/ParameterConfig"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryKeyTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foreignKeyTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="many" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Config" eType="#//Config"
+        transient="true" eOpposite="#//Config/Relationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="KeyPair" upperBound="-1"
+        eType="#//KeyPair" containment="true" eOpposite="#//KeyPair/Relationship"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="create" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="update" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Config" eType="#//Config"
+        transient="true" eOpposite="#//Config/Table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Column" upperBound="-1"
+        eType="#//Column" containment="true" eOpposite="#//Column/Table"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyPair">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryKeyColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foreignKeyColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relationship" eType="#//Relationship"
+        transient="true" eOpposite="#//Relationship/KeyPair"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="converterClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Table" eType="#//Table"
+        transient="true" eOpposite="#//Table/Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResultDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="converter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="CommandConfig" eType="#//CommandConfig"
+        transient="true" eOpposite="#//CommandConfig/ResultDescriptor"/>
+  </eClassifiers>
+</ecore:EPackage>

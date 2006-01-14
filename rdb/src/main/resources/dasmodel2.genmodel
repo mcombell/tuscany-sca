@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/temp.config/src"
+    modelPluginID="temp.config" modelName="Dasmodel2" importerID="org.eclipse.emf.importer.rose">
+  <foreignModel>dasmodel2.mdl</foreignModel>
+  <genPackages prefix="Config" basePackage="org.apache.tuscany.das.rdb" disposableProviderFactory="true"
+      ecorePackage="dasmodel2.ecore#/">
+    <genClasses ecoreClass="dasmodel2.ecore#//Config">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Config/uri"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Config/CommandConfig"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Config/ConnectionProperties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Config/Table"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Config/Relationship"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//CommandConfig">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//CommandConfig/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//CommandConfig/SQL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//CommandConfig/kind"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//CommandConfig/Config"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//CommandConfig/ParameterConfig"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//CommandConfig/ResultDescriptor"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//ConnectionProperties">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ConnectionProperties/dataSource"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ConnectionProperties/driverClassName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ConnectionProperties/driverURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ConnectionProperties/driverPassword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ConnectionProperties/driverUserName"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//ConnectionProperties/Config"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//ParameterConfig">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ParameterConfig/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ParameterConfig/type"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//ParameterConfig/CommandConfig"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//Relationship">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Relationship/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Relationship/primaryKeyTable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Relationship/foreignKeyTable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Relationship/many"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//Relationship/Config"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Relationship/KeyPair"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//Table">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Table/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Table/propertyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Table/create"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Table/update"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Table/delete"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//Table/Config"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dasmodel2.ecore#//Table/Column"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//KeyPair">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//KeyPair/primaryKeyColumn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//KeyPair/foreignKeyColumn"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//KeyPair/Relationship"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//Column">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/propertyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/converterClassName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/primaryKey"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/generated"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//Column/collision"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//Column/Table"/>
+    </genClasses>
+    <genClasses ecoreClass="dasmodel2.ecore#//ResultDescriptor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ResultDescriptor/columnName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ResultDescriptor/tableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ResultDescriptor/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dasmodel2.ecore#//ResultDescriptor/converter"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference dasmodel2.ecore#//ResultDescriptor/CommandConfig"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

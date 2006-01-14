@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+
+  <Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
+      <KeyPair>
+        <primaryKeyColumn>ID</primaryKeyColumn>
+        <foreignKeyColumn>COMPANYID</foreignKeyColumn>
+      </KeyPair>
+  </Relationship>
+  
+  <Relationship name="employees" primaryKeyTable="DEPARTMENT" foreignKeyTable="EMPLOYEE" many="true">
+  		<KeyPair>
+  			<primaryKeyColumn>ID</primaryKeyColumn>
+  			<foreignKeyColumn>DEPARTMENTID</foreignKeyColumn>
+  		</KeyPair>
+  </Relationship>
+  
+  <Table name="COMPANY" propertyName="CompanyType">
+    <Column name="ID" primaryKey="true"/>
+  </Table>
+  
+  <Table name="DEPARTMENT" propertyName="DepartmentType">
+    <Column name="ID" primaryKey="true"/>
+  </Table>
+  <Table name="EMPLOYEE" propertyName="EmployeeType">
+  	  <Column name="ID" primaryKey="true"/>
+  </Table>
+  
+</Config>

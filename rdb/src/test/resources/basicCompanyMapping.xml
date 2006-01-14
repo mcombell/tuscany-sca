@@ -1,0 +1,6 @@
+<Config>
+	<Table name="COMPANY">
+		<Column name="ID" primaryKey="true" generated="true"/>
+		<Column name="NAME"/>
+	</Table>
+</Config>

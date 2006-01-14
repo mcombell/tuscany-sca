@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+ <!-- <connection>
+  	<URL>jdbc:db2:DASTEST</URL>
+  	<driverName>com.ibm.db2.jcc.DB2Driver</driverName>
+  </connection> -->
+  
+  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
+  	<KeyPair>
+        <primaryKeyColumn>ID</primaryKeyColumn>
+        <foreignKeyColumn>CUSTOMER_ID</foreignKeyColumn>
+      </KeyPair>
+  </Relationship>
+  
+  <Table name="CUSTOMER" propertyName="Customer">
+    <Column name="ID" propertyName="iD" primaryKey="true"/>
+  </Table>
+  
+  <Table name="ANORDER" propertyName="AnOrder">
+  	<Column name="CUSTOMER_ID" propertyName="customerID"/>
+    <Column name="ID" propertyName="iD" primaryKey="true"/>
+  </Table>
+  
+</Config>
+

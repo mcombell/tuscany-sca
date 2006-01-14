@@ -1,0 +1,21 @@
+<Config>
+  <Relationship name="cities" primaryKeyTable="STATES" foreignKeyTable="CITIES" many="true">
+      <KeyPair>
+        <primaryKeyColumn>ID</primaryKeyColumn>
+        <foreignKeyColumn>STATE_ID</foreignKeyColumn>
+      </KeyPair>
+  </Relationship>
+  
+	<Table name="STATES">
+		<Column name="ID" primaryKey="true"/>
+		<Column name="NAME"/>
+	</Table>
+	
+	<Table name="CITIES">
+		
+		<Column name="ID" primaryKey="true"/>
+		<Column name="NAME"/>
+		<Column name="STATE_ID"/>
+	
+	</Table>
+</Config>

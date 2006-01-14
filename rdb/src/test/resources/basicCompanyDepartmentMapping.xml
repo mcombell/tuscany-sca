@@ -1,0 +1,17 @@
+<Config>
+  <Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
+      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="COMPANYID"/>
+  </Relationship>
+  
+	<Table name="COMPANY">
+		<Column name="ID" primaryKey="true" generated="true"/>
+		<Column name="NAME"/>
+	</Table>
+	<Table name="DEPARTMENT">
+		<Column name="ID" primaryKey="true" generated="true"/>
+		<Column name="NAME"/>
+		<Column name="NUMBER"/>
+		<Column name="COMPANYID"/>
+		<Column name="EOTM"/>
+	</Table>
+</Config>

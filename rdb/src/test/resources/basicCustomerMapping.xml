@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+<!--  <connection>
+  	<URL>jdbc:db2:DASTEST</URL>
+  	<driverName>com.ibm.db2.jcc.DB2Driver</driverName>
+  </connection> -->
+  
+  <Table name="CUSTOMER">
+    <Column name="ID" primaryKey="true"/>
+    <Column name="LASTNAME"/>
+    <Column name="ADDRESS"/> 
+  </Table>
+</Config>

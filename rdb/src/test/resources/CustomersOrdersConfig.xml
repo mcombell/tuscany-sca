@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+
+  <CommandConfig name="all customers" SQL="select * from CUSTOMER" kind = "Select" />
+  
+  <CommandConfig name="customer and orders" SQL="select * from CUSTOMER left join ANORDER on CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID" kind = "Select">
+    <ParameterConfig name=":ID"/>
+  </CommandConfig>
+
+  <CommandConfig name="order by id" SQL="select * from ANORDER where ANORDER.ID = :ID" kind = "Select">
+    <ParameterConfig name=":ID"/>
+  </CommandConfig>
+
+  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true" >
+      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="CUSTOMER_ID" />
+  </Relationship>
+
+  <Table name="CUSTOMER">
+  	<Column name="ID" primaryKey="true"/>
+  </Table>
+
+  <Table name="ANORDER">
+  	<Column name="ID" primaryKey="true"/>
+  </Table>
+  
+</Config>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+  <Table name="CUSTOMER">
+    <Column name="ID" primaryKey="true"/>
+    <Column name="LASTNAME"/>
+    <Column name="ADDRESS"/>
+    <create>insert into customer values blah (:ID, :LASTNAME, :ADDRESS)</create>
+    <update>update customer set blah lastname = :LASTNAME, address = :ADDRESS where ID = :ID</update>
+    <delete>delete from customer blah where ID = :ID</delete>
+  </Table>
+</Config>

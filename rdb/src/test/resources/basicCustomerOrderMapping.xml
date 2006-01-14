@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config>
+  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
+      <KeyPair>
+        <primaryKeyColumn>ID</primaryKeyColumn>
+        <foreignKeyColumn>CUSTOMER_ID</foreignKeyColumn>
+      </KeyPair>
+  </Relationship>
+  <Table name="CUSTOMER">
+  	<Column name="ID" primaryKey="true"/>
+  </Table>
+  <Table name="ANORDER">
+  	<Column name="ID" primaryKey="true"/>
+  	<Column name="CUSTOMER_ID"/>
+  </Table>
+  
+</Config>
+
