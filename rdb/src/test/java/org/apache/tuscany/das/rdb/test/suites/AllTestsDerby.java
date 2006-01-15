@@ -21,7 +21,7 @@ import org.apache.tuscany.das.rdb.test.framework.DerbySetup;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AllTestsDerby {
+public class AllTestsDerby extends TestSuite {
 	
 	
 	public static Test suite() {
