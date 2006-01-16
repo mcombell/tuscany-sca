@@ -16,6 +16,8 @@
  */
 package org.apache.tuscany.das.rdb.test.framework;
 
+import java.util.Properties;
+
 import junit.framework.Test;
 
 public class DerbySetup extends DatabaseSetup {
@@ -26,6 +28,11 @@ public class DerbySetup extends DatabaseSetup {
 
 	protected void initConnectionProtocol() {
 		
+		//Set the derby property to explicitly specify the database location relative 
+                //from current directory to "target"
+		Properties p = System.getProperties();
+		p.put("derby.system.home", "target");
+
 		platformName = "Derby";
 		driverName = "org.apache.derby.jdbc.EmbeddedDriver";
 		databaseURL = "jdbc:derby:dastest; create = true";
