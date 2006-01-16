@@ -104,7 +104,9 @@ public class DatabaseSetup extends TestSetup {
             try {
                 s.execute(statements[i]);
             } catch (SQLException e) {
-                e.printStackTrace();
+            	//If the table does not exist then ignore the exception on drop
+            	if (!e.getMessage().contains("does not exist"))
+                    throw new RuntimeException(e);
             }
         }
     }
@@ -125,7 +127,9 @@ public class DatabaseSetup extends TestSetup {
             try {
                 s.execute(statements[i]);
             } catch (SQLException e) {
-                e.printStackTrace();
+            	//If the proc does not exist then ignore the exception on drop
+            	if (!e.getMessage().contains("does not exist"))
+                    throw new RuntimeException(e);
             }
         }
     }
