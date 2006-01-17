@@ -1,37 +1,32 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config.impl;
 
 import java.util.Collection;
 
-import org.apache.tuscany.das.rdb.config.CommandConfig;
+import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -43,7 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getUri <em>Uri</em>}</li>
- *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getCommandConfig <em>Command Config</em>}</li>
+ *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getCommand <em>Command</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getConnectionProperties <em>Connection Properties</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getTable <em>Table</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ConfigImpl#getRelationship <em>Relationship</em>}</li>
@@ -74,14 +69,14 @@ public class ConfigImpl extends EObjectImpl implements Config {
 	protected String uri = URI_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getCommandConfig() <em>Command Config</em>}' containment reference list.
+	 * The cached value of the '{@link #getCommand() <em>Command</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCommandConfig()
+	 * @see #getCommand()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList commandConfig = null;
+	protected EList command = null;
 
 	/**
 	 * The cached value of the '{@link #getConnectionProperties() <em>Connection Properties</em>}' containment reference.
@@ -157,11 +152,11 @@ public class ConfigImpl extends EObjectImpl implements Config {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getCommandConfig() {
-		if (commandConfig == null) {
-			commandConfig = new EObjectContainmentWithInverseEList(CommandConfig.class, this, ConfigPackage.CONFIG__COMMAND_CONFIG, ConfigPackage.COMMAND_CONFIG__CONFIG);
+	public EList getCommand() {
+		if (command == null) {
+			command = new EObjectContainmentWithInverseEList(Command.class, this, ConfigPackage.CONFIG__COMMAND, ConfigPackage.COMMAND__CONFIG);
 		}
-		return commandConfig;
+		return command;
 	}
 
 	/**
@@ -239,8 +234,8 @@ public class ConfigImpl extends EObjectImpl implements Config {
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, Class baseClass, NotificationChain msgs) {
 		if (featureID >= 0) {
 			switch (eDerivedStructuralFeatureID(featureID, baseClass)) {
-				case ConfigPackage.CONFIG__COMMAND_CONFIG:
-					return ((InternalEList)getCommandConfig()).basicAdd(otherEnd, msgs);
+				case ConfigPackage.CONFIG__COMMAND:
+					return ((InternalEList)getCommand()).basicAdd(otherEnd, msgs);
 				case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 					if (connectionProperties != null)
 						msgs = ((InternalEObject)connectionProperties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ConfigPackage.CONFIG__CONNECTION_PROPERTIES, null, msgs);
@@ -266,8 +261,8 @@ public class ConfigImpl extends EObjectImpl implements Config {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, Class baseClass, NotificationChain msgs) {
 		if (featureID >= 0) {
 			switch (eDerivedStructuralFeatureID(featureID, baseClass)) {
-				case ConfigPackage.CONFIG__COMMAND_CONFIG:
-					return ((InternalEList)getCommandConfig()).basicRemove(otherEnd, msgs);
+				case ConfigPackage.CONFIG__COMMAND:
+					return ((InternalEList)getCommand()).basicRemove(otherEnd, msgs);
 				case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 					return basicSetConnectionProperties(null, msgs);
 				case ConfigPackage.CONFIG__TABLE:
@@ -290,8 +285,8 @@ public class ConfigImpl extends EObjectImpl implements Config {
 		switch (eDerivedStructuralFeatureID(eFeature)) {
 			case ConfigPackage.CONFIG__URI:
 				return getUri();
-			case ConfigPackage.CONFIG__COMMAND_CONFIG:
-				return getCommandConfig();
+			case ConfigPackage.CONFIG__COMMAND:
+				return getCommand();
 			case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 				return getConnectionProperties();
 			case ConfigPackage.CONFIG__TABLE:
@@ -312,9 +307,9 @@ public class ConfigImpl extends EObjectImpl implements Config {
 			case ConfigPackage.CONFIG__URI:
 				setUri((String)newValue);
 				return;
-			case ConfigPackage.CONFIG__COMMAND_CONFIG:
-				getCommandConfig().clear();
-				getCommandConfig().addAll((Collection)newValue);
+			case ConfigPackage.CONFIG__COMMAND:
+				getCommand().clear();
+				getCommand().addAll((Collection)newValue);
 				return;
 			case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 				setConnectionProperties((ConnectionProperties)newValue);
@@ -341,8 +336,8 @@ public class ConfigImpl extends EObjectImpl implements Config {
 			case ConfigPackage.CONFIG__URI:
 				setUri(URI_EDEFAULT);
 				return;
-			case ConfigPackage.CONFIG__COMMAND_CONFIG:
-				getCommandConfig().clear();
+			case ConfigPackage.CONFIG__COMMAND:
+				getCommand().clear();
 				return;
 			case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 				setConnectionProperties((ConnectionProperties)null);
@@ -366,8 +361,8 @@ public class ConfigImpl extends EObjectImpl implements Config {
 		switch (eDerivedStructuralFeatureID(eFeature)) {
 			case ConfigPackage.CONFIG__URI:
 				return URI_EDEFAULT == null ? uri != null : !URI_EDEFAULT.equals(uri);
-			case ConfigPackage.CONFIG__COMMAND_CONFIG:
-				return commandConfig != null && !commandConfig.isEmpty();
+			case ConfigPackage.CONFIG__COMMAND:
+				return command != null && !command.isEmpty();
 			case ConfigPackage.CONFIG__CONNECTION_PROPERTIES:
 				return connectionProperties != null;
 			case ConfigPackage.CONFIG__TABLE:
@@ -393,4 +388,4 @@ public class ConfigImpl extends EObjectImpl implements Config {
 		return result.toString();
 	}
 
-} 
+} //ConfigImpl

@@ -1,19 +1,9 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config;
 
 import org.eclipse.emf.ecore.EObject;
@@ -30,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getTableName <em>Table Name</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getType <em>Type</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getConverter <em>Converter</em>}</li>
- *   <li>{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommandConfig <em>Command Config</em>}</li>
+ *   <li>{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommand <em>Command</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,7 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ResultDescriptor extends EObject{
+public interface ResultDescriptor extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Column Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -144,31 +134,31 @@ public interface ResultDescriptor extends EObject{
 	void setConverter(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Command Config</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getResultDescriptor <em>Result Descriptor</em>}'.
+	 * Returns the value of the '<em><b>Command</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.apache.tuscany.das.rdb.config.Command#getResultDescriptor <em>Result Descriptor</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Command Config</em>' container reference isn't clear,
+	 * If the meaning of the '<em>Command</em>' container reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Command Config</em>' container reference.
-	 * @see #setCommandConfig(CommandConfig)
-	 * @see org.apache.tuscany.das.rdb.config.ConfigPackage#getResultDescriptor_CommandConfig()
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getResultDescriptor
+	 * @return the value of the '<em>Command</em>' container reference.
+	 * @see #setCommand(Command)
+	 * @see org.apache.tuscany.das.rdb.config.ConfigPackage#getResultDescriptor_Command()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getResultDescriptor
 	 * @model opposite="ResultDescriptor"
 	 * @generated
 	 */
-	CommandConfig getCommandConfig();
+	Command getCommand();
 
 	/**
-	 * Sets the value of the '{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommandConfig <em>Command Config</em>}' container reference.
+	 * Sets the value of the '{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommand <em>Command</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Command Config</em>' container reference.
-	 * @see #getCommandConfig()
+	 * @param value the new value of the '<em>Command</em>' container reference.
+	 * @see #getCommand()
 	 * @generated
 	 */
-	void setCommandConfig(CommandConfig value);
+	void setCommand(Command value);
 
 } // ResultDescriptor

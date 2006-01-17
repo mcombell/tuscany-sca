@@ -1,36 +1,28 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config.impl;
 
 import org.apache.tuscany.das.rdb.config.Column;
-import org.apache.tuscany.das.rdb.config.CommandConfig;
+import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.KeyPair;
-import org.apache.tuscany.das.rdb.config.ParameterConfig;
+import org.apache.tuscany.das.rdb.config.Parameter;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.ResultDescriptor;
 import org.apache.tuscany.das.rdb.config.Table;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -52,7 +44,7 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass commandConfigEClass = null;
+	private EClass commandEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -66,7 +58,7 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass parameterConfigEClass = null;
+	private EClass parameterEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -194,7 +186,7 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getConfig_CommandConfig() {
+	public EReference getConfig_Command() {
 		return (EReference)configEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -230,8 +222,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getCommandConfig() {
-		return commandConfigEClass;
+	public EClass getCommand() {
+		return commandEClass;
 	}
 
 	/**
@@ -239,8 +231,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCommandConfig_Name() {
-		return (EAttribute)commandConfigEClass.getEStructuralFeatures().get(0);
+	public EAttribute getCommand_Name() {
+		return (EAttribute)commandEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -248,8 +240,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCommandConfig_SQL() {
-		return (EAttribute)commandConfigEClass.getEStructuralFeatures().get(1);
+	public EAttribute getCommand_SQL() {
+		return (EAttribute)commandEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -257,8 +249,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCommandConfig_Kind() {
-		return (EAttribute)commandConfigEClass.getEStructuralFeatures().get(2);
+	public EAttribute getCommand_Kind() {
+		return (EAttribute)commandEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -266,8 +258,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCommandConfig_Config() {
-		return (EReference)commandConfigEClass.getEStructuralFeatures().get(3);
+	public EReference getCommand_Config() {
+		return (EReference)commandEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -275,8 +267,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCommandConfig_ParameterConfig() {
-		return (EReference)commandConfigEClass.getEStructuralFeatures().get(4);
+	public EReference getCommand_Parameter() {
+		return (EReference)commandEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -284,8 +276,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCommandConfig_ResultDescriptor() {
-		return (EReference)commandConfigEClass.getEStructuralFeatures().get(5);
+	public EReference getCommand_ResultDescriptor() {
+		return (EReference)commandEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -356,8 +348,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getParameterConfig() {
-		return parameterConfigEClass;
+	public EClass getParameter() {
+		return parameterEClass;
 	}
 
 	/**
@@ -365,8 +357,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParameterConfig_Name() {
-		return (EAttribute)parameterConfigEClass.getEStructuralFeatures().get(0);
+	public EAttribute getParameter_Name() {
+		return (EAttribute)parameterEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -374,8 +366,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParameterConfig_Type() {
-		return (EAttribute)parameterConfigEClass.getEStructuralFeatures().get(1);
+	public EAttribute getParameter_Type() {
+		return (EAttribute)parameterEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -383,8 +375,8 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getParameterConfig_CommandConfig() {
-		return (EReference)parameterConfigEClass.getEStructuralFeatures().get(2);
+	public EReference getParameter_Command() {
+		return (EReference)parameterEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -689,7 +681,7 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getResultDescriptor_CommandConfig() {
+	public EReference getResultDescriptor_Command() {
 		return (EReference)resultDescriptorEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -723,18 +715,18 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		// Create classes and their features
 		configEClass = createEClass(CONFIG);
 		createEAttribute(configEClass, CONFIG__URI);
-		createEReference(configEClass, CONFIG__COMMAND_CONFIG);
+		createEReference(configEClass, CONFIG__COMMAND);
 		createEReference(configEClass, CONFIG__CONNECTION_PROPERTIES);
 		createEReference(configEClass, CONFIG__TABLE);
 		createEReference(configEClass, CONFIG__RELATIONSHIP);
 
-		commandConfigEClass = createEClass(COMMAND_CONFIG);
-		createEAttribute(commandConfigEClass, COMMAND_CONFIG__NAME);
-		createEAttribute(commandConfigEClass, COMMAND_CONFIG__SQL);
-		createEAttribute(commandConfigEClass, COMMAND_CONFIG__KIND);
-		createEReference(commandConfigEClass, COMMAND_CONFIG__CONFIG);
-		createEReference(commandConfigEClass, COMMAND_CONFIG__PARAMETER_CONFIG);
-		createEReference(commandConfigEClass, COMMAND_CONFIG__RESULT_DESCRIPTOR);
+		commandEClass = createEClass(COMMAND);
+		createEAttribute(commandEClass, COMMAND__NAME);
+		createEAttribute(commandEClass, COMMAND__SQL);
+		createEAttribute(commandEClass, COMMAND__KIND);
+		createEReference(commandEClass, COMMAND__CONFIG);
+		createEReference(commandEClass, COMMAND__PARAMETER);
+		createEReference(commandEClass, COMMAND__RESULT_DESCRIPTOR);
 
 		connectionPropertiesEClass = createEClass(CONNECTION_PROPERTIES);
 		createEAttribute(connectionPropertiesEClass, CONNECTION_PROPERTIES__DATA_SOURCE);
@@ -744,10 +736,10 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		createEAttribute(connectionPropertiesEClass, CONNECTION_PROPERTIES__DRIVER_USER_NAME);
 		createEReference(connectionPropertiesEClass, CONNECTION_PROPERTIES__CONFIG);
 
-		parameterConfigEClass = createEClass(PARAMETER_CONFIG);
-		createEAttribute(parameterConfigEClass, PARAMETER_CONFIG__NAME);
-		createEAttribute(parameterConfigEClass, PARAMETER_CONFIG__TYPE);
-		createEReference(parameterConfigEClass, PARAMETER_CONFIG__COMMAND_CONFIG);
+		parameterEClass = createEClass(PARAMETER);
+		createEAttribute(parameterEClass, PARAMETER__NAME);
+		createEAttribute(parameterEClass, PARAMETER__TYPE);
+		createEReference(parameterEClass, PARAMETER__COMMAND);
 
 		relationshipEClass = createEClass(RELATIONSHIP);
 		createEAttribute(relationshipEClass, RELATIONSHIP__NAME);
@@ -786,7 +778,7 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		createEAttribute(resultDescriptorEClass, RESULT_DESCRIPTOR__TABLE_NAME);
 		createEAttribute(resultDescriptorEClass, RESULT_DESCRIPTOR__TYPE);
 		createEAttribute(resultDescriptorEClass, RESULT_DESCRIPTOR__CONVERTER);
-		createEReference(resultDescriptorEClass, RESULT_DESCRIPTOR__COMMAND_CONFIG);
+		createEReference(resultDescriptorEClass, RESULT_DESCRIPTOR__COMMAND);
 	}
 
 	/**
@@ -817,18 +809,18 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		// Initialize classes and features; add operations and parameters
 		initEClass(configEClass, Config.class, "Config", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getConfig_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getConfig_CommandConfig(), this.getCommandConfig(), this.getCommandConfig_Config(), "CommandConfig", null, 0, -1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConfig_Command(), this.getCommand(), this.getCommand_Config(), "Command", null, 0, -1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConfig_ConnectionProperties(), this.getConnectionProperties(), this.getConnectionProperties_Config(), "ConnectionProperties", null, 0, 1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConfig_Table(), this.getTable(), this.getTable_Config(), "Table", null, 0, -1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConfig_Relationship(), this.getRelationship(), this.getRelationship_Config(), "Relationship", null, 0, -1, Config.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(commandConfigEClass, CommandConfig.class, "CommandConfig", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCommandConfig_Name(), ecorePackage.getEString(), "name", null, 0, 1, CommandConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCommandConfig_SQL(), ecorePackage.getEString(), "SQL", null, 0, 1, CommandConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCommandConfig_Kind(), ecorePackage.getEString(), "kind", null, 0, 1, CommandConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCommandConfig_Config(), this.getConfig(), this.getConfig_CommandConfig(), "Config", null, 0, 1, CommandConfig.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCommandConfig_ParameterConfig(), this.getParameterConfig(), this.getParameterConfig_CommandConfig(), "ParameterConfig", null, 0, -1, CommandConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCommandConfig_ResultDescriptor(), this.getResultDescriptor(), this.getResultDescriptor_CommandConfig(), "ResultDescriptor", null, 0, -1, CommandConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(commandEClass, Command.class, "Command", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCommand_Name(), ecorePackage.getEString(), "name", null, 0, 1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCommand_SQL(), ecorePackage.getEString(), "SQL", null, 0, 1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCommand_Kind(), ecorePackage.getEString(), "kind", null, 0, 1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommand_Config(), this.getConfig(), this.getConfig_Command(), "Config", null, 0, 1, Command.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommand_Parameter(), this.getParameter(), this.getParameter_Command(), "Parameter", null, 0, -1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommand_ResultDescriptor(), this.getResultDescriptor(), this.getResultDescriptor_Command(), "ResultDescriptor", null, 0, -1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionPropertiesEClass, ConnectionProperties.class, "ConnectionProperties", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getConnectionProperties_DataSource(), ecorePackage.getEString(), "dataSource", null, 0, 1, ConnectionProperties.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -838,10 +830,10 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		initEAttribute(getConnectionProperties_DriverUserName(), ecorePackage.getEString(), "driverUserName", null, 0, 1, ConnectionProperties.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConnectionProperties_Config(), this.getConfig(), this.getConfig_ConnectionProperties(), "Config", null, 0, 1, ConnectionProperties.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(parameterConfigEClass, ParameterConfig.class, "ParameterConfig", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getParameterConfig_Name(), ecorePackage.getEString(), "name", null, 0, 1, ParameterConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getParameterConfig_Type(), ecorePackage.getEString(), "type", null, 0, 1, ParameterConfig.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getParameterConfig_CommandConfig(), this.getCommandConfig(), this.getCommandConfig_ParameterConfig(), "CommandConfig", null, 0, 1, ParameterConfig.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getParameter_Type(), ecorePackage.getEString(), "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getParameter_Command(), this.getCommand(), this.getCommand_Parameter(), "Command", null, 0, 1, Parameter.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(relationshipEClass, Relationship.class, "Relationship", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRelationship_Name(), ecorePackage.getEString(), "name", null, 0, 1, Relationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -880,10 +872,10 @@ public class ConfigPackageImpl extends EPackageImpl implements ConfigPackage {
 		initEAttribute(getResultDescriptor_TableName(), ecorePackage.getEString(), "tableName", null, 0, 1, ResultDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResultDescriptor_Type(), ecorePackage.getEString(), "type", null, 0, 1, ResultDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResultDescriptor_Converter(), ecorePackage.getEString(), "converter", null, 0, 1, ResultDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultDescriptor_CommandConfig(), this.getCommandConfig(), this.getCommandConfig_ResultDescriptor(), "CommandConfig", null, 0, 1, ResultDescriptor.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultDescriptor_Command(), this.getCommand(), this.getCommand_ResultDescriptor(), "Command", null, 0, 1, ResultDescriptor.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
 	}
 
-} 
+} //ConfigPackageImpl

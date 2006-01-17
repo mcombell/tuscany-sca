@@ -1,22 +1,13 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -28,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getUri <em>Uri</em>}</li>
- *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getCommandConfig <em>Command Config</em>}</li>
+ *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getCommand <em>Command</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getConnectionProperties <em>Connection Properties</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getTable <em>Table</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.Config#getRelationship <em>Relationship</em>}</li>
@@ -39,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Config extends EObject{
+public interface Config extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Uri</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -67,22 +58,22 @@ public interface Config extends EObject{
 	void setUri(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Command Config</b></em>' containment reference list.
-	 * The list contents are of type {@link org.apache.tuscany.das.rdb.config.CommandConfig}.
-	 * It is bidirectional and its opposite is '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getConfig <em>Config</em>}'.
+	 * Returns the value of the '<em><b>Command</b></em>' containment reference list.
+	 * The list contents are of type {@link org.apache.tuscany.das.rdb.config.Command}.
+	 * It is bidirectional and its opposite is '{@link org.apache.tuscany.das.rdb.config.Command#getConfig <em>Config</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Command Config</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Command</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Command Config</em>' containment reference list.
-	 * @see org.apache.tuscany.das.rdb.config.ConfigPackage#getConfig_CommandConfig()
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getConfig
-	 * @model type="org.apache.tuscany.das.rdb.config.CommandConfig" opposite="Config" containment="true"
+	 * @return the value of the '<em>Command</em>' containment reference list.
+	 * @see org.apache.tuscany.das.rdb.config.ConfigPackage#getConfig_Command()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getConfig
+	 * @model type="org.apache.tuscany.das.rdb.config.Command" opposite="Config" containment="true"
 	 * @generated
 	 */
-	EList getCommandConfig();
+	EList getCommand();
 
 	/**
 	 * Returns the value of the '<em><b>Connection Properties</b></em>' containment reference.
@@ -148,4 +139,4 @@ public interface Config extends EObject{
 	 */
 	EList getRelationship();
 
-}
+} // Config

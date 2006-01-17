@@ -1,19 +1,9 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -36,7 +26,7 @@ import org.eclipse.emf.ecore.EReference;
  * @model kind="package"
  * @generated
  */
-public interface ConfigPackage extends EPackage{
+public interface ConfigPackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
@@ -89,13 +79,13 @@ public interface ConfigPackage extends EPackage{
 	int CONFIG__URI = 0;
 
 	/**
-	 * The feature id for the '<em><b>Command Config</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Command</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIG__COMMAND_CONFIG = 1;
+	int CONFIG__COMMAND = 1;
 
 	/**
 	 * The feature id for the '<em><b>Connection Properties</b></em>' containment reference.
@@ -134,14 +124,14 @@ public interface ConfigPackage extends EPackage{
 	int CONFIG_FEATURE_COUNT = 5;
 
 	/**
-	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.CommandConfigImpl <em>Command Config</em>}' class.
+	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.CommandImpl <em>Command</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.apache.tuscany.das.rdb.config.impl.CommandConfigImpl
-	 * @see org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl#getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.impl.CommandImpl
+	 * @see org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl#getCommand()
 	 * @generated
 	 */
-	int COMMAND_CONFIG = 1;
+	int COMMAND = 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -150,7 +140,7 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__NAME = 0;
+	int COMMAND__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>SQL</b></em>' attribute.
@@ -159,7 +149,7 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__SQL = 1;
+	int COMMAND__SQL = 1;
 
 	/**
 	 * The feature id for the '<em><b>Kind</b></em>' attribute.
@@ -168,7 +158,7 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__KIND = 2;
+	int COMMAND__KIND = 2;
 
 	/**
 	 * The feature id for the '<em><b>Config</b></em>' container reference.
@@ -177,16 +167,16 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__CONFIG = 3;
+	int COMMAND__CONFIG = 3;
 
 	/**
-	 * The feature id for the '<em><b>Parameter Config</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Parameter</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__PARAMETER_CONFIG = 4;
+	int COMMAND__PARAMETER = 4;
 
 	/**
 	 * The feature id for the '<em><b>Result Descriptor</b></em>' containment reference list.
@@ -195,16 +185,16 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG__RESULT_DESCRIPTOR = 5;
+	int COMMAND__RESULT_DESCRIPTOR = 5;
 
 	/**
-	 * The number of structural features of the the '<em>Command Config</em>' class.
+	 * The number of structural features of the the '<em>Command</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_CONFIG_FEATURE_COUNT = 6;
+	int COMMAND_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.ConnectionPropertiesImpl <em>Connection Properties</em>}' class.
@@ -280,14 +270,14 @@ public interface ConfigPackage extends EPackage{
 	int CONNECTION_PROPERTIES_FEATURE_COUNT = 6;
 
 	/**
-	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.ParameterConfigImpl <em>Parameter Config</em>}' class.
+	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.ParameterImpl <em>Parameter</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.apache.tuscany.das.rdb.config.impl.ParameterConfigImpl
-	 * @see org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl#getParameterConfig()
+	 * @see org.apache.tuscany.das.rdb.config.impl.ParameterImpl
+	 * @see org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl#getParameter()
 	 * @generated
 	 */
-	int PARAMETER_CONFIG = 3;
+	int PARAMETER = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -296,7 +286,7 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_CONFIG__NAME = 0;
+	int PARAMETER__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -305,25 +295,25 @@ public interface ConfigPackage extends EPackage{
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_CONFIG__TYPE = 1;
+	int PARAMETER__TYPE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Command Config</b></em>' container reference.
+	 * The feature id for the '<em><b>Command</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_CONFIG__COMMAND_CONFIG = 2;
+	int PARAMETER__COMMAND = 2;
 
 	/**
-	 * The number of structural features of the the '<em>Parameter Config</em>' class.
+	 * The number of structural features of the the '<em>Parameter</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_CONFIG_FEATURE_COUNT = 3;
+	int PARAMETER_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link org.apache.tuscany.das.rdb.config.impl.RelationshipImpl <em>Relationship</em>}' class.
@@ -664,13 +654,13 @@ public interface ConfigPackage extends EPackage{
 	int RESULT_DESCRIPTOR__CONVERTER = 3;
 
 	/**
-	 * The feature id for the '<em><b>Command Config</b></em>' container reference.
+	 * The feature id for the '<em><b>Command</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESULT_DESCRIPTOR__COMMAND_CONFIG = 4;
+	int RESULT_DESCRIPTOR__COMMAND = 4;
 
 	/**
 	 * The number of structural features of the the '<em>Result Descriptor</em>' class.
@@ -704,15 +694,15 @@ public interface ConfigPackage extends EPackage{
 	EAttribute getConfig_Uri();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.Config#getCommandConfig <em>Command Config</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.Config#getCommand <em>Command</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Command Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.Config#getCommandConfig()
+	 * @return the meta object for the containment reference list '<em>Command</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.Config#getCommand()
 	 * @see #getConfig()
 	 * @generated
 	 */
-	EReference getConfig_CommandConfig();
+	EReference getConfig_Command();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link org.apache.tuscany.das.rdb.config.Config#getConnectionProperties <em>Connection Properties</em>}'.
@@ -748,80 +738,80 @@ public interface ConfigPackage extends EPackage{
 	EReference getConfig_Relationship();
 
 	/**
-	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.CommandConfig <em>Command Config</em>}'.
+	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.Command <em>Command</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Command Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig
+	 * @return the meta object for class '<em>Command</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.Command
 	 * @generated
 	 */
-	EClass getCommandConfig();
+	EClass getCommand();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.Command#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getName()
-	 * @see #getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getName()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EAttribute getCommandConfig_Name();
+	EAttribute getCommand_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getSQL <em>SQL</em>}'.
+	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.Command#getSQL <em>SQL</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>SQL</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getSQL()
-	 * @see #getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getSQL()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EAttribute getCommandConfig_SQL();
+	EAttribute getCommand_SQL();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getKind <em>Kind</em>}'.
+	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.Command#getKind <em>Kind</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Kind</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getKind()
-	 * @see #getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getKind()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EAttribute getCommandConfig_Kind();
+	EAttribute getCommand_Kind();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getConfig <em>Config</em>}'.
+	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.Command#getConfig <em>Config</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the container reference '<em>Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getConfig()
-	 * @see #getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getConfig()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EReference getCommandConfig_Config();
+	EReference getCommand_Config();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getParameterConfig <em>Parameter Config</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.Command#getParameter <em>Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Parameter Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getParameterConfig()
-	 * @see #getCommandConfig()
+	 * @return the meta object for the containment reference list '<em>Parameter</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.Command#getParameter()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EReference getCommandConfig_ParameterConfig();
+	EReference getCommand_Parameter();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.CommandConfig#getResultDescriptor <em>Result Descriptor</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.apache.tuscany.das.rdb.config.Command#getResultDescriptor <em>Result Descriptor</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Result Descriptor</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.CommandConfig#getResultDescriptor()
-	 * @see #getCommandConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Command#getResultDescriptor()
+	 * @see #getCommand()
 	 * @generated
 	 */
-	EReference getCommandConfig_ResultDescriptor();
+	EReference getCommand_ResultDescriptor();
 
 	/**
 	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.ConnectionProperties <em>Connection Properties</em>}'.
@@ -900,47 +890,47 @@ public interface ConfigPackage extends EPackage{
 	EReference getConnectionProperties_Config();
 
 	/**
-	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.ParameterConfig <em>Parameter Config</em>}'.
+	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.Parameter <em>Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parameter Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.ParameterConfig
+	 * @return the meta object for class '<em>Parameter</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.Parameter
 	 * @generated
 	 */
-	EClass getParameterConfig();
+	EClass getParameter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.ParameterConfig#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.Parameter#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.ParameterConfig#getName()
-	 * @see #getParameterConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Parameter#getName()
+	 * @see #getParameter()
 	 * @generated
 	 */
-	EAttribute getParameterConfig_Name();
+	EAttribute getParameter_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.ParameterConfig#getType <em>Type</em>}'.
+	 * Returns the meta object for the attribute '{@link org.apache.tuscany.das.rdb.config.Parameter#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Type</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.ParameterConfig#getType()
-	 * @see #getParameterConfig()
+	 * @see org.apache.tuscany.das.rdb.config.Parameter#getType()
+	 * @see #getParameter()
 	 * @generated
 	 */
-	EAttribute getParameterConfig_Type();
+	EAttribute getParameter_Type();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.ParameterConfig#getCommandConfig <em>Command Config</em>}'.
+	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.Parameter#getCommand <em>Command</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Command Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.ParameterConfig#getCommandConfig()
-	 * @see #getParameterConfig()
+	 * @return the meta object for the container reference '<em>Command</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.Parameter#getCommand()
+	 * @see #getParameter()
 	 * @generated
 	 */
-	EReference getParameterConfig_CommandConfig();
+	EReference getParameter_Command();
 
 	/**
 	 * Returns the meta object for class '{@link org.apache.tuscany.das.rdb.config.Relationship <em>Relationship</em>}'.
@@ -1301,15 +1291,15 @@ public interface ConfigPackage extends EPackage{
 	EAttribute getResultDescriptor_Converter();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommandConfig <em>Command Config</em>}'.
+	 * Returns the meta object for the container reference '{@link org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommand <em>Command</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Command Config</em>'.
-	 * @see org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommandConfig()
+	 * @return the meta object for the container reference '<em>Command</em>'.
+	 * @see org.apache.tuscany.das.rdb.config.ResultDescriptor#getCommand()
 	 * @see #getResultDescriptor()
 	 * @generated
 	 */
-	EReference getResultDescriptor_CommandConfig();
+	EReference getResultDescriptor_Command();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1320,4 +1310,4 @@ public interface ConfigPackage extends EPackage{
 	 */
 	ConfigFactory getConfigFactory();
 
-} 
+} //ConfigPackage

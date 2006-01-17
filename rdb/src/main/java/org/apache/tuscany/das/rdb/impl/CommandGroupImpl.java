@@ -26,7 +26,6 @@ import java.util.Map;
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
-import org.apache.tuscany.das.rdb.config.CommandConfig;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
@@ -59,9 +58,9 @@ public class CommandGroupImpl implements CommandGroup {
 
     private void initialize() {
 
-        Iterator i = config.getCommandConfig().iterator();
+        Iterator i = config.getCommand().iterator();
         while (i.hasNext()) {
-            CommandConfig commandConfig = (CommandConfig) i.next();
+        	org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i.next();
             //TODO - add other possible command types
             commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
         }

@@ -1,34 +1,16 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config.impl;
 
-import org.apache.tuscany.das.rdb.config.Column;
-import org.apache.tuscany.das.rdb.config.CommandConfig;
-import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigFactory;
-import org.apache.tuscany.das.rdb.config.ConfigPackage;
-import org.apache.tuscany.das.rdb.config.ConnectionProperties;
-import org.apache.tuscany.das.rdb.config.KeyPair;
-import org.apache.tuscany.das.rdb.config.ParameterConfig;
-import org.apache.tuscany.das.rdb.config.Relationship;
-import org.apache.tuscany.das.rdb.config.ResultDescriptor;
-import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 /**
@@ -56,9 +38,9 @@ public class ConfigFactoryImpl extends EFactoryImpl implements ConfigFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ConfigPackage.CONFIG: return createConfig();
-			case ConfigPackage.COMMAND_CONFIG: return createCommandConfig();
+			case ConfigPackage.COMMAND: return createCommand();
 			case ConfigPackage.CONNECTION_PROPERTIES: return createConnectionProperties();
-			case ConfigPackage.PARAMETER_CONFIG: return createParameterConfig();
+			case ConfigPackage.PARAMETER: return createParameter();
 			case ConfigPackage.RELATIONSHIP: return createRelationship();
 			case ConfigPackage.TABLE: return createTable();
 			case ConfigPackage.KEY_PAIR: return createKeyPair();
@@ -84,9 +66,9 @@ public class ConfigFactoryImpl extends EFactoryImpl implements ConfigFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommandConfig createCommandConfig() {
-		CommandConfigImpl commandConfig = new CommandConfigImpl();
-		return commandConfig;
+	public Command createCommand() {
+		CommandImpl command = new CommandImpl();
+		return command;
 	}
 
 	/**
@@ -104,9 +86,9 @@ public class ConfigFactoryImpl extends EFactoryImpl implements ConfigFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ParameterConfig createParameterConfig() {
-		ParameterConfigImpl parameterConfig = new ParameterConfigImpl();
-		return parameterConfig;
+	public Parameter createParameter() {
+		ParameterImpl parameter = new ParameterImpl();
+		return parameter;
 	}
 
 	/**
@@ -178,4 +160,4 @@ public class ConfigFactoryImpl extends EFactoryImpl implements ConfigFactory {
 		return ConfigPackage.eINSTANCE;
 	}
 
-} 
+} //ConfigFactoryImpl

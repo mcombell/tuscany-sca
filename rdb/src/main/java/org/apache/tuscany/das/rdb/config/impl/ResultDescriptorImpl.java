@@ -1,31 +1,25 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config.impl;
 
-import org.apache.tuscany.das.rdb.config.CommandConfig;
+import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ResultDescriptor;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
@@ -39,7 +33,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ResultDescriptorImpl#getTableName <em>Table Name</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ResultDescriptorImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ResultDescriptorImpl#getConverter <em>Converter</em>}</li>
- *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ResultDescriptorImpl#getCommandConfig <em>Command Config</em>}</li>
+ *   <li>{@link org.apache.tuscany.das.rdb.config.impl.ResultDescriptorImpl#getCommand <em>Command</em>}</li>
  * </ul>
  * </p>
  *
@@ -233,9 +227,9 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommandConfig getCommandConfig() {
-		if (eContainerFeatureID != ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG) return null;
-		return (CommandConfig)eContainer;
+	public Command getCommand() {
+		if (eContainerFeatureID != ConfigPackage.RESULT_DESCRIPTOR__COMMAND) return null;
+		return (Command)eContainer;
 	}
 
 	/**
@@ -243,20 +237,20 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCommandConfig(CommandConfig newCommandConfig) {
-		if (newCommandConfig != eContainer || (eContainerFeatureID != ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG && newCommandConfig != null)) {
-			if (EcoreUtil.isAncestor(this, newCommandConfig))
+	public void setCommand(Command newCommand) {
+		if (newCommand != eContainer || (eContainerFeatureID != ConfigPackage.RESULT_DESCRIPTOR__COMMAND && newCommand != null)) {
+			if (EcoreUtil.isAncestor(this, newCommand))
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
 			if (eContainer != null)
 				msgs = eBasicRemoveFromContainer(msgs);
-			if (newCommandConfig != null)
-				msgs = ((InternalEObject)newCommandConfig).eInverseAdd(this, ConfigPackage.COMMAND_CONFIG__RESULT_DESCRIPTOR, CommandConfig.class, msgs);
-			msgs = eBasicSetContainer((InternalEObject)newCommandConfig, ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG, msgs);
+			if (newCommand != null)
+				msgs = ((InternalEObject)newCommand).eInverseAdd(this, ConfigPackage.COMMAND__RESULT_DESCRIPTOR, Command.class, msgs);
+			msgs = eBasicSetContainer((InternalEObject)newCommand, ConfigPackage.RESULT_DESCRIPTOR__COMMAND, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG, newCommandConfig, newCommandConfig));
+			eNotify(new ENotificationImpl(this, Notification.SET, ConfigPackage.RESULT_DESCRIPTOR__COMMAND, newCommand, newCommand));
 	}
 
 	/**
@@ -267,10 +261,10 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, Class baseClass, NotificationChain msgs) {
 		if (featureID >= 0) {
 			switch (eDerivedStructuralFeatureID(featureID, baseClass)) {
-				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
+				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
 					if (eContainer != null)
 						msgs = eBasicRemoveFromContainer(msgs);
-					return eBasicSetContainer(otherEnd, ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG, msgs);
+					return eBasicSetContainer(otherEnd, ConfigPackage.RESULT_DESCRIPTOR__COMMAND, msgs);
 				default:
 					return eDynamicInverseAdd(otherEnd, featureID, baseClass, msgs);
 			}
@@ -288,8 +282,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, Class baseClass, NotificationChain msgs) {
 		if (featureID >= 0) {
 			switch (eDerivedStructuralFeatureID(featureID, baseClass)) {
-				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-					return eBasicSetContainer(null, ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG, msgs);
+				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+					return eBasicSetContainer(null, ConfigPackage.RESULT_DESCRIPTOR__COMMAND, msgs);
 				default:
 					return eDynamicInverseRemove(otherEnd, featureID, baseClass, msgs);
 			}
@@ -305,8 +299,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 	public NotificationChain eBasicRemoveFromContainer(NotificationChain msgs) {
 		if (eContainerFeatureID >= 0) {
 			switch (eContainerFeatureID) {
-				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-					return eContainer.eInverseRemove(this, ConfigPackage.COMMAND_CONFIG__RESULT_DESCRIPTOR, CommandConfig.class, msgs);
+				case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+					return eContainer.eInverseRemove(this, ConfigPackage.COMMAND__RESULT_DESCRIPTOR, Command.class, msgs);
 				default:
 					return eDynamicBasicRemoveFromContainer(msgs);
 			}
@@ -329,8 +323,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 				return getType();
 			case ConfigPackage.RESULT_DESCRIPTOR__CONVERTER:
 				return getConverter();
-			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-				return getCommandConfig();
+			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+				return getCommand();
 		}
 		return eDynamicGet(eFeature, resolve);
 	}
@@ -354,8 +348,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 			case ConfigPackage.RESULT_DESCRIPTOR__CONVERTER:
 				setConverter((String)newValue);
 				return;
-			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-				setCommandConfig((CommandConfig)newValue);
+			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+				setCommand((Command)newValue);
 				return;
 		}
 		eDynamicSet(eFeature, newValue);
@@ -380,8 +374,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 			case ConfigPackage.RESULT_DESCRIPTOR__CONVERTER:
 				setConverter(CONVERTER_EDEFAULT);
 				return;
-			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-				setCommandConfig((CommandConfig)null);
+			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+				setCommand((Command)null);
 				return;
 		}
 		eDynamicUnset(eFeature);
@@ -402,8 +396,8 @@ public class ResultDescriptorImpl extends EObjectImpl implements ResultDescripto
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case ConfigPackage.RESULT_DESCRIPTOR__CONVERTER:
 				return CONVERTER_EDEFAULT == null ? converter != null : !CONVERTER_EDEFAULT.equals(converter);
-			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND_CONFIG:
-				return getCommandConfig() != null;
+			case ConfigPackage.RESULT_DESCRIPTOR__COMMAND:
+				return getCommand() != null;
 		}
 		return eDynamicIsSet(eFeature);
 	}

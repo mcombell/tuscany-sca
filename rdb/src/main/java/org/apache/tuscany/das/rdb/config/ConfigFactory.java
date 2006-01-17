@@ -1,19 +1,9 @@
 /**
-*
-*  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package org.apache.tuscany.das.rdb.config;
 
 import org.eclipse.emf.ecore.EFactory;
@@ -26,7 +16,7 @@ import org.eclipse.emf.ecore.EFactory;
  * @see org.apache.tuscany.das.rdb.config.ConfigPackage
  * @generated
  */
-public interface ConfigFactory extends EFactory{
+public interface ConfigFactory extends EFactory {
 	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
@@ -45,13 +35,13 @@ public interface ConfigFactory extends EFactory{
 	Config createConfig();
 
 	/**
-	 * Returns a new object of class '<em>Command Config</em>'.
+	 * Returns a new object of class '<em>Command</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Command Config</em>'.
+	 * @return a new object of class '<em>Command</em>'.
 	 * @generated
 	 */
-	CommandConfig createCommandConfig();
+	Command createCommand();
 
 	/**
 	 * Returns a new object of class '<em>Connection Properties</em>'.
@@ -63,13 +53,13 @@ public interface ConfigFactory extends EFactory{
 	ConnectionProperties createConnectionProperties();
 
 	/**
-	 * Returns a new object of class '<em>Parameter Config</em>'.
+	 * Returns a new object of class '<em>Parameter</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Parameter Config</em>'.
+	 * @return a new object of class '<em>Parameter</em>'.
 	 * @generated
 	 */
-	ParameterConfig createParameterConfig();
+	Parameter createParameter();
 
 	/**
 	 * Returns a new object of class '<em>Relationship</em>'.
@@ -125,4 +115,4 @@ public interface ConfigFactory extends EFactory{
 	 */
 	ConfigPackage getConfigPackage();
 
-} 
+} //ConfigFactory
