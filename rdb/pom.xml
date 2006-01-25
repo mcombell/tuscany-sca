@@ -25,6 +25,16 @@
     <name>Tuscany DAS for Relational Databases</name>
     <version>SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>jeremy</id>
+            <url>http://people.apache.org/~jboynes/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.eclipse.emf</groupId>
@@ -72,7 +82,7 @@
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.1.1.0</version>
+            <version>10.1.2.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
