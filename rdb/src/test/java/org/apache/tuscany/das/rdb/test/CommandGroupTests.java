@@ -79,22 +79,46 @@ public class CommandGroupTests extends DasTest {
         assertEquals(5, root.getList("CUSTOMER").size());
 
     }
-    
+
     /**
-     * Read all customers with 
+     * Specify connection properties in config
      */
     public void testReadWithConnectionProperties() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-//        commandGroup.setConnection(getConnection());
+        CommandGroup commandGroup = CommandGroup.FACTORY
+                .createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+        // commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
 
         assertEquals(5, root.getList("CUSTOMER").size());
-        
+
     }
-    
+
+    /**
+     * Specify connection properties in config. Add explicit update command
+     */
+    public void testUpdate() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY
+                .createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+
+        Command read = commandGroup.getCommand("all customers");
+        DataObject root = read.executeQuery();
+        // Verify precondition
+        assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
+        int id = root.getInt("CUSTOMER[1]/ID");
+
+        Command update = commandGroup.getCommand("update customer");
+        update.setParameterValue("ID", new Integer(id));
+        update.execute();
+
+        // Verify update - reuse select command
+        root = read.executeQuery();
+        assertEquals("Pavick", root.get("CUSTOMER[1]/LASTNAME"));
+
+    }
 
     /**
      * Read all customers, select a specific customer. Then read that customer
@@ -102,23 +126,23 @@ public class CommandGroupTests extends DasTest {
      */
     public void testRead2() throws Exception {
 
-        //Create the group and set common connection
+        // Create the group and set common connection
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getCustomerOrderConfig());
         commandGroup.setConnection(getConnection());
 
-        //Read all customers and remember the first one
+        // Read all customers and remember the first one
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
         Integer id = (Integer) root.get("CUSTOMER[1]/ID");
 
-        //Read the specific Customer from above and its related orders
+        // Read the specific Customer from above and its related orders
         Command custOrders = commandGroup.getCommand("customer and orders");
         custOrders.setParameterValue("ID", id);
         root = custOrders.executeQuery();
 
-        //Modify the first order and flush this change back to the database
+        // Modify the first order and flush this change back to the database
         root.setString("CUSTOMER[1]/orders[1]/PRODUCT", "Defibrillator");
-        Integer orderId = (Integer)root.get("CUSTOMER[1]/orders[1]/ID");
+        Integer orderId = (Integer) root.get("CUSTOMER[1]/orders[1]/ID");
         ApplyChangesCommand flush = commandGroup.getApplyChangesCommand();
         flush.execute(root);
 
@@ -132,12 +156,12 @@ public class CommandGroupTests extends DasTest {
     // Utilities
 
     private InputStream getCustomerOrderConfig() throws FileNotFoundException {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream("CustomersOrdersConfig.xml");
+        return Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("CustomersOrdersConfig.xml");
     }
 
     private InputStream getConfig(String fileName) throws FileNotFoundException {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
-    }   
-    
-    
+    }
+
 }
