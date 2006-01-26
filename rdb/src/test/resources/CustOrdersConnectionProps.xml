@@ -15,6 +15,11 @@
         <Parameter name=":ID"/>
     </Command>
     
+    <Command name="update customer" SQL="update CUSTOMER set LASTNAME = 'Pavick' where ID = :ID"
+        kind="Update">
+        <Parameter name=":ID"/>
+    </Command>
+    
     <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver" driverURL="jdbc:derby:dastest" />
     
     <Table name="CUSTOMER">
