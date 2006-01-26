@@ -232,5 +232,25 @@ public class SimplestCrud extends DasTest {
 		assertEquals("Pavick", root.get("CUSTOMER[1]/LASTNAME"));
 		
 	}
+    
+    public void testUpdateWithParmarkers() throws Exception {
+
+        //Verify pre-condition
+        Command select = Command.FACTORY.createCommand("Select * from CUSTOMER where ID = 1");
+        select.setConnection(getConnection());
+        DataObject root = select.executeQuery();    
+        assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
+        
+        Command update = Command.FACTORY.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");  
+        update.setConnection(getConnection());
+        update.setParameterValue(1, "Pavick");
+        update.setParameterValue(2, new Integer(1));
+        update.execute();
+        
+        //Verify update - reuse select command
+        root = select.executeQuery();   
+        assertEquals("Pavick", root.get("CUSTOMER[1]/LASTNAME"));
+        
+    }
 
 }

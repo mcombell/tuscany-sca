@@ -66,7 +66,7 @@ public class CommandGroupTests extends DasTest {
     }
 
     /**
-     * Read all customers
+     * Read 
      */
     public void testRead() throws Exception {
 
@@ -80,6 +80,21 @@ public class CommandGroupTests extends DasTest {
 
     }
 
+    /**
+     * Read an order using parm marker
+     */
+    public void testReadWithParmmarker() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+
+        Command read = commandGroup.getCommand("order by id with ?");
+        read.setParameterValue(1, new Integer(1));
+        DataObject root = read.executeQuery();
+
+        assertEquals("recombobulator", root.getString("ANORDER[1]/PRODUCT"));
+
+    }   
+    
     /**
      * Specify connection properties in config
      */
@@ -101,8 +116,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testUpdate() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
 
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
