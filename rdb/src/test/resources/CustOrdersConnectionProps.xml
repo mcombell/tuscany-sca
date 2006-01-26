@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Config xsi:noNamespaceSchemaLocation="../../main/resources/dasmodel3.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
@@ -15,6 +15,8 @@
         <Parameter name=":ID"/>
     </Command>
     
+    <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver" driverURL="jdbc:derby:dastest" />
+    
     <Table name="CUSTOMER">
         <Column name="ID" primaryKey="true"/>
     </Table>
@@ -27,5 +29,6 @@
         foreignKeyTable="ANORDER" many="true">
         <KeyPair primaryKeyColumn="ID" foreignKeyColumn="CUSTOMER_ID"/>
     </Relationship>
+    
     
 </Config>
