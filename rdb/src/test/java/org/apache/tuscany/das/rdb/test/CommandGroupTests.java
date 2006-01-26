@@ -79,6 +79,22 @@ public class CommandGroupTests extends DasTest {
         assertEquals(5, root.getList("CUSTOMER").size());
 
     }
+    
+    /**
+     * Read all customers with 
+     */
+    public void testReadWithConnectionProperties() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+//        commandGroup.setConnection(getConnection());
+
+        Command read = commandGroup.getCommand("all customers");
+        DataObject root = read.executeQuery();
+
+        assertEquals(5, root.getList("CUSTOMER").size());
+        
+    }
+    
 
     /**
      * Read all customers, select a specific customer. Then read that customer
@@ -119,4 +135,9 @@ public class CommandGroupTests extends DasTest {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream("CustomersOrdersConfig.xml");
     }
 
+    private InputStream getConfig(String fileName) throws FileNotFoundException {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+    }   
+    
+    
 }
