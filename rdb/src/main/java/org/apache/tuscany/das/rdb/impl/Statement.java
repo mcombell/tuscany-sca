@@ -25,6 +25,7 @@ import java.util.Iterator;
 import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
+//TODO - Can use some refactoring.  Much code is duplicated in "execute" methods
 public class Statement {
 
     protected final QueryString queryString;
@@ -151,7 +152,8 @@ public class Statement {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             Parameter param = (Parameter) i.next();
-            param.setIndex(queryString.getParameterIndex(param.getName()));
+            if (param.getIndex() == 0)
+                param.setIndex(queryString.getParameterIndex(param.getName()));
             ps.setObject(param.getIndex(), param.getValue());
         }
         return ps;
