@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
+import org.apache.tuscany.das.rdb.config.ConnectionProperties;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -46,6 +49,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 public class CommandGroupImpl implements CommandGroup {
 
     private Config config;
+
     private Connection connection;
 
     private Map commands = new HashMap();
@@ -60,31 +64,35 @@ public class CommandGroupImpl implements CommandGroup {
 
         Iterator i = config.getCommand().iterator();
         while (i.hasNext()) {
-        	org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i.next();
-            //TODO - add other possible command types
+            org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
+                    .next();
+            // TODO - add other possible command types
             commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
         }
 
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.tuscany.das.rdb.CommandGroup#getApplyChangesCommand()
      */
     public ApplyChangesCommand getApplyChangesCommand() {
         ApplyChangesCommand cmd = new ApplyChangesCommandImpl(config);
-        cmd.setConnection(connection);
+        cmd.setConnection(getConnection());
         return cmd;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.tuscany.das.rdb.CommandGroup#getCommand(java.lang.String)
      */
     public Command getCommand(String name) {
         if (!commands.containsKey(name))
-            throw new RuntimeException("CommandGroup has no command named: "+ name);
+            throw new RuntimeException("CommandGroup has no command named: " + name);
         Command cmd = (Command) commands.get(name);
-        cmd.setConnection(connection);
+        cmd.setConnection(getConnection());
         return cmd;
     }
 
@@ -110,7 +118,39 @@ public class CommandGroupImpl implements CommandGroup {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
-        
+    }
+
+    public Connection getConnection() {
+        if (connection == null)
+            initializeConnection();
+        return connection;
+    }
+
+    private void initializeConnection() {
+
+        ConnectionProperties cp = config.getConnectionProperties();
+        if (cp == null)
+            throw new Error(
+                    "No connection properties have been configured and no connection has been provided");
+
+        if (cp.getDataSource() != null)
+            throw new Error("Datasource configuration not yet supported");
+
+        Connection connection = null;
+
+        try {
+            Class.forName(cp.getDriverClassName());
+            if (cp.getDriverUserName() == null)
+                connection = DriverManager.getConnection(cp.getDriverURL());
+            else
+                connection = DriverManager.getConnection(cp.getDriverURL(), cp.getDriverUserName(), cp
+                        .getDriverPassword());
+            connection.setAutoCommit(false);
+            setConnection(connection);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 
 }
