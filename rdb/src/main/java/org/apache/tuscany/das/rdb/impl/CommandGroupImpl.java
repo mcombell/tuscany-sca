@@ -30,7 +30,6 @@ import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
-import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -66,8 +65,18 @@ public class CommandGroupImpl implements CommandGroup {
         while (i.hasNext()) {
             org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
                     .next();
-            // TODO - add other possible command types
-            commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
+            String kind = commandConfig.getKind();
+            if (kind.equalsIgnoreCase("select"))
+                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
+            else if (kind.equalsIgnoreCase("update"))
+                commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
+            else if (kind.equalsIgnoreCase("insert"))
+                commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL()));
+            else if (kind.equalsIgnoreCase("delete"))
+                commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
+            else
+                throw new Error("Invalid kind of command: " + kind);
+
         }
 
     }
