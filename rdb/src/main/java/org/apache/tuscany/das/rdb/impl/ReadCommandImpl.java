@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
+import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
@@ -172,10 +172,10 @@ public class ReadCommandImpl extends CommandImpl {
 
 		HashMap map = new HashMap();
 		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-		metadata.putPackage(null, ConfigPackage.eINSTANCE);
+		metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
 
 		map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION,
-				ConfigPackage.eNS_URI);
+				ConfigPackageImpl.eNS_URI);
 		map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
 
 		try {

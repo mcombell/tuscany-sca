@@ -26,8 +26,8 @@ import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigPackage;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
+import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -134,9 +134,9 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
 
         HashMap map = new HashMap();
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        metadata.putPackage(null, ConfigPackage.eINSTANCE);
+        metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
 
-        map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackage.eNS_URI);
+        map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
         map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
 
         resource.load(stream, map);
