@@ -29,12 +29,13 @@ import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 
 public class MappingWrapper {
 
-	private static final ConfigFactory factory = ConfigFactory.eINSTANCE;
+	private static final ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
 
 	private static final boolean debug = false;
 
@@ -237,7 +238,7 @@ public class MappingWrapper {
 	private Table findOrCreateTable(String tableName) {
 		Table table = getTable(tableName);
 		if (table == null) {
-			table = ConfigFactory.eINSTANCE.createTable();
+			table = ConfigFactoryImpl.eINSTANCE.createTable();
 			table.setName(tableName);
 			config.getTable().add(table);
 		}
@@ -253,7 +254,7 @@ public class MappingWrapper {
 				return c;
 		}
 
-		Column c = ConfigFactory.eINSTANCE.createColumn();
+		Column c = ConfigFactoryImpl.eINSTANCE.createColumn();
 		c.setName(name);
 		t.getColumn().add(c);
 		return c;
