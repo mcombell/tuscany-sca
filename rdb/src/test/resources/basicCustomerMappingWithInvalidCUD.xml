@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Config>
-  <Table name="CUSTOMER">
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Table name="CUSTOMER"
+	  create="insert into customer blah values (:ID, :LASTNAME, :ADDRESS)"
+	  update="update customer blah set lastname = :LASTNAME, address = :ADDRESS where ID = :ID"
+      delete="delete from customer blah where ID = :ID">
     <Column name="ID" primaryKey="true"/>
     <Column name="LASTNAME"/>
-    <Column name="ADDRESS"/>
-    <create>insert into customer values blah (:ID, :LASTNAME, :ADDRESS)</create>
-    <update>update customer set blah lastname = :LASTNAME, address = :ADDRESS where ID = :ID</update>
-    <delete>delete from customer blah where ID = :ID</delete>
+    <Column name="ADDRESS"/> 
   </Table>
+	
 </Config>

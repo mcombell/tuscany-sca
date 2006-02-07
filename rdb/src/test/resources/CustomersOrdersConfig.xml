@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Config xsi:noNamespaceSchemaLocation="../../main/resources/dasmodel3.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
     <Command name="all customers" SQL="select * from CUSTOMER" kind="Select"/>
     

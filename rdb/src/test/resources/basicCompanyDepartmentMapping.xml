@@ -1,12 +1,11 @@
-<Config>
-  <Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
-      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="COMPANYID"/>
-  </Relationship>
+<?xml version="1.0" encoding="ASCII"?>
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   
 	<Table name="COMPANY">
 		<Column name="ID" primaryKey="true" generated="true"/>
 		<Column name="NAME"/>
 	</Table>
+	
 	<Table name="DEPARTMENT">
 		<Column name="ID" primaryKey="true" generated="true"/>
 		<Column name="NAME"/>
@@ -14,4 +13,9 @@
 		<Column name="COMPANYID"/>
 		<Column name="EOTM"/>
 	</Table>
+	
+	<Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
+      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="COMPANYID"/>
+    </Relationship>
+	
 </Config>

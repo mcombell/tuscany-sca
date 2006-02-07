@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="ASCII"?>
 <Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  
-  <Table name="CUSTOMER">
-  	<Column name="ID" primaryKey="true"/>
-  </Table>
-  <Table name="ANORDER">
-  	<Column name="ID" primaryKey="true"/>
+
+  <Table name="CUSTOMER" propertyName="Customer">
+    <Column name="ID" propertyName="iD" primaryKey="true"/>
   </Table>
   
+  <Table name="ANORDER" propertyName="AnOrder">
+  	<Column name="CUSTOMER_ID" propertyName="customerID"/>
+    <Column name="ID" propertyName="iD" primaryKey="true"/>
+  </Table>
+	
   <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="CUSTOMER_ID"/>
-  </Relationship>	
-	
+  </Relationship>
+  
 </Config>
 

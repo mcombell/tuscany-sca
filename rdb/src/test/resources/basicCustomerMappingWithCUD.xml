@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Config>
-<!--  <connection>
-  	<URL>jdbc:db2:DASTEST</URL>
-  	<driverName>com.ibm.db2.jcc.DB2Driver</driverName>
-  </connection> -->
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   
-  <Table name="CUSTOMER">
+  <Table name="CUSTOMER"
+	  create="insert into customer values (:ID, :LASTNAME, :ADDRESS)"
+	  update="update customer set lastname = :LASTNAME, address = :ADDRESS where ID = :ID"
+      delete="delete from customer where ID = :ID">
     <Column name="ID" primaryKey="true"/>
     <Column name="LASTNAME"/>
     <Column name="ADDRESS"/> 
-    <create>insert into customer values (:ID, :LASTNAME, :ADDRESS)</create>
-    <update>update customer set lastname = :LASTNAME, address = :ADDRESS where ID = :ID</update>
-    <delete>delete from customer where ID = :ID</delete>
   </Table>
+	
 </Config>

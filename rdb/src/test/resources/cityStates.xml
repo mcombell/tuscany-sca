@@ -1,11 +1,6 @@
-<Config>
-  <Relationship name="cities" primaryKeyTable="STATES" foreignKeyTable="CITIES" many="true">
-      <KeyPair>
-        <primaryKeyColumn>ID</primaryKeyColumn>
-        <foreignKeyColumn>STATE_ID</foreignKeyColumn>
-      </KeyPair>
-  </Relationship>
-  
+<?xml version="1.0" encoding="ASCII"?>
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
 	<Table name="STATES">
 		<Column name="ID" primaryKey="true"/>
 		<Column name="NAME"/>
@@ -18,4 +13,10 @@
 		<Column name="STATE_ID"/>
 	
 	</Table>
+	
+  <Relationship name="cities" primaryKeyTable="STATES" foreignKeyTable="CITIES" many="true">
+     <KeyPair primaryKeyColumn="ID" foreignKeyColumn="STATE_ID"/>
+  </Relationship>	
+	
+	
 </Config>

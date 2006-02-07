@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Config>
-  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
-      <KeyPair>
-        <primaryKeyColumn>ID</primaryKeyColumn>
-        <foreignKeyColumn>CUSTOMER_ID</foreignKeyColumn>
-      </KeyPair>
-  </Relationship>
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
   <Table name="CUSTOMER">
   	<Column name="ID" primaryKey="true"/>
   </Table>
@@ -13,6 +8,10 @@
   	<Column name="ID" primaryKey="true"/>
   	<Column name="CUSTOMER_ID"/>
   </Table>
+	
+  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
+     <KeyPair primaryKeyColumn="ID" foreignKeyColumn="CUSTOMER_ID"/>
+  </Relationship>	
   
 </Config>
 

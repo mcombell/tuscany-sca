@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Config>
-<!--  <connection>
-  	<URL>jdbc:db2:DASTEST</URL>
-  	<driverName>com.ibm.db2.jcc.DB2Driver</driverName>
-  </connection> -->
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   
   <Table name="CUSTOMER">
     <Column name="ID" primaryKey="true"/>
     <Column name="LASTNAME"/>
     <Column name="ADDRESS"/> 
   </Table>
+	
 </Config>
