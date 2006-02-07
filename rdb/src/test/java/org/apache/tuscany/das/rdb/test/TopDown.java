@@ -145,7 +145,6 @@ public class TopDown extends DasTest {
 
 	private InputStream getMappingModel_1xM_uni_no_cud_as_stream()
 			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/1xM_uni_mapping_no_cud.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("1xM_uni_mapping_no_cud.xml");
+		return Thread.currentThread().getContextClassLoader().getResourceAsStream("1xM_mapping_no_cud.xml");
 	}
 }

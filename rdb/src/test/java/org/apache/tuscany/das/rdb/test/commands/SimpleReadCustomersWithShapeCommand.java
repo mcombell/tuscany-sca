@@ -22,6 +22,7 @@ import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
 import commonj.sdo.Type;
@@ -38,7 +39,7 @@ public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
 	private static final Config mapping;
 
 	static {
-		ConfigFactory factory = ConfigFactory.eINSTANCE;
+		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
 		mapping = factory.createConfig();
 		Table t = factory.createTable();
 		Column id = factory.createColumn();
