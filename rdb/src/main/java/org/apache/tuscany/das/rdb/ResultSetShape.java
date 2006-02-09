@@ -107,7 +107,10 @@ public class ResultSetShape {
 			result.append('\t');
 			result.append(tables[i]);
 			result.append('\t');
-			result.append(types[i].getName());
+			if ( types[i] == null ) 
+				result.append("null");
+			else 
+				result.append(types[i].getName());
 			result.append('\t');
 			result.append(converters[i]);
 			result.append('\n');

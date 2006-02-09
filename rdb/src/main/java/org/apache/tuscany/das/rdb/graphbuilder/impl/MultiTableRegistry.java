@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EObject;
+
+import commonj.sdo.DataObject;
 
 
 
@@ -50,12 +51,12 @@ public class MultiTableRegistry implements TableRegistry {
 	 * @param primaryKey
 	 * @return EDataObject
 	 */
-	public EObject get(String tableName, List primaryKey) {
+	public DataObject get(String tableName, List primaryKey) {
 		if ( debug ) {
 			DebugUtil.debugln(getClass(), debug, "Looking for table " + tableName  + " with PK " + primaryKey);
 			DebugUtil.debugln(getClass(), debug, ("\tReturning " + getPkMap(tableName).get(primaryKey)));
 		}
-		return (EObject) getPkMap(tableName).get(primaryKey);
+		return (DataObject) getPkMap(tableName).get(primaryKey);
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class MultiTableRegistry implements TableRegistry {
 	 * @param primaryKey
 	 * @param value
 	 */
-	public void put(String tableName, List primaryKey, EObject value) {
+	public void put(String tableName, List primaryKey, DataObject value) {
 		if ( getPkMap(tableName).put(primaryKey, value) == null )
 		   getCreateValueList(tableName).add(value);
 	}

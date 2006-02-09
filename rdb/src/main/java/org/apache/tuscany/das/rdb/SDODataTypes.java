@@ -16,10 +16,8 @@
  */
 package org.apache.tuscany.das.rdb;
 
-import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
-
 import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 /**
  * Defines SDO data types. This is used primalirly to type stored procedure OUT parameters.
@@ -30,39 +28,41 @@ import commonj.sdo.Type;
  * 
  */public class SDODataTypes {
 
-	final public static Type BOOLEAN = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEBoolean());
-	final public static Type BYTE = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEByte());
-	final public static Type BYTES = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEByteArray());
-	final public static Type CHARACTER = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEChar());
-	final public static Type DATE = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type DATETIME = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type DAY = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type DECIMAL = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEFloat());
-	final public static Type DOUBLE =SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDouble());
-	final public static Type DURATION = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type FLOAT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEFloat());
-	final public static Type INT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEInt());
-	final public static Type INTEGER = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEInt());
-	final public static Type LONG = SDOUtil.adaptType(EcorePackage.eINSTANCE.getELong());
-	final public static Type MONTH = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type MONTHDAY = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type OBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEObject());
-	final public static Type SHORT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEShort());
-	final public static Type STRING = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEString());
-	final public static Type STRINGS = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEString());
-	final public static Type TIME = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type URI = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEString());
-	final public static Type YEAR = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type YEARMONTH = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type YEARMONTHDAY = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDate());
-	final public static Type BOOLEANOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEBooleanObject());
-	final public static Type BYTEOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEByteObject());
-	final public static Type CHARACTEROBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getECharacterObject());
-	final public static Type DOUBLEOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEDoubleObject());
-	final public static Type FLOATOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEFloatObject());
-	final public static Type INTEGEROBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEIntegerObject());
-	final public static Type LONGOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getELongObject());
-	final public static Type SHORTOBJECT = SDOUtil.adaptType(EcorePackage.eINSTANCE.getEShortObject());
+     static TypeHelper helper = TypeHelper.INSTANCE;
+     
+	final public static Type BOOLEAN = helper.getType("commonj.sdo", "Boolean");
+	final public static Type BYTE = helper.getType("commonj.sdo", "Byte");
+	final public static Type BYTES = helper.getType("commonj.sdo", "ByteArray");
+	final public static Type CHARACTER = helper.getType("commonj.sdo", "Char");
+	final public static Type DATE = helper.getType("commonj.sdo", "Date");
+	final public static Type DATETIME = helper.getType("commonj.sdo", "Date");
+	final public static Type DAY = helper.getType("commonj.sdo", "Date");
+	final public static Type DECIMAL = helper.getType("commonj.sdo", "Float");
+	final public static Type DOUBLE =helper.getType("commonj.sdo", "Double");
+	final public static Type DURATION = helper.getType("commonj.sdo", "Date");
+	final public static Type FLOAT = helper.getType("commonj.sdo", "Float");
+	final public static Type INT = helper.getType("commonj.sdo", "Int");
+	final public static Type INTEGER = helper.getType("commonj.sdo", "Integer");
+	final public static Type LONG = helper.getType("commonj.sdo", "Long");
+	final public static Type MONTH = helper.getType("commonj.sdo", "Date");
+	final public static Type MONTHDAY = helper.getType("commonj.sdo", "Date");
+	final public static Type OBJECT = helper.getType("commonj.sdo", "Object");
+	final public static Type SHORT = helper.getType("commonj.sdo", "Short");
+	final public static Type STRING = helper.getType("commonj.sdo", "String");
+	final public static Type STRINGS = helper.getType("commonj.sdo", "String");
+	final public static Type TIME = helper.getType("commonj.sdo", "Date");
+	final public static Type URI = helper.getType("commonj.sdo", "String");
+	final public static Type YEAR = helper.getType("commonj.sdo", "Date");
+	final public static Type YEARMONTH = helper.getType("commonj.sdo", "Date");
+	final public static Type YEARMONTHDAY = helper.getType("commonj.sdo", "Date");
+	final public static Type BOOLEANOBJECT = helper.getType("commonj.sdo", "BooleanObject");
+	final public static Type BYTEOBJECT = helper.getType("commonj.sdo", "ByteObject");
+	final public static Type CHARACTEROBJECT = helper.getType("commonj.sdo", "CharacterObject");
+	final public static Type DOUBLEOBJECT = helper.getType("commonj.sdo", "DoubleObject");
+	final public static Type FLOATOBJECT = helper.getType("commonj.sdo", "FloatObject");
+	final public static Type INTEGEROBJECT = helper.getType("commonj.sdo", "IntObject");
+	final public static Type LONGOBJECT = helper.getType("commonj.sdo", "LongObject");
+	final public static Type SHORTOBJECT = helper.getType("commonj.sdo", "ShortObject");
 
 
 }

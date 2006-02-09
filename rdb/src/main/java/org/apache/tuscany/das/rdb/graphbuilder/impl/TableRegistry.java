@@ -18,7 +18,7 @@ package org.apache.tuscany.das.rdb.graphbuilder.impl;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
+import commonj.sdo.DataObject;
 
 /**
  */
@@ -29,7 +29,7 @@ public interface TableRegistry {
 	 * @param primaryKey
 	 * @return EDataObject
 	 */
-	public EObject get(String tableName, List primaryKey);
+	public DataObject get(String tableName, List primaryKey);
 
 	/**
 	 * Add the table with the specified name and primary key
@@ -37,7 +37,7 @@ public interface TableRegistry {
 	 * @param primaryKey
 	 * @param value
 	 */
-	public void put(String tableName, List primaryKey, EObject value);
+	public void put(String tableName, List primaryKey, DataObject value);
 
 	public boolean contains(String name, List list);
 }

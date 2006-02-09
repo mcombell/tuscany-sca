@@ -16,9 +16,11 @@
  */
 package org.apache.tuscany.das.rdb.graphbuilder.schema;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EcoreFactory;
+import org.apache.tuscany.sdo.SDOFactory;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
+import org.apache.tuscany.sdo.impl.DataTypeImpl;
+
+import commonj.sdo.Type;
 
 
 /**
@@ -49,17 +51,17 @@ public class EAttributeMaker {
 	 * @param type The type of the new EAttribute
 	 * @return EAttribute
 	 */
-	public EAttribute createEAttribute(String name, EDataType type) {
+	public AttributeImpl createEAttribute(String name, Type type) {
 		
-		EAttribute attr = getFactory().createEAttribute();
+		AttributeImpl attr = (AttributeImpl) getFactory().createAttribute();
 		attr.setName(name);
-		attr.setEType(type);
+		attr.setEType((DataTypeImpl)type);
 		attr.setUnique(false);
 			
 		return attr;
 	}
 
-	private EcoreFactory getFactory() {
-		return EcoreFactory.eINSTANCE;
+	private SDOFactory getFactory() {
+		return SDOFactory.eINSTANCE;
 	}
 }

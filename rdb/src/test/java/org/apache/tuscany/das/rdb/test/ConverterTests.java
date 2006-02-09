@@ -86,7 +86,7 @@ public class ConverterTests extends DasTest {
 
 		String[] columns = { "ID", "LASTNAME", "ADDRESS" };
 		String[] tables = { "CUSTOMER", "CUSTOMER", "CUSTOMER" };
-		Type[] types = { SDODataTypes.INTEGER, SDODataTypes.DATE, SDODataTypes.STRING };
+		Type[] types = { SDODataTypes.INTEGEROBJECT, SDODataTypes.DATE, SDODataTypes.STRING };
 		ResultSetShape shape = new ResultSetShape(tables, columns, types);
 		read.setResultSetShape(shape);
 		

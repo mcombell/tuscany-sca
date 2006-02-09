@@ -94,7 +94,7 @@ public class SDODataTypeHelper {
 		else if ( sdoType == SDODataTypes.SHORTOBJECT )
 			return java.sql.Types.SMALLINT;
 		else
-			throw new RuntimeException("Not a valid SDO Type");
+			throw new RuntimeException("Not a valid SDO Type " + sdoType);
 		
-	}
+	} 
 }

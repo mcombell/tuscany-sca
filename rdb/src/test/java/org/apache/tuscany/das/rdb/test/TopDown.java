@@ -25,15 +25,15 @@ import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.customer.AnOrder;
 import org.apache.tuscany.das.rdb.test.customer.Customer;
-import org.apache.tuscany.das.rdb.test.customer.CustomerPackage;
+import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
 import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 public class TopDown extends DasTest {
 
@@ -54,9 +54,11 @@ public class TopDown extends DasTest {
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
 						getMappingModel_1xM_uni_no_cud_as_stream());
 
-		// Set the object model
-		select.setDataObjectModel(SDOUtil.adaptType(CustomerPackage.eINSTANCE
-				.getDataGraphRoot()));
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		
+//		 Set the object model
+		select.setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
+	
 
 		// Parameterize the command
 		select.setConnection(getConnection());
@@ -136,15 +138,10 @@ public class TopDown extends DasTest {
 	 * //Flush changes das.applyChanges(root, command); }
 	 */
 
-	/**
-	 * @return
-	 */
-	private Type getGraphType() {
-		return SDOUtil.adaptType(CustomerPackage.eINSTANCE.getDataGraphRoot());
-	}
+
 
 	private InputStream getMappingModel_1xM_uni_no_cud_as_stream()
 			throws FileNotFoundException {
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("1xM_mapping_no_cud.xml");
+		return getClass().getClassLoader().getResourceAsStream("1xM_mapping_no_cud.xml");
 	}
 }

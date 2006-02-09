@@ -1,18 +1,8 @@
 /**
+ * <copyright>
+ * </copyright>
  *
- *  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * $Id$
  */
 package org.apache.tuscany.das.rdb.test.company.impl;
 
@@ -20,8 +10,11 @@ import org.apache.tuscany.das.rdb.test.company.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,90 +22,143 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class CompanyFactoryImpl extends EFactoryImpl implements CompanyFactory {
-	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompanyFactoryImpl() {
-		super();
-	}
+public class CompanyFactoryImpl extends EFactoryImpl implements CompanyFactory
+{
+  /**
+   * The singleton instance of the factory.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public static final CompanyFactoryImpl eINSTANCE = init();
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case CompanyPackage.COMPANY_TYPE: return (EObject)createCompanyType();
-			case CompanyPackage.DEPARTMENT_TYPE: return (EObject)createDepartmentType();
-			case CompanyPackage.DOCUMENT_ROOT: return (EObject)createDocumentRoot();
-			case CompanyPackage.EMPLOYEE_TYPE: return (EObject)createEmployeeType();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-		}
-	}
+  /**
+   * Creates the default factory implementation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public static CompanyFactoryImpl init()
+  {
+    try
+    {
+      CompanyFactoryImpl theCompanyFactory = (CompanyFactoryImpl)EPackage.Registry.INSTANCE.getEFactory("org.apache.tuscany.das.rdb.test/company.xsd"); 
+      if (theCompanyFactory != null)
+      {
+        return theCompanyFactory;
+      }
+    }
+    catch (Exception exception)
+    {
+      EcorePlugin.INSTANCE.log(exception);
+    }
+    return new CompanyFactoryImpl();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompanyType createCompanyType() {
-		CompanyTypeImpl companyType = new CompanyTypeImpl();
-		return companyType;
-	}
+  /**
+   * Creates an instance of the factory.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CompanyFactoryImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DepartmentType createDepartmentType() {
-		DepartmentTypeImpl departmentType = new DepartmentTypeImpl();
-		return departmentType;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EObject create(EClass eClass)
+  {
+    switch (eClass.getClassifierID())
+    {
+      case CompanyPackageImpl.COMPANY_TYPE: return (EObject)createCompanyType();
+      case CompanyPackageImpl.DATAGRAPH_ROOT: return (EObject)createDatagraphRoot();
+      case CompanyPackageImpl.DEPARTMENT_TYPE: return (EObject)createDepartmentType();
+      case CompanyPackageImpl.DOCUMENT_ROOT: return (EObject)createDocumentRoot();
+      case CompanyPackageImpl.EMPLOYEE_TYPE: return (EObject)createEmployeeType();
+      default:
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DocumentRoot createDocumentRoot() {
-		DocumentRootImpl documentRoot = new DocumentRootImpl();
-		return documentRoot;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CompanyType createCompanyType()
+  {
+    CompanyTypeImpl companyType = new CompanyTypeImpl();
+    return companyType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EmployeeType createEmployeeType() {
-		EmployeeTypeImpl employeeType = new EmployeeTypeImpl();
-		return employeeType;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public DatagraphRoot createDatagraphRoot()
+  {
+    DatagraphRootImpl datagraphRoot = new DatagraphRootImpl();
+    return datagraphRoot;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompanyPackage getCompanyPackage() {
-		return (CompanyPackage)getEPackage();
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public DepartmentType createDepartmentType()
+  {
+    DepartmentTypeImpl departmentType = new DepartmentTypeImpl();
+    return departmentType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @deprecated
-	 * @generated
-	 */
-	public static CompanyPackage getPackage() {
-		return CompanyPackage.eINSTANCE;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EObject createDocumentRoot()
+  {
+    EObject documentRoot = super.create(CompanyPackageImpl.Literals.DOCUMENT_ROOT);
+    return documentRoot;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EmployeeType createEmployeeType()
+  {
+    EmployeeTypeImpl employeeType = new EmployeeTypeImpl();
+    return employeeType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CompanyPackageImpl getCompanyPackageImpl()
+  {
+    return (CompanyPackageImpl)getEPackage();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @deprecated
+   * @generated
+   */
+  public static CompanyPackageImpl getPackage()
+  {
+    return CompanyPackageImpl.eINSTANCE;
+  }
 
 } //CompanyFactoryImpl

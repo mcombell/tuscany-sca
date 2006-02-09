@@ -19,14 +19,13 @@ package org.apache.tuscany.das.rdb.util;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.sdo.EChangeSummarySetting;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
+import commonj.sdo.ChangeSummary.Setting;
 
 /**
  */
@@ -68,9 +67,9 @@ public class DataObjectUtil {
 		
 		Iterator i = changes.iterator();
 		while (i.hasNext()) {
-		    EChangeSummarySetting s = (EChangeSummarySetting) i.next();    
-		    if ( s.getFeature() instanceof EAttribute )
-		    	((EObject)changedCopy).eSet(s.getFeature(), s.getValue());
+		    Setting s = (Setting) i.next();    
+		    if ( s.getProperty().getType().isDataType() )
+		    	changedCopy.set(s.getProperty(), s.getValue());
 		}
    }
 

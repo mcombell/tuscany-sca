@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EObject;
 
 import commonj.sdo.DataObject;
 
@@ -118,7 +117,7 @@ public class ResultSetProcessor {
 				continue;   
 
 			String tableName = rawDataFromRow.getTableName();
-			EObject tableObject = registry.get(tableName, rawDataFromRow
+			DataObject tableObject = registry.get(tableName, rawDataFromRow
 					.getPrimaryKeyValues());
 			if (tableObject == null) {
 				tableObject = doMaker.createAndAddDataObject(rawDataFromRow, resultMetadata);

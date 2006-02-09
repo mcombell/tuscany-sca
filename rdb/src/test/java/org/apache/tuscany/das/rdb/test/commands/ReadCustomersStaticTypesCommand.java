@@ -22,8 +22,9 @@ import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
-import org.apache.tuscany.das.rdb.test.customer.CustomerPackage;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
+
+import commonj.sdo.helper.TypeHelper;
 
 
 public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
@@ -47,12 +48,13 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 		t.getColumn().add(lastname);
 		t.getColumn().add(address);
 		t.setName("CUSTOMER");
+		t.setPropertyName("Customer");
 		mapping.getTable().add(t);
 	}
 	
 	public ReadCustomersStaticTypesCommand() {
 		super(sqlString, mapping);
-		setDataObjectModel(SDOUtil.adaptType(CustomerPackage.eINSTANCE.getDataGraphRoot()));
+		setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
 	}
 
 

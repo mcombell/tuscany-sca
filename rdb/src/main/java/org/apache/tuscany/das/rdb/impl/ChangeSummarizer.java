@@ -28,11 +28,11 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EAttribute;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
+import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
+import org.apache.tuscany.sdo.impl.ChangeSummarySettingImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.emf.ecore.sdo.EChangeSummarySetting;
-import org.eclipse.emf.ecore.sdo.impl.EChangeSummaryImpl;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -59,7 +59,7 @@ public class ChangeSummarizer {
 	public Changes loadChanges(DataObject root) {
 		ChangeSummary changeSummary = root.getDataGraph().getChangeSummary();
 		if (changeSummary.isLogging())
-			((EChangeSummaryImpl) changeSummary).summarize();
+			((ChangeSummaryImpl) changeSummary).summarize();
 
 		List changedObjects = changeSummary.getChangedDataObjects();
 		DebugUtil.debugln(getClass(), debug,
@@ -72,6 +72,7 @@ public class ChangeSummarizer {
 		Iterator i = changedObjects.iterator();
 		while (i.hasNext()) {
 			DataObject o = (DataObject) i.next();
+			
 			if (!(o.equals(root))) {
 				createChange(changeSummary, o);
 			}
@@ -116,7 +117,7 @@ public class ChangeSummarizer {
 				List values = changeSummary.getOldValues(changedObject);
 				Iterator i = values.iterator();
 				while (i.hasNext()) {
-					EChangeSummarySetting setting = (EChangeSummarySetting) i
+					ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i
 							.next();
 
 					if (setting.getFeature() instanceof EReference) {
@@ -144,8 +145,8 @@ public class ChangeSummarizer {
 	private boolean hasAttributeChange(List theChanges) {
 		Iterator i = theChanges.iterator();
 		while (i.hasNext()) {
-			EChangeSummarySetting setting = (EChangeSummarySetting) i.next();
-			if (setting.getFeature() instanceof EAttribute)
+			ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i.next();
+			if (setting.getFeature() instanceof AttributeImpl)
 				return true;
 		}
 		return false;

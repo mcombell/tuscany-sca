@@ -19,103 +19,102 @@ package org.apache.tuscany.das.rdb.graphbuilder.impl;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.sdo.EDataObject;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
+import commonj.sdo.helper.DataFactory;
 
 public class DataObjectMaker {
 
-	private final EDataObject dataGraph;
+	private final DataObject rootObject;
+
 	private boolean debug = false;
 
-	public DataObjectMaker(DataObject dataGraph) {
-		this.dataGraph = (EDataObject) dataGraph;
+	public DataObjectMaker(DataObject root) {
+		this.rootObject = root;
 	}
-	
+
 	/**
 	 * @param tableData
 	 * @return
 	 */
-	public EObject createAndAddDataObject(TableData tableData, ResultMetadata resultMetadata) {
-		// Get the EClass from the EPackage, and create a standalone EObject
+	public DataObject createAndAddDataObject(TableData tableData,
+			ResultMetadata resultMetadata) {
+		// Get a Type from the package and create a standalone DataObject
 
-		DebugUtil.debugln(getClass(), this.debug,"Looking for EClass for " + tableData.getTableName());
-	
-		EClass tableClass = findTableClass(tableData.getTableName());
+		DebugUtil.debugln(getClass(), this.debug, "Looking for Type for "
+				+ tableData.getTableName());
 
-		if ( tableClass == null ) 
-			throw new RuntimeException("An SDO Type with name " + tableData.getTableName() + " was not found");
-		
-		EObject obj = SDOUtil.create(tableClass);
+		Type tableClass = findTableTypeByPropertyName(tableData.getTableName());
+
+		if (tableClass == null)
+			throw new RuntimeException("An SDO Type with name "
+					+ tableData.getTableName() + " was not found");
+
+		DataObject obj = DataFactory.INSTANCE.create(tableClass);
 
 		// Now, check to see if the root data object has a containment reference
 		// to this EClass. If so, add it to the graph. If not, it will be taken
 		// care
 		// of when we process relationships
-		
-		Iterator i = this.dataGraph.eClass().getEReferences().iterator();
+
+		Iterator i = this.rootObject.getType().getProperties().iterator();
 		while (i.hasNext()) {
-			EReference ref = (EReference) i.next();
-			if (ref.isContainment()
-					&& ref.getEReferenceType().equals(tableClass)) {
-				if ( ref.isMany())
-					((InternalEList) this.dataGraph.eGet(ref)).addUnique(obj);
+			Property p = (Property) i.next();
+
+			if (p.isContainment() && p.getType().equals(tableClass)) {
+				if (p.isMany())
+					rootObject.getList(p).add(obj);
+				// TODO This was a performance optimization for EMF in SDO 1.1,
+				// check to see if there is
+				// something equivalent in SDO 2.0
+				// ((InternalEList) this.dataGraph.eGet(ref)).addUnique(obj);
 				else
-					this.dataGraph.eSet(ref, obj);
+					this.rootObject.set(p, obj);
 			}
 
 		}
 
-		Iterator columnNames = resultMetadata.getColumnNames(tableData.getTableName()).iterator();
+		Iterator columnNames = resultMetadata.getColumnNames(
+				tableData.getTableName()).iterator();
 		while (columnNames.hasNext()) {
 			String columnName = (String) columnNames.next();
-			DataObject dataObject = (DataObject)obj;
+			DataObject dataObject = (DataObject) obj;
 			Property p = findProperty(dataObject.getType(), columnName);
 			Object value = tableData.getColumnData(columnName);
-		//	System.out.println("setting " + p.getName()+ " to " + value);
+
 			dataObject.set(p, value);
 		}
-		
+
 		return obj;
 	}
 
-	//temporary, ignoring case
+	// temporary, ignoring case
 	private Property findProperty(Type type, String columnName) {
 		Iterator properties = type.getProperties().iterator();
-		while ( properties.hasNext()) {
+		while (properties.hasNext()) {
 			Property p = (Property) properties.next();
-			if ( columnName.equalsIgnoreCase(p.getName()))
+			if (columnName.equalsIgnoreCase(p.getName()))
 				return p;
 		}
 		return null;
 	}
-	
-	// Temporary utility to return the Eclass with the given name
-	private EClass findTableClass(String tableName) {
-		Iterator classifiers = getPackage().getEClassifiers().iterator();
-		while (classifiers.hasNext()) {
-			EClass tableClass = (EClass) classifiers.next();
-			if (tableName.equalsIgnoreCase(tableClass.getName()))
-				return tableClass;
-		}
 
+	private Type findTableTypeByPropertyName(String tableName) {
+		Iterator i = rootObject.getType().getProperties().iterator();
+		while (i.hasNext()) {
+			Property p = (Property) i.next();
+	//		System.out.println(p.getType().getName());
+			if (tableName.equals(p.getType().getName()))
+				return p.getType();
+		}
+		
 		return null;
 	}
 
-	private EClass getSchema() {
-		return this.dataGraph.eClass();
-	}
-
-	private EPackage getPackage() {
-		return getSchema().getEPackage();
+	private Type findTableTypeByRootReference(String refName) {
+		return rootObject.getProperty(refName).getType();
 	}
 
 }

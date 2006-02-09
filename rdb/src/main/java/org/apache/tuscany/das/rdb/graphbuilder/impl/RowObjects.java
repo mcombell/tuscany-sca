@@ -17,7 +17,6 @@
 package org.apache.tuscany.das.rdb.graphbuilder.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -25,10 +24,9 @@ import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.ETypedElement;
+
+import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 
 
 public class RowObjects {
@@ -50,13 +48,13 @@ public class RowObjects {
 		this.registry = registry;
 	}
 
-	public void put(String key, EObject value) {
+	public void put(String key, DataObject value) {
 		objectsByTableName.put(key, value);
 		tableObjects.add(value);
 	}
 
-	public EObject get(String tablePropertyName) {
-		return (EObject) objectsByTableName.get(tablePropertyName);
+	public DataObject get(String tablePropertyName) {
+		return (DataObject) objectsByTableName.get(tablePropertyName);
 	}
 
 	void processRelationships() {
@@ -70,9 +68,10 @@ public class RowObjects {
 		while (i.hasNext()) {
 			Relationship r = (Relationship) i.next();
 
-			EObject parentTable = get(wrapper
+			
+            DataObject parentTable = get(wrapper
 					.getTablePropertyName(r.getPrimaryKeyTable()));
-			EObject childTable = get(wrapper
+			DataObject childTable = get(wrapper
 					.getTablePropertyName(r.getForeignKeyTable()));
 
 			DebugUtil.debugln(getClass(), debug, "Parent table: " + parentTable);
@@ -81,9 +80,8 @@ public class RowObjects {
 			if ((parentTable == null) || (childTable == null))
 				continue;
 
-			EReference ref = (EReference) parentTable.eClass()
-					.getEStructuralFeature(r.getName());
-			setOrAdd(parentTable, childTable, ref);
+            Property p = parentTable.getType().getProperty(r.getName());
+			setOrAdd(parentTable, childTable, p);
 			
 		}
 	}
@@ -93,34 +91,33 @@ public class RowObjects {
 	private void processRecursiveRelationships(MappingWrapper wrapper) {
 		Iterator i = tableObjects.iterator();
 		while (i.hasNext()) {
-			EObject table = (EObject) i.next();
-		//	System.out.println(table.eClass().getName());
-			Iterator relationships = wrapper.getRelationshipsByChildTable(table.eClass().getName()).iterator();
+			DataObject table = (DataObject) i.next();
+		
+			Iterator relationships = wrapper.getRelationshipsByChildTable(table.getType().getName()).iterator();
 			while ( relationships.hasNext() ) {
 				Relationship r = (Relationship) relationships.next();
-			//	System.out.println(r.getName());
-				EObject parentTable = findParentTable(table, r, wrapper);
+		
+				DataObject parentTable = findParentTable(table, r, wrapper);
 				
 				if (parentTable == null)
 					continue;
 
-				EReference ref = (EReference) parentTable.eClass().getEStructuralFeature(r.getName());
-				setOrAdd(parentTable, table, ref);
+                Property p = parentTable.getType().getProperty(r.getName());
+				setOrAdd(parentTable, table, p);
 			}
 			
 		}
 	}
 	
-	private void setOrAdd(EObject parent, EObject child, EReference ref) {
-		if (ref.getUpperBound() == ETypedElement.UNBOUNDED_MULTIPLICITY) {
-			Collection value = (Collection) parent.eGet(ref);
-			value.add(child);
+	private void setOrAdd(DataObject parent, DataObject child, Property p) {
+		if (p.isMany()) {
+            parent.getList(p).add(child);
 		} else {
-			parent.eSet(ref, child);
+			parent.set(p, child);
 		}
 	}
 	
-	private EObject findParentTable(EObject childTable, 
+	private DataObject findParentTable(DataObject childTable, 
 			Relationship r, MappingWrapper wrapper) {
 		
 		ArrayList fkValue = new ArrayList();
@@ -129,14 +126,13 @@ public class RowObjects {
 			KeyPair pair = (KeyPair) keyPairs.next();
 			String childProperty = wrapper.getColumnPropertyName(r.getPrimaryKeyTable(), pair.getForeignKeyColumn());
 	
-			EAttribute attr = (EAttribute) childTable.eClass()
-					.getEStructuralFeature(childProperty);
-			fkValue.add(childTable.eGet(attr));
+            Property p = childTable.getType().getProperty(childProperty);
+			fkValue.add(childTable.get(p));
 		}
 
 		DebugUtil.debugln(getClass(), debug, "Trying to find parent of " + r.getForeignKeyTable() + " with FK "
 				+ fkValue);
-		EObject parentTable = registry.get(r.getPrimaryKeyTable(), fkValue);
+		DataObject parentTable = registry.get(r.getPrimaryKeyTable(), fkValue);
 		DebugUtil.debugln(getClass(), debug, "Parent table from registry: " + parentTable);
 		return parentTable;
 	}

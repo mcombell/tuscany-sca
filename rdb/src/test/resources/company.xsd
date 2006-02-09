@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="org.apache.tuscany.das.rdb.test/company.xsd" xmlns:company="org.apache.tuscany.das.rdb.test/company.xsd" 
+<xsd:schema targetNamespace="org.apache.tuscany.das.rdb.test/company.xsd" 
+	xmlns:company="org.apache.tuscany.das.rdb.test/company.xsd" 
 		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+		
+	<xsd:complexType name="DatagraphRoot">		
+	 	<xsd:sequence>	 	
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="companies" type="company:CompanyType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="departments" type="company:DepartmentType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="employees" type="company:EmployeeType"/>
+    	</xsd:sequence>
+	</xsd:complexType>
+	
       <xsd:element name="company" type="company:CompanyType"/>
+      
       <xsd:complexType name="CompanyType">
         <xsd:sequence>
           <xsd:element maxOccurs="unbounded" name="departments" type="company:DepartmentType"/>
@@ -10,6 +21,7 @@
         <xsd:attribute name="name" type="xsd:string"/>
         <xsd:attribute name="employeeOfTheMonth" type="xsd:IDREF" ecore:reference="EmployeeType"/>
       </xsd:complexType>
+      
       <xsd:complexType name="DepartmentType">
         <xsd:sequence>
           <xsd:element maxOccurs="unbounded" name="employees" type="company:EmployeeType"/>

@@ -18,13 +18,13 @@ package org.apache.tuscany.das.rdb.graphbuilder.impl;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
+import commonj.sdo.DataObject;
 
 /**
  */
 public class SingleTableRegistry implements TableRegistry {
 
-	//private HashMap<List,EObject> values = new HashMap<List,EObject>();
+	//private HashMap<List,DataObject> values = new HashMap<List,DataObject>();
 
 	public SingleTableRegistry() {
 		// Empty Constructor
@@ -33,14 +33,14 @@ public class SingleTableRegistry implements TableRegistry {
 	/* (non-Javadoc)
 	 * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#get(java.lang.String, java.util.List)
 	 */
-	public EObject get(String tableName, List primaryKey) {
+	public DataObject get(String tableName, List primaryKey) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#put(java.lang.String, java.util.List, java.lang.Object)
 	 */
-	public void put(String tableName, List primaryKey, EObject value) {
+	public void put(String tableName, List primaryKey, DataObject value) {
 		// do nothing
 		
 	}

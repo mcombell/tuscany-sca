@@ -17,11 +17,14 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.test.company.CompanyPackage;
+import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
+import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
+
+import commonj.sdo.helper.TypeHelper;
 
 public class ExceptionTests extends DasTest {
 
@@ -56,13 +59,13 @@ public class ExceptionTests extends DasTest {
 		Command readCustomers = Command.FACTORY
 				.createCommand("select * from CUSTOMER where ID = 1");
 		readCustomers.setConnection(getConnection());
-		readCustomers.setDataObjectModel(SDOUtil
-				.adaptType(CompanyPackage.eINSTANCE.getDocumentRoot()));
+		SDOUtil.registerStaticTypes(CompanyFactory.class);
+		readCustomers.setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
 
 		try {
 			readCustomers.executeQuery();
 			fail("Exception should be thrown");
-		} catch (RuntimeException ex) {
+		} catch (RuntimeException ex) {	
 			assertEquals("An SDO Type with name CUSTOMER was not found", ex
 					.getMessage());
 		}

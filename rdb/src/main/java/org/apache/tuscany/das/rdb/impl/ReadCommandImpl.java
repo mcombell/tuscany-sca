@@ -32,19 +32,17 @@ import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
+import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
+import org.apache.tuscany.sdo.util.DataObjectUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.sdo.EType;
-import org.eclipse.emf.ecore.sdo.SDOFactory;
-import org.eclipse.emf.ecore.sdo.impl.EDataGraphImpl;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
+import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
@@ -98,7 +96,7 @@ public class ReadCommandImpl extends CommandImpl {
 	}
 
 	protected DataObject buildGraph(ResultSet result) throws SQLException {
-
+		
 		List results = new ArrayList();
 		results.add(result);
 
@@ -110,17 +108,19 @@ public class ReadCommandImpl extends CommandImpl {
 		GraphBuilderMetadata gbmd = new GraphBuilderMetadata(results,
 				getSchema(), mappingModel.getConfig(), resultSetShape);
 
-		EDataGraphImpl g = createEDataGraph(gbmd.getSchema());
+		DataGraph g = createEDataGraph(gbmd.getSchema());
+		ChangeSummaryImpl summary = (ChangeSummaryImpl) g.getChangeSummary();
 
 		ResultSetProcessor rsp = new ResultSetProcessor(g.getRootObject(), gbmd);
 		rsp.processResults(getStartRow(), getEndRow());
 
-		g.getChangeSummary().beginLogging();
+		summary.beginLogging();
+	
 		return g.getRootObject();
 	}
 
-	private EType getSchema() {
-		return (EType) schema;
+	private Type getSchema() {
+		return (Type) schema;
 	}
 
 	protected int getStartRow() {
@@ -139,26 +139,20 @@ public class ReadCommandImpl extends CommandImpl {
 		this.endRow = endRow;
 	}
 
-	private EDataGraphImpl createEDataGraph(EType type) {
+	private DataGraph createEDataGraph(Type type) {
 
-		EClassifier rootClass = type.getEClassifier();
-		EDataGraphImpl g = (EDataGraphImpl) SDOFactory.eINSTANCE
-				.createEDataGraph();
+		DataGraph g = SDOUtil.createDataGraph();
 
 		// Create a ResourceSet to contain the DataGraph
-		ResourceSet resourceSet = SDOUtil.createResourceSet();
+		ResourceSet resourceSet = DataObjectUtil.createResourceSet();
 
 		// Create a Resource to hold the schema
-		Resource r = resourceSet.createResource(URI.createURI(rootClass
-				.getEPackage().getNsURI()));
-		InternalEList list = (InternalEList) r.getContents();
-		list.addUnique(rootClass.getEPackage());
-
-		// Set the DataGraph's ResourceSet
-		g.setResourceSet(resourceSet);
+        
+		Resource r = resourceSet.createResource(URI.createURI(type.getURI()));
+		r.getContents().add(g);
 
 		// Create the root object
-		g.createRootObject(SDOUtil.adaptType(rootClass));
+		g.createRootObject(type);
 
 		return g;
 	}
@@ -168,6 +162,7 @@ public class ReadCommandImpl extends CommandImpl {
 	}
 
 	public void setMappingModel(InputStream stream) {
+        
 		XMLResource resource = new XMLResourceImpl();
 
 		HashMap map = new HashMap();

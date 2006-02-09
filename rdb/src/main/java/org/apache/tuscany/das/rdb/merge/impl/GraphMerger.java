@@ -22,14 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.MultiTableRegistry;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.TableRegistry;
-import org.eclipse.emf.ecore.EAttribute;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
+import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.sdo.impl.EChangeSummaryImpl;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -63,7 +62,7 @@ public class GraphMerger {
 	public DataObject merge(DataObject primary, DataObject secondary) {
 		addGraphToRegistry(primary);
 
-		EChangeSummaryImpl summary = (EChangeSummaryImpl) primary
+		ChangeSummaryImpl summary =  (ChangeSummaryImpl) primary
 				.getDataGraph().getChangeSummary();
 		summary.endLogging();
 		Iterator i = secondary.getType().getProperties().iterator();
@@ -95,11 +94,11 @@ public class GraphMerger {
 			Iterator attrs = eObjectToCopy.eClass().getEAllAttributes()
 					.iterator();
 			while (attrs.hasNext()) {
-				EAttribute attr = (EAttribute) attrs.next();
+				AttributeImpl attr = (AttributeImpl) attrs.next();
 				newObject.set(attr.getName(), eObjectToCopy.eGet(attr));
 			}
 			registry.put(object.getType().getName(), Collections
-					.singletonList(pk), (EObject) newObject);
+					.singletonList(pk), newObject);
 
 			Iterator refs = eObjectToCopy.eClass().getEAllReferences()
 					.iterator();
@@ -145,7 +144,7 @@ public class GraphMerger {
 				Object pk = object.get(getPrimaryKeyName(object));
 				logger.finest("Adding object with pk " + pk + " to registry");
 				registry.put(object.getType().getName(), Collections
-						.singletonList(pk), (EObject) object);
+						.singletonList(pk), object);
 			}
 		}
 	}

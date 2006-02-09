@@ -16,6 +16,9 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
 
@@ -27,11 +30,12 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
+import commonj.sdo.helper.XSDHelper;
 
 public abstract class CommandImpl implements Command {
 
 	protected Statement statement;
-	
+
 	protected Parameters parameters = new Parameters();
 
 	protected MappingWrapper mappingModel = new MappingWrapper();
@@ -42,6 +46,20 @@ public abstract class CommandImpl implements Command {
 
 	public CommandImpl(String sqlString) {
 		statement = new Statement(sqlString);
+
+		try {
+			URL url = getClass().getResource("/xml/sdoJava.xsd");
+			if (url == null)
+				throw new RuntimeException(
+					"Could not find resource: xml/sdoJava.xsd");
+		
+			InputStream inputStream = url.openStream();
+			XSDHelper.INSTANCE.define(inputStream, url.toString());
+			inputStream.close();
+		} catch ( IOException ex ) {
+			throw new RuntimeException(ex);
+		}
+
 	}
 
 	public abstract void execute();
@@ -51,19 +69,20 @@ public abstract class CommandImpl implements Command {
 	public void setParameterValue(String name, Object value) {
 		parameters.setParameter(name, value);
 	}
+
 	public void setParameterValue(int index, Object value) {
 		parameters.setParameter(index, value);
 	}
 
-    public void setParameterType(String name, Type dataType) {
-        parameters.setParameterWithType(name, dataType);
-    }
-    
-    public void setParameterType(int index, Type dataType) {
-        parameters.setParameterWithType(index, dataType);
-    }
+	public void setParameterType(String name, Type dataType) {
+		parameters.setParameterWithType(name, dataType);
+	}
 
-    public void addParameter(int index, Type sdoType) {
+	public void setParameterType(int index, Type dataType) {
+		parameters.setParameterWithType(index, dataType);
+	}
+
+	public void addParameter(int index, Type sdoType) {
 		addParameter(index, Parameter.IN, sdoType);
 	}
 
@@ -96,12 +115,12 @@ public abstract class CommandImpl implements Command {
 		return parameters.parameterList();
 	}
 
-
 	public Object getParameterValue(String name) {
 		Parameter p = parameters.get(name);
-		if ( p == null ) 
-			throw new RuntimeException("Parameter with name " + name + " not found");
-		
+		if (p == null)
+			throw new RuntimeException("Parameter with name " + name
+					+ " not found");
+
 		return p;
 	}
 

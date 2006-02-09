@@ -138,11 +138,11 @@ public class Statement {
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             Object value = param.getValue();
             DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
-            if (value == null) {
-                // System.out.println(param.getType());
+            if (value == null) {            
                 ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
-            } else
+            } else {           
                 ps.setObject(param.getIndex(), value);
+            }
         }
         return ps.executeUpdate();
     }

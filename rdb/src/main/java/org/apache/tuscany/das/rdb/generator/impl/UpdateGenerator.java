@@ -33,13 +33,10 @@ import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
 import org.apache.tuscany.das.rdb.impl.WriteCommandImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
+import org.apache.tuscany.sdo.impl.ChangeSummarySettingImpl;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
 import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.emf.ecore.sdo.EChangeSummarySetting;
-import org.eclipse.emf.ecore.sdo.EProperty;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -69,7 +66,7 @@ public class UpdateGenerator {
 		Iterator i = getChangedFields(mapping, summary, changedObject).iterator();
 
 		while (i.hasNext()) {
-			EAttribute attr = (EAttribute) i.next();
+			AttributeImpl attr = (AttributeImpl) i.next();
 			Column c = t.getColumnByPropertyName(attr.getName());
 			if ((c != null) && (c.isCollision() || c.isPrimaryKey())) {
 				// get rid of comma if OCC or PK is last field
@@ -128,9 +125,15 @@ public class UpdateGenerator {
 		return updateCommand;
 	}
 
-	private List getFields(DataObject obj) {
-		EClass clazz = ((EObject) obj).eClass();
-		return clazz.getEAttributes();
+	private List getAttributeProperties(DataObject obj) {
+		ArrayList fields = new ArrayList();
+		Iterator i = obj.getType().getProperties().iterator();
+		while ( i.hasNext() ) {
+			Property p = (Property) i.next();
+			if ( p.getType().isDataType())
+				fields.add(p);
+		}
+		return fields;
 	}
 
 
@@ -138,18 +141,18 @@ public class UpdateGenerator {
 		ArrayList changes = new ArrayList();
 		Iterator i = summary.getOldValues(obj).iterator();
 		while (i.hasNext()) {
-			EChangeSummarySetting setting = (EChangeSummarySetting) i.next();
-			if (setting.getFeature() instanceof EAttribute)
+			ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i.next();
+			if (setting.getFeature() instanceof AttributeImpl)
 				changes.add(setting.getFeature());
-			else if ( setting.getFeature() instanceof EReference) {
-				EReference ref = (EReference) setting.getFeature();
+			else if ( setting.getFeature() instanceof ReferenceImpl) {
+				ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
 				if ( ref.getUpperBound() != ETypedElement.UNBOUNDED_MULTIPLICITY ) {
 					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByName(ref.getEOpposite().getName()));
 					Iterator keys = r.getForeignKeys().iterator();
 					while ( keys.hasNext()) {
 						String key = (String) keys.next();
-						EProperty p = (EProperty) obj.getType().getProperty(key);
-						changes.add(p.getEStructuralFeature());
+						AttributeImpl p = (AttributeImpl) obj.getType().getProperty(key);
+						changes.add(p);
 					}
 				}
 					
@@ -178,9 +181,9 @@ public class UpdateGenerator {
 		ArrayList parameters = new ArrayList();
 		ArrayList pkParams = new ArrayList();
 		
-		Iterator i = getFields(changedObject).iterator();
+		Iterator i = getAttributeProperties(changedObject).iterator();
 		while (i.hasNext()) {
-			EAttribute attr = (EAttribute) i.next();
+			AttributeImpl attr = (AttributeImpl) i.next();
 			String field = attr.getName();
 
 			Parameter p = getParameter(wrapper, type.getProperty(field));

@@ -28,8 +28,7 @@ import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.InsertCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import commonj.sdo.DataObject;
@@ -51,12 +50,13 @@ public class InsertGenerator {
 		StringBuffer statement = new StringBuffer("insert into ");
 		statement.append(t.getName());
 
-		Iterator i = getFields(changedObject).iterator();
+		Iterator i = getAttributeProperties(changedObject).iterator();
 
 		ArrayList attributes = new ArrayList();
 		while (i.hasNext()) {
-			EAttribute attr = (EAttribute) i.next();
-			if ((!table.isGeneratedColumnProperty(attr.getName())) && ((EObject)changedObject).eIsSet(attr)) {
+			AttributeImpl attr = (AttributeImpl) i.next();
+			if ((!table.isGeneratedColumnProperty(attr.getName())) && 
+					((EObject)changedObject).eIsSet(attr)) {
 				attributes.add(attr.getName());
 				parameters.add(changedObject.getType().getProperty(
 						attr.getName()));
@@ -113,19 +113,27 @@ public class InsertGenerator {
 		return null;
 	}
 
-	private List getFields(DataObject obj) {
-		EClass clazz = ((EObject) obj).eClass();
-		return clazz.getEAttributes();
+	private List getAttributeProperties(DataObject obj) {
+		ArrayList fields = new ArrayList();
+		Iterator i = obj.getType().getProperties().iterator();
+		while ( i.hasNext()) {
+			Property p = (Property) i.next();
+			if ( p.getType().isDataType())
+				fields.add(p);
+		}
+		
+		return fields;
+	
 	}
 
 	public Collection getInsertParameters(DataObject changedObject, Table table) {
 		ArrayList parameters = new ArrayList();
 		TableWrapper wrapper = new TableWrapper(table);
 
-		Iterator i = getFields(changedObject).iterator();
+		Iterator i = getAttributeProperties(changedObject).iterator();
 
 		while (i.hasNext()) {
-			EAttribute attr = (EAttribute) i.next();
+			AttributeImpl attr = (AttributeImpl) i.next();
 			if (!wrapper.isGeneratedColumnProperty(attr.getName()))
 				parameters.add(changedObject.getType().getProperty(
 						attr.getName()));

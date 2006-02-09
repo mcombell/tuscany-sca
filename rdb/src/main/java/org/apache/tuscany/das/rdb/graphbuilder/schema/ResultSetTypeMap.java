@@ -18,14 +18,12 @@ package org.apache.tuscany.das.rdb.graphbuilder.schema;
 
 import java.sql.Types;
 
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.sdo.SDOPackage;
 
 import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 /**
- *         would provide some facility to do this.
  */
 public class ResultSetTypeMap {
 
@@ -46,91 +44,90 @@ public class ResultSetTypeMap {
 	 * @param isNullable
 	 * @return
 	 */
-	public EDataType getEDataType(int type, boolean isNullable) {
-
+	public Type getEDataType(int type, boolean isNullable) {
+     
+	    TypeHelper helper = TypeHelper.INSTANCE;
+        SDOPackage.eINSTANCE.eClass();
 		switch (type) {
 
 		case Types.CHAR:
 		case Types.VARCHAR:
 		case Types.LONGVARCHAR:
-			return getPackage().getEString();
+			return helper.getType("commonj.sdo", "String");
 
 		case Types.NUMERIC:
 		case Types.DECIMAL:
-			return getPackage().getEBigDecimal();
+			return helper.getType("commonj.sdo", "Decimal");
 
 		case Types.BIT:
 		case Types.BOOLEAN:
 			if (isNullable)
-				return getPackage().getEBooleanObject();
+				return helper.getType("commonj.sdo", "Boolean");
 			else
-				return getPackage().getEBoolean();
+				return helper.getType("commonj.sdo", "boolean");
 
 		case Types.TINYINT:
 		case Types.SMALLINT:
 		case Types.INTEGER:
-			if (isNullable)
-				return getPackage().getEIntegerObject();
-			else
-				return getPackage().getEInt();
+			if (isNullable) {               
+				return helper.getType("commonj.sdo", "IntObject");
+            } else
+				return helper.getType("commonj.sdo", "Int");
 
 		case Types.BIGINT:
 			if (isNullable)
-				return getPackage().getELongObject();
+				return helper.getType("commonj.sdo", "Long");
 			else
-				return getPackage().getELong();
+				return helper.getType("commonj.sdo", "long");
 
 		case Types.REAL:
 			if (isNullable)
-				return getPackage().getEFloatObject();
+				return helper.getType("commonj.sdo", "Real");
 			else
-				return getPackage().getEFloat();
+				return helper.getType("commonj.sdo", "real");
 
 		case Types.FLOAT:
 		case Types.DOUBLE:
 			if (isNullable)
-				return getPackage().getEDoubleObject();
+				return helper.getType("commonj.sdo", "Double");
 			else
-				return getPackage().getEDouble();
+				return helper.getType("commonj.sdo", "double");
 
 		case Types.BINARY:
 		case Types.VARBINARY:
 		case Types.LONGVARBINARY:
-			return getPackage().getEByteArray();
+			return helper.getType("commonj.sdo", "ByteArray");
 
 		case Types.DATE:
 		case Types.TIME:
 		case Types.TIMESTAMP:
-			return getPackage().getEDate();
+			return helper.getType("commonj.sdo", "Date");
 
 		case Types.CLOB:
-			return getPackage().getEString();
+			return helper.getType("commonj.sdo", "Clob");
 
 		case Types.BLOB:
-			return getPackage().getEByteArray();
+			return helper.getType("commonj.sdo", "Blob");
 
 		case Types.ARRAY:
-			return getPackage().getEByteArray();
+			return helper.getType("commonj.sdo", "Array");
 
 		case Types.DISTINCT:
 		case Types.STRUCT:
 		case Types.REF:
 		case Types.DATALINK:
 		case Types.JAVA_OBJECT:
-			return getPackage().getEJavaObject();
+			return helper.getType("commonj.sdo", "Object");
 
 		default:
-			return getPackage().getEJavaObject();
+            return helper.getType("commonj.sdo", "Object");
 		}
 
 	}
 
-	public EcorePackage getPackage() {
-		return EcorePackage.eINSTANCE;
-	}
 
 	public Type getType(int columnType, boolean b) {
-		return SDOUtil.adaptType(getEDataType(columnType, b));
+		return getEDataType(columnType, b);
 	}
 
 }

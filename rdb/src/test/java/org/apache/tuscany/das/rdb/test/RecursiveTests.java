@@ -52,7 +52,7 @@ public class RecursiveTests extends DasTest {
 
 		String[] columns = {"ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID"};
 		String[] tables = {"PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART"};
-		Type[] types = {SDODataTypes.INTEGER, SDODataTypes.STRING, SDODataTypes.INTEGER, SDODataTypes.INTEGER, SDODataTypes.INTEGER, SDODataTypes.STRING, SDODataTypes.INTEGER, SDODataTypes.INTEGER, SDODataTypes.INTEGER, SDODataTypes.STRING, SDODataTypes.INTEGER, SDODataTypes.INTEGER};
+		Type[] types = {SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT};
 		ResultSetShape shape = new ResultSetShape(tables, columns, types);
 
 		//Hack until we provide a nicer API

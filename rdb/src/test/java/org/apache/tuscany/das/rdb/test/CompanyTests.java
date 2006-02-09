@@ -20,10 +20,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.test.company.CompanyPackage;
+import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.company.CompanyType;
+import org.apache.tuscany.das.rdb.test.company.DatagraphRoot;
 import org.apache.tuscany.das.rdb.test.company.DepartmentType;
-import org.apache.tuscany.das.rdb.test.company.DocumentRoot;
 import org.apache.tuscany.das.rdb.test.company.EmployeeType;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
@@ -31,9 +31,10 @@ import org.apache.tuscany.das.rdb.test.data.DepEmpData;
 import org.apache.tuscany.das.rdb.test.data.DepartmentData;
 import org.apache.tuscany.das.rdb.test.data.EmployeeData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.helper.TypeHelper;
 
 public class CompanyTests extends DasTest {
 
@@ -76,6 +77,7 @@ public class CompanyTests extends DasTest {
 
     public void testSimpleStatic() throws Exception {
 
+    	SDOUtil.registerStaticTypes(CompanyFactory.class);
         // Build the select command
         Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
@@ -84,15 +86,16 @@ public class CompanyTests extends DasTest {
 
         // Parameterize the command
         selectCommand.setConnection(getConnection());
-        selectCommand.setDataObjectModel(SDOUtil.adaptType(CompanyPackage.eINSTANCE.getDocumentRoot()));
+        selectCommand.setDataObjectModel(TypeHelper.INSTANCE.getType(DatagraphRoot.class));
         selectCommand.addConverter("DEPARTMENT.NUMBER", "org.apache.tuscany.das.rdb.test.mappings.StringToIntegerConverter");
         selectCommand.addConverter("EMPLOYEE.MANAGER", "org.apache.tuscany.das.rdb.test.mappings.IntegerToBooleanConverter");
 
         // Get the graph
-        DocumentRoot root = (DocumentRoot) selectCommand.executeQuery();
+        DatagraphRoot root = (DatagraphRoot) selectCommand.executeQuery();
+        
+        
+        CompanyType company = (CompanyType) root.getCompanies().get(0);
 
-        // Get a company
-        CompanyType company = root.getCompany();
         assertEquals("MegaCorp", company.getName());
 
         // Get a department
@@ -105,8 +108,7 @@ public class CompanyTests extends DasTest {
     }
 
     private InputStream getCompanyMappingModel() throws FileNotFoundException {
-        // return new FileInputStream("src/test/resources/companyMapping.xml");
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream("companyMapping.xml");
+        return getClass().getClassLoader().getResourceAsStream("companyMapping.xml");
     }
 
 }

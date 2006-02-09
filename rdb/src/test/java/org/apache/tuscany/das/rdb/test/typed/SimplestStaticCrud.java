@@ -16,14 +16,17 @@
  */
 package org.apache.tuscany.das.rdb.test.typed;
 
+import java.io.InputStream;
 import java.util.Collection;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.test.customer.CustomerPackage;
+import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
 import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
+
+import commonj.sdo.helper.TypeHelper;
 
 
 /**
@@ -36,11 +39,15 @@ public class SimplestStaticCrud extends DasTest {
 	}
 	
 	public void testRead() throws Exception {
-		
-		Command select = Command.FACTORY.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = :LASTNAME");
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		InputStream mapping = getClass().getClassLoader().getResourceAsStream("basicStaticCustomer.xml");
+		Command select = Command.FACTORY.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = :LASTNAME",mapping);
 		select.setConnection(getConnection());
 		select.setParameterValue("LASTNAME", "Williams");
-		select.setDataObjectModel(SDOUtil.adaptType(CustomerPackage.eINSTANCE.getDataGraphRoot()));
+		TypeHelper helper = TypeHelper.INSTANCE;
+		
+		select.setDataObjectModel(helper.getType(DataGraphRoot.class));
+		
 		DataGraphRoot root = (DataGraphRoot) select.executeQuery();
 		
 		Collection customers = root.getCustomers();

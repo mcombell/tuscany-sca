@@ -27,7 +27,8 @@ import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.graphbuilder.schema.ESchemaMaker;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.sdo.EType;
+
+import commonj.sdo.Type;
 
 
 /**
@@ -37,10 +38,10 @@ public class GraphBuilderMetadata {
 	private Config mappingModel;
 	private final Collection resultSets = new ArrayList();
 	private boolean debug = false;
-	private EType schema;
+	private Type schema;
 
 
-	public GraphBuilderMetadata(Collection results, EType schema, Config model, ResultSetShape shape) throws SQLException {
+	public GraphBuilderMetadata(Collection results, Type schema, Config model, ResultSetShape shape) throws SQLException {
 		this.mappingModel = model;
 		this.schema = schema;
 		
@@ -82,7 +83,7 @@ public class GraphBuilderMetadata {
 	/**
 	 * @return
 	 */
-	public EType getSchema() {
+	public Type getSchema() {
 		if ( this.schema == null ) {
 			ESchemaMaker schemaMaker = new ESchemaMaker(this);
 			return schemaMaker.createESchema();

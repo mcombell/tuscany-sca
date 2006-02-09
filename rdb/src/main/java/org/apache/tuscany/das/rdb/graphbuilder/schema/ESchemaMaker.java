@@ -25,21 +25,23 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultMetadata;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.EAttribute;
+import org.apache.tuscany.sdo.SDOFactory;
+import org.apache.tuscany.sdo.impl.AttributeImpl;
+import org.apache.tuscany.sdo.impl.ClassImpl;
+import org.apache.tuscany.sdo.impl.DynamicDataObjectImpl;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
+import org.apache.tuscany.sdo.util.DataObjectUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.sdo.EType;
-import org.eclipse.emf.ecore.sdo.impl.DynamicEDataObjectImpl;
-import org.eclipse.emf.ecore.sdo.util.SDOUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
+
+import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 /**
  * 
@@ -49,235 +51,243 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  */
 public class ESchemaMaker {
 
-    private final GraphBuilderMetadata metadata;
+	private final GraphBuilderMetadata metadata;
 
-    private EPackage dataGraphPackage;
+	private EPackage dataGraphPackage;
 
-    private final String nsPrefix;
+	private final String nsPrefix;
 
-    private final String pkgName;
+	private final String pkgName;
 
-    private boolean debug = false;
+	private boolean debug = false;
 
-    /**
-     * Constructor for ESchemaMaker. Creates an EMF Schema based on the metadata
-     * passed in.
-     * 
-     * @param metadata
-     */
-    public ESchemaMaker(GraphBuilderMetadata metadata) {
-        this(metadata, null, null);
-    }
+	/**
+	 * Constructor for ESchemaMaker. Creates an EMF Schema based on the metadata
+	 * passed in.
+	 * 
+	 * @param metadata
+	 */
+	public ESchemaMaker(GraphBuilderMetadata metadata) {
+		this(metadata, null, null);
+	}
 
-    /**
-     * Constructor for ESshemaMaker. Creates an EMF Schema based on the supplied
-     * metadata, namespace prefix, and package name
-     * 
-     * @param metadata
-     *            the metadata
-     * @param nsPrefix
-     *            the namespace prefix - this affects the generated
-     *            Factory/Package name - defaults to datagraph
-     * @param pkgName
-     *            the package name - determines package name for generated code -
-     *            defaults to datagraph
-     */
-    public ESchemaMaker(GraphBuilderMetadata metadata, String nsPrefix,
-            String pkgName) {
-        if (nsPrefix == null)
-            nsPrefix = "datagraph";
-        if (pkgName == null)
-            pkgName = "datagraph";
+	/**
+	 * Constructor for ESshemaMaker. Creates an EMF Schema based on the supplied
+	 * metadata, namespace prefix, and package name
+	 * 
+	 * @param metadata
+	 *            the metadata
+	 * @param nsPrefix
+	 *            the namespace prefix - this affects the generated
+	 *            Factory/Package name - defaults to datagraph
+	 * @param pkgName
+	 *            the package name - determines package name for generated code -
+	 *            defaults to datagraph
+	 */
+	public ESchemaMaker(GraphBuilderMetadata metadata, String nsPrefix,
+			String pkgName) {
+		if (nsPrefix == null)
+			nsPrefix = "datagraph";
+		if (pkgName == null)
+			pkgName = "datagraph";
 
-        this.metadata = metadata;
-        this.nsPrefix = nsPrefix;
-        this.pkgName = pkgName;
+		this.metadata = metadata;
+		this.nsPrefix = nsPrefix;
+		this.pkgName = pkgName;
 
-    }
+		TypeHelper helper = TypeHelper.INSTANCE;
+	}
 
-    /**
-     * Creates an EMF Schema by using the
-     * 
-     * @link TableMaker and
-     * @link RelationshipMaker to transform
-     * @link Metadata elements into EMF Schema elements.
-     */
+	/**
+	 * Creates an EMF Schema by using the
+	 * 
+	 * @link TableMaker and
+	 * @link RelationshipMaker to transform
+	 * @link Metadata elements into EMF Schema elements.
+	 */
 
-    public EType createESchema() {
-        EClass rootObject = EcoreFactory.eINSTANCE.createEClass();
-        rootObject.setName("DataGraphRoot");
-        getEPackage().getEClassifiers().add(rootObject);
+	public Type createESchema() {
+		TypeHelper.INSTANCE.getType("commonj.sdo", "Integer");
+		DataObjectUtil.initRuntime();
+		SDOUtil.createDataGraph();
 
-        EReferenceMaker refMaker = new EReferenceMaker();
+		ClassImpl rootClass = (ClassImpl) SDOFactory.eINSTANCE.createClass();
+		Type rootType = (Type) rootClass;
 
-        Iterator iter = metadata.getResultMetadata().iterator();
-        while (iter.hasNext()) {
+		rootClass.setName("DataGraphRoot");
+		getEPackage().getEClassifiers().add(rootClass);
 
-            ResultMetadata resultMetadata = (ResultMetadata) iter.next();
+		EReferenceMaker refMaker = new EReferenceMaker();
 
-            Iterator names = resultMetadata.getAllTablePropertyNames()
-                    .iterator();
-            while (names.hasNext()) {
-                String tableName = (String) names.next();
-                if (rootObject.getEStructuralFeature(tableName) == null) {
-                    EClass clazz = createEClass(tableName);
-                    getEPackage().getEClassifiers().add(clazz);
-                    EReference ref = refMaker.createOneToManyReference(
-                            tableName, clazz, true);
-                    rootObject.getEStructuralFeatures().add(ref);
-                }
-            }
+		Iterator iter = metadata.getResultMetadata().iterator();
+		while (iter.hasNext()) {
 
-            for (int i = 1; i <= resultMetadata.getColumnNames().size(); i++) {
+			ResultMetadata resultMetadata = (ResultMetadata) iter.next();
 
-                EReference ref = (EReference) rootObject
-                        .getEStructuralFeature(resultMetadata
-                                .getTablePropertyName(i));
-                if (ref == null)
-                    throw new RuntimeException("Could not find table "
-                            + resultMetadata.getTablePropertyName(i)
-                            + " in the SDO model");
-                EClass clazz = ref.getEReferenceType();
-                String columnName = resultMetadata.getColumnPropertyName(i);
+			Iterator names = resultMetadata.getAllTablePropertyNames()
+					.iterator();
+			while (names.hasNext()) {
+				String tableName = (String) names.next();
+				if (rootClass.getEStructuralFeature(tableName) == null) {
+					Type clazz = createEClass(tableName);
+					getEPackage().getEClassifiers().add(clazz);
+					ReferenceImpl ref = refMaker.createOneToManyReference(
+							tableName, clazz, true);
+					rootClass.getEStructuralFeatures().add(ref);
+				}
+			}
 
-                if (clazz.getEStructuralFeature(columnName) == null) {
-                    EType atype = (EType) resultMetadata.getDataType(i);
-                    EDataType type = (EDataType) atype.getEClassifier();
+			for (int i = 1; i <= resultMetadata.getColumnNames().size(); i++) {
 
-                    EAttribute attr = getAttributeMaker().createEAttribute(
-                            columnName, type);
+				ReferenceImpl ref = (ReferenceImpl) rootType
+						.getProperty(resultMetadata.getTablePropertyName(i));
 
-                    DebugUtil.debugln(getClass(), debug, "Adding column "
-                            + columnName + " to "
-                            + resultMetadata.getTablePropertyName(i));
-                    clazz.getEStructuralFeatures().add(attr);
-                }
-            }
-        }
+				if (ref == null)
+					throw new RuntimeException("Could not find table "
+							+ resultMetadata.getTablePropertyName(i)
+							+ " in the SDO model");
+				EClass clazz = ref.getEReferenceType();
+				String columnName = resultMetadata.getColumnPropertyName(i);
 
-        if (metadata.hasMappingModel()) {
-            MappingWrapper wrapper = new MappingWrapper(metadata.getMapping());
-            Iterator i = metadata.getRelationships().iterator();
-            while (i.hasNext()) {
-                Relationship r = (Relationship) i.next();
+				if (clazz.getEStructuralFeature(columnName) == null) {
+					Type atype = (Type) resultMetadata.getDataType(i);
 
-                EClass parent = (EClass) getEPackage().getEClassifier(
-                        wrapper.getTablePropertyName(r.getPrimaryKeyTable()));
-                EClass child = (EClass) getEPackage().getEClassifier(
-                        wrapper.getTablePropertyName(r.getForeignKeyTable()));
-                if (parent == null) {
-                    throw new RuntimeException("The parent table ("
-                            + r.getPrimaryKeyTable() + ") in relationship "
-                            + r.getName()
-                            + " was not found in the mapping information.");
-                } else if (child == null) {
-                    throw new RuntimeException("The child table ("
-                            + r.getForeignKeyTable() + ") in relationship "
-                            + r.getName()
-                            + " was not found in the mapping information.");
-                }
+					// EDataType type = (EDataType) atype.getEClassifier();
 
-                EReference ref = refMaker.createReference(r, parent, child);
+					AttributeImpl attr = getAttributeMaker().createEAttribute(
+							columnName, atype);
 
-                DebugUtil.debugln(getClass(), debug, "Adding reference: "
-                        + ref.getName() + " to " + parent.getName());
-                if (parent.getEStructuralFeature(ref.getName()) == null)
-                    parent.getEStructuralFeatures().add(ref);
+					DebugUtil.debugln(getClass(), debug, "Adding column "
+							+ columnName + " to "
+							+ resultMetadata.getTablePropertyName(i));
+					clazz.getEStructuralFeatures().add(attr);
+				}
+			}
+		}
 
-                if (child.getEStructuralFeature(ref.getEOpposite().getName()) == null)
-                    child.getEStructuralFeatures().add(ref.getEOpposite());
+		if (metadata.hasMappingModel()) {
+			MappingWrapper wrapper = new MappingWrapper(metadata.getMapping());
+			Iterator i = metadata.getRelationships().iterator();
+			while (i.hasNext()) {
+				Relationship r = (Relationship) i.next();
 
-            }
+				EClass parent = (EClass) getEPackage().getEClassifier(
+						wrapper.getTablePropertyName(r.getPrimaryKeyTable()));
+				EClass child = (EClass) getEPackage().getEClassifier(
+						wrapper.getTablePropertyName(r.getForeignKeyTable()));
+				if (parent == null) {
+					throw new RuntimeException("The parent table ("
+							+ r.getPrimaryKeyTable() + ") in relationship "
+							+ r.getName()
+							+ " was not found in the mapping information.");
+				} else if (child == null) {
+					throw new RuntimeException("The child table ("
+							+ r.getForeignKeyTable() + ") in relationship "
+							+ r.getName()
+							+ " was not found in the mapping information.");
+				}
 
-        }
+				ReferenceImpl ref = refMaker.createReference(r, (Type)parent, (Type)child);
 
-        EcoreUtil.freeze(rootObject.getEPackage());
+				DebugUtil.debugln(getClass(), debug, "Adding reference: "
+						+ ref.getName() + " to " + parent.getName());
+				if (parent.getEStructuralFeature(ref.getName()) == null)
+					parent.getEStructuralFeatures().add(ref);
 
-        return SDOUtil.adaptType(rootObject);
-    }
+				if (child.getEStructuralFeature(ref.getEOpposite().getName()) == null)
+					child.getEStructuralFeatures().add(ref.getEOpposite());
 
-    /**
-     * Create an EClass with the specified name
-     * 
-     * @param name
-     * @return EClass
-     */
-    protected EClass createEClass(String name) {
-        EClass ecl = EcoreFactory.eINSTANCE.createEClass();
-        ecl.setName(name);
+			}
 
-        return ecl;
-    }
+		}
 
-    /**
-     * Get an EAttributeMaker singleton
-     * 
-     * @return EAttributeMaker
-     */
-    private EAttributeMaker getAttributeMaker() {
-        return EAttributeMaker.singleton();
-    }
+		// EcoreUtil.freeze(rootObject.getEPackage());
 
-    /**
-     * Internal method to save a schema to a file
-     * 
-     * @param eclass
-     *            The EClass to save (usually just the root EClass)
-     * @param name
-     *            The name of the file
-     * @throws IOException
-     */
-    private void save(ENamedElement eclass, OutputStream stream)
-            throws IOException {
+		return (Type) rootClass;
+	}
 
-        XMIResourceImpl resource = new XMIResourceImpl();
-        resource.getContents().add(eclass);
-        resource.save(stream, null);
+	/**
+	 * Create an EClass with the specified name
+	 * 
+	 * @param name
+	 * @return EClass
+	 */
+	protected Type createEClass(String name) {
+		ClassImpl ecl = (ClassImpl) SDOFactory.eINSTANCE.createClass();
+		ecl.setName(name);
 
-    }
+		return ecl;
+	}
 
-    /**
-     * Used by Metadata.saveToEcore() to save the schema to a file
-     * 
-     * @param name
-     *            the file name
-     * @throws IOException
-     */
-    public void save(OutputStream stream) throws IOException {
-        save(getEPackage(), stream);
-    }
+	/**
+	 * Get an EAttributeMaker singleton
+	 * 
+	 * @return EAttributeMaker
+	 */
+	private EAttributeMaker getAttributeMaker() {
+		return EAttributeMaker.singleton();
+	}
 
-    /**
-     * @return the EPackage for this schema
-     */
-    public EPackage getEPackage() {
-        if (this.dataGraphPackage == null)
-            this.dataGraphPackage = createEPackage();
-        return this.dataGraphPackage;
-    }
+	/**
+	 * Internal method to save a schema to a file
+	 * 
+	 * @param eclass
+	 *            The EClass to save (usually just the root EClass)
+	 * @param name
+	 *            The name of the file
+	 * @throws IOException
+	 */
+	private void save(ENamedElement eclass, OutputStream stream)
+			throws IOException {
 
-    /**
-     * Create the EPackage for this schema Uses the packageName and nsPrefix
-     * values set in the constructors The EPackage overrides the default
-     * EFactory so that DataObjects will be created using MapDataObjectImpl.
-     * 
-     * @return the new EPackage
-     */
-    protected EPackage createEPackage() {
+		XMLResourceImpl resource = new XMLResourceImpl();
+		resource.getContents().add(eclass);
+		resource.save(stream, null);
 
-        EPackage pkg = EcoreFactory.eINSTANCE.createEPackage();
-        pkg.setName(pkgName);
-        pkg.setNsPrefix(nsPrefix);
-        pkg.setNsURI("datagraph.ecore");
+	}
 
-        pkg.setEFactoryInstance(new EFactoryImpl() {
-            public EObject basicCreate(EClass cls) {
-                EObjectImpl result = new DynamicEDataObjectImpl(cls);
-                return result;
-            }
-        });
+	/**
+	 * Used by Metadata.saveToEcore() to save the schema to a file
+	 * 
+	 * @param name
+	 *            the file name
+	 * @throws IOException
+	 */
+	public void save(OutputStream stream) throws IOException {
+		save(getEPackage(), stream);
+	}
 
-        return pkg;
-    }
+	/**
+	 * @return the EPackage for this schema
+	 */
+	public EPackage getEPackage() {
+		if (this.dataGraphPackage == null)
+			this.dataGraphPackage = createEPackage();
+		return this.dataGraphPackage;
+	}
+
+	/**
+	 * Create the EPackage for this schema Uses the packageName and nsPrefix
+	 * values set in the constructors The EPackage overrides the default
+	 * EFactory so that DataObjects will be created using MapDataObjectImpl.
+	 * 
+	 * @return the new EPackage
+	 */
+	protected EPackage createEPackage() {
+		
+		EPackage pkg = EcoreFactory.eINSTANCE.createEPackage();
+		pkg.setName(pkgName);
+		pkg.setNsPrefix(nsPrefix);
+		pkg.setNsURI("datagraph.ecore");
+
+		pkg.setEFactoryInstance(new EFactoryImpl() {
+			public EObject basicCreate(EClass cls) {
+				EObject result = new DynamicDataObjectImpl(cls);
+				return result;
+			}
+		});
+
+		return pkg;
+	}
 
 }

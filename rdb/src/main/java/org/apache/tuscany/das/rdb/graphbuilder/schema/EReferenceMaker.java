@@ -17,9 +17,11 @@
 package org.apache.tuscany.das.rdb.graphbuilder.schema;
 
 import org.apache.tuscany.das.rdb.config.Relationship;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcoreFactory;
+import org.apache.tuscany.sdo.SDOFactory;
+import org.apache.tuscany.sdo.impl.ClassImpl;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
+
+import commonj.sdo.Type;
 
 /**
  * A helper used to create EReferences
@@ -40,10 +42,10 @@ public class EReferenceMaker {
 	 * @param containment
 	 * @return EReference
 	 */
-	public EReference createEReference(String name, EClass type, int lowerBound, int upperBound, boolean containment, boolean changeable) {
-		EReference ref = getFactory().createEReference();
+	public ReferenceImpl createReference(String name, Type type, int lowerBound, int upperBound, boolean containment, boolean changeable) {
+		ReferenceImpl ref = (ReferenceImpl) getFactory().createReference();		
 		ref.setName(name);
-		ref.setEType(type);
+		ref.setEType((ClassImpl)type);
 		ref.setLowerBound(lowerBound);
 		ref.setUpperBound(upperBound);
 		ref.setContainment(containment);
@@ -53,8 +55,8 @@ public class EReferenceMaker {
 		return ref;
 	}
 	
-	public EReference createEReference(String name, EClass type, int lowerBound, int upperBound, boolean containment) {
-		return createEReference(name, type, lowerBound, upperBound, containment, true);
+	public ReferenceImpl createReference(String name, Type type, int lowerBound, int upperBound, boolean containment) {
+		return createReference(name, type, lowerBound, upperBound, containment, true);
 	}
 	/**
 	 * Create a one to many reference with the specified name, type, and containment
@@ -63,8 +65,8 @@ public class EReferenceMaker {
 	 * @param containment
 	 * @return
 	 */
-	public EReference createOneToManyReference(String name, EClass type, boolean containment) {
-		return createEReference(name, type, 0, -1, containment);
+	public ReferenceImpl createOneToManyReference(String name, Type type, boolean containment) {
+		return createReference(name, type, 0, -1, containment);
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public class EReferenceMaker {
 	 * @param type
 	 * @return EReference
 	 */
-	public EReference createOneToManyReference(String name, EClass type) {
+	public ReferenceImpl createOneToManyReference(String name, Type type) {
 		return createOneToManyReference(name, type, false);	
 	}
 	
@@ -83,10 +85,8 @@ public class EReferenceMaker {
 	 * @param type
 	 * @return EReference
 	 */
-	public EReference createOneToOneReference(String name, EClass type) {
-		EReference ref = createEReference(name, type,0,1,false);
-	//	EcoreUtil.setAnnotation(ref, "commonj.sdo", "readOnly", "true");
-		  		
+	public ReferenceImpl createOneToOneReference(String name, Type type) {
+		ReferenceImpl ref = createReference(name, type,0,1,false);		  
 		return ref;
 	}
 	
@@ -96,12 +96,12 @@ public class EReferenceMaker {
 	 * @param type
 	 * @return EReference
 	 */
-	public EReference createManyToOneReference(String name, EClass type) {
-		return createEReference(name,type,0,1,false);
+	public ReferenceImpl createManyToOneReference(String name, Type type) {
+		return createReference(name,type,0,1,false);
 	}
 	
-	private EcoreFactory getFactory() {
-		return EcoreFactory.eINSTANCE;
+	private SDOFactory getFactory() {
+		return SDOFactory.eINSTANCE;
 	}
 
 
@@ -111,16 +111,16 @@ public class EReferenceMaker {
 	 * @param child
 	 * @return
 	 */
-	public EReference createReference(Relationship r, EClass parent, EClass child) {
+	public ReferenceImpl createReference(Relationship r, Type parent, Type child) {
 		if ( !r.isMany() ) {
-			EReference ref = createOneToOneReference(r.getName(), child);
-			EReference opp = createOneToOneReference(r.getName() + "_opposite", parent);
+			ReferenceImpl ref = createOneToOneReference(r.getName(), child);
+			ReferenceImpl opp = createOneToOneReference(r.getName() + "_opposite", parent);
 			ref.setEOpposite(opp);
 			opp.setEOpposite(ref);
 			return ref;
 		} else {
-			EReference ref = createOneToManyReference(r.getName(), child);
-			EReference opp = createManyToOneReference(r.getName() + "_opposite", parent);
+			ReferenceImpl ref = createOneToManyReference(r.getName(), child);
+			ReferenceImpl opp = createManyToOneReference(r.getName() + "_opposite", parent);
 			ref.setEOpposite(opp);
 			opp.setEOpposite(ref);
 			return ref;
