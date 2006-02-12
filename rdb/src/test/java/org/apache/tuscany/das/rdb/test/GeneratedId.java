@@ -22,9 +22,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
@@ -155,8 +152,7 @@ public class GeneratedId extends DasTest {
 	 */
 	public void testPropagateIdsXML() throws Exception {
 
-		Command select = Command.FACTORY.createCommand("Select * from COMPANY",
-				getBasicCompanyMapping());
+		Command select = Command.FACTORY.createCommand("Select * from COMPANY", getConfig("basicCompanyMapping.xml"));
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -165,8 +161,7 @@ public class GeneratedId extends DasTest {
 		company.setString("NAME", "Do-rite Pest Control");
 
 		// Create apply command
-		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getBasicCompanyMapping());
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCompanyMapping.xml"));
 		apply.setConnection(getConnection());
 
 		// verify pre-condition (id is not there until after flush)
@@ -197,8 +192,7 @@ public class GeneratedId extends DasTest {
 
 		String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-		Command select = Command.FACTORY.createCommand(selectCompanys,
-				getBasicCompanyDepartmentMapping());
+		Command select = Command.FACTORY.createCommand(selectCompanys, getConfig("basicCompanyDepartmentMapping.xml"));
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -220,8 +214,7 @@ public class GeneratedId extends DasTest {
 		company.getList("departments").add(department);
 
 		// Create apply command
-		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getBasicCompanyDepartmentMapping());
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCompanyDepartmentMapping.xml"));
 		apply.setConnection(getConnection());
 
 		// Flush changes
@@ -250,8 +243,7 @@ public class GeneratedId extends DasTest {
 
 		String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-		Command select = Command.FACTORY.createCommand(selectCompanys,
-				getBasicCompanyDepartmentMapping());
+		Command select = Command.FACTORY.createCommand(selectCompanys, getConfig("basicCompanyDepartmentMapping.xml"));
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -274,8 +266,7 @@ public class GeneratedId extends DasTest {
 		company.getList("departments").add(department);
 
 		// Create apply command
-		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getBasicCompanyDepartmentMapping());
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCompanyDepartmentMapping.xml"));
 		apply.setConnection(getConnection());
 
 		// Flush changes
@@ -291,11 +282,9 @@ public class GeneratedId extends DasTest {
 		select.setConnection(getConnection());
 		select.setParameterValue("ID", id);
 		root = select.executeQuery();
-		assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
-				.getString("NAME"));
+		assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 
 	}
-
 	
 	
 	// Test that error is thrown when no key has been generated (as in a select)
@@ -311,20 +300,6 @@ public class GeneratedId extends DasTest {
 		} catch (RuntimeException e) {
 			// OK
 		}
-	}
-
-	// Utilities
-
-	private InputStream getBasicCompanyMapping() throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/basicCompanyMapping.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("basicCompanyMapping.xml");
-		
-	}
-
-	private InputStream getBasicCompanyDepartmentMapping()
-			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/basicCompanyDepartmentMapping.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("basicCompanyDepartmentMapping.xml");
 	}
 
 }

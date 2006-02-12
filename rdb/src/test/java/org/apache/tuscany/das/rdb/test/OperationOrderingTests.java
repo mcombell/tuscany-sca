@@ -16,9 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.CityData;
@@ -52,7 +49,7 @@ public class OperationOrderingTests extends DasTest {
 	}
 	
 	public void testInsert() throws Exception {
-		Command select = Command.FACTORY.createCommand("Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID", getCityStateMapping());
+		Command select = Command.FACTORY.createCommand("Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID", getConfig("cityStates.xml"));
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -78,11 +75,6 @@ public class OperationOrderingTests extends DasTest {
 
 		// Flush changes
 		apply.execute(root);
-	}
-
-	private InputStream getCityStateMapping() throws IOException {
-//		return new FileInputStream("src/test/resources/cityStates.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("cityStates.xml");
 	}
 
 }

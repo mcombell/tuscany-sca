@@ -16,9 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.company.CompanyType;
@@ -55,7 +52,7 @@ public class CompanyTests extends DasTest {
         Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getCompanyMappingModel());
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMapping.xml"));
 
         // Parameterize the command
         selectCommand.setConnection(getConnection());
@@ -82,7 +79,7 @@ public class CompanyTests extends DasTest {
         Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getCompanyMappingModel());
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMapping.xml"));
 
         // Parameterize the command
         selectCommand.setConnection(getConnection());
@@ -105,10 +102,6 @@ public class CompanyTests extends DasTest {
         EmployeeType employee = (EmployeeType) department.getEmployees().get(0);
 
         assertEquals("John Jones", employee.getName());
-    }
-
-    private InputStream getCompanyMappingModel() throws FileNotFoundException {
-        return getClass().getClassLoader().getResourceAsStream("companyMapping.xml");
     }
 
 }

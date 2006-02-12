@@ -16,8 +16,20 @@
  */
 package org.apache.tuscany.das.rdb.test.framework;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.sdo.EProperty;
+
+import commonj.sdo.DataObject;
 
 import junit.framework.TestCase;
 
@@ -85,6 +97,65 @@ public class DasTest extends TestCase {
 			throw new RuntimeException(e);
 		}
 		
+	}
+	
+	
+	//Utilities
+    protected InputStream getConfig(String fileName) throws FileNotFoundException {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+    }
+
+	protected void write(String label, ResultSet rs) throws IOException, SQLException {
+		
+		ResultSetMetaData md = rs.getMetaData();
+		int count = md.getColumnCount();
+		System.out.println("Contents of ResultSet from " + label);
+		for (int i = 1; i <= count; i++) {
+			System.out.print("\t");
+			System.out.println (md.getColumnLabel(i));
+		}
+		System.out.println("");
+		while (rs.next()) {
+			for (int i = 1; i <= count; i++) {
+				System.out.print("\t");
+				System.out.print(rs.getString(i));
+			}
+			System.out.println("\t");
+		}
+		System.out.println("done");
+	}
+	
+	
+	protected void printGraph(DataObject auth) {
+		System.out.println(SDOPrinter.print(auth.getDataGraph()));
+		
+	}    
+	
+	protected void printList(List data) {
+		Iterator i = data.iterator();
+		while ( i.hasNext()) {
+			System.out.println();
+			DataObject obj = (DataObject) i.next();
+			Iterator props = obj.getType().getProperties().iterator();
+			while ( props.hasNext()) {
+				EProperty p = (EProperty) props.next();
+				if ( p.isMany() ) {
+					System.out.print("[ " + p.getName() + " ] ");
+					Iterator children = obj.getList(p).iterator();
+					while ( children.hasNext()) {
+						DataObject child = (DataObject) children.next();
+						System.out.print("[ " + child.get("ID") + " ]");
+					}
+					System.out.println();
+				} else if ( p.getEStructuralFeature() instanceof EReference ) {
+					DataObject child = obj.getDataObject(p);
+					if ( child != null ) 
+						System.out.println("[ " + p.getName() + " ] " + "[ " + child.get("ID") + " ]");
+				} else {
+					System.out.println("[ " + p.getName() + " ] " + obj.get(p));
+				}
+			}	
+		}
 	}
 	
 	

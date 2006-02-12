@@ -22,9 +22,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
@@ -155,7 +152,7 @@ public class DefectTests extends DasTest {
     public void testWASDefect330118() throws Exception {
 
         // Create the group and set common connection
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getCustomerOrderConfig());
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
         commandGroup.setConnection(getConnection());
 
         // Read all customers and add one
@@ -214,7 +211,7 @@ public class DefectTests extends DasTest {
     public void testYingChen12162005Workaraound() throws Exception {
 
         // Create the group and set common connection
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getCustomerConfig());
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomerConfig.xml"));
         commandGroup.setConnection(getConnection());
 
         Command insert = commandGroup.getCommand("insert customer");
@@ -299,15 +296,4 @@ public class DefectTests extends DasTest {
 
     }
     
-    // Utilities
-
-    private InputStream getCustomerOrderConfig() throws FileNotFoundException {
-        return Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("CustomersOrdersConfig.xml");
-    }
-
-    private InputStream getCustomerConfig() throws FileNotFoundException {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream("CustomerConfig.xml");
-    }
-
 }

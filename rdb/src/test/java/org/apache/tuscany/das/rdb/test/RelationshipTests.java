@@ -21,9 +21,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.SDODataTypes;
@@ -56,8 +53,7 @@ public class RelationshipTests extends DasTest {
 		String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
 
 		// Read some customers and related orders
-		Command select = Command.FACTORY.createCommand(
-				statement, getCustomerOrderRelMapping());
+		Command select = Command.FACTORY.createCommand(statement, getConfig("customerOrderRelationshipMapping.xml"));
 		select.setConnection(getConnection());
 
 		DataObject root = select.executeQuery();
@@ -150,8 +146,7 @@ public class RelationshipTests extends DasTest {
 		// Read some customers and related orders
 		Command select = Command.FACTORY
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID",
-						getBasicCustomerOrderMapping());
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID", getConfig("basicCustomerOrderMapping.xml"));
 		select.setConnection(getConnection());
 
 		DataObject root = select.executeQuery();
@@ -171,8 +166,7 @@ public class RelationshipTests extends DasTest {
 		cust1.getList("orders").add(order);
 		
 		// Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getBasicCustomerOrderMapping());
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerOrderMapping.xml"));
 		apply.setConnection(getConnection());
 
 		// Flush changes
@@ -182,7 +176,7 @@ public class RelationshipTests extends DasTest {
 		select = Command.FACTORY
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getBasicCustomerOrderMapping());
+						getConfig("basicCustomerOrderMapping.xml"));
 		select.setConnection(getConnection());
 		select.setParameterValue("ID", cust1ID);
 
@@ -196,20 +190,6 @@ public class RelationshipTests extends DasTest {
 		assertEquals(cust2OrderCount.intValue() - 1, root.getList(
 				"CUSTOMER[1]/orders").size());
 
-	}
-
-	// Utilities
-
-	private InputStream getBasicCustomerOrderMapping()
-			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/basicCustomerOrderMapping.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("basicCustomerOrderMapping.xml");
-	}
-
-	private InputStream getCustomerOrderRelMapping()
-			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/customerOrderRelationshipMapping.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("customerOrderRelationshipMapping.xml");
 	}
 
 }

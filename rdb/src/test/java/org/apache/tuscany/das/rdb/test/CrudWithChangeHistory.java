@@ -26,9 +26,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.SDODataTypes;
@@ -110,7 +107,7 @@ public class CrudWithChangeHistory
         customer.set( "LASTNAME", "Pavick" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand( getBasicCustomerMappingWithCUD() );
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMappingWithCUD.xml"));
         apply.setConnection( getConnection() );
 
         //Flush changes
@@ -176,7 +173,7 @@ public class CrudWithChangeHistory
         customer.set( "LASTNAME", "Pavick" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand( getBasicCustomerMappingModel() );
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMapping.xml"));
         apply.setConnection( getConnection() );
 
         //Flush changes
@@ -223,7 +220,7 @@ public class CrudWithChangeHistory
         cust4.set( "LASTNAME", "Gerkin" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand( getBasicCustomerMappingModel() );
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMapping.xml"));
         apply.setConnection( getConnection() );
 
         //Flush changes
@@ -251,29 +248,6 @@ public class CrudWithChangeHistory
         select.setParameterValue( "ID", new Integer( cust1ID ) );
         root = select.executeQuery();
         assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
-
-    }
-
-    //Utilities
-
-    /**
-     * Provides only a definition of the table
-     */
-    private InputStream getBasicCustomerMappingModel()
-        throws FileNotFoundException
-    {
-        //		return new FileInputStream("src/test/resources/basicCustomerMapping.xml");
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream( "basicCustomerMapping.xml" );
-    }
-
-    /**
-     * Adds definition of CUD statements
-     */
-    private InputStream getBasicCustomerMappingWithCUD()
-        throws FileNotFoundException
-    {
-        //		return new FileInputStream("src/test/resources/basicCustomerMappingWithCUD.xml");
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream( "basicCustomerMappingWithCUD.xml" );
 
     }
 

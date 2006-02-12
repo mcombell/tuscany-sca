@@ -21,9 +21,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
@@ -53,7 +50,7 @@ public class NameMappingTests extends DasTest {
 
 		// Read a customer
 		Command select = Command.FACTORY.createCommand(
-				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1", getCustomerMapping());
+				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1", getConfig("customerMapping.xml"));
 		select.setConnection(getConnection());
 
 		DataObject root = select.executeQuery();
@@ -63,15 +60,5 @@ public class NameMappingTests extends DasTest {
 		assertEquals("Williams", customer.getString("lastname"));
 		
 	}
-
-
-	// Utilities
-
-	private InputStream getCustomerMapping()
-			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/customerMapping.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("customerMapping.xml");
-	}
-
 
 }

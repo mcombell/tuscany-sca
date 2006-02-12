@@ -22,11 +22,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -205,23 +200,4 @@ public class StoredProcs extends DasTest {
 
 	}*/
 	
-	private void write(ResultSet rs) throws IOException, SQLException {
-
-		ResultSetMetaData md = rs.getMetaData();
-		int count = md.getColumnCount();
-		System.out.println("Debugg RAW SP Results");
-		for (int i = 1; i <= count; i++) {
-			System.out.print("\t");
-			System.out.print(md.getColumnLabel(i));
-		}
-		System.out.println("");
-		while (rs.next()) {
-			for (int i = 1; i <= count; i++) {
-				System.out.print("\t");
-				System.out.print(rs.getString(i));
-			}
-			System.out.println("\t");
-		}
-		System.out.println("done");
-	}
 }

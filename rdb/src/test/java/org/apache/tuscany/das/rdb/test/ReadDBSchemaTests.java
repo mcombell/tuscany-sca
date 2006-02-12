@@ -22,15 +22,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.apache.tuscany.das.rdb.test.framework.SDOPrinter;
-
 
 import commonj.sdo.DataObject;
 
@@ -64,31 +57,6 @@ public class ReadDBSchemaTests extends DasTest {
 	
 	//Utilities
 	
-	private void write(String label, ResultSet rs) throws IOException, SQLException {
-		
-		ResultSetMetaData md = rs.getMetaData();
-		int count = md.getColumnCount();
-		System.out.println("Contents of ResultSet from " + label);
-		for (int i = 1; i <= count; i++) {
-			System.out.print("\t");
-			System.out.println (md.getColumnLabel(i));
-		}
-		System.out.println("");
-		while (rs.next()) {
-			for (int i = 1; i <= count; i++) {
-				System.out.print("\t");
-				System.out.print(rs.getString(i));
-			}
-			System.out.println("\t");
-		}
-		System.out.println("done");
-	}
-	
-	
-	private void printGraph(DataObject auth) {
-		System.out.println(SDOPrinter.print(auth.getDataGraph()));
-		
-	}
 
 	
 }

@@ -17,7 +17,6 @@
 package org.apache.tuscany.das.rdb.test;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ResultSetShape;
@@ -25,9 +24,6 @@ import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 import org.apache.tuscany.das.rdb.test.data.PartData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.sdo.EProperty;
-
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
@@ -85,30 +81,4 @@ public class RecursiveTests extends DasTest {
 
 	}
 	
-	protected void printList(List data) {
-		Iterator i = data.iterator();
-		while ( i.hasNext()) {
-			System.out.println();
-			DataObject obj = (DataObject) i.next();
-			Iterator props = obj.getType().getProperties().iterator();
-			while ( props.hasNext()) {
-				EProperty p = (EProperty) props.next();
-				if ( p.isMany() ) {
-					System.out.print("[ " + p.getName() + " ] ");
-					Iterator children = obj.getList(p).iterator();
-					while ( children.hasNext()) {
-						DataObject child = (DataObject) children.next();
-						System.out.print("[ " + child.get("ID") + " ]");
-					}
-					System.out.println();
-				} else if ( p.getEStructuralFeature() instanceof EReference ) {
-					DataObject child = obj.getDataObject(p);
-					if ( child != null ) 
-						System.out.println("[ " + p.getName() + " ] " + "[ " + child.get("ID") + " ]");
-				} else {
-					System.out.println("[ " + p.getName() + " ] " + obj.get(p));
-				}
-			}	
-		}
-	}
 }

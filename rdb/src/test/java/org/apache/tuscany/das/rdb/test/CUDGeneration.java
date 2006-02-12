@@ -16,9 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -56,7 +53,7 @@ public class CUDGeneration extends DasTest {
 
 		// Build apply changes command
 		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getBasicCustomerMappingWithInvalidCUD());
+				.createApplyChangesCommand(getConfig("basicCustomerMappingWithInvalidCUD.xml"));
 		apply.setConnection(getConnection());
 
 		// Flush changes
@@ -100,7 +97,7 @@ public class CUDGeneration extends DasTest {
 		Command select = Command.FACTORY
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getMappingModel_1xM_uni_no_cud_as_stream());
+						getConfig("1xM_mapping_no_cud.xml"));
 
 		// Parameterize the command
 		select.setConnection(getConnection());
@@ -119,7 +116,7 @@ public class CUDGeneration extends DasTest {
 
 		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
 		apply.setConnection(getConnection());
-		apply.setMapping(getMappingModel_1xM_uni_no_cud_as_stream());
+		apply.setMapping(getConfig("1xM_mapping_no_cud.xml"));
 
 		// Flush changes
 		apply.execute(root);
@@ -164,29 +161,5 @@ public class CUDGeneration extends DasTest {
 		apply.execute(root);
 
 	}
-
-	// Utilities
-	// private FileInputStream getBasicCustomerMappingWithCUD()
-	// throws FileNotFoundException {
-	// return new FileInputStream("basicCustomerMappingWithCUD.xml");
-	// }
-
-	private InputStream getBasicCustomerMappingWithInvalidCUD()
-			throws FileNotFoundException {
-//		return new FileInputStream("src/test/resources/basicCustomerMappingWithInvalidCUD.xml");
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("basicCustomerMappingWithInvalidCUD.xml");
-	}
-
-	private InputStream getMappingModel_1xM_uni_no_cud_as_stream()
-			throws FileNotFoundException {
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream("1xM_mapping_no_cud.xml");
-	}
-
-	/**
-	 * Provides only a definition of the table
-	 */
-	// private FileInputStream getBasicCustomerMappingModel()
-	// throws FileNotFoundException {
-	// return new FileInputStream("basicCustomerMapping.xml");
-	// }
+	
 }

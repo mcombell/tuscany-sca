@@ -21,9 +21,6 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
@@ -70,7 +67,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testRead() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getCustomerOrderConfig());
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
         commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("all customers");
@@ -100,9 +97,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithConnectionProperties() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-        // commandGroup.setConnection(getConnection());
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
 
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -141,7 +136,7 @@ public class CommandGroupTests extends DasTest {
     public void testRead2() throws Exception {
 
         // Create the group and set common connection
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getCustomerOrderConfig());
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
         commandGroup.setConnection(getConnection());
 
         // Read all customers and remember the first one
@@ -165,17 +160,6 @@ public class CommandGroupTests extends DasTest {
         orderByID.setParameterValue("ID", orderId);
         assertEquals("Defibrillator", root.getString("ANORDER[1]/PRODUCT"));
 
-    }
-
-    // Utilities
-
-    private InputStream getCustomerOrderConfig() throws FileNotFoundException {
-        return Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("CustomersOrdersConfig.xml");
-    }
-
-    private InputStream getConfig(String fileName) throws FileNotFoundException {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
     }
 
 }

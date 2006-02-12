@@ -16,9 +16,7 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
@@ -52,7 +50,7 @@ public class TopDown extends DasTest {
 		Command select = Command.FACTORY
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getMappingModel_1xM_uni_no_cud_as_stream());
+						getConfig("1xM_mapping_no_cud.xml"));
 
 		SDOUtil.registerStaticTypes(CustomerFactory.class);
 		
@@ -77,7 +75,7 @@ public class TopDown extends DasTest {
 
 		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
 		apply.setConnection(getConnection());
-		apply.setMapping(getMappingModel_1xM_uni_no_cud_as_stream());
+		apply.setMapping(getConfig("1xM_mapping_no_cud.xml"));
 
 		// Flush changes
 		apply.execute((DataObject) root);
@@ -138,10 +136,4 @@ public class TopDown extends DasTest {
 	 * //Flush changes das.applyChanges(root, command); }
 	 */
 
-
-
-	private InputStream getMappingModel_1xM_uni_no_cud_as_stream()
-			throws FileNotFoundException {
-		return getClass().getClassLoader().getResourceAsStream("1xM_mapping_no_cud.xml");
-	}
 }

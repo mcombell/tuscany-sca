@@ -25,16 +25,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.TypesData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-
-import commonj.sdo.DataObject;
 
 public class SerializationTests extends DasTest {
 
