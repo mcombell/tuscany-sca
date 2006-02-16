@@ -31,10 +31,11 @@ import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
+import commonj.sdo.helper.XMLDocument;
+import commonj.sdo.helper.XMLHelper;
 
 /**
  * 
@@ -130,7 +131,7 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
     }
 
     public void setMapping(InputStream stream) throws IOException {
-        XMLResource resource = new XMLResourceImpl();
+    	XMLHelper helper = XMLHelper.INSTANCE;
 
         HashMap map = new HashMap();
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -138,9 +139,10 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
 
         map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
         map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
+        
+    	XMLDocument doc = helper.load(stream, ConfigPackageImpl.eNS_URI, map);
+    	Config mapping = (Config) doc.getRootObject();
 
-        resource.load(stream, map);
-        Config mapping = (Config) resource.getContents().get(0);
         summarizer.setMapping(mapping);
         if (mapping.getConnectionProperties() != null)
             setConnection(mapping.getConnectionProperties());

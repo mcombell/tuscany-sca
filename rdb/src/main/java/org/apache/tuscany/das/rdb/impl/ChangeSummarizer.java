@@ -31,8 +31,7 @@ import org.apache.tuscany.das.rdb.util.DebugUtil;
 import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummarySettingImpl;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.ETypedElement;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -120,15 +119,15 @@ public class ChangeSummarizer {
 					ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i
 							.next();
 
-					if (setting.getFeature() instanceof EReference) {
+					if (setting.getFeature() instanceof ReferenceImpl) {
 						DebugUtil.debugln(getClass(), debug,
 								"Reference change for "
 										+ changedObject.getType().getName());
 
-						EReference ref = (EReference) setting.getFeature();
+						ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
 
 						DebugUtil.debugln(getClass(), debug, ref.getName());
-						if (ref.getEOpposite().getUpperBound() == ETypedElement.UNBOUNDED_MULTIPLICITY) {
+						if (ref.getEOpposite().isMany()) {
 							ChangeFactory factory = getRegistry().getFactory(
 									changedObject.getType());
 							changes.addUpdate(factory

@@ -32,7 +32,8 @@ import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
+
+import commonj.sdo.helper.XMLHelper;
 
 /**
  * An ConfiguredCommandFactory produces instances of Command and
@@ -108,8 +109,7 @@ public class CommandGroupImpl implements CommandGroup {
     // Private
 
     private void setConfig(InputStream stream) {
-
-        XMLResource resource = new XMLResourceImpl();
+    	XMLHelper helper = XMLHelper.INSTANCE;       
         HashMap map = new HashMap();
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
@@ -117,12 +117,13 @@ public class CommandGroupImpl implements CommandGroup {
         map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
         map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
 
+       
         try {
-            resource.load(stream, map);
+        	config = (Config) helper.load(stream, ConfigPackageImpl.eNS_URI, map).getRootObject();           
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        config = (Config) resource.getContents().get(0);
+       
     }
 
     public void setConnection(Connection connection) {

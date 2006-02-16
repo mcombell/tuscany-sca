@@ -25,8 +25,9 @@ import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.sdo.impl.ClassImpl;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 
 import commonj.sdo.DataObject;
 
@@ -42,7 +43,7 @@ public class DatabaseObject {
 
 	private final DataObject dataObject;
 
-	private EReference parentReference;
+	private ReferenceImpl parentReference;
 
 	private static final boolean debug = false;
 
@@ -80,7 +81,7 @@ public class DatabaseObject {
 		if (r == null)
 			return dataObject.get(parameter);
 
-		EReference parentRef = getParentReference(r.getPrimaryKeyTable());
+		ReferenceImpl parentRef = getParentReference(r.getPrimaryKeyTable());
 		DataObject parent = (DataObject) ((EObject) dataObject).eGet(parentRef);
 		String parentKey = getParentKey(r, parameter);
 		return parent.get(parentKey);
@@ -98,13 +99,14 @@ public class DatabaseObject {
 		return null;
 	}
 
-	public EReference getParentReference(String parentName) {
+	public ReferenceImpl getParentReference(String parentName) {
 		if (this.parentReference == null) {
-			List references = ((EObject) dataObject).eClass()
+
+			List references = ((ClassImpl) dataObject.getType())
 					.getEAllReferences();
 			Iterator i = references.iterator();
 			while (i.hasNext()) {
-				EReference ref = (EReference) i.next();
+				ReferenceImpl ref = (ReferenceImpl) i.next();
 				if (ref.getEReferenceType().getName().equals(parentName)) {
 					this.parentReference = ref;
 				}
@@ -114,12 +116,13 @@ public class DatabaseObject {
 	}
 
 	public String getTableName() {
-		if ( mappingWrapper.getConfig() != null )
-			return mappingWrapper.getTableByPropertyName(getTypeName()).getName();
-		else 
+		if (mappingWrapper.getConfig() != null)
+			return mappingWrapper.getTableByPropertyName(getTypeName())
+					.getName();
+		else
 			return null;
 	}
-	
+
 	public String getTypeName() {
 		return dataObject.getType().getName();
 	}

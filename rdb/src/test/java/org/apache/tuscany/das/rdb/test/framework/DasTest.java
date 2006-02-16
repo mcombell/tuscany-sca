@@ -26,12 +26,10 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.sdo.EProperty;
+import junit.framework.TestCase;
 
 import commonj.sdo.DataObject;
-
-import junit.framework.TestCase;
+import commonj.sdo.Property;
 
 /**
  *
@@ -138,7 +136,7 @@ public class DasTest extends TestCase {
 			DataObject obj = (DataObject) i.next();
 			Iterator props = obj.getType().getProperties().iterator();
 			while ( props.hasNext()) {
-				EProperty p = (EProperty) props.next();
+				Property p = (Property) props.next();
 				if ( p.isMany() ) {
 					System.out.print("[ " + p.getName() + " ] ");
 					Iterator children = obj.getList(p).iterator();
@@ -147,7 +145,7 @@ public class DasTest extends TestCase {
 						System.out.print("[ " + child.get("ID") + " ]");
 					}
 					System.out.println();
-				} else if ( p.getEStructuralFeature() instanceof EReference ) {
+				} else if ( !p.getType().isDataType()) {
 					DataObject child = obj.getDataObject(p);
 					if ( child != null ) 
 						System.out.println("[ " + p.getName() + " ] " + "[ " + child.get("ID") + " ]");
