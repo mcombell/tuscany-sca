@@ -20,9 +20,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
@@ -109,7 +114,7 @@ public class CommandGroupImpl implements CommandGroup {
     // Private
 
     private void setConfig(InputStream stream) {
-    	XMLHelper helper = XMLHelper.INSTANCE;       
+        XMLHelper helper = XMLHelper.INSTANCE;
         HashMap map = new HashMap();
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
@@ -117,13 +122,12 @@ public class CommandGroupImpl implements CommandGroup {
         map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
         map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
 
-       
         try {
-        	config = (Config) helper.load(stream, ConfigPackageImpl.eNS_URI, map).getRootObject();           
+            config = (Config) helper.load(stream, ConfigPackageImpl.eNS_URI, map).getRootObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-       
+
     }
 
     public void setConnection(Connection connection) {
@@ -144,8 +148,13 @@ public class CommandGroupImpl implements CommandGroup {
                     "No connection properties have been configured and no connection has been provided");
 
         if (cp.getDataSource() != null)
-            throw new Error("Datasource configuration not yet supported");
+            initViaDataSource(cp);
+        else
+            initViaDriverManager(cp);
 
+    }
+
+    private void initViaDriverManager(ConnectionProperties cp) {
         Connection connection = null;
 
         try {
@@ -163,4 +172,30 @@ public class CommandGroupImpl implements CommandGroup {
 
     }
 
+    //TODO - Refactor to eliminate common initialization code after connection is got
+    private void initViaDataSource(ConnectionProperties cp) {
+
+        Connection connection = null;
+
+        InitialContext ctx;
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException e) {
+            throw new Error(e);
+        }
+        try {
+            //TODO - I think we should rename this getDataSourceURL?
+            DataSource ds = (DataSource) ctx.lookup(cp.getDataSource());
+            try {
+                connection = ds.getConnection();
+                connection.setAutoCommit(false);
+                setConnection(connection);
+            } catch (SQLException e) {
+                throw new Error (e);
+            }
+        } catch (NamingException e) {
+            throw new Error(e);
+        }
+
+    }
 }
