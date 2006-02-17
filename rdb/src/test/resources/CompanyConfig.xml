@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config xsi:noNamespaceSchemaLocation="../../main/resources/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+    <Command name="all companies" SQL="select * from COMPANY" kind="Select"/>
+    
+    <ConnectionProperties dataSource="jdbc:derby:Databases/CompanyDB"/>
+    
+    <Table name="COMPANY">
+        <Column name="ID" primaryKey="true" generated="true"/>
+    </Table>
+    
+</Config>
