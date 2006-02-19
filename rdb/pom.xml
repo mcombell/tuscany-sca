@@ -33,7 +33,7 @@
             <scope>compile</scope>
         </dependency>
 
-      <dependency>
+        <dependency>
             <groupId>org.apache.tuscany</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
             <version>SNAPSHOT</version>

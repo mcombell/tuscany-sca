@@ -124,11 +124,6 @@ public class DasTest extends TestCase {
 	}
 	
 	
-	protected void printGraph(DataObject auth) {
-		System.out.println(SDOPrinter.print(auth.getDataGraph()));
-		
-	}    
-	
 	protected void printList(List data) {
 		Iterator i = data.iterator();
 		while ( i.hasNext()) {
