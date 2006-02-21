@@ -3,7 +3,7 @@
     
     <Command name="all companies" SQL="select * from COMPANY" kind="Select"/>
     
-    <ConnectionProperties dataSource="jdbc:derby:Databases/CompanyDB"/>
+    <ConnectionProperties dataSource="jdbc:derby:Databases/dastest"/>
     
     <Table name="COMPANY">
         <Column name="ID" primaryKey="true" generated="true"/>
