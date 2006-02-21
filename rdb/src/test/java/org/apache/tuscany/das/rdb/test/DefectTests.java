@@ -297,4 +297,30 @@ public class DefectTests extends DasTest {
 
     }
     
+    /**
+     * Test bug reported by Philip K Warren
+     * Silent fail if a non-datagraph root is passed to ApplyChangesCommand
+     */     
+    public void testTuscany35() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
+
+        Command read = commandGroup.getCommand("all customers");
+        DataObject root = read.executeQuery();
+ 
+        //Update first customer
+        DataObject cust1 = root.getDataObject("CUSTOMER[1]");
+        cust1.setString("LASTNAME", "Pavick");
+ 
+        ApplyChangesCommand update = commandGroup.getApplyChangesCommand();
+        //pass cust1 instead of root
+        update.execute(cust1);
+//        update.execute(root);
+
+        // Verify update - reuse select command
+        root = read.executeQuery();
+        assertEquals("Pavick", root.get("CUSTOMER[1]/LASTNAME"));
+
+    }
+    
 }

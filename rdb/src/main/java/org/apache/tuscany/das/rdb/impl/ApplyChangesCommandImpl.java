@@ -113,9 +113,13 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
     public void execute(DataObject root) {
         DebugUtil.debugln(getClass(), debug, "Executing ApplyChangesCmd");
 
+        //Assertions
         if (dasConnection == null)
-            throw new RuntimeException("A connection must be provided");
+            throw new Error("A connection must be provided");
 
+        if (!root.equals(root.getDataGraph().getRootObject()))
+            throw new Error("'root' argument must be the root of the datagraph");
+        
         Changes changes = summarizer.loadChanges(root);
 
         boolean success = false;
