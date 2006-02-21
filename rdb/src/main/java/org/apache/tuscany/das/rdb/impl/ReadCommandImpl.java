@@ -32,7 +32,6 @@ import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
-import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
 import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.apache.tuscany.sdo.util.SDOUtil;
 import org.eclipse.emf.common.util.URI;
@@ -42,9 +41,11 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
+import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
+import commonj.sdo.helper.XMLHelper;
 
 public class ReadCommandImpl extends CommandImpl {
 
@@ -109,7 +110,7 @@ public class ReadCommandImpl extends CommandImpl {
 				getSchema(), mappingModel.getConfig(), resultSetShape);
 
 		DataGraph g = createEDataGraph(gbmd.getSchema());
-		ChangeSummaryImpl summary = (ChangeSummaryImpl) g.getChangeSummary();
+		ChangeSummary summary = g.getChangeSummary();
 
 		ResultSetProcessor rsp = new ResultSetProcessor(g.getRootObject(), gbmd);
 		rsp.processResults(getStartRow(), getEndRow());
@@ -173,13 +174,15 @@ public class ReadCommandImpl extends CommandImpl {
 				ConfigPackageImpl.eNS_URI);
 		map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
 
-		try {
-			resource.load(stream, map);
+		try {			
+			Config config = (Config) XMLHelper.INSTANCE.load(stream, ConfigPackageImpl.eNS_URI,map).getRootObject();
+			mappingModel = new MappingWrapper(config);
+		//	resource.load(stream, map);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		mappingModel = new MappingWrapper((Config) resource.getContents().get(
-				0));
+//		mappingModel = new MappingWrapper((Config) resource.getContents().get(
+//				0));
 		if (mappingModel.getConfig().getConnectionProperties() != null)
 			setConnection(mappingModel.getConfig().getConnectionProperties());
 

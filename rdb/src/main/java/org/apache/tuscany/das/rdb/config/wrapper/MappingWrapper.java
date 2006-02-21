@@ -375,7 +375,7 @@ public class MappingWrapper {
 			if ( name.equals (r.getName())) 
 				return r;
 		}
-		return null;
+		throw new RuntimeException("Could not find relationship " + name + " in the configuration");
 	}
 
 }

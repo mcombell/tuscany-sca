@@ -42,13 +42,13 @@ public class CudGenerator {
 		return deleteGenerator.getDeleteParameters(table);
 	}
 
-	public Collection getCreateParameters(DataObject changedObject, Table table) {
-		return insertGenerator.getInsertParameters(changedObject, table);
+	public Collection getCreateParameters(MappingWrapper mapping, DataObject changedObject, Table table) {
+		return insertGenerator.getInsertParameters(mapping, changedObject, table);
 	}
 
-	public InsertCommandImpl getInsertCommand(DataObject changedObject,
+	public InsertCommandImpl getInsertCommand(MappingWrapper mapping, DataObject changedObject,
 			Table table) {
-		return insertGenerator.getInsertCommand(changedObject, table);
+		return insertGenerator.getInsertCommand(mapping, changedObject, table);
 	}
 
 	public WriteCommandImpl getUpdateCommand(MappingWrapper mapping,

@@ -33,10 +33,6 @@ import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
 import org.apache.tuscany.das.rdb.impl.WriteCommandImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.impl.AttributeImpl;
-import org.apache.tuscany.sdo.impl.ChangeSummarySettingImpl;
-import org.apache.tuscany.sdo.impl.ReferenceImpl;
-import org.eclipse.emf.ecore.ETypedElement;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -66,7 +62,7 @@ public class UpdateGenerator {
 		Iterator i = getChangedFields(mapping, summary, changedObject).iterator();
 
 		while (i.hasNext()) {
-			AttributeImpl attr = (AttributeImpl) i.next();
+			Property attr = (Property) i.next();
 			Column c = t.getColumnByPropertyName(attr.getName());
 			if ((c != null) && (c.isCollision() || c.isPrimaryKey())) {
 				// get rid of comma if OCC or PK is last field
@@ -75,7 +71,7 @@ public class UpdateGenerator {
 							.delete(statement.length() - 2, statement.length());
 				}
 			} else {
-				parameters.add(type.getProperty(attr.getName()));
+				parameters.add(attr);
 				statement.append(c == null ? attr.getName() : c.getName());
 				statement.append(" = ?");
 				if (i.hasNext())
@@ -141,17 +137,17 @@ public class UpdateGenerator {
 		ArrayList changes = new ArrayList();
 		Iterator i = summary.getOldValues(obj).iterator();
 		while (i.hasNext()) {
-			ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i.next();
-			if (setting.getFeature() instanceof AttributeImpl)
-				changes.add(setting.getFeature());
-			else if ( setting.getFeature() instanceof ReferenceImpl) {
-				ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
-				if ( ref.getUpperBound() != ETypedElement.UNBOUNDED_MULTIPLICITY ) {
-					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByName(ref.getEOpposite().getName()));
+			ChangeSummary.Setting setting = (ChangeSummary.Setting) i.next();
+			if (setting.getProperty().getType().isDataType()) {
+				changes.add(setting.getProperty());
+			} else  {
+				Property ref = setting.getProperty();
+				if ( !ref.isMany() ) {
+					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByName(ref.getOpposite().getName()));
 					Iterator keys = r.getForeignKeys().iterator();
 					while ( keys.hasNext()) {
 						String key = (String) keys.next();
-						AttributeImpl p = (AttributeImpl) obj.getType().getProperty(key);
+						Property p = obj.getType().getProperty(key);
 						changes.add(p);
 					}
 				}
@@ -183,7 +179,7 @@ public class UpdateGenerator {
 		
 		Iterator i = getAttributeProperties(changedObject).iterator();
 		while (i.hasNext()) {
-			AttributeImpl attr = (AttributeImpl) i.next();
+			Property attr = (Property) i.next();
 			String field = attr.getName();
 
 			Parameter p = getParameter(wrapper, type.getProperty(field));

@@ -23,13 +23,14 @@ import java.util.List;
 
 import org.apache.tuscany.das.rdb.Converter;
 import org.apache.tuscany.das.rdb.Parameter;
+import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
+import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.InsertCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.impl.AttributeImpl;
-import org.eclipse.emf.ecore.EObject;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -44,19 +45,19 @@ public class InsertGenerator {
 		super();
 	}
 
-	public InsertCommandImpl getInsertCommand(DataObject changedObject, Table t) {
+	public InsertCommandImpl getInsertCommand(MappingWrapper config,
+			DataObject changedObject, Table t) {
 		ArrayList parameters = new ArrayList();
 		TableWrapper table = new TableWrapper(t);
 		StringBuffer statement = new StringBuffer("insert into ");
 		statement.append(t.getName());
 
-		Iterator i = getAttributeProperties(changedObject).iterator();
+		Iterator i = getAttributeProperties(changedObject, config).iterator();
 
 		ArrayList attributes = new ArrayList();
 		while (i.hasNext()) {
-			AttributeImpl attr = (AttributeImpl) i.next();
-			if ((!table.isGeneratedColumnProperty(attr.getName())) && 
-					((EObject)changedObject).eIsSet(attr)) {
+			Property attr = (Property) i.next();
+			if (!table.isGeneratedColumnProperty(attr.getName())) {
 				attributes.add(attr.getName());
 				parameters.add(changedObject.getType().getProperty(
 						attr.getName()));
@@ -76,7 +77,7 @@ public class InsertGenerator {
 		}
 
 		statement.append(" values (");
-		for ( int idx=1; idx <= attributes.size(); idx++) {
+		for (int idx = 1; idx <= attributes.size(); idx++) {
 			statement.append('?');
 			if (idx < attributes.size())
 				statement.append(", ");
@@ -86,7 +87,7 @@ public class InsertGenerator {
 
 		InsertCommandImpl cmd = new InsertCommandImpl(statement.toString());
 		Iterator params = parameters.iterator();
-		for (int idx=1; params.hasNext(); idx++ ) {
+		for (int idx = 1; params.hasNext(); idx++) {
 			Property property = (Property) params.next();
 			Parameter p = new ParameterImpl();
 			p.setName(property.getName());
@@ -94,13 +95,13 @@ public class InsertGenerator {
 			p.setConverter(getConverter(table, property.getName()));
 			p.setIndex(idx);
 			cmd.addParameter(p);
-			
+
 		}
 		DebugUtil.debugln(getClass(), debug, statement.toString());
 		return cmd;
 
 	}
-	
+
 	private Converter getConverter(TableWrapper tw, String name) {
 		String converter = tw.getConverter(name);
 		if ( converter != null ) {
@@ -113,27 +114,45 @@ public class InsertGenerator {
 		return null;
 	}
 
-	private List getAttributeProperties(DataObject obj) {
+	private List getAttributeProperties(DataObject obj, MappingWrapper config) {
 		ArrayList fields = new ArrayList();
 		Iterator i = obj.getType().getProperties().iterator();
-		while ( i.hasNext()) {
+		while (i.hasNext()) {
 			Property p = (Property) i.next();
-			if ( p.getType().isDataType())
-				fields.add(p);
+			if (p.getType().isDataType()) {
+				if (obj.isSet(p))
+					fields.add(p);
+			} else {
+				if (!p.isMany() && obj.isSet(p)) {
+					Relationship relationship = config.getRelationshipByName(p
+							.getOpposite().getName());
+
+					RelationshipWrapper r = new RelationshipWrapper(
+							relationship);
+					Iterator keys = r.getForeignKeys().iterator();
+					while (keys.hasNext()) {
+						String key = (String) keys.next();
+						Property keyProp = obj.getType().getProperty(key);
+						fields.add(keyProp);
+					}
+
+				}
+			}
 		}
-		
+
 		return fields;
-	
+
 	}
 
-	public Collection getInsertParameters(DataObject changedObject, Table table) {
+	public Collection getInsertParameters(MappingWrapper config,
+			DataObject changedObject, Table table) {
 		ArrayList parameters = new ArrayList();
 		TableWrapper wrapper = new TableWrapper(table);
 
-		Iterator i = getAttributeProperties(changedObject).iterator();
+		Iterator i = getAttributeProperties(changedObject, config).iterator();
 
 		while (i.hasNext()) {
-			AttributeImpl attr = (AttributeImpl) i.next();
+			Property attr = (Property) i.next();
 			if (!wrapper.isGeneratedColumnProperty(attr.getName()))
 				parameters.add(changedObject.getType().getProperty(
 						attr.getName()));
@@ -142,6 +161,4 @@ public class InsertGenerator {
 		return parameters;
 	}
 
-
 }
-

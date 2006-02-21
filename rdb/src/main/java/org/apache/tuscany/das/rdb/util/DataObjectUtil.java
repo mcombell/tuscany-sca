@@ -19,13 +19,11 @@ package org.apache.tuscany.das.rdb.util;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EFactory;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 import commonj.sdo.ChangeSummary.Setting;
+import commonj.sdo.helper.DataFactory;
 
 /**
  */
@@ -40,18 +38,15 @@ public class DataObjectUtil {
 
 	public static DataObject getCopy(DataObject original) {
 		
-		//Drop to "E" land and create a new instance
-		EObject eOriginal = (EObject) original;
-		EFactory factory = eOriginal.eClass().getEPackage().getEFactoryInstance();
-		EObject eCopy = factory.create(eOriginal.eClass());
+		DataObject copy = DataFactory.INSTANCE.create(original.getType());
 		
 		//Fill in values
-		Iterator i = eOriginal.eClass().getEAllStructuralFeatures().iterator();
+		Iterator i = original.getType().getProperties().iterator();
 		while (i.hasNext()) {
-			EStructuralFeature feature = (EStructuralFeature) i.next();
-			eCopy.eSet(feature, eOriginal.eGet(feature));
+			Property feature = (Property) i.next();
+			copy.set(feature, original.get(feature));
 		}
-		return (DataObject) eCopy;
+		return copy;
 	}	
 
 	/**

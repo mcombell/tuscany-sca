@@ -31,50 +31,55 @@ public class OperationOrderingTests extends DasTest {
 
 		CityData city = new CityData(getAutoConnection());
 		StateData state = new StateData(getAutoConnection());
-		
+
 		city.doDeletes();
 		state.doDeletes();
 		state.doInserts();
 		city.doInserts();
-		
 
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	public OperationOrderingTests() {
 		super();
 	}
-	
+
 	public void testInsert() throws Exception {
-		Command select = Command.FACTORY.createCommand("Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID", getConfig("cityStates.xml"));
+		Command select = Command.FACTORY
+				.createCommand(
+						"Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID",
+						getConfig("cityStates.xml"));
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
+
+		int numberOfStates = root.getList("STATES").size();
+		int numberOfCities = root.getList("CITIES").size();
 
 		DataObject atlanta = root.createDataObject("CITIES");
 		atlanta.setString("NAME", "Atlanta");
 		atlanta.setInt("ID", 6);
-		
+
 		// Create a new Company
 		DataObject georgia = root.createDataObject("STATES");
 		georgia.setInt("ID", 4);
 		georgia.setString("NAME", "GA");
-		
+
 		georgia.getList("cities").add(atlanta);
 
 		// Create apply command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("cityStates.xml"));
 		apply.setConnection(getConnection());
-
-		// Programatically set minimum metadata necessary
-		apply.addPrimaryKey("STATES.ID");
-		apply.addPrimaryKey("CITIES.ID");
-		apply.addRelationship("STATES.ID", "CITIES.STATE_ID");
 
 		// Flush changes
 		apply.execute(root);
+
+		select.setConnection(getConnection());
+		root = select.executeQuery();
+		assertEquals(numberOfCities + 1, root.getList("CITIES").size());
+		assertEquals(numberOfStates + 1, root.getList("STATES").size());
 	}
 
 }

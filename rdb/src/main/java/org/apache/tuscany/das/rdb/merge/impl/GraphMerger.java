@@ -27,9 +27,10 @@ import org.apache.tuscany.das.rdb.graphbuilder.impl.MultiTableRegistry;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.TableRegistry;
 import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 
+import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 
@@ -62,7 +63,7 @@ public class GraphMerger {
 	public DataObject merge(DataObject primary, DataObject secondary) {
 		addGraphToRegistry(primary);
 
-		ChangeSummaryImpl summary =  (ChangeSummaryImpl) primary
+		ChangeSummary summary =  primary
 				.getDataGraph().getChangeSummary();
 		summary.endLogging();
 		Iterator i = secondary.getType().getProperties().iterator();
@@ -76,7 +77,7 @@ public class GraphMerger {
 				createObjectWithSubtree(primary, p, object);
 			}
 		}
-		summary.resumeLogging();
+		((ChangeSummaryImpl)summary).resumeLogging();
 		return primary;
 	}
 
@@ -103,7 +104,7 @@ public class GraphMerger {
 			Iterator refs = eObjectToCopy.eClass().getEAllReferences()
 					.iterator();
 			while (refs.hasNext()) {
-				EReference ref = (EReference) refs.next();
+				ReferenceImpl ref = (ReferenceImpl) refs.next();
 				List refObjects;
 				if (!ref.isMany()) {
 					refObjects = Collections.singletonList(eObjectToCopy

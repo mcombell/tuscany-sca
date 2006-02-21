@@ -105,10 +105,10 @@ public class ChangeFactory {
 	
 			String createStatement = table.getCreate();
 			if ( createStatement == null ) {
-				createCommand = getCudGenerator().getInsertCommand(changedObject, table);
+				createCommand = getCudGenerator().getInsertCommand(mapping, changedObject, table);
 			} else {
 				createCommand = new InsertCommandImpl(createStatement);
-				Iterator i = getCudGenerator().getCreateParameters(changedObject, table).iterator();
+				Iterator i = getCudGenerator().getCreateParameters(mapping, changedObject, table).iterator();
 				while (i.hasNext()) {
 					Property p = (Property)i.next();				
 					createCommand.addParameter(p.getName(), p.getType());

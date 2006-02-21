@@ -16,8 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.graphbuilder.schema;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.config.Relationship;
@@ -33,12 +31,10 @@ import org.apache.tuscany.sdo.impl.ReferenceImpl;
 import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.apache.tuscany.sdo.util.SDOUtil;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 import commonj.sdo.Type;
 import commonj.sdo.helper.TypeHelper;
@@ -228,34 +224,6 @@ public class ESchemaMaker {
 		return EAttributeMaker.singleton();
 	}
 
-	/**
-	 * Internal method to save a schema to a file
-	 * 
-	 * @param eclass
-	 *            The EClass to save (usually just the root EClass)
-	 * @param name
-	 *            The name of the file
-	 * @throws IOException
-	 */
-	private void save(ENamedElement eclass, OutputStream stream)
-			throws IOException {
-
-		XMLResourceImpl resource = new XMLResourceImpl();
-		resource.getContents().add(eclass);
-		resource.save(stream, null);
-
-	}
-
-	/**
-	 * Used by Metadata.saveToEcore() to save the schema to a file
-	 * 
-	 * @param name
-	 *            the file name
-	 * @throws IOException
-	 */
-	public void save(OutputStream stream) throws IOException {
-		save(getEPackage(), stream);
-	}
 
 	/**
 	 * @return the EPackage for this schema
