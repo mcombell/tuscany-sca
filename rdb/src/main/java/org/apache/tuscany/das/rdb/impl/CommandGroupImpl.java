@@ -35,8 +35,6 @@ import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import commonj.sdo.helper.XMLHelper;
 
@@ -115,15 +113,11 @@ public class CommandGroupImpl implements CommandGroup {
 
     private void setConfig(InputStream stream) {
         XMLHelper helper = XMLHelper.INSTANCE;
-        HashMap map = new HashMap();
-        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
-
-        map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
-        map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
+  
+        ConfigPackageImpl impl = ConfigPackageImpl.eINSTANCE;
 
         try {
-            config = (Config) helper.load(stream, ConfigPackageImpl.eNS_URI, map).getRootObject();
+            config = (Config) helper.load(stream).getRootObject();           
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

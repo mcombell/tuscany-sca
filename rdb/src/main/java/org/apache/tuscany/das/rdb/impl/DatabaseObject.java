@@ -25,11 +25,9 @@ import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.impl.ClassImpl;
-import org.apache.tuscany.sdo.impl.ReferenceImpl;
-import org.eclipse.emf.ecore.EObject;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 
 /**
  * DatabaseObject wraps DataObject. If a field is an FK field, it will return
@@ -43,7 +41,7 @@ public class DatabaseObject {
 
 	private final DataObject dataObject;
 
-	private ReferenceImpl parentReference;
+	private Property parentReference;
 
 	private static final boolean debug = false;
 
@@ -81,8 +79,8 @@ public class DatabaseObject {
 		if (r == null)
 			return dataObject.get(parameter);
 
-		ReferenceImpl parentRef = getParentReference(r.getPrimaryKeyTable());
-		DataObject parent = (DataObject) ((EObject) dataObject).eGet(parentRef);
+		Property parentRef = getParentReference(r.getPrimaryKeyTable());
+		DataObject parent = dataObject.getDataObject(parentRef);
 		String parentKey = getParentKey(r, parameter);
 		return parent.get(parentKey);
 
@@ -99,15 +97,14 @@ public class DatabaseObject {
 		return null;
 	}
 
-	public ReferenceImpl getParentReference(String parentName) {
+	public Property getParentReference(String parentName) {
 		if (this.parentReference == null) {
 
-			List references = ((ClassImpl) dataObject.getType())
-					.getEAllReferences();
-			Iterator i = references.iterator();
+			Iterator i = dataObject.getType().getProperties().iterator();							
 			while (i.hasNext()) {
-				ReferenceImpl ref = (ReferenceImpl) i.next();
-				if (ref.getEReferenceType().getName().equals(parentName)) {
+				Property ref = (Property) i.next();
+				if ((!ref.getType().isDataType()) && 
+						(ref.getType().getName().equals(parentName))) {
 					this.parentReference = ref;
 				}
 			}

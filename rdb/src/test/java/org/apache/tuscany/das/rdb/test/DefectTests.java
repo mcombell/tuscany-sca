@@ -90,7 +90,7 @@ public class DefectTests extends DasTest {
         int custID = cust.getInt("ID");
         int custOrderCount = cust.getList("ANORDER").size();
         int rootCount = root.getList("ANORDER").size();
-
+        
         // Create a new Order and add to customer1
         DataObject order = root.createDataObject("ANORDER");
 
@@ -153,8 +153,7 @@ public class DefectTests extends DasTest {
     public void testWASDefect330118() throws Exception {
 
         // Create the group and set common connection
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
         commandGroup.setConnection(getConnection());
 
         // Read all customers and add one
@@ -229,15 +228,17 @@ public class DefectTests extends DasTest {
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
 
     }
+    
+    
+
 
     /**
-     * Should be able to explicitly set a parameter to null. But, should require
+     * Should be able to explicitly set a parameter to null.  But, should require
      * that the parameter type is set.
      */
     public void testDiltonsNullParameterBug1() throws Exception {
-
-        Command insert = Command.FACTORY
-                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");
+        
+        Command insert = Command.FACTORY.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
         insert.setConnection(getConnection());
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", null);
@@ -245,84 +246,55 @@ public class DefectTests extends DasTest {
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
         insert.execute();
 
-        // Verify
+        //Verify
         Command select = Command.FACTORY.createCommand("Select * from CUSTOMER where ID = 10");
         select.setConnection(getConnection());
-        DataObject root = select.executeQuery();
+        DataObject root = select.executeQuery();    
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
 
     }
+   
 
     /**
      * Error by not setting a parameter
-     */
+     */    
     public void testDiltonsNullParameterBug2() throws Exception {
-
-        Command insert = Command.FACTORY
-                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");
+        
+        Command insert = Command.FACTORY.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
         insert.setConnection(getConnection());
         insert.setParameterValue("ID", new Integer(10));
-        // insert.setParameterValue("LASTNAME", null);
+//        insert.setParameterValue("LASTNAME", null);
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
-
+        
         try {
             insert.execute();
             fail();
-        } catch (RuntimeException e) {
-            // Expected since "LASTNAME" parameter not set
         }
-    }
-
+        catch (RuntimeException e) {
+            //Expected since "LASTNAME" parameter not set
+        }
+    }    
+    
     /**
      * Set parameter to empty string
-     */
+     */    
     public void testDiltonsNullParameterBug3() throws Exception {
-
-        Command insert = Command.FACTORY
-                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");
+        
+        Command insert = Command.FACTORY.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
         insert.setConnection(getConnection());
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", "");
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
         insert.execute();
 
-        // Verify
+        //Verify
         Command select = Command.FACTORY.createCommand("Select * from CUSTOMER where ID = 10");
         select.setConnection(getConnection());
-        DataObject root = select.executeQuery();
+        DataObject root = select.executeQuery();    
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
 
     }
-
-    /**
-     * Test bug reported by Philip K Warren Silent fail if a non-datagraph root
-     * is passed to ApplyChangesCommand
-     * 
-     * 2-21-06 Modified to verify exception thrown if datagrpah root is not passed
-     * to applychanges command
-     */
-    public void testTuscany35() throws Exception {
-
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-
-        Command read = commandGroup.getCommand("all customers");
-        DataObject root = read.executeQuery();
-
-        // Update first customer
-        DataObject cust1 = root.getDataObject("CUSTOMER[1]");
-        cust1.setString("LASTNAME", "Pavick");
-
-        ApplyChangesCommand update = commandGroup.getApplyChangesCommand();
-        try {
-            // pass cust1 instead of root
-            update.execute(cust1);
-            fail();
-        } catch (Error e) {
-            // Expected
-        }
-
-    }
+    
 }

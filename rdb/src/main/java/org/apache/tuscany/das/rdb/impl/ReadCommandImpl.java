@@ -23,12 +23,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
-import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
@@ -37,9 +35,6 @@ import org.apache.tuscany.sdo.util.SDOUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
@@ -163,27 +158,21 @@ public class ReadCommandImpl extends CommandImpl {
 	}
 
 	public void setMappingModel(InputStream stream) {
+		
+		 XMLHelper helper = XMLHelper.INSTANCE;
+		  
+//		 ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+//		 metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
+
+		 try {
+			 Config config = (Config) helper.load(stream).getRootObject();     
+			 mappingModel = new MappingWrapper(config);
+	     } catch (IOException e) {
+	    	 throw new RuntimeException(e);
+	     }
         
-		XMLResource resource = new XMLResourceImpl();
-
-		HashMap map = new HashMap();
-		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-		metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
-
-		map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION,
-				ConfigPackageImpl.eNS_URI);
-		map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
-
-		try {			
-			Config config = (Config) XMLHelper.INSTANCE.load(stream, ConfigPackageImpl.eNS_URI,map).getRootObject();
-			mappingModel = new MappingWrapper(config);
-		//	resource.load(stream, map);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-//		mappingModel = new MappingWrapper((Config) resource.getContents().get(
-//				0));
-		if (mappingModel.getConfig().getConnectionProperties() != null)
+	
+	     if (mappingModel.getConfig().getConnectionProperties() != null)
 			setConnection(mappingModel.getConfig().getConnectionProperties());
 
 	}

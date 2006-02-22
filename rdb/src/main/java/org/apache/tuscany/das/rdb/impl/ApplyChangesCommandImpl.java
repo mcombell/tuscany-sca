@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.HashMap;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
@@ -29,8 +28,6 @@ import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
@@ -113,12 +110,11 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
     public void execute(DataObject root) {
         DebugUtil.debugln(getClass(), debug, "Executing ApplyChangesCmd");
 
-        //Assertions
         if (dasConnection == null)
-            throw new Error("A connection must be provided");
+            throw new RuntimeException("A connection must be provided");
 
         if (!root.equals(root.getDataGraph().getRootObject()))
-            throw new Error("'root' argument must be the root of the datagraph");
+            throw new RuntimeException("'root' argument must be the root of the datagraph");
         
         Changes changes = summarizer.loadChanges(root);
 
@@ -136,15 +132,9 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
 
     public void setMapping(InputStream stream) throws IOException {
     	XMLHelper helper = XMLHelper.INSTANCE;
-
-        HashMap map = new HashMap();
-        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        metadata.putPackage(null, ConfigPackageImpl.eINSTANCE);
-
-        map.put(XMLResource.NO_NAMESPACE_SCHEMA_LOCATION, ConfigPackageImpl.eNS_URI);
-        map.put(XMLResource.OPTION_EXTENDED_META_DATA, metadata);
-        
-    	XMLDocument doc = helper.load(stream, ConfigPackageImpl.eNS_URI, map);
+   
+        ConfigPackageImpl impl = ConfigPackageImpl.eINSTANCE;
+    	XMLDocument doc = helper.load(stream);
     	Config mapping = (Config) doc.getRootObject();
 
         summarizer.setMapping(mapping);

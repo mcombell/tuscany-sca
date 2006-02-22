@@ -125,7 +125,7 @@ public class ESchemaMaker {
 			while (names.hasNext()) {
 				String tableName = (String) names.next();
 				if (rootClass.getEStructuralFeature(tableName) == null) {
-					Type clazz = createEClass(tableName);
+					Type clazz = createType(tableName);
 					getEPackage().getEClassifiers().add(clazz);
 					ReferenceImpl ref = refMaker.createOneToManyReference(
 							tableName, clazz, true);
@@ -208,7 +208,7 @@ public class ESchemaMaker {
 	 * @param name
 	 * @return EClass
 	 */
-	protected Type createEClass(String name) {
+	protected Type createType(String name) {
 		ClassImpl ecl = (ClassImpl) SDOFactory.eINSTANCE.createClass();
 		ecl.setName(name);
 

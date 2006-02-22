@@ -25,10 +25,7 @@ import java.util.logging.Logger;
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.MultiTableRegistry;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.TableRegistry;
-import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
-import org.apache.tuscany.sdo.impl.ReferenceImpl;
-import org.eclipse.emf.ecore.EObject;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -90,43 +87,44 @@ public class GraphMerger {
 	//		logger.info("creating " + object.getType().getName() + " with pk " + pk);
 			DataObject newObject = root.createDataObject(p.getName());
 
-			EObject eObjectToCopy = (EObject) object;
+			
 
-			Iterator attrs = eObjectToCopy.eClass().getEAllAttributes()
-					.iterator();
+			Iterator attrs = object.getType().getProperties().iterator();
 			while (attrs.hasNext()) {
-				AttributeImpl attr = (AttributeImpl) attrs.next();
-				newObject.set(attr.getName(), eObjectToCopy.eGet(attr));
+				Property attr = (Property) attrs.next();
+				if ( attr.getType().isDataType()) {
+					newObject.set(attr.getName(), object.get(attr));
+				} 
 			}
 			registry.put(object.getType().getName(), Collections
 					.singletonList(pk), newObject);
 
-			Iterator refs = eObjectToCopy.eClass().getEAllReferences()
-					.iterator();
+			Iterator refs = object.getType().getProperties().iterator();
 			while (refs.hasNext()) {
-				ReferenceImpl ref = (ReferenceImpl) refs.next();
-				List refObjects;
-				if (!ref.isMany()) {
-					refObjects = Collections.singletonList(eObjectToCopy
-							.eGet(ref));
-				} else {
-					refObjects = (List) eObjectToCopy.eGet(ref);
-				}
+				Property ref = (Property) refs.next();
+				if ( !ref.getType().isDataType()) {
+					List refObjects;
+					if (!ref.isMany()) {
+						refObjects = Collections.singletonList(object.get(ref));
+					} else {
+						refObjects = (List) object.get(ref);
+					}
 
-				Iterator iter = refObjects.iterator();
-				while (iter.hasNext()) {
-					DataObject refObject = (DataObject) iter.next();
-					createObjectWithSubtree(root, refObject
+					Iterator iter = refObjects.iterator();
+					while (iter.hasNext()) {
+						DataObject refObject = (DataObject) iter.next();
+						createObjectWithSubtree(root, refObject
 							.getContainmentProperty(), refObject);
 					
-					refObject = (DataObject) registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
-					if (ref.isMany()) {
-						newObject.getList(
+						refObject = (DataObject) registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
+						if (ref.isMany()) {
+							newObject.getList(
 								newObject.getType().getProperty(ref.getName()))
 								.add(refObject);
-					} else
-						newObject.set(newObject.getType().getProperty(
-								ref.getName()), refObject);
+						} else
+							newObject.set(newObject.getType().getProperty(
+									ref.getName()), refObject);
+					}
 				}
 
 			}
