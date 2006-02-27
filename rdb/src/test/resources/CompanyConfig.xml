@@ -3,8 +3,16 @@
     
     <Command name="all companies" SQL="select * from COMPANY" kind="Select"/>
     
-    <ConnectionProperties dataSource="jdbc:derby:Databases/dastest"/>
-    
+<!--
+	For use in sample application using datasource
+	    <ConnectionProperties dataSource="jdbc:derby:Databases/dastest"/>
+ -->
+	
+    <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+        driverURL="jdbc:derby:dastest"/>
+ 	
+	
+	   
     <Table name="COMPANY">
         <Column name="ID" primaryKey="true" generated="true"/>
     </Table>
