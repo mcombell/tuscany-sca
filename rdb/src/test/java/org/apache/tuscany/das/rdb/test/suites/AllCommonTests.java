@@ -16,10 +16,12 @@
  */
 package org.apache.tuscany.das.rdb.test.suites;
 
+import org.apache.tuscany.das.rdb.test.BestPracticeTests;
 import org.apache.tuscany.das.rdb.test.CUDGeneration;
 import org.apache.tuscany.das.rdb.test.CompanyTests;
 import org.apache.tuscany.das.rdb.test.CompoundKeyTests;
 import org.apache.tuscany.das.rdb.test.ConverterTests;
+import org.apache.tuscany.das.rdb.test.CorrectedDefectTests;
 import org.apache.tuscany.das.rdb.test.CrudWithChangeHistory;
 import org.apache.tuscany.das.rdb.test.ExceptionTests;
 import org.apache.tuscany.das.rdb.test.GeneratedCommandTests;
@@ -81,6 +83,9 @@ public class AllCommonTests {
 		suite.addTest(new TestSuite (SerializationTests.class));
 		
         suite.addTest(new TestSuite (CommandGroupTests.class));
+        suite.addTest(new TestSuite (BestPracticeTests.class));
+        suite.addTest(new TestSuite (CorrectedDefectTests.class));
+        
 		//$JUnit-END$
 		return suite;
 	}
