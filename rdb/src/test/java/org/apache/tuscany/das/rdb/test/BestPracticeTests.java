@@ -30,14 +30,13 @@ public class BestPracticeTests extends DasTest {
         new CompanyData(getAutoConnection()).refresh();
     }
 
-    //Added this to test code used in the Stand alone companies test.  This is not working
-    //because datasource is specified in the config
+    //Read list of companies
     public void testReadCompanies() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
         Command read = commandGroup.getCommand("all companies");
-        DataObject root = read.executeQuery();
-        root.getList("COMPANY");
+        DataObject root = read.executeQuery(); 
+        assertEquals(3, root.getList("COMPANY").size());
 
     }
 
