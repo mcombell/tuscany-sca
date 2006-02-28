@@ -7,14 +7,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-    <title>  Apache Tuscany - How To Build Site</title>
+    <title>  
+	Apache Tuscany - How To Build Site</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
       @import url("./css/site.css");
     </style>
     <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
-          <meta name="author" content="  Matthew Marum" />
+          <meta name="author" content="  
+	Mike Edwards" />
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
   </head>
   <body class="composite">
@@ -29,7 +31,7 @@
       </div>
     </div>
     <div id="breadcrumbs">
-      <div class="xleft">Last Published: Tue Feb 28 10:01:09 GMT 2006</div>
+      <div class="xleft">Last Published: Tue Feb 28 10:52:16 GMT 2006</div>
       <div class="xright">      <a href="http://www.apache.org/">Apache</a>
       </div>
       <div class="clear">
@@ -217,10 +219,31 @@
     </div></div>
     <div id="bodyColumn">
       <div id="contentBox">
-          
-	<div class="section"><h2>Maven Site Generation Overview</h2>
-<p>Maven provides the capability of developing a default website for a project using only the information specified in project.xml.  It includes information about the dependancies listed for the project, also any mailing lists, SCM information, and project contributors, etc.  It is possible to override and/or extend the default site and customize the generated content through the use of xdocs, HTML, and other resources.</p>
-
+         
+	 
+	<div class="section"><h2>Tuscany Site Generation Overview</h2>
+	
+		<p>The Tuscany website is built using the site plugin of Maven 2.0.  A general guide to
+		the Maven site plugin can be found <a href="http://maven.apache.org/guides/mini/guide-site.html">here</a>.
+		</p>
+		<p>
+		The website is held in the site subproject of Tuscany, with a set of source files in the src/site 
+		directory and the final website files held in the target/site directory.  The website project has its own POM
+		file, held in the main site directory.
+		The site is generated using the command
+		<pre>
+			mvn site
+		</pre>
+		from the main site directory, which uses the source files to build the final website files in the target/site
+		directory.
+		</p>
+		<p>
+		The actual live website for Tuscany is at 
+		<a href="http://incubator.apache.org/tuscany/">http://incubator.apache.org/tuscany/</a>.  The files for the live
+		website are transferred from the Tuscany subversion repository to the machine people.apache.org in the directory 
+		/www/incubator.apache.org/tuscany, using a subversion extract of the site/target/site directory.
+		</p>
+		
 <p>For example, if you wanted to add a news section that had a link to a PDF.  Say that you also wanted to add the News section to the main menu, you would need to do the following.</p>
 
 
