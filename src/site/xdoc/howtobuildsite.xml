@@ -14,74 +14,128 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<document url="howtobuildsite.xml"><properties>  <author email="mgmarum@us.ibm.com">Matthew Marum</author>  <title>Apache Tuscany - How To Build Site</title></properties><body>  
-	<section name="Maven Site Generation Overview">
-<p>Maven provides the capability of developing a default website for a project using only the information specified in project.xml.  It includes information about the dependancies listed for the project, also any mailing lists, SCM information, and project contributors, etc.  It is possible to override and/or extend the default site and customize the generated content through the use of xdocs, HTML, and other resources.</p>
+<document url="howtobuildsite.xml"><properties>  
+	<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>  
+	<title>Apache Tuscany - How To Build Site</title></properties><body> 
+	 
+	<section name="Tuscany Site Generation Overview">
+	
+		<p>The Tuscany website is built using the site plugin of Maven 2.0.  A general guide to
+		the Maven site plugin can be found <a href="http://maven.apache.org/guides/mini/guide-site.html">here</a>.
+		</p>
+		<p>
+		The website is held in the site subproject of Tuscany, with a set of source files in the src/site 
+		directory and the final website files held in the target/site directory.  The website project has its own POM
+		file, held in the main site directory.
+		The site is generated using the command
+		<pre>
+			mvn site
+		</pre>
+		from the main site directory, which uses the source files to build the final website files in the target/site
+		directory.
+		</p>
+		<p>
+		The actual live website for Tuscany is at 
+		<a href="http://incubator.apache.org/tuscany/">http://incubator.apache.org/tuscany/</a>.  The files for the live
+		website are transferred from the Tuscany subversion repository to the machine people.apache.org in the directory 
+		/www/incubator.apache.org/tuscany, using a subversion extract of the site/target/site directory. So, if you
+		update the site/target directory on SVN and want to make the new version live, you will need to logon to
+		people.apache.org and type in:
+		<pre>
+			cd /www/incubator.apache.org/tuscany
+			svn update
+		</pre>
+		</p>
+		
+	</section>
+	<section name="Location and Format of the Source Files">
+		
+		<p>The source files for the Tuscany site are held in the site/src/site directory.  In that
+		directory there is a special file called site.xml which holds the basic layout for all the
+		pages in the site.  In particular, site.xml contains the definitions for the left menu bar
+		and for the overall title on each page. Only edit site.xml if you need to add a new top
+		level page to the site.
+		</p>
+		<p>
+		Most of the pages for the site are held in the xdoc directory.  The pages are generally in
+		an XML format, although it is possible to define pages as HTML files.  XML files are 
+		preferred, since Maven applies a standard layout and style sheet to these pages.  If you
+		provide a page as an HTML file, it will appear exactly as you create it - Maven does not
+		modify HTML files as it creates the site.
+		</p>
+		<p>
+		The website landing page is defined by index.xml.  The other pages are linked from this
+		page, either via the left sidebar or via explicit links in the body of the page.  The
+		following section gives you some details on how to create your own page and link it into
+		the site.
+		</p>
+		<p>
+		Other files are held in the resources directory.  These files include things like images
+		(eg. JPEG files) and documents (eg. PDF files).  These files can be referenced from the
+		pages in the xdocs directory, without the need for any path - Maven copies the files in 
+		the resources directory to the root directory of the website.
+		</p>
+		
+	</section>
+	<section name="Creating your own Pages">
+		<p>
+		You can get a good feel for the format of the pages in the Tuscany website by looking at
+		some of the existing files in the xdoc directory.  bugs.xml is a good example of a simple
+		page with a reference hyperlink.  documentation.xml is an example of a more complex page
+		which has a table.  The format of the xml files uses a simple set of elements that
+		approximate to the more common HTML tags.  To get a feel for the XML elements, let's use an example
+		of creating a new page called foo.xml.
+		</p>
+		<p>
+		First, create a file called foo.xml in the xdocs directory, similar to the following:
 
-<p>For example, if you wanted to add a news section that had a link to a PDF.  Say that you also wanted to add the News section to the main menu, you would need to do the following.</p>
+		<pre>
+		&lt;document url="foo.xml"&gt;
+		&lt;properties&gt;  
+			&lt;author email="your_id@blah.com"&gt;Your Name&lt;/author&gt;
+			&lt;title&gt;Apache Tuscany - Foo&lt;/title&gt;
+		&lt;/properties&gt;
+		&lt;body&gt;
+			&lt;section name="Tuscany Foo"&gt;	
+			&lt;p&gt;
+			Welcome to the foo section.  
+			Please review the &lt;a href="tuscany_foo.pdf"&gt;Tuscany FOO manual&lt;/a&gt;.
+			You can run foo by typing in the command:
+			&lt;pre&gt;
+				foo bar
+			&lt;/pre&gt;
+			&lt;/p&gt; 
 
+		&lt;/section&gt;
+		&lt;/body&gt;
+		&lt;/document&gt;
+		</pre>
+		
+		Note the header information with a general title in the properties section - this gets applied to the title line of
+		the browser when the page is displayed.  There is a body section, which is the main content
+		of the page.  Within the body, each section tag places a heading into the page.  Paragraphs
+		are defined using the &lt;p&gt; tags. Hyperlink references can be created using the &lt;a&gt;
+		element.  For descriptions of commands and similar text elements, you can use the &lt;pre&gt;
+		element.
+		</p>
+		<p>
+		References like "tuscany_foo.pdf" should be dropped into the site/resources directory.  
+		</p>
+		<p>If the foo page needs to be linked from the left bar, then a link to foo must be created in the
+		site.xml file which is in the main src/site directory:
 
-<p>In xdocs/navigation.xml, You can add the "News" item to the "Tuscany" menu.</p>
-
-<pre>
-...
-&lt;menu name="Tuscany"&gt;
-	...
-	&lt;item name="News"  href="news.html" /&gt;
-&lt;/menu&gt;
-...
-</pre>
-Create xdocs/news.xml,  similar to the one below.
-<pre>
-&lt;document url="news.xml"&gt;
-&lt;properties&gt;  
-	&lt;author email="mike_edwards@uk.ibm.com"&gt;Mike Edwards&lt;/author&gt;
-	&lt;title&gt;Apache Tuscany - News&lt;/title&gt;
-&lt;/properties&gt;
-&lt;body&gt;
-	&lt;section name="Tuscany News"&gt;	
-
-Welcome to the news section.  Please, review the &lt;a href="tuscany.pdf"&gt;Tuscany PDF&lt;/a&gt;.  
-
-	&lt;/section&gt;
-&lt;/body&gt;
-&lt;/document&gt;
-</pre>
-<p>Then drop "tuscany.pdf" into the same directory as news.xml.  When you run the maven site generation the PDF will get copied over and the link will be preserved in the news.html generated from news.xml.</p>
-<p>NOTE:  Even though we developed the content in "news.xml" the link needed to point to "news.html".</p>
-
-<p>You can see how other xdocs are structured by looking at the *.xml files in PROJECT_ROOT/xdocs.</p>
-
+		<pre>
+		...
+		&lt;menu name="Tuscany"&gt;
+		...
+		&lt;item name="Foo"  href="foo.html" /&gt;
+		&lt;/menu&gt;
+		...
+		</pre>
+		Note that the link here is to foo.html, not to foo.xml - foo.html is the name of the page
+		in the final website format.
+		</p>
 	</section>  
-<section name="Directory Structure">
-<pre>
-PROJECT_ROOT/xdocs		&lt;-- XDocs and other site resources
-PROJECT_ROOT/target/docs	&lt;-- Generated HTML and resources
-</pre>
-</section>
 
-<section name="Tuscany XDocs">
-Navigation.xml is the content for the title area and the side menu.
-Linking to site content using XDocs (like index.xml, news.xml) will retain
-the same look, feel, and menus.  It is possible to link to a static HTML page or
-a PDF, etc.  Just drop those resources into the xdocs directory and add the links to those resources.  When the site builds, those resources will be copied to the output directory.
-
-</section>
-
-<section name="Generating the Site">
-<pre>
-&gt; maven site
-</pre>
-
-<p>The xdocs get converted into HTML and the standard Maven stylesheets are used and placed into the generated PROJECT_ROOT/target/docs directory.  Also, any non-xdoc resource in the xdocs directory will get copied into the output directory.</p>
-</section>
-<section name="Generating the multi-project Site">
-<pre>
-&gt; maven multiproject:site
-</pre>
-<p>
-All of the subprojects will have their sites independently generated and copied into the PARENT_PROJECT_ROOT/target/docs/multiproject/ directory.  Note, they are not explicitly linked to from the default generated site.
-</p>
-</section>
 </body>
 </document> 
