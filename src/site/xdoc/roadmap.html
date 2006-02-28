@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>Tuscany Work Items</title>
+    </head>
+    <body>
+        <h1>Tuscany Java Runtime Work Items</h1>
+        <h2>I. Incremental Changes </h2>
+        <p>These changes represent basic code cleanup and need to be done prior to the major work
+            detailed below. Most of these tasks can be done in parallel.</p>
+        <h3>1. Exception Handling Cleanup</h3>
+        <p>Exception handling needs to follow the style outlined in the exception handling guide.
+            The following packages need to be updated.</p>
+        <table>
+            <tr>
+                <td>Package</td>
+                <td>Owner</td>
+                <td>Completion Date</td>
+            </tr>
+            <tr>
+                <td>o.a.t.common</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.binding.axis</td>
+                <td>Raymond</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.addressing</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.extensions</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.invocation</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.message</td>   
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.pipeline</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.core.runtime</td>
+                <td>Jim</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.assembly</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.builder</td>
+                <td>Jim</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.config</td>
+                <td>Jim</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.handler</td>
+                <td>Sebastien</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.injection</td>
+                <td>Jim</td>
+                <td>9 Dec</td>
+            </tr>
+            <tr>
+                <td>o.a.t.container.java.runtime</td>
+                <td>Jim</td>
+                <td>9 Dec</td>
+            </tr>
+        </table>
+        <h3>2. JavaDoc proposal</h3>
+        <p>While cleaning up exceptions, owners should also bring code into conformance with the
+            following Javadoc guildelines: </p>
+        <ul>
+            <li>All public interfaces and methods on those interfaces</li>
+            <li>All public classes and methods that represent cross-project contracts</li>
+            <li>All public classes and methods</li>
+            <li>All other classes and methods</li>
+        </ul>
+        <h3>3. Contract cleanup</h3>
+        <p>While cleaning up Javadoc, the following needs to be done:</p>
+        <ul>
+            <li>Turn public classes that represent cross-project contracts into interfaces</li>
+            <li>Make public classes that do not need to be protected or default</li>
+        </ul>
+        <h3>3. Unclogging proposal</h3>
+        <p>Jeremy to write up best practices and guidelines based on his design. The owners of
+            exception cleanup should implement for their respective packages.</p>
+        <h3>4. Architecture documents</h3>
+        <p>Jim to convert powerpoint slides and add text around existing architecture documents. Due
+            12 December.</p>
+        <h2>II. Significant Core Runtime Changes </h2>
+        <p>The following list represents the order in which signficant refactorings and new
+            functionality will be added to the core runtime.</p>
+        <h3>1. Subsystem design</h3>
+        <h4>a. Recursive Injection Container. Jim with some help from Sebastien</h4>
+        <h4>b. Susbsystem and Module Component topology/packaging design. Sebastien with some help
+            from Jim</h4>
+        <p>This will beed to done in conjunction with the recursive injection container.</p>
+        <h4>c. Refactoring of TuscanyModuleComponentContainerImp to support recursive injection
+            container. Jim and Sebastien.</h4>
+        <h4>d. Refactoring of Tomcat code to support subsystems. Sebastien.</h4>
+        <h3>2. Proxy Redesign</h3>
+        <h4>a. Subsystem "proxies". Sebastien with some help from Jim</h4>
+        <h4>b. Module proxies refactoring. Sebastien</h4>
+        <h3>3. Entry Point and External Service redesign. Raymond</h3>
+        <p>This will be staged after the Subsystem design work.</p>
+        <p/>
+        <h3>4. SDO 2 Support</h3>
+        <h4>a. Regenerate models</h4>
+        <h4>b. Remove all outstanding EMF dependencies</h4>
+        <h4>c. Remove old code that duplactes SDO 2 functions</h4>
+        <h4>d. Figure out a way to support POJO property values and support for collections such as
+            Map and List</h4>
+        <h4>e. SDO2 configuration mechanism for the runtime</h4>
+        <h4>f. Port tooling to SDO 2 and integrate with the runtime</h4>
+        <h4>g. SDO2 and web services authoring integration (annotated POJOs)</h4>
+        <h3>5. Policy Support</h3>
+        <p>Some of this could be done in parrallel with SDO2 integration</p>
+        <h4>a. Support for transactions via the Geronimo trasnaction manager</h4>
+        <h3>6. First class support of WSDL and XSD for component interfaces</h3>
+        <h3>7. Additional component and binding types</h3>
+        <h4>a.Spring as a module type </h4>
+        <h4>b.XSLT as component type </h4>
+        <h4>c. ActiveMQ JMS binding</h4>
+        <h4>d. Raw XML/HTTP</h4>
+        <h4>e. Scripting language component</h4>
+        <h3>8. Pluggable data binding framework</h3>
+        <p>Once the SDO 2 implementation has been integrated, we should investigate how to plug in
+            different binding technologies such as JAXB.</p>
+        <h2>III. Web Services Work</h2>
+        <p>This may be done in parallel with other work</p>
+        <h3>a. Better AxisServlet configuration></h3>
+        <h3>b. Streamling serialization/deserialization</h3>
+        <h3>c. Pluggable databinding as above</h3>
+        <h3>d. WS-I basic profile</h3>
+        <h3>e. RPC Encoded</h3> 
+    </body>
+</html>

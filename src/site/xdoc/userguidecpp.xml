@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="faq.xml">
+	<properties>
+		<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>
+		<title>Apache Tuscany - User Guide for C++</title>
+	</properties>
+	<body>
+	<section name="Tuscany User Guide for C++">
+		<ol>
+			<li><a href="#Introduction">Introduction</a></li>
+			<li><a href="#Installing">Installing and Configuring Tuscany</a></li>
+			<li><a href="#First">Your First Tuscany Application</a></li>
+			<li><a href="#Troubleshooting">Troubleshooting</a></li>
+		</ol>
+	</section>
+	<a name="Introduction"></a>
+	<section name="Introduction">
+		<p>Apache Tuscany is built upon two core technologies, SCA and SDO.</p>
+		<b>What is SCA?</b>
+		<p>
+			Service Component Architecture (SCA) is a specification which describes a model for 
+			building applications and systems using a Service Oriented Architecture (SOA).  
+			If you'd like to learn more about SCA you can read the 
+			<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_White_Paper1_09.pdf">white paper</a>.
+		</p>
+
+		<b>What is SDO?</b>
+		<p>
+			Service Data Objects (SDO) is an architecture and API which provides uniform access #
+			to and manipulation of data from heterogeneous data sources, such as relational databases, 
+			XML, and Web services. You can read the 
+			<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/SDO_Specification_CPP_V2.01.pdf">
+			SDO Specification for C++</a> to learn more about SDO.
+		</p>
+	</section>
+	<a name="Installing"></a>
+	<section name="Installing and Configuring Tuscany">
+		You can refer to the <a href="installcpp.html">Tuscany Installation Instructions for C++ Projects</a> for more information on 
+		how to install and configure the Tuscany C++ projects.
+	</section>
+	<a name="First"></a>
+	<section name="Your First Tuscany Application">
+		TODO
+	</section>
+	<a name="Troubleshooting"></a>
+	<section name="Troubleshooting">
+		TODO
+	</section>
+
+	</body>
+</document>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="howtobuildsite.xml"><properties>  <author email="mgmarum@us.ibm.com">Matthew Marum</author>  <title>Apache Tuscany - How To Build Site</title></properties><body>  
+	<section name="Maven Site Generation Overview">
+<p>Maven provides the capability of developing a default website for a project using only the information specified in project.xml.  It includes information about the dependancies listed for the project, also any mailing lists, SCM information, and project contributors, etc.  It is possible to override and/or extend the default site and customize the generated content through the use of xdocs, HTML, and other resources.</p>
+
+<p>For example, if you wanted to add a news section that had a link to a PDF.  Say that you also wanted to add the News section to the main menu, you would need to do the following.</p>
+
+
+<p>In xdocs/navigation.xml, You can add the "News" item to the "Tuscany" menu.</p>
+
+<pre>
+...
+&lt;menu name="Tuscany"&gt;
+	...
+	&lt;item name="News"  href="news.html" /&gt;
+&lt;/menu&gt;
+...
+</pre>
+Create xdocs/news.xml,  similar to the one below.
+<pre>
+&lt;document url="news.xml"&gt;
+&lt;properties&gt;  
+	&lt;author email="mike_edwards@uk.ibm.com"&gt;Mike Edwards&lt;/author&gt;
+	&lt;title&gt;Apache Tuscany - News&lt;/title&gt;
+&lt;/properties&gt;
+&lt;body&gt;
+	&lt;section name="Tuscany News"&gt;	
+
+Welcome to the news section.  Please, review the &lt;a href="tuscany.pdf"&gt;Tuscany PDF&lt;/a&gt;.  
+
+	&lt;/section&gt;
+&lt;/body&gt;
+&lt;/document&gt;
+</pre>
+<p>Then drop "tuscany.pdf" into the same directory as news.xml.  When you run the maven site generation the PDF will get copied over and the link will be preserved in the news.html generated from news.xml.</p>
+<p>NOTE:  Even though we developed the content in "news.xml" the link needed to point to "news.html".</p>
+
+<p>You can see how other xdocs are structured by looking at the *.xml files in PROJECT_ROOT/xdocs.</p>
+
+	</section>  
+<section name="Directory Structure">
+<pre>
+PROJECT_ROOT/xdocs		&lt;-- XDocs and other site resources
+PROJECT_ROOT/target/docs	&lt;-- Generated HTML and resources
+</pre>
+</section>
+
+<section name="Tuscany XDocs">
+Navigation.xml is the content for the title area and the side menu.
+Linking to site content using XDocs (like index.xml, news.xml) will retain
+the same look, feel, and menus.  It is possible to link to a static HTML page or
+a PDF, etc.  Just drop those resources into the xdocs directory and add the links to those resources.  When the site builds, those resources will be copied to the output directory.
+
+</section>
+
+<section name="Generating the Site">
+<pre>
+&gt; maven site
+</pre>
+
+<p>The xdocs get converted into HTML and the standard Maven stylesheets are used and placed into the generated PROJECT_ROOT/target/docs directory.  Also, any non-xdoc resource in the xdocs directory will get copied into the output directory.</p>
+</section>
+<section name="Generating the multi-project Site">
+<pre>
+&gt; maven multiproject:site
+</pre>
+<p>
+All of the subprojects will have their sites independently generated and copied into the PARENT_PROJECT_ROOT/target/docs/multiproject/ directory.  Note, they are not explicitly linked to from the default generated site.
+</p>
+</section>
+</body>
+</document> 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="SCA_Java_Tools_documentation.xml">
+	<properties>
+		<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>
+		<title>Documentation for SCA Java Tools</title>
+	</properties>
+	<body>
+
+		<section name="SCA Java Tools">
+			<p>
+			  The following tools are available to support users of the SCA Java Runtime:
+			  <ul>
+			    <li>XSD2Java</li>
+			    <li>WSDL2Java</li>
+			  </ul>
+			</p>
+		<h2>XSD2Java Tool</h2>
+			<p>
+				The XSD2Java tool is designed to create a set of SDO Java classes which represent the 
+				data structure defined by an XSD file.
+			</p>
+			<p>
+				Java programmers who need to deal with service data that is defined in terms of XML XSD data
+				definitions will typically find it simpler to have that data rendered as SDO classes and use
+				SDO programming interfaces to deal with the data.  The XSD2Java tool will produce the set of 
+				SDO Java classes which are equivalent to the data definitions held in the XSD file(s).
+			</p>
+			<p>
+				XSD2Java is available both as a Command run from the command line and also as a Java class.
+			</p>
+			<h3>Usage</h3>
+				<p>
+					xsd2java -f [XSD file] 
+				</p>
+				<p>
+					java org.apache.tuscany.tools.XSD2Java -f [XSD file]
+				</p> 
+
+		<h2>WSDL2Java Tool</h2>
+			<p>
+				The WSDL2Java tool is designed to create a Java interface file, plus an associated set of SDO
+				Java classes, from a WSDL file.
+			</p>
+			<p>
+				Java programmers will typically find it much easier to use service interfaces which are defined
+				as Java interfaces rather than using interfaces which are defined using WSDL.  The idea of the
+				WSDL2Java tool is to create a Java interface definition which is the equivalent of the WSDL
+				definition for a service.
+			</p>
+			<h3>Usage</h3>
+				<p>
+					wsdl2java -f [WSDL file] 
+				</p>
+				<p>
+					java org.apache.tuscany.tools.WSDL2Java -f [WSDL file]
+				</p> 
+			
+		</section>
+	</body>
+</document>

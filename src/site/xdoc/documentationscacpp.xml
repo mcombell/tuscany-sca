@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="documentation.xml">
+	<properties>
+		<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>
+		<title>SCA Runtime for C++ - Documentation</title>
+	</properties>
+	<body>
+
+		<section name="Documentation for SCA Runtime for C++ subproject">
+		<p>
+			This page provides links to documents that help to explain various aspects of the
+			Tuscany SCA C++ runtime subproject and the programming model that it provides.  More general
+			documentation which applies to the Tuscany project as a whole can be found on the 
+			<a href="documentation.html">
+			Tuscany Documentation page</a>.
+		</p>
+		<h2>General Documentation</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							TBD
+						</td>
+						<td>
+							
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+		<h2>Papers that Explain the SCA Programming model</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_White_Paper1_09.pdf">
+								SCA White Paper
+							</a>
+						</td>
+						<td>
+							A white paper that explains the SCA programming model
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+		<h2>Specifications</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_AssemblyModel_V09.pdf">
+								SCA Assembly Specification V0.9
+							</a>
+						</td>
+						<td>
+							The core Service Component Architecture Assembly specification
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_ClientAndImplementationModel_Cpp_V09.pdf">
+								SCA Client and Implementation Model for C++ Specification V0.9
+							</a>
+						</td>
+						<td>
+							The Service Component Architecture Client and Implementation specification
+							for C++.  Describes how to write SCA components in C++ and how to write 
+							Clients to SCA services in C++.
+						</td>
+					</tr>		
+
+				</tbody>
+			</table>
+
+		</section>
+	</body>
+</document>

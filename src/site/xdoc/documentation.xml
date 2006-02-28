@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="documentation.xml">
+	<properties>
+		<author email="edwardsmj@apache.org">Mike Edwards</author>
+		<title>Apache Tuscany - Documentation</title>
+	</properties>
+	<body>
+
+		<section name="Documentation">
+		<p>
+			This page provides links to a set of documents that help to explain various aspects of the
+			Tuscany project and the SOA programming model that it provides (initially the SCA and SDO
+			specifications).
+		</p>
+		<h2>General Documentation</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="acceptance/readme.htm">
+								Tuscany Acceptance Test
+							</a>
+						</td>
+						<td>
+							Explains how to setup and run the Acceptance
+							Test Suite provided with Apache Tuscany.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="samples/readme.htm">
+								Tuscany Samples
+							</a>
+						</td>
+						<td>
+							Explains setup and usage of the samples
+							provided by with Apache Tuscany.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="SCA_Java_Tools_documentation.html">
+								SCA Java Tools
+							</a>
+						</td>
+						<td>
+							Describes how to use the tools supplied to assist users of the SCA Java runtime.
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+			
+		<h2>Papers that Explain the SOA Programming model</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_White_Paper1_09.pdf">
+								SCA White Paper
+							</a>
+						</td>
+						<td>
+							A white paper describing Service Component Architecture.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/Next-Gen-Data-Programming-Whitepaper.pdf">
+								SDO White Paper
+							</a>
+						</td>
+						<td>
+							A white paper that explains the SDO programming model
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_BuildingYourFirstApplication_V09.pdf">
+								SCA: "Building your first application"
+							</a>
+						</td>
+						<td>
+							The simplified "BigBank" application as a worked example.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="RDB_DAS_white_paper_v-0.1.2.pdf">
+								DAS White Paper: The Data Access Service
+							</a>
+						</td>
+						<td>
+							How to access relational data in terms of Service Data Objects (not yet on the website - to be provided)
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+		<h2>Specifications</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_AssemblyModel_V09.pdf">
+								SCA Assembly Specification V0.9
+							</a>
+						</td>
+						<td>
+							The core Service Component Architecture Assembly specification
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_ClientAndImplementationModelforJava_V09.pdf">
+								SCA Client and Implementation Model for Java Specification V0.9
+							</a>
+						</td>
+						<td>
+							The Service Component Architecture Client and Implementation specification
+							for Java.  Describes how to write SCA components in Java and how to write 
+							Clients to SCA services in Java.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_ClientAndImplementationModel_Cpp_V09.pdf">
+								SCA Client and Implementation Model for C++ Specification V0.9
+							</a>
+						</td>
+						<td>
+							The Service Component Architecture Client and Implementation specification
+							for C++.  Describes how to write SCA components in C++ and how to write 
+							Clients to SCA services in C++.
+						</td>
+					</tr>					
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/SDO_Specification_Java_V2.01.pdf">
+								SDO Specification for Java V2.01
+							</a>
+						</td>
+						<td>
+							The Service Data Objects specification for Java.  Describes the data
+							programming interfaces of SDO in the Java language. 
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/SDO_Specification_CPP_V2.01.pdf">
+								SDO Specification for C++ V2.01
+							</a>
+						</td>
+						<td>
+							The Service Data Objects specification for C++.  Describes the data
+							programming interfaces of SDO in the C++ language. 
+						</td>
+					</tr>					
+
+				</tbody>
+			</table>
+
+		</section>
+	</body>
+</document>

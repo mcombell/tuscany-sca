@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="documentation.xml">
+	<properties>
+		<author email="kjwillia@us.ibm.com">Kevin Williams</author>
+		<title>Relational DB Data Access Service - Documentation</title>
+	</properties>
+	<body>
+
+		<section name="Documentation for DAS subproject">
+		<p>
+			This page provides links to documents that help to explain various aspects of the
+			Tuscany DAS subproject and the programming model that it provides.  More general
+			documentation which applies to the Tuscany project as a whole can be found on the 
+			<a href="documentation.html">
+			Tuscany Documentation page</a>.
+		</p>
+		<h2>General Documentation</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="RDB_DAS_white_paper_v-0.1.2.pdf">
+								DAS White Paper: The Data Access Service
+							</a>
+						</td>
+						<td>
+							How to access relational data in terms of Service Data Objects
+						</td>
+					</tr>
+					
+
+				</tbody>
+			</table>
+			
+		<h2>Papers that Explain the DAS Programming model</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							User's Guide TBD
+						</td>
+						<td>
+							A usage guide for the RDB DAS
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+		<h2>Specifications</h2>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>
+							<span style="font-weight: bold;">
+								Title
+							</span>
+						</td>
+						<td>
+							<span style="font-weight: bold;">
+								Description
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							DAS Specification - TBD
+						</td>
+						<td>
+							The Data Access Specification
+						</td>
+					</tr>
+								
+
+				</tbody>
+			</table>
+
+		</section>
+	</body>
+</document>

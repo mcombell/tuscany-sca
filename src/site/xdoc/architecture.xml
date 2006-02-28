@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="documentation.xml">
+	<properties>
+		<author email="jboynes@apache.org">Jeremy Boynes</author>
+		<title>Tuscany - Java Runtime Architecture</title>
+	</properties>
+	<body>
+
+	<section name="Tuscany Java Runtime Architecture">
+
+        <h1>Introduction</h1>
+        <p>This document provides a high-level overview of the Tuscany Java Runtime architecture.</p>
+        <h2>Project Structure</h2>
+        <p>The runtime is organized into separate projects to facilitate a clean separation between
+            functional units as well as reuse across a variety of host environments. The main
+            functional units are: </p>
+        <ul>
+            <li>o.a.t.runtime.common</li>
+            <p>Basic utility code used throughout the runtime such as the logging monitor framework,
+                io, discovery, and resource loading</p>
+            <li>o.a.t.runtime.model</li>
+            <p>Contains interfaces defining a representation of SCA SCDL used by the runtime - the
+                logical model - to create runtime artifacts and an SDO implementation that generates
+                it from XML. This project also contains XSD type definitions used to describe
+                various runtime artifacts such as services.</p>
+            <li>o.a.t.runtime.core</li>
+            <p>The core runtime code. Contains configuration builders used to generate runtime
+                artifacts - the runtime model - from the logical model, messaging and invocation
+                infrastructure, the runtime artifacts (o.a.t.runtime.core.context), injection
+                container, and proxy framework.</p>
+            <li>o.a.t.runtime.container.java</li>
+            <p>Code that implements functionality specific to the Java SCA Client and Implementation
+                model, logical model extensions, builders, handlers and general POJO management.</p>
+        </ul>
+        <p> The following is a pictorial representation of the project dependencies: <br/>
+            <img src="architecture/Slide1.png" alt="architecture dependencies"/>
+        </p>
+        <h1>Basic Concepts</h1>
+        <h2>Runtime</h2>
+        <p>A running instance of an SCA container</p>
+        <h2>Host Platform</h2>
+        <p>An environment which the SCA runtime is deployed to, such as (but not limited to) Tomcat
+            or a J2EE application server.</p>
+        <h2>Runtime Artifacts</h2>
+        <p>The core runtime includes the following key functional units: </p>
+        <ul>
+            <li>The Logical Configuration Model</li>
+            <li>The Runtime Configuration Model</li>
+            <li>Instance Contexts</li>
+            <li>Messaging and Invocation Handling</li>
+        </ul>
+        <h3>The Logical Configuration Model</h3>
+        <p>
+            <i>o.a.t.model, o.a.t.runtime.container.java.assembly</i>
+        </p>
+        <p>The LCM is an in-memory representation of a set of one or more configuration sources and
+            is designed for easy manipulation of configuration information. The LCM is derived from
+            SCA SCDL and analogous to an Abstract Syntax Tree. Tuscany currently supports generating
+            the LCM from XML using SDO but other data binding technologies may be substituted. The
+            logical model may be represented as:<br/>
+            <img src="architecture/Slide2.png" alt="logical model"/>
+        </p>
+        <h3>The Runtime Configuration Model</h3>
+        <p>
+            <i>o.a.t.model,o.a.t.runtime.core.builder, o.a.t.runtime.container.java.builder,
+                o.a.t.runtime.container.java.injection</i>
+        </p>
+        <p>The RCM is a set of in-memory artifacts used by the runtime to “execute” SCA code. The
+            RCM is derived from the logical model but does not have to be “round-trippable.” Rather,
+            it is designed and optimized for runtime processing work. The RCM is analogous to
+            compiled output. </p>
+        <h3>Instance Context</h3>
+        <p>
+            <i>o.a.t.runtime.core.context, o.a.t.runtime.container.java.context</i>
+        </p>
+        <p> The RCM produces instance contexts, which are responsible for managing runtime resources
+            such as component implementation instances. The following is a simplified instance
+            context inheritance hierarchy:</p>
+        <img src="architecture/Slide3.png" alt="instance context"/>
+        <p>TuscanyModuleComponentContext implementations are responsible for providing module
+            component functionality as specified by SCA, including assembly and management of SCA
+            application component lifecycle. SimpleComponentContext implementations are responsible
+            for managing component implementation instances for a particular type. For example,
+            JavaComponentContext manages SCA POJO implementation types. Other SimpleComponentContext
+            implementations may exist for other component types such as BPEL or XSLT. As detailed
+            below, a TuscanyModuleComponentContextImpl (the implementation which supports SCA POJOs)
+            indirectly contains SimpleComponentContexts.</p>
+        <h3>Scope Containers</h3>
+        <p>
+            <i>o.a.t.runtime.core.context, o.a.t.runtime.core.context.scope</i>
+        </p>
+        <p>TuscanyModuleComponentContextImpl contains scope containers which are responsible for
+            managing component instance visibility and lifecycle. That is, they implement scoping
+            functionality defined by SCA. Generally, scope containers have collections of instance
+            contexts associated with a scope key (an exception is the stateless scope). Instance
+            contexts in turn contain one or more component implementation instances (the common case
+            is a 1:1 relation). Concretely, an HTTP session scope container would have a collection
+            of instance contexts associated with session keys. Therefore, for every session-scoped
+            component, an instance context would exist (assuming the component was accessed). If the
+            implementation type was SCA Java, the instance context would contain the actual POJO
+            component implementation instance.<br/>
+            <img src="architecture/Slide4.png" alt="scope containers"/><br/> This relationship between the
+            LCM, instance contexts, and scopes is depicted in the following diagram:<br/>
+            <img src="architecture/Slide5.png" alt="relations"/>
+        </p>
+        <h3>Messaging and Invocation Handling </h3>
+        <p>
+            <i>o.a.t.runtime.core.invocation, o.a.t.runtime.core.message,
+                o.a.t.runtime.core.pipeline, o.a.t.runtime.container.java.handler,
+                o.a.t.runtime.container.java.injection</i>
+        </p>
+        <img src="architecture/Slide6.png" alt="invocation"/>
+        <p>Complete</p>
+        <h1>The Recursive Runtime Design</h1>
+        <h2>Assembly in the Large</h2>
+        <h2>Assembly in the Small</h2>
+        <h1>Dispatching</h1>
+        <h2>Creating a new implementation instance</h2>
+        <p>The following sequence diagram shows how new component implementation instances are
+            created and configured (injected) with property and reference values using the default
+            TuscanyModuleComponentContextImpl: <br/><img src="architecture/Slide7.png"
+                alt="implementation instance"/>
+        </p>
+        <h2>Module event dispatching</h2>
+        <p>Scope containers rely on a module context eventing mechanism to be notified of lifecycle
+            changes in the runtime, for example, when a request processing starts/stops, a session
+            starts/stops, or the module starts/stops. Scope containers have a reference to an
+            EventContext, which returns an id associated with the current thread for a given scope
+            type. This enables lazy id creation (e.g. lazy creation of HTTP session ids and
+            contexts). The following sequence diagram traces how module eventing works for request
+            and session lifecycles:<br/><img src="architecture/Slide7.png" alt="dispatching"/>
+        </p>
+        <h2>Entry point operation</h2>
+        <h2>External service operation</h2>
+        
+        </section>
+    </body>
+</document>

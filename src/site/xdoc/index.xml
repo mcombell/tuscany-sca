@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="index.xml">
+	<properties>
+		<author email="mgmarum@us.ibm.com">Matthew Marum</author>
+		<title>Apache Tuscany</title>
+	</properties>
+	<body>
+		<section name="Apache Tuscany">
+			<p>
+				Welcome to Apache Tuscany. The Apache Tuscany project is currently in Incubation under the 
+				Apache Incubator.
+			</p>
+			<p>
+				Apache Tuscany provides runtime capabilities for applications built 
+				using a Service Oriented Architecture (SOA). Tuscany provides capabilities which follow the 
+				Service Component Architecture specification and the Service Data Objects specification, which 
+				together define a simpler, business-oriented approach to the creation of applications and solutions
+				which use a SOA.
+			</p>
+			<p>
+				Currently, Tuscany provides separate runtime support for the Java language and for the C++
+				language.  This means that you can write service components in either the Java language or in
+				the C++ language.
+			</p>
+			<p>
+				For more information on the SOA programming model provided
+				by Tuscany, you can read:
+				<ul>
+					<li>
+						A White Paper on Service Component Architecture
+						(SCA)
+					</li>
+					<li>The SCA 0.9 Assembly Model specification</li>
+					<li>
+						The SCA 0.9 Client and Implementation Model
+						specification
+					</li>
+					<li>The SDO 2.01 specification</li>
+				</ul>
+				These are available on the <a href="documentation.html">Documentation</a> page.
+				You can also get a feel for what it's like to create a program using Tuscany by trying out the 
+				Sample Programs that are supplied with the Tuscany project.
+			</p>
+		</section>
+		<section name="Tuscany Subprojects">
+			<p>
+				Tuscany consists of 5 subprojects, each dealing with different aspects of the SOA programming model:
+				<ol>
+					<li>SCA Runtime for Java</li>
+					<li>SDO 2.0 Runtime for Java</li>
+					<li>Data Access Service for Java</li>
+					<li>SCA Runtime for C++</li>
+					<li>SDO 2.0 Runtime for C++</li>
+				</ol>
+			</p>
+		</section>
+		<section name="What's New?">
+			<p>
+				(January 10 2006) The current code in the Tuscany
+				project is an initial implementation, which is still
+				very much evolving. We're looking to add a lot of
+				additional function over the coming weeks and months,
+				such as support for additional implementation types and
+				for additional bindings. We're looking for people to
+				help us add these capabilities - so please take some
+				time to look over the project and join us in this
+				exciting developement.
+			</p>
+			<p>
+				The current codebase is designed to work with the Apache
+				Tomcat runtime, and uses the Apache Axis runtime to
+				provide support for Web services. With this combination,
+				you can write service components that can be used to
+				provide Web services or which can be used to provide
+				business services behind Servlets and JSPs.
+			</p>
+		</section>
+	</body>
+</document>
