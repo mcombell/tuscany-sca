@@ -56,8 +56,10 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
 
     public ApplyChangesCommandImpl(Config mappingModel){
         summarizer.setMapping(mappingModel);
-        if (mappingModel.getConnectionProperties() != null)
-            setConnection(mappingModel.getConnectionProperties());
+//TODO - Really need to refactor the Command framework.  ReadCommand and ApplychangesCommand should
+// be using the same approach to set connection and should probably share the same initialization.
+//        if (mappingModel.getConnectionProperties() != null)
+//            setConnection(mappingModel.getConnectionProperties());
     }
 
     public void setConnection(Connection connection) {
