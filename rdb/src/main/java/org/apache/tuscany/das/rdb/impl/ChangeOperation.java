@@ -55,7 +55,8 @@ public abstract class ChangeOperation {
 		}
 
 		writeCommand.execute();
-		if ( propagatedID != null ) {
+        //TODO -                     Added this instanceof hack.  Brent to verify       
+		if (( propagatedID != null ) && (writeCommand instanceof InsertCommandImpl)){
 			DebugUtil.debugln(getClass(), debug, "Propagating key " + propagatedID);
 			int id = writeCommand.getGeneratedKey();
 			dObject.setPropagatedID(propagatedID, id);

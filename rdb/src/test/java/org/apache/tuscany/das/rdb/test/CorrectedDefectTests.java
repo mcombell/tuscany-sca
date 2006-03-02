@@ -22,11 +22,17 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
+import java.util.Iterator;
+import java.util.Random;
+
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.SDODataTypes;
+import org.apache.tuscany.das.rdb.test.data.CompanyData;
+import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
+import org.apache.tuscany.das.rdb.test.data.DepartmentData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -38,6 +44,11 @@ public class CorrectedDefectTests extends DasTest {
         super.setUp();
         new CustomerData(getAutoConnection()).refresh();
         new OrderData(getAutoConnection()).refresh();
+        
+        new CompanyData(getAutoConnection()).refresh();
+        new DepartmentData(getAutoConnection()).refresh();
+        new CompanyDeptData(getAutoConnection()).refresh();
+        
     }
 
     protected void tearDown() throws Exception {
@@ -219,5 +230,29 @@ public class CorrectedDefectTests extends DasTest {
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
 
     }
+    
+    public void testUpdateChildThatHasGeneratedKey() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+                        
+        //Read a specific company based on the known ID
+        Command readCust = commandGroup.getCommand("all companies and departments");
+        DataObject root = readCust.executeQuery();       
+        DataObject lastCustomer = root.getDataObject("COMPANY[3]");
+        Iterator i = lastCustomer.getList("departments").iterator();
+        Random generator = new Random();
+        int random = generator.nextInt(1000) + 1;
+        DataObject department;
+        while (i.hasNext()) {
+            department = (DataObject)i.next();
+            System.out.println("Modifying department: " + department.getString("NAME"));
+            department.setString("NAME", "Dept-" + random);
+            random = random + 1;
+        } 
+        
+        ApplyChangesCommand apply = commandGroup.getApplyChangesCommand();
+        apply.execute(root);
+        
+    }  
     
 }
