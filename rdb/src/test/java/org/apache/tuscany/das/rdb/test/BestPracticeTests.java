@@ -16,9 +16,16 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.List;
+
+import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
+import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
+import org.apache.tuscany.das.rdb.test.data.DepEmpData;
+import org.apache.tuscany.das.rdb.test.data.DepartmentData;
+import org.apache.tuscany.das.rdb.test.data.EmployeeData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
@@ -27,7 +34,13 @@ public class BestPracticeTests extends DasTest {
 
     protected void setUp() throws Exception {
         super.setUp();
+        
         new CompanyData(getAutoConnection()).refresh();
+        new DepartmentData(getAutoConnection()).refresh();
+        new EmployeeData(getAutoConnection()).refresh();
+        new CompanyDeptData(getAutoConnection()).refresh();
+        new DepEmpData(getAutoConnection()).refresh();
+        
     }
 
     //Read list of companies
@@ -39,5 +52,38 @@ public class BestPracticeTests extends DasTest {
         assertEquals(3, root.getList("COMPANY").size());
 
     }
+    
+    //Read list of companies
+    public void testReadCompaniesWithDepartments() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        Command read = commandGroup.getCommand("all companies and departments");
+        DataObject root = read.executeQuery(); 
+        DataObject firstCompany = root.getDataObject("COMPANY[1]");
+        List departments = firstCompany.getList("departments");
+        assertEquals(0, departments.size());
+
+    }  
+    
+    public void testddDepartmentToFirstCompany() throws Exception {
+        
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        Command read = commandGroup.getCommand("all companies and departments");
+        DataObject root = read.executeQuery();
+        DataObject firstCustomer = root.getDataObject("COMPANY[1]");
+        int deptCount = firstCustomer.getList("departments").size();
+        
+        DataObject newDepartment = root.createDataObject("DEPARTMENT");
+        firstCustomer.getList("departments").add(newDepartment); 
+        
+        ApplyChangesCommand apply = commandGroup.getApplyChangesCommand();
+        apply.execute(root);
+        
+        //verify
+        root = read.executeQuery();
+        firstCustomer = root.getDataObject("COMPANY[1]");
+        assertEquals (deptCount + 1, firstCustomer.getList("departments").size());
+    }  
+    
 
 }

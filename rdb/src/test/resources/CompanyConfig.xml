@@ -3,18 +3,29 @@
     
     <Command name="all companies" SQL="select * from COMPANY" kind="Select"/>
     
+    <Command name="all companies and departments" SQL="select * from COMPANY left outer join DEPARTMENT on COMPANY.ID = DEPARTMENT.COMPANYID" kind="Select"/>
+
+    <Command name="all departments for company" SQL="select * from COMPANY inner join DEPARTMENT on COMPANY.ID = DEPARTMENT.COMPANYID where COMPANY.ID = :ID" kind="Select"/>
+
 <!--
-	For use in sample application using datasource
-	    <ConnectionProperties dataSource="jdbc:derby:Databases/dastest"/>
- -->
-	
+	   <ConnectionProperties dataSource="java:comp/env/jdbc/dastest"/>
+-->  
+
+
     <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
         driverURL="jdbc:derby:dastest"/>
- 	
-	
-	   
+
     <Table name="COMPANY">
         <Column name="ID" primaryKey="true" generated="true"/>
     </Table>
     
+	<Table name="DEPARTMENT">
+		<Column name="ID" primaryKey="true" generated="true"/>
+	</Table>
+	
+	<Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
+      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="COMPANYID"/>
+    </Relationship>
+	
+	
 </Config>
