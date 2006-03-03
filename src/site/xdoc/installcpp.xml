@@ -30,6 +30,8 @@
 
 	<p>If you haven't already, the first step is to download the latest release of Apache Tuscany from our <a href="download.html">Downloads</a> page.</p>
 
+	<p>The current status of the SCA project is held in this <a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca/readme.txt ">readme.txt</a>.</p>
+
 	</section>
 
 	<section name="System Requirements">
@@ -66,7 +68,11 @@
 
 	<section name="Configuring Apache Tuscany">
 		<p>You can find detailed instructions on how to configure the C++ runtime and tools in the 
-		<a href="cpp/sca/Developers Guide.txt">Developers Guide.txt</a>.</p>
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/build.txt">build.txt</a> file.</p>
+		<p>You can find instructions on how to build the SCA C++ runtime here: 
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca/INSTALL">INSTALL</a>.</p>
+		<p>You can find instructions on how to build the SDO C++ runtime here: 
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sdo/INSTALL">INSTALL</a>.</p>
 	</section>
 
 </body>
