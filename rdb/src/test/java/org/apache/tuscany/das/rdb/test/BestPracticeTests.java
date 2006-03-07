@@ -85,5 +85,50 @@ public class BestPracticeTests extends DasTest {
         assertEquals (deptCount + 1, firstCustomer.getList("departments").size());
     }  
     
+    /**
+     * Test ability to correctly flush heirarchy of objects that have generated
+     * keys
+     */
+    public void testFlushCreateHeirarchy() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        Command select = commandGroup.getCommand("all companies and departments");
+        select.setConnection(getConnection());
+        DataObject root = select.executeQuery();
+
+        // Create a new Company
+        DataObject company = root.createDataObject("COMPANY");
+        company.setString("NAME", "Do-rite Pest Control");
+
+        // Create a new Department
+        //Do not set ID or CompanyID since these are generated
+        DataObject department = root.createDataObject("DEPARTMENT");
+        department.setString("NAME", "Do-rite Pest Control");
+        department.setString("LOCATION", "The boonies");
+        department.setString("NUMBER", "101");
+        department.setInt("EOTM", 1);
+   
+        // Associate the new department with the new company
+        company.getList("departments").add(department);
+
+        // Get apply command
+        ApplyChangesCommand apply = commandGroup.getApplyChangesCommand();
+        apply.setConnection(getConnection());
+
+        // Flush changes
+        apply.execute(root);
+
+        // Save the id
+        Integer id = (Integer) company.get("ID");
+
+        // Verify the change
+
+        select = commandGroup.getCommand("company by id with departments");
+        select.setParameterValue("ID", id);
+        root = select.executeQuery();
+        assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
+                .getString("NAME"));
+
+    }
 
 }
