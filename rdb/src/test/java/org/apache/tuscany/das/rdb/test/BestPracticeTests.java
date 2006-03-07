@@ -16,6 +16,7 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
@@ -27,8 +28,11 @@ import org.apache.tuscany.das.rdb.test.data.DepEmpData;
 import org.apache.tuscany.das.rdb.test.data.DepartmentData;
 import org.apache.tuscany.das.rdb.test.data.EmployeeData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
+import org.apache.tuscany.sdo.impl.ReferenceImpl;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
+import commonj.sdo.Type;
 
 public class BestPracticeTests extends DasTest {
 
@@ -128,6 +132,23 @@ public class BestPracticeTests extends DasTest {
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
                 .getString("NAME"));
+
+    }
+    
+    /**
+     * Test ability to get an empty graph with the Types/Properties intact
+     */
+    public void testGetEmptyGraph() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+
+        Command select = commandGroup.getCommand("company by id with departments");
+        int idOfNoExistingCompany = -1;
+        select.setParameterValue("ID", idOfNoExistingCompany);
+        DataObject root = select.executeQuery();
+        
+        //Will fail if there is no property named "COMPANY"
+        assertEquals(0, root.getList("COMPANY").size()); 
 
     }
 
