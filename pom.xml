@@ -90,4 +90,10 @@
             </plugin>
         </plugins>
     </reporting>
+ <distributionManagement>
+    <site>
+      <id>website</id>
+      <url>scp://minotaur.apache.org/www/incubator.apache.org/tuscany/</url>
+    </site>
+  </distributionManagement>
 </project>
