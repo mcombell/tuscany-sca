@@ -47,10 +47,12 @@
 					</tr>
 					<tr>
 						<td>
-							TBD
+							<a href="SDO_Java_Project_Overview.pdf">
+								SDO Java Project Overview
+							</a>
 						</td>
 						<td>
-							
+							SDO for Java project contents, high-level design, setup/build instructions, etc.
 						</td>
 					</tr>
 					
