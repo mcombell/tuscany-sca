@@ -71,7 +71,7 @@
 		</section>
 		<section name="What's New?">
 			<p>
-				(January 10 2006) The current code in the Tuscany
+				(Jan 10 2006) The current code in the Tuscany
 				project is an initial implementation, which is still
 				very much evolving. We're looking to add a lot of
 				additional function over the coming weeks and months,
@@ -82,7 +82,7 @@
 				exciting developement.
 			</p>
 			<p>
-				The current codebase is designed to work with the Apache
+				(March 9 2006) The current codebase is designed to work with the Apache
 				Tomcat runtime, and uses the Apache Axis runtime to
 				provide support for Web services. With this combination,
 				you can write service components that can be used to
