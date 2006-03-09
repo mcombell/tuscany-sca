@@ -90,6 +90,24 @@
             </plugin>
         </plugins>
     </reporting>
+
+  <mailingLists>
+
+    <mailingList>
+      <name>Tuscany Developer List</name>
+      <subscribe>tuscany-dev-subscribe@ws.apache.org</subscribe>
+      <unsubscribe>tuscany-dev-unsubscribe@ws.apache.org</unsubscribe>
+      <post>tuscany-dev@ws.apache.org</post>
+      <archive>http://www.mail-archive.com/tuscany-dev%40ws.apache.org/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Tuscany Commits List</name>
+      <subscribe>tuscany-commits-subscribe@ws.apache.org</subscribe>
+      <unsubscribe>tuscany-commits-unsubscribe@ws.apache.org</unsubscribe>
+      <archive>http://www.mail-archive.com/tuscany-commits%40ws.apache.org/maillist.html</archive>
+    </mailingList>
+  </mailingLists>
+
  <distributionManagement>
     <site>
       <id>website</id>
