@@ -19,7 +19,6 @@
 	<title>Apache Tuscany - How To Build Site</title></properties><body> 
 	 
 	<section name="Tuscany Site Generation Overview">
-	
 		<p>The Tuscany website is built using the site plugin of Maven 2.0.  A general guide to
 		the Maven site plugin can be found <a href="http://maven.apache.org/guides/mini/guide-site.html">here</a>.
 		</p>
@@ -29,22 +28,47 @@
 		file, held in the main site directory.
 		The site is generated using the command
 		<pre>
-			mvn site
+	mvn site
 		</pre>
 		from the main site directory, which uses the source files to build the final website files in the target/site
-		directory.
+		directory.  When you make changes to files intended for the website, please check out the results on your local
+		machine before publsihing them to the live site.  The main landing page for the site is the file 
+		site/target/site/index.html.  Open this page in your browser and you should be able to reach all the other pages 
+		from this location.
 		</p>
 		<p>
-		The actual live website for Tuscany is at 
+		The actual live website for Tuscany is at the URL 
 		<a href="http://incubator.apache.org/tuscany/">http://incubator.apache.org/tuscany/</a>.  The files for the live
-		website are transferred from the Tuscany subversion repository to the machine people.apache.org in the directory 
-		/www/incubator.apache.org/tuscany, using a subversion extract of the site/target/site directory. So, if you
-		update the site/target directory on SVN and want to make the new version live, you will need to logon to
-		people.apache.org and type in:
+		website are held on the machine people.apache.org in the directory /www/incubator.apache.org/tuscany. 
+		When you want to publish new or updated pages to the live website, use the command
 		<pre>
-			cd /www/incubator.apache.org/tuscany
-			svn update
+	mvn site-deploy
 		</pre>
+		which transfers the site files from the site/target directory on your system to the people.apache.org system and
+		the files go live within a few minutes of the transfer.  For site-deploy to work, you must have a userid and 
+		password that are valid for the people.apache.org system and you must be a member of the apcvs group, since this
+		is the group with write access to the /tuscany directory. To enable the mvn site-deploy command to work correctly,
+		you need an entry like this in your maven settings.xml file:
+		<pre>
+&lt;servers&gt;
+&lt;!-- server
+| Specifies the authentication information to use when connecting to a particular server, identified by
+| a unique name within the system referred to by the 'id' attribute below.
+| 
+| NOTE: You should either specify username/password OR privateKey/passphrase, since these pairings are 
+|       used together.
+|
+-->
+	
+	&lt;server&gt;
+		&lt;id&gt;website&lt;/id&gt;
+		&lt;username&gt;yourid&lt;/username&gt;
+		&lt;password&gt;yourpassword&lt;/password&gt;
+	&lt;/server&gt;
+	
+&lt;/servers&gt;
+		</pre>
+		The settings.xml file can be found in your $MAVEN_HOME/conf directory.
 		</p>
 		
 	</section>
@@ -90,25 +114,25 @@
 		First, create a file called foo.xml in the xdocs directory, similar to the following:
 
 		<pre>
-		&lt;document url="foo.xml"&gt;
-		&lt;properties&gt;  
-			&lt;author email="your_id@blah.com"&gt;Your Name&lt;/author&gt;
-			&lt;title&gt;Apache Tuscany - Foo&lt;/title&gt;
-		&lt;/properties&gt;
-		&lt;body&gt;
-			&lt;section name="Tuscany Foo"&gt;	
-			&lt;p&gt;
-			Welcome to the foo section.  
-			Please review the &lt;a href="tuscany_foo.pdf"&gt;Tuscany FOO manual&lt;/a&gt;.
-			You can run foo by typing in the command:
-			&lt;pre&gt;
-				foo bar
-			&lt;/pre&gt;
-			&lt;/p&gt; 
+&lt;document url="foo.xml"&gt;
+&lt;properties&gt;  
+	&lt;author email="your_id@blah.com"&gt;Your Name&lt;/author&gt;
+	&lt;title&gt;Apache Tuscany - Foo&lt;/title&gt;
+&lt;/properties&gt;
+&lt;body&gt;
+	&lt;section name="Tuscany Foo"&gt;	
+	&lt;p&gt;
+	Welcome to the foo section.  
+	Please review the &lt;a href="tuscany_foo.pdf"&gt;Tuscany FOO manual&lt;/a&gt;.
+	You can run foo by typing in the command:
+	&lt;pre&gt;
+		foo bar
+	&lt;/pre&gt;
+	&lt;/p&gt; 
 
-		&lt;/section&gt;
-		&lt;/body&gt;
-		&lt;/document&gt;
+&lt;/section&gt;
+&lt;/body&gt;
+&lt;/document&gt;
 		</pre>
 		
 		Note the header information with a general title in the properties section - this gets applied to the title line of
@@ -119,22 +143,38 @@
 		element.
 		</p>
 		<p>
-		References like "tuscany_foo.pdf" should be dropped into the site/resources directory.  
+		References like "tuscany_foo.pdf" should be dropped into the site/resources directory.  If you want to structure the
+		information in the resources area, you can create subdirectories and then use relative references in the hyperlinks
+		which reference them, such as href="subdirname/tuscany_foo.pdf".
 		</p>
 		<p>If the foo page needs to be linked from the left bar, then a link to foo must be created in the
-		site.xml file which is in the main src/site directory:
+		site.xml file which is in the main src/site directory, with the following format:
 
 		<pre>
-		...
-		&lt;menu name="Tuscany"&gt;
-		...
-		&lt;item name="Foo"  href="foo.html" /&gt;
-		&lt;/menu&gt;
-		...
+...
+&lt;menu name="Tuscany"&gt;
+...
+&lt;item name="Foo"  href="foo.html" /&gt;
+&lt;/menu&gt;
+...
 		</pre>
 		Note that the link here is to foo.html, not to foo.xml - foo.html is the name of the page
 		in the final website format.
 		</p>
+		<section name="Preferred Data Formats">
+			<p>
+				When placing materials onto the web site, please use formats that are widely accepted and avoid
+				proprietary formats.  So, xdoc format is the preferred style for source web pages since they get
+				the "house style" look and feel of the Tuscany site. HTML files are also acceptable, but they will
+				lack the naviagation features of the xdoc pages (particularly the left bar). If you need to publish
+				longer material, you can use HTML or PDF format.  PDF is particularly good for material that users
+				may need to download and keep locally for reference.  PDF is also good if you anticipate that the
+				users will need to print the material.
+			</p>
+			<p>Please avoid the use of proprietary format such as Word documents.  Not everyone has Microsoft office
+			installed and may find such formats unreadable.
+			</p>
+		</section>
 	</section>  
 
 </body>
