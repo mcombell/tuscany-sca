@@ -71,6 +71,17 @@
 		</section>
 		<section name="What's New?">
 			<p>
+				(March 9 2006) The codebase has reached a first stable milestone at SVN revision 383106.
+				Both the Java and C++ projects have advanced to provide end-to-end support for a range of
+				scenarios.  For the Java project, the codebase now integrates with Apache Tomcat 5.5.15 and Axis 2.0. 
+				There is a substantial set of working samples for the SCA, SDO and DAS subprojects, which can run on
+				Windows, Linux and Mac.  There is also support for writing service components in Javascript.
+			</p>
+			<p>
+				With this combination you can write service components that provide Web services or that provide 
+				business services supporting a Web UI based on Servlets and JSPs.
+			</p>
+			<p>
 				(Jan 10 2006) The current code in the Tuscany
 				project is an initial implementation, which is still
 				very much evolving. We're looking to add a lot of
@@ -80,14 +91,6 @@
 				help us add these capabilities - so please take some
 				time to look over the project and join us in this
 				exciting developement.
-			</p>
-			<p>
-				(March 9 2006) The current codebase is designed to work with the Apache
-				Tomcat runtime, and uses the Apache Axis runtime to
-				provide support for Web services. With this combination,
-				you can write service components that can be used to
-				provide Web services or which can be used to provide
-				business services behind Servlets and JSPs.
 			</p>
 		</section>
 	</body>

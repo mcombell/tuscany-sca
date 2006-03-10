@@ -30,15 +30,28 @@
 	<p>
 	  This page contains latest Tuscany News.
 	</p>
-        <p>
-            (March 06 2006) A stable build with all samples working for Tuscany Java in build 383106. To obtain this particular build see the
-            <a href ="http://wiki.apache.org/ws/Tuscany/GetTuscany" target='_blank'>GetTuscany Wiki</a> 
-            On the svn check out command do:<br/> svn co -r 383106   http://svn.apache.org/repos/asf/incubator/tuscany/java
+    <p>
+		(March 06 2006) A stable "milestone" build is available. To get this build up and running on your system see the
+        <a href ="http://wiki.apache.org/ws/Tuscany/GetTuscany" target='_blank'>GetTuscany Wiki</a>. Use the following SVN checkout command:
+        <pre> svn co -r 383106   http://svn.apache.org/repos/asf/incubator/tuscany/java
+        </pre>
+        Highlights for the Java project in this build:
+        <ul>
+         <li>SCA, SDO and DAS subprojects all have functional samples working, including the large BigBank sample.</li>
+         <li>Axis2 is supported for Web services.</li>
+         <li>Support for Javascript components</li>
+        </ul>
 	</p>
-
 	<p>
-          (January 10 2006) The current code in the Tuscany project is an initial implementation, which is still very much evolving. We're looking to add a lot of additional function over the coming weeks and months, such as support for additional implementation types and for additional bindings. We're looking for people to help us add these capabilities - so please take some time to look over the project and join us in this exciting developement. 
-          The current codebase is designed to work with the Apache Tomcat runtime, and uses the Apache Axis runtime to provide support for Web services. With this combination, you can write service components that can be used to provide Web services or which can be used to provide business services behind Servlets and JSPs. 
+		(January 10 2006) The current code in the Tuscany project is an initial implementation, which is still very much evolving. 
+		We're looking to add a lot of additional function over the coming weeks and months, such as support for additional implementation 
+		types and for additional bindings. We're looking for people to help us add these capabilities - so please take some time to look 
+		over the project and join us in this exciting developement.
+	</p>
+	<p>
+		The current codebase is designed to work with the Apache Tomcat runtime, and uses the Apache Axis runtime to provide support 
+		for Web services. With this combination, you can write service components that can be used to provide Web services or which 
+		can be used to provide business services behind Servlets and JSPs. 
 	</p>
 
 	</body>
