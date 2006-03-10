@@ -86,7 +86,6 @@
 			<item name="Reference Library" href="reference.html" />
 		</menu>
 		<menu name="Related Projects">
-			<item name="Axis" href="http://ws.apache.org/axis/" />
 			<item name="Axis2" href="http://ws.apache.org/axis2/" />
 			<item name="Tomcat" href="http://tomcat.apache.org/" />
 		</menu>

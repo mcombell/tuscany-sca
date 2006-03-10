@@ -44,7 +44,7 @@
 						<td>
 						<ul>
 						<li>
-                                                     <script type="text/javascript">linknewwindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>
+                                                     <script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>
 						</li>
 						</ul>
 						</td>
@@ -63,7 +63,7 @@
 						<td>
 						<ul>
                                                      <li>
-                                                     <script type="text/javascript">linknewwindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
+                                                     <script type="text/javascript">linkNewWindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
                                                      </li>
 						</ul>
 						</td>

@@ -28,9 +28,8 @@
 	<section name="Apache Tuscany Requirements" />
 		<p>
 			Tuscany requirements are handled via a 
-			<a href="http://issues.apache.org/jira/browse/TUScany">
-				JIRA issues list
-			</a>.
+                         <script type="text/javascript">linkNewWindow('http://issues.apache.org/jira/browse/TUScany','<B>JIRA issues list</B>');</script>
+                         (<script type="text/javascript">linkNewWindow('http://issues.apache.org/jira/browse/TUScany','http://issues.apache.org/jira/browse/TUScany');</script>)
 		</p>
 		
 	</body>
