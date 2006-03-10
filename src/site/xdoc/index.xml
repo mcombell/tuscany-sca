@@ -71,7 +71,7 @@
 		</section>
 		<section name="What's New?">
 			<p>
-				(March 9 2006) The codebase has reached a first stable milestone at SVN revision 383106.
+				(March 6 2006) The codebase has reached a first stable milestone at SVN revision 383106.
 				Both the Java and C++ projects have advanced to provide end-to-end support for a range of
 				scenarios.  For the Java project, the codebase now integrates with Apache Tomcat 5.5.15 and Axis 2.0. 
 				There is a substantial set of working samples for the SCA, SDO and DAS subprojects, which can run on
