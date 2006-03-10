@@ -45,24 +45,14 @@
 					</tr>
 					<tr>
 						<td>
+
+                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples README file');</script>
 							<a href="acceptance/readme.htm">
-								Tuscany Acceptance Test
+								
 							</a>
 						</td>
 						<td>
-							Explains how to setup and run the Acceptance
-							Test Suite provided with Apache Tuscany.
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="samples/readme.htm">
-								Tuscany Samples
-							</a>
-						</td>
-						<td>
-							Explains setup and usage of the samples
-							provided by with Apache Tuscany.
+							Explains how to setup and run the Java examples. 
 						</td>
 					</tr>
 					<tr>
@@ -97,9 +87,7 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_White_Paper1_09.pdf">
-								SCA White Paper
-							</a>
+                      <script type="text/javascript">linkNewWindow('http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_White_Paper1_09.pdf','SCA White Paper');</script>
 						</td>
 						<td>
 							A white paper describing Service Component Architecture.
@@ -107,9 +95,7 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/Next-Gen-Data-Programming-Whitepaper.pdf">
-								SDO White Paper
-							</a>
+                                                       <script type="text/javascript">linkNewWindow('http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sdo/Next-Gen-Data-Programming-Whitepaper.pdf','SDO White Paper');</script>
 						</td>
 						<td>
 							A white paper that explains the SDO programming model
@@ -117,9 +103,7 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_BuildingYourFirstApplication_V09.pdf">
-								SCA: "Building your first application"
-							</a>
+                                                       <script type="text/javascript">linkNewWindow('http://download.boulder.ibm.com/ibmdl/pub/software/dw/specs/ws-sca/SCA_BuildingYourFirstApplication_V09.pdf','SCA: "Building your first application');</script>
 						</td>
 						<td>
 							The simplified "BigBank" application as a worked example.
@@ -127,9 +111,7 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="RDB_DAS_white_paper_v-0.1.2.pdf">
-								DAS White Paper: The Data Access Service
-							</a>
+                                                       <script type="text/javascript">linkNewWindow('RDB_DAS_white_paper_v-0.1.2.pdf','DAS White Paper: The Data Access Service');</script>
 						</td>
 						<td>
 							How to access relational data in terms of Service Data Objects (not yet on the website - to be provided)

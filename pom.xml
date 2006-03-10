@@ -72,6 +72,38 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
+                    <execution>
+                      <phase>pre-site</phase>
+                      <configuration>
+                        <tasks>
+                            <mkdir dir="target/site/samples/java" />
+                            <copy todir="target/site/samples/java" >
+                                    <fileset dir="../java/samples">
+                                            <patternset>
+                                              <include name="**/readme.htm" />
+                                            </patternset>
+                                    </fileset>
+                            </copy>
+                            <mkdir dir="target/site/scripts" />
+                            <copy todir="target/site/scripts"  >
+                                     <fileset dir="src/site/scripts"/>
+                            </copy>
+
+
+                        </tasks>
+                      </configuration>
+                      <goals>
+                        <goal>run</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                </plugin>
+
+
         </plugins>
 
         <resources>
@@ -88,6 +120,14 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
+          <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-site-plugin</artifactId>
+           <configuration>
+             <templateDirectory>file:///${basedir}/</templateDirectory>
+             <template>maven-site.vm</template>
+           </configuration>
+          </plugin>
         </plugins>
     </reporting>
 
@@ -114,4 +154,10 @@
       <url>scp://minotaur.apache.org/www/incubator.apache.org/tuscany/</url>
     </site>
   </distributionManagement>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/tuscany</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/incubator/tuscany/</url>
+  </scm>
 </project>

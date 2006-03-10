@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+  Copyright (c) 2005 the apache software foundation or its licensors, as applicable.
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  licensed under the apache license, version 2.0 (the "license");
+  you may not use this file except in compliance with the license.
+  you may obtain a copy of the license at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     http://www.apache.org/licenses/license-2.0
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+  unless required by applicable law or agreed to in writing, software
+  distributed under the license is distributed on an "as is" basis,
+  without warranties or conditions of any kind, either express or implied.
+  see the license for the specific language governing permissions and
+  limitations under the license.
  -->
 <document url="install.xml">
 
 	<properties>
 
-		<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>
+		<author email="mike_edwards@uk.ibm.com">mike edwards</author>
 
-		<title>Apache Tuscany - Installation Instructions for Java Projects</title>
+		<title>apache tuscany - installation instructions for java projects</title>
 	</properties>	
 	
 	<body>
 
-	<section name="Installation Instructions for Java Projects">
-	<p>This page describes what you need to know to install the Java Projects of Tuscany.
+	<section name="installation instructions for java projects">
+	<p>this page describes what you need to know to install the java projects of tuscany.
 	</p>
 
-	<p>If you haven't already, the first step is to download the latest release of Apache Tuscany from our <a href="download.html">Downloads</a> page.
+	<p>if you haven't already, the first step is to download the latest release of apache tuscany from our <a href="download.html">downloads</a> page.
 	</p>
 
 	</section>
 
-	<section name="System Requirements">
-		<p>In order to run the Tuscany Java Projects there are some minimum system requirements</p>
+	<section name="system requirements">
+		<p>in order to run the tuscany java projects there are some minimum system requirements</p>
 			<table style="text-align: left; width: 100%;" border="1"
 				cellpadding="2" cellspacing="2">
 				<tbody>
 					<tr>
-						<td>JDK</td>
+						<td>jdk</td>
 						<td>
 						<ul>
 						<li>
-							<a href="http://java.sun.com/j2se/1.5.0/download.jsp">
-								JDK 5.0
-							</a>
+                                                     <script type="text/javascript">linknewwindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>
 						</li>
 						</ul>
 						</td>
 					</tr>
 					<tr>
-						<td>Operating System</td>
+						<td>operating system</td>
 						<td>
 						<ul>
-							<li>Windows XP SP2</li>
-							<li>Linux: Red Hat Fedora Core </li>
+							<li>windows xp sp2</li>
+							<li>linux: red hat fedora core </li>
 						</ul>
 						</td>
 					</tr>
 					<tr>
-						<td>Other components</td>
+						<td>other components</td>
 						<td>
 						<ul>
-							<li><a href="http://tomcat.apache.org/">
-								Apache Tomcat 5.5
-							</a></li>
+                                                     <li>
+                                                     <script type="text/javascript">linknewwindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
+                                                     </li>
 						</ul>
 						</td>
 					</tr>
@@ -74,9 +72,11 @@
 			</table>
 	</section>
 
-	<section name="Configuring Apache Tuscany">
+	<section name="configuring apache tuscany">
 		<p>Detailed instructions on how to configure your Tomcat environment, or a Stand-Alone environment, 
- 		can be found in the <a href="samples/readme.htm">Samples README file</a>.</p>
+ 		can be found in the 
+                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Samples README file');</script>
+                    </p>
 	</section>
 
 </body>

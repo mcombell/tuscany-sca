@@ -28,9 +28,8 @@
 	
 	<p>
 	  Tuscany has a Wiki which you can find 
-	  	<a href="http://wiki.apache.org/ws/Tuscany">
-			here.
-		</a>
+               <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany','here');</script>
+                
 	</p>
 
 	</body>
