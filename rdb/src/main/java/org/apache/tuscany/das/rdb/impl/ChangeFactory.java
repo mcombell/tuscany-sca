@@ -101,7 +101,7 @@ public class ChangeFactory {
 		if ( createCommand == null ) {
 			Table table = mapping.getTable(changedObject.getType().getName());
 			if (table == null ) 
-				throw new RuntimeException("Table " + table + " was changed in the DataGraph but is not present in the Config");
+				throw new RuntimeException("Table " + changedObject.getType().getName() + " was changed in the DataGraph but is not present in the Config");
 	
 			String createStatement = table.getCreate();
 			if ( createStatement == null ) {
