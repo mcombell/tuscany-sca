@@ -269,7 +269,7 @@ svn commit -m"change comment"
 			</p>
 		</section>
 		<section name="Using Eclipse style templates">
-                 Tuscany has a preferred Java code style. Please use the 
+                 Tuscany has a preferred Java coding style. Please use the 
                    <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-eclipse-codestyle.xml'>tuscany-eclipse-codestyle.xml</a> in Eclipse.
                 <br/>Download this file. <i>You may need to right click and save.</i> 
                 Then in Eclipse:<br/>
@@ -324,9 +324,13 @@ svn commit -m"change comment"
 			</p>
 		</section>
 		<section name="Using IDEA style templates">
-                 Tuscany has a preferred Java code style. Please use the 
+                 Tuscany has a preferred Java coding style. Please use the 
                    <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-idea-codestyle.xml'>tuscany-idea-codestyle.xml</a> in IDEA 
                 <br/>Download this file. <i>You may need to right click and save.</i> 
+                        <pre>
+                        copy tuscany-idea-codestyle.xml to ~/.IntelliJIdea50/config/codestyles
+                        File->Settings, Project Code Styles, Import
+                        </pre>
 		</section>
 
 		<section name="Using Maven">
