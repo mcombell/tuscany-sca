@@ -17,7 +17,7 @@
 <document url="getinvolved.xml">
 
 	<properties>
-		<author email="mgmarum@us.ibm.com">Matthew Marum</author>
+		<author email="mgmarum@us.ibm.com">Tuscany Developer</author>
 		<title>Apache Tuscany - Get Involved</title>
 	</properties>
 
@@ -268,7 +268,16 @@ svn commit -m"change comment"
 					project.
 			</p>
 		</section>
-
+		<section name="Using Eclipse style templates">
+                 Tuscany has a preferred Java code style. Please use the 
+                   <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-eclipse-codestyle.xml'>tuscany-eclipse-codestyle.xml</a> in Eclipse.
+                <br/>Download this file. <i>You may need to right click and save.</i> 
+                Then in Eclipse:<br/>
+                <pre>
+                Window->Preferences-&gt;Java-&gt;Code-Style-&gt;Formatter-&gt;Import...
+                <i>(Specify path and file to the tuscany-eclipse-codestyle.xml just downloaded. </i>
+                </pre>
+		</section>
 		<section name="Using Subclipse">
 			<p>
 				Install the Subversion Eclipse Plugin as described here:
@@ -314,6 +323,11 @@ svn commit -m"change comment"
 				You can check in changes using the "Commit" item in the team submenu of the Java perspective.
 			</p>
 		</section>
+		<section name="Using IDEA style templates">
+                 Tuscany has a preferred Java code style. Please use the 
+                   <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-idea-codestyle.xml'>tuscany-idea-codestyle.xml</a> in IDEA 
+                <br/>Download this file. <i>You may need to right click and save.</i> 
+		</section>
 
 		<section name="Using Maven">
 			<p>
@@ -326,12 +340,13 @@ svn commit -m"change comment"
 					http://maven.apache.org/guides/getting-started/index.html
 				</a>
 			</p>
-			<p>
+			<!-- p>
+                        THis was for maven 1.x
 				There is a Maven plug-in for Eclipse called Mevenide which you can find here:
 				<a href="http://mevenide.codehaus.org/download.html">
 					http://mevenide.codehaus.org/download.html
 				</a>
-			</p>
+			</p -->
 			<p>
 				With Maven, there is no build "script" like the ant build.xml file. Instead you 
 				provide Maven with a description of your project and it uses that information to
@@ -362,7 +377,7 @@ svn commit -m"change comment"
 				</a>
 			</p>
 			<p>
-				Download "The Core" Tomcat 5.5.12 from:
+				Download "The Core" Tomcat 5.5.15 from:
 				<a href="http://tomcat.apache.org/download-55.cgi#5.5.12">
 					http://tomcat.apache.org/download-55.cgi#5.5.12
 				</a>
