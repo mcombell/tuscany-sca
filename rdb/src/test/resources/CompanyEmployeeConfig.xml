@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		
+	<Command name="get all companies" SQL="select * from COMPANY" kind = "Select"/>
+	
+	<Command name="get named employee" SQL="select * from EMPLOYEE where NAME=:NAME" kind = "Select">
+  		<Parameter name=":NAME"/>
+  	</Command>
+  	
+	<Command name="get named employee with company" 
+		SQL="select * from EMPLOYEE left outer join COMPANY on EMPLOYEE.ID = COMPANY.EOTMID where EMPLOYEE.NAME=:NAME" kind = "Select">
+  		<Parameter name=":NAME"/>
+  	</Command>
+
+	  	<Command name="get employee by ID" SQL="select * from EMPLOYEE where ID=:PARAM1" kind = "Select">
+  		<Parameter name=":PARAM1"/>
+  	</Command>
+  	
+  	<Command name="get all employees" SQL="select * from EMPLOYEE" kind = "Select"/>
+  	
+    <Command name="get companies with employee of the month" 
+		SQL="select * from COMPANY left outer join EMPLOYEE on COMPANY.EOTMID = EMPLOYEE.ID" kind="Select"/>
+
+<!--	  
+  	<Command name="get company and employee of the month" 
+  		SQL="select C.*, E.* from COMPANY AS C, EMPLOYEE AS E
+  		where C.EOTMID = E.ID" kind = "Select">
+  		
+  	</Command>
+	-->
+  	
+    <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+        driverURL="jdbc:derby:dastest"/>
+
+	<Table name="COMPANY">
+    	<Column name="ID" primaryKey="true" generated="true"/>
+  	</Table>
+  
+  	<Table name="DEPARTMENT">
+   		<Column name="ID" primaryKey="true" generated="true"/>
+  	</Table>
+  		
+  	<Table name="EMPLOYEE">
+  	  	<Column name="ID" primaryKey="true" generated="true"/>
+  	</Table>	
+	  	
+	<Relationship name="company->employee" primaryKeyTable="EMPLOYEE" foreignKeyTable="COMPANY" many="false" >
+      	<KeyPair primaryKeyColumn="ID" foreignKeyColumn="EOTMID" />
+  	</Relationship>
+			
+</Config>
+			
