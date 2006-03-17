@@ -1,3 +1,4 @@
+
 /**
  *
  *  Copyright 2005 The Apache Software Foundation or its licensors, as applicable.
@@ -17,29 +18,27 @@
 package org.apache.tuscany.das.rdb.test.data;
 
 import java.sql.Connection;
-import java.sql.Types;
 
-import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
+import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
 
-public class EmployeeData extends TestDataWithExplicitColumns {
+public class CompanyEmpData extends RelationshipData {
 
-	private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.SMALLINT};
+    public static Object[][] data = {
+        {"Mary Smith", "ACME Publishing" },
+        {"Jane Doe", "Do-rite plumbing"},
+        {"Al Smith", "MegaCorp"}};
+    
+    public CompanyEmpData(Connection c) {
+        super(c, data);
+    }
 
-	private static Object[][] employeeData = { 
-        { "John Jones", "E0001", new Boolean(false) },
-		{ "Mary Smith", "E0002", new Boolean(true)},
-		{ "Jane Doe", "E0003", new Boolean(false)},
-		{ "Al Smith", "E0004", new Boolean(true) } };
+    protected String getParentRetrievalStatement() {
+        return "select employee.id from employee where employee.name = ?";
+    }
 
-	private static String[] employeeColumns = { "NAME", "SN", "MANAGER" };
-	
-	public EmployeeData(Connection connection) {
-		super(connection, employeeData, employeeColumns, columnTypes);
-	}
-	
-	public String getTableName() {
-		return "EMPLOYEE";
-	}
+    protected String getChildUpdateStatement() {
+        return "update company set company.eotmid = ? where company.name = ?";
+    }
 
 }
