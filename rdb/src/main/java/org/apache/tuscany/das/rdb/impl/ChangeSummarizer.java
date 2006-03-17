@@ -127,7 +127,8 @@ public class ChangeSummarizer {
 						ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
 
 						DebugUtil.debugln(getClass(), debug, ref.getName());
-						if (ref.getEOpposite().isMany()) {
+//						if (ref.getEOpposite().isMany()) {
+                        if (referencesParent(ref)) {
 							ChangeFactory factory = getRegistry().getFactory(
 									changedObject.getType());
 							changes.addUpdate(factory
@@ -222,4 +223,15 @@ public class ChangeSummarizer {
 		mapping.addConverter(name, converterName);
 	}
 
+    
+    private boolean referencesParent(ReferenceImpl reference) {
+        
+        if (reference.getEOpposite().isMany())
+            return true;
+        
+//        if (!reference.getName().contains("_opposite"))
+//            return true;
+        
+        return false;
+    }
 }
