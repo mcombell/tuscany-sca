@@ -205,7 +205,7 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getCreateCompany() {
-        return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30))";
+        return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30), EOTMID INT)";
     }
 
     protected String getCreateEmployee() {
@@ -213,7 +213,7 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getCreateDepartment() {
-        return "CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30), LOCATION VARCHAR(30), NUMBER VARCHAR(10), COMPANYID INT, EOTM INT)";
+        return "CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30), LOCATION VARCHAR(30), NUMBER VARCHAR(10), COMPANYID INT)";
     }
 
     protected String getCreateBook() {
