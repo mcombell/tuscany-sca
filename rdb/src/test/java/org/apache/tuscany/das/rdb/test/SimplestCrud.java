@@ -80,10 +80,10 @@ public class SimplestCrud extends DasTest {
 		
 		DataObject cust = root.getDataObject("CUSTOMER[1]");
 		
-		int n = (cust.getType().getProperties()).size();
-		for (int i=0; i<n; i++) {
-			System.out.println(cust.get(i));
-		}
+//		int n = (cust.getType().getProperties()).size();
+//		for (int i=0; i<n; i++) {
+//			System.out.println(cust.get(i));
+//		}
 		
 		
 		//Verify 

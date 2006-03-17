@@ -16,7 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
@@ -28,11 +27,8 @@ import org.apache.tuscany.das.rdb.test.data.DepEmpData;
 import org.apache.tuscany.das.rdb.test.data.DepartmentData;
 import org.apache.tuscany.das.rdb.test.data.EmployeeData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.apache.tuscany.sdo.impl.ReferenceImpl;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Property;
-import commonj.sdo.Type;
 
 public class BestPracticeTests extends DasTest {
 
@@ -110,7 +106,6 @@ public class BestPracticeTests extends DasTest {
         department.setString("NAME", "Do-rite Pest Control");
         department.setString("LOCATION", "The boonies");
         department.setString("NUMBER", "101");
-        department.setInt("EOTM", 1);
    
         // Associate the new department with the new company
         company.getList("departments").add(department);

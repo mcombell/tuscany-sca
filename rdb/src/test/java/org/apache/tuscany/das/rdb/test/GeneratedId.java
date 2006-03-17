@@ -207,8 +207,6 @@ public class GeneratedId extends DasTest {
 		department.setString("NAME", "Do-rite Pest Control");
 		department.setString("LOCATION", "The boonies");
 		department.setString("NUMBER", "101");
-		department.setInt("EOTM", 1);
-
 		
 		// Associate the new department with the new company
 		company.getList("departments").add(department);
@@ -259,8 +257,6 @@ public class GeneratedId extends DasTest {
 		//Do not set this property to force storing NULL to DB
 //		department.setString("LOCATION", "The boonies");
 		department.setString("NUMBER", "101");
-		department.setInt("EOTM", 1);
-
 		
 		// Associate the new department with the new company
 		company.getList("departments").add(department);

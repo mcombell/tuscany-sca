@@ -245,7 +245,7 @@ public class CorrectedDefectTests extends DasTest {
         DataObject department;
         while (i.hasNext()) {
             department = (DataObject)i.next();
-            System.out.println("Modifying department: " + department.getString("NAME"));
+//            System.out.println("Modifying department: " + department.getString("NAME"));
             department.setString("NAME", "Dept-" + random);
             random = random + 1;
         } 
