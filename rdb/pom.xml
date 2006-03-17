@@ -92,6 +92,8 @@
                     <includes>
                         <include>**/*AllTestsDerby.java</include>
                     </includes>
+					<reportFormat>brief</reportFormat>
+                    <useFile>false</useFile> 
                 </configuration>
             </plugin>
         </plugins>
