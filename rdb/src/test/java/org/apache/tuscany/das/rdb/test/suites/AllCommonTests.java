@@ -29,6 +29,7 @@ import org.apache.tuscany.das.rdb.test.GeneratedId;
 import org.apache.tuscany.das.rdb.test.GraphMergeTests;
 import org.apache.tuscany.das.rdb.test.NameMappingTests;
 import org.apache.tuscany.das.rdb.test.OCCTests;
+import org.apache.tuscany.das.rdb.test.OneToOneRelationshipTests;
 import org.apache.tuscany.das.rdb.test.OperationOrderingTests;
 import org.apache.tuscany.das.rdb.test.Paging;
 import org.apache.tuscany.das.rdb.test.PartialUpdateTests;
@@ -85,6 +86,8 @@ public class AllCommonTests {
         suite.addTest(new TestSuite (CommandGroupTests.class));
         suite.addTest(new TestSuite (BestPracticeTests.class));
         suite.addTest(new TestSuite (CorrectedDefectTests.class));
+        suite.addTest(new TestSuite (OneToOneRelationshipTests.class));
+       
         
 		//$JUnit-END$
 		return suite;
