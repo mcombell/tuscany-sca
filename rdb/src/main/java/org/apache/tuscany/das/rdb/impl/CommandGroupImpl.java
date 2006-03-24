@@ -113,11 +113,11 @@ public class CommandGroupImpl implements CommandGroup {
 
     private void setConfig(InputStream stream) {
         XMLHelper helper = XMLHelper.INSTANCE;
-  
+
         ConfigPackageImpl impl = ConfigPackageImpl.eINSTANCE;
 
         try {
-            config = (Config) helper.load(stream).getRootObject();           
+            config = (Config) helper.load(stream).getRootObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -166,7 +166,8 @@ public class CommandGroupImpl implements CommandGroup {
 
     }
 
-    //TODO - Refactor to eliminate common initialization code after connection is got
+    // TODO - Refactor to eliminate common initialization code after connection
+    // is got
     private void initViaDataSource(ConnectionProperties cp) {
 
         Connection connection = null;
@@ -178,18 +179,63 @@ public class CommandGroupImpl implements CommandGroup {
             throw new Error(e);
         }
         try {
-            //TODO - I think we should rename this getDataSourceURL?
+            // TODO - I think we should rename this getDataSourceURL?
             DataSource ds = (DataSource) ctx.lookup(cp.getDataSource());
             try {
                 connection = ds.getConnection();
                 connection.setAutoCommit(false);
                 setConnection(connection);
             } catch (SQLException e) {
-                throw new Error (e);
+                throw new Error(e);
             }
         } catch (NamingException e) {
             throw new Error(e);
         }
 
     }
+
+    public void releaseResources() {
+
+        if (managingConnections())
+            closeConnection();
+    }
+
+    private void closeConnection() {
+        if (connection != null)
+            try {
+                connection.close();
+                connection = null;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
+    /**
+     * If the config has connection properties then we are "manageing" the
+     * connection via DriverManager or DataSource
+     */
+    private boolean managingConnections() {
+
+        if (config.getConnectionProperties() == null)
+            return false;
+        else
+            return true;
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#finalize()
+     * We should clean up on finalize in case the client neglected to do so
+     */
+    @Override
+    protected void finalize() throws Throwable {
+
+        try {
+            releaseResources();
+        } finally {
+            super.finalize();
+        }
+
+    }
+
 }

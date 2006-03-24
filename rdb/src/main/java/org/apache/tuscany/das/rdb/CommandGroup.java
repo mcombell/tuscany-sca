@@ -52,5 +52,12 @@ public interface CommandGroup {
      * @param connection
      */
     public void setConnection(Connection connection);
+    
+    /**
+     * If the CommandGroup is managing connections then this method
+     * must be called when the client is done with the instance.
+     * 
+     */
+    public void releaseResources();
 
 }
