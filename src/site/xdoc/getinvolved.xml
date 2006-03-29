@@ -88,13 +88,16 @@
 			<span style="font-size: 14pt;">
 					Common Commands for Subversion
 			</span>
-			<p>
+			<p>Start by making a directory tuscany and in that directory:
 				<b style="">
 					<i style="">To check out the Java project:</i>
 				</b>
 			</p>
 			<pre>
+Committers:                        
 svn co https://svn.apache.org/repos/asf/incubator/tuscany/java
+Non-Commiters:
+svn co http://svn.apache.org/repos/asf/incubator/tuscany/java
 			</pre>
 			<p>
 				<b style="">
@@ -102,7 +105,10 @@ svn co https://svn.apache.org/repos/asf/incubator/tuscany/java
 				</b>
 			</p>
 			<pre>
+Committers:                        
 svn co https://svn.apache.org/repos/asf/incubator/tuscany/cpp
+Non-Commiters:
+svn co http://svn.apache.org/repos/asf/incubator/tuscany/cpp
 			</pre>
 			<p>
 				If it worked, you will see all the files as they

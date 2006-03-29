@@ -78,7 +78,7 @@
 		</menu>		
 		<menu name="Community">
 			<item name="Get Involved" href="/getinvolved.html" />
-			<item name="Committers" href="/team-list.html" />
+			<!-- item name="Committers" href="/team-list.html" / -->
 			<item name="SVN Code Repository" href="/svn.html" />
 			<item name="Mailing Lists" href="/mail-lists.html" />
 			<item name="Bugs" href="/bugs.html" />
