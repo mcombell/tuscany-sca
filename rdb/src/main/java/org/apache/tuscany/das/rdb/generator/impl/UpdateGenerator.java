@@ -142,8 +142,9 @@ public class UpdateGenerator {
 				changes.add(setting.getProperty());
 			} else  {
 				Property ref = setting.getProperty();
-				if ( !ref.isMany() ) {
-					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByName(ref.getOpposite().getName()));
+				if ( !ref.isMany() ) {												
+					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByReference(ref));
+					
 					Iterator keys = r.getForeignKeys().iterator();
 					while ( keys.hasNext()) {
 						String key = (String) keys.next();

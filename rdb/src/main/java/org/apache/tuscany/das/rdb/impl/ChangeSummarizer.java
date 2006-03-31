@@ -16,6 +16,7 @@
 */
 package org.apache.tuscany.das.rdb.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +25,12 @@ import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
+import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
+import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
@@ -35,6 +39,7 @@ import org.apache.tuscany.sdo.impl.ReferenceImpl;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 public class ChangeSummarizer {
@@ -127,10 +132,9 @@ public class ChangeSummarizer {
 						ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
 
 						DebugUtil.debugln(getClass(), debug, ref.getName());
-//						if (ref.getEOpposite().isMany()) {
-                        if (referencesParent(ref)) {
+						if (hasState(ref, changedObject) ) {                     
 							ChangeFactory factory = getRegistry().getFactory(
-									changedObject.getType());
+									changedObject.getType());							
 							changes.addUpdate(factory
 									.createUpdateOperation(changedObject));
 						}
@@ -140,6 +144,33 @@ public class ChangeSummarizer {
 			}
 		}
 
+	}
+
+	private boolean hasState(Property ref, DataObject changedObject) {
+		if ( ref.getOpposite().isMany() ) {
+			return true;
+		} else {
+			MappingWrapper mw = this.mapping;
+			if ( mw.getConfig() == null ) 
+				mw = registry.getFactory(changedObject.getType()).getConfig();
+			if ( mw.getConfig() == null )
+				return false;
+			
+			Relationship rel = mw.getRelationshipByReference(ref);			
+			
+			if ( !rel.isMany()) {
+				// This is a one-one relationship
+				Table t = mapping.getTableByPropertyName(changedObject.getType().getName());
+				TableWrapper tw = new TableWrapper(t);
+				RelationshipWrapper rw = new RelationshipWrapper(rel);
+				if (( rel.getForeignKeyTable().equals(t.getName())) &&
+						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
+					return true;
+				
+			}
+		
+		}
+		return false;
 	}
 
 	private boolean hasAttributeChange(List theChanges) {
@@ -224,14 +255,5 @@ public class ChangeSummarizer {
 	}
 
     
-    private boolean referencesParent(ReferenceImpl reference) {
-        
-        if (reference.getEOpposite().isMany())
-            return true;
-        
-//        if (!reference.getName().contains("_opposite"))
-//            return true;
-        
-        return false;
-    }
+    
 }

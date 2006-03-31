@@ -32,6 +32,8 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
+import commonj.sdo.Property;
+
 
 public class MappingWrapper {
 
@@ -368,6 +370,17 @@ public class MappingWrapper {
 		return converters;
 	}
 
+	public Relationship getRelationshipByReference(Property ref) {
+		Iterator i = config.getRelationship().iterator();
+		while ( i.hasNext() ) {
+			Relationship r = (Relationship) i.next();
+			if ( ref.getName().equals (r.getName()) ||
+					ref.getOpposite().getName().equals(r.getName())) 
+				return r;
+		}
+		throw new RuntimeException("Could not find relationship " + ref.getName() + " in the configuration");
+	}
+	
 	public Relationship getRelationshipByName(String name) {
 		Iterator i = config.getRelationship().iterator();
 		while ( i.hasNext() ) {

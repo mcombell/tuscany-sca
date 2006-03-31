@@ -168,5 +168,9 @@ public class ChangeFactory {
 		return updateCommand;
 	}
 
+	public MappingWrapper getConfig() {
+		return this.mapping;
+	}
+
 
 }

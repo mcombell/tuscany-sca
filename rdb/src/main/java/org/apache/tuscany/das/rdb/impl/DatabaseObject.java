@@ -81,6 +81,8 @@ public class DatabaseObject {
 
 		Property parentRef = getParentReference(r.getPrimaryKeyTable());
 		DataObject parent = dataObject.getDataObject(parentRef);
+		if ( parent == null ) 
+			return null;
 		String parentKey = getParentKey(r, parameter);
 		return parent.get(parentKey);
 
