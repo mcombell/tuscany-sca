@@ -92,8 +92,7 @@ public class OneToOneRelationshipTests extends DasTest {
         //Verify
         root = read.executeQuery();
         company = root.getDataObject("COMPANY[1]");
-//TODO - Correct issue with changing 1:1 relationships
-//        assertNull(company.getDataObject("company->employee_opposite"));
+        assertNull(company.getDataObject("company->employee_opposite"));
     }
     
     
