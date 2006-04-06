@@ -25,40 +25,56 @@
 				Welcome to Apache Tuscany. The Apache Tuscany project is currently in Incubation under the 
 				Apache Incubator.
 			</p>
-			<p>
-				Apache Tuscany provides runtime capabilities for applications built 
-				using a Service Oriented Architecture (SOA). Tuscany provides capabilities which follow the 
-				Service Component Architecture specification and the Service Data Objects specification, which 
-				together define a simpler, business-oriented approach to the creation of applications and solutions
-				which use a SOA.
+			<p>Apache Tuscany project simplifies the development of business solutions using a service-oriented architecture (SOA).
+                        It provides an implementation for Service Component Architecture (SCA), Service Data Objects (SDO) and Relational Database Data Access Service (RDB DAS)
+                         in conjunction with other well-established Java<sup>tm</sup> runtime environments such as Apache Axis, Apache Tomcat, and Apache Geronimo.
 			</p>
-			<p>
-				Currently, Tuscany provides separate runtime support for the Java language and for the C++
-				language.  This means that you can write service components in either the Java language or in
-				the C++ language.
-			</p>
-			<p>
-				For more information on the SOA programming model provided
-				by Tuscany, you can read:
-				<ul>
-					<li>
-						A White Paper on Service Component Architecture
-						(SCA)
-					</li>
-					<li>The SCA 0.9 Assembly Model specification</li>
-					<li>
-						The SCA 0.9 Client and Implementation Model
-						specification
-					</li>
-					<li>The SDO 2.01 specification</li>
-				</ul>
-				These are available on the <a href="documentation.html">Documentation</a> page.
-				You can also get a feel for what it's like to create a program using Tuscany by trying out the 
-				Sample Programs that are supplied with the Tuscany project.
-			</p>
+                        <p>SCA provides developers with a simple model for creating systems based on SOA and addresses infrastructure capabilities such as transactions,
+                         security and reliable messaging. Solutions developed using SCA can be declaratively changed to alter infrastructure capabilities or application
+                          configuration properties to meet business requirements.
+                          For example, security policies or currency for one environment may be different from those required by another environment and SCA allows
+                           these to be changed declaratively without the need for re-implementation.  
+                        </p>
+                        <p>
+SCA divides up the steps in building a service-oriented application into two major parts:
+<ul>
+<li>
+The Implementation of components which provide services and consume other services. SCA supports service implementations written using any one of many programming languages, both including conventional object-oriented and procedural languages such as Java<sup>tm</sup>, PHP, C ++,  and also  XML-centric languages such as BPEL and XSLT, and also declarative languages such as SQL and XQuery. SCA also supports a range of programming styles, including asynchronous and message-oriented styles, in addition to the synchronous call-and-return style.
+</li>
+<li>
+The Assembly of sets of components to build composite business applications that addresses specific business requirements. This is performed by wiring together the service implementation components.  
+</li>
+</ul>
+ For more information about SCA read the white paper on Service Component Architecture (SCA) on <a href="documentation.html">Documentation page</a>. Tuscany provides runtime implementation of SCA in both Java and C++.
+                        </p>
+                        <p>SDO provides a consistent view of data regardless of the type of data store where the data resides. It maintains history of change in data as
+                            well as referential integrity of schema. Tuscany implements SDO in Java and C++. 
+                            PHP implementation of SDO is also available under PECL at this link <script type="text/javascript">linkNewWindow('http://pecl.php.net/package/sdo','http://pecl.php.net/package/sdo');</script>
+                            To further understand the benefits of SDO please refer to the white paper called SDO white paper on the <a href="documentation.html">Documentation page</a>. 
+                        </p>
+                        <p>
+RDB DAS provides a generic data access service that provides transformation capability between SDO data graphs and relational databases and vise versa. To further explore the benefits of DAS please refer to white paper on <a href="documentation.html">Documentation page</a>.  
+                        </p>
+<p>
+You can get a feel for what it's like to create simple applications using Tuscany by trying out the Sample Programs that are supplied with the Tuscany project.
+                        </p>
+                        <p>
+The specifications for SDO and SCA can be found on the <a href="documentation.html">Documentation page</a>:<br/> 
+<ul>
+<li>
+The SCA 0.9 Assembly Model specification 
+</li>
+<li>
+The SCA 0.9 Client and Implementation Model specifications - for Java and for C++ 
+</li>
+<li>
+The SDO 2.01 specifications - for Java and for C++
+</li>
+</ul>
+                        </p>
                         <p>     Tuscany is very interested in getting your comments or any feedback you may have.  Please feel free
                                 to post these on the mailing lists.  Mailing list information is available in the <a href="mail-lists.html">Project Mailing Lists</a> section.
- 
+                                We look forward to your involvement in Tuscany.  
 			</p>
 		</section>
 		<section name="Tuscany Subprojects">
