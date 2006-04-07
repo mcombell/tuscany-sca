@@ -95,6 +95,61 @@ public class OneToOneRelationshipTests extends DasTest {
         assertNull(company.getDataObject("company->employee_opposite"));
     }
     
+    /**
+     * Delete employee O' month
+     */
+    public void test4() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY
+                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+
+        Command read = commandGroup.getCommand("get companies with employee of the month");
+        DataObject root = read.executeQuery();
+        DataObject company = root.getDataObject("COMPANY[1]");
+        DataObject employee = company.getDataObject("company->employee_opposite");
+        employee.delete();
+        assertNull(company.getDataObject("company->employee_opposite"));
+   
+        //Flush changes
+        commandGroup.getApplyChangesCommand().execute(root);
+
+        //Verify
+        root = read.executeQuery();
+        company = root.getDataObject("COMPANY[1]");
+        assertNull(company.getDataObject("company->employee_opposite"));
+    }
     
-    
+    /**
+     * Add new employee O' month
+     */
+    public void test5() throws Exception {
+
+        CommandGroup commandGroup = CommandGroup.FACTORY
+                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+
+        Command read = commandGroup.getCommand("get companies with employee of the month");
+        DataObject root = read.executeQuery();
+        DataObject company = root.getDataObject("COMPANY[1]");
+        
+        //Create a new employee
+        DataObject employee = root.createDataObject("EMPLOYEE");
+        employee.setString ("NAME", "Joe Hotshot");
+        
+ /*       //Assigne a EOTM
+        //Strangely this statement results in "Could not find relationships" error
+        //although "company.setDataObject("company->employee_opposite", null);" dos not   
+        company.setDataObject("company->employee_opposite", employee);     
+         
+        //Flush changes
+        commandGroup.getApplyChangesCommand().execute(root);
+
+        //Verify
+        root = read.executeQuery();
+        company = root.getDataObject("COMPANY[1]");
+        
+        employee = root.getDataObject("COMPANY[1]/company->employee_opposite");
+
+        assertEquals("Joe Hotshot", employee.getString("NAME"));
+        */
+    }
 }

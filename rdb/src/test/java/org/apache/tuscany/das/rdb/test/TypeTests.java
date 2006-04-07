@@ -24,6 +24,10 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
+import java.sql.Timestamp;
+import java.util.Date;
+
+import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.test.data.TypesData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -61,5 +65,32 @@ public class TypeTests extends DasTest {
 	}
 	
 
+    /**
+     * Write various types.  
+     * TODO - Need to rethink the Timestamp write.  My current thinking id that writes of non-SDO2 defined types 
+     * require a converter
+     */
+/*    public void testWrite() throws Exception {
+
+        //Read customer 1
+        Command select = Command.FACTORY.createCommand("Select * from TYPETEST where ID = 1");  
+        select.setConnection(getConnection());
+        DataObject root = select.executeQuery();
+        
+        DataObject types = (DataObject)root.get("TYPETEST[1]");
+        Date now = new Date();
+        types.set("ATIMESTAMP", now);
+        
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+        apply.setConnection(getConnection());
+        apply.addPrimaryKey("TYPETEST.ID");
+        apply.execute(root);
+        
+        //Verify
+        root = select.executeQuery();
+        java.sql.Timestamp ts = (java.sql.Timestamp)types.get("ATIMESTAMP");
+        assertEquals(now, ts);
+        
+    }*/
 	
 }
