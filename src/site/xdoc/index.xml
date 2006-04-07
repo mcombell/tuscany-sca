@@ -16,47 +16,69 @@
  -->
 <document url="index.xml">
 	<properties>
-		<author email="mgmarum@us.ibm.com">Matthew Marum</author>
+		<author email="someone@apache.org">someone</author>
 		<title>Apache Tuscany</title>
 	</properties>
 	<body>
 		<section name="Apache Tuscany">
 			<p>
-				Welcome to Apache Tuscany. The Apache Tuscany project is currently in Incubation under the 
+				Welcome to Apache Tuscany. The Apache Tuscany project is currently in incubation within the 
 				Apache Incubator.
 			</p>
-			<p>Apache Tuscany project simplifies the development of business solutions using a service-oriented architecture (SOA).
-                        It provides an implementation for Service Component Architecture (SCA), Service Data Objects (SDO) and Relational Database Data Access Service (RDB DAS)
-                         in conjunction with other well-established Java<sup>tm</sup> runtime environments such as Apache Axis, Apache Tomcat, and Apache Geronimo.
+                        <p>
+			The Apache Tuscany project simplifies the development of business solutions that use a service-oriented 
+architecture. It allows new solutions to be constructed by combining new or existing services within an 
+easy to configure service oriented run time with little or no programming.  It does this by providing  
+implementations for the Service Component Architecture (SCA) and Service Data Object (SDO) 
+specifications and by defining Data Access Services built on SDO.  
+Specifications for SDO and SCA can be found on the <a href="documentation.html">Documentation page</a>
 			</p>
-                        <p>SCA provides developers with a simple model for creating systems based on SOA and addresses infrastructure capabilities such as transactions,
-                         security and reliable messaging. Solutions developed using SCA can be declaratively changed to alter infrastructure capabilities or application
-                          configuration properties to meet business requirements.
-                          For example, security policies or currency for one environment may be different from those required by another environment and SCA allows
-                           these to be changed declaratively without the need for re-implementation.  
+                        <p>
+  SCA provides developers with a simple, business-oriented, model for creating systems based on a service 
+  oriented architecture. It manages infrastructure complexities such as transactions, security and reliable 
+  messaging and frees the developer to focus on providing business function.  The solutions developed using 
+  SCA can be changed declaratively to alter infrastructure capabilities or application configuration properties 
+  to meet changing business requirements. For example, infrastructure capabilities such as security policies 
+  may change from one environment to another and can be changed without the need for re-implementation.  
+  Application configuration may also be changed in this way, for example, the currency quoted by a stock 
+  quote feed may be changed though the SCA configuration mechanism. 
                         </p>
                         <p>
-SCA divides up the steps in building a service-oriented application into two major parts:
-<ul>
-<li>
-The Implementation of components which provide services and consume other services. SCA supports service implementations written using any one of many programming languages, both including conventional object-oriented and procedural languages such as Java<sup>tm</sup>, PHP, C ++,  and also  XML-centric languages such as BPEL and XSLT, and also declarative languages such as SQL and XQuery. SCA also supports a range of programming styles, including asynchronous and message-oriented styles, in addition to the synchronous call-and-return style.
+  SCA divides up the steps in building a service-oriented application into two major parts:
+  <ul>
+  <li>
+  The Implementation of components which provide services and consume other services. SCA 
+  supports service implementations written using any one of many programming languages, both including 
+  conventional object-oriented and procedural languages such as Java<sup>tm</sup>, PHP, C ++. XML-centric languages 
+  such as BPEL and XSLT, and also declarative languages such as SQL and XQuery. SCA also supports a 
+  range of programming styles, including asynchronous and message-oriented styles, in addition to the 
+  synchronous call-and-return style.
 </li>
 <li>
 The Assembly of sets of components to build composite business applications that addresses specific business requirements. This is performed by wiring together the service implementation components.  
 </li>
 </ul>
- For more information about SCA read the white paper on Service Component Architecture (SCA) on <a href="documentation.html">Documentation page</a>. Tuscany provides runtime implementation of SCA in both Java and C++.
-                        </p>
-                        <p>SDO provides a consistent view of data regardless of the type of data store where the data resides. It maintains history of change in data as
-                            well as referential integrity of schema. Tuscany implements SDO in Java and C++. 
-                            PHP implementation of SDO is also available under PECL at this link <script type="text/javascript">linkNewWindow('http://pecl.php.net/package/sdo','http://pecl.php.net/package/sdo');</script>
-                            To further understand the benefits of SDO please refer to the white paper called SDO white paper on the <a href="documentation.html">Documentation page</a>. 
+ For more information about SCA read the white paper Service Component Architecture-Building Systems using a Service Oriented Architecure on the <a href="documentation.html">Documentation page</a>.
+The Tuscany project provides runtime implementation of SCA in both Java and C++.
                         </p>
                         <p>
-RDB DAS provides a generic data access service that provides transformation capability between SDO data graphs and relational databases and vise versa. To further explore the benefits of DAS please refer to white paper on <a href="documentation.html">Documentation page</a>.  
+  SDO provides Tuscany with a consistent mechanism for describing and manipulating data regardless of the 
+  source data resource, the target data resource or, indeed, the environment in which the data is to be 
+  processed . Along side this SDO also maintains a change history for data as well as ensuring referential 
+  integrity based on a defined schema. These features allow developers to focus on data processing tasks 
+  rather that the specific nature of data retrieval mechanisms as it arrives at and is dispatch from a service. 
+  To further understand the benefits of SDO please refer to the "Next Generation Data Programming: Service 
+  Data Objects"on the <a href="documentation.html">Documentation page</a>. 
+  Tuscany implements SDO in Java and C++. A PHP implementation of SDO is also available under <script type="text/javascript">linkNewWindow('http://pecl.php.net/package/sdo','PECL' );</script>.
+                        </p>
+                        <p>
+RDB DAS provides a generic data access service that provides transformation capability between SDO data graphs and relational databases and vise versa.
+To further explore the benefits of DAS please refer to white paper "DAS White Paper: The Data Access Service"  on the <a href="documentation.html">Documentation page</a>.  
                         </p>
 <p>
 You can get a feel for what it's like to create simple applications using Tuscany by trying out the Sample Programs that are supplied with the Tuscany project.
+For Java look at the <a href="installjava.html" >Installation instructions for Java Projects</a> page and then follow the Samples README.
+For C++ go to the <a href="installcpp.html" >Installation Instructions for C++ Projects</a> page.
                         </p>
                         <p>
 The specifications for SDO and SCA can be found on the <a href="documentation.html">Documentation page</a>:<br/> 
