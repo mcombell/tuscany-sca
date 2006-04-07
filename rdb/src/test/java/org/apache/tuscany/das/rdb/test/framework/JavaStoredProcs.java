@@ -24,62 +24,56 @@ import java.sql.SQLException;
 
 /**
  * Stored Procedures for DB2 and Derby SP tests
- *
+ * 
  */
 public class JavaStoredProcs {
 
-	public static void getAllCompanies(ResultSet[] results) throws SQLException {
+    public static void getAllCompanies(ResultSet[] results) throws SQLException {
 
-		Connection conn = DriverManager
-				.getConnection("jdbc:default:connection");
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM COMPANY");
-		results[0] = ps.executeQuery();
-	}
-	
-	public static void deleteCustomer(int theId) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM COMPANY");
+        results[0] = ps.executeQuery();
+    }
 
-		Connection conn = DriverManager
-				.getConnection("jdbc:default:connection");
-		PreparedStatement ps = conn.prepareStatement("DELETE FROM CUSTOMER WHERE ID = ?");
-		ps.setInt(1, theId);
-		ps.execute();
-		
-	}
+    public static void deleteCustomer(int theId) throws SQLException {
 
-	public static void getNamedCompany(String theName, ResultSet[] results) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM CUSTOMER WHERE ID = ?");
+        ps.setInt(1, theId);
+        ps.execute();
 
-		Connection conn = DriverManager
-				.getConnection("jdbc:default:connection");
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM COMPANY WHERE NAME = ?");
-		ps.setString(1, theName);
-		results[0] = ps.executeQuery();
-	}
-	
-	public static void getCustomerAndOrders(int theId, ResultSet[] results) throws SQLException {
+    }
 
-		Connection conn = DriverManager
-				.getConnection("jdbc:default:connection");
-		PreparedStatement ps = 
-			conn.prepareStatement("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = ?");
-		ps.setInt(1, theId);
-		results[0] = ps.executeQuery();
-	}
-	
-	public static void getNamedCustomers(String theName, int[] outCount, ResultSet[] results) throws SQLException {
+    public static void getNamedCompany(String theName, ResultSet[] results) throws SQLException {
 
-		Connection conn = DriverManager
-				.getConnection("jdbc:default:connection");
-		PreparedStatement ps = 
-			conn.prepareStatement("SELECT * FROM CUSTOMER WHERE LASTNAME = ?");
-		ps.setString(1, theName);
-		results[0] = ps.executeQuery();
-		
-		ps = conn.prepareStatement("SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = ?");
-		ps.setString(1, theName);
+        Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM COMPANY WHERE NAME = ?");
+        ps.setString(1, theName);
+        results[0] = ps.executeQuery();
+    }
 
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		outCount[0] = rs.getInt(1);
-	}
-		
+    public static void getCustomerAndOrders(int theId, ResultSet[] results) throws SQLException {
+
+        Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn
+                .prepareStatement("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = ?");
+        ps.setInt(1, theId);
+        results[0] = ps.executeQuery();
+    }
+
+    public static void getNamedCustomers(String theName, int[] outCount, ResultSet[] results) throws SQLException {
+
+        Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM CUSTOMER WHERE LASTNAME = ?");
+        ps.setString(1, theName);
+        results[0] = ps.executeQuery();
+
+        ps = conn.prepareStatement("SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = ?");
+        ps.setString(1, theName);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        outCount[0] = rs.getInt(1);
+    }
+
 }

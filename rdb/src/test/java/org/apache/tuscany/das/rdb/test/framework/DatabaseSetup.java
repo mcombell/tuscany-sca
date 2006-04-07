@@ -90,13 +90,14 @@ public class DatabaseSetup extends TestSetup {
 
     private void dropTables() {
 
-        System.out.println("Dropping tables");
+//        System.out.println("Dropping tables");
 
         String[] statements = {
 
-        "DROP TABLE CUSTOMER", "DROP TABLE ANORDER", "DROP TABLE ORDERDETAILS", "DROP TABLE ITEM", "DROP TABLE COMPANY",
-                "DROP TABLE EMPLOYEE", "DROP TABLE DEPARTMENT", "DROP TABLE BOOK", "DROP TABLE PART", "DROP TABLE TYPETEST",
-                "DROP TABLE CITIES", "DROP TABLE STATES", "DROP TABLE conmgt.SERVERSTATUS"
+        "DROP TABLE CUSTOMER", "DROP TABLE ANORDER", "DROP TABLE ORDERDETAILS", "DROP TABLE ITEM",
+                "DROP TABLE COMPANY", "DROP TABLE EMPLOYEE", "DROP TABLE DEPARTMENT", "DROP TABLE BOOK",
+                "DROP TABLE PART", "DROP TABLE TYPETEST", "DROP TABLE CITIES", "DROP TABLE STATES",
+                "DROP TABLE conmgt.SERVERSTATUS"
 
         };
 
@@ -104,8 +105,8 @@ public class DatabaseSetup extends TestSetup {
             try {
                 s.execute(statements[i]);
             } catch (SQLException e) {
-            	//If the table does not exist then ignore the exception on drop
-            	if (!e.getMessage().contains("does not exist"))
+                // If the table does not exist then ignore the exception on drop
+                if (!e.getMessage().contains("does not exist"))
                     throw new RuntimeException(e);
             }
         }
@@ -113,13 +114,12 @@ public class DatabaseSetup extends TestSetup {
 
     protected void dropProcedures() {
 
-        System.out.println("Dropping procedures");
+//        System.out.println("Dropping procedures");
 
         String[] statements = {
 
         "DROP PROCEDURE GETALLCOMPANIES", "DROP PROCEDURE DELETECUSTOMER", "DROP PROCEDURE GETNAMEDCOMPANY",
-                "DROP PROCEDURE GETCUSTOMERANDORDERS",
-        // "DROP PROCEDURE GETNAMEDCUSTOMERS"
+                "DROP PROCEDURE GETCUSTOMERANDORDERS", "DROP PROCEDURE GETNAMEDCUSTOMERS"
 
         };
 
@@ -127,8 +127,8 @@ public class DatabaseSetup extends TestSetup {
             try {
                 s.execute(statements[i]);
             } catch (SQLException e) {
-            	//If the proc does not exist then ignore the exception on drop
-            	if (!e.getMessage().contains("does not exist"))
+                // If the proc does not exist then ignore the exception on drop
+                if (!e.getMessage().contains("does not exist"))
                     throw new RuntimeException(e);
             }
         }
@@ -136,7 +136,7 @@ public class DatabaseSetup extends TestSetup {
 
     private void createTables() {
 
-        System.out.println("Creating tables");
+//        System.out.println("Creating tables");
 
         try {
 
@@ -161,22 +161,15 @@ public class DatabaseSetup extends TestSetup {
 
     protected void createProcedures() {
 
-        System.out.println("Creating procedures");
+//        System.out.println("Creating procedures");
         try {
 
-            s
-                    .execute("CREATE PROCEDURE GETALLCOMPANIES() PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCompanies'");
-            s
-                    .execute("CREATE PROCEDURE DELETECUSTOMER(theId int) PARAMETER STYLE JAVA LANGUAGE JAVA MODIFIES SQL DATA EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.deleteCustomer'");
-            s
-                    .execute("CREATE PROCEDURE GETNAMEDCOMPANY(theName VARCHAR(100)) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCompany'");
-            s
-                    .execute("CREATE PROCEDURE GETCUSTOMERANDORDERS(theID INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getCustomerAndOrders'");
-            // TODO s.execute("CREATE PROCEDURE GETNAMEDCUSTOMERS(theName
-            // VARCHAR(100), OUT theCount INTEGER) PARAMETER STYLE JAVA LANGUAGE
-            // JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME
-            // 'tests.framework.JavaStoredProcs.getNamedCustomers'");
-            // This is failing on DB2 with SQLCODE: 42723. Need to investigate
+            s.execute("CREATE PROCEDURE GETALLCOMPANIES() PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCompanies'");
+            s.execute("CREATE PROCEDURE DELETECUSTOMER(theId int) PARAMETER STYLE JAVA LANGUAGE JAVA MODIFIES SQL DATA EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.deleteCustomer'");
+            s.execute("CREATE PROCEDURE GETNAMEDCOMPANY(theName VARCHAR(100)) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCompany'");
+            s.execute("CREATE PROCEDURE GETCUSTOMERANDORDERS(theID INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getCustomerAndOrders'");
+            s.execute("CREATE PROCEDURE GETNAMEDCUSTOMERS(theName VARCHAR(100), OUT theCount INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCustomers'");
+            // TODO - "GETNAMEDCUSTOMERS" is failing on DB2 with SQLCODE: 42723. Need to investigate
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

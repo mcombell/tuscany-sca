@@ -16,13 +16,10 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-/*
- * Generated IDs 
- * 
- * 
- */
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.Parameter;
+import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
@@ -110,7 +107,7 @@ public class StoredProcs extends DasTest {
 	 * customers with that last name. The number of read customers is returned
 	 * in the out parameter
 	 */
-/*	public void testGetNamedCustomers() throws Exception {
+	public void testGetNamedCustomers() throws Exception {
 
 		Command read = Command.FACTORY.createCommand("{call GETNAMEDCUSTOMERS(?,?)}");
 		read.setConnection(getConnection());
@@ -124,7 +121,7 @@ public class StoredProcs extends DasTest {
 		assertEquals(customersRead.intValue(), root.getList("CUSTOMER").size());
 
 	}
-	*/
+	
 	//TODO - Resolve issue with programmatic creation of GETNAMEDCUSTOMERS on DB2 and
 	//re-enable this test
 	
@@ -132,7 +129,6 @@ public class StoredProcs extends DasTest {
 	// Simplest possible SP write
 	public void testDelete() throws Exception {
 		
-//		JDBCDASCommand delete = JDBCDASCommand.FACTORY.createSPWriteCommand("{call DELETECUSTOMER(?)}");	
 		Command delete = Command.FACTORY.createCommand("{call DELETECUSTOMER(?)}");	
 		delete.setConnection(getConnection());
 		delete.setParameterValue(1, new Integer(1));
