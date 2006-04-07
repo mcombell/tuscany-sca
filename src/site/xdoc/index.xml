@@ -30,7 +30,8 @@
 architecture. It allows new solutions to be constructed by combining new or existing services within an 
 easy to configure service oriented run time with little or no programming.  It does this by providing  
 implementations for the Service Component Architecture (SCA) and Service Data Object (SDO) 
-specifications and by defining Data Access Services built on SDO.  
+and providing Data Access Service that supports SDO. Tuscany integrates with well 
+established Web Services and server technologies such as Apache Axis2, Apache Tomcat and Geronimo. 
 Specifications for SDO and SCA can be found on the <a href="documentation.html">Documentation page</a>
 			</p>
                         <p>
@@ -62,11 +63,9 @@ The Assembly of sets of components to build composite business applications that
 The Tuscany project provides runtime implementation of SCA in both Java and C++.
                         </p>
                         <p>
-  SDO provides Tuscany with a consistent mechanism for describing and manipulating data regardless of the 
-  source data resource, the target data resource or, indeed, the environment in which the data is to be 
-  processed . Along side this SDO also maintains a change history for data as well as ensuring referential 
-  integrity based on a defined schema. These features allow developers to focus on data processing tasks 
-  rather that the specific nature of data retrieval mechanisms as it arrives at and is dispatch from a service. 
+  SDO enables developers to focus on data processing rather than the specific nature of data retrieval mechanisms as data arrives at and is dispatch from a service. 
+  SDO provides a consistent mechanism for describing and manipulating data regardless of data resource target or source types and the environment in which the data is to be processed. 
+  It maintains a change history for data as well as ensuring referential integrity based on a defined schema. 
   To further understand the benefits of SDO please refer to the "Next Generation Data Programming: Service 
   Data Objects"on the <a href="documentation.html">Documentation page</a>. 
   Tuscany implements SDO in Java and C++. A PHP implementation of SDO is also available under <script type="text/javascript">linkNewWindow('http://pecl.php.net/package/sdo','PECL' );</script>.
@@ -76,7 +75,7 @@ RDB DAS provides a generic data access service that provides transformation capa
 To further explore the benefits of DAS please refer to white paper "DAS White Paper: The Data Access Service"  on the <a href="documentation.html">Documentation page</a>.  
                         </p>
 <p>
-You can get a feel for what it's like to create simple applications using Tuscany by trying out the Sample Programs that are supplied with the Tuscany project.
+You can get a feel for what it's like to create simple applications using Tuscany by trying out the sample programs that are supplied with the Tuscany project.
 For Java look at the <a href="installjava.html" >Installation instructions for Java Projects</a> page and then follow the Samples README.
 For C++ go to the <a href="installcpp.html" >Installation Instructions for C++ Projects</a> page.
                         </p>
@@ -94,7 +93,7 @@ The SDO 2.01 specifications - for Java and for C++
 </li>
 </ul>
                         </p>
-                        <p>     Tuscany is very interested in getting your comments or any feedback you may have.  Please feel free
+                        <p>     <B> Tuscany is very interested in getting your comments or any feedback that you may have. </B>  Please feel free
                                 to post these on the mailing lists.  Mailing list information is available in the <a href="mail-lists.html">Project Mailing Lists</a> section.
                                 We look forward to your involvement in Tuscany.  
 			</p>
@@ -123,16 +122,20 @@ The SDO 2.01 specifications - for Java and for C++
 				With this combination you can write service components that provide Web services or that provide 
 				business services supporting a Web UI based on Servlets and JSPs.
 			</p>
+		</section>
+		 
+		<section name="History">
 			<p>
-				(Jan 10 2006) The current code in the Tuscany
-				project is an initial implementation, which is still
-				very much evolving. We're looking to add a lot of
-				additional function over the coming weeks and months,
-				such as support for additional implementation types and
+				(March 6 2006) The codebase has reached a first stable Java milestone at SVN revision 383106 and a first
+				a first C++ milestone at SVN revision 383564.
+			</p>
+			<p>
+
+				(Jan 10 2006)  Tuscany project initial implementation published with intention to add a lot of additional 
+                        function over the coming weeks and months, such as support for additional implementation types and
 				for additional bindings. We're looking for people to
-				help us add these capabilities - so please take some
-				time to look over the project and join us in this
-				exciting developement.
+				help us add these capabilities 
+
 			</p>
 		</section>
 	</body>
