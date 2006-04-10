@@ -82,9 +82,9 @@ public class ResultSetTypeMap {
 
 		case Types.REAL:
 			if (isNullable)
-				return helper.getType("commonj.sdo", "Real");
+				return helper.getType("commonj.sdo", "Float");
 			else
-				return helper.getType("commonj.sdo", "real");
+				return helper.getType("commonj.sdo", "float");
 
 		case Types.FLOAT:
 		case Types.DOUBLE:
