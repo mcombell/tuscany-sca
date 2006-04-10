@@ -135,7 +135,7 @@ public class OneToOneRelationshipTests extends DasTest {
         DataObject employee = root.createDataObject("EMPLOYEE");
         employee.setString ("NAME", "Joe Hotshot");
         
- /*       //Assigne a EOTM
+      //Assigne a EOTM
         //Strangely this statement results in "Could not find relationships" error
         //although "company.setDataObject("company->employee_opposite", null);" dos not   
         company.setDataObject("company->employee_opposite", employee);     
@@ -150,6 +150,6 @@ public class OneToOneRelationshipTests extends DasTest {
         employee = root.getDataObject("COMPANY[1]/company->employee_opposite");
 
         assertEquals("Joe Hotshot", employee.getString("NAME"));
-        */
+        
     }
 }

@@ -18,6 +18,7 @@ package org.apache.tuscany.das.rdb.generator.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -123,17 +124,17 @@ public class InsertGenerator {
 				if (obj.isSet(p))
 					fields.add(p);
 			} else {
-				if (!p.isMany() && obj.isSet(p)) {
-					Relationship relationship = config.getRelationshipByName(p
-							.getOpposite().getName());
-
-					RelationshipWrapper r = new RelationshipWrapper(
+				if ( obj.isSet(p) ) {
+					Relationship relationship = config.getRelationshipByReference(p);
+					if ( p.getOpposite().isMany() || (hasState(config, relationship, obj))) {							
+						RelationshipWrapper r = new RelationshipWrapper(
 							relationship);
-					Iterator keys = r.getForeignKeys().iterator();
-					while (keys.hasNext()) {
-						String key = (String) keys.next();
-						Property keyProp = obj.getType().getProperty(key);
-						fields.add(keyProp);
+						Iterator keys = r.getForeignKeys().iterator();
+						while (keys.hasNext()) {
+							String key = (String) keys.next();
+							Property keyProp = obj.getType().getProperty(key);
+							fields.add(keyProp);
+						}
 					}
 
 				}
@@ -159,6 +160,20 @@ public class InsertGenerator {
 		}
 
 		return parameters;
+	}
+
+	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {							
+			
+			if ( !rel.isMany()) {
+				Table t = config.getTableByPropertyName(changedObject.getType().getName());
+				TableWrapper tw = new TableWrapper(t);
+				RelationshipWrapper rw = new RelationshipWrapper(rel);
+				if (( rel.getForeignKeyTable().equals(t.getName())) &&
+						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
+					return true;			
+			}
+				
+		return false;
 	}
 
 }
