@@ -226,7 +226,7 @@ svn commit -m"change comment"
 		</section>
 
 
-		<section name="Using Eclipse">
+		<section name="Using Eclipse (optional)">
 			<p>
 				<span style="font-size: 10pt;">
 					Link to Eclipse download :
@@ -275,7 +275,7 @@ svn commit -m"change comment"
 			</p>
 		</section>
 		<section name="Using Eclipse style templates">
-                 Tuscany has a preferred Java coding style. Please use the 
+                 If you are using Eclpse, Tuscany has a preferred Java coding style. Please use the 
                    <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-eclipse-codestyle.xml'>tuscany-eclipse-codestyle.xml</a> in Eclipse.
                 <br/>Download this file. <i>You may need to right click and save.</i> 
                 Then in Eclipse:<br/>
@@ -284,7 +284,7 @@ svn commit -m"change comment"
                 <i>(Specify path and file to the tuscany-eclipse-codestyle.xml just downloaded. </i>
                 </pre>
 		</section>
-		<section name="Using Subclipse">
+		<section name="Using Subclipse (optional)">
 			<p>
 				Install the Subversion Eclipse Plugin as described here:
 				<a href="http://subclipse.tigris.org/">http://subclipse.tigris.org/
@@ -330,7 +330,7 @@ svn commit -m"change comment"
 			</p>
 		</section>
 		<section name="Using IDEA style templates">
-                 Tuscany has a preferred Java coding style. Please use the 
+                 If you are using IDEA IDE, Tuscany has a preferred Java coding style. Please use the 
                    <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-idea-codestyle.xml'>tuscany-idea-codestyle.xml</a> in IDEA 
                 <br/>Download this file. <i>You may need to right click and save.</i> 
                         <pre>
@@ -378,8 +378,15 @@ svn commit -m"change comment"
 				compile, unit test and package each project. This will typically output a
 				jar file that is installed locally so that other projects can depend on it.
 			</p>
+                        <p>
+                            To build the Java project once you have Maven and Java SDK set up in your path, in the SVN checked out java directory:<br/>
+                           <code>
+                              mvn
+                            </code>
+                            
+			</p>
 		</section>
-		<section name="Using Tomcat 5.5.12">
+		<section name="Using Tomcat">
 			<p>
 				The Tuscany runtime can be used as a server in conjunction with Tomcat, which you can find
 				here: <a href="http://tomcat.apache.org/">
@@ -387,10 +394,22 @@ svn commit -m"change comment"
 				</a>
 			</p>
 			<p>
-				Download "The Core" Tomcat 5.5.15 from:
-				<a href="http://tomcat.apache.org/download-55.cgi#5.5.12">
-					http://tomcat.apache.org/download-55.cgi#5.5.12
+				Download "The Core" Tomcat 5.5.<i>xx</i> from:
+				<a href="http://tomcat.apache.org/download-55.cgi">
+					http://tomcat.apache.org/download-55.cgi
 				</a>
+			</p>
+                        <p>
+                         For setting up Tomcat to run Tuscany see the sample's readme 
+                          <script type="text/javascript">linkNewWindow('samples/java/readme.htm#Tomcat_Setup','Tomcat Setup');</script> in the sample's
+                          readme.
+
+                        </p>
+		</section>
+		<section name="Samples">
+			<p>
+				Tuscany also provides you some sample code to help you get started with the technology. See the readme for the 
+                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>
 			</p>
 		</section>
 
