@@ -223,19 +223,4 @@ public class CommandGroupImpl implements CommandGroup {
 
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#finalize()
-     * We should clean up on finalize in case the client neglected to do so
-     */
-    @Override
-    protected void finalize() throws Throwable {
-
-        try {
-            releaseResources();
-        } finally {
-            super.finalize();
-        }
-
-    }
-
 }
