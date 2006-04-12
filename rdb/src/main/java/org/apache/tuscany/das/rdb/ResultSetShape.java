@@ -19,7 +19,6 @@ package org.apache.tuscany.das.rdb;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import org.apache.tuscany.das.rdb.graphbuilder.impl.DefaultConverter;
 import org.apache.tuscany.das.rdb.graphbuilder.schema.ResultSetTypeMap;
 
 import commonj.sdo.Type;
@@ -32,33 +31,24 @@ import commonj.sdo.Type;
  * <p>
  * There may also be a performance boost when using this interface.
  * 
- * TODO - This is very preliminary.  We need to go over this again and consider making is as close as possible to
- * to the infromation returned from ResultSetMetadata.  For example, we may want to use JDBC types
- * here rather than SDODataTypes.  Also, ResultSetMetadata doe not provide converters, so, maybe this
- * interface should also not.
- * 
  * 
  */
 public class ResultSetShape {
 
 	private final String[] columns;
 	private final String[] tables;
-	private final Type[] types;
-	//TODO - Are converters really needed here?
-	private Converter[] converters;
+	private final Type[] types;	
 	
 	public ResultSetShape(String[] t, String[] c, Type[] dataTypes) {
 		this.columns = c;
 		this.tables = t;
-		this.types = dataTypes;
-		this.converters = new DefaultConverter[c.length];
+		this.types = dataTypes;	
 	}
 
 	public ResultSetShape(ResultSetMetaData metadata) throws SQLException {
 		columns = new String[metadata.getColumnCount()];
 		tables = new String[metadata.getColumnCount()];
-		types = new Type[metadata.getColumnCount()];
-		converters = new DefaultConverter[metadata.getColumnCount()];
+		types = new Type[metadata.getColumnCount()];	
 		
 		ResultSetTypeMap typeMap = ResultSetTypeMap.instance;
 		for (int i = 1; i <= metadata.getColumnCount(); i++) {
@@ -84,20 +74,6 @@ public class ResultSetShape {
 		return types[i-1];
 	}
 	
-	public void setConverter(int i, Converter converter) {
-		this.converters[i] = converter;
-	}
-	
-	public Converter getConverter(int i) {
-		return this.converters[i-1];
-	}
-
-	public void setConverterFactory(Converter converter) {
-		for ( int i=0; i < getColumnCount(); i++ ) {
-			this.converters[i] = converter;
-		}
-		
-	}
 	
 	public String toString() {
 		StringBuffer result = new StringBuffer();
@@ -110,9 +86,7 @@ public class ResultSetShape {
 			if ( types[i] == null ) 
 				result.append("null");
 			else 
-				result.append(types[i].getName());
-			result.append('\t');
-			result.append(converters[i]);
+				result.append(types[i].getName());			
 			result.append('\n');
 		}
 		

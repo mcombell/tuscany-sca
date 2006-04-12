@@ -21,7 +21,7 @@ import commonj.sdo.DataObject;
 
 public class CreateOperation extends ChangeOperation {
 
-	public CreateOperation(WriteCommandImpl command, DataObject changedObject, String ID) {
+	public CreateOperation(InsertCommandImpl command, DataObject changedObject, String ID) {
 		super(command, changedObject);
 		this.propagatedID = ID;
 	}

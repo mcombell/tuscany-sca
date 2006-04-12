@@ -29,7 +29,7 @@ public class DeleteOperation extends ChangeOperation {
 	 * Objects deleted from the graph have lost their "settings" and must
 	 * be restored
 	 */
-	public DeleteOperation(WriteCommandImpl command, DataObject changedObject) {
+	public DeleteOperation(DeleteCommandImpl command, DataObject changedObject) {
 		super(command);
 		this.dObject = new DatabaseObject(command.getMappingModel(),DataObjectUtil.getRestoredCopy(changedObject));
 

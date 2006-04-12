@@ -22,7 +22,7 @@ import commonj.sdo.DataObject;
 
 public class UpdateOperation extends ChangeOperation {
 
-	public UpdateOperation(WriteCommandImpl command, DataObject changedObject, String id) {
+	public UpdateOperation(UpdateCommandImpl command, DataObject changedObject, String id) {
 		super(command, changedObject);
 		this.propagatedID = id;
 	}

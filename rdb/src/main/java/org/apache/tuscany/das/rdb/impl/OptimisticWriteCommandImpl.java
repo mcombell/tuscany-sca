@@ -18,7 +18,7 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.SQLException;
 
-public class OptimisticWriteCommandImpl extends WriteCommandImpl {
+public class OptimisticWriteCommandImpl extends UpdateCommandImpl {
 
 	public OptimisticWriteCommandImpl(String sqlString) {
 		super(sqlString);

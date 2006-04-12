@@ -31,7 +31,6 @@ import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.OptimisticWriteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
-import org.apache.tuscany.das.rdb.impl.WriteCommandImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.ChangeSummary;
@@ -49,7 +48,7 @@ public class UpdateGenerator {
 		super();
 	}
 
-	public WriteCommandImpl getUpdateCommand(MappingWrapper mapping, DataObject changedObject, Table table) {
+	public UpdateCommandImpl getUpdateCommand(MappingWrapper mapping, DataObject changedObject, Table table) {
 		ArrayList parameters = new ArrayList();
 		Type type = changedObject.getType();
 		TableWrapper t = new TableWrapper(table);
@@ -101,7 +100,7 @@ public class UpdateGenerator {
 		}
 
 		
-		WriteCommandImpl updateCommand;
+		UpdateCommandImpl updateCommand;
 		if ( t.getCollisionColumn() != null )
 			updateCommand = new OptimisticWriteCommandImpl(statement.toString());
 		else

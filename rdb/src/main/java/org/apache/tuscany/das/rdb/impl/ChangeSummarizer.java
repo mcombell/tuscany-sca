@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Column;
-import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -186,16 +185,19 @@ public class ChangeSummarizer {
 	public void addCreateCommand(Type type, Command cmd) {
 		ChangeFactory cf = getRegistry().getFactory(type);
 		cf.setCreateCommand((InsertCommandImpl) cmd);
+		((CommandImpl) cmd).setConnection(connection);
 	}
 
 	public void addUpdateCommand(Type type, Command cmd) {
 		ChangeFactory cf = getRegistry().getFactory(type);
-		cf.setUpdateCommand((WriteCommandImpl) cmd);
+		cf.setUpdateCommand((UpdateCommandImpl) cmd);
+		((CommandImpl) cmd).setConnection(connection);
 	}
 
 	public void addDeleteCommand(Type type, Command cmd) {
 		ChangeFactory cf = getRegistry().getFactory(type);
-		cf.setDeleteCommand((WriteCommandImpl) cmd);
+		cf.setDeleteCommand((DeleteCommandImpl) cmd);
+		 ((CommandImpl) cmd).setConnection(connection);
 
 	}
 
@@ -210,8 +212,12 @@ public class ChangeSummarizer {
 		this.connection = connection;
 	}
 
-	public void setMapping(Config map) {
-		this.mapping = new MappingWrapper(map);
+	public void setMapping(MappingWrapper map) {
+		this.mapping = map;
+		
+		if ( mapping.getConfig() == null ) 
+			return;
+	
 		Iterator i = mapping.getConfig().getTable().iterator();
 		while (i.hasNext()) {
 			Table t = (Table) i.next();
@@ -252,6 +258,10 @@ public class ChangeSummarizer {
 
 	public void addConverter(String name, String converterName) {
 		mapping.addConverter(name, converterName);
+	}
+
+	public ConnectionImpl getConnection() {
+		return this.connection;	
 	}
 
     

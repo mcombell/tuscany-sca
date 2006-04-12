@@ -23,11 +23,12 @@ import java.sql.DriverManager;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
-import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
@@ -37,9 +38,7 @@ import commonj.sdo.helper.XMLHelper;
 /**
  * 
  */
-public class ApplyChangesCommandImpl implements ApplyChangesCommand {
-
-    private ConnectionImpl dasConnection;
+public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyChangesCommand {
 
     private static final boolean debug = false;
 
@@ -50,32 +49,26 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
     }
 
     // IOException is recoverable, needs to be thrown
-    public ApplyChangesCommandImpl(InputStream mappingModel) throws IOException {
-        setMapping(mappingModel);
+    public ApplyChangesCommandImpl(InputStream stream) throws IOException {
+    	SDOUtil.registerStaticTypes(ConfigFactory.class);
+    	XMLHelper helper = XMLHelper.INSTANCE;   
+    	XMLDocument doc = helper.load(stream);
+    	Config mapping = (Config) doc.getRootObject();
+
+    	this.configWrapper = new MappingWrapper(mapping);
+     
+        if (mapping.getConnectionProperties() != null)
+            setConnection(mapping.getConnectionProperties());
+       
     }
 
     public ApplyChangesCommandImpl(Config mappingModel){
-        summarizer.setMapping(mappingModel);
-//TODO - Really need to refactor the Command framework.  ReadCommand and ApplychangesCommand should
-// be using the same approach to set connection and should probably share the same initialization.
-//        if (mappingModel.getConnectionProperties() != null)
-//            setConnection(mappingModel.getConnectionProperties());
+    	this.configWrapper = new MappingWrapper(mappingModel);      
     }
 
-    public void setConnection(Connection connection) {
-        setConnection(new ConnectionImpl(connection));
-    }
-
-    public void setConnection(Connection connection, boolean manageTransaction) {
-        ConnectionImpl c = new ConnectionImpl(connection);
-        c.setManageTransactions(manageTransaction);
-        setConnection(c);
-    }
-
-    public void setConnection(ConnectionImpl connection) {
-        dasConnection = connection;
-        summarizer.setConnection(connection);
-    }
+	public void setConnection(ConnectionImpl connection) {
+		summarizer.setConnection(connection);
+	}
 
     public void setConnection(ConnectionProperties c) {
         try {
@@ -93,30 +86,27 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
     }
 
     public void addCreateCommand(Type type, Command cmd) {
-        summarizer.addCreateCommand(type, cmd);
-        ((CommandImpl) cmd).setConnection(dasConnection);
+        summarizer.addCreateCommand(type, cmd);        
     }
 
-    public void addUpdateCommand(Type type, Command cmd) {
-        // DebugUtil.debugln(getClass(), debug, "Adding update command for type
-        // " + type.getName());
-        summarizer.addUpdateCommand(type, cmd);
-        ((CommandImpl) cmd).setConnection(dasConnection);
+    public void addUpdateCommand(Type type, Command cmd) {      
+        summarizer.addUpdateCommand(type, cmd);        
     }
 
     public void addDeleteCommand(Type type, Command cmd) {
-        summarizer.addDeleteCommand(type, cmd);
-        ((CommandImpl) cmd).setConnection(dasConnection);
+        summarizer.addDeleteCommand(type, cmd);       
     }
 
     public void execute(DataObject root) {
         DebugUtil.debugln(getClass(), debug, "Executing ApplyChangesCmd");
 
-        if (dasConnection == null)
+        if (summarizer.getConnection() == null)
             throw new RuntimeException("A connection must be provided");
 
         if (!root.equals(root.getDataGraph().getRootObject()))
             throw new RuntimeException("'root' argument must be the root of the datagraph");
+        
+        summarizer.setMapping(configWrapper);
         
         Changes changes = summarizer.loadChanges(root);
 
@@ -126,51 +116,10 @@ public class ApplyChangesCommandImpl implements ApplyChangesCommand {
             success = true;
         } finally {
             if (success)
-                dasConnection.cleanUp();
+                summarizer.getConnection().cleanUp();
             else
-                dasConnection.errorCleanUp();
+                summarizer.getConnection().errorCleanUp();
         }
-    }
-
-    public void setMapping(InputStream stream) throws IOException {
-    	XMLHelper helper = XMLHelper.INSTANCE;
-   
-        ConfigPackageImpl impl = ConfigPackageImpl.eINSTANCE;
-    	XMLDocument doc = helper.load(stream);
-    	Config mapping = (Config) doc.getRootObject();
-
-        summarizer.setMapping(mapping);
-        if (mapping.getConnectionProperties() != null)
-            setConnection(mapping.getConnectionProperties());
-
-    }
-
-    public void addRelationship(String parent, String child) {
-        summarizer.addRelationship(parent, child);
-    }
-
-    public void addPrimaryKey(String columnName) {
-        summarizer.addPrimaryKey(columnName);
-    }
-
-    public void addCollisionColumn(String columnName) {
-        summarizer.addCollisionColumn(columnName);
-    }
-
-    public void addRelationship(Key parentKey, Key childKey) {
-        throw new RuntimeException("Not Implemented");
-    }
-
-    public void addPrimaryKey(Key key) {
-        summarizer.addPrimarykey(key);
-    }
-
-    public void addGeneratedPrimaryKey(String columnName) {
-        summarizer.addGeneratedPrimaryKey(columnName);
-    }
-
-    public void addConverter(String name, String converterName) {
-        summarizer.addConverter(name, converterName);
     }
 
 }

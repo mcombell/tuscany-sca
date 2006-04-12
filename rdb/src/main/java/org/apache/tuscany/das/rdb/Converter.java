@@ -17,7 +17,7 @@
 package org.apache.tuscany.das.rdb;
 
 /**
- * A lightweight Tabele-column <--> DataObject-property converter framework.
+ * A lightweight Table-column <--> DataObject-property converter framework.
  * Converters allow a user to insert a transformation between a column value and
  * is destination DataObject property value. For example, by default, a VARCHAR
  * column will be represented as a String in its corresponding DataObject

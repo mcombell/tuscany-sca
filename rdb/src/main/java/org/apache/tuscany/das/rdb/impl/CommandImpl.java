@@ -19,26 +19,21 @@ package org.apache.tuscany.das.rdb.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 import commonj.sdo.helper.XSDHelper;
 
-public abstract class CommandImpl implements Command {
+public abstract class CommandImpl extends BaseCommandImpl implements Command {
 
 	protected Statement statement;
 
 	protected Parameters parameters = new Parameters();
-
-	protected MappingWrapper mappingModel = new MappingWrapper();
 
 	protected static final boolean debug = false;
 
@@ -128,16 +123,6 @@ public abstract class CommandImpl implements Command {
 		return parameters.parameterWithIndex(index).getValue();
 	}
 
-	public void setConnection(Connection connection) {
-		setConnection(new ConnectionImpl(connection));
-	}
-
-	public void setConnection(Connection connection, boolean manageTransaction) {
-		ConnectionImpl c = new ConnectionImpl(connection);
-		c.setManageTransactions(manageTransaction);
-		setConnection(c);
-	}
-
 	public void setConnection(ConnectionImpl connection) {
 		statement.setConnection(connection);
 	}
@@ -146,29 +131,12 @@ public abstract class CommandImpl implements Command {
 		return statement.getConnection();
 	}
 
-	public void addRelationship(String parentName, String childName) {
-		mappingModel.addRelationship(parentName, childName);
-	}
 
-	public void addRelationship(Key parentKey, Key childKey) {
-		mappingModel.addRelationship(parentKey, childKey);
-	}
-
-	public void addPrimaryKey(String pk) {
-		mappingModel.addPrimaryKey(pk);
-	}
-
-	public void addPrimaryKey(Key pk) {
-		mappingModel.addPrimaryKey(pk);
-	}
 
 	public void setResultSetShape(ResultSetShape shape) {
 		this.resultSetShape = shape;
 	}
 
-	public void addConverter(String name, String converter) {
-		mappingModel.addConverter(name, converter);
-	}
 
 	public void close() {
 		statement.close();

@@ -56,7 +56,7 @@ public abstract class WriteCommandImpl extends CommandImpl {
 	}
 
 	public Config getMappingModel() {
-		return this.mappingModel.getConfig();
+		return configWrapper.getConfig();
 	}
 
 	

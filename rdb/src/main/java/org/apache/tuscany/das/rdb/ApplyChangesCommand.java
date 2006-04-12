@@ -80,11 +80,6 @@ public interface ApplyChangesCommand {
 	public void execute(DataObject root);
 
 	/**
-	 * TODO - Need to remove this. COnfig now set via factory method
-	 */
-	public void setMapping(InputStream mappingModel) throws IOException;
-
-	/**
 	 * Provides the java.sql.Connection to be used for this executing this
 	 * command.
 	 * 

@@ -35,9 +35,9 @@ public class ChangeFactory {
 	
 	private InsertCommandImpl createCommand;
 
-	private WriteCommandImpl updateCommand;
+	private UpdateCommandImpl updateCommand;
 
-	private WriteCommandImpl deleteCommand;
+	private DeleteCommandImpl deleteCommand;
 
 	private static final boolean debug = false;
 
@@ -61,12 +61,12 @@ public class ChangeFactory {
 		createCommand = cmd;
 	}
 
-	public void setUpdateCommand(WriteCommandImpl cmd) {
+	public void setUpdateCommand(UpdateCommandImpl cmd) {
 		DebugUtil.debugln(getClass(), debug, "Setting Update Command to " + cmd);
 		updateCommand = cmd;
 	}
 
-	public void setDeleteCommand(WriteCommandImpl cmd) {
+	public void setDeleteCommand(DeleteCommandImpl cmd) {
 		deleteCommand = cmd;
 	}
 
@@ -115,12 +115,12 @@ public class ChangeFactory {
 				}
 			}
 			createCommand.setConnection(connection);
-			createCommand.mappingModel = mapping;
+			createCommand.configWrapper = mapping;
 		}
 		return createCommand;
 	}
 
-	private WriteCommandImpl getDeleteCommand(DataObject changedObject) {
+	private DeleteCommandImpl getDeleteCommand(DataObject changedObject) {
 		
 		if ( deleteCommand == null ) {
 			Table table = mapping.getTable(changedObject.getType().getName());
@@ -141,7 +141,7 @@ public class ChangeFactory {
 		return deleteCommand;
 	}
 
-	private WriteCommandImpl getUpdateCommand(DataObject changedObject) {
+	private UpdateCommandImpl getUpdateCommand(DataObject changedObject) {
 	
 		if ( updateCommand == null ) {
 			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
@@ -162,7 +162,7 @@ public class ChangeFactory {
 				
 			}
 			updateCommand.setConnection(connection);
-			updateCommand.mappingModel = mapping;
+			updateCommand.configWrapper = mapping;
 		}
 		DebugUtil.debugln(getClass(), debug, "Returning updateCommand: " + updateCommand);
 		return updateCommand;

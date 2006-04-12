@@ -41,6 +41,8 @@ public class InsertList {
 
     public void add(ChangeOperation op) {
         DebugUtil.debugln(getClass(), debug, "Adding insert operation ");
+        // If nothing has been added yet, or this is no ordering, simply 
+        // add the operation to the list
         if ((order.size() == 0) || (op.getTableName() == null)) {
             insertOperations.add(op);
         } else {
@@ -62,7 +64,7 @@ public class InsertList {
                 String name = (String) i.next();
                 DebugUtil.debugln(getClass(), debug,
                         "Adding operations for table " + name);
-                // TODO - KJW added null check ... Brent to verify.
+                // A null here means a table is in the config but hasn't been changed here
                 if (opsByTableName.get(name) != null)
                     insertOperations.addAll((Collection) opsByTableName
                             .get(name));

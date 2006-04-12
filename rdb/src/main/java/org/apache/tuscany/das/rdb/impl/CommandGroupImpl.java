@@ -43,11 +43,6 @@ import commonj.sdo.helper.XMLHelper;
  * ApplyChangesCommand. This factory is initialized with a configuration that
  * defines the commands it produces.
  * 
- * <p>
- * TODO - This is still underdevelopment and is likely to replace CommandFactory
- * as the preferred mechanism to set commands at runtime.
- * 
- * 
  */
 public class CommandGroupImpl implements CommandGroup {
 

@@ -34,12 +34,20 @@ public abstract class ChangeOperation {
 	private static final boolean debug = false;
 	
 	protected String propagatedID = null;
+	
+	private boolean isInsert = false;
 
-	public ChangeOperation(WriteCommandImpl command) {
+	public ChangeOperation(DeleteCommandImpl command) {
 		writeCommand = command;
 	}
 
-	public ChangeOperation(WriteCommandImpl command, DataObject changedObject) {
+	public ChangeOperation(InsertCommandImpl command, DataObject changedObject) {
+		writeCommand = command;
+		dObject = new DatabaseObject(command.getMappingModel(), changedObject);
+		this.isInsert = true;
+	}
+	
+	public ChangeOperation(UpdateCommandImpl command, DataObject changedObject) {
 		writeCommand = command;
 		dObject = new DatabaseObject(command.getMappingModel(), changedObject);
 	}
@@ -55,8 +63,8 @@ public abstract class ChangeOperation {
 		}
 
 		writeCommand.execute();
-        //TODO -                     Added this instanceof hack.  Brent to verify       
-		if (( propagatedID != null ) && (writeCommand instanceof InsertCommandImpl)){
+               
+		if ( isInsert && ( propagatedID != null )) { 
 			DebugUtil.debugln(getClass(), debug, "Propagating key " + propagatedID);
 			int id = writeCommand.getGeneratedKey();
 			dObject.setPropagatedID(propagatedID, id);

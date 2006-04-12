@@ -57,8 +57,7 @@ public interface CommandFactory {
 	 * Creates an {@linkApplyChangesCommand} instance with the provided configuration
 	 * @param mappingModel The provided configuration as a stream over an xml file
 	 * @return Returns an ApplyChangesCOmmand in stance
-	 * @throws IOException
-	 * TODO - Either remove this throws clause or add it to createCommand
+	 * @throws IOException	
 	 */
 	public ApplyChangesCommand createApplyChangesCommand(
 			InputStream mappingModel) throws IOException;

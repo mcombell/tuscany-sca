@@ -22,10 +22,6 @@ import commonj.sdo.helper.TypeHelper;
 /**
  * Defines SDO data types. This is used primalirly to type stored procedure OUT parameters.
  * 
- * TODO - This maybe be obviated by the move to SDO2.  We also need to settle the question
- * of whether config information is in terms of database or data object types
- * 
- * 
  */public class SDODataTypes {
 
      static TypeHelper helper = TypeHelper.INSTANCE;

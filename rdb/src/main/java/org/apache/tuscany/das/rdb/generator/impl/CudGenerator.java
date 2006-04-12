@@ -22,7 +22,7 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.impl.DeleteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.InsertCommandImpl;
-import org.apache.tuscany.das.rdb.impl.WriteCommandImpl;
+import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
 
 import commonj.sdo.DataObject;
 
@@ -51,7 +51,7 @@ public class CudGenerator {
 		return insertGenerator.getInsertCommand(mapping, changedObject, table);
 	}
 
-	public WriteCommandImpl getUpdateCommand(MappingWrapper mapping,
+	public UpdateCommandImpl getUpdateCommand(MappingWrapper mapping,
 			DataObject changedObject, Table table) {
 		return updateGenerator.getUpdateCommand(mapping, changedObject, table);
 	}

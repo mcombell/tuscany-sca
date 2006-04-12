@@ -30,8 +30,7 @@ public class Changes {
 	private UpdateList updates = new UpdateList();
 	private DeleteList deletes = new DeleteList();
 	
-//	private static final boolean debug = false;
-	
+
 	public void addInsert(ChangeOperation c) {
 		inserts.add(c);
 	}

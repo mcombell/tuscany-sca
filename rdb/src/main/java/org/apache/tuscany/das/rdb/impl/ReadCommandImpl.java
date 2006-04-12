@@ -102,7 +102,7 @@ public class ReadCommandImpl extends CommandImpl {
 
 
 		GraphBuilderMetadata gbmd = new GraphBuilderMetadata(results,
-				getSchema(), mappingModel.getConfig(), resultSetShape);
+				getSchema(), configWrapper.getConfig(), resultSetShape);
 
 		DataGraph g = createEDataGraph(gbmd.getSchema());
 		ChangeSummary summary = g.getChangeSummary();
@@ -154,7 +154,7 @@ public class ReadCommandImpl extends CommandImpl {
 	}
 
 	private void setMappingModel(Config mapping) {
-		mappingModel = new MappingWrapper(mapping);
+		configWrapper = new MappingWrapper(mapping);
 	}
 
 	public void setMappingModel(InputStream stream) {
@@ -166,14 +166,14 @@ public class ReadCommandImpl extends CommandImpl {
 
 		 try {
 			 Config config = (Config) helper.load(stream).getRootObject();     
-			 mappingModel = new MappingWrapper(config);
+			 configWrapper = new MappingWrapper(config);
 	     } catch (IOException e) {
 	    	 throw new RuntimeException(e);
 	     }
         
 	
-	     if (mappingModel.getConfig().getConnectionProperties() != null)
-			setConnection(mappingModel.getConfig().getConnectionProperties());
+	     if (configWrapper.getConfig().getConnectionProperties() != null)
+			setConnection(configWrapper.getConfig().getConnectionProperties());
 
 	}
 
