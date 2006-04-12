@@ -92,9 +92,7 @@ public class CompoundKeyTests extends DasTest {
 
         Key pk = new Key("ANORDER.ID");
         read.addPrimaryKey(pk);
-
-        
-        //TODO - When this is omitted, we fail with NPE.  Need a better error message
+          
         Key detailsPk = new Key(new String[] { "ORDERDETAILS.ORDERID", "ORDERDETAILS.PRODUCTID" });
         read.addPrimaryKey(detailsPk);
 

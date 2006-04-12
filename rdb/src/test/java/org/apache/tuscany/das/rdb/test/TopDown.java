@@ -73,67 +73,13 @@ public class TopDown extends DasTest {
 		AnOrder order = (AnOrder) customer.getOrders().get(0);
 		order.setProduct("Kitchen Sink 001");
 
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());
-		apply.setMapping(getConfig("1xM_mapping_no_cud.xml"));
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("1xM_mapping_no_cud.xml"));
+		apply.setConnection(getConnection());		
 
 		// Flush changes
 		apply.execute((DataObject) root);
 
-		/*
-		 * JDBCDAS das = JDBCDAS.FACTORY.create(); // Build the select command
-		 * CrudCommand select = CrudCommand.FACTORY.create( "select CUSTOMER.ID,
-		 * CUSTOMER.LASTNAME, CUSTOMER.ADDRESS, ANORDER.ID, ANORDER.PRODUCT,
-		 * ANORDER.QUANTITY, ANORDER.CUSTOMER_ID from CUSTOMER left outer join
-		 * ANORDER on ANORDER.CUSTOMER_ID=CUSTOMER.ID where CUSTOMER.ID = :ID" ,
-		 * getMappingModel_1xM_uni_as_stream() , getGraphType()); //
-		 * Parameterize the command select.setConnection(getConnection());
-		 * select.setParameter("ID", new Integer(1)); // Get the graph
-		 * DataObject root = das.getRootDataObject(select); // Modify a customer
-		 * DataObject customer = (DataObject) root.getList("CUSTOMER").get(0);
-		 * customer.set("LASTNAME", "Pavick"); // Modify the first order
-		 * DataObject order = (DataObject)customer.getList("orders").get(0);
-		 * order.setString("PRODUCT", "Kitchen Sink 001"); // Build command for
-		 * flush ApplyChangesCommand command =
-		 * ApplyChangesCommand.FACTORY.create(getMappingModel_1xM_uni_as_stream());
-		 * command.setConnection(getConnection()); // Flush changes
-		 * das.applyChanges(root, command);
-		 */
 	}
 
-	/*
-	 * //User provides the model and uses generated classes public void
-	 * testUserProvidedModelStatic() throws SQLException, IOException {
-	 * 
-	 * JDBCDAS das = JDBCDAS.FACTORY.create();
-	 * 
-	 * //Build the select command CrudCommand select =
-	 * CrudCommand.FACTORY.create( "select CUSTOMER.ID, CUSTOMER.LASTNAME,
-	 * CUSTOMER.ADDRESS, ANORDER.ID, ANORDER.PRODUCT, ANORDER.QUANTITY,
-	 * ANORDER.CUSTOMER_ID from CUSTOMER left outer join ANORDER on
-	 * ANORDER.CUSTOMER_ID=CUSTOMER.ID where CUSTOMER.ID = :ID" ,
-	 * getMappingModel_1xM_uni_as_stream() , getGraphType());
-	 * 
-	 * //Parameterize the command select.setConnection(getConnection());
-	 * select.setParameter("ID", new Integer(1));
-	 * 
-	 * //Get the graph DataObject root = das.getRootDataObject(getGraphType(),
-	 * select);
-	 * 
-	 * //Modify a customer DataGraphRoot dgRoot = (DataGraphRoot) root; // TODO
-	 * Need to cast to Static customer and use "setLastName()"
-	 * 
-	 * Customer customer = (Customer) dgRoot.getCustomers().get(0);
-	 * customer.setLastName("Pavick");
-	 * 
-	 * //Modify the first order AnOrder order = customer.getOrders();
-	 * order.setProduct("Kitchen Sink 001");
-	 * 
-	 * //Build command for flush ApplyChangesCommand command =
-	 * ApplyChangesCommand.FACTORY.create(getMappingModel_1xM_uni_as_stream());
-	 * command.setConnection(getConnection());
-	 * 
-	 * //Flush changes das.applyChanges(root, command); }
-	 */
 
 }

@@ -114,9 +114,8 @@ public class CUDGeneration extends DasTest {
 		DataObject order = (DataObject) customer.get("orders[1]");
 		order.setString("PRODUCT", "Kitchen Sink 001");
 
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());
-		apply.setMapping(getConfig("1xM_mapping_no_cud.xml"));
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("1xM_mapping_no_cud.xml"));
+		apply.setConnection(getConnection());		
 
 		// Flush changes
 		apply.execute(root);
