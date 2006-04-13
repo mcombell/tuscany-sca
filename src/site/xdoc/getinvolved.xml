@@ -24,57 +24,177 @@
 	<body>
 		<section name="Getting Involved with Apache Tuscany">
 			<p>
-				Here is a short guide on how to get involved with Apache Tuscany.
+				You can get involved in Apache Tuscany in many different ways. The following are a few suggestions:
+			<ul>
+ 			 	<li>
+			Contribute new ideas/requirements that are based on real business experiences to the mailing list to improve Tuscany as a solution for SOA.  
+				</li>
+				<li>
+			Answer questions posted to the <a href="mail-lists.html">mailing lists</a>.     
+				</li>
+				<li>
+				Contribute to the <a href="faq.html">FAQ</a> or to 
+                    <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany','Wiki');</script> 
+				</li>
+				<li>
+			Contribute to user or developer <a href="documentation.html">Documentations</a>.
+				</li>
+				<li>
+			Investigate 
+                    <script type="text/javascript">linkNewWindow('http://issues.apache.org/jira/secure/BrowseProject.jspa?id=12310210','issues');</script> 
+			that have been reported and provide patches. 
+				</li>
+				<li>
+			Help with development. Check for roadmap on the Wiki. 
+				</li>
+				<li>	
+			Help with 
+                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script> 
+            to demonstrate Tuscany's value and help new users understand Tuscany
+				</li>
+			</ul>
 			</p>
+
+                  <p>
+			Before you start, join <a href="mail-lists.html">Tuscany mailing list</a>. At the moment we only have one mailing list that handles both developer and user questions. 
+                  <ul>
+			<li>
+			Subscription: Send a blank email to    tuscany-dev-subscribe@ws.apache.org 
+			</li>
+                        <li>
+			Posting questions to the list: Send your question to tuscany-dev@ws.apache.org
+			</li> 
+		  </ul>
+       		</p>
+
+		<p> 
+		You should also review <script type="text/javascript">linkNewWindow('http://www.apache.org/foundation/how-it-works.html','How Apache works');</script>.  
+		</p>
+
+                <p>
+			Tuscany holds weekly IRC chats.  IRC chats are held weekly on <b>Mondays 15:30 GMT for an hour</b>. The IRC server is <code><b>irc.freenode.net</b></code> and the channel is <code><b>#tuscany</b></code>
+                    <script type="text/javascript">linkNewWindow('http://www.irchelp.org/','Internet Relay Chat (IRC) Help');</script> 
+                    is a good source of
+                    information on understanding IRC chats.<br/>
+                    The following are some IRC chat clients:
+                    <table>
+                      <tbody>
+                       <tr>
+                       <td>
+                        mIRC 
+                       </td>
+                       <td>
+                    <script type="text/javascript">linkNewWindow('http://www.mirc.com/','http://www.mirc.com/');</script> 
+                       </td>
+                       </tr>
+                       <tr>
+                       <td>
+                        Trillian
+                       </td>
+                       <td>
+                    <script type="text/javascript">linkNewWindow('http://www.ceruleanstudios.com/','http://www.ceruleanstudios.com/');</script> 
+                    
+                       </td>
+                       </tr>
+                        </tbody>
+                    </table>
+                        
+                </p>
+
+
 		</section>
 		<section name="How to get involved">
-			<p>Tuscany has a mailing list and this should be your first port of call.  The list
-			is tuscany-dev@ws.apache.org.  You can subscribe to this mailing list by sending a 
-			message to tuscany-dev-subscribe@ws.apache.org.
-			</p>
-			<p>The Tuscany code is held in a Subversion repository.  Subversion is a code control
-			system similar in function to CVS.  Subversion is used as the code repository by many
-			Apache projects.  If you are not familiar with Subversion, see the 
-			section below "Using Subversion".
-			</p>
-			<p>The Tuscany Subversion repository is found at 
-			<a href="https://svn.apache.org/repos/asf/incubator/tuscany">
-			https://svn.apache.org/repos/asf/incubator/tuscany</a>. You can check out the
-			Tuscany code from the repository and build it on your own machine. 
-			</p>
-			<p>Inside the Tuscany repository, you will find two main directories containing code:
-			<ul>
-				<li>cpp - which holds the code for the C++ projects</li>
-				<li>java - which holds the code for the Java projects</li>
-			</ul>
-			The Java code is built using Apache Maven.  There is a section below which describes
-			how to set up and use Maven.
-			</p>
-			
+                  <p> Apache Tuscany source code, documentation and web site are managed under version control using Subversion in 
+ <script type="text/javascript">linkNewWindow('https://svn.apache.org/repos/asf/incubator/tuscany','Tuscany Subversion Repository');</script>.  
+                   In this repository structure you will find two main directories
+			    <ul>
+			     	<li>
+             		   1) CPP directory holds SCA and SDO C++ source code
+			 	</li>
+				 <li> 
+				2) Java directory holds SCA, SDO and DAS source code. 
+				</li>
+			     </ul>
+		   </p>
+			<p>
+ 			It is assumed that you are familiar with
+                        <script type="http://www.apache.org/dev/version-control.html#anon-svn">linkNewWindow('http://wiki.apache.org/ws/Tuscany','Apache guidance for Subversion');</script> 
+			A quick reference for subversion commands is provided in 'using subversion' section below.
+			</p>			
 		</section>
+		<section name="Get Started On Tuscany Using Java">
+		<p>
+			<ul>
+			<li>
+			<span style="">
+					<span style="font-size: 10pt;">
+						The Tuscany Java projects depend on J2SE version 5.x which can be downloaded here:
+						<span style="" />
+					</span>
+				</span>
+				<a href="http://java.sun.com/j2se/1.5.0/download.jsp">
+					<span style="">
+						<span style="font-size: 10pt;">
+							http://java.sun.com/j2se/1.5.0/download.jsp
+						</span>
+					</span>
+					<span style="" />
+				</a>
+				<span style="">
+					<span style="font-size: 10pt;" />
+				</span>
+			</li>
+		
+			<li>
+			The Java project is built using Apache Maven 2 (Link to the information on Maven 2 we have on the page)
+			</li>
+	
+			<li>
+				The Tuscany runtime can be used as a server in conjunction with Tomcat, which you can find
+				here:
+                                    <script type="text/javascript">linkNewWindow('http://tomcat.apache.org/','http:/tomcat.apache.org');</script> 
+			<p>
+				Download "The Core" Tomcat 5.5.<i>xx</i> from:
+				<a href="http://tomcat.apache.org/download-55.cgi">
+					http://tomcat.apache.org/download-55.cgi
+				</a>
+			</p>
+		
+                        <p>
+                         For setting up Tomcat to run Tuscany see the sample's readme 
+                          <script type="text/javascript">linkNewWindow('samples/java/readme.htm#Tomcat_Setup','Tomcat Setup');</script> in the sample's
+                          readme.
+                          </p>
+
+	 	 </li>
+
+	 	 <li>
+             Use  <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>.
+		</li>
+		</ul>
+		  </p>
+                <p>
+		 You can use any IDE. Tuscany has a preferred way of rnning from within Eclipse and IDEA. This is documented below.
+		 You will also find high level introduction for maven 2.0 as well as subversion in the text below.
+		</p>
+            
+		</section>
+
 		<section name="Using Subversion (Command Line)">
 			<p>
 				You can find and download Subversion here:
-					<a href="http://subversion.tigris.org/">
-						http://subversion.tigris.org/
-					</a>
+                                    <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');/</script>.
 			</p>
 			<p>
 				There is a Subversion Reference manual ("the book"):
-				<a href="http://svnbook.red-bean.com/">
-					http://svnbook.red-bean.com/
-				</a>
+                                    <script type="text/javascript">linkNewWindow('http://svnbook.red-bean.com/','http://svnbook.red-bean.com/');</script>.
 			</p>
 			<p>
 				<span style="font-size: 10pt;">
 					If you use Eclipse as your development environment, there is a plugin available
 					which enables you to use Subversion from within Eclipse (ie it is a Subversion
 					client for Eclipse).  This plugin is called Subclipse and it is located at:
-					<span style="" />
-					<a href="http://subclipse.tigris.org/">
-						http://subclipse.tigris.org/
-					</a>
-					<span style="" />
+                                    <script type="text/javascript">linkNewWindow('http://subclipse.tigris.org/','http://subclipse.tigris.org/');</script>
 				</span>
 			</p>
 			<p style="margin-right: -0.25in;">
@@ -198,34 +318,6 @@ svn commit -m"change comment"
 		</section>
 
 
-		<section name="Using JDK 5">
-			<p>
-				<span style="">
-					<span style="font-size: 10pt;">
-						The Tuscany Java projects depend on J2SE version 5.x.  Here is a link 
-						to download Sun's J2SE JDK 5.0:
-						<span style="" />
-					</span>
-				</span>
-				<a href="http://java.sun.com/j2se/1.5.0/download.jsp">
-					<span style="">
-						<span style="font-size: 10pt;">
-							http://java.sun.com/j2se/1.5.0/download.jsp
-						</span>
-					</span>
-					<span style="" />
-				</a>
-				<span style="">
-					<span style="font-size: 10pt;" />
-				</span>
-			</p>
-			<p>
-				<span style=""><!--[if !supportEmptyParas]--><!--[endif]-->
-				</span>
-			</p>
-		</section>
-
-
 		<section name="Using Eclipse (optional)">
 			<p>
 				<span style="font-size: 10pt;">
@@ -342,13 +434,11 @@ svn commit -m"change comment"
 		<section name="Using Maven">
 			<p>
 				Tuscany uses Maven 2.x. Maven can be found here:
-				<a href="http://maven.apache.org/">http://maven.apache.org/</a>
+                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/','http://maven.apache.org/');</script> 
 			</p>
 			<p>
 				For some help getting started with Maven, look at:
-				<a href="http://maven.apache.org/guides/getting-started/index.html">
-					http://maven.apache.org/guides/getting-started/index.html
-				</a>
+                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/guides/getting-started/index.html','http://maven.apache.org/guides/getting-started/index.html');</script> 
 			</p>
 			<!-- p>
                         THis was for maven 1.x
@@ -386,33 +476,7 @@ svn commit -m"change comment"
                             
 			</p>
 		</section>
-		<section name="Using Tomcat">
-			<p>
-				The Tuscany runtime can be used as a server in conjunction with Tomcat, which you can find
-				here: <a href="http://tomcat.apache.org/">
-						http:/tomcat.apache.org/
-				</a>
-			</p>
-			<p>
-				Download "The Core" Tomcat 5.5.<i>xx</i> from:
-				<a href="http://tomcat.apache.org/download-55.cgi">
-					http://tomcat.apache.org/download-55.cgi
-				</a>
-			</p>
-                        <p>
-                         For setting up Tomcat to run Tuscany see the sample's readme 
-                          <script type="text/javascript">linkNewWindow('samples/java/readme.htm#Tomcat_Setup','Tomcat Setup');</script> in the sample's
-                          readme.
-
-                        </p>
-		</section>
-		<section name="Samples">
-			<p>
-				Tuscany also provides you some sample code to help you get started with the technology. See the readme for the 
-                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>
-			</p>
-		</section>
-
+		
 	</body>
 
 </document>
