@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
@@ -159,6 +160,7 @@ public class ReadCommandImpl extends CommandImpl {
 
 	public void setMappingModel(InputStream stream) {
 		
+		SDOUtil.registerStaticTypes(ConfigFactory.class);
 		 XMLHelper helper = XMLHelper.INSTANCE;
 		  
 //		 ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
