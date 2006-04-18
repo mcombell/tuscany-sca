@@ -86,7 +86,7 @@ public class GraphBuilderMetadata {
 	public Type getSchema() {
 		if ( this.schema == null ) {
 			ESchemaMaker schemaMaker = new ESchemaMaker(this);
-			return schemaMaker.createESchema();
+			return schemaMaker.createTypes();
 		} else {
 			return this.schema;
 		}
