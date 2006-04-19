@@ -31,10 +31,7 @@ import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.impl.AttributeImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
-import org.apache.tuscany.sdo.impl.ChangeSummarySettingImpl;
-import org.apache.tuscany.sdo.impl.ReferenceImpl;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -120,15 +117,15 @@ public class ChangeSummarizer {
 				List values = changeSummary.getOldValues(changedObject);
 				Iterator i = values.iterator();
 				while (i.hasNext()) {
-					ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i
+					ChangeSummary.Setting setting = (ChangeSummary.Setting) i
 							.next();
 
-					if (setting.getFeature() instanceof ReferenceImpl) {
+					if (!setting.getProperty().getType().isDataType()) {
 						DebugUtil.debugln(getClass(), debug,
 								"Reference change for "
 										+ changedObject.getType().getName());
 
-						ReferenceImpl ref = (ReferenceImpl) setting.getFeature();
+						Property ref = setting.getProperty();
 
 						DebugUtil.debugln(getClass(), debug, ref.getName());
 						if (hasState(ref, changedObject) ) {                     
@@ -175,8 +172,8 @@ public class ChangeSummarizer {
 	private boolean hasAttributeChange(List theChanges) {
 		Iterator i = theChanges.iterator();
 		while (i.hasNext()) {
-			ChangeSummarySettingImpl setting = (ChangeSummarySettingImpl) i.next();
-			if (setting.getFeature() instanceof AttributeImpl)
+			ChangeSummary.Setting setting = (ChangeSummary.Setting) i.next();
+			if (setting.getProperty().getType().isDataType())
 				return true;
 		}
 		return false;

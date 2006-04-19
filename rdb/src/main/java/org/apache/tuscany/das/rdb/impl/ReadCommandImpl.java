@@ -28,11 +28,7 @@ import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
-import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.apache.tuscany.sdo.util.SDOUtil;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
@@ -93,7 +89,12 @@ public class ReadCommandImpl extends CommandImpl {
         GraphBuilderMetadata gbmd = new GraphBuilderMetadata(results, getSchema(), configWrapper.getConfig(),
                 resultSetShape);
 
-        DataGraph g = createEDataGraph(gbmd.getSchema());
+        // Create the DataGraph
+        DataGraph g = SDOUtil.createDataGraph();     
+
+        // Create the root object
+        g.createRootObject(gbmd.getSchema());
+       
         ChangeSummary summary = g.getChangeSummary();
 
         ResultSetProcessor rsp = new ResultSetProcessor(g.getRootObject(), gbmd);
@@ -123,24 +124,7 @@ public class ReadCommandImpl extends CommandImpl {
     protected void setEndRow(int endRow) {
         this.endRow = endRow;
     }
-
-    private DataGraph createEDataGraph(Type type) {
-
-        DataGraph g = SDOUtil.createDataGraph();
-
-        // Create a ResourceSet to contain the DataGraph
-        ResourceSet resourceSet = DataObjectUtil.createResourceSet();
-
-        // Create a Resource to hold the schema
-
-        Resource r = resourceSet.createResource(URI.createURI(type.getURI()));
-        r.getContents().add(g);
-
-        // Create the root object
-        g.createRootObject(type);
-
-        return g;
-    }
+ 
 
     private void setMappingModel(Config config) {
         configWrapper = new MappingWrapper(config);

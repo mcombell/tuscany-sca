@@ -1,16 +1,9 @@
 package org.apache.tuscany.das.rdb.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.Key;
-import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
-import org.apache.tuscany.sdo.util.SDOUtil;
-
-import commonj.sdo.helper.XMLHelper;
 
 public abstract class BaseCommandImpl {
 
