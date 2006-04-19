@@ -46,13 +46,12 @@ public class CommandFactoryImpl implements CommandFactory {
         return new ApplyChangesCommandImpl();
     }
 
-    public ApplyChangesCommand createApplyChangesCommand(InputStream mappingModel) throws IOException {
-        return new ApplyChangesCommandImpl(mappingModel);
+    public ApplyChangesCommand createApplyChangesCommand(InputStream configStream) throws IOException {
+        return new ApplyChangesCommandImpl(loadConfig(configStream));
     }
 
     public ApplyChangesCommand createApplyChangesCommand(Config config) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ApplyChangesCommandImpl(config);
     }
 
     // Utilities

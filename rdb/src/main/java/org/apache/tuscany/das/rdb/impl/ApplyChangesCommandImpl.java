@@ -16,24 +16,18 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
-import commonj.sdo.helper.XMLDocument;
-import commonj.sdo.helper.XMLHelper;
 
 /**
  * 
@@ -45,25 +39,12 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyCha
     private ChangeSummarizer summarizer = new ChangeSummarizer();
 
     public ApplyChangesCommandImpl() {
-        // Empty Constructor
     }
 
-    // IOException is recoverable, needs to be thrown
-    public ApplyChangesCommandImpl(InputStream stream) throws IOException {
-    	SDOUtil.registerStaticTypes(ConfigFactory.class);
-    	XMLHelper helper = XMLHelper.INSTANCE;   
-    	XMLDocument doc = helper.load(stream);
-    	Config mapping = (Config) doc.getRootObject();
-
-    	this.configWrapper = new MappingWrapper(mapping);
-     
-        if (mapping.getConnectionProperties() != null)
-            setConnection(mapping.getConnectionProperties());
-       
-    }
-
-    public ApplyChangesCommandImpl(Config mappingModel){
-    	this.configWrapper = new MappingWrapper(mappingModel);      
+    public ApplyChangesCommandImpl(Config config){
+    	this.configWrapper = new MappingWrapper(config); 
+        if (config.getConnectionProperties() != null)
+            setConnection(config.getConnectionProperties());
     }
 
 	public void setConnection(ConnectionImpl connection) {
