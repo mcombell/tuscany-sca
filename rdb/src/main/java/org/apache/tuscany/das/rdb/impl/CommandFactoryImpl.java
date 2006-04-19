@@ -18,63 +18,76 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandFactory;
+import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
+import commonj.sdo.helper.XMLHelper;
 
 public class CommandFactoryImpl implements CommandFactory {
-	
-	protected Map namedCommands = new HashMap();
 
-	public Command createCommand(String sql) {
-		return createCommand(sql, null);
-	}
+    public Command createCommand(String sql) {
+        return baseCreateCommand(sql, null);
+    }
 
-	public Command createCommand(String sql, InputStream model) {
+    public Command createCommand(String sql, InputStream configStream) {
+        return baseCreateCommand(sql, loadConfig(configStream));
+    }
 
-		sql = sql.trim(); //Remove leading white space
-		char firstChar = Character.toUpperCase(sql.charAt(0));
-		switch (firstChar) {
-		case 'S':
-			return new ReadCommandImpl(sql, model);
-		case 'I':
-			return new InsertCommandImpl(sql);
-		case 'U':
-			return new UpdateCommandImpl(sql);
-		case 'D':
-			return new DeleteCommandImpl(sql);
-		case '{':
-			return new SPCommandImpl(sql);
-		default:
-			throw new Error("SQL => " + sql + " is not valid");
-		}
+    public Command createCommand(String sql, Config config) {
+        return baseCreateCommand(sql, config);
+    }
 
-	}
+    public ApplyChangesCommand createApplyChangesCommand() {
+        return new ApplyChangesCommandImpl();
+    }
 
-	public Command createReadCommand(String sql) {
-		return new ReadCommandImpl(sql);
-	}
+    public ApplyChangesCommand createApplyChangesCommand(InputStream mappingModel) throws IOException {
+        return new ApplyChangesCommandImpl(mappingModel);
+    }
 
-	public Command createReadCommand(String sql, InputStream model) {
-		return new ReadCommandImpl(sql, model);
-	}
+    public ApplyChangesCommand createApplyChangesCommand(Config config) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public ApplyChangesCommand createApplyChangesCommand() {
-		return new ApplyChangesCommandImpl();
-	}
+    // Utilities
 
-	public ApplyChangesCommand createApplyChangesCommand(
-			InputStream mappingModel) throws IOException {
-		return new ApplyChangesCommandImpl(mappingModel);
-	}
+    private Command baseCreateCommand(String sql, Config config) {
 
-	public Command getCommand (String name) {
-		return (Command) namedCommands.get(name);
-	}
+        sql = sql.trim(); // Remove leading white space
+        char firstChar = Character.toUpperCase(sql.charAt(0));
+        switch (firstChar) {
+        case 'S':
+            return new ReadCommandImpl(sql, config);
+        case 'I':
+            return new InsertCommandImpl(sql);
+        case 'U':
+            return new UpdateCommandImpl(sql);
+        case 'D':
+            return new DeleteCommandImpl(sql);
+        case '{':
+            return new SPCommandImpl(sql);
+        default:
+            throw new Error("SQL => " + sql + " is not valid");
+        }
 
-	
+    }
+
+    private Config loadConfig(InputStream configStream) {
+
+        SDOUtil.registerStaticTypes(ConfigFactory.class);
+        XMLHelper helper = XMLHelper.INSTANCE;
+
+        try {
+            Config config = (Config) helper.load(configStream).getRootObject();
+            return config;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

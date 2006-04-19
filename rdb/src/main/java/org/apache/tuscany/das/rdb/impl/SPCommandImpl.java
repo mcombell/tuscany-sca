@@ -16,7 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,10 +27,6 @@ public class SPCommandImpl extends ReadCommandImpl {
 
 	public SPCommandImpl(String sqlString) {
 		super(sqlString);
-	}
-
-	public SPCommandImpl(String sqlString, InputStream modelStream) {
-		super(sqlString, modelStream);
 	}
 
 	public DataObject executeQuery() {

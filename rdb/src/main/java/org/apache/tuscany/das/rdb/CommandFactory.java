@@ -19,6 +19,8 @@ package org.apache.tuscany.das.rdb;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.tuscany.das.rdb.config.Config;
+
 /**
  * A CommandFactory produces {@link Command} and {@link ApplyChangesCommand}
  * instances.
@@ -27,40 +29,65 @@ import java.io.InputStream;
  */
 public interface CommandFactory {
 
-	/**
-	 * Creates a Command based on the provided SQL statement
-	 * 
-	 * @param sql
-	 *            The SQL statement
-	 * @return returns a Command instance
-	 */
-	public Command createCommand(String sql);
+    /**
+     * Creates a Command based on the provided SQL statement
+     * 
+     * @param sql
+     *            The SQL statement
+     * @return returns a Command instance
+     */
+    public Command createCommand(String sql);
 
-	/**
-	 * Creates a Command based on the provided SQL statement and configuration
-	 * 
-	 * @param sql
-	 *            The SQL statement
-	 * @param mappingModel
-	 *            The congiguration as XML file stream
-	 * @return returns a COmmand instance
-	 */
-	public Command createCommand(String sql, InputStream mappingModel);
+    /**
+     * Creates a Command based on the provided SQL statement and configuration
+     * 
+     * @param sql
+     *            The SQL statement
+     * @param mappingModel
+     *            The congiguration as XML file stream
+     * @return returns a COmmand instance
+     */
+    public Command createCommand(String sql, InputStream config);
 
-	/**
-	 * Creates an {@linkApplyChangesCommand} instance
-	 * @return Returns the ApplyChangesCommand instance
-	 */
-	public ApplyChangesCommand createApplyChangesCommand();
+    /**
+     * Creates a Command based on the provided SQL statement and configuration
+     * 
+     * @param sql
+     *            The SQL statement
+     * @param config
+     *            The congiguration as Config instance
+     * @return returns a COmmand instance
+     */
+    public Command createCommand(String sql, Config config);
 
-	/**
-	 * Creates an {@linkApplyChangesCommand} instance with the provided configuration
-	 * @param mappingModel The provided configuration as a stream over an xml file
-	 * @return Returns an ApplyChangesCOmmand in stance
-	 * @throws IOException	
-	 */
-	public ApplyChangesCommand createApplyChangesCommand(
-			InputStream mappingModel) throws IOException;
+    /**
+     * Creates an {@linkApplyChangesCommand} instance
+     * 
+     * @return Returns the ApplyChangesCommand instance
+     */
+    public ApplyChangesCommand createApplyChangesCommand();
 
+    /**
+     * Creates an {@linkApplyChangesCommand} instance with the provided
+     * configuration
+     * 
+     * @param config
+     *            The provided configuration as a stream over an xml file
+     * @return Returns an ApplyChangesCOmmand in stance
+     * @throws IOException
+     */
+    public ApplyChangesCommand createApplyChangesCommand(InputStream config) throws IOException;
+
+
+    /**
+     * Creates an {@linkApplyChangesCommand} instance with the provided
+     * configuration
+     * 
+     * @param config
+     *            The provided configuration as a Config instance
+     * @return Returns an ApplyChangesCommand in stance
+     * @throws IOException
+     */
+    public ApplyChangesCommand createApplyChangesCommand(Config config);
 
 }
