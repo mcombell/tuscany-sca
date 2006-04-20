@@ -76,7 +76,23 @@ public class ResultMetadata {
             String converter = mappingWrapper.getConverter(tableName,
                     resultSetShape.getColumnName(i));
             if (converter != null) {
+                
                 try {
+                    
+                    Class converterClazz=  Class.forName(converter, true, Thread.currentThread().getContextClassLoader());
+                    if(null != converterClazz)
+                        converters[i - 1]=  (Converter) converterClazz.newInstance();
+                     
+                }catch( Exception e){
+                  //try loading below....
+                    converters[i - 1]= null; //safety
+                }
+                    
+                    
+                 if(null == converters[i - 1] )   
+                 try{   
+                    
+                    
                     Converter convInstance = (Converter) Class.forName(
                             converter).newInstance();
                     converters[i - 1] = convInstance;
