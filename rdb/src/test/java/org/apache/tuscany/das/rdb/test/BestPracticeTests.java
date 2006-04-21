@@ -138,7 +138,7 @@ public class BestPracticeTests extends DasTest {
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
 
         Command select = commandGroup.getCommand("company by id with departments");
-        int idOfNoExistingCompany = -1;
+        Integer idOfNoExistingCompany = new Integer(-1);
         select.setParameterValue("ID", idOfNoExistingCompany);
         DataObject root = select.executeQuery();
         

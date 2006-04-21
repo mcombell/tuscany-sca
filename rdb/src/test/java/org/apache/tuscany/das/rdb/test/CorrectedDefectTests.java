@@ -67,8 +67,6 @@ public class CorrectedDefectTests extends DasTest {
 
         // Set minimum metadata necessary to describe relationship
         select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        select.addPrimaryKey("CUSTOMER.ID");
-        select.addPrimaryKey("ANORDER.ID");
 
         DataObject root = select.executeQuery();
 
@@ -107,8 +105,6 @@ public class CorrectedDefectTests extends DasTest {
         select.setParameterValue("ID", new Integer(custID));
 
         select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        select.addPrimaryKey("CUSTOMER.ID");
-        select.addPrimaryKey("ANORDER.ID");
         root = select.executeQuery();
 
         assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/ANORDER").size());

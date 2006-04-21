@@ -89,8 +89,6 @@ public class StoredProcs extends DasTest {
 
 		//Set minimum metadata necessary to describe relationship
 		read.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		read.addPrimaryKey("CUSTOMER.ID");
-		read.addPrimaryKey("ANORDER.ID");		
 		
 		DataObject root = read.executeQuery();
 
