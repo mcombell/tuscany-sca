@@ -26,10 +26,13 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
+import java.util.Iterator;
+
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
+import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
@@ -43,6 +46,7 @@ public class CrudWithChangeHistory
     {
         super.setUp();
         new CustomerData( getAutoConnection() ).refresh();
+        new OrderDetailsData( getAutoConnection() ).refresh();
     }
 
     protected void tearDown()
@@ -251,4 +255,126 @@ public class CrudWithChangeHistory
 
     }
 
+    
+    public void testReadModifyApplyWithAssumedID() throws Exception {
+
+		//Read customer with particular ID
+		Command select = Command.FACTORY
+				.createCommand("Select * from CUSTOMER");
+		select.setConnection(getConnection());
+		DataObject root = select.executeQuery();
+
+		DataObject customer = root.getDataObject("CUSTOMER[1]");
+
+		//Modify customer
+		customer.set("LASTNAME", "Pavick");
+
+		DataObject customerForDelete = root.getDataObject("CUSTOMER[2]");
+		String deletedLastName = customerForDelete.getString("LASTNAME");
+		customerForDelete.delete();
+		
+		DataObject newCustomer = root.createDataObject("CUSTOMER");
+		newCustomer.set("LASTNAME", "NewCustomer");
+		newCustomer.setInt("ID", 9000);
+		
+		//Build apply changes command
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		apply.setConnection(getConnection());		
+
+		//Flush changes
+		apply.execute(root);
+
+		//Verify the change
+		root = select.executeQuery();
+		assertEquals("Pavick", getCustomerByLastName(root, "Pavick").getString("LASTNAME"));
+		assertEquals("NewCustomer", getCustomerByLastName(root, "NewCustomer").getString("LASTNAME"));
+		assertNull(getCustomerByLastName(root, deletedLastName));
+
+	}
+    
+    
+    public void testReadModifyApplyWithAssumedIDFailure() throws Exception {
+	
+		Command select = Command.FACTORY
+				.createCommand("Select * from ORDERDETAILS");
+		select.setConnection(getConnection());
+		DataObject root = select.executeQuery();
+
+		DataObject od = root.getDataObject("ORDERDETAILS[1]");
+
+		//Modify customer
+		od.setInt("PRODUCTID", 72);	
+		
+		//Build apply changes command
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		apply.setConnection(getConnection());		
+
+		//Flush changes -- This should fail because Order Details does not have a column that
+		// we can assume to be an ID
+		try {
+			apply.execute(root);	
+		} catch (RuntimeException ex) {
+			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
+		}
+
+	}
+    
+    public void testReadModifyApplyWithAssumedIDFailure2() throws Exception {
+    	
+		Command select = Command.FACTORY
+				.createCommand("Select * from ORDERDETAILS");
+		select.setConnection(getConnection());
+		DataObject root = select.executeQuery();
+
+		DataObject od = root.getDataObject("ORDERDETAILS[1]");
+		od.delete();	
+		
+		//Build apply changes command
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		apply.setConnection(getConnection());		
+
+		//Flush changes -- This should fail because Order Details does not have a column that
+		// we can assume to be an ID
+		try {
+			apply.execute(root);	
+		} catch (RuntimeException ex) {
+			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
+		}
+
+	}
+    public void testReadModifyApplyWithAssumedIDFailure3() throws Exception {
+    	
+		Command select = Command.FACTORY
+				.createCommand("Select * from ORDERDETAILS");
+		select.setConnection(getConnection());
+		DataObject root = select.executeQuery();
+
+		DataObject od = root.createDataObject("ORDERDETAILS");
+
+		//Modify customer
+		od.setInt("PRODUCTID", 72);	
+		od.setInt("ORDERID", 500);
+		
+		//Build apply changes command
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		apply.setConnection(getConnection());		
+
+		//Flush changes -- This should fail because Order Details does not have a column that
+		// we can assume to be an ID
+		try {
+			apply.execute(root);	
+		} catch (RuntimeException ex) {
+			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
+		}
+
+	}
+    private DataObject getCustomerByLastName(DataObject root, String name) {
+    	Iterator i = root.getList("CUSTOMER").iterator(); 
+    	while ( i. hasNext()) {
+    		DataObject obj = (DataObject)i.next();
+    		if (name.equals(obj.getString("LASTNAME")))
+    			return obj;
+    	}
+    	return null;
+    }
 }
