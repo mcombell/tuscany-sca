@@ -214,70 +214,9 @@ public interface Command {
 	public void setConnection(Connection connection, boolean manageTransactions);
 
 	/**
-	 * Add relationship metadata necessary for processing query results. This is
-	 * an alternative to providing the same information in a config file.
-	 * 
-	 * @param parent
-	 *            a name identifying the relationship parent key (example:
-	 *            "CUSTOMER.ID")
-	 * @param child
-	 *            a name identifying the relationship child key
-	 *            ("ORDER.CUSTOMER_ID")
-	 */
-	public void addRelationship(String parent, String child);
-
-	/**
-	 * Add relationship metadata necessary for processing query results. This is
-	 * an alternative to providing the same information in a config file.
-	 * 
-	 * @param parentKey
-	 *            the parent key for the relationship
-	 * @param childKey
-	 *            the child key in the relationship
-	 * @see Key
-	 */
-	public void addRelationship(Key parentKey, Key childKey);
-
-	/**
-	 * Add primary key metadata. This is an alternative to providing the same
-	 * information in a config file.
-	 * 
-	 * @param pk
-	 *            the string identifying a prmary key. (Example: "CUSTOMER.ID")
-	 */
-	public void addPrimaryKey(String pk);
-
-	/**
-	 * Add primary key metadata. This is an alternative to providing the same
-	 * information in a config file.
-	 * 
-	 * @param key
-	 *            the primary key
-	 * @see Key
-	 */
-	public void addPrimaryKey(Key key);
-
-	/**
-	 * Associate a {@link Converter} with a column to be used by this command.
-	 * This is an alternative to providing the same information in a config
-	 * file.
-	 * 
-	 * @param name
-	 *            the name of the column being assigned a converter (example:
-	 *            "CUSTOMER.LASTNAME")
-	 * @param converterName
-	 *            the name of the converter instance being assigned (example:
-	 *            org.company.project.StringConverter)
-	 * @see Converter
-	 */
-	public void addConverter(String name, String converterName);
-
-	/**
 	 * Cleans up and realeases all resources associated with this command. This
 	 * should be called when the application is done with this command.
 	 */
 	public void close();
-
-
 
 }

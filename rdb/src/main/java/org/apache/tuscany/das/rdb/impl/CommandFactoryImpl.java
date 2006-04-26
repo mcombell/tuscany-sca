@@ -70,7 +70,7 @@ public class CommandFactoryImpl implements CommandFactory {
         case 'D':
             return new DeleteCommandImpl(sql);
         case '{':
-            return new SPCommandImpl(sql);
+            return new SPCommandImpl(sql, config);
         default:
             throw new Error("SQL => " + sql + " is not valid");
         }

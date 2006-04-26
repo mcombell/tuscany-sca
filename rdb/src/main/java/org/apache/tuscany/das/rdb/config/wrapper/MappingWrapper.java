@@ -210,6 +210,23 @@ public class MappingWrapper {
 				+ name + " in table " + t.getName());
 		return null;
 	}
+    
+    public Column getColumnByPropertyName(Table t, String propertyName) {
+        if (t == null)
+            return null;
+        Iterator i = t.getColumn().iterator();
+        while (i.hasNext()) {
+            Column c = (Column) i.next();
+            if (c.getName().equals(propertyName)) 
+                return c;
+            if (c.getPropertyName() != null && c.getPropertyName().equals(propertyName))
+               return c;
+        }
+        DebugUtil.debugln(getClass(), debug, "WARNING: Could not find column "
+                + propertyName + " in table " + t.getName());
+        return null;
+    }    
+    
 
 	public String getColumnPropertyName(String tableName, String columnName) {
 		Table t = getTable(tableName);
