@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<Table name="ORDERDETAILS">
+        <Column name="ORDERID" primaryKey="true"/>
+        <Column name="PRODUCTID" primaryKey="true"/>
+    </Table>
+ 
+	   
+    <Relationship name="ORDERDETAILS" primaryKeyTable="ANORDER"
+        foreignKeyTable="ORDERDETAILS" many="true">
+        <KeyPair primaryKeyColumn="ID" foreignKeyColumn="ORDERID"/>
+    </Relationship>
+    
+</Config>

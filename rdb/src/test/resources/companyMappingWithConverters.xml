@@ -7,12 +7,14 @@
   
   <Table name="DEPARTMENT" propertyName="DepartmentType">
     <Column name="ID" primaryKey="true"/>
+    <Column name="NUMBER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToIntegerConverter"/>
   </Table>
 
   <Table name="EMPLOYEE" propertyName="EmployeeType">
   	  <Column name="ID" primaryKey="true"/>
-  </Table>
-  
+  	  <Column name="MANAGER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.IntegerToBooleanConverter"/>
+  </Table>	
+	
   <Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">
      <KeyPair primaryKeyColumn="ID" foreignKeyColumn="COMPANYID"/>
   </Relationship>	
