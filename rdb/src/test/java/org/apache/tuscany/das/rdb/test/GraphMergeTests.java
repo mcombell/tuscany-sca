@@ -87,77 +87,68 @@ public class GraphMergeTests extends DasTest {
 
 	}
 
-	public void testMultiTableMerge() throws Exception {
-		//Read some customers and related orders
-		Command select = Command.FACTORY.createCommand(
-				"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID ");	
-		select.setConnection(getConnection());
+    
+    public void testMultiTableMerge2() throws Exception {
+        //Read some customers and related orders
+        Command select = Command.FACTORY.createCommand(
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
+        select.setConnection(getConnection());
+        
+        select.setConnection(getConnection());
+        select.setParameterValue("ID", new Integer(1));
+        DataObject graph1 = select.executeQuery();
+        
+        DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
+        assertEquals(2, customer.getList("orders").size());    
+        
+        select.setParameterValue("ID", new Integer(2));
+        DataObject graph2 = select.executeQuery();
+        DataObject customer2 = (DataObject)graph2.getList("CUSTOMER").get(0);
+        assertEquals(1, graph2.getList("CUSTOMER").size());
+        assertEquals(1, customer2.getList("orders").size());
+        assertEquals(2, customer2.getInt("ID"));
+        
+        GraphMerger merger = new GraphMerger();
+        merger.addPrimaryKey("CUSTOMER.ID");
+        merger.addPrimaryKey("ANORDER.ID");
+        DataObject mergedGraph = merger.merge(graph1, graph2);
+        
+        assertEquals(3, mergedGraph.getList("ANORDER").size());
+        assertEquals(2, mergedGraph.getList("CUSTOMER").size());
+        
+        DataObject mergedCustomer = (DataObject) mergedGraph.getList("CUSTOMER").get(1);
+        assertEquals(2, mergedCustomer.getInt("ID"));
+        assertEquals(1, mergedCustomer.getList("orders").size());
+        DataObject mergedOrder = (DataObject) mergedCustomer.getList("orders").get(0);
+        assertEquals(4, mergedOrder.getInt("ID"));
+        
+    }
+    
+    public void testMultiTableAppendSingleTable2() throws Exception {
+        //Read some customers and related orders
+        Command select = Command.FACTORY.createCommand(
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
+        select.setConnection(getConnection());
+        
+        select.setConnection(getConnection());
+        select.setParameterValue("ID", new Integer(1));
+        DataObject graph1 = select.executeQuery();
+        
+        DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
+        assertEquals(2, customer.getList("orders").size());
+        
+        Command select2 = Command.FACTORY.createCommand("select * from ANORDER");
+        select2.setConnection(getConnection());
+        DataObject graph2 = select2.executeQuery();
+        assertEquals(4, graph2.getList("ANORDER").size());
+        
+        GraphMerger merger = new GraphMerger();
+        merger.addPrimaryKey("CUSTOMER.ID");
+        merger.addPrimaryKey("ANORDER.ID");
+        DataObject mergedGraph = merger.merge(graph1, graph2);
+        assertEquals(4, mergedGraph.getList("ANORDER").size());
+        assertEquals(1, mergedGraph.getList("CUSTOMER").size());
+    }
 
-		//Set minimum metadata necessary to describe relationship
-		select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		select.addPrimaryKey("CUSTOMER.ID");
-		select.addPrimaryKey("ANORDER.ID");
-		
-		select.setConnection(getConnection());
-		select.setParameterValue("ID", new Integer(1));
-		DataObject graph1 = select.executeQuery();
-		
-		DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
-		assertEquals(2, customer.getList("ANORDER").size());	
-		
-		select.setParameterValue("ID", new Integer(2));
-		DataObject graph2 = select.executeQuery();
-		DataObject customer2 = (DataObject)graph2.getList("CUSTOMER").get(0);
-		assertEquals(1, graph2.getList("CUSTOMER").size());
-		assertEquals(1, customer2.getList("ANORDER").size());
-		assertEquals(2, customer2.getInt("ID"));
-		
-		GraphMerger merger = new GraphMerger();
-		merger.addPrimaryKey("CUSTOMER.ID");
-		merger.addPrimaryKey("ANORDER.ID");
-		DataObject mergedGraph = merger.merge(graph1, graph2);
-		
-		assertEquals(3, mergedGraph.getList("ANORDER").size());
-		assertEquals(2, mergedGraph.getList("CUSTOMER").size());
-		
-		DataObject mergedCustomer = (DataObject) mergedGraph.getList("CUSTOMER").get(1);
-		assertEquals(2, mergedCustomer.getInt("ID"));
-		assertEquals(1, mergedCustomer.getList("ANORDER").size());
-		DataObject mergedOrder = (DataObject) mergedCustomer.getList("ANORDER").get(0);
-		assertEquals(4, mergedOrder.getInt("ID"));
-		
-
-	}
-	
-	public void testMultiTableAppendSingleTable() throws Exception {
-		//Read some customers and related orders
-		Command select = Command.FACTORY.createCommand(
-				"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID ");	
-		select.setConnection(getConnection());
-
-		//Set minimum metadata necessary to describe relationship
-		select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		select.addPrimaryKey("CUSTOMER.ID");
-		select.addPrimaryKey("ANORDER.ID");
-		
-		select.setConnection(getConnection());
-		select.setParameterValue("ID", new Integer(1));
-		DataObject graph1 = select.executeQuery();
-		
-		DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
-		assertEquals(2, customer.getList("ANORDER").size());
-		
-		Command select2 = Command.FACTORY.createCommand("select * from ANORDER");
-		select2.setConnection(getConnection());
-		DataObject graph2 = select2.executeQuery();
-		assertEquals(4, graph2.getList("ANORDER").size());
-		
-		GraphMerger merger = new GraphMerger();
-		merger.addPrimaryKey("CUSTOMER.ID");
-		merger.addPrimaryKey("ANORDER.ID");
-		DataObject mergedGraph = merger.merge(graph1, graph2);
-		assertEquals(4, mergedGraph.getList("ANORDER").size());
-		assertEquals(1, mergedGraph.getList("CUSTOMER").size());
-	}
 
 }

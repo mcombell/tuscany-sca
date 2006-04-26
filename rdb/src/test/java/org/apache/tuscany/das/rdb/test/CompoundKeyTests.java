@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.test;
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.Key;
+import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -33,6 +34,7 @@ public class CompoundKeyTests extends DasTest {
         super.setUp();
 
         new OrderDetailsData(getAutoConnection()).refresh();
+        new OrderData(getAutoConnection()).refresh();
     }
 
     protected void tearDown() throws Exception {
@@ -55,7 +57,7 @@ public class CompoundKeyTests extends DasTest {
 
     }
 
-    public void testReadModifyWrite() throws Exception {
+    public void testReadModifyWrite2() throws Exception {
 
         Command getOrderDetails = Command.FACTORY
                 .createCommand("Select * from ORDERDETAILS where ORDERID = 1 AND PRODUCTID = 1");
@@ -69,36 +71,24 @@ public class CompoundKeyTests extends DasTest {
         orderDetails.setFloat("PRICE", 0f);
 
         // Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("OrdersOrderDetailsConfig.xml"));
         apply.setConnection(getConnection());
-        // programatically add the only part of the mapping model needed for
-        // this simple case
-        apply.addPrimaryKey(new Key(new String[] { "ORDERDETAILS.ORDERID", "ORDERDETAILS.PRODUCTID" }));
 
         // Write
         apply.execute(root);
 
         // Verify
+        root = getOrderDetails.executeQuery();
         orderDetails = root.getDataObject("ORDERDETAILS[1]");
         assertEquals(0f, orderDetails.getFloat("PRICE"), 0.01);
 
     }
-
-    public void testReadOrdersAndDetails() throws Exception {
+    
+    public void testReadOrdersAndDetails2() throws Exception {
 
         Command read = Command.FACTORY
-                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");
+                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID", getConfig("OrdersOrderDetailsConfig.xml"));
         read.setConnection(getConnection());
-
-        Key pk = new Key("ANORDER.ID");
-        read.addPrimaryKey(pk);
-          
-        Key detailsPk = new Key(new String[] { "ORDERDETAILS.ORDERID", "ORDERDETAILS.PRODUCTID" });
-        read.addPrimaryKey(detailsPk);
-
-        Key fk = new Key("ORDERDETAILS.ORDERID");
-
-        read.addRelationship(pk, fk);
 
         DataObject root = read.executeQuery();
 
@@ -107,5 +97,4 @@ public class CompoundKeyTests extends DasTest {
         assertEquals(2, firstOrder.getList("ORDERDETAILS").size());
 
     }
-
 }

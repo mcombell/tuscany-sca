@@ -83,17 +83,14 @@ public class StoredProcs extends DasTest {
 	// Retreive heirarchy using a stored proc ... new programming model
 	public void testGetCustomersAndOrder() throws Exception {
 
-		Command read = Command.FACTORY.createCommand("{call getCustomerAndOrders(?)}");
+		Command read = Command.FACTORY.createCommand("{call getCustomerAndOrders(?)}", getConfig("CustomersOrdersConfig.xml"));
 		read.setConnection(getConnection());
 		read.setParameterValue(1, new Integer(1));
-
-		//Set minimum metadata necessary to describe relationship
-		read.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
 		
 		DataObject root = read.executeQuery();
 
 		DataObject customer = (DataObject) root.getList("CUSTOMER").get(0);
-		assertEquals(2, customer.getList("ANORDER").size());
+		assertEquals(2, customer.getList("orders").size());
 
 	}
 

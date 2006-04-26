@@ -79,13 +79,11 @@ public class CompanyTests extends DasTest {
         Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMapping.xml"));
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMappingWithConverters.xml"));
 
         // Parameterize the command
         selectCommand.setConnection(getConnection());
         selectCommand.setDataObjectModel(TypeHelper.INSTANCE.getType(DatagraphRoot.class));
-        selectCommand.addConverter("DEPARTMENT.NUMBER", "org.apache.tuscany.das.rdb.test.mappings.StringToIntegerConverter");
-        selectCommand.addConverter("EMPLOYEE.MANAGER", "org.apache.tuscany.das.rdb.test.mappings.IntegerToBooleanConverter");
 
         // Get the graph
         DatagraphRoot root = (DatagraphRoot) selectCommand.executeQuery();

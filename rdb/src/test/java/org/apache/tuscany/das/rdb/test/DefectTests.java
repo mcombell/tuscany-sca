@@ -82,65 +82,7 @@ public class DefectTests extends DasTest {
 
     }
 
-    /**
-     * Dilton's bug for adding new child data object
-     */
-    public void testAddNewOrder() throws Exception {
 
-        // Read some customers and related orders
-        Command select = Command.FACTORY
-                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
-        select.setConnection(getConnection());
-
-        // Set minimum metadata necessary to describe relationship
-        select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        select.addPrimaryKey("CUSTOMER.ID");
-        select.addPrimaryKey("ANORDER.ID");
-
-        DataObject root = select.executeQuery();
-
-        DataObject cust = root.getDataObject("CUSTOMER[1]");
-
-        // Save ID and Order Count
-        int custID = cust.getInt("ID");
-        int custOrderCount = cust.getList("ANORDER").size();
-        int rootCount = root.getList("ANORDER").size();
-        
-        // Create a new Order and add to customer1
-        DataObject order = root.createDataObject("ANORDER");
-
-        order.set("ID", new Integer(99));
-        order.set("PRODUCT", "The 99th product");
-        order.set("QUANTITY", new Integer(99));
-        cust.getList("ANORDER").add(order);
-
-        assertEquals(custOrderCount + 1, cust.getList("ANORDER").size());
-        // Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection(getConnection());
-
-        // Metadata
-        apply.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        apply.addPrimaryKey("CUSTOMER.ID");
-        apply.addPrimaryKey("ANORDER.ID");
-
-        // Flush changes
-        apply.execute(root);
-
-        // verify cust1 relationship updates
-        select = Command.FACTORY
-                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
-        select.setConnection(getConnection());
-        select.setParameterValue("ID", new Integer(custID));
-
-        select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        select.addPrimaryKey("CUSTOMER.ID");
-        select.addPrimaryKey("ANORDER.ID");
-        root = select.executeQuery();
-
-        assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/ANORDER").size());
-
-    }
 
     public void testDiltonsInsertWorkaround() throws Exception {
 

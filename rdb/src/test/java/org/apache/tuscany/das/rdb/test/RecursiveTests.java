@@ -40,10 +40,9 @@ public class RecursiveTests extends DasTest {
 		//Table definition
 		//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
 
-
 		String threeLevelPartsSQL = "SELECT P1.*, P2.*, P3.* FROM PART AS P1 LEFT JOIN PART AS P2 ON P1.ID = P2.PARENT_ID "
 				+ "LEFT JOIN PART AS P3 on P2.ID = P3.PARENT_ID WHERE P1.ID = 1";
-		Command select = Command.FACTORY.createCommand(threeLevelPartsSQL);
+		Command select = Command.FACTORY.createCommand(threeLevelPartsSQL, getConfig("PartsConfig.xml"));
 		select.setConnection(getConnection());
 
 		String[] columns = {"ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID"};
@@ -56,8 +55,6 @@ public class RecursiveTests extends DasTest {
 		
 		// Need to set the key explicitly. The aggregate of columns not working
 		// because of null values
-		select.addPrimaryKey("PART.ID");
-		select.addRelationship("PART.ID", "PART.PARENT_ID");
 		DataObject root = select.executeQuery();
 
 		assertEquals(5, root.getList("PART").size());
@@ -65,10 +62,10 @@ public class RecursiveTests extends DasTest {
 		DataObject engine = root.getDataObject("PART.0");
 		assertEquals("Engine", engine.getString("NAME"));
 		
-		assertEquals(3, engine.getList("PART").size());
+		assertEquals(3, engine.getList("subparts").size());
 		
 		DataObject piston = null;
-		Iterator i = engine.getList("PART").iterator();
+		Iterator i = engine.getList("subparts").iterator();
 		while ( i.hasNext() ) {
 			DataObject obj = (DataObject)i.next();
 			if ( obj.getString("NAME").equals("Piston"))
@@ -76,8 +73,8 @@ public class RecursiveTests extends DasTest {
 		}
 		
 		assertEquals("Piston", piston.getString("NAME"));
-		assertEquals(1, piston.getList("PART").size());
-		assertEquals("Piston Ring", piston.getDataObject("PART.0").getString("NAME"));
+		assertEquals(1, piston.getList("subparts").size());
+		assertEquals("Piston Ring", piston.getDataObject("subparts.0").getString("NAME"));
 
 	}
 	

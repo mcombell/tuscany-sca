@@ -22,7 +22,6 @@ import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
-
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
@@ -35,74 +34,72 @@ import commonj.sdo.Type;
  */
 public class ResultSetShapeTests extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		new CustomerData(getAutoConnection()).refresh();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+        new CustomerData(getAutoConnection()).refresh();
+    }
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-	/**
-	 * Read a specific customer
-	 */
-	public void testReadSingle() throws Exception {
+    /**
+     * Read a specific customer
+     */
+    public void testReadSingle() throws Exception {
 
-		// Using literals in the select forces invalid resultset metadata
-		String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
-		String[] columns = { "ID", "LASTNAME", "ADDRESS" };
-		String[] tables = { "CUSTOMER", "CUSTOMER", "CUSTOMER" };
-		Type[] types = { SDODataTypes.LONG, SDODataTypes.STRING,
-				SDODataTypes.STRING };
+        // Using literals in the select forces invalid resultset metadata
+        String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
+        String[] columns = { "ID", "LASTNAME", "ADDRESS" };
+        String[] tables = { "CUSTOMER", "CUSTOMER", "CUSTOMER" };
+        Type[] types = { SDODataTypes.LONG, SDODataTypes.STRING, SDODataTypes.STRING };
 
-		ResultSetShape shape = new ResultSetShape(tables, columns, types);
+        ResultSetShape shape = new ResultSetShape(tables, columns, types);
 
-		// Create and initialize command to read customers
-		Command readCustomers = Command.FACTORY.createCommand(sqlString);
-		readCustomers.addConverter("CUSTOMER.ID", "org.apache.tuscany.das.rdb.test.mappings.StringToLongConverter");
-		// Specify result shape
-		readCustomers.setResultSetShape(shape);
+        // Create and initialize command to read customers
+        Command readCustomers = Command.FACTORY.createCommand(sqlString,
+                getConfig("CustomerConfigWithIDConverter.xml"));
+        // Specify result shape
+        readCustomers.setResultSetShape(shape);
 
-		readCustomers.setConnection(getConnection());
+        readCustomers.setConnection(getConnection());
 
-		// Read
-		DataObject root = readCustomers.executeQuery();
+        // Read
+        DataObject root = readCustomers.executeQuery();
 
-		// Verify
-		assertEquals(5, root.getList("CUSTOMER").size());
-		assertEquals(99, root.getInt("CUSTOMER[1]/ID"));
-		assertEquals("Roosevelt", root.getString("CUSTOMER[1]/LASTNAME"));
-		assertEquals("1600 Pennsylvania Avenue", root
-				.getString("CUSTOMER[1]/ADDRESS"));
+        // Verify
+        assertEquals(5, root.getList("CUSTOMER").size());
+        assertEquals(99, root.getInt("CUSTOMER[1]/ID"));
+        assertEquals("Roosevelt", root.getString("CUSTOMER[1]/LASTNAME"));
+        assertEquals("1600 Pennsylvania Avenue", root.getString("CUSTOMER[1]/ADDRESS"));
 
-	}
+    }
 
-	/**
-	 * Read a specific customer This duplicates the previous tests but does not
-	 * provide the shape info. Since the select will not return valid metadata,
-	 * this test is expected to fail
-	 */
-	public void testReadSingleVerifyShapeUse() throws Exception {
+    /**
+     * Read a specific customer This duplicates the previous tests but does not
+     * provide the shape info. Since the select will not return valid metadata,
+     * this test is expected to fail
+     */
+    public void testReadSingleVerifyShapeUse() throws Exception {
 
-		// Using literals in the select forces invalid resultset metadata
-		String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
+        // Using literals in the select forces invalid resultset metadata
+        String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
 
-		// Create and initialize command to read customers
-		Command readCustomers = Command.FACTORY.createCommand(sqlString);
-		readCustomers.setConnection(getConnection());
+        // Create and initialize command to read customers
+        Command readCustomers = Command.FACTORY.createCommand(sqlString);
+        readCustomers.setConnection(getConnection());
 
-		// Read
-		DataObject root = readCustomers.executeQuery();
+        // Read
+        DataObject root = readCustomers.executeQuery();
 
-		// Verify
-		try {
-			assertEquals(5, root.getList("CUSTOMER").size());
-			fail("Should fail since there will be no feature named CUSTOMER");
-		} catch (IllegalArgumentException e) {
-			// OK
-		}
+        // Verify
+        try {
+            assertEquals(5, root.getList("CUSTOMER").size());
+            fail("Should fail since there will be no feature named CUSTOMER");
+        } catch (IllegalArgumentException e) {
+            // OK
+        }
 
-	}
+    }
 
 }

@@ -121,44 +121,5 @@ public class CUDGeneration extends DasTest {
 		apply.execute(root);
 
 	}
-
-	/**
-	 * Same as previous version but uses explicit model creation
-	 */
-	public void testReadModifyApply2() throws Exception {
-
-		// Build the select command
-		Command select = Command.FACTORY
-				.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
-
-		// Set minimum metadata necessary to describe relationship
-		select.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		select.addPrimaryKey("CUSTOMER.ID");
-		select.addPrimaryKey("ANORDER.ID");
-
-		// Parameterize the command
-		select.setConnection(getConnection());
-		select.setParameterValue("ID", new Integer(1));
-
-		// Get the graph
-		DataObject root = select.executeQuery();
-
-		// Modify a customer
-		DataObject customer = (DataObject) root.get("CUSTOMER[1]");
-		customer.set("LASTNAME", "Pavick");
-
-		// Modify an order
-		DataObject order = (DataObject) customer.getList("ANORDER").get(0);
-		order.setString("PRODUCT", "Kitchen Sink 001");
-
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());
-		apply.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		apply.addPrimaryKey("CUSTOMER.ID");
-		apply.addPrimaryKey("ANORDER.ID");
-		// Flush changes
-		apply.execute(root);
-
-	}
 	
 }

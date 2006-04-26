@@ -37,7 +37,6 @@ public class OCCTests extends DasTest {
 		//Read a book instance
 		Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE ID = 1");
 		select.setConnection(getConnection());
-		select.addPrimaryKey("BOOK.ID");
 		DataObject root = select.executeQuery();
 		DataObject book = root.getDataObject("BOOK[1]");
 		//Change a field to mark the instance 'dirty'

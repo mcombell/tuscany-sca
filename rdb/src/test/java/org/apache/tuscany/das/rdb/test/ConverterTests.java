@@ -81,7 +81,7 @@ public class ConverterTests extends DasTest {
 	public void testArbitraryConverter() throws Exception {
 		
 		//Create and initialize command to read customers
-		Command read = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");	
+		Command read = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1", getConfig("CustomerConfigWithConverter.xml"));	
 		read.setConnection(getConnection());
 
 		String[] columns = { "ID", "LASTNAME", "ADDRESS" };
@@ -89,9 +89,7 @@ public class ConverterTests extends DasTest {
 		Type[] types = { SDODataTypes.INTEGEROBJECT, SDODataTypes.DATE, SDODataTypes.STRING };
 		ResultSetShape shape = new ResultSetShape(tables, columns, types);
 		read.setResultSetShape(shape);
-		
-		read.addConverter("CUSTOMER.LASTNAME", "org.apache.tuscany.das.rdb.test.mappings.SillyDateStringConverter");
-				
+						
 		//Read
 		DataObject root = read.executeQuery();
 		
