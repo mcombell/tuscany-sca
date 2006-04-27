@@ -50,10 +50,8 @@ public class OCCTests extends DasTest {
 		update.execute();
 
 		//Try to flush the change
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("BooksConfig.xml"));
 		apply.setConnection(getConnection());
-		apply.addPrimaryKey("BOOK.ID");
-		apply.addCollisionColumn("BOOK.OCC");
 
 		try {
 			apply.execute(root);
@@ -62,6 +60,5 @@ public class OCCTests extends DasTest {
 			if ( !ex.getMessage().equals("OCC Exception") )
 				throw ex;
 		}
-
 	}
 }

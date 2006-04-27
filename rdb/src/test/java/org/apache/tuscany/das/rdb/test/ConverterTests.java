@@ -99,10 +99,8 @@ public class ConverterTests extends DasTest {
 		//Modify
 		root.setDate("CUSTOMER[1]/LASTNAME", tbday);	
 		
-		ApplyChangesCommand write = Command.FACTORY.createApplyChangesCommand();
-		write.addPrimaryKey("CUSTOMER.ID");
+		ApplyChangesCommand write = Command.FACTORY.createApplyChangesCommand(getConfig("CustomerConfigWithConverter.xml"));
 		write.setConnection(getConnection());
-		write.addConverter("CUSTOMER.LASTNAME", "org.apache.tuscany.das.rdb.test.mappings.SillyDateStringConverter");
 		write.execute(root);
 		
 		//Read

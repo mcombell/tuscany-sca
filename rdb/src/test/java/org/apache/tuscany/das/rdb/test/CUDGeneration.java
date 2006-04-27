@@ -78,7 +78,6 @@ public class CUDGeneration extends DasTest {
 		customer.set("ADDRESS", "asdfasdf");
 
 		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.addPrimaryKey("CUSTOMER.ID");
 		apply.setConnection(getConnection());
 		apply.execute(root);
 

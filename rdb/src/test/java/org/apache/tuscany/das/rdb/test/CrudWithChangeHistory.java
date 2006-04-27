@@ -145,9 +145,6 @@ public class CrudWithChangeHistory
         //Build apply changes command
         ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
         apply.setConnection( getConnection() );
-        //programatically add the only part of the mapping model needed for this simple case.
-        //The ID designation is needed to generate the CUD statements
-        apply.addPrimaryKey( "CUSTOMER.ID" );
 
         //Flush changes
         apply.execute( root );
