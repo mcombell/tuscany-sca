@@ -34,6 +34,7 @@ import org.apache.tuscany.das.rdb.test.OperationOrderingTests;
 import org.apache.tuscany.das.rdb.test.Paging;
 import org.apache.tuscany.das.rdb.test.PartialUpdateTests;
 import org.apache.tuscany.das.rdb.test.PassiveConnectionTests;
+import org.apache.tuscany.das.rdb.test.ProgrammaticConfigTests;
 import org.apache.tuscany.das.rdb.test.RecursiveTests;
 import org.apache.tuscany.das.rdb.test.RelationshipTests;
 import org.apache.tuscany.das.rdb.test.ResultSetShapeTests;
@@ -88,7 +89,8 @@ public class AllCommonTests {
         suite.addTest(new TestSuite (CorrectedDefectTests.class));
         suite.addTest(new TestSuite (OneToOneRelationshipTests.class));
        
-        
+        suite.addTest(new TestSuite (ProgrammaticConfigTests.class));
+       
 		//$JUnit-END$
 		return suite;
 	}

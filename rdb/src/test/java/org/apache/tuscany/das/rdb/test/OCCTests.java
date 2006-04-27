@@ -35,7 +35,7 @@ public class OCCTests extends DasTest {
 	public void testSimpleOCC() throws Exception {
 		
 		//Read a book instance
-		Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE ID = 1");
+		Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 		DataObject book = root.getDataObject("BOOK[1]");
@@ -44,7 +44,7 @@ public class OCCTests extends DasTest {
 
 		// Explicitly change OCC column in database to force collision
 		Command update = Command.FACTORY
-				.createCommand("update BOOK set OCC = :OCC where ID = 1");
+				.createCommand("update BOOK set OCC = :OCC where BOOK_ID = 1");
 		update.setConnection(getConnection());
 		update.setParameterValue("OCC", new Integer(100));
 		update.execute();

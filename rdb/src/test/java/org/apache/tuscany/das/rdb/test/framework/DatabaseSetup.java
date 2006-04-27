@@ -210,7 +210,7 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getCreateBook() {
-        return "CREATE TABLE BOOK (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)";
+        return "CREATE TABLE BOOK (BOOK_ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)";
     }
 
     protected String getCreatePart() {

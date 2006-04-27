@@ -32,7 +32,7 @@ public class BookData extends TestDataWithExplicitColumns {
 			{ new Integer(1), "The Brothers Karamazov", "Fyodor Dostoevsky", new Integer(5), new Integer(17) },
 			{ new Integer(2), "Cat in the Hat", "Doctor Seuss", new Integer(10), new Integer(1) }};
 
-	private static String[] bookColumns = { "ID", "NAME", "AUTHOR", "QUANTITY", "OCC"};
+	private static String[] bookColumns = { "BOOK_ID", "NAME", "AUTHOR", "QUANTITY", "OCC"};
 	
 	public BookData(Connection connection) {
 		super(connection, bookData, bookColumns, bookTypes);
