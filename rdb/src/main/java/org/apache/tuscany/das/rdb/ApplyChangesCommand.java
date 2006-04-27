@@ -16,8 +16,6 @@
  */
 package org.apache.tuscany.das.rdb;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 
 import commonj.sdo.DataObject;
@@ -99,83 +97,5 @@ public interface ApplyChangesCommand {
 	 *            commit/rollback
 	 */
 	public void setConnection(Connection connection, boolean manageTransactions);
-
-	/**
-	 * Add relationship metadata necessary for processing query results. This is
-	 * an alternative to providing the same information in a config file.
-	 * 
-	 * @param parent
-	 *            a name identifying the relationship parent key (example:
-	 *            "CUSTOMER.ID")
-	 * @param child
-	 *            a name identifying the relationship child key
-	 *            ("ORDER.CUSTOMER_ID")
-	 */
-	public void addRelationship(String parent, String child);
-
-	/**
-	 * Add relationship metadata necessary for processing query results. This is
-	 * an alternative to providing the same information in a config file.
-	 * 
-	 * @param parentKey
-	 *            the parent key for the relationship
-	 * @param childKey
-	 *            the child key in the relationship
-	 * @see Key
-	 */
-	public void addRelationship(Key parentKey, Key childKey);
-
-	/**
-	 * Add primary key metadata. This is an alternative to providing the same
-	 * information in a config file.
-	 * 
-	 * @param pk
-	 *            the string identifying a prmary key. (Example: "CUSTOMER.ID")
-	 */
-	public void addPrimaryKey(String columnName);
-
-	/**
-	 * Add primary key metadata. This is an alternative to providing the same
-	 * information in a config file.
-	 * 
-	 * @param key
-	 *            the primary key
-	 * @see Key
-	 */
-	public void addPrimaryKey(Key key);
-
-	/**
-	 * Adds a column to be used in a optimistic concurrency control (OCC)
-	 * strategy. The generated UPDATE statement will include a overqualified
-	 * where clause using this column
-	 * 
-	 * @param columnName
-	 *            the name of the column to be used for OCC
-	 */
-	public void addCollisionColumn(String columnName);
-
-	/**
-	 * Add metadata that indicate a column is a generated primary key.
-	 * 
-	 * @param string
-	 *            the name of the generated primary key column. Example
-	 *            ("COMPANY.ID")
-	 */
-	public void addGeneratedPrimaryKey(String columnName);
-
-	/**
-	 * Associate a {@link Converter} with a column to be used by this command.
-	 * This is an alternative to providing the same information in a config
-	 * file.
-	 * 
-	 * @param name
-	 *            the name of the column being assigned a converter (example:
-	 *            "CUSTOMER.LASTNAME")
-	 * @param converterName
-	 *            the name of the converter instance being assigned (example:
-	 *            org.company.project.StringConverter)
-	 * @see Converter
-	 **/
-	public void addConverter(String name, String converterName);
 
 }

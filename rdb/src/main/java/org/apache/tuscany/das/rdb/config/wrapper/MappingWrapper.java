@@ -82,9 +82,10 @@ public class MappingWrapper {
 			if (name.equals(wrapper.getPropertyName()))
 				return t;
 		}
+        return null;
 
-		throw new RuntimeException("Table with property name " + name
-				+ " not found.");
+//		throw new RuntimeException("Table with property name " + name
+//				+ " not found.");
 
 	}
 
