@@ -146,7 +146,7 @@
 			</li>
 		
 			<li>
-			The Java project is built using Apache Maven 2 (Link to the information on Maven 2 we have on the page)
+			The Java project is built using <script type="text/javascript">linkNewWindow('http://maven.apache.org/','Apache Maven 2');</script>
 			</li>
 	
 			<li>
@@ -169,12 +169,12 @@
 	 	 </li>
 
 	 	 <li>
-             Use  <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>.
+             Run  <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>.
 		</li>
 		</ul>
 		  </p>
                 <p>
-		 You can use any IDE. Tuscany has a preferred way of rnning from within Eclipse and IDEA. This is documented below.
+		 You can use any IDE. Tuscany has a preferred way of running from within Eclipse and IDEA. This is documented below.
 		 You will also find high level introduction for maven 2.0 as well as subversion in the text below.
 		</p>
             
@@ -182,11 +182,11 @@
 
 		<section name="Using Subversion (Command Line)">
 			<p>
-				You can find and download Subversion here:
-                                    <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');/</script>.
+				You can download Subversion from 
+                                    <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');</script>.
 			</p>
 			<p>
-				There is a Subversion Reference manual ("the book"):
+				Subversion Reference manual ("the book") is located at 
                                     <script type="text/javascript">linkNewWindow('http://svnbook.red-bean.com/','http://svnbook.red-bean.com/');</script>.
 			</p>
 			<p>
@@ -208,10 +208,12 @@
 			<span style="font-size: 14pt;">
 					Common Commands for Subversion
 			</span>
-			<p>Start by making a directory tuscany and in that directory:
+			<p>Create a directory called tuscany and check out the project.
+				<p>
 				<b style="">
 					<i style="">To check out the Java project:</i>
 				</b>
+				</p>
 			</p>
 			<pre>
 Committers:                        
