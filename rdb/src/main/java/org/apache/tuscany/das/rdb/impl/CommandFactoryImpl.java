@@ -23,10 +23,7 @@ import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandFactory;
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConfigFactory;
-import org.apache.tuscany.sdo.util.SDOUtil;
-
-import commonj.sdo.helper.XMLHelper;
+import org.apache.tuscany.das.rdb.util.ConfigUtil;
 
 public class CommandFactoryImpl implements CommandFactory {
 
@@ -35,7 +32,7 @@ public class CommandFactoryImpl implements CommandFactory {
     }
 
     public Command createCommand(String sql, InputStream configStream) {
-        return baseCreateCommand(sql, loadConfig(configStream));
+        return baseCreateCommand(sql, ConfigUtil.loadConfig(configStream));
     }
 
     public Command createCommand(String sql, Config config) {
@@ -47,7 +44,7 @@ public class CommandFactoryImpl implements CommandFactory {
     }
 
     public ApplyChangesCommand createApplyChangesCommand(InputStream configStream) throws IOException {
-        return new ApplyChangesCommandImpl(loadConfig(configStream));
+        return new ApplyChangesCommandImpl(ConfigUtil.loadConfig(configStream));
     }
 
     public ApplyChangesCommand createApplyChangesCommand(Config config) {
@@ -77,16 +74,4 @@ public class CommandFactoryImpl implements CommandFactory {
 
     }
 
-    private Config loadConfig(InputStream configStream) {
-
-        SDOUtil.registerStaticTypes(ConfigFactory.class);
-        XMLHelper helper = XMLHelper.INSTANCE;
-
-        try {
-            Config config = (Config) helper.load(configStream).getRootObject();
-            return config;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

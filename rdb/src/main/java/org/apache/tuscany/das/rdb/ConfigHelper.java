@@ -1,13 +1,16 @@
 package org.apache.tuscany.das.rdb;
 
-import java.io.InputStream;
-
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
-public class ConfigHelper {
+/**
+ * A ConfigHelper is used as an aid in programmatic construction of Config instances.
+ * Manual contrution fo COnfig is an alternative to providing needed configuration
+ * information in an XML file
+ * 
+ */public class ConfigHelper {
 
     private Config config;
 

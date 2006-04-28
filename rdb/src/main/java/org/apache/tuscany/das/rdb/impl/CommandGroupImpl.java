@@ -16,7 +16,6 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,9 +33,7 @@ import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConnectionProperties;
-import org.apache.tuscany.das.rdb.config.impl.ConfigPackageImpl;
-
-import commonj.sdo.helper.XMLHelper;
+import org.apache.tuscany.das.rdb.util.ConfigUtil;
 
 /**
  * An ConfiguredCommandFactory produces instances of Command and
@@ -54,12 +51,12 @@ public class CommandGroupImpl implements CommandGroup {
 
     public CommandGroupImpl(InputStream stream) {
         super();
-        setConfig(stream);
+        config = ConfigUtil.loadConfig(stream);
         initialize();
     }
 
     private void initialize() {
-
+        
         Iterator i = config.getCommand().iterator();
         while (i.hasNext()) {
             org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
@@ -104,20 +101,6 @@ public class CommandGroupImpl implements CommandGroup {
         return cmd;
     }
 
-    // Private
-
-    private void setConfig(InputStream stream) {
-        XMLHelper helper = XMLHelper.INSTANCE;
-
-        ConfigPackageImpl impl = ConfigPackageImpl.eINSTANCE;
-
-        try {
-            config = (Config) helper.load(stream).getRootObject();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
     public void setConnection(Connection connection) {
         this.connection = connection;
