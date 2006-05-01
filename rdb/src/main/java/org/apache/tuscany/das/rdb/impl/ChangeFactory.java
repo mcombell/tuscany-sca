@@ -99,7 +99,7 @@ public class ChangeFactory {
 	private InsertCommandImpl getCreateCommand(DataObject changedObject) {
 		
 		if ( createCommand == null ) {
-			Table table = mapping.getTable(changedObject.getType().getName());
+			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
 			if (table == null ) {
 				if (changedObject.getType().getProperty("ID") != null ) {
 					// If the table is not defined in the config, assume it has a primary key of "ID"
@@ -131,7 +131,7 @@ public class ChangeFactory {
 	private DeleteCommandImpl getDeleteCommand(DataObject changedObject) {
 		
 		if ( deleteCommand == null ) {
-			Table table = mapping.getTable(changedObject.getType().getName());
+			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
 			if (table == null )  {
 				if (changedObject.getType().getProperty("ID") != null ) {
 					// If the table is not defined in the config, assume it has a primary key of "ID"

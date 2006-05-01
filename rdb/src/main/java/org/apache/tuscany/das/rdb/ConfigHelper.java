@@ -39,7 +39,11 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
     public void addRelationship(String parentName, String childName) {
         configWrapper.addRelationship(parentName, childName);
     }
-
+    
+    public void addTable(String name, String propertyName) {
+        configWrapper.addTable(name, propertyName);
+    }
+    
     public Config getConfig() {
         return config;
     }
