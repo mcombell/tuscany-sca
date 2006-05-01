@@ -120,4 +120,38 @@ public class ProgrammaticConfigTests extends DasTest {
         assertEquals(2, customer.getList("ANORDER").size());
 
     }
+    
+    /**
+     * Programatically create table config with "property" name
+     */
+    public void test_4() throws Exception {
+
+        String statement = "SELECT * FROM BOOK WHERE BOOK.BOOK_ID = :ID";
+
+        // Create Table config programmatically
+        ConfigHelper helper = new ConfigHelper();
+        helper.addTable("BOOK", "Book");
+        helper.addPrimaryKey("Book.BOOK_ID");
+        
+        Command select = Command.FACTORY.createCommand(statement, helper.getConfig());
+        select.setConnection(getConnection());
+        select.setParameterValue("ID", new Integer(1));
+
+        DataObject root = select.executeQuery();
+        
+        DataObject newBook = root.createDataObject("Book");
+        newBook.setString("NAME", "Ant Colonies of the Old World");
+        newBook.setInt("BOOK_ID", 1001);
+        root.getList("Book").add(newBook);
+               
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
+        apply.setConnection(getConnection());
+        apply.execute(root);
+        
+        //Verify
+        select.setParameterValue("ID", new Integer(1001));
+        root = select.executeQuery();
+        assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
+        
+    }
 }

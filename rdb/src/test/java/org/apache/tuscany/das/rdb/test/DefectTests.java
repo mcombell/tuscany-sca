@@ -292,4 +292,12 @@ public class DefectTests extends DasTest {
     }
     
     
+    public void testTablePropertyName() throws Exception {
+        
+    }
+    
+    
+    
+    
+    
 }

@@ -16,15 +16,19 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
+import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.sdo.util.SDOUtil;
 
+import commonj.sdo.DataObject;
 import commonj.sdo.helper.TypeHelper;
 
 public class ExceptionTests extends DasTest {
@@ -38,6 +42,7 @@ public class ExceptionTests extends DasTest {
 
         new CustomerData(getAutoConnection()).refresh();
         new OrderData(getAutoConnection()).refresh();
+        new BookData(getAutoConnection()).refresh();
 
     }
 
@@ -98,4 +103,47 @@ public class ExceptionTests extends DasTest {
                     e.getMessage());
         }
     }
+    
+    
+    /**
+     * Test nice error message when Conofig does not use Aliased name
+     * Alis is defined for BOOK -> Book but PK config uses BOOK.BOOK_ID
+     * 
+     * In this test case, the create is silently never performed!!!
+     * 
+     * TODO - Uncomment out
+     */
+    public void test_4() throws Exception {
+
+        String statement = "SELECT * FROM BOOK WHERE BOOK.BOOK_ID = :ID";
+
+        // Create Table config programmatically
+        ConfigHelper helper = new ConfigHelper();
+        helper.addTable("BOOK", "Book");
+        helper.addPrimaryKey("BOOK.BOOK_ID");
+        
+        Command select = Command.FACTORY.createCommand(statement, helper.getConfig());
+        select.setConnection(getConnection());
+        select.setParameterValue("ID", new Integer(1));
+
+        DataObject root = select.executeQuery();
+        
+        DataObject newBook = root.createDataObject("Book");
+        newBook.setString("NAME", "Ant Colonies of the Old World");
+        newBook.setInt("BOOK_ID", 1001);
+        root.getList("Book").add(newBook);
+               
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
+        apply.setConnection(getConnection());
+        apply.execute(root);
+        
+        //Verify
+        select.setParameterValue("ID", new Integer(1001));
+        root = select.executeQuery();
+        //TODO - Uncomment to test TUSCANY-250
+//        assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
+        
+    }
+    
+    
 }
