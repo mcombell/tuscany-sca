@@ -49,7 +49,7 @@
 				</li>
 				<li>	
 			Help with 
-                    <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script> 
+                    <script type="text/javascript">linkNewWindow('samples/java/sampleSetup.htm','Tuscany Samples');</script> 
             to demonstrate Tuscany's value and help new users understand Tuscany
 				</li>
 			</ul>
@@ -162,14 +162,14 @@
 		
                         <p>
                          For setting up Tomcat to run Tuscany see the sample's readme 
-                          <script type="text/javascript">linkNewWindow('samples/java/readme.htm#Tomcat_Setup','Tomcat Setup');</script> in the sample's
+                          <script type="text/javascript">linkNewWindow('samples/java/sampleSetup.htm#Tomcat_Setup','Tomcat Setup');</script> in the sample's
                           readme.
                           </p>
 
 	 	 </li>
 
 	 	 <li>
-             Run  <script type="text/javascript">linkNewWindow('samples/java/readme.htm','Tuscany Samples');</script>.
+             Run  <script type="text/javascript">linkNewWindow('samples/java/sampleSetup.htm','Tuscany Samples');</script>.
 		</li>
 		</ul>
 		  </p>

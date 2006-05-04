@@ -81,8 +81,17 @@
                       <configuration>
                         <tasks>
                             <mkdir dir="target/site/samples/java" />
-                            <copy todir="target/site/samples/java" >
+                            <copy todir='target/site/samples/java' file='../java/sampleSetup.htm'/>
+                            <copy todir="target/site/samples/java/samples" >
                                     <fileset dir="../java/samples">
+                                            <patternset>
+                                              <include name="**/readme.htm" />
+                                            </patternset>
+                                    </fileset>
+                            </copy>
+                            <mkdir dir="target/site/samples/java/sca/samples" />
+                            <copy todir="target/site/samples/java/sca/samples" >
+                                    <fileset dir="../java/sca/samples">
                                             <patternset>
                                               <include name="**/readme.htm" />
                                             </patternset>
