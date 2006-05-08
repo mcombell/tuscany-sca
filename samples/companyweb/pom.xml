@@ -15,21 +15,28 @@
  *  limitations under the License.
  -->
 <project>
+	
     <parent>
-        <groupId>org.apache.tuscany</groupId>
-        <artifactId>tuscany-project</artifactId>
+        <groupId>org.apache.tuscany.samples.das</groupId>
+        <artifactId>das-samples</artifactId>
         <version>SNAPSHOT</version>
     </parent>
+	
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.tuscany.das</groupId>
-    <artifactId>tuscany-das</artifactId>
-    <packaging>pom</packaging>
-    <name>Tuscany DAS</name>
+    <artifactId>companyWeb</artifactId>
+    <packaging>war</packaging>
+    <name>Tuscany DAS sample Company WEB</name>
+    <description>Sample use of RDB DAS with JSP</description>
     <version>SNAPSHOT</version>
 
-    <modules>
-        <module>rdb</module>
-        <module>samples</module>
-    </modules>
+    <dependencies>
+		
+        <dependency>
+            <groupId>org.apache.tuscany.das</groupId>
+            <artifactId>tuscany-das-rdb</artifactId>
+            <version>${pom.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
+    </dependencies>
 </project>
