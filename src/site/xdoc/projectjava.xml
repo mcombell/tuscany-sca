@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+ <document url="projectjava">
+	 <properties>
+		<title>Apache Tuscany - Setting up Tuscany Project </title>
+	</properties>
+	<body>
+<section name="Tuscany Java Project">
+<p>
+	<ol>
+
+		<li><a href="#setup development">Setup development environment and run samples</a></li>
+		<li><a href="#checkout and build tuscany">Checkout and build Tuscany Java project</a></li>
+		<li><a href="#run samples">Run HelloWorld sample</a></li>
+	<li> <script type="text/javascript">linkNewWindow('javadocinfo.html','javadoc');</script></li>
+	<li> <script type="text/javascript">linkNewWindow('codeguidelines.html','Java Coding Guidelines');</script></li>
+	</ol>
+</p>
+</section>
+
+<a name="setup development"></a>
+<section name="System requirement for development">
+		<p>
+			The first step to creating your java tuscany project is to <b> create 
+				<a href="#create a tuscany directory">a tuscany directory</a>.</b>
+		</p>
+		<p>		
+			Next, please download the following in order to get your machine ready for Java development.
+			Please note that the instructions mentioned in the table below is for windows environment.
+			For Linux, please follow the <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/Linux','Linux setup and build instruction');</script>.
+			<br></br>
+		<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr> <!-- heading -->
+						<td><b>Software</b></td>
+						<td><b>Download Link</b></td>
+				<td><b>Download Instructions for windows</b></td>
+					</tr>
+					<tr>
+					<td>JDK 5.0 Update 6</td>
+					<td>
+                                        <script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>
+				</td>
+				<td>Steps for Java setup is  <a href="#setup JDK 5.0">here</a>. </td>
+				</tr>
+				<tr> <!--mvn -->
+				        <td> Apache Maven 2.0.4  </td>
+				        <td><script type="text/javascript">linkNewWindow('http://maven.apache.org/download.html','Maven 2.04');</script> </td>
+					<td> 
+						<ul>
+						<li>
+						We are using Maven 2 to build Tuscany, plus a few Ant scripts. Steps for Maven setup is <a href="#setup maven">here</a>.
+						</li>
+						<li>
+						A quick reference on Maven is available <a href="#using maven">here</a>.
+						</li>	
+						</ul>
+					</td>
+				</tr>
+				<tr> <!--ant -->	
+		 	 		<td> Apache Ant 1.6.5  </td>
+			        	<td><script type="text/javascript">linkNewWindow('http://ant.apache.org/bindownload.cgi','Ant');</script> </td>
+					<td> Steps for Ant setup is <a href="#setup ant">here</a>. </td> 
+				</tr>
+				<tr> <!--svn -->
+					<td>Subversion 1.3.0 </td>
+					<td> <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/project_packages.html','Subversion');</script></td>
+					<td> Tuscany source code is stored in a Subversion (SVN) repository, you need Subversion to download it. Steps for svn setup is <a href="#setup subversion">here</a>. 
+					</td>
+				</tr>
+				<tr><!--tomcat --> 
+				<td> Apache Tomcat 5.5.16 </td>
+				<td>
+			<script type="text/javascript">linkNewWindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
+				</td>
+				<td>
+				This is the Web container that we integrate with, to allow you to use the SCA programming 
+				model in Web applications. 
+				Steps for Tomcat setup is <a href="#setup tomcat">here</a>.
+			       	</td>
+				</tr>
+				</tbody>
+			</table>
+			<br></br>
+			Please <b>verify your setup</b>. Issue the following command to ensure you have a correct setup. 
+			<br></br>
+			<pre>
+	C:\tuscany\setenv.bat
+	java -version
+	mvn --version
+	ant -version
+	svn --version
+			</pre>	
+			<br></br>
+			You are now ready to <a href="#checkout and build tuscany"> check out and build Tuscany source code</a>. 
+</p>
+</section><!-- system requirement for development -->
+
+
+<a name="create a tuscany directory"></a>
+<section name="Creating a tuscany directory">
+Open a Command Prompt window, then from the command prompt create a tuscany directory as follows: 
+<pre>
+	C:
+	mkdir C:\tuscany
+	cd C:\tuscany
+</pre>
+This is the directory where we're going to download the Tuscany code as well as the tools and packages required to build and run Tuscany. 
+</section>
+	<a name="setup JDK 5.0"></a>
+<section name="Downloading and installing the Java JDK 5.0"> 
+<ul>
+	<li>
+	Point your Web browser to   <script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>.
+	</li>
+	<li>
+	Select "Download JDK 5.0 Update 6". 
+	</li>
+	<li>
+	Accept the License agreement, then select Windows Online Installation, 
+	Multi-language - jdk-1_5_0_06-windows-i586-p-iftw.exe. </li>
+	<li>
+	Download jdk-1_5_0_06-windows-i586-p-iftw.exe to the C:\tuscany directory. 
+	</li>
+	<li>
+	From the command prompt do the following: 
+	<pre>
+	jdk-1_5_0_06-windows-i586-p-iftw.exe
+	This will run the JDK 5.0 Installation Wizard. Accept the License agreement, 
+	then proceed through the pages of the wizard. Accept all the default options. 
+
+	After a few minutes the installation will complete.
+	Press Finish to close the installation wizard. 
+	</pre> 
+	</li>
+	<li>
+	Create a new .bat file C:\tuscany\setenv.bat and add the following line: 
+	<pre>
+	set JAVA_HOME=C:\Program Files\Java\jdk1.5.0_06
+	</pre>
+	</li>
+</ul>
+</section>
+
+<a name="setup maven"></a>
+<section name ="Download and Setup Maven">
+<ul>
+	<li>
+		Point your Web browser to  <script type="text/javascript">linkNewWindow('http://maven.apache.org/download.html','http://maven.apache.org/download.html');</script>.
+	</li>
+	<li>	
+		Select "Maven 2.0.4 (zip) - maven-2.0.4-bin.zip".
+	</li>
+	<li>
+	Download maven-2.0.4-bin.zip to the C:\tuscany directory. 
+	</li>
+	<li>
+	From the command prompt do the following: 
+	<pre>
+		unzip maven-2.0.4-bin.zip
+	</pre>
+	This will extract Maven 2.0.4 to the C:\tuscany\maven-2.0.4 directory. 
+	</li>
+	<li>
+	Modify C:\tuscany\setenv.bat and add the following line: 
+	<pre>
+		set PATH=%PATH%;C:\tuscany\maven-2.0.4\bin
+	</pre>
+	</li>
+</ul>
+</section>
+<a name="setup ant"></a>
+<section name ="Download and Setup Ant">
+<ul>
+	<li>
+	Point your Web browser to  <script type="text/javascript">linkNewWindow('http://ant.apache.org/bindownload.cgi','http://ant.apache.org/bindownload.cgi');</script>.
+	</li>
+	<li>	
+	Select ".zip archive: apache-ant-1.6.5-bin.zip". 
+	</li>
+	<li>
+	Download apache-ant-1.6.5-bin.zip to the C:\tuscany directory. 
+	</li>
+	<li>
+	From the command prompt do the following: 
+	</li>
+	<li>
+	unzip <b> apache-ant-1.6.5-bin.zip</b>.
+	This will extract Ant 1.6.5 to the C:\tuscany\apache-ant-1.6.5 directory. 
+	</li>
+	<li>
+	Modify C:\tuscany\setenv.bat and add the following lines: 
+	<pre>
+	set PATH=%PATH%;C:\tuscany\apache-ant-1.6.5\bin
+	</pre>
+	</li>
+</ul>
+</section>
+<a name="setup subversion"></a>
+<section name ="Download and Setup Subversion">
+<ul>
+	<li>
+	Point your Web browser to  <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/project_packages.html','Subversion 1.3.0');</script>.
+	</li>
+	<li>	
+	Pick a Subversion package for your system, for example for a Windows XP pick 
+	http://subversion.tigris.org/files/documents/15/29039/svn-win32-1.3.0.zip.
+	</li>
+	<li>
+	Download svn-win32-1.3.0.zip to the C:\tuscany directory.
+	</li>	
+	<li>
+	From the command prompt do the following: 
+	<pre>
+	unzip svn-win32-1.3.0.zip
+	</pre>
+	This will extract Subversion 1.3.0 to the C:\tuscany\svn-win32-1.3.0 directory. 
+	</li>
+	<li>
+	Modify C:\tuscany\setenv.bat and add the following line: 
+	<pre>
+	set PATH=%PATH%;C:\tuscany\svn-win32-1.3.0\bin
+	</pre>
+	</li>
+</ul>
+</section>
+
+<a name="setup tomcat"></a>
+<section name ="Download and Setup Tomcat">
+	<ul>
+	<li>
+	Dowload apache-tomcat-5.5.16.zip to the C:\tuscany directory. you can dowload <script type="text/javascript">linkNewWindow('http://www.ibiblio.org/pub/mirrors/apache/tomcat/tomcat-5/v5.5.16/bin/apache-tomcat-5.5.16.zip','Tomcat Zip');</script> here. 
+	</li>
+	<li>
+	To install Tomcat, from the command prompt do the following: 
+	<code>
+	cd C:\tuscany
+	unzip apache-tomcat-5.5.16.tar.gz
+	</code> 
+        <br></br>
+	This will extract Tomcat to the C:\tuscany\apache-tomcat-5.5.16 directory.
+	</li>	
+
+	<li> 
+	From the command prompt do the following:
+	<br></br>	
+	<code>
+		ant -f java\testing\tomcat\build.xml -Dtuscany.acceptance.tc.dir=C:\tuscany\apache-tomcat-5.5.16 tuscany.tomcat.fixup
+		<br></br>
+This will configure Tomcat to use Tuscany and will install the required JARs under the Tomcat lib directory. 
+	</code>
+	</li>
+	</ul>
+</section>
+<a name="using maven"></a>
+<section name="Maven Quick Reference">
+			<p>
+				For some help getting started with Maven, look at:
+                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/guides/getting-started/index.html','http://maven.apache.org/guides/getting-started/index.html');</script> 
+	    </p>
+	     <p>
+		    With Maven, there is no build "script" like the ant build.xml file. Instead you 
+				provide Maven with a description of your project and it uses that information to
+				determine how to achieve your build goal. The description is held in a pom.xml file.
+				There is a pom.xml file at the top level of your project and there are subsidiary
+				pom.xml files for modules within your project which are referenced from the top level
+				pom file. The Maven project has also established a set of best practices for
+				structuring builds and if you follow those you can get away with very little 
+				description; the Tuscany builds are set up that way.
+			</p>
+			<p>
+				The general rule for maven is that each (sub)project produces one build artifact 
+				(typically a jar file). You can see this in the java project directory where
+				there are separate projects for sca, sdo, das (etc) and within these, separate
+				folders and pom files for major components such as container.java.
+			</p>
+			<p>
+				The main Maven 2.x command is "mvn" and the default goal is "install" which will 
+				compile, unit test and package each project. This will typically output a
+				jar file that is installed locally so that other projects can depend on it.
+			</p>
+                        <p>
+                           Once you have the Java project setup up, you can build the project by issuing the following command in the tuscany rootd directory:<br/>
+                           <code>
+                              mvn
+                            </code>
+                            
+			</p>
+		</section>
+
+<a name="checkout and build tuscany"></a>
+<section name ="checkout and build tuscany">
+	<p>
+		<b>Check out Tuscany Java</b>
+	</p>
+        <p>	
+	From the command prompt, do the following: 
+	<br></br>
+	<code>
+	svn co http://svn.apache.org/repos/asf/incubator/tuscany/java
+	</code>
+	<br></br>
+	This should check out all the source code from the Tuscany SVN repository into the C:\tuscany\java directory. 
+</p>
+<p>
+	When the check out completes, do the following: 
+	<br></br>
+	<code>
+	cd java
+	dir /b
+	</code>
+	<br></br>
+	You should see the content of Java directory. 
+</p>
+<p>
+	<b> Build Tuscany Java </b>
+</p>
+<p>
+	From the command prompt do the following: 
+	<br></br> 
+<code>
+	cd C:\tuscany\java
+	mvn
+</code>
+<br></br>
+This will build the Tuscany runtime with Maven. Maven will download all the JAR dependencies, build all the Tuscany sub-projects and run the unit tests. 
+</p>
+</section>
+<a name="run samples"></a>
+<section name ="Run Helloworld Sample">
+	<p>
+		<ol>
+			<li value="windows">
+				Information for how to run Helloworld sample in J2SE or Tomcat is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/WinXP','here');</script>.
+			</li>
+			<li value="Linux">
+				Information for how to run hellowrld sample is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/Linux','here');</script>.
+			</li>
+		</ol>
+	</p>
+</section>
+	</body>
+</document>
