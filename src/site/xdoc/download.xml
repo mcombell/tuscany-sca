@@ -27,8 +27,11 @@
 		</p>
 		<p>
 			If you want to obtain the Tuscany runtime and tools, you should check out the source from the
-			SVN repository and build it locally on your machine. Details of this can be found on the
-			<a href="svn.html">SVN Code Repository</a> page.
+			SVN repository and build it locally on your machine. 
+			<br></br>
+			Details of this can be found on the
+			<a href="projectjava.html">java project</a> page for Java and on 
+			<a href="projectc++.html"> C++ project </a> page for C++.
 		</p>
 	</body>
 </document>

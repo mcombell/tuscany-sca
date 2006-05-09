@@ -106,21 +106,17 @@
 		<section name="How to get involved">
                   <p> Apache Tuscany source code, documentation and web site are managed under version control using Subversion in 
  <script type="text/javascript">linkNewWindow('https://svn.apache.org/repos/asf/incubator/tuscany','Tuscany Subversion Repository');</script>.  
-                   In this repository structure you will find two main directories
-			    <ul>
-			     	<li>
-             		   1) CPP directory holds SCA and SDO C++ source code
-			 	</li>
-				 <li> 
-				2) Java directory holds SCA, SDO and DAS source code. 
-				</li>
-			     </ul>
-		   </p>
-			<p>
- 			It is assumed that you are familiar with
-                        <script type="http://www.apache.org/dev/version-control.html#anon-svn">linkNewWindow('http://wiki.apache.org/ws/Tuscany','Apache guidance for Subversion');</script> 
-			A quick reference for subversion commands is provided in 'using subversion' section below.
-			</p>			
+ In this repository structure you will find two main directories
+ <ol>
+				<li> CPP directory holds SCA and SDO C++ source code. </li>
+				 <li> Java directory holds SCA, SDO and DAS source code.</li> 
+			     </ol>
+			     We welcome your help with any of the projects. You can learn more about how to setup your development environment for <script type="text/javascript">linkNewWindow('projectJava.html','Java');</script> or <script type="text/javascript">linkNewWindow('projectC++.html','C++');</script>. 
+			     <br></br>
+			     Both C++ and Java projects are in svn repository. 
+			     <script type="http://www.apache.org/dev/version-control.html#anon-svn">linkNewWindow('http://wiki.apache.org/ws/Tuscany','Apache guidance for Subversion');</script> 
+			A quick reference for subversion commands is provided in <a href="#using subversion">using subversion</a>.
+		</p>
 		</section>
 		<section name="Get Started On Tuscany Using Java">
 		<p>
@@ -178,29 +174,29 @@
 		 You will also find high level introduction for maven 2.0 as well as subversion in the text below.
 		</p>
             
-		</section>
-
-		<section name="Using Subversion (Command Line)">
-			<p>
-				You can download Subversion from 
-                                    <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');</script>.
-			</p>
-			<p>
-				Subversion Reference manual ("the book") is located at 
-                                    <script type="text/javascript">linkNewWindow('http://svnbook.red-bean.com/','http://svnbook.red-bean.com/');</script>.
-			</p>
-			<p>
-				<span style="font-size: 10pt;">
-					If you use Eclipse as your development environment, there is a plugin available
-					which enables you to use Subversion from within Eclipse (ie it is a Subversion
-					client for Eclipse).  This plugin is called Subclipse and it is located at:
-                                    <script type="text/javascript">linkNewWindow('http://subclipse.tigris.org/','http://subclipse.tigris.org/');</script>
-				</span>
-			</p>
-			<p style="margin-right: -0.25in;">
-				<span style="font-size: 10pt;">
-					If you use Windows on your systems, there is also a graphical client implemented as an
-					extension to the Windows shell, called TortoiseSVN:
+	</section>
+	<a name="using subversion"></a>
+	<section name="Using Subversion (Command Line)">
+	<p>
+		You can download Subversion from 
+                <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');</script>.
+	</p>
+	<p>
+		Subversion Reference manual ("the book") is located at 
+                <script type="text/javascript">linkNewWindow('http://svnbook.red-bean.com/','http://svnbook.red-bean.com/');</script>.
+	</p>
+	<p>
+	<span style="font-size: 10pt;">
+		If you use Eclipse as your development environment, there is a plugin available
+		which enables you to use Subversion from within Eclipse (ie it is a Subversion
+		client for Eclipse).  This plugin is called Subclipse and it is located at:
+                <script type="text/javascript">linkNewWindow('http://subclipse.tigris.org/','http://subclipse.tigris.org/');</script>
+		</span>
+		</p>
+		<p style="margin-right: -0.25in;">
+		<span style="font-size: 10pt;">
+		If you use Windows on your systems, there is also a graphical client implemented as an
+			extension to the Windows shell, called TortoiseSVN:
 					<span style="" />
 					http://tortoisesvn.tigris.org/
 				</span>
@@ -431,52 +427,6 @@ svn commit -m"change comment"
                         copy tuscany-idea-codestyle.xml to ~/.IntelliJIdea50/config/codestyles
                         File->Settings, Project Code Styles, Import
                         </pre>
-		</section>
-
-		<section name="Using Maven">
-			<p>
-				Tuscany uses Maven 2.x. Maven can be found here:
-                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/','http://maven.apache.org/');</script> 
-			</p>
-			<p>
-				For some help getting started with Maven, look at:
-                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/guides/getting-started/index.html','http://maven.apache.org/guides/getting-started/index.html');</script> 
-			</p>
-			<!-- p>
-                        THis was for maven 1.x
-				There is a Maven plug-in for Eclipse called Mevenide which you can find here:
-				<a href="http://mevenide.codehaus.org/download.html">
-					http://mevenide.codehaus.org/download.html
-				</a>
-			</p -->
-			<p>
-				With Maven, there is no build "script" like the ant build.xml file. Instead you 
-				provide Maven with a description of your project and it uses that information to
-				determine how to achieve your build goal. The description is held in a pom.xml file.
-				There is a pom.xml file at the top level of your project and there are subsidiary
-				pom.xml files for modules within your project which are referenced from the top level
-				pom file. The Maven project has also established a set of best practices for
-				structuring builds and if you follow those you can get away with very little 
-				description; the Tuscany builds are set up that way.
-			</p>
-			<p>
-				The general rule for maven is that each (sub)project produces one build artifact 
-				(typically a jar file). You can see this in the java project directory where
-				there are separate projects for sca, sdo, das (etc) and within these, separate
-				folders and pom files for major components such as container.java.
-			</p>
-			<p>
-				The main Maven 2.x command is "mvn" and the default goal is "install" which will 
-				compile, unit test and package each project. This will typically output a
-				jar file that is installed locally so that other projects can depend on it.
-			</p>
-                        <p>
-                            To build the Java project once you have Maven and Java SDK set up in your path, in the SVN checked out java directory:<br/>
-                           <code>
-                              mvn
-                            </code>
-                            
-			</p>
 		</section>
 		
 	</body>

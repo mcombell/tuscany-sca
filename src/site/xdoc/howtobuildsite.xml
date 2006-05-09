@@ -23,18 +23,15 @@
 		the Maven site plugin can be found <a href="http://maven.apache.org/guides/mini/guide-site.html">here</a>.
 		</p>
 		<p>
-		The website is held in the site subproject of Tuscany, with a set of source files in the src/site 
-		directory and the final website files held in the target/site directory.  The website project has its own POM
-		file, held in the main site directory.
-		The site is generated using the command
+		The website is held in the site subproject of Tuscany, with a set of source files in tuscany/src/site 
+		directory.  The website project has its own POM file, held in the main site directory.
+		The site is generated using the following command while in site directory.
 		<pre>
 	mvn site
 		</pre>
-		from the main site directory, which uses the source files to build the final website files in the target/site
-		directory.  When you make changes to files intended for the website, please check out the results on your local
-		machine before publsihing them to the live site.  The main landing page for the site is the file 
-		site/target/site/index.html.  Open this page in your browser and you should be able to reach all the other pages 
-		from this location.
+		This will generate target/site directory.  When you make changes to files intended for the website,
+		please check out the results on your local machine by opening site/target/site/index.htm. You should 
+		be able to reach all the other pages from this location.
 		</p>
 		<p>
 		The actual live website for Tuscany is at the URL 
@@ -81,7 +78,7 @@
 		level page to the site.
 		</p>
 		<p>
-		Most of the pages for the site are held in the xdoc directory.  The pages are generally in
+			Most of the pages for the site are held in the site/src/xdoc directory.  The pages are generally in
 		an XML format, although it is possible to define pages as HTML files.  XML files are 
 		preferred, since Maven applies a standard layout and style sheet to these pages.  If you
 		provide a page as an HTML file, it will appear exactly as you create it - Maven does not

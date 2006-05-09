@@ -29,9 +29,14 @@
 	
 	<p>
 	  This page contains latest Tuscany News.
-	</p>
-    <p>
-		(March 06 2006) A stable "milestone" build is available. To get this build up and running on your system see the
+  </p>
+<p><b>May 16-19 2006  -- JavaOne (San Francisco, USA)</b><br />
+<br />
+Various community members will be presenting SCA, SDO. There is also a BOF session for Tuscany on Thursday.
+</p>  
+    <p><b>March 6 2006  --  A stable "milestone" build is available for both Java and C++ </b><br />
+<br />
+To get Java build up and running on your system see the
         <a href ="http://wiki.apache.org/ws/Tuscany/GetTuscany" target='_blank'>GetTuscany Wiki</a>. Use the following SVN checkout command:
         <pre> svn co -r 383106   http://svn.apache.org/repos/asf/incubator/tuscany/java
         </pre>
@@ -42,16 +47,13 @@
          <li>Support for Javascript components</li>
         </ul>
 	</p>
-	<p>
-		(January 10 2006) The current code in the Tuscany project is an initial implementation, which is still very much evolving. 
-		We're looking to add a lot of additional function over the coming weeks and months, such as support for additional implementation 
-		types and for additional bindings. We're looking for people to help us add these capabilities - so please take some time to look 
-		over the project and join us in this exciting developement.
+<p><b>January 10 2006  -- Tuscany Project Initial Implementation</b><br /><br />
+We're looking to add a lot of additional function over the coming weeks and months, such as support for additional implementation types and for additional bindings. We're looking for people to help us add these capabilities - so please take some time to look over the project and join us in this exciting developement.
 	</p>
 	<p>
-		The current codebase is designed to work with the Apache Tomcat runtime, and uses the Apache Axis runtime to provide support 
-		for Web services. With this combination, you can write service components that can be used to provide Web services or which 
-		can be used to provide business services behind Servlets and JSPs. 
+The current codebase is designed to work with the Apache Tomcat runtime, and uses the Apache Axis runtime to provide support 
+for Web services. With this combination, you can write service components that can be used to provide Web services or which 
+can be used to provide business services behind Servlets and JSPs. 
 	</p>
 
 	</body>

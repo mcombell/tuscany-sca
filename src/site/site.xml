@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
 
@@ -15,80 +15,71 @@
   limitations under the License.
  -->
 <project name="Apache Tuscany">
-  <bannerLeft>
-  	<name>Apache Tuscany Project</name>
-  </bannerLeft>
-  <!--
-  <bannerLeft>
-    <name>Tuscany Project</name>
-    <src>./Tuscany_Icon.jpg</src>
-    <href>http://incubator.apache.org/tuscany/</href>
-  </bannerLeft>
-  <bannerRight>
-    <name>Apache Tuscany</name>
-    <src>./Tuscany_Name.jpg</src>
-  </bannerRight>
-  -->
-  <body>
-    <links>
-      <item name="Apache" href="http://www.apache.org/" />
-    </links>
-
+	<title>Apache Tuscany</title>
+	<body>
+		<links>
+			<item name="Apache" href="http://www.apache.org" />
+		</links>
 		<menu name="Tuscany">
 			<item name="Overview" href="/index.html" />
 			<item name="News" href="news.html" />
 			<item name="Documentation" href="/documentation.html" />
-			<item name="FAQ" href="/faq.html" />
-			<item name="Wiki" href="/wiki.html" />
 			<item name="Download" href="/download.html" />
-			<item name="Requirements" href="/requirements.html" />
 		</menu>
 		<menu name="SCA Runtime for Java">
 			<item name="Releases" href="/releasesscajava.html" />
-			<item name="Installation Instructions" href="/installjava.html" />
+			<item name="Installation" href="/installjava.html" />
 			<item name="User's Guide" href="/userguidejava.html" />
 			<item name="Documentation" href="/documentationscajava.html" />
 		</menu>
-		<menu name="SDO 2.0 for Java">
+		<menu name="SDO for Java">
 			<item name="Releases" href="/releasessdojava.html" />	
-			<item name="Installation Instructions" href="installjava.html" />	
+			<item name="Installation" href="installjava.html" />	
 			<item name="User's Guide" href="/userguidejava.html" />		
 			<item name="Documentation" href="/documentationsdojava.html" />
 		</menu>
 		<menu name="Relational Data Access Service for Java">
 			<item name="Releases" href="/releasesdasjava.html" />	
-			<item name="Installation Instructions" href="installjava.html" />	
+			<item name="Installation" href="installjava.html" />	
 			<item name="User's Guide" href="/userguidejava.html" />		
 			<item name="Documentation" href="/documentationdasjava.html" />
 		</menu>
 		<menu name="SCA Runtime for C++">
 			<item name="Releases" href="/releasescpp.html" />	
-			<item name="Installation Instructions" href="installcpp.html" />	
+			<item name="Installation" href="installcpp.html" />	
 			<item name="User's Guide" href="/userguidecpp.html" />		
 			<item name="Documentation" href="/documentationscacpp.html" />
 		</menu>
-		<menu name="SDO 2.0 for C++">
+		<menu name="SDO for C++">
 			<item name="Releases" href="/releasescpp.html" />	
-			<item name="Installation Instructions" href="installcpp.html" />	
+			<item name="Installation" href="installcpp.html" />	
 			<item name="User's Guide" href="/userguidecpp.html" />		
 			<item name="Documentation" href="/documentationsdocpp.html" />
-		</menu>
-		<menu name="SDO for PHP">
-			<item name="SDO for PHP Project" href="phpproject.html" />
-		</menu>		
+		</menu>	
 		<menu name="Community">
 			<item name="Get Involved" href="/getinvolved.html" />
-			<!-- item name="Committers" href="/team-list.html" / -->
-			<item name="SVN Code Repository" href="/svn.html" />
+			<!--	<item name="Committers" href="/team-list.html" /> -->
 			<item name="Mailing Lists" href="/mail-lists.html" />
-			<item name="Bugs" href="/bugs.html" />
-			<item name="HowToBuildSite" href="howtobuildsite.html" />
+			<item name="Reporting Bugs" href="/bugs.html" />
+			<item name="Wiki" href="/wiki.html" />
+			<item name="Requirements" href="/requirements.html" />
+			<item name="FAQ" href="/faq.html" />
 			<item name="Reference Library" href="reference.html" />
 		</menu>
-		<menu name="Related Projects">
-			<item name="Axis2" href="http://ws.apache.org/axis2/" />
-			<item name="Tomcat" href="http://tomcat.apache.org/" />
+		
+		<menu name="Development">
+			<!--	<item name="Source Code" href="/svn.html" />
+			-->	
+			<item name="Java projects" href="/projectjava.html"/>
+			<item name="C++ projects" href="/projectc++.html"/>
+			<item name="Building the Site" href="howtobuildsite.html" />
 		</menu>
-
-  </body>
+		<menu name="Related Projects">
+			<item name="Axis" href="http://ws.apache.org/axis/" />
+			<item name="Geronimo" href="http://geronimo.apache.org/" />
+		</menu>
+		<footer>
+			<div>&#169; 2005, Apache Software Foundation</div>
+		</footer>
+	</body>
 </project>
