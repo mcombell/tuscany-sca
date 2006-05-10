@@ -63,7 +63,11 @@ public class CommandGroupImpl implements CommandGroup {
                     .next();
             String kind = commandConfig.getKind();
             if (kind.equalsIgnoreCase("select"))
-                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
+                //TODO - Need to refactor Command heirarchy based on Datasource
+                if (config.getConnectionProperties() != null)
+                    commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config, getConnection()));
+                else
+                    commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
             else if (kind.equalsIgnoreCase("update"))
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("insert"))
@@ -83,8 +87,7 @@ public class CommandGroupImpl implements CommandGroup {
      * @see org.apache.tuscany.das.rdb.CommandGroup#getApplyChangesCommand()
      */
     public ApplyChangesCommand getApplyChangesCommand() {
-        ApplyChangesCommand cmd = new ApplyChangesCommandImpl(config);
-        cmd.setConnection(getConnection());
+        ApplyChangesCommand cmd = new ApplyChangesCommandImpl(config, connection);
         return cmd;
     }
 

@@ -53,6 +53,14 @@ public class ReadCommandImpl extends CommandImpl {
             setMappingModel(mapping);
     }
 
+    //TODO - Need to refactor based on use of DataSource and CommandGroup
+    public ReadCommandImpl(String sqlString, Config mapping, Connection connection) {
+        this(sqlString);
+        setConnection(connection);
+        if (mapping != null)
+            setMappingModel(mapping);
+    }
+
     public void execute() {
         throw new UnsupportedOperationException();
     }
@@ -90,11 +98,11 @@ public class ReadCommandImpl extends CommandImpl {
                 resultSetShape);
 
         // Create the DataGraph
-        DataGraph g = SDOUtil.createDataGraph();     
+        DataGraph g = SDOUtil.createDataGraph();
 
         // Create the root object
         g.createRootObject(gbmd.getSchema());
-       
+
         ChangeSummary summary = g.getChangeSummary();
 
         ResultSetProcessor rsp = new ResultSetProcessor(g.getRootObject(), gbmd);
@@ -124,12 +132,13 @@ public class ReadCommandImpl extends CommandImpl {
     protected void setEndRow(int endRow) {
         this.endRow = endRow;
     }
- 
 
     private void setMappingModel(Config config) {
         configWrapper = new MappingWrapper(config);
-        if (config.getConnectionProperties() != null)
-            setConnection(config.getConnectionProperties());
+        //TODO - need to refactor and take into regression that lost ability to use Datasource
+        if (getConnection() == null)
+            if (config.getConnectionProperties() != null)
+                setConnection(config.getConnectionProperties());
     }
 
     public void setConnection(ConnectionProperties c) {

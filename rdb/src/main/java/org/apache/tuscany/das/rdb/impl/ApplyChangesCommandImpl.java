@@ -46,7 +46,12 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyCha
         if (config.getConnectionProperties() != null)
             setConnection(config.getConnectionProperties());
     }
-
+    
+    public ApplyChangesCommandImpl(Config config, Connection connection){
+        this.configWrapper = new MappingWrapper(config); 
+        setConnection(connection);
+    }
+    
 	public void setConnection(ConnectionImpl connection) {
 		summarizer.setConnection(connection);
 	}
