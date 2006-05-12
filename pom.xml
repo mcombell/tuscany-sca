@@ -29,7 +29,6 @@
 
     <modules>
         <module>rdb</module>
-        <module>samples</module>
     </modules>
 
 </project>
