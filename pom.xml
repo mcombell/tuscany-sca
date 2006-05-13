@@ -80,8 +80,10 @@
                       <phase>pre-site</phase>
                       <configuration>
                         <tasks>
-                            <mkdir dir="target/site/samples/java" />
-                            <copy todir='target/site/samples/java' file='../java/sampleSetup.htm'/>
+                            <mkdir dir="target/site/samples/java/docs" />
+                            <copy todir='target/site/samples/java/docs' >
+                                    <fileset dir="../java/docs"/>
+                            </copy>
                             <copy todir="target/site/samples/java/samples" >
                                     <fileset dir="../java/samples">
                                             <patternset>
@@ -89,9 +91,9 @@
                                             </patternset>
                                     </fileset>
                             </copy>
-                            <mkdir dir="target/site/samples/java/sca/samples" />
-                            <copy todir="target/site/samples/java/sca/samples" >
-                                    <fileset dir="../java/sca/samples">
+                            <mkdir dir="target/site/samples/java/sampleapps" />
+                            <copy todir="target/site/samples/java/sampleapps" >
+                                    <fileset dir="../java/sampleapps">
                                             <patternset>
                                               <include name="**/readme.htm" />
                                             </patternset>
@@ -101,8 +103,6 @@
                             <copy todir="target/site/scripts"  >
                                      <fileset dir="src/site/scripts"/>
                             </copy>
-
-
                         </tasks>
                       </configuration>
                       <goals>

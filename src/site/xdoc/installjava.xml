@@ -67,7 +67,7 @@
 	<section name="configuring apache tuscany">
 		<p>Detailed instructions on how to configure your Tomcat environment, or a Stand-Alone environment, 
  		can be found in the 
-                    <script type="text/javascript">linkNewWindow('samples/java/sampleSetup.htm','Samples README file');</script>
+                    <script type="text/javascript">linkNewWindow('samples/java/docs/sampleSetup.htm','Samples README file');</script>
                     </p>
 	</section>
 
