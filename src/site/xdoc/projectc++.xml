@@ -14,16 +14,70 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
- <document url="buildprojectc++">
-	 <properties>
-		<title>Apache Tuscany - Setting up Tuscany Project </title>
-	</properties>
-	<body>
-		<section name="Tuscany C++ Project">
+<document url="projectc++.xml">
 
-<p>
-To be filled in.
-</p>
+	<properties>
+
+		<author email="slattery@uk.ibm.com">Edward Slattery</author>
+
+		<title>Apache Tuscany - project Development Instructions for C++ Projects</title>
+	</properties>	
+	
+	<body>
+
+	<section name="Tuscany C++ Project">
+	<p>
+      The main Tuscany project repository is located at https://svn.apache.org/repos/asf/incubator/tuscany
+. You can use SVN to check out the entire project, and you will get both the java and C++ repositories.
+Alternatively you can check out just the cpp directory at
+https://svn.apache.org/repos/asf/incubator/tuscany/cpp, to get the SCA and SDO implementations for 
+C++. </p>
+
+	<section name="Building Apache Tuscany for C++">
+		<p>You can find detailed instructions on how to configure the C++ runtime and tools in the 
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/build.txt">build.txt</a> file.</p>
+		<p>You can find instructions on how to build the SCA C++ runtime here: 
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca/INSTALL">INSTALL</a>.</p>
+		<p>You can find instructions on how to build the SDO C++ runtime here: 
+		<a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sdo/INSTALL">INSTALL</a>.</p>
 	</section>
-	</body>
+
+	<p>The current status of the SCA project is held in this <a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca/readme.txt ">readme.txt</a>.</p>
+
+	</section>
+
+	<section name="System Requirements">
+		<p>In order to run the Tuscany C++ runtimes there are some minimum system requirements</p>
+			<table style="text-align: left; width: 100%;" border="1"
+				cellpadding="2" cellspacing="2">
+				<tbody>
+					<tr>
+						<td>Operating System</td>
+						<td>
+						<ul>
+							<li>Windows XP SP2</li>
+							<li>Linux: Red Hat Fedora Core </li>
+						</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>Other components</td>
+						<td>
+						<ul>
+							<li><a href="http://ws.apache.org/axis/">
+								Apache Axis (C++) 1.5
+							</a></li>
+							<li><a href="http://xml.apache.org/xerces-c/">
+								Xerces C++ XML Parser 2.2
+							</a>
+							</li>
+						</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	</section>
+
+</body>
+
 </document>
