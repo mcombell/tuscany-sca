@@ -64,7 +64,6 @@
 			<item name="Wiki" href="/wiki.html" />
 			<item name="Requirements" href="/requirements.html" />
 			<item name="FAQ" href="/faq.html" />
-			<item name="Reference Library" href="reference.html" />
 		</menu>
 		
 		<menu name="Development">

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document url="patches.xml">
+	<properties>
+		<author email="hmahbod@gmail.com">Haleh Mahbod</author>
+		<title>Apache Tuscany - Patches</title>
+	</properties>
+	<body>
+		<section name="Creating and Submitting a Patch">
+			Thank you for helping Tuscany project. Here are the steps to follow to create and submit a patch.
+			<ul>
+				<li>
+				<p>
+					<b> Check out the latest version </b> of source code from Subversion.
+				If you have a version checked out already,
+				do a fresh update before you make your changes. 
+				</p>
+				
+				<p>
+				You can find information about how to setup development environment <a href="projectjava.html"> for Java </a> or <a href="projectc++.html"> for C++ </a> here. 
+			 	</p>
+				</li>
+			       
+				<li> 
+				<p>
+					Please do a <b>full build with all tests enabled </b>. Try the following for Java projects:
+			        </p><p> 
+			        <code>
+				 
+					 maven -o clean new
+				 </code>
+			 	</p>
+			 	</li>
+			 
+				<li>
+				<p>
+					 <b>Confirm</b> that the problem is actually fixed and include a test case in the patch where possible.
+				 </p>
+				 </li>
+				 
+				 <li>
+				 <p>
+					 <b>Generate a patch</b> by issuing the following command from tuscany directory.   
+				 </p><p>
+				 <code>
+					 svn diff File >> patchfile
+				 </code>
+				 </p><p>
+				  Please try to give your patch files meaningful names. This helps the developer
+				  who applies a number of different patches. A recommendation is to use the JIRA 
+				  issue number as part of patch file name. For example
+			  	 </p>
+			  	 <p> 
+				 <code>
+					  svn diff File >> File312
+				  </code>
+				  <br></br>
+				  In this example, the number 312 is a JIRA issue number associated with this patch.
+			         </p>
+			        
+			  	</li>
+			
+				<li> 
+					<p> Add your patch file as an attachment to the JIRA issue that it is fixing.</p> 
+				<p>
+					Please include detailed steps to reproduce the problem in the issue description 
+					so that the patch can be properly verified after it is applied.
+				</p>
+			</li>
+			<li>
+				<p>Thank you! Your patch will be picked up for review. </p>
+			</li>
+		</ul>
+		</section>
+	</body>
+</document>

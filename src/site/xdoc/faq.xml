@@ -34,6 +34,14 @@
 					based on the same Service Component Architecture specification that is used by
 					the Tuscany runtime.					
 				</p>
+
+				<li>
+					I get null pointer for all samples running Tomcat. What is wrong?
+				</li>
+				This is result of a user error but useful to know anyhow. The build/test instructions say that to run the helloworld tomcat test you go to testing/tomcat and run mvn. This works fine. 
+				<br></br>If you forget this instruction and use the "prepareTomcat" ant target that the maven pom refers to, it fails. 
+				<p>
+				</p>
 			</ul>
 
 

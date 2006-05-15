@@ -34,10 +34,11 @@
 <br />
 Various community members will be presenting SCA, SDO. There is also a BOF session for Tuscany on Thursday.
 </p>  
-    <p><b>March 6 2006  --  A stable "milestone" build is available for both Java and C++ </b><br />
+    <p><b>March 6 2006  --  A stable level of source code is available for both Java and C++ </b><br />
 <br />
-To get Java build up and running on your system see the
-        <a href ="http://wiki.apache.org/ws/Tuscany/GetTuscany" target='_blank'>GetTuscany Wiki</a>. Use the following SVN checkout command:
+To get the Java project up and running on your system see the <script type="text/javascript">linkNewWindow('projectjava.html','Java Project Page');</script>.
+         <br></br>
+         Use the following SVN checkout command to get this version:
         <pre> svn co -r 383106   http://svn.apache.org/repos/asf/incubator/tuscany/java
         </pre>
         Highlights for the Java project in this build:

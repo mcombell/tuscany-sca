@@ -25,8 +25,8 @@
 	
 	<body>
 
-	<section name="installation instructions for java projects">
-	<p>this page describes what you need to know to install the java projects of tuscany.
+	<section name="Installation Instructions for JAVA projects">
+	<p>This page describes what is needed to install and run Tuscany SCA, SDO and DAS for Java.
 	</p>
 
 	<p>if you haven't already, the first step is to download the latest release of apache tuscany from our <a href="download.html">downloads</a> page.
@@ -34,16 +34,22 @@
 
 	</section>
 
-	<section name="system requirements">
+	<section name="System Requirements">
 		<p>in order to run the tuscany java projects there are some minimum system requirements</p>
 			<table style="text-align: left; width: 100%;" border="1"
 				cellpadding="2" cellspacing="2">
 				<tbody>
+					<tr> <!-- heading -->
+						<td><b>Software</b></td>
+						<td><b>Download Link</b></td>
+						<td><b>Download Instructions </b></td>
+					</tr>
 					<tr>
 						<td>jdk</td>
 						<td>
-                                                     <script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>
+							<script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script> 
 						</td>
+						<td>Steps for Java setup is <a href="#setup JDK 5.0">here</a>.  </td>
 					</tr>
 					<tr>
 						<td>operating system</td>
@@ -52,25 +58,100 @@
 							<li>windows xp sp2</li>
 							<li>linux: red hat fedora core </li>
 						</ul>
-						</td>
+					</td>
+					<td></td>
 					</tr>
-					<tr>
-						<td>other components</td>
-						<td>
-                                                     <script type="text/javascript">linkNewWindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
-						</td>
-					</tr>
-				</tbody>
+					<tr> <!--mvn -->
+				        <td> Apache Maven 2.0.4  </td>
+				        <td><script type="text/javascript">linkNewWindow('http://maven.apache.org/download.html','Maven 2.04');</script> </td>
+					<td> 
+						You would use maven to build samples if you wish to. Instruction for downloading mave 2.0.4 and building samples is <a href="#setup maven">here</a>.
+				
+							</td>
+				</tr>				</tbody>
 			</table>
 	</section>
 
-	<section name="configuring apache tuscany">
-		<p>Detailed instructions on how to configure your Tomcat environment, or a Stand-Alone environment, 
- 		can be found in the 
-                    <script type="text/javascript">linkNewWindow('samples/java/docs/sampleSetup.htm','Samples README file');</script>
-                    </p>
-	</section>
+	
+	<a name="setup JDK 5.0"></a>
+<section name="Downloading and Installing the Java JDK 5.0"> 
+<ul>
+	<li>
+	Point your Web browser to   <script type="text/javascript">linkNewWindow('http://java.sun.com/j2se/1.5.0/download.jsp','jdk 5.0');</script>.
+	</li>
+	<li>
+	Select "Download JDK 5.0 Update 6". 
+	</li>
+	<li>
+	Accept the License agreement, then select Windows Online Installation, 
+	Multi-language - jdk-1_5_0_06-windows-i586-p-iftw.exe. </li>
+	<li>
+	Download jdk-1_5_0_06-windows-i586-p-iftw.exe to the C:\tuscany directory. 
+	</li>
+	<li>
+	From the command prompt do the following: 
+	<pre>
+	jdk-1_5_0_06-windows-i586-p-iftw.exe
+	This will run the JDK 5.0 Installation Wizard. Accept the License agreement, 
+	then proceed through the pages of the wizard. Accept all the default options. 
 
+	After a few minutes the installation will complete.
+        You should see the following: <br></br>
+       	<img alt="installation result" src="jdkinstall.jpg"/>
+
+	Press Finish to close the installation wizard. 
+	</pre> 
+	</li>
+	<li>
+	Create a new .bat file C:\tuscany\setenv.bat and add the following line: 
+	<pre>
+	set JAVA_HOME=C:\Program Files\Java\jdk1.5.0_06
+	</pre>
+	</li>
+</ul>
+</section>
+
+
+
+<a name="setup maven"></a>
+<section name ="Setup Maven and Build Samples">
+	<p>
+		<b> Download and Setup </b>
+	</p>
+<ul>
+	<li>
+		Point your Web browser to  <script type="text/javascript">linkNewWindow('http://maven.apache.org/download.html','http://maven.apache.org/download.html');</script>.
+	</li>
+	<li>	
+		Select "Maven 2.0.4 (zip) - maven-2.0.4-bin.zip".
+	</li>
+	<li>
+	Download maven-2.0.4-bin.zip to the C:\tuscany directory. 
+	</li>
+	<li>
+	From the command prompt do the following: 
+	<pre>
+		unzip maven-2.0.4-bin.zip
+	</pre>
+	This will extract Maven 2.0.4 to the C:\tuscany\maven-2.0.4 directory. 
+	</li>
+	<li>
+	Modify C:\tuscany\setenv.bat and add the following line: 
+	<pre>
+		set PATH=%PATH%;C:\tuscany\maven-2.0.4\bin
+	</pre>
+	</li>
+</ul>
+<p>
+	<b> Build Samples </b>
+	<br></br>
+		You are now ready to build samples. For example,  go to samples/sca/helloworld and issue the following command to build it. 
+		<br> </br>
+		<pre>
+			mvn 
+		</pre>
+	</p>
+</section>
 </body>
 
 
