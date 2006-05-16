@@ -41,7 +41,7 @@
 		<p>		
 			Next, please download the following in order to get your machine ready for Java development.
 			Please note that the instructions mentioned in the table below is for windows environment.
-			For Linux, please follow the <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/Linux','Linux setup and build instruction');</script>.
+			For Linux, please follow the <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/TuscanyJava/GetTuscany/Linux','Linux setup and build instruction');</script>.
 			<br></br>
 		<table style="text-align: left; width: 100%;" border="1"
 				cellpadding="2" cellspacing="2">
@@ -346,10 +346,10 @@ This will build the Tuscany runtime with Maven. Maven will download all the JAR 
 	<p>
 		<ol>
 			<li value="windows">
-				Information for how to run Helloworld sample in J2SE or Tomcat is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/WinXP','here');</script>.
+				Information for how to run Helloworld sample in J2SE or Tomcat is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/TuscanyJava/GetTuscany/WinXP','here');</script>.
 			</li>
 			<li value="Linux">
-				Information for how to run hellowrld sample is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/GetTuscany/Linux','here');</script>.
+				Information for how to run hellowrld sample is <script type="text/javascript">linkNewWindow('http://wiki.apache.org/ws/Tuscany/TuscanyJava/GetTuscany/Linux','here');</script>.
 			</li>
 		</ol>
 	</p>
