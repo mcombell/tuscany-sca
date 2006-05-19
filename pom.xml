@@ -80,14 +80,17 @@
                       <phase>pre-site</phase>
                       <configuration>
                         <tasks>
-                            <mkdir dir="target/site/samples/java/docs" />
-                            <copy todir='target/site/samples/java/docs' >
-                                    <fileset dir="../java/docs"/>
+                            <mkdir dir="target/site/samples/java/javadoc" />
+                            <copy todir='target/site/samples/java/javadoc' >
+                                    <fileset dir="../java/javadoc"/>
                             </copy>
                             <copy todir="target/site/samples/java/samples" >
                                     <fileset dir="../java/samples">
                                             <patternset>
-                                              <include name="**/readme.htm" />
+                                              <include name="**/*.htm*" />
+                                              <include name="**/*.jpg" />
+                                              <include name="**/*.gif" />
+                                              <include name="**/*.png" />
                                             </patternset>
                                     </fileset>
                             </copy>
@@ -95,7 +98,10 @@
                             <copy todir="target/site/samples/java/sampleapps" >
                                     <fileset dir="../java/sampleapps">
                                             <patternset>
-                                              <include name="**/readme.htm" />
+                                              <include name="**/*.htm*" />
+                                              <include name="**/*.jpg" />
+                                              <include name="**/*.gif" />
+                                              <include name="**/*.png" />
                                             </patternset>
                                     </fileset>
                             </copy>
@@ -103,6 +109,7 @@
                             <copy todir="target/site/scripts"  >
                                      <fileset dir="src/site/scripts"/>
                             </copy>
+                            <copy file='../java/GettingStarted.htm' todir='target/site/samples/java'/>
                         </tasks>
                       </configuration>
                       <goals>
@@ -142,6 +149,13 @@
 
   <mailingLists>
 
+    <mailingList>
+      <name>Tuscany User List</name>
+      <subscribe>tuscany-user-subscribe@ws.apache.org</subscribe>
+      <unsubscribe>tuscany-user-unsubscribe@ws.apache.org</unsubscribe>
+      <post>tuscany-user@ws.apache.org</post>
+      <archive>http://www.mail-archive.com/tuscany-user%40ws.apache.org/</archive>
+    </mailingList>
     <mailingList>
       <name>Tuscany Developer List</name>
       <subscribe>tuscany-dev-subscribe@ws.apache.org</subscribe>
