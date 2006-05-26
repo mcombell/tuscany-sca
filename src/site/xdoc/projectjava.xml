@@ -81,6 +81,7 @@
                                         <ul>
                                                 <li>Tuscany source code is stored in a Subversion (SVN) repository, you need Subversion to download it. Steps for svn setup is <a href="#setup subversion">here</a>. </li>
                                                 <li> A quick reference for subversion commands is <script type="text/javascript">linkNewWindow('quicksubversion.html','here');</script></li>
+                                                <li><i>Note: Some linux distributions may already have a subversion client installed. try executing "svn --version"</i></li>
                                         </ul>
                                         </td>
                                 </tr>
@@ -107,7 +108,7 @@
 Open a Command Prompt window, then from the command prompt create a directory named "tuscany": 
 This is the directory where we're going to check out the Tuscany code from subversion.
 </section>
-<section name="Enviroment scripts">
+<section name="Environment scripts">
 <p>There is a windows <a href='setenv.bat'>setenv.bat</a> and a linux  <a href='setenv.sh'>setenv.sh</a> script that you can
 download by right clicking and "selecting save as..."  You can edit these scripts
  with the below described environment variables to set up your environment any time by running them. On linux you invoke the shell script with
