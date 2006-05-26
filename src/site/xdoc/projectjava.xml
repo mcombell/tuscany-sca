@@ -24,10 +24,11 @@
         <ol>
 
                 <li><a href="#System requirements">System requirements</a></li>
+                <li><a href="#Enviroment scripts">Environment Scripts- <i>template scripts to setup your environment</i>.</a></li>
                 <li><a href="#checkout and build tuscany">Checkout and build Tuscany Java project</a></li>
                 <li><a href="#run samples">Running  samples</a></li>
                 <li> <script type="text/javascript">linkNewWindow('patches.html','Create and submit a patch');</script></li>
-        <li> <script type="text/javascript">linkNewWindow('javadocinfo.html','javadoc');</script></li>
+        <li> <script type="text/javascript">linkNewWindow('javadoc/index.htm','javadoc');</script></li>
         <li> <script type="text/javascript">linkNewWindow('codeguidelines.html','Java Coding Guidelines');</script></li>
                 <li><a href="#using eclipse">Using Eclipse for IDE</a></li>
                 <li><a href="#using idea">Using IDEA style templates</a></li>
@@ -64,7 +65,7 @@
                                                 We are using Maven 2 to build Tuscany, plus a few Ant scripts. Steps for Maven setup is <a href="#setup maven">here</a>.
                                                 </li>
                                                 <li>
-                                                A quick reference on Maven is available <script type="text/javascript">linkNewWindow('mavan.html','here');</script>
+                                                A quick reference on Maven is available <script type="text/javascript">linkNewWindow('maven.html','here');</script>
                                                 </li>
                                                 </ul>
                                         </td>
@@ -86,7 +87,7 @@
                                         </td>
                                 </tr>
                                 <tr><!--tomcat --> 
-                                <td> Apache Tomcat 5.5.16 </td>
+                                <td> Apache Tomcat 5.5.17 </td>
                                 <td>
                         <script type="text/javascript">linkNewWindow('http://tomcat.apache.org/','apache tomcat 5.5');</script>
                                 </td>
@@ -173,7 +174,8 @@ download by right clicking and "selecting save as..."  You can edit these script
 <section name ="Download and Setup Tomcat">
         <ul>
         <li>
-        Dowload apache-tomcat-5.5.17  <script type="text/javascript">linkNewWindow('http://www.ibiblio.org/pub/mirrors/apache/tomcat/tomcat-5/v5.5.16/bin/apache-tomcat-5.5.16.zip','Tomcat Zip');</script> here. 
+        Dowload apache-tomcat-5.5.17  <script type="text/javascript">linkNewWindow('http://mirrors.ibiblio.org/pub/mirrors/apache/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.zip','apache-tomcat-5.5.17.zip');</script> for Windows or
+          <script type="text/javascript">linkNewWindow('http://mirrors.ibiblio.org/pub/mirrors/apache/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.tar.gz','apache-tomcat-5.5.17.tar.gz');</script> for Linux
         to the <B>tuscany\java\distribution\tomcat-overlay directory</B>. Do not unpack.
         </li>
         </ul>
@@ -221,7 +223,8 @@ This will build the Tuscany runtime with Maven. Maven will download all the JAR 
           Change the directory tuscany\java\distribution\target\tuscany-dist
          </li>
          <li>
-          Follow the directions in GettingStarted.htm
+                 
+          Follow the directions in <script type="text/javascript">linkNewWindow('samples/java/GettingStarted.htm#Starting the Server','GettingStarted.htm');</script>.
          </li>
          </ul>
            
@@ -337,7 +340,7 @@ This will build the Tuscany runtime with Maven. Maven will download all the JAR 
                 <br/>Download this file. <i>You may need to right click and save.</i> 
                         <pre>
                         copy tuscany-idea-codestyle.xml to ~/.IntelliJIdea50/config/codestyles
-                        File->Settings, Project Code Styles, Import
+                        File-&gt;Settings, Project Code Styles, Import
                         </pre>
                 </section>
         </body>
