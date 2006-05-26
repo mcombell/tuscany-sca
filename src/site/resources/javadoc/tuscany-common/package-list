@@ -1,0 +1,5 @@
+org.apache.tuscany.common
+org.apache.tuscany.common.monitor
+org.apache.tuscany.common.monitor.impl
+org.apache.tuscany.common.resource
+org.apache.tuscany.common.resource.impl
