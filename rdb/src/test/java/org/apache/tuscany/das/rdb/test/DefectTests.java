@@ -279,6 +279,90 @@ public class DefectTests extends DasTest {
     }  
          
     
+    /**
+     * Tuscany-433
+     * 
+     * Read and modify a customer.  
+     * Provide needed Create/Update/Delete statements programatically
+     * 
+     * From CrudWithChangeHistory tests but not setting parameters.
+     * Should not be necessary
+     */
+    public void testReadModifyApply()
+        throws Exception
+    {
+
+        //Read customer 1
+        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        select.setConnection( getConnection() );
+        DataObject root = select.executeQuery();
+
+        DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );
+
+        //Modify customer
+        customer.set( "LASTNAME", "Pavick" );
+
+        //Build apply changes command
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+        apply.setConnection( getConnection() );
+
+        //Manually create and add update command
+        Command update = Command.FACTORY.createCommand( "update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID" );
+//        update.addParameter( "LASTNAME", SDODataTypes.STRING );
+//        update.addParameter( "ID", SDODataTypes.INTEGER );
+        apply.addUpdateCommand( customer.getType(), update );
+
+        //Flush changes
+        apply.execute( root );
+
+        //Verify changes
+        root = select.executeQuery();
+        assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
+
+    }
+
+    /**
+     * 
+     * Tuscany-433
+     * 
+     * 
+     * Read and modify a customer.  
+     * Provide needed Create/Update/Delete statements via xml file
+     * 
+     * Same as in CrudWithChangeHistory but provided partial update statement
+     */
+    public void testReadModifyApply1()
+        throws Exception
+    {
+
+        //Read customer 1
+        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        select.setConnection( getConnection() );
+        DataObject root = select.executeQuery();
+
+        DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );
+
+        //Modify customer
+        customer.set( "LASTNAME", "Pavick" );
+
+        //Build apply changes command
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMappingWithCUD2.xml"));
+        apply.setConnection( getConnection() );
+
+        //Flush changes
+        apply.execute( root );
+
+        //Verify changes
+        root = select.executeQuery();
+        assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
+
+    }    
+    
+    
+    
+    
+    
+    
     
     /**
      * Test problem with Random
