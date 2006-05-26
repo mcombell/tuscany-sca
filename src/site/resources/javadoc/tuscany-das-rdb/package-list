@@ -1,0 +1,11 @@
+org.apache.tuscany.das.rdb
+org.apache.tuscany.das.rdb.config
+org.apache.tuscany.das.rdb.config.impl
+org.apache.tuscany.das.rdb.config.util
+org.apache.tuscany.das.rdb.config.wrapper
+org.apache.tuscany.das.rdb.generator.impl
+org.apache.tuscany.das.rdb.graphbuilder.impl
+org.apache.tuscany.das.rdb.graphbuilder.schema
+org.apache.tuscany.das.rdb.impl
+org.apache.tuscany.das.rdb.merge.impl
+org.apache.tuscany.das.rdb.util

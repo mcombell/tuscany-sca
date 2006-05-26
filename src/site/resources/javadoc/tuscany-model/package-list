@@ -1,0 +1,10 @@
+org.apache.tuscany.model
+org.apache.tuscany.model.assembly
+org.apache.tuscany.model.assembly.impl
+org.apache.tuscany.model.assembly.loader
+org.apache.tuscany.model.scdl.loader.impl
+org.apache.tuscany.model.types.java
+org.apache.tuscany.model.types.java.impl
+org.apache.tuscany.model.types.wsdl
+org.apache.tuscany.model.types.wsdl.impl
+org.apache.tuscany.model.util
