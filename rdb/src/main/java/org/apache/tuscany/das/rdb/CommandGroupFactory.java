@@ -18,6 +18,8 @@ package org.apache.tuscany.das.rdb;
 
 import java.io.InputStream;
 
+import org.apache.tuscany.das.rdb.config.Config;
+
 /**
  * A CommandGroupFactory produces {@link CommandGroup} instances.
  * 
@@ -33,5 +35,15 @@ public interface CommandGroupFactory {
      * @return returns a CommandGroup instance
      */
     public CommandGroup createCommandGroup(InputStream configStream);
+    
+    
+    /**
+     * Creates a CommandGroup based on the provided config
+     * 
+     * @param config
+     *            A DAS config object
+     * @return returns a CommandGroup instance
+     */
+    public CommandGroup createCommandGroup(Config config);
 
 }

@@ -130,23 +130,38 @@ public class ESchemaMaker {
 			while (i.hasNext()) {
 				Relationship r = (Relationship) i.next();
 
-				Type parent = rootType.getProperty(
-						wrapper.getTablePropertyName(r.getPrimaryKeyTable())).getType();
-				Type child = rootType.getProperty(
-						wrapper.getTablePropertyName(r.getForeignKeyTable())).getType();
-				if (parent == null) {
+				String parentName = wrapper.getTablePropertyName(r.getPrimaryKeyTable());
+				String childName = wrapper.getTablePropertyName(r.getForeignKeyTable());
+				
+				if (parentName == null) {
 					throw new RuntimeException("The parent table ("
 							+ r.getPrimaryKeyTable() + ") in relationship "
 							+ r.getName()
 							+ " was not found in the mapping information.");
-				} else if (child == null) {
+				} else if (childName == null) {
 					throw new RuntimeException("The child table ("
 							+ r.getForeignKeyTable() + ") in relationship "
 							+ r.getName()
 							+ " was not found in the mapping information.");
 				}
-
-			//	ReferenceImpl ref = refMaker.createReference(r, parent, child);	
+				
+				Property parentProperty = rootType.getProperty(parentName);
+				Property childProperty = rootType.getProperty(childName);
+				
+				if (parentProperty == null) {
+					throw new RuntimeException("The parent table ("
+							+ parentName + ") in relationship "
+							+ r.getName()
+							+ " was not found.");
+				} else if (childProperty == null) {
+					throw new RuntimeException("The child table ("
+							+ childName + ") in relationship "
+							+ r.getName()
+							+ " was not found.");
+				}
+				
+				Type parent = parentProperty.getType();
+				Type child = childProperty.getType();								
 				
 				Property parentProp = SDOUtil.createProperty(parent, r.getName(), child);	
 				Property childProp = SDOUtil.createProperty(child, r.getName() + "_opposite", parent);

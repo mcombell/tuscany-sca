@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.CommandGroupFactory;
+import org.apache.tuscany.das.rdb.config.Config;
 
 public class CommandGroupFactoryImpl implements CommandGroupFactory {
 
@@ -27,5 +28,9 @@ public class CommandGroupFactoryImpl implements CommandGroupFactory {
     public CommandGroup createCommandGroup(InputStream configStream) {
         return new CommandGroupImpl(configStream);
     }
+
+	public CommandGroup createCommandGroup(Config config) {		
+		return new CommandGroupImpl(config);
+	}
 
 }

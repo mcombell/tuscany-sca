@@ -50,12 +50,12 @@ public class CommandGroupImpl implements CommandGroup {
     private Map commands = new HashMap();
 
     public CommandGroupImpl(InputStream stream) {
-        super();
-        config = ConfigUtil.loadConfig(stream);
-        initialize();
+        this(ConfigUtil.loadConfig(stream));
+        
     }
 
-    private void initialize() {
+    public CommandGroupImpl(Config inConfig) {
+    	this.config = inConfig;
         
         Iterator i = config.getCommand().iterator();
         while (i.hasNext()) {
