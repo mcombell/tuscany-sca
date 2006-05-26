@@ -24,9 +24,11 @@ package org.apache.tuscany.das.rdb.test;
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
+import org.apache.tuscany.das.rdb.util.ConfigUtil;
 
 import commonj.sdo.DataObject;
 
@@ -77,6 +79,20 @@ public class CommandGroupTests extends DasTest {
 
     }
 
+    /**
+     * Read 
+     */
+    public void testReadUsingConfigInput() throws Exception {
+    	Config config = ConfigUtil.loadConfig(getConfig("CustomersOrdersConfig.xml"));
+        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(config);
+        commandGroup.setConnection(getConnection());
+
+        Command read = commandGroup.getCommand("all customers");
+        DataObject root = read.executeQuery();
+
+        assertEquals(5, root.getList("CUSTOMER").size());
+
+    }
     /**
      * Read an order using parm marker
      */

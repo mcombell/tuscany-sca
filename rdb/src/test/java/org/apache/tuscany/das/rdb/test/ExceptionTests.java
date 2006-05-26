@@ -25,6 +25,7 @@ import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
+import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.sdo.util.SDOUtil;
 
@@ -43,6 +44,7 @@ public class ExceptionTests extends DasTest {
         new CustomerData(getAutoConnection()).refresh();
         new OrderData(getAutoConnection()).refresh();
         new BookData(getAutoConnection()).refresh();
+        new OrderDetailsData(getAutoConnection()).refresh();
 
     }
 
@@ -145,5 +147,22 @@ public class ExceptionTests extends DasTest {
         
     }
     
+    
+    public void testReadOrdersAndDetails2() throws Exception {
+
+        Command read = Command.FACTORY
+				.createCommand(
+						"SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID",
+						getConfig("InvalidConfig1.xml"));
+		read.setConnection(getConnection());
+
+		try {
+			DataObject root = read.executeQuery();
+		} catch ( Exception ex ) {
+			assertEquals("The parent table (xxx) in relationship ORDERDETAILS was not found.", ex.getMessage());
+		}	
+
+    }
+  
     
 }
