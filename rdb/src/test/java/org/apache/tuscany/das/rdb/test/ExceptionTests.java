@@ -85,7 +85,7 @@ public class ExceptionTests extends DasTest {
         try {
             Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1", getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
-        } catch (Error e) {
+        } catch (RuntimeException e) {
             assertEquals(
                     "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name",
                     e.getMessage());
@@ -99,7 +99,7 @@ public class ExceptionTests extends DasTest {
         try {
             CommandGroup.FACTORY.createCommandGroup(getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
-        } catch (Error e) {
+        } catch (RuntimeException e) {
             assertEquals(
                     "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name",
                     e.getMessage());
