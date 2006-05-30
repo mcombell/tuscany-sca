@@ -28,6 +28,7 @@ import java.util.Random;
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
@@ -285,8 +286,7 @@ public class DefectTests extends DasTest {
      * Read and modify a customer.  
      * Provide needed Create/Update/Delete statements programatically
      * 
-     * From CrudWithChangeHistory tests but not setting parameters.
-     * Should not be necessary
+     * Fails if provided udpate statement does not include all parameters
      */
     public void testReadModifyApply()
         throws Exception
@@ -302,15 +302,14 @@ public class DefectTests extends DasTest {
         //Modify customer
         customer.set( "LASTNAME", "Pavick" );
 
-        //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection( getConnection() );
 
-        //Manually create and add update command
-        Command update = Command.FACTORY.createCommand( "update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID" );
-//        update.addParameter( "LASTNAME", SDODataTypes.STRING );
-//        update.addParameter( "ID", SDODataTypes.INTEGER );
-        apply.addUpdateCommand( customer.getType(), update );
+        // Provide updatecommand programmatically via config
+        ConfigHelper helper = new ConfigHelper();
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID", "CUSTOMER");         
+        
+        //Build apply changes command
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
+        apply.setConnection( getConnection() );
 
         //Flush changes
         apply.execute( root );
@@ -330,6 +329,9 @@ public class DefectTests extends DasTest {
      * Provide needed Create/Update/Delete statements via xml file
      * 
      * Same as in CrudWithChangeHistory but provided partial update statement
+     * 
+     * Fails if provided udpate statement does not include all parameters
+     * 
      */
     public void testReadModifyApply1()
         throws Exception

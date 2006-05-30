@@ -30,6 +30,7 @@ import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
@@ -73,16 +74,14 @@ public class CrudWithChangeHistory
         //Modify customer
         customer.set( "LASTNAME", "Pavick" );
 
+        // Provide updatecommand programmatically via config
+        ConfigHelper helper = new ConfigHelper();
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME, ADDRESS = :ADDRESS where ID = :ID", "CUSTOMER");        
+               
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
         apply.setConnection( getConnection() );
-
-        //Manually create and add update command
-        Command update = Command.FACTORY.createCommand( "update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID" );
-        update.addParameter( "LASTNAME", SDODataTypes.STRING );
-        update.addParameter( "ID", SDODataTypes.INTEGER );
-        apply.addUpdateCommand( customer.getType(), update );
-
+        
         //Flush changes
         apply.execute( root );
 
