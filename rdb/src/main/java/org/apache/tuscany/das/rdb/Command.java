@@ -46,24 +46,6 @@ public interface Command {
 	public DataObject executeQuery();
 
 	/**
-	 * Returns the parameter associated with "name"
-	 * 
-	 * @param name
-	 *            the name of the parameter
-	 * @return the associated parameter
-	 */
-	public Parameter getParameter(String name);
-
-	/**
-	 * Returns the Parameter at index
-	 * 
-	 * @param index
-	 *            the index of the Parameter
-	 * @return the associated Parameter
-	 */
-	public Parameter getParameter(int index);
-
-	/**
 	 * Sets the value of the named Parameter
 	 * 
 	 * @param name
@@ -94,16 +76,6 @@ public interface Command {
     public void setParameterType(String string, Type dataType);
      
      /**
-     * Sets the "type" of the associated Parameter
-     * 
-     * @param index
-     *            the index of the Parameter
-     * @param type
-     *            the SDODataTypes-defined "type" for the Parameter.
-     */
-    public void setParameterType(int index, Type dataType);
-    
-    /**
 	 * Returns the value of the associated Parameter
 	 * 
 	 * @param name
@@ -126,26 +98,6 @@ public interface Command {
 	 * 
 	 * @param index
 	 *            the index of the parameter
-	 * @param sdoType
-	 *            the commonj.sdo.Type of the Parameter
-	 */
-	public void addParameter(int index, Type sdoType);
-
-	/**
-	 * Adds a Parameter to the command
-	 * 
-	 * @param name
-	 *            the index of the parameter
-	 * @param sdoType
-	 *            the commonj.sdo.Type of the Parameter
-	 */
-	public void addParameter(String name, Type sdoType);
-
-	/**
-	 * Adds a Parameter to the command
-	 * 
-	 * @param index
-	 *            the index of the parameter
 	 * @param direction
 	 *            the direction of the Parameter. Either Parameter.IN,
 	 *            Parameter.OUT or Parameter.INOUT
@@ -154,20 +106,6 @@ public interface Command {
 	 *            {@link SDODataTypes}
 	 */
 	public void addParameter(int index, int direction, Type sdoType);
-
-	/**
-	 * Adds a Parameter to the command
-	 * 
-	 * @param name
-	 *            the name associated with the Parameter
-	 * @param direction
-	 *            the direction of the Parameter. Either Parameter.IN,
-	 *            Parameter.OUT or Parameter.INOUT
-	 * @param sdoType
-	 *            specifies the type as a commonj.sdo.Type from
-	 *            {@link SDODataTypes}
-	 */
-	public void addParameter(String name, int direction, Type sdoType);
 
 	/**
 	 * Specifies an object model for a graph of DataObjects returned by

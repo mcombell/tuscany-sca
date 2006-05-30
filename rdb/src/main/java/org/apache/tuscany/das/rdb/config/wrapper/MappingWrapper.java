@@ -408,4 +408,10 @@ public class MappingWrapper {
         throw new RuntimeException("Could not find relationship " + name + " in the configuration");
     }
 
+    public void addUpdateCommand(String tableName, String statement) {
+        Table table = findOrCreateTable(tableName);
+        table.setUpdate(statement);
+        
+    }
+
 }
