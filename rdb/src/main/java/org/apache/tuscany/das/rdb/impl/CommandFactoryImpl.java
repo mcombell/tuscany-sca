@@ -69,7 +69,7 @@ public class CommandFactoryImpl implements CommandFactory {
         case '{':
             return new SPCommandImpl(sql, config);
         default:
-            throw new Error("SQL => " + sql + " is not valid");
+            throw new RuntimeException("SQL => " + sql + " is not valid");
         }
 
     }

@@ -246,7 +246,7 @@ public class MappingWrapper {
     public void addTable(String tableName, String propertyName) {
         Table table = getTable(tableName);
         if (table != null)
-            throw new Error("Table " + tableName + "already exists");
+            throw new RuntimeException("Table " + tableName + "already exists");
 
         table = ConfigFactoryImpl.eINSTANCE.createTable();
         table.setName(tableName);

@@ -75,7 +75,7 @@ public class CommandGroupImpl implements CommandGroup {
             else if (kind.equalsIgnoreCase("delete"))
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
             else
-                throw new Error("Invalid kind of command: " + kind);
+                throw new RuntimeException("Invalid kind of command: " + kind);
 
         }
 
@@ -119,7 +119,7 @@ public class CommandGroupImpl implements CommandGroup {
 
         ConnectionProperties cp = config.getConnectionProperties();
         if (cp == null)
-            throw new Error(
+            throw new RuntimeException(
                     "No connection properties have been configured and no connection has been provided");
 
         if (cp.getDataSource() != null)
@@ -157,7 +157,7 @@ public class CommandGroupImpl implements CommandGroup {
         try {
             ctx = new InitialContext();
         } catch (NamingException e) {
-            throw new Error(e);
+            throw new RuntimeException(e);
         }
         try {
             // TODO - I think we should rename this getDataSourceURL?
@@ -167,10 +167,10 @@ public class CommandGroupImpl implements CommandGroup {
                 connection.setAutoCommit(false);
                 setConnection(connection);
             } catch (SQLException e) {
-                throw new Error(e);
+                throw new RuntimeException(e);
             }
         } catch (NamingException e) {
-            throw new Error(e);
+            throw new RuntimeException(e);
         }
 
     }

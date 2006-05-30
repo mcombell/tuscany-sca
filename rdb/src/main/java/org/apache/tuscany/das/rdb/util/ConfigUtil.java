@@ -35,7 +35,7 @@ public class ConfigUtil {
     public static Config loadConfig(InputStream configStream) {
 
         if (configStream == null)
-            throw new Error(
+            throw new RuntimeException(
                     "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name");
 
         SDOUtil.registerStaticTypes(ConfigFactory.class);
