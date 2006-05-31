@@ -13,14 +13,14 @@ set SVN_HOME=E:\bin\svn-win32-1.3.1
 set PATH=%PATH%;%JAVA_HOME%\bin
 set PATH=%PATH%;%MAVEN_HOME%\bin
 set PATH=%PATH%;%ANT_HOME%\bin
-set PATH=%PATH%;%ANT_HOME%\bin
+set PATH=%PATH%;%SVN_HOME%\bin
 echo.
 echo Checkng Java 
 java -version
 echo checking Ant
 call ant -version
 echo.
-echo checking Ant
+echo checking SVN
 svn --version
 echo.
 echo checking Maven 

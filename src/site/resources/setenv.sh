@@ -7,8 +7,7 @@ typeset -x PATH=$ANT_HOME/bin:$PATH
 typeset -x MVN_HOME=~/bin/maven-2.0.4
 typeset -x PATH=$MVN_HOME/bin:$PATH/bin
 #
-typeset -x SVN_HOME=~/bin/maven-2.0.4
-typeset -x PATH=$SVN_HOME/bin:$PATH/bin
+typeset -x SVN_HOME=~/bin/svn-1.3.1typeset -x PATH=$SVN_HOME/bin:$PATH/bin
 #
 java -version
 mvn --version
