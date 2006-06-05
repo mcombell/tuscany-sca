@@ -208,6 +208,11 @@ download by right clicking and "selecting save as..."  You can edit these script
         </pre>
 This will build the Tuscany runtime with Maven. Maven will download all the JAR dependencies, build all the Tuscany sub-projects and run the unit tests. 
 </p>
+<p>
+<i><b>Note:</b> Depending on the load of remote Mavan 2.0 repositories you may have to execute mvn several time until required
+      dependencies are all located in your local maven repository.  After you have completed a full successful build you 
+      can use "mvn -o" which is much faster.</i>
+</p>
 </section>
 <a name="run samples"></a>
 <section name ="Running The Samples">
@@ -217,7 +222,7 @@ This will build the Tuscany runtime with Maven. Maven will download all the JAR 
           Change the directory to the tuscany\java\distribution
          </li>
          <li>
-          Issue mvn to build the distribution package.
+          Run build-dist.bat (for win32 platforms), or build-dist.sh (for linux)
          </li>
          <li>
           Change the directory tuscany\java\distribution\target\tuscany-dist
