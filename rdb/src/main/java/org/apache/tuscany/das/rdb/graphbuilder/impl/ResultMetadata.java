@@ -70,7 +70,7 @@ public class ResultMetadata {
             String tableName = resultSetShape.getTableName(i);
 
             String tableProperty = mappingWrapper
-                    .getTablePropertyName(tableName);
+                    .getTableTypeName(tableName);
             String columnProperty = mappingWrapper.getColumnPropertyName(
                     tableName, resultSetShape.getColumnName(i));
             String converter = mappingWrapper.getConverter(tableName,
@@ -124,8 +124,8 @@ public class ResultMetadata {
             while (tablesFromModel.hasNext()) {
                 TableWrapper t = new TableWrapper((Table) tablesFromModel
                         .next());
-                if (tableToColumnMap.get(t.getPropertyName()) == null)
-                    tableToColumnMap.put(t.getPropertyName(),
+                if (tableToColumnMap.get(t.getTypeName()) == null)
+                    tableToColumnMap.put(t.getTypeName(),
                             Collections.EMPTY_LIST);
             }
         }

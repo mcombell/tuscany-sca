@@ -17,14 +17,12 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
@@ -134,28 +132,8 @@ public class ReadCommandImpl extends CommandImpl {
     }
 
     private void setMappingModel(Config config) {
-        configWrapper = new MappingWrapper(config);
-        //TODO - need to refactor and take into regression that lost ability to use Datasource
-        if (getConnection() == null)
-            if (config.getConnectionProperties() != null)
-                setConnection(config.getConnectionProperties());
-    }
-
-    public void setConnection(ConnectionProperties c) {
-        try {
-            Connection connection = null;
-            Class.forName(c.getDriverClassName());
-            if (c.getDriverUserName() == null)
-                connection = DriverManager.getConnection(c.getDriverURL());
-            else
-                connection = DriverManager.getConnection(c.getDriverURL(), c.getDriverUserName(), c
-                        .getDriverPassword());
-            connection.setAutoCommit(false);
-            setConnection(connection);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+        configWrapper = new MappingWrapper(config);    
+    }   
 
     public void setDataObjectModel(Type schema) {
         this.schema = schema;

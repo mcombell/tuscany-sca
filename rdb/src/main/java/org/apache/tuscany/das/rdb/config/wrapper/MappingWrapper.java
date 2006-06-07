@@ -54,29 +54,29 @@ public class MappingWrapper {
         return this.config;
     }
 
-    public Table getTable(String name) {
+    public Table getTable(String tableName) {
         if (config == null)
             return null;
-        DebugUtil.debugln(getClass(), debug, "Looking for table " + name);
+        DebugUtil.debugln(getClass(), debug, "Looking for table " + tableName);
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
-            if (name.equals(t.getName()))
+            if (tableName.equals(t.getTableName()))
                 return t;
         }
 
         return null;
     }
 
-    public Table getTableByPropertyName(String name) {
+    public Table getTableByTypeName(String typeName) {
         if (config == null)
             return null;
-        DebugUtil.debugln(getClass(), debug, "Looking for table by property: " + name);
+        DebugUtil.debugln(getClass(), debug, "Looking for table by property: " + typeName);
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
             TableWrapper wrapper = new TableWrapper(t);
-            if (name.equals(wrapper.getPropertyName()))
+            if (typeName.equals(wrapper.getTypeName()))
                 return t;
         }
         return null;
@@ -174,11 +174,11 @@ public class MappingWrapper {
         }
     }
 
-    public String getTablePropertyName(String tableName) {
+    public String getTableTypeName(String tableName) {
         Table t = getTable(tableName);
         if (t == null)
             return tableName;
-        String propertyName = t.getPropertyName();
+        String propertyName = t.getTypeName();
 
         if (propertyName == null)
             return tableName;
@@ -186,18 +186,18 @@ public class MappingWrapper {
         return propertyName;
     }
 
-    public Column getColumn(Table t, String name) {
+    public Column getColumn(Table t, String columnName) {
         if (t == null)
             return null;
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (c.getName().equals(name)) {
+            if (c.getColumnName().equals(columnName)) {
                 return c;
             }
         }
         DebugUtil
-                .debugln(getClass(), debug, "WARNING: Could not find column " + name + " in table " + t.getName());
+                .debugln(getClass(), debug, "WARNING: Could not find column " + columnName + " in table " + t.getTableName());
         return null;
     }
 
@@ -207,13 +207,13 @@ public class MappingWrapper {
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (c.getName().equals(propertyName))
+            if (c.getColumnName().equals(propertyName))
                 return c;
             if (c.getPropertyName() != null && c.getPropertyName().equals(propertyName))
                 return c;
         }
         DebugUtil.debugln(getClass(), debug, "WARNING: Could not find column " + propertyName + " in table "
-                + t.getName());
+                + t.getTableName());
         return null;
     }
 
@@ -225,7 +225,7 @@ public class MappingWrapper {
 
         String propertyName = c.getPropertyName();
         if (propertyName == null)
-            return c.getName();
+            return c.getColumnName();
 
         return propertyName;
     }
@@ -243,14 +243,14 @@ public class MappingWrapper {
         config.getTable().add(t);
     }
 
-    public void addTable(String tableName, String propertyName) {
+    public void addTable(String tableName, String typeName) {
         Table table = getTable(tableName);
         if (table != null)
             throw new RuntimeException("Table " + tableName + "already exists");
 
         table = ConfigFactoryImpl.eINSTANCE.createTable();
-        table.setName(tableName);
-        table.setPropertyName(propertyName);
+        table.setTableName(tableName);
+        table.setTypeName(typeName);
         config.getTable().add(table);
 
     }
@@ -259,7 +259,7 @@ public class MappingWrapper {
         Table table = getTable(tableName);
         if (table == null) {
             table = ConfigFactoryImpl.eINSTANCE.createTable();
-            table.setName(tableName);
+            table.setTableName(tableName);
             config.getTable().add(table);
         }
         return table;
@@ -270,12 +270,12 @@ public class MappingWrapper {
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (name.equals(c.getName()))
+            if (name.equals(c.getColumnName()))
                 return c;
         }
 
         Column c = ConfigFactoryImpl.eINSTANCE.createColumn();
-        c.setName(name);
+        c.setColumnName(name);
         t.getColumn().add(c);
         return c;
     }
@@ -381,7 +381,7 @@ public class MappingWrapper {
             if (c.getConverterClassName() != null) {
                 String property = c.getPropertyName();
                 if (property == null)
-                    property = c.getName();
+                    property = c.getColumnName();
                 converters.put(property, c.getConverterClassName());
             }
         }

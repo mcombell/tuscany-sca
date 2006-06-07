@@ -14,90 +14,67 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.apache.tuscany.das.rdb.config="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="org.apache.tuscany.das.rdb.config" ecore:package="org.apache.tuscany.das.rdb.config" targetNamespace="http:///org.apache.tuscany.das.rdb/config.xsd">
-   <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
-   <xsd:element ecore:ignore="true" name="Config" type="org.apache.tuscany.das.rdb.config:Config"/>
-   <xsd:element ecore:ignore="true" name="Command" type="org.apache.tuscany.das.rdb.config:Command"/>
-   <xsd:element ecore:ignore="true" name="ConnectionProperties" type="org.apache.tuscany.das.rdb.config:ConnectionProperties"/>
-   <xsd:element ecore:ignore="true" name="Parameter" type="org.apache.tuscany.das.rdb.config:Parameter"/>
-   <xsd:element ecore:ignore="true" name="Relationship" type="org.apache.tuscany.das.rdb.config:Relationship"/>
-   <xsd:element ecore:ignore="true" name="Table" type="org.apache.tuscany.das.rdb.config:Table"/>
-   <xsd:element ecore:ignore="true" name="KeyPair" type="org.apache.tuscany.das.rdb.config:KeyPair"/>
-   <xsd:element ecore:ignore="true" name="Column" type="org.apache.tuscany.das.rdb.config:Column"/>
-   <xsd:element ecore:ignore="true" name="ResultDescriptor" type="org.apache.tuscany.das.rdb.config:ResultDescriptor"/>
+<xsd:schema  xmlns:org.apache.tuscany.das.rdb.config="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  targetNamespace="http:///org.apache.tuscany.das.rdb/config.xsd">
    <xsd:complexType name="Config">
       <xsd:sequence>
-         <xsd:element ecore:opposite="Config" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="Command" type="org.apache.tuscany.das.rdb.config:Command"/>
-         <xsd:element ecore:opposite="Config" ecore:resolveProxies="true" minOccurs="0" name="ConnectionProperties" type="org.apache.tuscany.das.rdb.config:ConnectionProperties"/>
-         <xsd:element ecore:opposite="Config" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="Table" type="org.apache.tuscany.das.rdb.config:Table"/>
-         <xsd:element ecore:opposite="Config" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="Relationship" type="org.apache.tuscany.das.rdb.config:Relationship"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Command" type="org.apache.tuscany.das.rdb.config:Command"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Table" type="org.apache.tuscany.das.rdb.config:Table"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Relationship" type="org.apache.tuscany.das.rdb.config:Relationship"/>      
       </xsd:sequence>
+      <xsd:attribute name="dataSource" type="xsd:string"/>
       <xsd:attribute name="uri" type="xsd:string"/>
    </xsd:complexType>
    <xsd:complexType name="Command">
       <xsd:sequence>
-         <xsd:element ecore:opposite="Command" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="Parameter" type="org.apache.tuscany.das.rdb.config:Parameter"/>
-         <xsd:element ecore:opposite="Command" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="ResultDescriptor" type="org.apache.tuscany.das.rdb.config:ResultDescriptor"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Parameter" type="org.apache.tuscany.das.rdb.config:Parameter"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="ResultDescriptor" type="org.apache.tuscany.das.rdb.config:ResultDescriptor"/>
       </xsd:sequence>
       <xsd:attribute name="name" type="xsd:string"/>
       <xsd:attribute name="SQL" type="xsd:string"/>
       <xsd:attribute name="kind" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="Command" ecore:reference="org.apache.tuscany.das.rdb.config:Config" ecore:transient="true" name="Config" type="xsd:anyURI"/>
-   </xsd:complexType>
-   <xsd:complexType name="ConnectionProperties">
-      <xsd:attribute name="dataSource" type="xsd:string"/>
-      <xsd:attribute name="driverClassName" type="xsd:string"/>
-      <xsd:attribute name="driverURL" type="xsd:string"/>
-      <xsd:attribute name="driverPassword" type="xsd:string"/>
-      <xsd:attribute name="driverUserName" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="ConnectionProperties" ecore:reference="org.apache.tuscany.das.rdb.config:Config" ecore:transient="true" name="Config" type="xsd:anyURI"/>
-   </xsd:complexType>
+   </xsd:complexType>     
    <xsd:complexType name="Parameter">
       <xsd:attribute name="name" type="xsd:string"/>
       <xsd:attribute name="columnType" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="Parameter" ecore:reference="org.apache.tuscany.das.rdb.config:Command" ecore:transient="true" name="Command" type="xsd:anyURI"/>
+      <xsd:attribute name="direction" type="xsd:string"/>     
    </xsd:complexType>
    <xsd:complexType name="Relationship">
       <xsd:sequence>
-         <xsd:element ecore:opposite="Relationship" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="KeyPair" type="org.apache.tuscany.das.rdb.config:KeyPair"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="KeyPair" type="org.apache.tuscany.das.rdb.config:KeyPair"/>
       </xsd:sequence>
       <xsd:attribute name="name" type="xsd:string"/>
       <xsd:attribute name="primaryKeyTable" type="xsd:string"/>
       <xsd:attribute name="foreignKeyTable" type="xsd:string"/>
-      <xsd:attribute name="many" type="xsd:boolean"/>
-      <xsd:attribute ecore:opposite="Relationship" ecore:reference="org.apache.tuscany.das.rdb.config:Config" ecore:transient="true" name="Config" type="xsd:anyURI"/>
+      <xsd:attribute name="many" type="xsd:boolean"/>   
    </xsd:complexType>
    <xsd:complexType name="Table">
       <xsd:sequence>
-         <xsd:element ecore:opposite="Table" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="Column" type="org.apache.tuscany.das.rdb.config:Column"/>
+         <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Column" type="org.apache.tuscany.das.rdb.config:Column"/>
       </xsd:sequence>
-      <xsd:attribute name="name" type="xsd:string"/>
-      <xsd:attribute name="propertyName" type="xsd:string"/>
+      <xsd:attribute name="tableName" type="xsd:string"/>
+      <xsd:attribute name="typeName" type="xsd:string"/>
       <xsd:attribute name="create" type="xsd:string"/>
       <xsd:attribute name="update" type="xsd:string"/>
-      <xsd:attribute name="delete" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="Table" ecore:reference="org.apache.tuscany.das.rdb.config:Config" ecore:transient="true" name="Config" type="xsd:anyURI"/>
+      <xsd:attribute name="delete" type="xsd:string"/>    
    </xsd:complexType>
    <xsd:complexType name="KeyPair">
       <xsd:attribute name="primaryKeyColumn" type="xsd:string"/>
-      <xsd:attribute name="foreignKeyColumn" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="KeyPair" ecore:reference="org.apache.tuscany.das.rdb.config:Relationship" ecore:transient="true" name="Relationship" type="xsd:anyURI"/>
+      <xsd:attribute name="foreignKeyColumn" type="xsd:string"/>   
    </xsd:complexType>
    <xsd:complexType name="Column">
-      <xsd:attribute name="name" type="xsd:string"/>
+      <xsd:attribute name="columnName" type="xsd:string"/>
       <xsd:attribute name="propertyName" type="xsd:string"/>
       <xsd:attribute name="converterClassName" type="xsd:string"/>
       <xsd:attribute name="columnType" type="xsd:string"/>
       <xsd:attribute name="primaryKey" type="xsd:boolean"/>
       <xsd:attribute name="generated" type="xsd:boolean"/>
-      <xsd:attribute name="collision" type="xsd:boolean"/>
-      <xsd:attribute ecore:opposite="Column" ecore:reference="org.apache.tuscany.das.rdb.config:Table" ecore:transient="true" name="Table" type="xsd:anyURI"/>
+      <xsd:attribute name="collision" type="xsd:boolean"/>    
    </xsd:complexType>
    <xsd:complexType name="ResultDescriptor">
       <xsd:attribute name="columnName" type="xsd:string"/>
       <xsd:attribute name="tableName" type="xsd:string"/>
       <xsd:attribute name="columnType" type="xsd:string"/>
-      <xsd:attribute name="converter" type="xsd:string"/>
-      <xsd:attribute ecore:opposite="ResultDescriptor" ecore:reference="org.apache.tuscany.das.rdb.config:Command" ecore:transient="true" name="Command" type="xsd:anyURI"/>
+      <xsd:attribute name="converter" type="xsd:string"/>   
    </xsd:complexType>
+   
 </xsd:schema>

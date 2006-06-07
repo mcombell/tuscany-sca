@@ -47,6 +47,7 @@ public class BestPracticeTests extends DasTest {
     public void testReadCompanies() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        commandGroup.setConnection(getConnection());
         Command read = commandGroup.getCommand("all companies");
         DataObject root = read.executeQuery(); 
         assertEquals(3, root.getList("COMPANY").size());
@@ -57,6 +58,7 @@ public class BestPracticeTests extends DasTest {
     public void testReadCompaniesWithDepartments() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        commandGroup.setConnection(getConnection());
         Command read = commandGroup.getCommand("all companies and departments");
         DataObject root = read.executeQuery(); 
         DataObject firstCompany = root.getDataObject("COMPANY[1]");
@@ -68,6 +70,7 @@ public class BestPracticeTests extends DasTest {
     public void testddDepartmentToFirstCompany() throws Exception {
         
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        commandGroup.setConnection(getConnection());
         Command read = commandGroup.getCommand("all companies and departments");
         DataObject root = read.executeQuery();
         DataObject firstCustomer = root.getDataObject("COMPANY[1]");
@@ -92,6 +95,7 @@ public class BestPracticeTests extends DasTest {
     public void testFlushCreateHeirarchy() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        commandGroup.setConnection(getConnection());
         Command select = commandGroup.getCommand("all companies and departments");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
@@ -136,6 +140,7 @@ public class BestPracticeTests extends DasTest {
     public void testGetEmptyGraph() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command select = commandGroup.getCommand("company by id with departments");
         Integer idOfNoExistingCompany = new Integer(-1);

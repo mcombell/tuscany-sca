@@ -219,7 +219,8 @@ public class CorrectedDefectTests extends DasTest {
     public void testUpdateChildThatHasGeneratedKey() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-
+        commandGroup.setConnection(getConnection());
+        
         // Read a specific company based on the known ID
         Command readCust = commandGroup.getCommand("all companies and departments");
         DataObject root = readCust.executeQuery();

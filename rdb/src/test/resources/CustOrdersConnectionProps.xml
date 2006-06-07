@@ -40,17 +40,14 @@
         SQL="update CUSTOMER set LASTNAME = 'Pavick' where ID = :ID"
         kind="Update">
         <Parameter name=":ID"/>
-    </Command>
+    </Command>      
     
-    <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
-        driverURL="jdbc:derby:dastest"/>
-    
-    <Table name="CUSTOMER">
-        <Column name="ID" primaryKey="true"/>
+    <Table tableName="CUSTOMER">
+        <Column columnName="ID" primaryKey="true"/>
     </Table>
     
-    <Table name="ANORDER">
-        <Column name="ID" primaryKey="true"/>
+    <Table tableName="ANORDER">
+        <Column columnName="ID" primaryKey="true"/>
     </Table>
     
     <Relationship name="orders" primaryKeyTable="CUSTOMER"

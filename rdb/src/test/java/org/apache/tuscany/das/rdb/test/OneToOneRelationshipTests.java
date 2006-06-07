@@ -46,6 +46,7 @@ public class OneToOneRelationshipTests extends DasTest {
 
         CommandGroup commandGroup = CommandGroup.FACTORY
                 .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
@@ -62,6 +63,7 @@ public class OneToOneRelationshipTests extends DasTest {
 
         CommandGroup commandGroup = CommandGroup.FACTORY
                 .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("get named employee with company");
         read.setParameterValue("NAME", "Mary Smith");
@@ -79,6 +81,7 @@ public class OneToOneRelationshipTests extends DasTest {
 
         CommandGroup commandGroup = CommandGroup.FACTORY
                 .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
@@ -102,6 +105,7 @@ public class OneToOneRelationshipTests extends DasTest {
 
         CommandGroup commandGroup = CommandGroup.FACTORY
                 .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
@@ -126,6 +130,7 @@ public class OneToOneRelationshipTests extends DasTest {
 
         CommandGroup commandGroup = CommandGroup.FACTORY
                 .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
+        commandGroup.setConnection(getConnection());
 
         Command read = commandGroup.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();

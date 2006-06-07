@@ -29,12 +29,12 @@
         <Parameter name=":ID"/>
     </Command>
     
-    <Table name="CUSTOMER">
-        <Column name="ID" primaryKey="true"/>
+    <Table tableName="CUSTOMER">
+        <Column columnName="ID" primaryKey="true"/>
     </Table>
     
-    <Table name="ANORDER">
-        <Column name="ID" primaryKey="true"/>
+    <Table tableName="ANORDER">
+        <Column columnName="ID" primaryKey="true"/>
     </Table>
     
     <Relationship name="orders" primaryKeyTable="CUSTOMER"

@@ -37,18 +37,18 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 		mapping = factory.createConfig();
 		Table t = factory.createTable();
 		Column id = factory.createColumn();
-		id.setName("ID");
+		id.setColumnName("ID");
 		id.setPrimaryKey(true);
 		Column lastname = factory.createColumn();
-		lastname.setName("LASTNAME");
+		lastname.setColumnName("LASTNAME");
 		Column address = factory.createColumn();
-		address.setName("ADDRESS");
+		address.setColumnName("ADDRESS");
 		
 		t.getColumn().add(id);
 		t.getColumn().add(lastname);
 		t.getColumn().add(address);
-		t.setName("CUSTOMER");
-		t.setPropertyName("Customer");
+		t.setTableName("CUSTOMER");
+		t.setTypeName("Customer");
 		mapping.getTable().add(t);
 	}
 	

@@ -16,16 +16,16 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  
-	<Table name="STATES">
-		<Column name="ID" primaryKey="true"/>
-		<Column name="NAME"/>
+	<Table tableName="STATES">
+		<Column columnName="ID" primaryKey="true"/>
+		<Column columnName="NAME"/>
 	</Table>
 	
-	<Table name="CITIES">
+	<Table tableName="CITIES">
 		
-		<Column name="ID" primaryKey="true"/>
-		<Column name="NAME"/>
-		<Column name="STATE_ID"/>
+		<Column columnName="ID" primaryKey="true"/>
+		<Column columnName="NAME"/>
+		<Column columnName="STATE_ID"/>
 	
 	</Table>
 	

@@ -16,9 +16,9 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
-	<Table name="ORDERDETAILS">
-        <Column name="ORDERID" primaryKey="true"/>
-        <Column name="PRODUCTID" primaryKey="true"/>
+	<Table tableName="ORDERDETAILS">
+        <Column columnName="ORDERID" primaryKey="true"/>
+        <Column columnName="PRODUCTID" primaryKey="true"/>
     </Table>
  
 	   

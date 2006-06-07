@@ -130,8 +130,8 @@ public class ESchemaMaker {
 			while (i.hasNext()) {
 				Relationship r = (Relationship) i.next();
 
-				String parentName = wrapper.getTablePropertyName(r.getPrimaryKeyTable());
-				String childName = wrapper.getTablePropertyName(r.getForeignKeyTable());
+				String parentName = wrapper.getTableTypeName(r.getPrimaryKeyTable());
+				String childName = wrapper.getTableTypeName(r.getForeignKeyTable());
 				
 				if (parentName == null) {
 					throw new RuntimeException("The parent table ("

@@ -17,12 +17,10 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
@@ -42,9 +40,7 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyCha
     }
 
     public ApplyChangesCommandImpl(Config config){
-    	this.configWrapper = new MappingWrapper(config); 
-        if (config.getConnectionProperties() != null)
-            setConnection(config.getConnectionProperties());
+    	this.configWrapper = new MappingWrapper(config);       
     }
     
     public ApplyChangesCommandImpl(Config config, Connection connection){
@@ -55,21 +51,6 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyCha
 	public void setConnection(ConnectionImpl connection) {
 		summarizer.setConnection(connection);
 	}
-
-    public void setConnection(ConnectionProperties c) {
-        try {
-            Connection connection = null;
-            Class.forName(c.getDriverClassName());
-            if (c.getDriverUserName() == null)
-                connection = DriverManager.getConnection(c.getDriverURL());
-            else
-                connection = DriverManager.getConnection(c.getDriverURL(), c.getDriverUserName(), c.getDriverPassword());
-            connection.setAutoCommit(false);
-            setConnection(connection);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
     public void addCreateCommand(Type type, Command cmd) {
         summarizer.addCreateCommand(type, cmd);        

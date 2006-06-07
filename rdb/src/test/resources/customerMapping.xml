@@ -16,10 +16,10 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <Table name="CUSTOMER" propertyName="Customer">
-    <Column name="ID" propertyName="id" primaryKey="true"/>
-    <Column name="LASTNAME" propertyName="lastname"/>
-    <Column name="ADDRESS" propertyName="address"/>
+  <Table tableName="CUSTOMER" typeName="Customer">
+    <Column columnName="ID" propertyName="id" primaryKey="true"/>
+    <Column columnName="LASTNAME" propertyName="lastname"/>
+    <Column columnName="ADDRESS" propertyName="address"/>
   </Table>
 	
 </Config>

@@ -16,8 +16,8 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   
-  <Table name="PART">
-  	<Column name="ID" primaryKey="true"/>
+  <Table tableName="PART">
+  	<Column columnName="ID" primaryKey="true"/>
   </Table>
   
   <Relationship name="subparts" primaryKeyTable="PART" foreignKeyTable="PART" many="true">

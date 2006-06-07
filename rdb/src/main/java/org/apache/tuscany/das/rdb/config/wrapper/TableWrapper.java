@@ -31,9 +31,9 @@ public class TableWrapper {
 		this.table = table;
 	}
 
-	public String getPropertyName() {
-		return table.getPropertyName() == null ? table.getName() : table
-				.getPropertyName();
+	public String getTypeName() {
+		return table.getTypeName() == null ? table.getTableName() : table
+				.getTypeName();
 	}
 
 	public Collection getPrimaryKeyNames() {
@@ -42,7 +42,7 @@ public class TableWrapper {
 		while (i.hasNext()) {
 			Column c = (Column) i.next();
 			if (c.isPrimaryKey())
-				pkNames.add(c.getName());
+				pkNames.add(c.getColumnName());
 		}
 		return pkNames;
 	}
@@ -65,7 +65,7 @@ public class TableWrapper {
 		if (c.getPropertyName() != null)
 			return c.getPropertyName();
 		else
-			return c.getName();
+			return c.getColumnName();
 	}
 
 	public boolean isGeneratedColumnProperty(String name) {
@@ -94,7 +94,7 @@ public class TableWrapper {
 			Column c = (Column) columns.next();
 			String property = c.getPropertyName();
 			if (property == null)
-				property = c.getName();
+				property = c.getColumnName();
 			if (propertyName.equals(property))
 				return c;
 		}
@@ -119,6 +119,6 @@ public class TableWrapper {
 		if ( c.getPropertyName() != null ) 
 			return c.getPropertyName();
 		else
-			return c.getName();
+			return c.getColumnName();
 	}
 }

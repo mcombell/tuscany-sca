@@ -120,7 +120,7 @@ public class DatabaseObject {
 
     public String getTableName() {
         if (mappingWrapper.getConfig() != null)
-            return mappingWrapper.getTableByPropertyName(getTypeName()).getName();
+            return mappingWrapper.getTableByTypeName(getTypeName()).getTableName();
         else
             return null;
     }

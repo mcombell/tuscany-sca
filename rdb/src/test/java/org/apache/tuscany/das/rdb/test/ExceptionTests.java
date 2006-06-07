@@ -63,6 +63,7 @@ public class ExceptionTests extends DasTest {
 
     }
 
+
     public void testMissingMapping() throws Exception {
         Command readCustomers = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");
         readCustomers.setConnection(getConnection());

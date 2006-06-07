@@ -32,7 +32,6 @@ import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.config.Config;
-import org.apache.tuscany.das.rdb.config.ConnectionProperties;
 import org.apache.tuscany.das.rdb.util.ConfigUtil;
 
 /**
@@ -62,12 +61,8 @@ public class CommandGroupImpl implements CommandGroup {
             org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
                     .next();
             String kind = commandConfig.getKind();
-            if (kind.equalsIgnoreCase("select"))
-                //TODO - Need to refactor Command heirarchy based on Datasource
-                if (config.getConnectionProperties() != null)
-                    commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config, getConnection()));
-                else
-                    commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
+            if (kind.equalsIgnoreCase("select"))                             
+                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
             else if (kind.equalsIgnoreCase("update"))
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("insert"))
@@ -117,39 +112,10 @@ public class CommandGroupImpl implements CommandGroup {
 
     private void initializeConnection() {
 
-        ConnectionProperties cp = config.getConnectionProperties();
-        if (cp == null)
+        String dataSource = config.getDataSource();
+        if (dataSource == null)
             throw new RuntimeException(
-                    "No connection properties have been configured and no connection has been provided");
-
-        if (cp.getDataSource() != null)
-            initViaDataSource(cp);
-        else
-            initViaDriverManager(cp);
-
-    }
-
-    private void initViaDriverManager(ConnectionProperties cp) {
-        Connection connection = null;
-
-        try {
-            Class.forName(cp.getDriverClassName());
-            if (cp.getDriverUserName() == null)
-                connection = DriverManager.getConnection(cp.getDriverURL());
-            else
-                connection = DriverManager.getConnection(cp.getDriverURL(), cp.getDriverUserName(), cp
-                        .getDriverPassword());
-            connection.setAutoCommit(false);
-            setConnection(connection);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-
-    }
-
-    // TODO - Refactor to eliminate common initialization code after connection
-    // is got
-    private void initViaDataSource(ConnectionProperties cp) {
+                    "No connection has been provided and no data source has been specified");
 
         Connection connection = null;
 
@@ -161,7 +127,7 @@ public class CommandGroupImpl implements CommandGroup {
         }
         try {
             // TODO - I think we should rename this getDataSourceURL?
-            DataSource ds = (DataSource) ctx.lookup(cp.getDataSource());
+            DataSource ds = (DataSource) ctx.lookup(dataSource);
             try {
                 connection = ds.getConnection();
                 connection.setAutoCommit(false);
@@ -192,12 +158,12 @@ public class CommandGroupImpl implements CommandGroup {
     }
 
     /**
-     * If the config has connection properties then we are "manageing" the
-     * connection via DriverManager or DataSource
+     * If the config has connection properties then we are "managing" the
+     * connection via DataSource
      */
     private boolean managingConnections() {
 
-        if (config.getConnectionProperties() == null)
+        if (config.getDataSource() == null)
             return false;
         else
             return true;

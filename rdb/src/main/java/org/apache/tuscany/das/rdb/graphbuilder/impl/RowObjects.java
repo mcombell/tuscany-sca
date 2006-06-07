@@ -70,9 +70,9 @@ public class RowObjects {
 
 			
             DataObject parentTable = get(wrapper
-					.getTablePropertyName(r.getPrimaryKeyTable()));
+					.getTableTypeName(r.getPrimaryKeyTable()));
 			DataObject childTable = get(wrapper
-					.getTablePropertyName(r.getForeignKeyTable()));
+					.getTableTypeName(r.getForeignKeyTable()));
 
 			DebugUtil.debugln(getClass(), debug, "Parent table: " + parentTable);
 			DebugUtil.debugln(getClass(), debug, "Child table: " + childTable);

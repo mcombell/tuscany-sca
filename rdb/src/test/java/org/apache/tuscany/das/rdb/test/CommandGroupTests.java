@@ -99,7 +99,8 @@ public class CommandGroupTests extends DasTest {
     public void testReadWithParmmarker() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-
+        commandGroup.setConnection(getConnection());
+        
         Command read = commandGroup.getCommand("order by id with ?");
         read.setParameterValue(1, new Integer(1));
         DataObject root = read.executeQuery();
@@ -114,7 +115,8 @@ public class CommandGroupTests extends DasTest {
     public void testReadWithConnectionProperties() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-
+        commandGroup.setConnection(getConnection());
+        
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
 
@@ -128,7 +130,8 @@ public class CommandGroupTests extends DasTest {
     public void testUpdate() throws Exception {
 
         CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-
+        commandGroup.setConnection(getConnection());
+        
         Command read = commandGroup.getCommand("all customers");
         DataObject root = read.executeQuery();
         // Verify precondition

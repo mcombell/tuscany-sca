@@ -15,8 +15,8 @@
   limitations under the License.
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Table name="COMPANY">
-		<Column name="ID" primaryKey="true" generated="true"/>
-		<Column name="NAME"/>
+	<Table tableName="COMPANY">
+		<Column columnName="ID" primaryKey="true" generated="true"/>
+		<Column columnName="NAME"/>
 	</Table>
 </Config>

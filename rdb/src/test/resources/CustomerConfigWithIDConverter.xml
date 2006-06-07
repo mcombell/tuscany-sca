@@ -16,8 +16,8 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <Table name="CUSTOMER">
-    <Column name="ID" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToLongConverter"/>
+  <Table tableName="CUSTOMER">
+    <Column columnName="ID" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToLongConverter"/>
   </Table>
 	
 </Config>

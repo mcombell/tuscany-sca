@@ -16,13 +16,13 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <Table name="CUSTOMER" propertyName="Customer">
-    <Column name="ID" propertyName="iD" primaryKey="true"/>
+  <Table tableName="CUSTOMER" typeName="Customer">
+    <Column columnName="ID" propertyName="iD" primaryKey="true"/>
   </Table>
   
-  <Table name="ANORDER" propertyName="AnOrder">
-  	<Column name="CUSTOMER_ID" propertyName="customerID"/>
-    <Column name="ID" propertyName="iD" primaryKey="true"/>
+  <Table tableName="ANORDER" typeName="AnOrder">
+  	<Column columnName="CUSTOMER_ID" propertyName="customerID"/>
+    <Column columnName="ID" propertyName="iD" primaryKey="true"/>
   </Table>
 	
   <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">

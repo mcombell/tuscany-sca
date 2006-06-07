@@ -51,7 +51,7 @@ public class InsertGenerator {
 		ArrayList parameters = new ArrayList();
 		TableWrapper table = new TableWrapper(t);
 		StringBuffer statement = new StringBuffer("insert into ");
-		statement.append(t.getName());
+		statement.append(t.getTableName());
 
 		Iterator i = getAttributeProperties(changedObject, config).iterator();
 
@@ -165,10 +165,10 @@ public class InsertGenerator {
 	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {							
 			
 			if ( !rel.isMany()) {
-				Table t = config.getTableByPropertyName(changedObject.getType().getName());
+				Table t = config.getTableByTypeName(changedObject.getType().getName());
 				TableWrapper tw = new TableWrapper(t);
 				RelationshipWrapper rw = new RelationshipWrapper(rel);
-				if (( rel.getForeignKeyTable().equals(t.getName())) &&
+				if (( rel.getForeignKeyTable().equals(t.getTableName())) &&
 						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
 					return true;			
 			}

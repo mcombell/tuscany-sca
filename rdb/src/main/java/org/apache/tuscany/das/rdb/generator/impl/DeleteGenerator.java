@@ -43,7 +43,7 @@ public class DeleteGenerator {
 
 		StringBuffer statement = new StringBuffer();
 		statement.append("delete from ");
-		statement.append(t.getName());
+		statement.append(t.getTableName());
 		statement.append(" where ");
 
 		Iterator names = table.getPrimaryKeyNames().iterator();

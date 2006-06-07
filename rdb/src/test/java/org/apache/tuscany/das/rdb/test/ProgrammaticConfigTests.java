@@ -16,6 +16,8 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.Iterator;
+
 import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
@@ -25,6 +27,7 @@ import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 
 /**
  * Tests the Converter framwork
@@ -139,7 +142,7 @@ public class ProgrammaticConfigTests extends DasTest {
 
         DataObject root = select.executeQuery();
         
-        DataObject newBook = root.createDataObject("Book");
+        DataObject newBook = root.createDataObject("Book");     
         newBook.setString("NAME", "Ant Colonies of the Old World");
         newBook.setInt("BOOK_ID", 1001);
         root.getList("Book").add(newBook);

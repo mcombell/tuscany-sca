@@ -156,10 +156,10 @@ public class ChangeSummarizer {
 			
 			if ( !rel.isMany()) {
 				// This is a one-one relationship
-				Table t = mapping.getTableByPropertyName(changedObject.getType().getName());
+				Table t = mapping.getTableByTypeName(changedObject.getType().getName());
 				TableWrapper tw = new TableWrapper(t);
 				RelationshipWrapper rw = new RelationshipWrapper(rel);
-				if (( rel.getForeignKeyTable().equals(t.getName())) &&
+				if (( rel.getForeignKeyTable().equals(t.getTableName())) &&
 						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
 					return true;
 				
@@ -223,9 +223,9 @@ public class ChangeSummarizer {
 				Column c = (Column) columns.next();
 				if ( c.isPrimaryKey() && c.isGenerated()) {
 					DebugUtil.debugln(getClass(), debug, "adding generated key "
-							+ t.getName() + "."
-							+ c.getName());
-					generatedKeys.put(t.getName(), c.getName());
+							+ t.getTableName() + "."
+							+ c.getColumnName());
+					generatedKeys.put(t.getTableName(), c.getColumnName());
 				}
 			}
 		}

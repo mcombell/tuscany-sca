@@ -53,7 +53,7 @@ public class UpdateGenerator {
 		Type type = changedObject.getType();
 		TableWrapper t = new TableWrapper(table);
 		StringBuffer statement = new StringBuffer("update ");
-		statement.append(table.getName());
+		statement.append(table.getTableName());
 		statement.append(" set ");
 
 		
@@ -71,7 +71,7 @@ public class UpdateGenerator {
 				}
 			} else {
 				parameters.add(attr);
-				statement.append(c == null ? attr.getName() : c.getName());
+				statement.append(c == null ? attr.getName() : c.getColumnName());
 				statement.append(" = ?");
 				if (i.hasNext())
 					statement.append(", ");
@@ -94,7 +94,7 @@ public class UpdateGenerator {
 
 		if (t.getCollisionColumn() != null) {
 			statement.append(" and ");
-			statement.append(t.getCollisionColumn().getName());
+			statement.append(t.getCollisionColumn().getColumnName());
 			statement.append(" = ?");
 			parameters.add(type.getProperty(t.getCollisionColumnPropertyName()));
 		}

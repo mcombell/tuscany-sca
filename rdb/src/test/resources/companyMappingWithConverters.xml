@@ -16,18 +16,18 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   
-  <Table name="COMPANY" propertyName="CompanyType">
-    <Column name="ID" primaryKey="true"/>
+  <Table tableName="COMPANY" typeName="CompanyType">
+    <Column columnName="ID" primaryKey="true"/>
   </Table>
   
-  <Table name="DEPARTMENT" propertyName="DepartmentType">
-    <Column name="ID" primaryKey="true"/>
-    <Column name="NUMBER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToIntegerConverter"/>
+  <Table tableName="DEPARTMENT" typeName="DepartmentType">
+    <Column columnName="ID" primaryKey="true"/>
+    <Column columnName="NUMBER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToIntegerConverter"/>
   </Table>
 
-  <Table name="EMPLOYEE" propertyName="EmployeeType">
-  	  <Column name="ID" primaryKey="true"/>
-  	  <Column name="MANAGER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.IntegerToBooleanConverter"/>
+  <Table tableName="EMPLOYEE" typeName="EmployeeType">
+  	  <Column columnName="ID" primaryKey="true"/>
+  	  <Column columnName="MANAGER" converterClassName="org.apache.tuscany.das.rdb.test.mappings.IntegerToBooleanConverter"/>
   </Table>	
 	
   <Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">

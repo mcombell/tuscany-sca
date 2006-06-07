@@ -29,15 +29,12 @@
 -->  
 
 
-    <ConnectionProperties driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
-        driverURL="jdbc:derby:dastest"/>
-
-    <Table name="COMPANY">
-        <Column name="ID" primaryKey="true" generated="true"/>
+    <Table tableName="COMPANY">
+        <Column columnName="ID" primaryKey="true" generated="true"/>
     </Table>
     
-	<Table name="DEPARTMENT">
-		<Column name="ID" primaryKey="true" generated="true"/>
+	<Table tableName="DEPARTMENT">
+		<Column columnName="ID" primaryKey="true" generated="true"/>
 	</Table>
 	
 	<Relationship name="departments" primaryKeyTable="COMPANY" foreignKeyTable="DEPARTMENT" many="true">

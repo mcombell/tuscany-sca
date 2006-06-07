@@ -99,12 +99,12 @@ public class ChangeFactory {
 	private InsertCommandImpl getCreateCommand(DataObject changedObject) {
 		
 		if ( createCommand == null ) {
-			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
+			Table table = mapping.getTableByTypeName(changedObject.getType().getName());
 			if (table == null ) {
 				if (changedObject.getType().getProperty("ID") != null ) {
 					// If the table is not defined in the config, assume it has a primary key of "ID"
 					mapping.addPrimaryKey(changedObject.getType().getName() + ".ID");
-					table = mapping.getTableByPropertyName(changedObject.getType().getName());
+					table = mapping.getTableByTypeName(changedObject.getType().getName());
 				} else {
 					throw new RuntimeException("Table " + changedObject.getType().getName() + " was changed in the DataGraph but is not present in the Config");
 				}
@@ -131,12 +131,12 @@ public class ChangeFactory {
 	private DeleteCommandImpl getDeleteCommand(DataObject changedObject) {
 		
 		if ( deleteCommand == null ) {
-			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
+			Table table = mapping.getTableByTypeName(changedObject.getType().getName());
 			if (table == null )  {
 				if (changedObject.getType().getProperty("ID") != null ) {
 					// If the table is not defined in the config, assume it has a primary key of "ID"
 					mapping.addPrimaryKey(changedObject.getType().getName() + ".ID");
-					table = mapping.getTableByPropertyName(changedObject.getType().getName());
+					table = mapping.getTableByTypeName(changedObject.getType().getName());
 				} else {
 					throw new RuntimeException("Table " + changedObject.getType().getName() + " was changed in the DataGraph but is not present in the Config");
 				}
@@ -160,12 +160,12 @@ public class ChangeFactory {
 	private UpdateCommandImpl getUpdateCommand(DataObject changedObject) {
 	
 		if ( updateCommand == null ) {
-			Table table = mapping.getTableByPropertyName(changedObject.getType().getName());
+			Table table = mapping.getTableByTypeName(changedObject.getType().getName());
 			if (table == null ) {
 				if (changedObject.getType().getProperty("ID") != null ) {
 					// If the table is not defined in the config, assume it has a primary key of "ID"
 					mapping.addPrimaryKey(changedObject.getType().getName() + ".ID");
-					table = mapping.getTableByPropertyName(changedObject.getType().getName());
+					table = mapping.getTableByTypeName(changedObject.getType().getName());
 				} else {
 					throw new RuntimeException("Table " + changedObject.getType().getName() + " was changed in the DataGraph but is not present in the Config");
 				}
