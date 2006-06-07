@@ -23,7 +23,8 @@
 	<body>
 		<section name="Tuscany SCA Runtime for Java Releases">
 			<p>
-				There are no releases of the SCA Runtime for Java at present.
+			The latest release is included in the Apache Tuscany Java milestone release (tuscany incubating M1).  To download please visit the
+                        the <a href='download.html#Apache Tuscany Java Downloads'>Apache Tuscany Downloads page</a>.
 			</p>
 		</section>
 	</body>
