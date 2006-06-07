@@ -16,22 +16,128 @@
  -->
 <document url="download.xml">
 	<properties>
-		<author email="mike_edwards@uk.ibm.com">Mike Edwards</author>
+		<author email="someone@apache.org"></author>
 		<title>Apache Tuscany - Downloads</title>
 	</properties>
 	<body>
-		<h2>Apache Tuscany Downloads</h2>
+		<section name="Apache Tuscany Downloads">
 		<p>
-			Welcome to the Apache Tuscany downloads site. As the Tuscany project is currently part
-			of the Incubator, no binary downloads are available now.
-		</p>
-		<p>
-			If you want to obtain the Tuscany runtime and tools, you should check out the source from the
-			SVN repository and build it locally on your machine. 
-			<br></br>
-			Details of this can be found on the
-			<a href="projectjava.html">java project</a> page for Java and on 
-			<a href="projectc++.html"> C++ project </a> page for C++.
-		</p>
+			Welcome to the Apache Tuscany download page. The Apache Tuscany project is currently part of the
+<script type="text/javascript">linkNewWindow('http://incubator.apache.org/','Apache Incubator');</script>.
+
+<br/>Apache Tuscany is distributed under the
+<script type="text/javascript">linkNewWindow('http://www.apache.org/licenses/LICENSE-2.0.html','Apache License, version 2.0');</script>.
+<p><i>Note:You may have to for some links right click on the link and then select &quot;</i><b><code>Save Target As...</code></b><i>&quot;.</i>
+</p>
+                 <ul>
+                 <li>
+                   <a href='#Apache Tuscany Java Downloads'>Java Downloads</a>
+                 </li>
+                 <li>
+                   <a href='#Apache Tuscany C++ Downloads'>C++ Downloads</a>
+                 </li>
+                 </ul>
+                </p>
+		</section>
+
+                <a name="Apache Tuscany Java Downloads"></a>
+		<section name="Apache Tuscany Java Downloads">
+
+<p>
+Tuscany is distributed in several formats for your convenience.
+</p>
+<h3>Incubating-M1 (June 7, 2006)</h3>
+<p>
+For requirements please review 
+<script type="text/javascript">linkNewWindow('samples/java/GettingStarted.htm#System Requirements','Getting Started, System Requirements section ');</script>.
+                    <table>
+                      <thead>
+                      <th>
+                         Description
+                      </th>
+                      <th>
+                         Download link
+                      </th>
+                      <th>
+                        MD5 Check sum file of download 
+                      </th>
+                      <th>
+                        PGP Signature file of download 
+                      </th>
+                      </thead>
+                      <tbody>
+                       <tr>
+                       <td>
+                       Tuscany M1 binary (<i>Linux</i>) 
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz'>tuscany-incubating-M1.tar.gz</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.md5'>tuscany-incubating-M1.tar.gz.md5</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.asc'>tuscany-incubating-M1.tar.gz.asc</a>
+                       </td>
+                       </tr>
+
+
+                       <tr>
+                       <td>
+                       Tuscany M1 source (<i>Linux</i>) 
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz'>tuscany-incubating-M1-src.tar.gz</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.md5'>tuscany-incubating-M1-src.tar.gz.md5</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.asc'>tuscany-incubating-M1-src.tar.gz.asc</a>
+                       </td>
+                       </tr>
+
+
+                       <tr>
+                       <td>
+                       Tuscany M1 binary (<i>Windows</i>) 
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip'>tuscany-incubating-M1.zip</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.md5'>tuscany-incubating-M1.zip.md5</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.asc'>tuscany-incubating-M1.zip.asc</a>
+                       </td>
+                       </tr>
+
+                       <tr>
+                       <td>
+                       Tuscany M1 source (<i>Windows</i>) 
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip'>tuscany-incubating-M1-src.zip </a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.md5'>tuscany-incubating-M1-src.zip.md5</a>
+                       </td>
+                       <td>
+                    <a href='http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.asc'>tuscany-incubating-M1-src.zip.asc</a>
+                       </td>
+                       </tr>
+
+                       
+                        </tbody>
+                    </table>
+       </p>
+		</section>
+                <a name="Apache Tuscany C++ Downloads"></a>
+		<section name="Apache Tuscany C++ Downloads">
+			There are currently no downloads available for the C++ project. If you want to obtain the Tuscany C++ runtime and tools, you should check out the source from the
+			SVN repository and build it locally on your machine.  Please refer to the 
+			<a href="projectc++.html"> C++ project page</a> for more details.
+		</section>
 	</body>
 </document>

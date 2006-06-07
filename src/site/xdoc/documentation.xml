@@ -57,12 +57,12 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="SCA_Java_Tools_documentation.html">
-								SCA Java Tools
+							<a href="http://svn.apache.org/repos/asf/incubator/tuscany/site/svnresources/extendingTuscany/ExtendingTuscany.pdf">
+								Extending Tuscany
 							</a>
 						</td>
 						<td>
-							Describes how to use the tools supplied to assist users of the SCA Java runtime.
+							Describes how to extend Tuscany by contributing a new implementation/binding type
 						</td>
 					</tr>
 
