@@ -32,6 +32,7 @@
         <li> <script type="text/javascript">linkNewWindow('codeguidelines.html','Java Coding Guidelines');</script></li>
                 <li><a href="#using eclipse">Using Eclipse for IDE</a></li>
                 <li><a href="#using idea">Using IDEA style templates</a></li>
+                <li><a href="#Logging">Logging</a></li>
         </ol>
 </p>
 </section>
@@ -347,6 +348,11 @@ This will build the Tuscany runtime with Maven. Maven will download all the JAR 
                         copy tuscany-idea-codestyle.xml to ~/.IntelliJIdea50/config/codestyles
                         File-&gt;Settings, Project Code Styles, Import
                         </pre>
+                </section>
+<a name="Logging"></a>
+                <section name="Logging">
+                For more information regarding how to add logging to your code you can review 
+                 <script type="text/javascript">linkNewWindow('monitoring.htm','Tuscany Monitoring');</script>
                 </section>
         </body>
 </document>
