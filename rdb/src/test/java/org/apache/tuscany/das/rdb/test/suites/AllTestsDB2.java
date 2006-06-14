@@ -16,11 +16,11 @@
  */
 package org.apache.tuscany.das.rdb.test.suites;
 
-import org.apache.tuscany.das.rdb.test.ReadDBSchemaTests;
-import org.apache.tuscany.das.rdb.test.framework.DB2Setup;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import org.apache.tuscany.das.rdb.test.ReadDBSchemaTests;
+import org.apache.tuscany.das.rdb.test.framework.DB2Setup;
 
 public class AllTestsDB2 {
 	

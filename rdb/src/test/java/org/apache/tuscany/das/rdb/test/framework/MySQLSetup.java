@@ -18,7 +18,6 @@ package org.apache.tuscany.das.rdb.test.framework;
 
 import java.sql.SQLException;
 
-
 import junit.framework.Test;
 
 public class MySQLSetup extends DatabaseSetup {

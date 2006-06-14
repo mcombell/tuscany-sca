@@ -17,6 +17,7 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.company.CompanyType;
 import org.apache.tuscany.das.rdb.test.company.DatagraphRoot;
@@ -48,11 +49,13 @@ public class CompanyTests extends DasTest {
 
     public void testSimple() throws Exception {
 
+    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMapping.xml"));
+    	
         // Build the select command
-        Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
+        Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMapping.xml"));
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");//, getConfig("companyMapping.xml"));
 
         // Parameterize the command
         selectCommand.setConnection(getConnection());
@@ -74,9 +77,10 @@ public class CompanyTests extends DasTest {
 
     public void testSimpleStatic() throws Exception {
 
+    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"));
     	SDOUtil.registerStaticTypes(CompanyFactory.class);
         // Build the select command
-        Command selectCommand = Command.FACTORY.createCommand("select COMPANY.NAME, "
+        Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
                 + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMappingWithConverters.xml"));

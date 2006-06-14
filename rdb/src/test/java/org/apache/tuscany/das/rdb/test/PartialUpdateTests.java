@@ -18,8 +18,8 @@ package org.apache.tuscany.das.rdb.test;
 
 import java.sql.SQLException;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -41,7 +41,8 @@ public class PartialUpdateTests extends DasTest {
     }
 
     public void testPartialUpdate() throws SQLException {
-        Command readCustomers = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
         readCustomers.setConnection(getConnection());
 
         // Read
@@ -51,15 +52,14 @@ public class PartialUpdateTests extends DasTest {
         // Verify
         assertEquals(1, customer.getInt("ID"));
 
-        Command update = Command.FACTORY.createCommand("update CUSTOMER set LASTNAME = 'modified' where ID = 1");
+        Command update = das.createCommand("update CUSTOMER set LASTNAME = 'modified' where ID = 1");
         update.setConnection(getConnection());
         update.execute();
 
         customer.setString("ADDRESS", "main street");
 
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection(getConnection());
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
         root = readCustomers.executeQuery();
 
@@ -71,7 +71,8 @@ public class PartialUpdateTests extends DasTest {
     }
 
     public void testPartialInsert() throws SQLException {
-        Command readCustomers = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
         readCustomers.setConnection(getConnection());
 
         // Read
@@ -84,11 +85,10 @@ public class PartialUpdateTests extends DasTest {
         // Purposely do not set lastname to let it default to 'Garfugengheist'
         // newCust.set("LASTNAME", "Gerkin" );
 
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection(getConnection());
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
-        Command readNewCust = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 100");
+        Command readNewCust = das.createCommand("select * from CUSTOMER where ID = 100");
         readNewCust.setConnection(getConnection());
         root = readNewCust.executeQuery();
 

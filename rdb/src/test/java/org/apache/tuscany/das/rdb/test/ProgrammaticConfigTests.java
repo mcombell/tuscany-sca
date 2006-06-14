@@ -16,18 +16,15 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.util.Iterator;
-
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Property;
 
 /**
  * Tests the Converter framwork
@@ -50,21 +47,17 @@ public class ProgrammaticConfigTests extends DasTest {
      * config associaed with the applychanges command
      */
     public void test_1() throws Exception {
-
+    	DAS das = DAS.FACTORY.createDAS();
         // Read a book instance
-        Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
+        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
         DataObject book = root.getDataObject("BOOK[1]");
         // Change a field to mark the instance 'dirty'
-        book.setInt("QUANTITY", 2);
-
-        // Flush the change
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection(getConnection());
+        book.setInt("QUANTITY", 2);        
 
         try {
-            apply.execute(root);
+           das.applyChanges(root);
             fail("An exception should be thrown since here is no config to identify the primary key");
         } catch (RuntimeException ex) {
             // Expected
@@ -76,9 +69,13 @@ public class ProgrammaticConfigTests extends DasTest {
      * programmatically using the ConfigHelper.
      */
     public void test_2() throws Exception {
-
+    	 // Create config programmatically
+        ConfigHelper helper = new ConfigHelper();
+        helper.addPrimaryKey("BOOK.BOOK_ID");
+    	DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+    	
         // Read a book instance
-        Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
+        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
         DataObject book = root.getDataObject("BOOK[1]");
@@ -86,15 +83,10 @@ public class ProgrammaticConfigTests extends DasTest {
         book.setInt("QUANTITY", 2);
 
         // Flush the change
-        // Create config programmatically
-        ConfigHelper helper = new ConfigHelper();
-        helper.addPrimaryKey("BOOK.BOOK_ID");
-
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
-        apply.setConnection(getConnection());
-
-        apply.execute(root);
-
+       
+        das.setConnection(getConnection());
+        das.applyChanges(root);
+       
         // Verify
         root = select.executeQuery();
         book = root.getDataObject("BOOK[1]");
@@ -113,8 +105,8 @@ public class ProgrammaticConfigTests extends DasTest {
         // Create relationship config programmatically
         ConfigHelper helper = new ConfigHelper();
         helper.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        
-        Command select = Command.FACTORY.createCommand(statement, helper.getConfig());
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+        Command select = das.createCommand(statement);
         select.setConnection(getConnection());
 
         DataObject root = select.executeQuery();
@@ -136,7 +128,8 @@ public class ProgrammaticConfigTests extends DasTest {
         helper.addTable("BOOK", "Book");
         helper.addPrimaryKey("Book.BOOK_ID");
         
-        Command select = Command.FACTORY.createCommand(statement, helper.getConfig());
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+        Command select = das.createCommand(statement);
         select.setConnection(getConnection());
         select.setParameterValue("ID", new Integer(1));
 
@@ -146,10 +139,9 @@ public class ProgrammaticConfigTests extends DasTest {
         newBook.setString("NAME", "Ant Colonies of the Old World");
         newBook.setInt("BOOK_ID", 1001);
         root.getList("Book").add(newBook);
-               
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
-        apply.setConnection(getConnection());
-        apply.execute(root);
+           
+        das.setConnection(getConnection());
+        das.applyChanges(root);
         
         //Verify
         select.setParameterValue("ID", new Integer(1001));

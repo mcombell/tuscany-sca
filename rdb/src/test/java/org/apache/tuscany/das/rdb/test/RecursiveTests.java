@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.test;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
@@ -37,12 +38,13 @@ public class RecursiveTests extends DasTest {
 
 	public void testReadEngineParts() throws Exception {
 		
+		DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"));
 		//Table definition
 		//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
 
 		String threeLevelPartsSQL = "SELECT P1.*, P2.*, P3.* FROM PART AS P1 LEFT JOIN PART AS P2 ON P1.ID = P2.PARENT_ID "
 				+ "LEFT JOIN PART AS P3 on P2.ID = P3.PARENT_ID WHERE P1.ID = 1";
-		Command select = Command.FACTORY.createCommand(threeLevelPartsSQL, getConfig("PartsConfig.xml"));
+		Command select = das.createCommand(threeLevelPartsSQL, getConfig("PartsConfig.xml"));
 		select.setConnection(getConnection());
 
 		String[] columns = {"ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID"};

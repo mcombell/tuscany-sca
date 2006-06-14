@@ -16,10 +16,10 @@
  */
 package org.apache.tuscany.das.rdb.test.suites;
 
-import org.apache.tuscany.das.rdb.test.framework.MySQLSetup;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import org.apache.tuscany.das.rdb.test.framework.MySQLSetup;
 
 public class AllTestsMySQL {
 	

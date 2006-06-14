@@ -18,6 +18,7 @@ package org.apache.tuscany.das.rdb.test;
 
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
@@ -45,8 +46,8 @@ public class StoredProcs extends DasTest {
 
 	// Call a simple stored proc to read all companies
 	public void testGetCompanies() throws Exception {
-		
-		Command read = Command.FACTORY.createCommand("{call GETALLCOMPANIES()}");
+		DAS das = DAS.FACTORY.createDAS();
+		Command read = das.createCommand("{call GETALLCOMPANIES()}");
 		read.setConnection(getConnection());
 		DataObject root = read.executeQuery();
 
@@ -57,8 +58,8 @@ public class StoredProcs extends DasTest {
 	}
 
 	public void testGetNamedCompany() throws Exception {
-
-		Command read = Command.FACTORY.createCommand("{call GETNAMEDCOMPANY(?)}");
+		DAS das = DAS.FACTORY.createDAS();
+		Command read = das.createCommand("{call GETNAMEDCOMPANY(?)}");
 
 		read.setConnection(getConnection());
 		read.setParameterValue(1, "MegaCorp");
@@ -69,7 +70,8 @@ public class StoredProcs extends DasTest {
 	}
 
 	public void testGetNamedCompanyByName() throws Exception {
-		Command read = Command.FACTORY
+		DAS das = DAS.FACTORY.createDAS();
+		Command read = das
 				.createCommand("{call GETNAMEDCOMPANY(:NAME)}");
 
 		read.setConnection(getConnection());
@@ -82,8 +84,8 @@ public class StoredProcs extends DasTest {
 
 	// Retreive heirarchy using a stored proc ... new programming model
 	public void testGetCustomersAndOrder() throws Exception {
-
-		Command read = Command.FACTORY.createCommand("{call getCustomerAndOrders(?)}", getConfig("CustomersOrdersConfig.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
+		Command read = das.createCommand("{call getCustomerAndOrders(?)}", getConfig("CustomersOrdersConfig.xml"));
 		read.setConnection(getConnection());
 		read.setParameterValue(1, new Integer(1));
 		
@@ -103,8 +105,8 @@ public class StoredProcs extends DasTest {
 	 * in the out parameter
 	 */
 	public void testGetNamedCustomers() throws Exception {
-
-		Command read = Command.FACTORY.createCommand("{call GETNAMEDCUSTOMERS(?,?)}");
+		DAS das = DAS.FACTORY.createDAS();
+		Command read =das.createCommand("{call GETNAMEDCUSTOMERS(?,?)}");
 		read.setConnection(getConnection());
 		read.setParameterValue(1, "Williams");
 		read.addParameter(2, Parameter.OUT, SDODataTypes.INTEGER);
@@ -123,14 +125,14 @@ public class StoredProcs extends DasTest {
 	
 	// Simplest possible SP write
 	public void testDelete() throws Exception {
-		
-		Command delete = Command.FACTORY.createCommand("{call DELETECUSTOMER(?)}");	
+		DAS das = DAS.FACTORY.createDAS();
+		Command delete = das.createCommand("{call DELETECUSTOMER(?)}");	
 		delete.setConnection(getConnection());
 		delete.setParameterValue(1, new Integer(1));
 		delete.execute();
 
 		// Verify DELETE
-		Command select = Command.FACTORY.createCommand("Select * from CUSTOMER where ID = 1");	
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 		assertTrue(root.getList("CUSTOMER").isEmpty());

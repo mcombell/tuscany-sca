@@ -16,14 +16,14 @@
  */
 package org.apache.tuscany.das.rdb.test.customer.impl;
 
-import org.apache.tuscany.das.rdb.test.customer.*;
-
+import org.apache.tuscany.das.rdb.test.customer.AnOrder;
+import org.apache.tuscany.das.rdb.test.customer.Customer;
+import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
+import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

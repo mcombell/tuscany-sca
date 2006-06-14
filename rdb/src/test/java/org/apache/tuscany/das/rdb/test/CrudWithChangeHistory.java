@@ -28,10 +28,9 @@ package org.apache.tuscany.das.rdb.test;
 
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
-import org.apache.tuscany.das.rdb.SDODataTypes;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -64,8 +63,13 @@ public class CrudWithChangeHistory
         throws Exception
     {
 
+        // Provide updatecommand programmatically via config
+        ConfigHelper helper = new ConfigHelper();
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME, ADDRESS = :ADDRESS where ID = :ID", "CUSTOMER");        
+  
+    	DAS das = DAS.FACTORY.createDAS(helper.getConfig());
         //Read customer 1
-        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
         select.setConnection( getConnection() );
         DataObject root = select.executeQuery();
 
@@ -74,16 +78,10 @@ public class CrudWithChangeHistory
         //Modify customer
         customer.set( "LASTNAME", "Pavick" );
 
-        // Provide updatecommand programmatically via config
-        ConfigHelper helper = new ConfigHelper();
-        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME, ADDRESS = :ADDRESS where ID = :ID", "CUSTOMER");        
                
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
-        apply.setConnection( getConnection() );
-        
-        //Flush changes
-        apply.execute( root );
+        das.setConnection(getConnection());
+        das.applyChanges(root);       
 
         //Verify changes
         root = select.executeQuery();
@@ -99,8 +97,9 @@ public class CrudWithChangeHistory
         throws Exception
     {
 
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithCUD.xml"));
         //Read customer 1
-        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
         select.setConnection( getConnection() );
         DataObject root = select.executeQuery();
 
@@ -110,11 +109,8 @@ public class CrudWithChangeHistory
         customer.set( "LASTNAME", "Pavick" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMappingWithCUD.xml"));
-        apply.setConnection( getConnection() );
-
-        //Flush changes
-        apply.execute( root );
+        das.setConnection(getConnection());
+        das.applyChanges(root);      
 
         //Verify changes
         root = select.executeQuery();
@@ -131,8 +127,9 @@ public class CrudWithChangeHistory
         throws Exception
     {
 
+    	DAS das = DAS.FACTORY.createDAS();
         //Read customer with particular ID
-        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
         select.setConnection( getConnection() );
         DataObject root = select.executeQuery();
 
@@ -142,11 +139,8 @@ public class CrudWithChangeHistory
         customer.set( "LASTNAME", "Pavick" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection( getConnection() );
-
-        //Flush changes
-        apply.execute( root );
+        das.setConnection(getConnection());
+        das.applyChanges(root);       
 
         //Verify the change
         root = select.executeQuery();
@@ -161,9 +155,9 @@ public class CrudWithChangeHistory
     public void testReadModifyApply3()
         throws Exception
     {
-
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMapping.xml"));
         //Read customer with particular ID
-        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = 1" );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
         select.setConnection( getConnection() );
         DataObject root = select.executeQuery();
 
@@ -173,11 +167,8 @@ public class CrudWithChangeHistory
         customer.set( "LASTNAME", "Pavick" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMapping.xml"));
-        apply.setConnection( getConnection() );
-
-        //Flush changes
-        apply.execute( root );
+        das.setConnection(getConnection());
+        das.applyChanges(root);       
 
         //Verify the change
         root = select.executeQuery();
@@ -192,9 +183,10 @@ public class CrudWithChangeHistory
     public void testReadModifyDeleteInsertApply()
         throws Exception
     {
-
+    	
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMapping.xml"));
         //Read some customers
-        Command select = Command.FACTORY.createCommand( "Select * from CUSTOMER where LASTNAME = 'Williams'" );
+        Command select = das.createCommand( "Select * from CUSTOMER where LASTNAME = 'Williams'" );
         select.setConnection( getConnection() );
         DataObject root = select.executeQuery();
 
@@ -220,14 +212,11 @@ public class CrudWithChangeHistory
         cust4.set( "LASTNAME", "Gerkin" );
 
         //Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerMapping.xml"));
-        apply.setConnection( getConnection() );
-
-        //Flush changes
-        apply.execute( root );
+        das.setConnection(getConnection());
+        das.applyChanges(root);       
 
         //Verify deletes
-        select = Command.FACTORY.createCommand( "Select * from CUSTOMER where ID = :ID" );
+        select = das.createCommand( "Select * from CUSTOMER where ID = :ID" );
         select.setConnection( getConnection() );
         select.setParameterValue( "ID", new Integer( cust2ID ) );
         root = select.executeQuery();
@@ -254,8 +243,9 @@ public class CrudWithChangeHistory
     
     public void testReadModifyApplyWithAssumedID() throws Exception {
 
+    	DAS das = DAS.FACTORY.createDAS();
 		//Read customer with particular ID
-		Command select = Command.FACTORY
+		Command select = das
 				.createCommand("Select * from CUSTOMER");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
@@ -274,11 +264,8 @@ public class CrudWithChangeHistory
 		newCustomer.setInt("ID", 9000);
 		
 		//Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());		
-
-		//Flush changes
-		apply.execute(root);
+		das.setConnection(getConnection());
+		das.applyChanges(root);
 
 		//Verify the change
 		root = select.executeQuery();
@@ -290,8 +277,8 @@ public class CrudWithChangeHistory
     
     
     public void testReadModifyApplyWithAssumedIDFailure() throws Exception {
-	
-		Command select = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS();
+		Command select = das
 				.createCommand("Select * from ORDERDETAILS");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
@@ -301,14 +288,13 @@ public class CrudWithChangeHistory
 		//Modify customer
 		od.setInt("PRODUCTID", 72);	
 		
-		//Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());		
+			
 
 		//Flush changes -- This should fail because Order Details does not have a column that
 		// we can assume to be an ID
 		try {
-			apply.execute(root);	
+			das.setConnection(getConnection());
+			das.applyChanges(root);	
 		} catch (RuntimeException ex) {
 			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
 		}
@@ -316,31 +302,29 @@ public class CrudWithChangeHistory
 	}
     
     public void testReadModifyApplyWithAssumedIDFailure2() throws Exception {
-    	
-		Command select = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS();
+		Command select = das
 				.createCommand("Select * from ORDERDETAILS");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
 		DataObject od = root.getDataObject("ORDERDETAILS[1]");
 		od.delete();	
-		
-		//Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());		
+				
 
 		//Flush changes -- This should fail because Order Details does not have a column that
 		// we can assume to be an ID
 		try {
-			apply.execute(root);	
+			das.setConnection(getConnection());
+			das.applyChanges(root);	
 		} catch (RuntimeException ex) {
 			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
 		}
 
 	}
     public void testReadModifyApplyWithAssumedIDFailure3() throws Exception {
-    	
-		Command select = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS();
+		Command select = das
 				.createCommand("Select * from ORDERDETAILS");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
@@ -351,14 +335,13 @@ public class CrudWithChangeHistory
 		od.setInt("PRODUCTID", 72);	
 		od.setInt("ORDERID", 500);
 		
-		//Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());		
+		
+		das.setConnection(getConnection());		
 
 		//Flush changes -- This should fail because Order Details does not have a column that
 		// we can assume to be an ID
 		try {
-			apply.execute(root);	
+			das.applyChanges(root);	
 		} catch (RuntimeException ex) {
 			assertTrue(ex.getMessage().contains("changed in the DataGraph but is not present in the Config"));
 		}

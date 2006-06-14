@@ -16,8 +16,8 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -39,10 +39,10 @@ public class CUDGeneration extends DasTest {
 	 * statements.
 	 */
 	public void testCUDGeneration1() throws Exception {
-
+		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithInvalidCUD.xml"));
+		
 		// Read customer with particular ID
-		Command select = Command.FACTORY
-				.createCommand("Select * from CUSTOMER where ID = 1");
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -51,14 +51,10 @@ public class CUDGeneration extends DasTest {
 		// Modify customer
 		customer.set("LASTNAME", "Pavick");
 
-		// Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY
-				.createApplyChangesCommand(getConfig("basicCustomerMappingWithInvalidCUD.xml"));
-		apply.setConnection(getConnection());
 
 		// Flush changes
 		try {
-			apply.execute(root);
+			das.applyChanges(root);
 			fail("Should fail with invalid SQL.  Provided CUD not used!!");
 		} catch (RuntimeException e) {
 			// Everything OK
@@ -67,8 +63,9 @@ public class CUDGeneration extends DasTest {
 	}
 
 	public void testInsertCUDGeneration() throws Exception {
-		Command select = Command.FACTORY
-				.createCommand("Select * from CUSTOMER where ID = 1");
+		DAS das = DAS.FACTORY.createDAS();
+		
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 
@@ -77,12 +74,10 @@ public class CUDGeneration extends DasTest {
 		customer.set("LASTNAME", "foobar");
 		customer.set("ADDRESS", "asdfasdf");
 
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-		apply.setConnection(getConnection());
-		apply.execute(root);
+		das.setConnection(getConnection());
+		das.applyChanges(root);
 
-		select = Command.FACTORY
-				.createCommand("select * from CUSTOMER where ID = 720");
+		select = das.createCommand("select * from CUSTOMER where ID = 720");
 		select.setConnection(getConnection());
 		root = select.executeQuery();
 
@@ -91,9 +86,11 @@ public class CUDGeneration extends DasTest {
 
 	public void testReadModifyApply() throws Exception {
 
+		DAS das = DAS.FACTORY.createDAS(getConfig("1xM_mapping_no_cud.xml"));
+		
 		// Build the select command to read a specific customer and related
 		// orders
-		Command select = Command.FACTORY
+		Command select = das
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
 						getConfig("1xM_mapping_no_cud.xml"));
@@ -113,11 +110,8 @@ public class CUDGeneration extends DasTest {
 		DataObject order = (DataObject) customer.get("orders[1]");
 		order.setString("PRODUCT", "Kitchen Sink 001");
 
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("1xM_mapping_no_cud.xml"));
-		apply.setConnection(getConnection());		
-
-		// Flush changes
-		apply.execute(root);
+		das.setConnection(getConnection());
+		das.applyChanges(root);
 
 	}
 	

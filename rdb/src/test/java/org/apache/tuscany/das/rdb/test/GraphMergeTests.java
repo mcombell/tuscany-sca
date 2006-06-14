@@ -19,11 +19,11 @@ package org.apache.tuscany.das.rdb.test;
 import java.util.ArrayList;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.merge.impl.GraphMerger;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-
 
 import commonj.sdo.DataObject;
 
@@ -39,8 +39,8 @@ public class GraphMergeTests extends DasTest {
 
 
 	public void testSingleTableMerge() throws Exception {
-		
-		Command select = Command.FACTORY
+		DAS das = DAS.FACTORY.createDAS();
+		Command select = das
 				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");
 		select.setConnection(getConnection());
 		select.setParameterValue("ID", "3");
@@ -59,8 +59,8 @@ public class GraphMergeTests extends DasTest {
 	}
 
 	public void testSingleTableMergeThreeGraphs() throws Exception {
-
-		Command select = Command.FACTORY
+		DAS das = DAS.FACTORY.createDAS();
+		Command select = das
 				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");
 		select.setConnection(getConnection());
 		select.setParameterValue("ID", "3");
@@ -89,8 +89,9 @@ public class GraphMergeTests extends DasTest {
 
     
     public void testMultiTableMerge2() throws Exception {
+    	DAS das = DAS.FACTORY.createDAS();
         //Read some customers and related orders
-        Command select = Command.FACTORY.createCommand(
+        Command select = das.createCommand(
                 "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
         select.setConnection(getConnection());
         
@@ -125,8 +126,9 @@ public class GraphMergeTests extends DasTest {
     }
     
     public void testMultiTableAppendSingleTable2() throws Exception {
+    	DAS das = DAS.FACTORY.createDAS();
         //Read some customers and related orders
-        Command select = Command.FACTORY.createCommand(
+        Command select = das.createCommand(
                 "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
         select.setConnection(getConnection());
         
@@ -137,7 +139,7 @@ public class GraphMergeTests extends DasTest {
         DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
         assertEquals(2, customer.getList("orders").size());
         
-        Command select2 = Command.FACTORY.createCommand("select * from ANORDER");
+        Command select2 = das.createCommand("select * from ANORDER");
         select2.setConnection(getConnection());
         DataObject graph2 = select2.executeQuery();
         assertEquals(4, graph2.getList("ANORDER").size());

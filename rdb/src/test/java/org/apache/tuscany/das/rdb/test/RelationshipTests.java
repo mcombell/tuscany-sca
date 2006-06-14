@@ -21,9 +21,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.SDODataTypes;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -52,8 +51,9 @@ public class RelationshipTests extends DasTest {
 
 		String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
 
+		DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"));
 		// Read some customers and related orders
-		Command select = Command.FACTORY.createCommand(statement, getConfig("customerOrderRelationshipMapping.xml"));
+		Command select = das.createCommand(statement, getConfig("customerOrderRelationshipMapping.xml"));
 		select.setConnection(getConnection());
 
 		DataObject root = select.executeQuery();
@@ -69,10 +69,12 @@ public class RelationshipTests extends DasTest {
 	 */
 	public void testRelationshipModification2() throws Exception {
 
+		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerOrderMapping.xml"));
 		// Read some customers and related orders
-		Command select = Command.FACTORY
+		Command select = das
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID", getConfig("basicCustomerOrderMapping.xml"));
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID", 
+						getConfig("basicCustomerOrderMapping.xml"));
 		select.setConnection(getConnection());
 
 		DataObject root = select.executeQuery();
@@ -90,16 +92,14 @@ public class RelationshipTests extends DasTest {
 		// Move an order to cust1 from cust2
 		DataObject order = (DataObject) cust2.getList("orders").get(0);
 		cust1.getList("orders").add(order);
-		
-		// Build apply changes command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("basicCustomerOrderMapping.xml"));
-		apply.setConnection(getConnection());
+			
 
 		// Flush changes
-		apply.execute(root);
+		das.setConnection(getConnection());
+		das.applyChanges(root);
 
 		// verify cust1 relationship updates
-		select = Command.FACTORY
+		select = das
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
 						getConfig("basicCustomerOrderMapping.xml"));

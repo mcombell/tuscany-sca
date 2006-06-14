@@ -20,11 +20,11 @@ package org.apache.tuscany.das.rdb.test;
 import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.Pager;
 import org.apache.tuscany.das.rdb.impl.PagerImpl;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-
 
 import commonj.sdo.DataObject;
 
@@ -38,9 +38,9 @@ public class Paging extends DasTest {
 	}
 
 	public void testPaging() throws SQLException  {
-
+		DAS das = DAS.FACTORY.createDAS();
 		//Build command to read all customers
-		Command custCommand = Command.FACTORY.createCommand("select * from CUSTOMER order by ID");
+		Command custCommand = das.createCommand("select * from CUSTOMER order by ID");
 		custCommand.setConnection(getConnection());
 
 		//Create a pager with the command
@@ -71,8 +71,9 @@ public class Paging extends DasTest {
 	
 	
 	public void testRandomPage() throws SQLException {
+		DAS das = DAS.FACTORY.createDAS();
 	//Build the select command
-		Command select = Command.FACTORY
+		Command select = das
 				.createCommand("select * from CUSTOMER order by ID");
 
 		//Parameterize the command

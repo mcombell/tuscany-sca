@@ -22,8 +22,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.DepartmentData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -47,14 +47,15 @@ public class GeneratedId extends DasTest {
     // Test insert into row with generated ID
     public void testInsert() throws Exception {
 
-        Command insert = Command.FACTORY.createCommand("insert into COMPANY (NAME) values (:NAME)");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
         insert.setConnection(getConnection());
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
 
         // Verify insert
         // Verify
-        Command select = Command.FACTORY.createCommand("Select ID, NAME from COMPANY");
+        Command select = das.createCommand("Select ID, NAME from COMPANY");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
 
@@ -66,7 +67,8 @@ public class GeneratedId extends DasTest {
     // Test back to back insertions with the same command
     public void testInsert2() throws Exception {
 
-        Command insert = Command.FACTORY.createCommand("insert into COMPANY (NAME) values (:NAME)");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
         insert.setConnection(getConnection());
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
@@ -77,7 +79,7 @@ public class GeneratedId extends DasTest {
 
         // Verify insert
         // Verify
-        Command select = Command.FACTORY.createCommand("Select ID, NAME from COMPANY");
+        Command select = das.createCommand("Select ID, NAME from COMPANY");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
 
@@ -87,15 +89,15 @@ public class GeneratedId extends DasTest {
 
     // Test ability to retrieve and utilize the generated key
     public void testInsert3() throws Exception {
-
-        Command insert = Command.FACTORY.createCommand("insert into COMPANY (NAME) values (:NAME)");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
         insert.setConnection(getConnection());
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
         Integer key = (Integer) insert.getParameterValue("generated_key");
 
         // Verify insert
-        Command select = Command.FACTORY.createCommand("Select ID, NAME from COMPANY where ID = :ID");
+        Command select = das.createCommand("Select ID, NAME from COMPANY where ID = :ID");
         select.setConnection(getConnection());
         select.setParameterValue("ID", key);
         DataObject root = select.executeQuery();
@@ -105,30 +107,27 @@ public class GeneratedId extends DasTest {
 
     // Test ability to propogate generated values back to owning data objects
     public void testPropagateIds() throws Exception {
-
-        Command select = Command.FACTORY.createCommand("Select * from COMPANY");
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        Command select = das.createCommand("Select * from COMPANY");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
 
         // Create a new Company
         DataObject company = root.createDataObject("COMPANY");
-        company.setString("NAME", "Do-rite Pest Control");
-
-        // Create apply command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("CompanyConfig.xml"));
-        apply.setConnection(getConnection());
+        company.setString("NAME", "Do-rite Pest Control");               
 
         // verify pre-condition (id is not there until after flush)
         assertNull(company.get("ID"));
 
         // Flush changes
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
 
         // Verify the change
-        select = Command.FACTORY.createCommand("Select * from COMPANY where ID = :ID");
+        select = das.createCommand("Select * from COMPANY where ID = :ID");
         select.setConnection(getConnection());
         select.setParameterValue("ID", id);
         root = select.executeQuery();
@@ -140,8 +139,8 @@ public class GeneratedId extends DasTest {
      * Same as above but metadata provided by XML config file
      */
     public void testPropagateIdsXML() throws Exception {
-
-        Command select = Command.FACTORY.createCommand("Select * from COMPANY",
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyMapping.xml"));
+        Command select = das.createCommand("Select * from COMPANY",
                 getConfig("basicCompanyMapping.xml"));
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
@@ -150,22 +149,19 @@ public class GeneratedId extends DasTest {
         DataObject company = root.createDataObject("COMPANY");
         company.setString("NAME", "Do-rite Pest Control");
 
-        // Create apply command
-        ApplyChangesCommand apply = Command.FACTORY
-                .createApplyChangesCommand(getConfig("basicCompanyMapping.xml"));
-        apply.setConnection(getConnection());
-
+        
         // verify pre-condition (id is not there until after flush)
         assertNull(company.get("ID"));
 
         // Flush changes
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
 
         // Verify the change
-        select = Command.FACTORY.createCommand("Select * from COMPANY where ID = :ID");
+        select = das.createCommand("Select * from COMPANY where ID = :ID");
         select.setConnection(getConnection());
         select.setParameterValue("ID", id);
         root = select.executeQuery();
@@ -179,9 +175,10 @@ public class GeneratedId extends DasTest {
      */
     public void testFlushCreateHeirarchy() throws Exception {
 
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"));
         String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-        Command select = Command.FACTORY.createCommand(selectCompanys,
+        Command select = das.createCommand(selectCompanys,
                 getConfig("basicCompanyDepartmentMapping.xml"));
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
@@ -202,13 +199,8 @@ public class GeneratedId extends DasTest {
         // Associate the new department with the new company
         company.getList("departments").add(department);
 
-        // Create apply command
-        ApplyChangesCommand apply = Command.FACTORY
-                .createApplyChangesCommand(getConfig("basicCompanyDepartmentMapping.xml"));
-        apply.setConnection(getConnection());
-
-        // Flush changes
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
@@ -216,7 +208,7 @@ public class GeneratedId extends DasTest {
         // Verify the change
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = :ID";
 
-        select = Command.FACTORY.createCommand(selectString);
+        select = das.createCommand(selectString);
         select.setConnection(getConnection());
         select.setParameterValue("ID", id);
         root = select.executeQuery();
@@ -232,7 +224,8 @@ public class GeneratedId extends DasTest {
 
         String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-        Command select = Command.FACTORY.createCommand(selectCompanys,
+        DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"));
+        Command select = das.createCommand(selectCompanys,
                 getConfig("basicCompanyDepartmentMapping.xml"));
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
@@ -254,13 +247,8 @@ public class GeneratedId extends DasTest {
         // Associate the new department with the new company
         company.getList("departments").add(department);
 
-        // Create apply command
-        ApplyChangesCommand apply = Command.FACTORY
-                .createApplyChangesCommand(getConfig("basicCompanyDepartmentMapping.xml"));
-        apply.setConnection(getConnection());
-
-        // Flush changes
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
@@ -268,7 +256,7 @@ public class GeneratedId extends DasTest {
         // Verify the change
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = :ID";
 
-        select = Command.FACTORY.createCommand(selectString);
+        select = das.createCommand(selectString);
         select.setConnection(getConnection());
         select.setParameterValue("ID", id);
         root = select.executeQuery();
@@ -278,8 +266,8 @@ public class GeneratedId extends DasTest {
 
     // Test that error is thrown when no key has been generated (as in a select)
     public void testRead() throws Exception {
-
-        Command select = Command.FACTORY.createCommand("Select * from COMPANY");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command select = das.createCommand("Select * from COMPANY");
         select.setConnection(getConnection());
         select.executeQuery();
 

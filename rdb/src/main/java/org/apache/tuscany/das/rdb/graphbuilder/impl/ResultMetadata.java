@@ -240,7 +240,7 @@ public class ResultMetadata {
                                 "No mapping model exists, all columns will be considered PK columns");
             return true;
         } else {
-            Table t = mappingWrapper.getTable(getTablePropertyName(i));
+            Table t = mappingWrapper.getTableByTypeName(getTablePropertyName(i));
             if (t == null)
                 return true;
             Column c = mappingWrapper.getColumn(t, getDatabaseColumnName(i));

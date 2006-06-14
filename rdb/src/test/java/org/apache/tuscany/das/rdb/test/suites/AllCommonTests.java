@@ -16,8 +16,12 @@
  */
 package org.apache.tuscany.das.rdb.test.suites;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.apache.tuscany.das.rdb.test.BestPracticeTests;
 import org.apache.tuscany.das.rdb.test.CUDGeneration;
+import org.apache.tuscany.das.rdb.test.CommandGroupTests;
 import org.apache.tuscany.das.rdb.test.CompanyTests;
 import org.apache.tuscany.das.rdb.test.CompoundKeyTests;
 import org.apache.tuscany.das.rdb.test.ConverterTests;
@@ -43,11 +47,7 @@ import org.apache.tuscany.das.rdb.test.SimplestCrud;
 import org.apache.tuscany.das.rdb.test.StoredProcs;
 import org.apache.tuscany.das.rdb.test.TopDown;
 import org.apache.tuscany.das.rdb.test.TypeTests;
-import org.apache.tuscany.das.rdb.test.CommandGroupTests;
 import org.apache.tuscany.das.rdb.test.typed.SimplestStaticCrud;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 public class AllCommonTests {
 

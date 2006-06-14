@@ -17,6 +17,7 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -56,8 +57,9 @@ public class ResultSetShapeTests extends DasTest {
 
         ResultSetShape shape = new ResultSetShape(tables, columns, types);
 
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"));
         // Create and initialize command to read customers
-        Command readCustomers = Command.FACTORY.createCommand(sqlString,
+        Command readCustomers = das.createCommand(sqlString,
                 getConfig("CustomerConfigWithIDConverter.xml"));
         // Specify result shape
         readCustomers.setResultSetShape(shape);
@@ -85,8 +87,9 @@ public class ResultSetShapeTests extends DasTest {
         // Using literals in the select forces invalid resultset metadata
         String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
 
+        DAS das = DAS.FACTORY.createDAS();
         // Create and initialize command to read customers
-        Command readCustomers = Command.FACTORY.createCommand(sqlString);
+        Command readCustomers = das.createCommand(sqlString);
         readCustomers.setConnection(getConnection());
 
         // Read

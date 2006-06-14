@@ -17,13 +17,9 @@
 package org.apache.tuscany.das.rdb.test.customer.impl;
 
 import org.apache.tuscany.das.rdb.test.customer.AnOrder;
-
 import org.apache.tuscany.sdo.impl.DataObjectImpl;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**

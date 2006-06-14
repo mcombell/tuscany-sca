@@ -16,11 +16,10 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-
 
 import commonj.sdo.DataObject;
 
@@ -33,9 +32,9 @@ public class OCCTests extends DasTest {
 
 	
 	public void testSimpleOCC() throws Exception {
-		
+		DAS das = DAS.FACTORY.createDAS(getConfig("BooksConfig.xml"));
 		//Read a book instance
-		Command select = Command.FACTORY.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
+		Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 		DataObject book = root.getDataObject("BOOK[1]");
@@ -43,18 +42,15 @@ public class OCCTests extends DasTest {
 		book.setInt("QUANTITY", 2);
 
 		// Explicitly change OCC column in database to force collision
-		Command update = Command.FACTORY
+		Command update = das
 				.createCommand("update BOOK set OCC = :OCC where BOOK_ID = 1");
 		update.setConnection(getConnection());
 		update.setParameterValue("OCC", new Integer(100));
-		update.execute();
-
-		//Try to flush the change
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("BooksConfig.xml"));
-		apply.setConnection(getConnection());
+		update.execute();		
 
 		try {
-			apply.execute(root);
+			das.setConnection(getConnection());
+			das.applyChanges(root);
 			fail("An OCCException should be thrown");
 		} catch (RuntimeException ex) {
 			if ( !ex.getMessage().equals("OCC Exception") )

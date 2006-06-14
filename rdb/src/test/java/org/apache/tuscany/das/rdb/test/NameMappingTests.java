@@ -22,6 +22,7 @@ package org.apache.tuscany.das.rdb.test;
  */
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -48,8 +49,9 @@ public class NameMappingTests extends DasTest {
 	 */
 	public void testRead() throws Exception {
 
+		DAS das = DAS.FACTORY.createDAS(getConfig("customerMapping.xml"));
 		// Read a customer
-		Command select = Command.FACTORY.createCommand(
+		Command select = das.createCommand(
 				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1", getConfig("customerMapping.xml"));
 		select.setConnection(getConnection());
 

@@ -21,6 +21,9 @@
         <Column columnName="PRODUCTID" primaryKey="true"/>
     </Table>
  
+ 	<Table tableName="ANORDER">
+ 		<Column columnName="ID" primaryKey="true"/>
+ 	</Table>
 	   
     <Relationship name="ORDERDETAILS" primaryKeyTable="ANORDER"
         foreignKeyTable="ORDERDETAILS" many="true">

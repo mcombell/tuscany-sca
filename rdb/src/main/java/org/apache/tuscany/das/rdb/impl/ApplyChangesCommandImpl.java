@@ -18,7 +18,6 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Connection;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -30,7 +29,7 @@ import commonj.sdo.Type;
 /**
  * 
  */
-public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyChangesCommand {
+public class ApplyChangesCommandImpl extends BaseCommandImpl  {
 
     private static final boolean debug = false;
 
@@ -45,7 +44,8 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl implements ApplyCha
     
     public ApplyChangesCommandImpl(Config config, Connection connection){
         this.configWrapper = new MappingWrapper(config); 
-        setConnection(connection);
+        if ( connection != null )
+     	   setConnection(connection);
     }
     
 	public void setConnection(ConnectionImpl connection) {

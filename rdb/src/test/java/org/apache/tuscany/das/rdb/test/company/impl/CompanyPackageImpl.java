@@ -21,15 +21,12 @@ import org.apache.tuscany.das.rdb.test.company.CompanyType;
 import org.apache.tuscany.das.rdb.test.company.DatagraphRoot;
 import org.apache.tuscany.das.rdb.test.company.DepartmentType;
 import org.apache.tuscany.das.rdb.test.company.EmployeeType;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
 /**

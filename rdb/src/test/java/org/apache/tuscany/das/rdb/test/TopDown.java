@@ -19,8 +19,8 @@ package org.apache.tuscany.das.rdb.test;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.customer.AnOrder;
 import org.apache.tuscany.das.rdb.test.customer.Customer;
 import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
@@ -45,9 +45,9 @@ public class TopDown extends DasTest {
 
 	// Uses dynamic SDOs but user provides the model
 	public void testUserProvidedModelDynamic() throws SQLException, IOException {
-
+		DAS das = DAS.FACTORY.createDAS(getConfig("1xM_mapping_no_cud.xml"));
 		// Build the select command
-		Command select = Command.FACTORY
+		Command select = das
 				.createCommand(
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
 						getConfig("1xM_mapping_no_cud.xml"));
@@ -73,11 +73,9 @@ public class TopDown extends DasTest {
 		AnOrder order = (AnOrder) customer.getOrders().get(0);
 		order.setProduct("Kitchen Sink 001");
 
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("1xM_mapping_no_cud.xml"));
-		apply.setConnection(getConnection());		
-
 		// Flush changes
-		apply.execute((DataObject) root);
+		das.setConnection(getConnection());
+		das.applyChanges((DataObject) root);
 
 	}
 

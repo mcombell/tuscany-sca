@@ -17,7 +17,7 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyEmpData;
 import org.apache.tuscany.das.rdb.test.data.EmployeeData;
@@ -44,11 +44,11 @@ public class OneToOneRelationshipTests extends DasTest {
      */
     public void test1() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("get companies with employee of the month");
+        Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
         DataObject employee = root.getDataObject("COMPANY[1]/company->employee_opposite");
 
@@ -61,11 +61,11 @@ public class OneToOneRelationshipTests extends DasTest {
      */
     public void test2() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("get named employee with company");
+        Command read = das.getCommand("get named employee with company");
         read.setParameterValue("NAME", "Mary Smith");
         DataObject root = read.executeQuery();
         DataObject company = root.getDataObject("EMPLOYEE[1]/company->employee");
@@ -79,18 +79,18 @@ public class OneToOneRelationshipTests extends DasTest {
      */
     public void test3() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("get companies with employee of the month");
+        Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
         DataObject company = root.getDataObject("COMPANY[1]");
         company.setDataObject("company->employee_opposite", null);
         assertNull(company.getDataObject("company->employee_opposite"));
    
         //Flush changes
-        commandGroup.getApplyChangesCommand().execute(root);
+        das.applyChanges(root);
 
         //Verify
         root = read.executeQuery();
@@ -103,11 +103,11 @@ public class OneToOneRelationshipTests extends DasTest {
      */
     public void test4() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("get companies with employee of the month");
+        Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
         DataObject company = root.getDataObject("COMPANY[1]");
         DataObject employee = company.getDataObject("company->employee_opposite");
@@ -115,7 +115,7 @@ public class OneToOneRelationshipTests extends DasTest {
         assertNull(company.getDataObject("company->employee_opposite"));
    
         //Flush changes
-        commandGroup.getApplyChangesCommand().execute(root);
+        das.applyChanges(root);
 
         //Verify
         root = read.executeQuery();
@@ -128,11 +128,11 @@ public class OneToOneRelationshipTests extends DasTest {
      */
     public void test5() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY
-                .createCommandGroup(getConfig("CompanyEmployeeConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("get companies with employee of the month");
+        Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
         DataObject company = root.getDataObject("COMPANY[1]");
         
@@ -146,7 +146,7 @@ public class OneToOneRelationshipTests extends DasTest {
         company.setDataObject("company->employee_opposite", employee);     
          
         //Flush changes
-        commandGroup.getApplyChangesCommand().execute(root);
+        das.applyChanges(root);
 
         //Verify
         root = read.executeQuery();

@@ -16,9 +16,8 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.Key;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -42,8 +41,8 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testRead() throws Exception {
-
-        Command getOrderDetails = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS();
+        Command getOrderDetails = das
                 .createCommand("Select * from ORDERDETAILS where ORDERID = :ORDERID AND PRODUCTID = :PRODUCTID");
         getOrderDetails.setConnection(getConnection());
 
@@ -58,8 +57,8 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testReadModifyWrite2() throws Exception {
-
-        Command getOrderDetails = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"));
+        Command getOrderDetails = das
                 .createCommand("Select * from ORDERDETAILS where ORDERID = 1 AND PRODUCTID = 1");
         getOrderDetails.setConnection(getConnection());
         DataObject root = getOrderDetails.executeQuery();
@@ -71,11 +70,8 @@ public class CompoundKeyTests extends DasTest {
         orderDetails.setFloat("PRICE", 0f);
 
         // Build apply changes command
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("OrdersOrderDetailsConfig.xml"));
-        apply.setConnection(getConnection());
-
-        // Write
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);        
 
         // Verify
         root = getOrderDetails.executeQuery();
@@ -85,9 +81,10 @@ public class CompoundKeyTests extends DasTest {
     }
     
     public void testReadOrdersAndDetails2() throws Exception {
-
-        Command read = Command.FACTORY
-                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID", getConfig("OrdersOrderDetailsConfig.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"));
+        Command read = das
+                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID", 
+                		getConfig("OrdersOrderDetailsConfig.xml"));
         read.setConnection(getConnection());
 
         DataObject root = read.executeQuery();

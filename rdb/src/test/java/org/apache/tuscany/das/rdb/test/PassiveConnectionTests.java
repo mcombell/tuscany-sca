@@ -23,8 +23,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -51,9 +51,9 @@ public class PassiveConnectionTests extends DasTest {
         java.sql.Connection c = getConnection();
 
         try {
-
+        	DAS das = DAS.FACTORY.createDAS();
             // Read customer 1
-            Command select = Command.FACTORY.createCommand("Select * from CUSTOMER where ID = 1");
+            Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
             select.setConnection(c);
             DataObject root = select.executeQuery();
 
@@ -62,12 +62,7 @@ public class PassiveConnectionTests extends DasTest {
             // Modify customer
             customer.set("LASTNAME", "Pavick");
 
-            // Build apply changes command
-            ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-            apply.setConnection(c, false);
-
-            // Flush changes
-            apply.execute(root);
+           das.applyChanges(root);
 
             // Verify changes
             root = select.executeQuery();

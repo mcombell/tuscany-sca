@@ -24,14 +24,10 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import java.sql.Timestamp;
-import java.util.Date;
-
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.TypesData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-
 
 import commonj.sdo.DataObject;
 
@@ -48,9 +44,9 @@ public class TypeTests extends DasTest {
 	 * Read various types.  
 	 */
 	public void testRead() throws Exception {
-
+		DAS das = DAS.FACTORY.createDAS();
 		//Read customer 1
-		Command select = Command.FACTORY.createCommand("Select * from TYPETEST where ID = 1");	
+		Command select = das.createCommand("Select * from TYPETEST where ID = 1");	
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 		

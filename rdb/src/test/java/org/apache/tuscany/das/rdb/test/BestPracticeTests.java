@@ -18,9 +18,8 @@ package org.apache.tuscany.das.rdb.test;
 
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
 import org.apache.tuscany.das.rdb.test.data.DepEmpData;
@@ -46,9 +45,9 @@ public class BestPracticeTests extends DasTest {
     //Read list of companies
     public void testReadCompanies() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-        commandGroup.setConnection(getConnection());
-        Command read = commandGroup.getCommand("all companies");
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        das.setConnection(getConnection());
+        Command read = das.getCommand("all companies");
         DataObject root = read.executeQuery(); 
         assertEquals(3, root.getList("COMPANY").size());
 
@@ -57,9 +56,9 @@ public class BestPracticeTests extends DasTest {
     //Read list of companies
     public void testReadCompaniesWithDepartments() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-        commandGroup.setConnection(getConnection());
-        Command read = commandGroup.getCommand("all companies and departments");
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        das.setConnection(getConnection());
+        Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery(); 
         DataObject firstCompany = root.getDataObject("COMPANY[1]");
         List departments = firstCompany.getList("departments");
@@ -69,9 +68,9 @@ public class BestPracticeTests extends DasTest {
     
     public void testddDepartmentToFirstCompany() throws Exception {
         
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-        commandGroup.setConnection(getConnection());
-        Command read = commandGroup.getCommand("all companies and departments");
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        das.setConnection(getConnection());
+        Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery();
         DataObject firstCustomer = root.getDataObject("COMPANY[1]");
         int deptCount = firstCustomer.getList("departments").size();
@@ -79,8 +78,7 @@ public class BestPracticeTests extends DasTest {
         DataObject newDepartment = root.createDataObject("DEPARTMENT");
         firstCustomer.getList("departments").add(newDepartment); 
         
-        ApplyChangesCommand apply = commandGroup.getApplyChangesCommand();
-        apply.execute(root);
+        das.applyChanges(root);        
         
         //verify
         root = read.executeQuery();
@@ -94,9 +92,9 @@ public class BestPracticeTests extends DasTest {
      */
     public void testFlushCreateHeirarchy() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-        commandGroup.setConnection(getConnection());
-        Command select = commandGroup.getCommand("all companies and departments");
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        das.setConnection(getConnection());
+        Command select = das.getCommand("all companies and departments");
         select.setConnection(getConnection());
         DataObject root = select.executeQuery();
 
@@ -115,18 +113,14 @@ public class BestPracticeTests extends DasTest {
         company.getList("departments").add(department);
 
         // Get apply command
-        ApplyChangesCommand apply = commandGroup.getApplyChangesCommand();
-        apply.setConnection(getConnection());
-
-        // Flush changes
-        apply.execute(root);
+        das.applyChanges(root);      
 
         // Save the id
         Integer id = (Integer) company.get("ID");
 
         // Verify the change
 
-        select = commandGroup.getCommand("company by id with departments");
+        select = das.getCommand("company by id with departments");
         select.setParameterValue("ID", id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
@@ -139,10 +133,10 @@ public class BestPracticeTests extends DasTest {
      */
     public void testGetEmptyGraph() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CompanyConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command select = commandGroup.getCommand("company by id with departments");
+        Command select = das.getCommand("company by id with departments");
         Integer idOfNoExistingCompany = new Integer(-1);
         select.setParameterValue("ID", idOfNoExistingCompany);
         DataObject root = select.executeQuery();

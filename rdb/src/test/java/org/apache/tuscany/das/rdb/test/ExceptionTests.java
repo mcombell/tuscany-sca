@@ -16,10 +16,9 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.CommandGroup;
 import org.apache.tuscany.das.rdb.ConfigHelper;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.BookData;
@@ -53,7 +52,8 @@ public class ExceptionTests extends DasTest {
     }
 
     public void testMissingConnection() throws Exception {
-        Command readCustomers = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
         try {
             readCustomers.executeQuery();
             fail("RuntimeException should be thrown");
@@ -65,7 +65,8 @@ public class ExceptionTests extends DasTest {
 
 
     public void testMissingMapping() throws Exception {
-        Command readCustomers = Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1");
+    	DAS das = DAS.FACTORY.createDAS();
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
         readCustomers.setConnection(getConnection());
         SDOUtil.registerStaticTypes(CompanyFactory.class);
         readCustomers.setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
@@ -84,7 +85,8 @@ public class ExceptionTests extends DasTest {
      */
     public void testEmptyStream() throws Exception {
         try {
-            Command.FACTORY.createCommand("select * from CUSTOMER where ID = 1", getConfig("NonExistingFile.xml"));
+        	DAS das = DAS.FACTORY.createDAS(getConfig("NonExistingFile.xml"));
+           // das.createCommand("select * from CUSTOMER where ID = 1", getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
         } catch (RuntimeException e) {
             assertEquals(
@@ -98,7 +100,7 @@ public class ExceptionTests extends DasTest {
      */
     public void testEmptyStream2() throws Exception {
         try {
-            CommandGroup.FACTORY.createCommandGroup(getConfig("NonExistingFile.xml"));
+            DAS.FACTORY.createDAS(getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
         } catch (RuntimeException e) {
             assertEquals(
@@ -125,7 +127,8 @@ public class ExceptionTests extends DasTest {
         helper.addTable("BOOK", "Book");
         helper.addPrimaryKey("BOOK.BOOK_ID");
         
-        Command select = Command.FACTORY.createCommand(statement, helper.getConfig());
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+        Command select = das.createCommand(statement);
         select.setConnection(getConnection());
         select.setParameterValue("ID", new Integer(1));
 
@@ -136,22 +139,22 @@ public class ExceptionTests extends DasTest {
         newBook.setInt("BOOK_ID", 1001);
         root.getList("Book").add(newBook);
                
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(helper.getConfig());
-        apply.setConnection(getConnection());
-        apply.execute(root);
+        das.setConnection(getConnection());
+        das.applyChanges(root);
         
         //Verify
         select.setParameterValue("ID", new Integer(1001));
         root = select.executeQuery();
         //TODO - Uncomment to test TUSCANY-250
-//        assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
+        assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
         
     }
     
     
     public void testReadOrdersAndDetails2() throws Exception {
 
-        Command read = Command.FACTORY
+    	DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConfig1.xml"));
+        Command read = das
 				.createCommand(
 						"SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID",
 						getConfig("InvalidConfig1.xml"));

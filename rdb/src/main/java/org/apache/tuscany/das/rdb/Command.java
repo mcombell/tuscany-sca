@@ -18,8 +18,6 @@ package org.apache.tuscany.das.rdb;
 
 import java.sql.Connection;
 
-import org.apache.tuscany.das.rdb.impl.CommandFactoryImpl;
-
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
@@ -30,7 +28,7 @@ import commonj.sdo.Type;
  */
 public interface Command {
 
-	public static CommandFactory FACTORY = new CommandFactoryImpl();
+//	public static CommandFactory FACTORY = new CommandFactoryImpl();
 
 	/**
 	 * Performs the function defined by the command

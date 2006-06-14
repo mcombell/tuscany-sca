@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
 import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -39,9 +40,11 @@ public class SimplestStaticCrud extends DasTest {
 	}
 	
 	public void testRead() throws Exception {
-		SDOUtil.registerStaticTypes(CustomerFactory.class);
 		InputStream mapping = getClass().getClassLoader().getResourceAsStream("basicStaticCustomer.xml");
-		Command select = Command.FACTORY.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = :LASTNAME",mapping);
+		DAS das = DAS.FACTORY.createDAS(mapping);
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		
+		Command select = das.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = :LASTNAME");
 		select.setConnection(getConnection());
 		select.setParameterValue("LASTNAME", "Williams");
 		TypeHelper helper = TypeHelper.INSTANCE;

@@ -21,9 +21,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.CommandGroup;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
@@ -69,10 +68,10 @@ public class CommandGroupTests extends DasTest {
      */
     public void testRead() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("all customers");
+        Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
 
         assertEquals(5, root.getList("CUSTOMER").size());
@@ -84,10 +83,10 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadUsingConfigInput() throws Exception {
     	Config config = ConfigUtil.loadConfig(getConfig("CustomersOrdersConfig.xml"));
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(config);
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(config);
+        das.setConnection(getConnection());
 
-        Command read = commandGroup.getCommand("all customers");
+        Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
 
         assertEquals(5, root.getList("CUSTOMER").size());
@@ -98,10 +97,10 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithParmmarker() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
+        das.setConnection(getConnection());
         
-        Command read = commandGroup.getCommand("order by id with ?");
+        Command read = das.getCommand("order by id with ?");
         read.setParameterValue(1, new Integer(1));
         DataObject root = read.executeQuery();
 
@@ -114,10 +113,10 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithConnectionProperties() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
+        das.setConnection(getConnection());
         
-        Command read = commandGroup.getCommand("all customers");
+        Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
 
         assertEquals(5, root.getList("CUSTOMER").size());
@@ -129,16 +128,16 @@ public class CommandGroupTests extends DasTest {
      */
     public void testUpdate() throws Exception {
 
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustOrdersConnectionProps.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
+        das.setConnection(getConnection());
         
-        Command read = commandGroup.getCommand("all customers");
+        Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
         // Verify precondition
         assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
         int id = root.getInt("CUSTOMER[1]/ID");
 
-        Command update = commandGroup.getCommand("update customer");
+        Command update = das.getCommand("update customer");
         update.setParameterValue("ID", new Integer(id));
         update.execute();
 
@@ -155,27 +154,26 @@ public class CommandGroupTests extends DasTest {
     public void testRead2() throws Exception {
 
         // Create the group and set common connection
-        CommandGroup commandGroup = CommandGroup.FACTORY.createCommandGroup(getConfig("CustomersOrdersConfig.xml"));
-        commandGroup.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
+        das.setConnection(getConnection());
 
         // Read all customers and remember the first one
-        Command read = commandGroup.getCommand("all customers");
+        Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
         Integer id = (Integer) root.get("CUSTOMER[1]/ID");
 
         // Read the specific Customer from above and its related orders
-        Command custOrders = commandGroup.getCommand("customer and orders");
+        Command custOrders = das.getCommand("customer and orders");
         custOrders.setParameterValue("ID", id);
         root = custOrders.executeQuery();
 
         // Modify the first order and flush this change back to the database
         root.setString("CUSTOMER[1]/orders[1]/PRODUCT", "Defibrillator");
         Integer orderId = (Integer) root.get("CUSTOMER[1]/orders[1]/ID");
-        ApplyChangesCommand flush = commandGroup.getApplyChangesCommand();
-        flush.execute(root);
+        das.applyChanges(root);
 
         // Verify
-        Command orderByID = commandGroup.getCommand("order by id");
+        Command orderByID = das.getCommand("order by id");
         orderByID.setParameterValue("ID", orderId);
         assertEquals("Defibrillator", root.getString("ANORDER[1]/PRODUCT"));
 

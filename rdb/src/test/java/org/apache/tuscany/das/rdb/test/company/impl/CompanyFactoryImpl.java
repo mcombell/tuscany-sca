@@ -16,14 +16,15 @@
  */
 package org.apache.tuscany.das.rdb.test.company.impl;
 
-import org.apache.tuscany.das.rdb.test.company.*;
-
+import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
+import org.apache.tuscany.das.rdb.test.company.CompanyType;
+import org.apache.tuscany.das.rdb.test.company.DatagraphRoot;
+import org.apache.tuscany.das.rdb.test.company.DepartmentType;
+import org.apache.tuscany.das.rdb.test.company.EmployeeType;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

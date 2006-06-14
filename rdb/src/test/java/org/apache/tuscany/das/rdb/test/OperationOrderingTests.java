@@ -16,8 +16,8 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import org.apache.tuscany.das.rdb.ApplyChangesCommand;
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CityData;
 import org.apache.tuscany.das.rdb.test.data.StateData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -48,7 +48,8 @@ public class OperationOrderingTests extends DasTest {
 	}
 
 	public void testInsert() throws Exception {
-		Command select = Command.FACTORY
+		DAS das = DAS.FACTORY.createDAS(getConfig("cityStates.xml"));
+		Command select = das
 				.createCommand(
 						"Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID",
 						getConfig("cityStates.xml"));
@@ -69,12 +70,8 @@ public class OperationOrderingTests extends DasTest {
 
 		georgia.getList("cities").add(atlanta);
 
-		// Create apply command
-		ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand(getConfig("cityStates.xml"));
-		apply.setConnection(getConnection());
-
-		// Flush changes
-		apply.execute(root);
+		das.setConnection(getConnection());
+		das.applyChanges(root);
 
 		select.setConnection(getConnection());
 		root = select.executeQuery();

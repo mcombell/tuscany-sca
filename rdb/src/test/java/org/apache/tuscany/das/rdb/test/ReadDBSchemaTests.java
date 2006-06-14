@@ -23,6 +23,7 @@ package org.apache.tuscany.das.rdb.test;
  */
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
@@ -42,8 +43,8 @@ public class ReadDBSchemaTests extends DasTest {
 	
 	
 	public void testReadTableInfo() throws Exception {
-		
-		Command select = Command.FACTORY.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");	
+		DAS das = DAS.FACTORY.createDAS();
+		Command select = das.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");	
 		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();
 		
