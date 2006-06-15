@@ -17,12 +17,12 @@
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <Table tableName="CUSTOMER" typeName="Customer">
-    <Column columnName="ID" propertyName="iD" primaryKey="true"/>
+    <Column columnName="ID" propertyName="ID" primaryKey="true"/>
   </Table>
   
   <Table tableName="ANORDER" typeName="AnOrder">
-  	<Column columnName="CUSTOMER_ID" propertyName="customerID"/>
-    <Column columnName="ID" propertyName="iD" primaryKey="true"/>
+  	<Column columnName="CUSTOMER_ID" propertyName="Customer_ID"/>
+    <Column columnName="ID" propertyName="ID" primaryKey="true"/>
   </Table>
 	
   <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">

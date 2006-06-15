@@ -62,8 +62,35 @@
                 <artifactId>tuscany-sdo-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>config</id>
                         <configuration>
                             <schemaFile>${basedir}/src/main/resources/config.xsd</schemaFile>
+                            <generateLoader>true</generateLoader>
+                            <generateSwitch>true</generateSwitch>
+                            <noNotification>true</noNotification>
+                            <noUnsettable>true</noUnsettable>
+                        </configuration>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>company</id>
+                        <configuration>
+                            <schemaFile>${basedir}/src/test/resources/company.xsd</schemaFile>
+                            <generateLoader>true</generateLoader>
+                            <generateSwitch>true</generateSwitch>
+                            <noNotification>true</noNotification>
+                            <noUnsettable>true</noUnsettable>
+                        </configuration>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>customer</id>
+                        <configuration>
+                            <schemaFile>${basedir}/src/test/resources/customer.xsd</schemaFile>
                             <generateLoader>true</generateLoader>
                             <generateSwitch>true</generateSwitch>
                             <noNotification>true</noNotification>
