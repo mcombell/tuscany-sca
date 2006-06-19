@@ -114,19 +114,6 @@ public interface Command {
 	 */
 	public void setDataObjectModel(Type schema);
 
-	/**
-	 * Defines the structure of the ResultSet returned by the JDBC Driver when
-	 * this command is executed. If the shape is not specified then the shape is
-	 * taken from the ResultSetMetatadta instance provided by the JDBC Driver.
-	 * <p>
-	 * This method is prvided primarily to support platforms (such as Oracle)
-	 * that do not provide complete support for ResultSetMetadata
-	 * 
-	 * @param shape
-	 *            the specified result set shape
-	 * @see ResultSetShape
-	 */
-	public void setResultSetShape(ResultSetShape shape);
 
 	/**
 	 * Provides the java.sql.Connection to be used for this executing this

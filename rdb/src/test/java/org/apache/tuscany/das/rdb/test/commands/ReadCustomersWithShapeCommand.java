@@ -16,25 +16,43 @@
  */
 package org.apache.tuscany.das.rdb.test.commands;
 
-import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.SDODataTypes;
+import java.util.ArrayList;
+
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.ResultDescriptor;
+import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
-import commonj.sdo.Type;
-
 public class ReadCustomersWithShapeCommand extends ReadCommandImpl {
-
-	// This sql string ensures that we won't have resultset metadata
-	private static final String sqlString = "Select * from customer union select * from customer";
-
-	private static final String[] columns = {"ID", "LASTNAME", "ADDRESS"};
-	private static final String[] tables = {"CUSTOMER", "CUSTOMER", "CUSTOMER"};
-	private static final Type[] types = {SDODataTypes.INT, SDODataTypes.STRING, SDODataTypes.STRING};
-
+//	 This sql string ensures that we won't have resultset metadata
+	static String sqlString = "select * from customer union select * from customer";	
+	static ArrayList descriptor = new ArrayList();
+	
+	static {
+		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+		
+		ResultDescriptor desc1 = factory.createResultDescriptor();
+		desc1.setColumnName("ID");
+		desc1.setColumnType("commonj.sdo.Int");
+		desc1.setTableName("CUSTOMER");
+		
+		ResultDescriptor desc2 = factory.createResultDescriptor();
+		desc2.setColumnName("LASTNAME");
+		desc2.setColumnType("commonj.sdo.String");
+		desc2.setTableName("CUSTOMER");
+		
+		ResultDescriptor desc3 = factory.createResultDescriptor();
+		desc3.setColumnName("ADDRESS");
+		desc3.setColumnType("commonj.sdo.String");
+		desc3.setTableName("CUSTOMER");
+		
+		descriptor.add(desc1);
+		descriptor.add(desc2);
+		descriptor.add(desc3);
+		
+	}
 	public ReadCustomersWithShapeCommand() {
-		super(sqlString);
-		ResultSetShape shape = new ResultSetShape(tables, columns, types);
-		setResultSetShape(shape);
+		super(sqlString, null, descriptor);		
 	}
 
 }

@@ -62,7 +62,7 @@ public class DASImpl implements DAS {
                     .next();
             String kind = commandConfig.getKind();
             if (kind.equalsIgnoreCase("select"))                             
-                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config));
+                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config, commandConfig.getResultDescriptor()));
             else if (kind.equalsIgnoreCase("update"))
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("insert"))
@@ -192,7 +192,7 @@ public class DASImpl implements DAS {
         char firstChar = Character.toUpperCase(sql.charAt(0));
         switch (firstChar) {
         case 'S':
-            return new ReadCommandImpl(sql, config);
+            return new ReadCommandImpl(sql, config, null);
         case 'I':
             return new InsertCommandImpl(sql);
         case 'U':

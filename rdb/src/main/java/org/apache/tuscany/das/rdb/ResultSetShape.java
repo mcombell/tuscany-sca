@@ -18,10 +18,13 @@ package org.apache.tuscany.das.rdb;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
+import org.apache.tuscany.das.rdb.config.ResultDescriptor;
 import org.apache.tuscany.das.rdb.graphbuilder.schema.ResultSetTypeMap;
 
 import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 /**
  * Describes the structure of the result set returned from execution 
@@ -38,12 +41,6 @@ public class ResultSetShape {
 	private final String[] columns;
 	private final String[] tables;
 	private final Type[] types;	
-	
-	public ResultSetShape(String[] t, String[] c, Type[] dataTypes) {
-		this.columns = c;
-		this.tables = t;
-		this.types = dataTypes;	
-	}
 
 	public ResultSetShape(ResultSetMetaData metadata) throws SQLException {
 		columns = new String[metadata.getColumnCount()];
@@ -56,6 +53,31 @@ public class ResultSetShape {
 			columns[i-1] = metadata.getColumnName(i);
 			types[i-1] = typeMap.getType(metadata.getColumnType(i), true);
 		}
+	}
+
+	public ResultSetShape(List resultDescriptor) {
+		TypeHelper helper = TypeHelper.INSTANCE;
+		int size = resultDescriptor.size();
+		columns = new String[size];
+		tables = new String[size];
+		types = new Type[size];	
+		
+		for (int i=0; i<size; i++) {
+			ResultDescriptor desc = (ResultDescriptor) resultDescriptor.get(i);
+			tables[i] = desc.getTableName();
+			columns[i] = desc.getColumnName();
+			
+			
+			int idx = desc.getColumnType().lastIndexOf('.');
+			String uri = desc.getColumnType().substring(0, idx);
+			String typeName = desc.getColumnType().substring(idx+1);
+			
+			types[i] = helper.getType(uri, typeName);
+			if ( types[i] == null ) 
+				throw new RuntimeException("Could not find type " + desc.getColumnType() + " for column " + desc.getColumnName());
+		}
+		
+		
 	}
 
 	public int getColumnCount() {

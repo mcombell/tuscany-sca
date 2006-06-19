@@ -16,31 +16,27 @@
 */
 package org.apache.tuscany.das.rdb.test.commands;
 
-import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.SDODataTypes;
+import java.util.ArrayList;
+
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.ResultDescriptor;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
-
-import commonj.sdo.Type;
 
 public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
 
 	// This sql string ensures that we won't have resultset metadata
 	private static final String sqlString = "Select * from customer union select * from customer";
-
-	private static final String[] columns = {"ID", "LASTNAME", "ADDRESS"};
-	private static final String[] tables = {"CUSTOMER", "CUSTOMER", "CUSTOMER"};
-	private static final Type[] types = {SDODataTypes.INT, SDODataTypes.STRING, SDODataTypes.STRING};
+	private static final ArrayList descriptor = new ArrayList();
 	
-	private static final Config mapping;
+	private static final Config config;
 
 	static {
 		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
-		mapping = factory.createConfig();
+		config = factory.createConfig();
 		Table t = factory.createTable();
 		Column id = factory.createColumn();
 		id.setColumnName("ID");
@@ -54,13 +50,30 @@ public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
 		t.getColumn().add(lastname);
 		t.getColumn().add(address);
 		t.setTableName("CUSTOMER");
-		mapping.getTable().add(t);
+		config.getTable().add(t);
+		
+		ResultDescriptor desc1 = factory.createResultDescriptor();
+		desc1.setColumnName("ID");
+		desc1.setColumnType("commonj.sdo.Int");
+		desc1.setTableName("CUSTOMER");
+		
+		ResultDescriptor desc2 = factory.createResultDescriptor();
+		desc2.setColumnName("LASTNAME");
+		desc2.setColumnType("commonj.sdo.String");
+		desc2.setTableName("CUSTOMER");
+		
+		ResultDescriptor desc3 = factory.createResultDescriptor();
+		desc3.setColumnName("ADDRESS");
+		desc3.setColumnType("commonj.sdo.String");
+		desc3.setTableName("CUSTOMER");
+		
+		descriptor.add(desc1);
+		descriptor.add(desc2);
+		descriptor.add(desc3);
 	}
 
 	public SimpleReadCustomersWithShapeCommand() {
-		super(sqlString, mapping);
-		ResultSetShape shape = new ResultSetShape(tables, columns, types);
-		setResultSetShape(shape);
+		super(sqlString, config, descriptor);		
 	}
 
 }

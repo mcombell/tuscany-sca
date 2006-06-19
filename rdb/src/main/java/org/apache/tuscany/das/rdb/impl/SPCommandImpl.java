@@ -25,13 +25,9 @@ import org.apache.tuscany.das.rdb.util.DebugUtil;
 import commonj.sdo.DataObject;
 
 public class SPCommandImpl extends ReadCommandImpl {
-
-	public SPCommandImpl(String sqlString) {
-		super(sqlString);
-	}
     
     public SPCommandImpl(String sqlString, Config config) {
-        super(sqlString, config);
+        super(sqlString, config, null);
     }
 
 	public DataObject executeQuery() {

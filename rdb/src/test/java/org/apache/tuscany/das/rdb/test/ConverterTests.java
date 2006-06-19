@@ -23,13 +23,10 @@ import java.util.Date;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 /**
  * Tests the Converter framwork
@@ -79,16 +76,10 @@ public class ConverterTests extends DasTest {
 	 */
 	public void testArbitraryConverter() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithConverter.xml"));
+		das.setConnection(getConnection());
 		//Create and initialize command to read customers
-		Command read = das.createCommand("select * from CUSTOMER where ID = 1", getConfig("CustomerConfigWithConverter.xml"));	
-		read.setConnection(getConnection());
+		Command read = das.getCommand("testArbitraryConverter");			
 
-		String[] columns = { "ID", "LASTNAME", "ADDRESS" };
-		String[] tables = { "CUSTOMER", "CUSTOMER", "CUSTOMER" };
-		Type[] types = { SDODataTypes.INTEGEROBJECT, SDODataTypes.DATE, SDODataTypes.STRING };
-		ResultSetShape shape = new ResultSetShape(tables, columns, types);
-		read.setResultSetShape(shape);							
-		
 		//Read
 		DataObject root = read.executeQuery();
 		

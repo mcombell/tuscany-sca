@@ -53,7 +53,7 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 	}
 	
 	public ReadCustomersStaticTypesCommand() {
-		super(sqlString, mapping);
+		super(sqlString, mapping, null);
 		setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
 	}
 

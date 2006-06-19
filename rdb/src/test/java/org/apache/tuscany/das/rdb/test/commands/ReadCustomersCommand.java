@@ -49,7 +49,7 @@ public class ReadCustomersCommand extends ReadCommandImpl {
 	}
 	
 	public ReadCustomersCommand() {
-		super(sqlString, mapping);
+		super(sqlString, mapping, null);
 	}
 
 }

@@ -16,12 +16,12 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
@@ -39,26 +39,18 @@ public class ReadCommandImpl extends CommandImpl {
 
     private int startRow = 1;
 
-    private int endRow = Integer.MAX_VALUE;
+    private int endRow = Integer.MAX_VALUE;   
 
-    public ReadCommandImpl(String sqlString) {
+    public ReadCommandImpl(String sqlString, Config mapping, List resultDescriptor) {
         super(sqlString);
-    }
-
-    public ReadCommandImpl(String sqlString, Config mapping) {
-        this(sqlString);
         if (mapping != null)
             setMappingModel(mapping);
+        
+        if ( resultDescriptor != null && !resultDescriptor.isEmpty()) 
+        	this.resultSetShape = new ResultSetShape(resultDescriptor);
     }
 
-    //TODO - Need to refactor based on use of DataSource and CommandGroup
-    public ReadCommandImpl(String sqlString, Config mapping, Connection connection) {
-        this(sqlString);
-        setConnection(connection);
-        if (mapping != null)
-            setMappingModel(mapping);
-    }
-
+   
     public void execute() {
         throw new UnsupportedOperationException();
     }

@@ -15,6 +15,26 @@
   limitations under the License.
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  	
+  <Command name="readEngineParts" kind="Select" SQL="SELECT P1.*, P2.*, P3.* FROM PART AS P1 
+  				LEFT JOIN PART AS P2 ON P1.ID = P2.PARENT_ID 
+  					LEFT JOIN PART AS P3 on P2.ID = P3.PARENT_ID WHERE P1.ID = 1">
+  					<ResultDescriptor columnName="ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="NAME" columnType="commonj.sdo.String" tableName="PART"/>
+  					<ResultDescriptor columnName="QUANTITY" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="PARENT_ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					
+  					<ResultDescriptor columnName="ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="NAME" columnType="commonj.sdo.String" tableName="PART"/>
+  					<ResultDescriptor columnName="QUANTITY" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="PARENT_ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					
+  					<ResultDescriptor columnName="ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="NAME" columnType="commonj.sdo.String" tableName="PART"/>
+  					<ResultDescriptor columnName="QUANTITY" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					<ResultDescriptor columnName="PARENT_ID" columnType="commonj.sdo.IntObject" tableName="PART"/>
+  					
+  </Command>
   
   <Table tableName="PART">
   	<Column columnName="ID" primaryKey="true"/>

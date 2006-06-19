@@ -16,6 +16,12 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+ 	<Command name="literal" SQL="Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer" kind="Select">
+ 		<ResultDescriptor columnName="ID" tableName="CUSTOMER" columnType="commonj.sdo.Long"/>
+ 		<ResultDescriptor columnName="LASTNAME" tableName="CUSTOMER" columnType="commonj.sdo.String"/>
+ 		<ResultDescriptor columnName="ADDRESS" tableName="CUSTOMER" columnType="commonj.sdo.String"/>
+ 	</Command>
+ 	
   <Table tableName="CUSTOMER">
     <Column columnName="ID" converterClassName="org.apache.tuscany.das.rdb.test.mappings.StringToLongConverter"/>
   </Table>

@@ -49,6 +49,6 @@ public class ReadCustomersByLastnameCommand extends ReadCommandImpl {
 	}
 	
 	public ReadCustomersByLastnameCommand() {
-		super(sqlString, mapping);
+		super(sqlString, mapping, null);
 	}
 }

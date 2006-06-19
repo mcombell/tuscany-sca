@@ -20,14 +20,10 @@ import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.SDODataTypes;
-import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 import org.apache.tuscany.das.rdb.test.data.PartData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 public class RecursiveTests extends DasTest {
 
@@ -39,21 +35,12 @@ public class RecursiveTests extends DasTest {
 	public void testReadEngineParts() throws Exception {
 		
 		DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"));
+		das.setConnection(getConnection());
 		//Table definition
 		//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
 
-		String threeLevelPartsSQL = "SELECT P1.*, P2.*, P3.* FROM PART AS P1 LEFT JOIN PART AS P2 ON P1.ID = P2.PARENT_ID "
-				+ "LEFT JOIN PART AS P3 on P2.ID = P3.PARENT_ID WHERE P1.ID = 1";
-		Command select = das.createCommand(threeLevelPartsSQL, getConfig("PartsConfig.xml"));
-		select.setConnection(getConnection());
-
-		String[] columns = {"ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID", "ID", "NAME", "QUANTITY", "PARENT_ID"};
-		String[] tables = {"PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART", "PART"};
-		Type[] types = {SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT, SDODataTypes.STRING, SDODataTypes.INTEGEROBJECT, SDODataTypes.INTEGEROBJECT};
-		ResultSetShape shape = new ResultSetShape(tables, columns, types);
-
-		//Hack until we provide a nicer API
-		((ReadCommandImpl)select).setResultSetShape(shape);	
+	
+		Command select = das.getCommand("readEngineParts");				
 		
 		// Need to set the key explicitly. The aggregate of columns not working
 		// because of null values

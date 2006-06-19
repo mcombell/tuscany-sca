@@ -18,13 +18,10 @@ package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.ResultSetShape;
-import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 /**
  * Test ability to specify format(shape) of the ResultSet. This is necessary
@@ -49,20 +46,10 @@ public class ResultSetShapeTests extends DasTest {
      */
     public void testReadSingle() throws Exception {
 
-        // Using literals in the select forces invalid resultset metadata
-        String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
-        String[] columns = { "ID", "LASTNAME", "ADDRESS" };
-        String[] tables = { "CUSTOMER", "CUSTOMER", "CUSTOMER" };
-        Type[] types = { SDODataTypes.LONG, SDODataTypes.STRING, SDODataTypes.STRING };
-
-        ResultSetShape shape = new ResultSetShape(tables, columns, types);
-
         DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"));
+        das.setConnection(getConnection());
         // Create and initialize command to read customers
-        Command readCustomers = das.createCommand(sqlString,
-                getConfig("CustomerConfigWithIDConverter.xml"));
-        // Specify result shape
-        readCustomers.setResultSetShape(shape);
+        Command readCustomers = das.getCommand("literal");     
 
         readCustomers.setConnection(getConnection());
 

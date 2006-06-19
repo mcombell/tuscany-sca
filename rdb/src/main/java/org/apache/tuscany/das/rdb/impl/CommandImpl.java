@@ -132,12 +132,6 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 	}
 
 
-
-	public void setResultSetShape(ResultSetShape shape) {
-		this.resultSetShape = shape;
-	}
-
-
 	public void close() {
 		statement.close();
 	}
