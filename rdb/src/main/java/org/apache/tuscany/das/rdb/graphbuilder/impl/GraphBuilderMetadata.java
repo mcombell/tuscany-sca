@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.graphbuilder.schema.ESchemaMaker;
+import org.apache.tuscany.das.rdb.impl.ResultSetShape;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Type;

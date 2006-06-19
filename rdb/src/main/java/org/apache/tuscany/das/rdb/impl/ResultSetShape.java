@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.tuscany.das.rdb;
+package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;

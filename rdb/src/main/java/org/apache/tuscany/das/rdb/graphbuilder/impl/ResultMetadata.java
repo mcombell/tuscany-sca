@@ -25,12 +25,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.Converter;
-import org.apache.tuscany.das.rdb.ResultSetShape;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
+import org.apache.tuscany.das.rdb.impl.ResultSetShape;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Type;

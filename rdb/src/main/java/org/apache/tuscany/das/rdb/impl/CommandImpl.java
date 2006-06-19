@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.Parameter;
-import org.apache.tuscany.das.rdb.ResultSetShape;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
