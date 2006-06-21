@@ -1,8 +1,13 @@
 Manifest-Version: 1.0
+Extension-Name: tuscany-das-rdb
+Specification-Title: Tuscany DAS for Relational Databases
+Specification-Vendor: Apache Software Foundation
+Implementation-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Implementation-Title: tuscany-das-rdb
+Implementation-Version: incubating-M1
 Bundle-ManifestVersion: 2
-Bundle-Name: rdbdas
-Bundle-SymbolicName: rdbdas
+Bundle-Name: Tuscany DAS for Relational Databases
+Bundle-SymbolicName: org.apache.tuscany.das.rdb
 Bundle-Version: 1.0.0
-Bundle-Localization: plugin
-Require-Bundle: org.junit,
- org.eclipse.emf.ecore.sdo
+Bundle-Vendor: Apache Software Foundation
