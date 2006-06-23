@@ -109,48 +109,6 @@ public class ExceptionTests extends DasTest {
         }
     }
     
-    
-    /**
-     * Test nice error message when Conofig does not use Aliased name
-     * Alis is defined for BOOK -> Book but PK config uses BOOK.BOOK_ID
-     * 
-     * In this test case, the create is silently never performed!!!
-     * 
-     * TODO - Uncomment out
-     */
-    public void test_4() throws Exception {
-
-        String statement = "SELECT * FROM BOOK WHERE BOOK.BOOK_ID = :ID";
-
-        // Create Table config programmatically
-        ConfigHelper helper = new ConfigHelper();
-        helper.addTable("BOOK", "Book");
-        helper.addPrimaryKey("BOOK.BOOK_ID");
-        
-        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
-        Command select = das.createCommand(statement);
-        select.setConnection(getConnection());
-        select.setParameterValue("ID", new Integer(1));
-
-        DataObject root = select.executeQuery();
-        
-        DataObject newBook = root.createDataObject("Book");
-        newBook.setString("NAME", "Ant Colonies of the Old World");
-        newBook.setInt("BOOK_ID", 1001);
-        root.getList("Book").add(newBook);
-               
-        das.setConnection(getConnection());
-        das.applyChanges(root);
-        
-        //Verify
-        select.setParameterValue("ID", new Integer(1001));
-        root = select.executeQuery();
-        //TODO - Uncomment to test TUSCANY-250
-        assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
-        
-    }
-    
-    
     public void testReadOrdersAndDetails2() throws Exception {
 
     	DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConfig1.xml"));

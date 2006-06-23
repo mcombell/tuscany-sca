@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.test.suites;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.apache.tuscany.das.rdb.test.AliasTests;
 import org.apache.tuscany.das.rdb.test.BestPracticeTests;
 import org.apache.tuscany.das.rdb.test.CUDGeneration;
 import org.apache.tuscany.das.rdb.test.CommandGroupTests;
@@ -90,6 +91,7 @@ public class AllCommonTests {
         suite.addTest(new TestSuite (OneToOneRelationshipTests.class));
        
         suite.addTest(new TestSuite (ProgrammaticConfigTests.class));
+        suite.addTest(new TestSuite (AliasTests.class));
        
 		//$JUnit-END$
 		return suite;
