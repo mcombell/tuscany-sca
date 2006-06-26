@@ -16,8 +16,6 @@
  */
 package org.apache.tuscany.das.rdb;
 
-import java.sql.Connection;
-
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
@@ -91,29 +89,6 @@ public interface Command {
 	 */
 	public Object getParameterValue(int index);
 
-	/**
-	 * Adds a Parameter to the command
-	 * 
-	 * @param index
-	 *            the index of the parameter
-	 * @param direction
-	 *            the direction of the Parameter. Either Parameter.IN,
-	 *            Parameter.OUT or Parameter.INOUT
-	 * @param sdoType
-	 *            specifies the type as a commonj.sdo.Type from
-	 *            {@link SDODataTypes}
-	 */
-	public void addParameter(int index, int direction, Type sdoType);
-
-	/**
-	 * Specifies an object model for a graph of DataObjects returned by
-	 * #executeQuery()
-	 * 
-	 * @param schema
-	 *            the model as a commonj.sdo.Type
-	 */
-	public void setDataObjectModel(Type schema);
-
 
 	/**
 	 * Provides the java.sql.Connection to be used for this executing this
@@ -122,7 +97,7 @@ public interface Command {
 	 * @param connection
 	 *            the java.sql.Connection
 	 */
-	public void setConnection(Connection connection);
+//	public void setConnection(Connection connection);
 
 	/**
 	 * Provides the java.sql.Connection to be used for this executing this
@@ -134,12 +109,13 @@ public interface Command {
 	 *            <code>true</code> if the DAS should perform tx
 	 *            commit/rollback
 	 */
-	public void setConnection(Connection connection, boolean manageTransactions);
+//	public void setConnection(Connection connection, boolean manageTransactions);
 
 	/**
 	 * Cleans up and realeases all resources associated with this command. This
 	 * should be called when the application is done with this command.
 	 */
 	public void close();
+	
 
 }

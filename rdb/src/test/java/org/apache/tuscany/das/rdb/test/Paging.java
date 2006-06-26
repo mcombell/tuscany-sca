@@ -38,10 +38,9 @@ public class Paging extends DasTest {
 	}
 
 	public void testPaging() throws SQLException  {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Build command to read all customers
-		Command custCommand = das.createCommand("select * from CUSTOMER order by ID");
-		custCommand.setConnection(getConnection());
+		Command custCommand = das.createCommand("select * from CUSTOMER order by ID");	
 
 		//Create a pager with the command
 		Pager pager = new PagerImpl(custCommand, 2);
@@ -71,13 +70,10 @@ public class Paging extends DasTest {
 	
 	
 	public void testRandomPage() throws SQLException {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 	//Build the select command
 		Command select = das
-				.createCommand("select * from CUSTOMER order by ID");
-
-		//Parameterize the command
-		select.setConnection(getConnection());
+				.createCommand("select * from CUSTOMER order by ID");	
 
 		//Create a pager
 		Pager pager = new PagerImpl(select, 2);

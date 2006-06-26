@@ -47,16 +47,14 @@ public class GeneratedId extends DasTest {
     // Test insert into row with generated ID
     public void testInsert() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");       
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
 
         // Verify insert
         // Verify
-        Command select = das.createCommand("Select ID, NAME from COMPANY");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select ID, NAME from COMPANY");     
         DataObject root = select.executeQuery();
 
         assertEquals(4, root.getList("COMPANY").size());
@@ -67,9 +65,8 @@ public class GeneratedId extends DasTest {
     // Test back to back insertions with the same command
     public void testInsert2() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");     
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
 
@@ -79,8 +76,7 @@ public class GeneratedId extends DasTest {
 
         // Verify insert
         // Verify
-        Command select = das.createCommand("Select ID, NAME from COMPANY");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select ID, NAME from COMPANY");     
         DataObject root = select.executeQuery();
 
         assertEquals(5, root.getList("COMPANY").size());
@@ -89,16 +85,14 @@ public class GeneratedId extends DasTest {
 
     // Test ability to retrieve and utilize the generated key
     public void testInsert3() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into COMPANY (NAME) values (:NAME)");      
         insert.setParameterValue("NAME", "AAA Rental");
         insert.execute();
         Integer key = (Integer) insert.getParameterValue("generated_key");
 
         // Verify insert
-        Command select = das.createCommand("Select ID, NAME from COMPANY where ID = :ID");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select ID, NAME from COMPANY where ID = :ID");     
         select.setParameterValue("ID", key);
         DataObject root = select.executeQuery();
         assertEquals(key, root.get("COMPANY[1]/ID"));
@@ -107,9 +101,8 @@ public class GeneratedId extends DasTest {
 
     // Test ability to propogate generated values back to owning data objects
     public void testPropagateIds() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        Command select = das.createCommand("Select * from COMPANY");
-        select.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
+        Command select = das.createCommand("Select * from COMPANY");      
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -119,16 +112,14 @@ public class GeneratedId extends DasTest {
         // verify pre-condition (id is not there until after flush)
         assertNull(company.get("ID"));
 
-        // Flush changes
-        das.setConnection(getConnection());
+        // Flush changes      
         das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
 
         // Verify the change
-        select = das.createCommand("Select * from COMPANY where ID = :ID");
-        select.setConnection(getConnection());
+        select = das.createCommand("Select * from COMPANY where ID = :ID");       
         select.setParameterValue("ID", id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
@@ -139,10 +130,8 @@ public class GeneratedId extends DasTest {
      * Same as above but metadata provided by XML config file
      */
     public void testPropagateIdsXML() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyMapping.xml"));
-        Command select = das.createCommand("Select * from COMPANY",
-                getConfig("basicCompanyMapping.xml"));
-        select.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyMapping.xml"), getConnection());
+        Command select = das.createCommand("Select * from COMPANY");      
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -153,16 +142,14 @@ public class GeneratedId extends DasTest {
         // verify pre-condition (id is not there until after flush)
         assertNull(company.get("ID"));
 
-        // Flush changes
-        das.setConnection(getConnection());
+        // Flush changes      
         das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
 
         // Verify the change
-        select = das.createCommand("Select * from COMPANY where ID = :ID");
-        select.setConnection(getConnection());
+        select = das.createCommand("Select * from COMPANY where ID = :ID");      
         select.setParameterValue("ID", id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
@@ -175,12 +162,10 @@ public class GeneratedId extends DasTest {
      */
     public void testFlushCreateHeirarchy() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"), getConnection());
         String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-        Command select = das.createCommand(selectCompanys,
-                getConfig("basicCompanyDepartmentMapping.xml"));
-        select.setConnection(getConnection());
+        Command select = das.createCommand(selectCompanys);      
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -198,8 +183,7 @@ public class GeneratedId extends DasTest {
 
         // Associate the new department with the new company
         company.getList("departments").add(department);
-
-        das.setConnection(getConnection());
+      
         das.applyChanges(root);
 
         // Save the id
@@ -208,8 +192,7 @@ public class GeneratedId extends DasTest {
         // Verify the change
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = :ID";
 
-        select = das.createCommand(selectString);
-        select.setConnection(getConnection());
+        select = das.createCommand(selectString);      
         select.setParameterValue("ID", id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
@@ -224,10 +207,8 @@ public class GeneratedId extends DasTest {
 
         String selectCompanys = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID";
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"));
-        Command select = das.createCommand(selectCompanys,
-                getConfig("basicCompanyDepartmentMapping.xml"));
-        select.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("basicCompanyDepartmentMapping.xml"), getConnection());
+        Command select = das.createCommand(selectCompanys);    
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -246,8 +227,7 @@ public class GeneratedId extends DasTest {
 
         // Associate the new department with the new company
         company.getList("departments").add(department);
-
-        das.setConnection(getConnection());
+        
         das.applyChanges(root);
 
         // Save the id
@@ -256,8 +236,7 @@ public class GeneratedId extends DasTest {
         // Verify the change
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = :ID";
 
-        select = das.createCommand(selectString);
-        select.setConnection(getConnection());
+        select = das.createCommand(selectString);    
         select.setParameterValue("ID", id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
@@ -266,9 +245,8 @@ public class GeneratedId extends DasTest {
 
     // Test that error is thrown when no key has been generated (as in a select)
     public void testRead() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
-        Command select = das.createCommand("Select * from COMPANY");
-        select.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command select = das.createCommand("Select * from COMPANY");      
         select.executeQuery();
 
         try {

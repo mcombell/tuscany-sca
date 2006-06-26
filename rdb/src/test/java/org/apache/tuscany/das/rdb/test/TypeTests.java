@@ -44,10 +44,9 @@ public class TypeTests extends DasTest {
 	 * Read various types.  
 	 */
 	public void testRead() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Read customer 1
-		Command select = das.createCommand("Select * from TYPETEST where ID = 1");	
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from TYPETEST where ID = 1");		
 		DataObject root = select.executeQuery();
 		
 		DataObject types = (DataObject)root.get("TYPETEST[1]");

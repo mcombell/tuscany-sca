@@ -32,7 +32,6 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.helper.TypeHelper;
 
 public class CompanyTests extends DasTest {
 
@@ -49,16 +48,13 @@ public class CompanyTests extends DasTest {
 
     public void testSimple() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMapping.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMapping.xml"), getConnection());
     	
         // Build the select command
         Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");//, getConfig("companyMapping.xml"));
-
-        // Parameterize the command
-        selectCommand.setConnection(getConnection());
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");     
 
         // Get the graph
         DataObject root = selectCommand.executeQuery();
@@ -77,17 +73,14 @@ public class CompanyTests extends DasTest {
 
     public void testSimpleStatic() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"), getConnection());
     	SDOUtil.registerStaticTypes(CompanyFactory.class);
         // Build the select command
         Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID", getConfig("companyMappingWithConverters.xml"));
-
-        // Parameterize the command
-        selectCommand.setConnection(getConnection());
-        selectCommand.setDataObjectModel(TypeHelper.INSTANCE.getType(DatagraphRoot.class));
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");
+        
 
         // Get the graph
         DatagraphRoot root = (DatagraphRoot) selectCommand.executeQuery();

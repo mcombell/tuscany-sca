@@ -45,8 +45,7 @@ public class BestPracticeTests extends DasTest {
     //Read list of companies
     public void testReadCompanies() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
         Command read = das.getCommand("all companies");
         DataObject root = read.executeQuery(); 
         assertEquals(3, root.getList("COMPANY").size());
@@ -56,8 +55,7 @@ public class BestPracticeTests extends DasTest {
     //Read list of companies
     public void testReadCompaniesWithDepartments() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
         Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery(); 
         DataObject firstCompany = root.getDataObject("COMPANY[1]");
@@ -68,8 +66,7 @@ public class BestPracticeTests extends DasTest {
     
     public void testddDepartmentToFirstCompany() throws Exception {
         
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());      
         Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery();
         DataObject firstCustomer = root.getDataObject("COMPANY[1]");
@@ -92,10 +89,8 @@ public class BestPracticeTests extends DasTest {
      */
     public void testFlushCreateHeirarchy() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        das.setConnection(getConnection());
-        Command select = das.getCommand("all companies and departments");
-        select.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
+        Command select = das.getCommand("all companies and departments");        
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -133,8 +128,7 @@ public class BestPracticeTests extends DasTest {
      */
     public void testGetEmptyGraph() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());      
 
         Command select = das.getCommand("company by id with departments");
         Integer idOfNoExistingCompany = new Integer(-1);

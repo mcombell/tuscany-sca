@@ -51,10 +51,9 @@ public class RelationshipTests extends DasTest {
 
 		String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"), getConnection());
 		// Read some customers and related orders
-		Command select = das.createCommand(statement, getConfig("customerOrderRelationshipMapping.xml"));
-		select.setConnection(getConnection());
+		Command select = das.createCommand(statement);	
 
 		DataObject root = select.executeQuery();
 		DataObject customer = root.getDataObject("CUSTOMER[1]");
@@ -69,13 +68,11 @@ public class RelationshipTests extends DasTest {
 	 */
 	public void testRelationshipModification2() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerOrderMapping.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerOrderMapping.xml"), getConnection());
 		// Read some customers and related orders
 		Command select = das
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID", 
-						getConfig("basicCustomerOrderMapping.xml"));
-		select.setConnection(getConnection());
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");	
 
 		DataObject root = select.executeQuery();
 
@@ -94,16 +91,13 @@ public class RelationshipTests extends DasTest {
 		cust1.getList("orders").add(order);
 			
 
-		// Flush changes
-		das.setConnection(getConnection());
+		// Flush changes	
 		das.applyChanges(root);
 
 		// verify cust1 relationship updates
 		select = das
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getConfig("basicCustomerOrderMapping.xml"));
-		select.setConnection(getConnection());
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");	
 		select.setParameterValue("ID", cust1ID);
 
 		root = select.executeQuery();

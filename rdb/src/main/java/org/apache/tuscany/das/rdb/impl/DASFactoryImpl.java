@@ -17,6 +17,7 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.io.InputStream;
+import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.DASFactory;
@@ -34,6 +35,18 @@ public class DASFactoryImpl implements DASFactory {
 	
 	public DAS createDAS() {
 		return new DASImpl();
+	}
+
+	public DAS createDAS(InputStream configStream, Connection connection) {
+		return new DASImpl(configStream, connection);
+	}
+
+	public DAS createDAS(Config config, Connection connection) {
+		return new DASImpl(config, connection);
+	}
+
+	public DAS createDAS(Connection connection) {
+		return new DASImpl(connection);
 	}
 
 

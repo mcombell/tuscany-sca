@@ -18,7 +18,6 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
@@ -57,7 +56,7 @@ public abstract class ChangeOperation {
 	
 		Iterator i = writeCommand.getParameters().iterator();
 		while (i.hasNext()) {
-			Parameter parm = (Parameter) i.next();
+			ParameterImpl parm = (ParameterImpl) i.next();
 			DebugUtil.debugln(getClass(), debug, "setting " + parm.getName() + " to " + dObject.get(parm.getName()));
 			parm.setValue(dObject.get(parm.getName()));
 		}

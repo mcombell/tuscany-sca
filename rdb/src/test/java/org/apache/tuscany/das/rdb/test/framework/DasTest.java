@@ -37,7 +37,6 @@ import commonj.sdo.Property;
 public class DasTest extends TestCase {
 
 	public static Connection connection = null;
-	private boolean usingDefaultSetup = false;
 
 	/**
 	 * Tears down the fixture, for example, close a network connection. This
@@ -83,9 +82,7 @@ public class DasTest extends TestCase {
 	 * TODO - refactor to avoid this hackiness ... could move this logic to its own
 	 * class that is then invoked by DatabaseSetUp
 	 */
-	private void defaultSetup() {
-		
-		usingDefaultSetup = true;
+	private void defaultSetup() {	
 		
 //		DatabaseSetup setUp = new DB2Setup(this);
         DatabaseSetup setUp = new DerbySetup(this);

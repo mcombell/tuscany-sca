@@ -68,15 +68,13 @@ public class DefectTests extends DasTest {
         // managedserverid, timestamp) values (316405209, 316405209, '2005-11-23
         // 19:29:52.636')";
         String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (316405209, '2005-11-23 19:29:52.636')";
-        DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand(sql);
-        insert.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand(sql);       
         insert.execute();
 
         // Verify
         Command select = das
-                .createCommand("Select * from conmgt.serverstatus where statusid = 316405209");
-        select.setConnection(getConnection());
+                .createCommand("Select * from conmgt.serverstatus where statusid = 316405209");        
         DataObject root = select.executeQuery();
         assertEquals(1, root.getList("conmgt.serverstatus").size());
 
@@ -92,16 +90,14 @@ public class DefectTests extends DasTest {
         // String sql = "insert into conmgt.serverstatus (managedserverid,
         // timestamp) values (316405209, '2005-11-23 19:29:52.636')";
         String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (:serverid, :timestamp)";
-        DAS das = DAS.FACTORY.createDAS();
+        DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand(sql);
         insert.setParameterValue("serverid", new Integer(316405209));
-        insert.setParameterValue("timestamp", "2005-11-23 19:29:52.636");
-        insert.setConnection(getConnection());
+        insert.setParameterValue("timestamp", "2005-11-23 19:29:52.636");      
         insert.execute();
 
         // Verify
-        Command select = das.createCommand("Select * from conmgt.serverstatus");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select * from conmgt.serverstatus");   
         DataObject root = select.executeQuery();
         assertEquals(1, root.getList("SERVERSTATUS").size());
 
@@ -110,8 +106,7 @@ public class DefectTests extends DasTest {
     public void testWASDefect330118() throws Exception {
 
         // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
 
         // Read all customers and add one
         Command read = das.getCommand("all customers");
@@ -144,18 +139,16 @@ public class DefectTests extends DasTest {
      * 
      */
     public void testYingChen12162005() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das
-                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");
-        insert.setConnection(getConnection());
+                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");       
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", "Williams");
         insert.setParameterValue("ADDRESS", null);
         insert.execute();
 
         // Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
         DataObject root = select.executeQuery();
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
@@ -168,8 +161,7 @@ public class DefectTests extends DasTest {
     public void testYingChen12162005Workaraound() throws Exception {
 
         // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfig.xml"),getConnection());      
 
         Command insert = das.getCommand("insert customer");
         insert.setParameterValue("ID", new Integer(10));
@@ -193,9 +185,8 @@ public class DefectTests extends DasTest {
      * that the parameter type is set.
      */
     public void testDiltonsNullParameterBug1() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");         
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", null);
         insert.setParameterType("LASTNAME", SDODataTypes.STRING);
@@ -203,8 +194,7 @@ public class DefectTests extends DasTest {
         insert.execute();
 
         //Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
         DataObject root = select.executeQuery();    
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
@@ -216,9 +206,8 @@ public class DefectTests extends DasTest {
      * Error by not setting a parameter
      */    
     public void testDiltonsNullParameterBug2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");         
         insert.setParameterValue("ID", new Integer(10));
 //        insert.setParameterValue("LASTNAME", null);
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
@@ -236,17 +225,15 @@ public class DefectTests extends DasTest {
      * Set parameter to empty string
      */    
     public void testDiltonsNullParameterBug3() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");   
-        insert.setConnection(getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");          
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", "");
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
         insert.execute();
 
         //Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
         DataObject root = select.executeQuery();    
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
@@ -294,11 +281,10 @@ public class DefectTests extends DasTest {
         ConfigHelper helper = new ConfigHelper();
         helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID", "CUSTOMER");         
         
-    	DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+    	DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
     	
         //Read customer 1
-        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
-        select.setConnection( getConnection() );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );        
         DataObject root = select.executeQuery();
 
         DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );
@@ -331,10 +317,9 @@ public class DefectTests extends DasTest {
     public void testReadModifyApply1()
         throws Exception
     {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithCUD2.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithCUD2.xml"), getConnection());
         //Read customer 1
-        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );
-        select.setConnection( getConnection() );
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );       
         DataObject root = select.executeQuery();
 
         DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );

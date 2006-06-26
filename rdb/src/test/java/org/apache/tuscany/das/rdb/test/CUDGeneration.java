@@ -39,11 +39,10 @@ public class CUDGeneration extends DasTest {
 	 * statements.
 	 */
 	public void testCUDGeneration1() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithInvalidCUD.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithInvalidCUD.xml"), getConnection());
 		
 		// Read customer with particular ID
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		DataObject root = select.executeQuery();
 
 		DataObject customer = (DataObject) root.get("CUSTOMER[1]");
@@ -63,22 +62,19 @@ public class CUDGeneration extends DasTest {
 	}
 
 	public void testInsertCUDGeneration() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		DataObject root = select.executeQuery();
 
 		DataObject customer = root.createDataObject("CUSTOMER");
 		customer.setInt("ID", 720);
 		customer.set("LASTNAME", "foobar");
 		customer.set("ADDRESS", "asdfasdf");
-
-		das.setConnection(getConnection());
+	
 		das.applyChanges(root);
 
 		select = das.createCommand("select * from CUSTOMER where ID = 720");
-		select.setConnection(getConnection());
 		root = select.executeQuery();
 
 		assertEquals(1, root.getList("CUSTOMER").size());
@@ -86,17 +82,15 @@ public class CUDGeneration extends DasTest {
 
 	public void testReadModifyApply() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("1xM_mapping_no_cud.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("1xM_mapping_no_cud.xml"), getConnection());
 		
 		// Build the select command to read a specific customer and related
 		// orders
 		Command select = das
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getConfig("1xM_mapping_no_cud.xml"));
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
 
-		// Parameterize the command
-		select.setConnection(getConnection());
+		// Parameterize the command	
 		select.setParameterValue("ID", new Integer(1));
 
 		// Get the graph
@@ -109,8 +103,7 @@ public class CUDGeneration extends DasTest {
 		// Modify an order
 		DataObject order = (DataObject) customer.get("orders[1]");
 		order.setString("PRODUCT", "Kitchen Sink 001");
-
-		das.setConnection(getConnection());
+	
 		das.applyChanges(root);
 
 	}

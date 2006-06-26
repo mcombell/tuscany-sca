@@ -23,6 +23,7 @@
       </xsd:sequence>
       <xsd:attribute name="dataSource" type="xsd:string"/>
       <xsd:attribute name="uri" type="xsd:string"/>
+      <xsd:attribute name="dataObjectModel" type="xsd:string"/>
    </xsd:complexType>
    <xsd:complexType name="Command">
       <xsd:sequence>
@@ -73,8 +74,7 @@
    <xsd:complexType name="ResultDescriptor">
       <xsd:attribute name="columnName" type="xsd:string"/>
       <xsd:attribute name="tableName" type="xsd:string"/>
-      <xsd:attribute name="columnType" type="xsd:string"/>
-      <xsd:attribute name="converter" type="xsd:string"/>   
+      <xsd:attribute name="columnType" type="xsd:string"/>      
    </xsd:complexType>
    
 </xsd:schema>

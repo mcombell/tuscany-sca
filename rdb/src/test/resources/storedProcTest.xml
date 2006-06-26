@@ -14,13 +14,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  
-  <Table tableName="CUSTOMER">
-    <Column columnName="ID" primaryKey="true"/>
-    <Column columnName="LASTNAME"/>
-    <Column columnName="ADDRESS"/> 
-  </Table>
-	
+
+<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Command name="getNamedCustomers" SQL="{call GETNAMEDCUSTOMERS(?,?)}" kind="procedure">
+		<Parameter name="name" direction="IN" columnType="commonj.sdo.String"/>
+		<Parameter name="number" direction="OUT" columnType="commonj.sdo.IntObject"/>
+	</Command>
+
 </Config>

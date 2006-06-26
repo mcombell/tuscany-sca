@@ -17,12 +17,28 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import org.apache.tuscany.das.rdb.Converter;
-import org.apache.tuscany.das.rdb.Parameter;
 
 import commonj.sdo.Type;
 
-public class ParameterImpl implements Parameter {
+public class ParameterImpl  {
 
+	/**
+	 * Value for "Direction" that indicates that a parameter is soley for input.
+	 */
+	final static int IN = 1;
+
+	/**
+	 * Value for "Direction" that indicates that a parameter is soley for
+	 * output. Out parameters only apply to Stored Procedures
+	 */
+	final static int OUT = 2;
+
+	/**
+	 * Value for "Direction" that indicates that a parameter is for both input
+	 * and output. In-out parameters only apply to stored procedures
+	 */
+	final static int IN_OUT = 3;
+	
 	private int index;
 	private Type type;
 	private String name;
@@ -41,6 +57,7 @@ public class ParameterImpl implements Parameter {
 	public ParameterImpl(int index) {
 		this.index = index;
 	}
+
 
 	public void setType(Type type) {
 		this.type = type;

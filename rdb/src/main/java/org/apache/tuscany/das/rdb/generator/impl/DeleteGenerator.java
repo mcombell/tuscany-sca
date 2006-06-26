@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.Converter;
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
@@ -71,7 +70,7 @@ public class DeleteGenerator {
 		Iterator i = getDeleteParameters(t).iterator();
 		for(int idx=1; i.hasNext(); idx++) {
 			String property = (String) i.next();
-			Parameter p = new ParameterImpl();
+			ParameterImpl p = new ParameterImpl();
 			p.setName(property);
 			p.setType(SDODataTypes.OBJECT);
 			p.setConverter(getConverter(t, property));

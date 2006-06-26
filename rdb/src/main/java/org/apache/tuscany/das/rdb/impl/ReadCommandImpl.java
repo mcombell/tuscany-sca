@@ -30,11 +30,8 @@ import org.apache.tuscany.sdo.util.SDOUtil;
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 public class ReadCommandImpl extends CommandImpl {
-
-    private Type schema;
 
     private int startRow = 1;
 
@@ -83,7 +80,7 @@ public class ReadCommandImpl extends CommandImpl {
         // inferrable information
         // isn't specified, add it in.
 
-        GraphBuilderMetadata gbmd = new GraphBuilderMetadata(results, getSchema(), configWrapper.getConfig(),
+        GraphBuilderMetadata gbmd = new GraphBuilderMetadata(results, configWrapper.getConfig(),
                 resultSetShape);
 
         // Create the DataGraph
@@ -102,9 +99,6 @@ public class ReadCommandImpl extends CommandImpl {
         return g.getRootObject();
     }
 
-    private Type getSchema() {
-        return (Type) schema;
-    }
 
     protected int getStartRow() {
         return startRow;
@@ -125,10 +119,6 @@ public class ReadCommandImpl extends CommandImpl {
     private void setMappingModel(Config config) {
         configWrapper = new MappingWrapper(config);    
     }   
-
-    public void setDataObjectModel(Type schema) {
-        this.schema = schema;
-    }
 
     protected void enablePaging() {
         statement.enablePaging();

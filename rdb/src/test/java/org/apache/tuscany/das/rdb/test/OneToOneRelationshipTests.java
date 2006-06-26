@@ -45,9 +45,8 @@ public class OneToOneRelationshipTests extends DasTest {
     public void test1() throws Exception {
 
         DAS das = DAS.FACTORY
-                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
-        das.setConnection(getConnection());
-
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());
+    
         Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
         DataObject employee = root.getDataObject("COMPANY[1]/company->employee_opposite");
@@ -62,8 +61,7 @@ public class OneToOneRelationshipTests extends DasTest {
     public void test2() throws Exception {
 
         DAS das = DAS.FACTORY
-                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
-        das.setConnection(getConnection());
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());       
 
         Command read = das.getCommand("get named employee with company");
         read.setParameterValue("NAME", "Mary Smith");
@@ -80,8 +78,7 @@ public class OneToOneRelationshipTests extends DasTest {
     public void test3() throws Exception {
 
         DAS das = DAS.FACTORY
-                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
-        das.setConnection(getConnection());
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());       
 
         Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
@@ -104,8 +101,7 @@ public class OneToOneRelationshipTests extends DasTest {
     public void test4() throws Exception {
 
         DAS das = DAS.FACTORY
-                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
-        das.setConnection(getConnection());
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());      
 
         Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();
@@ -129,8 +125,7 @@ public class OneToOneRelationshipTests extends DasTest {
     public void test5() throws Exception {
 
         DAS das = DAS.FACTORY
-                .createDAS(getConfig("CompanyEmployeeConfig.xml"));
-        das.setConnection(getConnection());
+                .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());       
 
         Command read = das.getCommand("get companies with employee of the month");
         DataObject root = read.executeQuery();

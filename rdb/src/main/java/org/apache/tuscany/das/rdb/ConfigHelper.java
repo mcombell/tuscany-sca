@@ -62,11 +62,7 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
     
     public void addUpdateStatement(String statement, String tableName) {
         configWrapper.addUpdateCommand(tableName, statement);
-    }  
-    
-    public void addParameter(String statement, String tableName) {
-        configWrapper.addUpdateCommand(tableName, statement);
-    }    
+    }     
     
     
     

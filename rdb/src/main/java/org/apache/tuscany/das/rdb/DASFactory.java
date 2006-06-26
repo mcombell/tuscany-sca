@@ -17,39 +17,58 @@
 package org.apache.tuscany.das.rdb;
 
 import java.io.InputStream;
+import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.config.Config;
 
 /**
- * A CommandGroupFactory produces {@link DAS} instances.
+ * A DASFactory produces {@link DAS} instances.
  * 
  * 
  */
 public interface DASFactory {
 
     /**
-     * Creates a CommandGroup based on the provided config file stream
+     * Creates a DAS based on the provided config file stream
      * 
      * @param configStream
      *            A stream over a DAS config file
-     * @return returns a CommandGroup instance
+     * @return returns a DAS instance
      */
     public DAS createDAS(InputStream configStream);
     
+    /**
+     * Creates a DAS based on the provide config file stream and connection
+     * @param configStream
+     * @param connection
+     * @return
+     */
+    public DAS createDAS(InputStream configStream, Connection connection);
     
     /**
-     * Creates a CommandGroup based on the provided config
+     * Creates a DAS based on the provided config
      * 
      * @param config
      *            A DAS config object
-     * @return returns a CommandGroup instance
+     * @return returns a DAS instance
      */
     public DAS createDAS(Config config);
 
+    /**
+     * Creates a DAS based on the provided config and connection
+     * @param config
+     * @param connection
+     * @return
+     */
+    public DAS createDAS(Config config, Connection connection);
 
-	public DAS createDAS();
+    /**
+     * Creates a DAS based on the provided connection
+     * @param connection
+     * @return
+     */
+    public DAS createDAS(Connection connection);
     
- 
 
 }
 

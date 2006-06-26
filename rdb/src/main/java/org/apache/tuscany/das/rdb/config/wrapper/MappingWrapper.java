@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
-import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
@@ -112,65 +112,24 @@ public class MappingWrapper {
 
     }
 
-    public void addRelationship(Key parentKey, Key childKey) {
 
+    
+    public void addPrimaryKey(String columnName) {     
+    	addPrimaryKey(Collections.singletonList(columnName));
+    }
+    
+    public void addPrimaryKey(List columnNames) {
         if (config == null)
             config = factory.createConfig();
 
-        QualifiedColumn parent = new QualifiedColumn((String) parentKey.getColumNames().get(0));
-        QualifiedColumn child = new QualifiedColumn((String) childKey.getColumNames().get(0));
-
-        Relationship r = factory.createRelationship();
-        r.setName(child.getTableName());
-        r.setPrimaryKeyTable(parent.getTableName());
-        r.setForeignKeyTable(child.getTableName());
-        DebugUtil.debugln(getClass(), debug, "Created relationship from " + r.getPrimaryKeyTable() + " to "
-                + r.getForeignKeyTable() + " named " + r.getName());
-
-        Iterator i = parentKey.getColumNames().iterator();
-        Iterator j = childKey.getColumNames().iterator();
-        while (i.hasNext() && j.hasNext()) {
-            parent = new QualifiedColumn((String) i.next());
-            child = new QualifiedColumn((String) j.next());
-            KeyPair pair = factory.createKeyPair();
-            pair.setPrimaryKeyColumn(parent.getColumnName());
-            pair.setForeignKeyColumn(child.getColumnName());
-
-            r.getKeyPair().add(pair);
-        }
-        r.setMany(true);
-        config.getRelationship().add(r);
-
-    }
-
-    public void addPrimaryKey(String columnName) {
-        Key k = new Key(columnName);
-        addPrimaryKey(k, false);
-    }
-
-    public void addPrimaryKey(Key key) {
-        addPrimaryKey(key, false);
-    }
-
-    public void addGeneratedPrimaryKey(String columnName) {
-        Key key = new Key(columnName);
-        addPrimaryKey(key, true);
-    }
-
-    private void addPrimaryKey(Key key, boolean generated) {
-        if (config == null)
-            config = factory.createConfig();
-
-        Iterator i = key.getColumNames().iterator();
+        Iterator i = columnNames.iterator();
         while (i.hasNext()) {
             String columnName = (String) i.next();
 
             QualifiedColumn pkColumn = new QualifiedColumn(columnName);
             Table t = findOrCreateTable(pkColumn.getTableName());
             Column c = findOrCreateColumn(t, pkColumn.getColumnName());
-            c.setPrimaryKey(true);
-            if (generated)
-                c.setGenerated(true);
+            c.setPrimaryKey(true);           
         }
     }
 

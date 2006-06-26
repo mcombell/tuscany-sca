@@ -22,7 +22,6 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.Parameter;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
@@ -76,41 +75,21 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 		parameters.setParameterWithType(index, dataType);
 	}
 
-	public void addParameter(int index, Type sdoType) {
-		addParameter(index, Parameter.IN, sdoType);
-	}
-
-	public void addParameter(int index, int direction, Type sdoType) {
-		parameters.findOrCreateParameterWithIndex(index, direction, sdoType);
-	}
-
-	public void addParameter(String name, Type sdoType) {
-		addParameter(name, Parameter.IN, sdoType);
-	}
-
-	public void addParameter(String name, int direction, Type sdoType) {
+	protected void addParameter(String name, Type sdoType) {
 		parameters.setParameterWithType(name, sdoType);
 	}
 
-	public void addParameter(Parameter param) {
+	public void addParameter(ParameterImpl param) {
 		parameters.add(param);
 	}
 
-	public Parameter getParameter(String name) {
-		return parameters.get(name);
-	}
-
-	public Parameter getParameter(int index) {
-		return parameters.get(index);
-
-	}
 
 	public List getParameters() {
 		return parameters.parameterList();
 	}
 
 	public Object getParameterValue(String name) {
-		Parameter p = parameters.get(name);
+		ParameterImpl p = parameters.get(name);
 		if (p == null)
 			throw new RuntimeException("Parameter with name " + name
 					+ " not found");

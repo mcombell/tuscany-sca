@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Converter;
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -90,7 +89,7 @@ public class InsertGenerator {
 		Iterator params = parameters.iterator();
 		for (int idx = 1; params.hasNext(); idx++) {
 			Property property = (Property) params.next();
-			Parameter p = new ParameterImpl();
+			ParameterImpl p = new ParameterImpl();
 			p.setName(property.getName());
 			p.setType(property.getType());
 			p.setConverter(getConverter(table, property.getName()));

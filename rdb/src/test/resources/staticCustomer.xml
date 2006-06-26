@@ -15,12 +15,8 @@
   limitations under the License.
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+dataObjectModel="org.apache.tuscany.das.rdb.test.customer.DataGraphRoot">
   
-  <Table tableName="CUSTOMER">
-    <Column columnName="ID" primaryKey="true"/>
-    <Column columnName="LASTNAME"/>
-    <Column columnName="ADDRESS"/> 
-  </Table>
 	
 </Config>

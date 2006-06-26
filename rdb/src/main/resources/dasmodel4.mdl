@@ -73,6 +73,9 @@
 				type       	"String")
 			    (object ClassAttribute "dataSource"
 				quid       	"4485DF600233"
+				type       	"String")
+			    (object ClassAttribute "dataObjectModel"
+				quid       	"449AB6CD0132"
 				type       	"String")))
 		    (object Class "Command"
 			quid       	"4362A2EC01FE"
@@ -173,9 +176,10 @@
 			    (object ClassAttribute "columnType"
 				quid       	"437B5A6D033A"
 				type       	"String")
-			    (object ClassAttribute "converter"
-				quid       	"437B5A6F0153"
-				type       	"String"))
+			    (object ClassAttribute "name"
+				quid       	"449AB74D03DF"
+				type       	"type"
+				initv      	"initval"))
 			language   	"Java")
 		    (object Association "$UNNAMED$0"
 			quid       	"4362A3030323"
@@ -352,7 +356,7 @@
 				    fill_color 	16777215
 				    anchor     	2
 				    nlines     	8
-				    max_width  	515)
+				    max_width  	525)
 				width      	536
 				height     	486
 				autoResize 	TRUE)
@@ -448,7 +452,7 @@
 				    fill_color 	16777215
 				    anchor     	2
 				    nlines     	6
-				    max_width  	337)
+				    max_width  	346)
 				width      	358
 				height     	386
 				autoResize 	TRUE)
@@ -524,13 +528,13 @@
 				ShowCompartmentStereotypes 	TRUE
 				IncludeAttribute 	TRUE
 				IncludeOperation 	TRUE
-				location   	(1054, 155)
+				location   	(1054, 186)
 				label      	(object ItemLabel
 				    Parent_View 	@14
-				    location   	(877, 49)
+				    location   	(828, 55)
 				    fill_color 	13434879
 				    nlines     	1
-				    max_width  	354
+				    max_width  	452
 				    justify    	0
 				    label      	"Config")
 				icon_style 	"Icon"
@@ -539,20 +543,20 @@
 				quidu      	"4362A2DE0045"
 				compartment 	(object Compartment
 				    Parent_View 	@14
-				    location   	(877, 109)
+				    location   	(828, 115)
 				    icon_style 	"Icon"
 				    fill_color 	16777215
 				    anchor     	2
-				    nlines     	3
-				    max_width  	350)
-				width      	372
-				height     	236
+				    nlines     	4
+				    max_width  	450)
+				width      	470
+				height     	286
 				autoResize 	TRUE)
 			    (object AssociationViewNew "$UNNAMED$9" @15
-				location   	(1054, 424)
+				location   	(1054, 452)
 				label      	(object SegLabel @16
 				    Parent_View 	@15
-				    location   	(1054, 365)
+				    location   	(1054, 393)
 				    font       	(object Font
 					italics    	TRUE)
 				    hidden     	TRUE
@@ -571,10 +575,10 @@
 				roleview_list 	(list RoleViews
 				    (object RoleView "$UNNAMED$10" @17
 					Parent_View 	@15
-					location   	(-93, -382)
+					location   	(-93, -354)
 					label      	(object SegLabel @18
 					    Parent_View 	@17
-					    location   	(1013, 304)
+					    location   	(1013, 354)
 					    hidden     	TRUE
 					    anchor     	1
 					    anchor_loc 	1
@@ -593,10 +597,10 @@
 					line_style 	0)
 				    (object RoleView "$UNNAMED$11" @19
 					Parent_View 	@15
-					location   	(-93, -382)
+					location   	(-93, -354)
 					label      	(object SegLabel @20
 					    Parent_View 	@19
-					    location   	(1013, 513)
+					    location   	(1013, 526)
 					    hidden     	TRUE
 					    anchor     	1
 					    anchor_loc 	1
@@ -615,7 +619,7 @@
 					line_style 	0
 					label      	(object SegLabel @21
 					    Parent_View 	@19
-					    location   	(1011, 559)
+					    location   	(1011, 562)
 					    anchor     	2
 					    anchor_loc 	1
 					    nlines     	1
@@ -626,40 +630,40 @@
 					    height     	44
 					    orientation 	1))))
 			    (object AssociationViewNew "$UNNAMED$6" @22
-				location   	(1804, 247)
+				location   	(1829, 247)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4362A448026C"
 				roleview_list 	(list RoleViews
 				    (object RoleView "$UNNAMED$7" @23
 					Parent_View 	@22
-					location   	(998, -559)
+					location   	(1023, -559)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"4362A4490105"
 					client     	@22
 					supplier   	@14
 					line_style 	3
-					origin_attachment 	(1804, 247)
-					terminal_attachment 	(1240, 247))
+					origin_attachment 	(1829, 247)
+					terminal_attachment 	(1289, 247))
 				    (object RoleView "$UNNAMED$8" @24
 					Parent_View 	@22
-					location   	(998, -559)
+					location   	(1023, -559)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"4362A4490106"
 					client     	@22
 					supplier   	@8
 					vertices   	(list Points
-					    (1804, 247)
+					    (1829, 247)
 					    (1972, 247)
 					    (1972, 644))
 					line_style 	3
-					origin_attachment 	(1804, 247)
+					origin_attachment 	(1829, 247)
 					terminal_attachment 	(1972, 644)
 					label      	(object SegLabel @25
 					    Parent_View 	@24
-					    location   	(2031, 431)
+					    location   	(2031, 441)
 					    anchor     	2
 					    anchor_loc 	1
 					    nlines     	1
@@ -734,36 +738,36 @@
 					    height     	55
 					    orientation 	0))))
 			    (object AssociationViewNew "$UNNAMED$0" @31
-				location   	(593, 212)
+				location   	(568, 213)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4362A3030323"
 				roleview_list 	(list RoleViews
 				    (object RoleView "$UNNAMED$1" @32
 					Parent_View 	@31
-					location   	(159, -470)
+					location   	(134, -469)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"4362A3040108"
 					client     	@31
 					supplier   	@14
 					line_style 	3
-					origin_attachment 	(593, 212)
-					terminal_attachment 	(868, 212))
+					origin_attachment 	(568, 213)
+					terminal_attachment 	(819, 213))
 				    (object RoleView "$UNNAMED$2" @33
 					Parent_View 	@31
-					location   	(159, -470)
+					location   	(134, -469)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"4362A3040109"
 					client     	@31
 					supplier   	@26
 					line_style 	3
-					origin_attachment 	(593, 212)
-					terminal_attachment 	(318, 212)
+					origin_attachment 	(568, 213)
+					terminal_attachment 	(318, 213)
 					label      	(object SegLabel @34
 					    Parent_View 	@33
-					    location   	(365, 260)
+					    location   	(360, 261)
 					    anchor     	2
 					    anchor_loc 	1
 					    nlines     	1
@@ -797,7 +801,7 @@
 				    fill_color 	16777215
 				    anchor     	2
 				    nlines     	5
-				    max_width  	440)
+				    max_width  	431)
 				width      	452
 				height     	336
 				annotation 	8

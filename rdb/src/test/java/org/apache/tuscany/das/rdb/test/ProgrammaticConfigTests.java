@@ -47,10 +47,9 @@ public class ProgrammaticConfigTests extends DasTest {
      * config associaed with the applychanges command
      */
     public void test_1() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
         // Read a book instance
-        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");      
         DataObject root = select.executeQuery();
         DataObject book = root.getDataObject("BOOK[1]");
         // Change a field to mark the instance 'dirty'
@@ -72,19 +71,17 @@ public class ProgrammaticConfigTests extends DasTest {
     	 // Create config programmatically
         ConfigHelper helper = new ConfigHelper();
         helper.addPrimaryKey("BOOK.BOOK_ID");
-    	DAS das = DAS.FACTORY.createDAS(helper.getConfig());
+    	DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
     	
         // Read a book instance
-        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");     
         DataObject root = select.executeQuery();
         DataObject book = root.getDataObject("BOOK[1]");
         // Change a field to mark the instance 'dirty'
         book.setInt("QUANTITY", 2);
 
         // Flush the change
-       
-        das.setConnection(getConnection());
+           
         das.applyChanges(root);
        
         // Verify
@@ -105,9 +102,8 @@ public class ProgrammaticConfigTests extends DasTest {
         // Create relationship config programmatically
         ConfigHelper helper = new ConfigHelper();
         helper.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
-        Command select = das.createCommand(statement);
-        select.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+        Command select = das.createCommand(statement);       
 
         DataObject root = select.executeQuery();
         DataObject customer = root.getDataObject("CUSTOMER[1]");
@@ -128,9 +124,8 @@ public class ProgrammaticConfigTests extends DasTest {
         helper.addTable("BOOK", "Book");
         helper.addPrimaryKey("Book.BOOK_ID");
         
-        DAS das = DAS.FACTORY.createDAS(helper.getConfig());
-        Command select = das.createCommand(statement);
-        select.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+        Command select = das.createCommand(statement);       
         select.setParameterValue("ID", new Integer(1));
 
         DataObject root = select.executeQuery();
@@ -139,8 +134,7 @@ public class ProgrammaticConfigTests extends DasTest {
         newBook.setString("NAME", "Ant Colonies of the Old World");
         newBook.setInt("BOOK_ID", 1001);
         root.getList("Book").add(newBook);
-           
-        das.setConnection(getConnection());
+                
         das.applyChanges(root);
         
         //Verify

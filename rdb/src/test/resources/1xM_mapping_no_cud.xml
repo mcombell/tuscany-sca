@@ -14,7 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <Table tableName="CUSTOMER" typeName="Customer">
     <Column columnName="ID" propertyName="ID" primaryKey="true"/>

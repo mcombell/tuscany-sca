@@ -105,7 +105,6 @@ public class DataObjectMaker {
 		Iterator i = rootObject.getType().getProperties().iterator();
 		while (i.hasNext()) {
 			Property p = (Property) i.next();
-	//		System.out.println(p.getType().getName());
 			if (tableName.equals(p.getType().getName()))
 				return p.getType();
 		}
@@ -113,8 +112,5 @@ public class DataObjectMaker {
 		return null;
 	}
 
-	private Type findTableTypeByRootReference(String refName) {
-		return rootObject.getProperty(refName).getType();
-	}
 
 }

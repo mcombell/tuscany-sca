@@ -49,11 +49,10 @@ public class NameMappingTests extends DasTest {
 	 */
 	public void testRead() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("customerMapping.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("customerMapping.xml"), getConnection());
 		// Read a customer
 		Command select = das.createCommand(
-				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1", getConfig("customerMapping.xml"));
-		select.setConnection(getConnection());
+				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1");	
 
 		DataObject root = select.executeQuery();
 		DataObject customer = root.getDataObject("Customer[1]");

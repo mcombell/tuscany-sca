@@ -31,7 +31,6 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.helper.TypeHelper;
 
 public class TopDown extends DasTest {
 
@@ -45,21 +44,15 @@ public class TopDown extends DasTest {
 
 	// Uses dynamic SDOs but user provides the model
 	public void testUserProvidedModelDynamic() throws SQLException, IOException {
-		DAS das = DAS.FACTORY.createDAS(getConfig("1xM_mapping_no_cud.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomerOrder.xml"), getConnection());
 		// Build the select command
 		Command select = das
 				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID",
-						getConfig("1xM_mapping_no_cud.xml"));
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
 
-		SDOUtil.registerStaticTypes(CustomerFactory.class);
-		
-//		 Set the object model
-		select.setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
-	
+		SDOUtil.registerStaticTypes(CustomerFactory.class);		
 
-		// Parameterize the command
-		select.setConnection(getConnection());
+		// Parameterize the command	
 		select.setParameterValue("ID", new Integer(1));
 
 		// Get the graph - DataGraphRoot is from the typed package
@@ -74,7 +67,6 @@ public class TopDown extends DasTest {
 		order.setProduct("Kitchen Sink 001");
 
 		// Flush changes
-		das.setConnection(getConnection());
 		das.applyChanges((DataObject) root);
 
 	}

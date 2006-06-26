@@ -68,8 +68,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testRead() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
 
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -83,8 +82,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadUsingConfigInput() throws Exception {
     	Config config = ConfigUtil.loadConfig(getConfig("CustomersOrdersConfig.xml"));
-        DAS das = DAS.FACTORY.createDAS(config);
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(config, getConnection());       
 
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -97,8 +95,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithParmmarker() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());     
         
         Command read = das.getCommand("order by id with ?");
         read.setParameterValue(1, new Integer(1));
@@ -113,8 +110,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithConnectionProperties() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());   
         
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -128,8 +124,7 @@ public class CommandGroupTests extends DasTest {
      */
     public void testUpdate() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());       
         
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -154,8 +149,7 @@ public class CommandGroupTests extends DasTest {
     public void testRead2() throws Exception {
 
         // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
 
         // Read all customers and remember the first one
         Command read = das.getCommand("all customers");

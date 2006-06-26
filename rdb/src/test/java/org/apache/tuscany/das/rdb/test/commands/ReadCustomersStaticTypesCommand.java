@@ -50,11 +50,12 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 		t.setTableName("CUSTOMER");
 		t.setTypeName("Customer");
 		mapping.getTable().add(t);
+		
+		mapping.setDataObjectModel("org.apache.tuscany.das.rdb.test.customer.DataGraphRoot");
 	}
 	
 	public ReadCustomersStaticTypesCommand() {
-		super(sqlString, mapping, null);
-		setDataObjectModel(TypeHelper.INSTANCE.getType(DataGraphRoot.class));
+		super(sqlString, mapping, null);		
 	}
 
 

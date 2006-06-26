@@ -75,8 +75,8 @@ public class ConverterTests extends DasTest {
 	 * 
 	 */
 	public void testArbitraryConverter() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithConverter.xml"));
-		das.setConnection(getConnection());
+		DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithConverter.xml"), getConnection());
+		
 		//Create and initialize command to read customers
 		Command read = das.getCommand("testArbitraryConverter");			
 
@@ -89,7 +89,6 @@ public class ConverterTests extends DasTest {
 		//Modify
 		root.setDate("CUSTOMER[1]/LASTNAME", tbday);	
 		
-		das.setConnection(getConnection());
 		das.applyChanges(root);		
 		
 		//Read

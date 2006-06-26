@@ -47,12 +47,12 @@ public class MySQLSetup extends DatabaseSetup {
 		    "  DELETE FROM CUSTOMER WHERE ID = theId ";
 
 
-		String createGetNamedCustomers = 
-			"CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) " +
-		    " BEGIN " +
-		    "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; " +
-            "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " +
-            " END ";
+//		String createGetNamedCustomers = 
+//			"CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) " +
+//		    " BEGIN " +
+//		    "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; " +
+//            "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " +
+//            " END ";
 		  
 		String createGetCustomerAndOrders = 
 			" CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) " +

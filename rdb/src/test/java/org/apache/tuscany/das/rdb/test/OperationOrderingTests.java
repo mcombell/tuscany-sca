@@ -48,12 +48,10 @@ public class OperationOrderingTests extends DasTest {
 	}
 
 	public void testInsert() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConfig("cityStates.xml"));
+		DAS das = DAS.FACTORY.createDAS(getConfig("cityStates.xml"), getConnection());
 		Command select = das
 				.createCommand(
-						"Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID",
-						getConfig("cityStates.xml"));
-		select.setConnection(getConnection());
+						"Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID");		
 		DataObject root = select.executeQuery();
 
 		int numberOfStates = root.getList("STATES").size();
@@ -69,11 +67,9 @@ public class OperationOrderingTests extends DasTest {
 		georgia.setString("NAME", "GA");
 
 		georgia.getList("cities").add(atlanta);
-
-		das.setConnection(getConnection());
+		
 		das.applyChanges(root);
-
-		select.setConnection(getConnection());
+	
 		root = select.executeQuery();
 		assertEquals(numberOfCities + 1, root.getList("CITIES").size());
 		assertEquals(numberOfStates + 1, root.getList("STATES").size());

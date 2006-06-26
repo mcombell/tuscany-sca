@@ -34,8 +34,7 @@ public class RecursiveTests extends DasTest {
 
 	public void testReadEngineParts() throws Exception {
 		
-		DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"));
-		das.setConnection(getConnection());
+		DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"), getConnection());		
 		//Table definition
 		//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
 

@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Converter;
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -109,7 +108,7 @@ public class UpdateGenerator {
 		Iterator params = parameters.iterator();
 		for (int idx = 1; params.hasNext(); idx++ ) {
 			Property p = (Property)params.next();
-			Parameter param = new ParameterImpl();
+			ParameterImpl param = new ParameterImpl();
 			param.setName(p.getName());
 			param.setType(p.getType());
 			param.setConverter(getConverter(t, p.getName()));
@@ -182,7 +181,7 @@ public class UpdateGenerator {
 			Property attr = (Property) i.next();
 			String field = attr.getName();
 
-			Parameter p = getParameter(wrapper, type.getProperty(field));
+			ParameterImpl p = getParameter(wrapper, type.getProperty(field));
 			if (pkNames.contains(field)) {
 				pkParams.add(p);
 			} else {
@@ -194,8 +193,8 @@ public class UpdateGenerator {
 		
 	}
 
-	private Parameter getParameter(TableWrapper wrapper, Property property) {
-		Parameter param = new ParameterImpl();
+	private ParameterImpl getParameter(TableWrapper wrapper, Property property) {
+		ParameterImpl param = new ParameterImpl();
 		param.setName(property.getName());
 		param.setType(property.getType());
 		param.setConverter(getConverter(wrapper, property.getName()));

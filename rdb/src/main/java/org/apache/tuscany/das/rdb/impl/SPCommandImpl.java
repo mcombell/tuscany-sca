@@ -18,16 +18,40 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.Parameter;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 public class SPCommandImpl extends ReadCommandImpl {
     
-    public SPCommandImpl(String sqlString, Config config) {
+    public SPCommandImpl(String sqlString, Config config, List params) {
         super(sqlString, config, null);
+        Iterator i = params.iterator();
+        for (int idx = 1; i.hasNext(); idx++) {
+			Parameter p = (Parameter) i.next();
+
+			int index = p.getColumnType().lastIndexOf('.');
+			String pkg = p.getColumnType().substring(0, index);
+			String typeName = p.getColumnType().substring(index + 1);
+
+			Type sdoType = TypeHelper.INSTANCE.getType(pkg, typeName);
+			
+
+			int direction = ParameterImpl.IN;
+			if ("OUT".equalsIgnoreCase(p.getDirection()))
+				direction = ParameterImpl.OUT;
+			else if ("INOUT".equalsIgnoreCase(p.getDirection()))
+				direction = ParameterImpl.IN_OUT;
+			parameters.findOrCreateParameterWithIndex(idx, direction, sdoType);
+		}    	
+        
     }
 
 	public DataObject executeQuery() {

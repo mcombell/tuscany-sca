@@ -39,10 +39,9 @@ public class GraphMergeTests extends DasTest {
 
 
 	public void testSingleTableMerge() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command select = das
-				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");
-		select.setConnection(getConnection());
+				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");	
 		select.setParameterValue("ID", "3");
 		DataObject graph1 = select.executeQuery();
 		assertEquals(3, graph1.getList("CUSTOMER").size());
@@ -59,10 +58,9 @@ public class GraphMergeTests extends DasTest {
 	}
 
 	public void testSingleTableMergeThreeGraphs() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command select = das
-				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");
-		select.setConnection(getConnection());
+				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");		
 		select.setParameterValue("ID", "3");
 		DataObject graph1 = select.executeQuery();
 		assertEquals(3, graph1.getList("CUSTOMER").size());
@@ -89,13 +87,11 @@ public class GraphMergeTests extends DasTest {
 
     
     public void testMultiTableMerge2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         //Read some customers and related orders
         Command select = das.createCommand(
-                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
-        select.setConnection(getConnection());
-        
-        select.setConnection(getConnection());
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");  
+      
         select.setParameterValue("ID", new Integer(1));
         DataObject graph1 = select.executeQuery();
         
@@ -126,21 +122,19 @@ public class GraphMergeTests extends DasTest {
     }
     
     public void testMultiTableAppendSingleTable2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         //Read some customers and related orders
         Command select = das.createCommand(
-                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID", getConfig("CustomersOrdersConfig.xml"));  
-        select.setConnection(getConnection());
-        
-        select.setConnection(getConnection());
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");  
+     
         select.setParameterValue("ID", new Integer(1));
         DataObject graph1 = select.executeQuery();
         
         DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
         assertEquals(2, customer.getList("orders").size());
         
-        Command select2 = das.createCommand("select * from ANORDER");
-        select2.setConnection(getConnection());
+        DAS das2 = DAS.FACTORY.createDAS(getConnection());
+        Command select2 = das2.createCommand("select * from ANORDER");     
         DataObject graph2 = select2.executeQuery();
         assertEquals(4, graph2.getList("ANORDER").size());
         

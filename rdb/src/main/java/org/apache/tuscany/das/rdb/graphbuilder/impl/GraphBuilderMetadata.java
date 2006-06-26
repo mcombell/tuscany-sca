@@ -29,6 +29,7 @@ import org.apache.tuscany.das.rdb.impl.ResultSetShape;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 
 /**
@@ -41,9 +42,19 @@ public class GraphBuilderMetadata {
 	private Type schema;
 
 
-	public GraphBuilderMetadata(Collection results, Type schema, Config model, ResultSetShape shape) throws SQLException {
+	public GraphBuilderMetadata(Collection results, Config model, ResultSetShape shape) throws SQLException {
 		this.mappingModel = model;
-		this.schema = schema;
+		if (model != null && model.getDataObjectModel() != null) {
+
+			Class rootClass;
+			try {
+				rootClass = Thread.currentThread().getContextClassLoader().loadClass(model.getDataObjectModel());				
+				this.schema = TypeHelper.INSTANCE.getType(rootClass);
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
 		
 		Iterator i = results.iterator();
 		while (i.hasNext()) {

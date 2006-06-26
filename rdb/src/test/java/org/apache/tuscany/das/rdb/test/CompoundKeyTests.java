@@ -41,10 +41,10 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testRead() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command getOrderDetails = das
                 .createCommand("Select * from ORDERDETAILS where ORDERID = :ORDERID AND PRODUCTID = :PRODUCTID");
-        getOrderDetails.setConnection(getConnection());
+       
 
         getOrderDetails.setParameterValue("ORDERID", new Integer(1));
         getOrderDetails.setParameterValue("PRODUCTID", new Integer(1));
@@ -57,10 +57,10 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testReadModifyWrite2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
         Command getOrderDetails = das
                 .createCommand("Select * from ORDERDETAILS where ORDERID = 1 AND PRODUCTID = 1");
-        getOrderDetails.setConnection(getConnection());
+     
         DataObject root = getOrderDetails.executeQuery();
 
         DataObject orderDetails = (DataObject) root.get("ORDERDETAILS[1]");
@@ -70,7 +70,7 @@ public class CompoundKeyTests extends DasTest {
         orderDetails.setFloat("PRICE", 0f);
 
         // Build apply changes command
-        das.setConnection(getConnection());
+       
         das.applyChanges(root);        
 
         // Verify
@@ -81,11 +81,9 @@ public class CompoundKeyTests extends DasTest {
     }
     
     public void testReadOrdersAndDetails2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"));
+    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
         Command read = das
-                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID", 
-                		getConfig("OrdersOrderDetailsConfig.xml"));
-        read.setConnection(getConnection());
+                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");      
 
         DataObject root = read.executeQuery();
 

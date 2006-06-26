@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.impl;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -69,6 +70,8 @@ public class DASImpl implements DAS {
                 commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("delete"))
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
+            else if (kind.equalsIgnoreCase("procedure"))
+            	commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(),config, commandConfig.getParameter()));
             else
                 throw new RuntimeException("Invalid kind of command: " + kind);
 
@@ -77,7 +80,20 @@ public class DASImpl implements DAS {
     }
 
     public DASImpl() {
-		// TODO Auto-generated constructor stub
+		// Empty Constructor
+	}
+
+	public DASImpl(Config inConfig, Connection inConnection) {
+		this(inConfig);
+		setConnection(inConnection);
+	}
+
+	public DASImpl(InputStream configStream, Connection inConnection) {
+		this(ConfigUtil.loadConfig(configStream), inConnection);	
+	}
+
+	public DASImpl(Connection inConnection) {
+		setConnection(inConnection);
 	}
 
 	/*
@@ -98,7 +114,7 @@ public class DASImpl implements DAS {
     public Command getCommand(String name) {
         if (!commands.containsKey(name))
             throw new RuntimeException("CommandGroup has no command named: " + name);
-        Command cmd = (Command) commands.get(name);
+        CommandImpl cmd = (CommandImpl) commands.get(name);
         cmd.setConnection(getConnection());
         return cmd;
     }
@@ -115,9 +131,8 @@ public class DASImpl implements DAS {
     }
 
     private void initializeConnection() {
-
-        String dataSource = config.getDataSource();
-        if (dataSource == null)
+       
+        if (config == null || config.getDataSource() == null)
             throw new RuntimeException(
                     "No connection has been provided and no data source has been specified");
 
@@ -131,7 +146,7 @@ public class DASImpl implements DAS {
         }
         try {
             // TODO - I think we should rename this getDataSourceURL?
-            DataSource ds = (DataSource) ctx.lookup(dataSource);
+            DataSource ds = (DataSource) ctx.lookup(config.getDataSource());
             try {
                 connection = ds.getConnection();
                 connection.setAutoCommit(false);
@@ -178,33 +193,36 @@ public class DASImpl implements DAS {
         return baseCreateCommand(sql, this.config);
     }
 
-    public Command createCommand(String sql, InputStream configStream) {
-        return baseCreateCommand(sql, ConfigUtil.loadConfig(configStream));
-    }
-
     public Command createCommand(String sql, Config config) {
         return baseCreateCommand(sql, config);
     }
 
     private Command baseCreateCommand(String sql, Config config) {
-
+    	CommandImpl returnCmd = null;
         sql = sql.trim(); // Remove leading white space
         char firstChar = Character.toUpperCase(sql.charAt(0));
         switch (firstChar) {
         case 'S':
-            return new ReadCommandImpl(sql, config, null);
+            returnCmd =  new ReadCommandImpl(sql, config, null);
+            break;
         case 'I':
-            return new InsertCommandImpl(sql);
+            returnCmd =  new InsertCommandImpl(sql);
+            break;
         case 'U':
-            return new UpdateCommandImpl(sql);
+            returnCmd =  new UpdateCommandImpl(sql);
+            break;
         case 'D':
-            return new DeleteCommandImpl(sql);
+            returnCmd =  new DeleteCommandImpl(sql);
+            break;
         case '{':
-            return new SPCommandImpl(sql, config);
+            returnCmd =  new SPCommandImpl(sql, config, Collections.EMPTY_LIST);
+            break;
         default:
             throw new RuntimeException("SQL => " + sql + " is not valid");
         }
 
+        returnCmd.setConnection(getConnection());
+        return returnCmd;
     }
 
 	public void applyChanges(DataObject root) {

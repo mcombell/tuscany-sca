@@ -46,7 +46,6 @@ public class QueryString {
 	
 	public int getParameterIndex(String name) {
 		DebugUtil.debugln(getClass(), debug, "Looking for parameter index for: " + name);
-		//System.out.println(toString());
 		return ((Integer)parameters.get(name)).intValue();
 	}
 	

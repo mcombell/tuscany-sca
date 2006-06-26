@@ -15,10 +15,9 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.ConfigHelper;
+import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
-import org.apache.tuscany.das.rdb.DAS;
 
 import commonj.sdo.DataObject;
 
@@ -38,8 +37,7 @@ public class AliasTests extends DasTest{
 	 */
 	public void testColumnAlias() throws Exception{
 		
-		DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml") );
-	    das.setConnection( getConnection() );
+		DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml") , getConnection());	   
 	    
 	    Command select = das.getCommand( "get all books" );
 	    //select.setConnection( getConnection() );
@@ -65,12 +63,10 @@ public class AliasTests extends DasTest{
 	 */
 	public void testColumnData() throws Exception {
 		
-	    DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml") );
-	    das.setConnection(getConnection());
+	    DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml") , getConnection());	 
 	    
 	    Command select = das.getCommand( "get book by ID" );
-	    select.setParameterValue("ID", new Integer(1));
-	    select.setConnection(getConnection());
+	    select.setParameterValue("ID", new Integer(1));	
 	    
 	    //*******Verifys a column entry is readable
 	    DataObject root = select.executeQuery();
@@ -113,8 +109,7 @@ public class AliasTests extends DasTest{
 	    //helper.addTable("BOOK", "Book");
 	    //helper.addPrimaryKey("BOOK.BOOK_ID");
 	    
-	    DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml") );
-	    das.setConnection(getConnection());
+	    DAS das = DAS.FACTORY.createDAS( getConfig("BooksConfigWithAlias.xml"), getConnection() );	
 	    Command select = das.getCommand( "get book by ID" );
 	    select.setParameterValue("ID", new Integer(1));
 	    

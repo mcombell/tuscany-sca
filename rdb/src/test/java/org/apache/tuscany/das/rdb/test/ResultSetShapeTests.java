@@ -46,12 +46,9 @@ public class ResultSetShapeTests extends DasTest {
      */
     public void testReadSingle() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"));
-        das.setConnection(getConnection());
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"),getConnection());    
         // Create and initialize command to read customers
-        Command readCustomers = das.getCommand("literal");     
-
-        readCustomers.setConnection(getConnection());
+        Command readCustomers = das.getCommand("literal");          
 
         // Read
         DataObject root = readCustomers.executeQuery();
@@ -74,10 +71,9 @@ public class ResultSetShapeTests extends DasTest {
         // Using literals in the select forces invalid resultset metadata
         String sqlString = "Select 99, 'Roosevelt', '1600 Pennsylvania Avenue' from customer";
 
-        DAS das = DAS.FACTORY.createDAS();
+        DAS das = DAS.FACTORY.createDAS(getConnection());
         // Create and initialize command to read customers
-        Command readCustomers = das.createCommand(sqlString);
-        readCustomers.setConnection(getConnection());
+        Command readCustomers = das.createCommand(sqlString);     
 
         // Read
         DataObject root = readCustomers.executeQuery();

@@ -43,9 +43,8 @@ public class ReadDBSchemaTests extends DasTest {
 	
 	
 	public void testReadTableInfo() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
-		Command select = das.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");	
-		select.setConnection(getConnection());
+		DAS das = DAS.FACTORY.createDAS(getConnection());
+		Command select = das.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");			
 		DataObject root = select.executeQuery();
 		
 		DataObject table = (DataObject)root.get("SYSTABLES[1]");

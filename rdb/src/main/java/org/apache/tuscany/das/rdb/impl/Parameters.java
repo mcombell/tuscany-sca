@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
@@ -43,12 +42,12 @@ public class Parameters {
 		super();
 	}
 
-	public Parameter get(String name) {
-		return (Parameter) parametersByName.get(name);
+	public ParameterImpl get(String name) {
+		return (ParameterImpl) parametersByName.get(name);
 	}
 
-	public Parameter get(int index) {
-		return (Parameter) parameters.get(index);
+	public ParameterImpl get(int index) {
+		return (ParameterImpl) parameters.get(index);
 	}
 
 	public List outParams() {
@@ -59,23 +58,23 @@ public class Parameters {
 		return inParams;
 	}
 
-	private void addParameter(Parameter param) {
-		if (param.getDirection() == Parameter.IN)
+	private void addParameter(ParameterImpl param) {		
+		if (param.getDirection() == ParameterImpl.IN)
 			inParams.add(param);
-		else if ((param.getDirection() == Parameter.OUT)
-				|| (param.getDirection() == Parameter.IN_OUT))
+		else if ((param.getDirection() == ParameterImpl.OUT)
+				|| (param.getDirection() == ParameterImpl.IN_OUT))
 			outParams.add(param);
 
 		this.parameters.add(param);
 		parametersByName.put(param.getName(), param);
 	}
 
-	public void add(Parameter param) {
+	public void add(ParameterImpl param) {
 		addParameter(param);
 	}
 
-	public Parameter findOrCreateParameterNamed(String name) {
-		Parameter param = get(name);
+	public ParameterImpl findOrCreateParameterNamed(String name) {
+		ParameterImpl param = get(name);
 		if (param == null) {
 			param = new ParameterImpl(name);
 			addParameter(param);
@@ -83,18 +82,18 @@ public class Parameters {
 		return param;
 	}
 
-	public Parameter findOrCreateParameterWithIndex(int index, int direction,
+	public ParameterImpl findOrCreateParameterWithIndex(int index, int direction,
 			Type sdoType) {
 		Iterator i = parameters.iterator();
 		while (i.hasNext()) {
-			Parameter param = (Parameter) i.next();
+			ParameterImpl param = (ParameterImpl) i.next();
 
 			if (param.getIndex() == index)
 				return param;
 		}
 		DebugUtil.debugln(getClass(), debug,
 				"Creating new parameter with index " + index);
-		Parameter newParam = new ParameterImpl(index);
+		ParameterImpl newParam = new ParameterImpl(index);
 		newParam.setDirection(direction);
 		newParam.setType(sdoType);
 		addParameter(newParam);
@@ -105,41 +104,41 @@ public class Parameters {
 		return parameters;
 	}
 
-	public Parameter findOrCreateParameterWithIndex(int index) {
-		return findOrCreateParameterWithIndex(index, Parameter.IN,
+	public ParameterImpl findOrCreateParameterWithIndex(int index) {
+		return findOrCreateParameterWithIndex(index, ParameterImpl.IN,
 				SDODataTypes.OBJECT);
 	}
 
 	public void setParameter(int index, Object value) {
-		Parameter param = findOrCreateParameterWithIndex(index);
+		ParameterImpl param = findOrCreateParameterWithIndex(index);
 		param.setValue(value);
 	}
 
 	public void setParameter(String name, Object value) {
 		if (name == null)
 			throw new RuntimeException("Null parameter name not allowed");
-		Parameter param = findOrCreateParameterNamed(name);
+		ParameterImpl param = findOrCreateParameterNamed(name);
 		param.setValue(value);
 	}
 
 	public void setParameterWithType(String name, Type sdoType) {
 		if (name == null)
 			throw new RuntimeException("Null parameter name not allowed");
-		Parameter p = findOrCreateParameterNamed(name);
+		ParameterImpl p = findOrCreateParameterNamed(name);
 		p.setType(sdoType);
 	}
 
     public void setParameterWithType(int index, Type sdoType) {
         if (index == 0)
             throw new RuntimeException("Null parameter index not allowed");
-        Parameter p = findOrCreateParameterWithIndex(index);
+        ParameterImpl p = findOrCreateParameterWithIndex(index);
         p.setType(sdoType);
     }
     
-    public Parameter parameterWithIndex(int index) {
+    public ParameterImpl parameterWithIndex(int index) {
 		Iterator i = parameters.iterator();
 		while (i.hasNext()) {
-			Parameter param = (Parameter) i.next();
+			ParameterImpl param = (ParameterImpl) i.next();
 
 			if (param.getIndex() == index)
 				return param;

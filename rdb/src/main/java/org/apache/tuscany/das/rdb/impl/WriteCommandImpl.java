@@ -20,11 +20,9 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.config.Config;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 public abstract class WriteCommandImpl extends CommandImpl {
 	
@@ -68,10 +66,6 @@ public abstract class WriteCommandImpl extends CommandImpl {
 		if ( false )
 			throw new SQLException();
 	}
-
-	public void setDataObjectModel(Type schema) {
-		// don't really care what the model is here
-	}
 	
 	public String toString() {
 		
@@ -88,7 +82,7 @@ public abstract class WriteCommandImpl extends CommandImpl {
 	public void addParameters(Collection updateParameters) {
 		Iterator i = updateParameters.iterator();
 		while ( i.hasNext()) {
-			Parameter p = (Parameter) i.next();
+			ParameterImpl p = (ParameterImpl) i.next();
 			addParameter(p);
 		}
 	}

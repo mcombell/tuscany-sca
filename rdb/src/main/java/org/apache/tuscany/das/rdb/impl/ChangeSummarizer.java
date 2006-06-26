@@ -22,12 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.Key;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
-import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
@@ -231,31 +229,6 @@ public class ChangeSummarizer {
 		}
 	}
 
-	public void addRelationship(String parentName, String childName) {
-		mapping.addRelationship(parentName, childName);
-	}
-
-	public void addPrimaryKey(String columnName) {
-		mapping.addPrimaryKey(columnName);
-	}
-
-	public void addCollisionColumn(String columnName) {
-		mapping.addCollisionColumn(columnName);
-	}
-
-	public void addPrimarykey(Key key) {
-		mapping.addPrimaryKey(key);
-	}
-
-	public void addGeneratedPrimaryKey(String columnName) {
-		QualifiedColumn col = new QualifiedColumn(columnName);
-		generatedKeys.put(col.getTableName(), col.getColumnName());
-		mapping.addGeneratedPrimaryKey(columnName);
-	}
-
-	public void addConverter(String name, String converterName) {
-		mapping.addConverter(name, converterName);
-	}
 
 	public ConnectionImpl getConnection() {
 		return this.connection;	

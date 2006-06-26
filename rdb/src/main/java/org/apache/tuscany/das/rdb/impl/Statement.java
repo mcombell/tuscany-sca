@@ -22,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.Parameter;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 //TODO - Can use some refactoring.  Much code is duplicated in "execute" methods
@@ -57,7 +56,7 @@ public class Statement {
 
             Iterator inParams = parameters.inParams().iterator();
             while (inParams.hasNext()) {
-                Parameter param = (Parameter) inParams.next();
+                ParameterImpl param = (ParameterImpl) inParams.next();
                 if (param.getIndex() == 0)
                     param.setIndex(queryString.getParameterIndex(param.getName()));
                 cs.setObject(param.getIndex(), param.getValue());
@@ -66,7 +65,7 @@ public class Statement {
             // register out parameters
             Iterator outParams = parameters.outParams().iterator();
             while (outParams.hasNext()) {
-                Parameter param = (Parameter) outParams.next();
+                ParameterImpl param = (ParameterImpl) outParams.next();
                 if (param.getIndex() == 0)
                     param.setIndex(queryString.getParameterIndex(param.getName()));
                 DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
@@ -81,7 +80,7 @@ public class Statement {
 
             Iterator i = parameters.outParams().iterator();
             while (i.hasNext()) {
-                Parameter param = (Parameter) i.next();
+                ParameterImpl param = (ParameterImpl) i.next();
                 param.setValue(cs.getObject(param.getIndex()));
             }
 
@@ -98,7 +97,7 @@ public class Statement {
 
         Iterator inParams = parameters.inParams().iterator();
         while (inParams.hasNext()) {
-            Parameter param = (Parameter) inParams.next();
+            ParameterImpl param = (ParameterImpl) inParams.next();
             if (param.getIndex() == 0)
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             cs.setObject(param.getIndex(), param.getValue());
@@ -107,7 +106,7 @@ public class Statement {
         // register out parameters
         Iterator outParams = parameters.outParams().iterator();
         while (outParams.hasNext()) {
-            Parameter param = (Parameter) outParams.next();
+            ParameterImpl param = (ParameterImpl) outParams.next();
             if (param.getIndex() == 0)
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
@@ -118,7 +117,7 @@ public class Statement {
 
         Iterator out = parameters.outParams().iterator();
         while (out.hasNext()) {
-            Parameter param = (Parameter) out.next();
+            ParameterImpl param = (ParameterImpl) out.next();
             param.setValue(cs.getObject(param.getIndex()));
         }
 
@@ -133,7 +132,8 @@ public class Statement {
         PreparedStatement ps = getPreparedStatement();
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
-            Parameter param = (Parameter) i.next();
+            ParameterImpl param = (ParameterImpl) i.next();
+           
             if (param.getIndex() == 0)
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             Object value = param.getValue();
@@ -151,7 +151,7 @@ public class Statement {
             throws SQLException {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
-            Parameter param = (Parameter) i.next();
+            ParameterImpl param = (ParameterImpl) i.next();
             if (param.getIndex() == 0)
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             ps.setObject(param.getIndex(), param.getValue());

@@ -51,10 +51,9 @@ public class PassiveConnectionTests extends DasTest {
         java.sql.Connection c = getConnection();
 
         try {
-        	DAS das = DAS.FACTORY.createDAS();
+        	DAS das = DAS.FACTORY.createDAS(c);
             // Read customer 1
-            Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-            select.setConnection(c);
+            Command select = das.createCommand("Select * from CUSTOMER where ID = 1");          
             DataObject root = select.executeQuery();
 
             DataObject customer = (DataObject) root.get("CUSTOMER[1]");

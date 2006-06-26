@@ -78,7 +78,7 @@ public class ResultSetProcessor {
 			processResultSet(results, resultMetadata, start, end);
 
 			//TODO These statements HAVE to be closed or we will have major problems
-			//results.getStatement().close();
+//			results.getStatement().close();
 			results.close();
 		}
 

@@ -57,9 +57,8 @@ public class SimplestCrud extends DasTest {
 	public void testReadSingle() throws Exception {
 
 		//Create and initialize command to read customers
-		DAS das = DAS.FACTORY.createDAS();
-		Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");	
-		readCustomers.setConnection(getConnection());
+		DAS das = DAS.FACTORY.createDAS(getConnection());
+		Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");		
 
 		//Read
 		DataObject root = readCustomers.executeQuery();
@@ -73,21 +72,12 @@ public class SimplestCrud extends DasTest {
 	 */
 	public void testReadSingle2() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Create and initialize command to read customers
-		Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");	
-		readCustomers.setConnection(getConnection());
+		Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");		
 
 		//Read
-		DataObject root = readCustomers.executeQuery();
-		
-		DataObject cust = root.getDataObject("CUSTOMER[1]");
-		
-//		int n = (cust.getType().getProperties()).size();
-//		for (int i=0; i<n; i++) {
-//			System.out.println(cust.get(i));
-//		}
-		
+		DataObject root = readCustomers.executeQuery();			
 		
 		//Verify 
 		assertEquals(1, root.getInt("CUSTOMER[1]/ID"));
@@ -98,10 +88,9 @@ public class SimplestCrud extends DasTest {
 	 * Same as above but tests tolerance of white space in provided SQL
 	 */
 	public void testReadSingleWithWhiteSpace() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Create and initialize command to read customers
-		Command readCustomers = das.createCommand("   select * from CUSTOMER where ID = 1");	
-		readCustomers.setConnection(getConnection());
+		Command readCustomers = das.createCommand("   select * from CUSTOMER where ID = 1");		
 
 		//Read
 		DataObject root = readCustomers.executeQuery();
@@ -115,11 +104,10 @@ public class SimplestCrud extends DasTest {
 	 */
 	public void testReadMultiple() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Create and initialize command to read customers
 		Command readCustomers = das.createCommand("select * from CUSTOMER where LASTNAME = 'Williams'");	
-		readCustomers.setConnection(getConnection());
-
+	
 		//Read
 		DataObject root = readCustomers.executeQuery();
 		
@@ -132,10 +120,9 @@ public class SimplestCrud extends DasTest {
 	 * LASTNAME value is provided via a parameter
 	 */
 	public void testReadMultipleWithParameters() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Create and initialize command to read customers
-		Command readCustomers = das.createCommand("select * from CUSTOMER where LASTNAME = :LASTNAME");	
-		readCustomers.setConnection(getConnection());
+		Command readCustomers = das.createCommand("select * from CUSTOMER where LASTNAME = :LASTNAME");		
 
 		//Parameterize the command
 		readCustomers.setParameterValue("LASTNAME", "Williams");
@@ -146,14 +133,12 @@ public class SimplestCrud extends DasTest {
 	}
 
 	public void testInsert() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
-		Command insert = das.createCommand("insert into CUSTOMER values (10, 'Williams', '5528 Wells Fargo Dr')");	
-		insert.setConnection(getConnection());
+		DAS das = DAS.FACTORY.createDAS(getConnection());
+		Command insert = das.createCommand("insert into CUSTOMER values (10, 'Williams', '5528 Wells Fargo Dr')");		
 		insert.execute();
 
 		//Verify
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 10");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 10");	
 		DataObject root = select.executeQuery();	
 		assertEquals(1, root.getList("CUSTOMER").size());
 		assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
@@ -161,9 +146,8 @@ public class SimplestCrud extends DasTest {
 	}
 
 	public void testInsertWithParameters() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");	
-		insert.setConnection(getConnection());
 		insert.setParameterValue("ID", new Integer(10));
 		insert.setParameterValue("LASTNAME", "Williams");
 		insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
@@ -171,7 +155,6 @@ public class SimplestCrud extends DasTest {
 
 		//Verify
 		Command select = das.createCommand("Select * from CUSTOMER where ID = 10");
-		select.setConnection(getConnection());
 		DataObject root = select.executeQuery();	
 		assertEquals(1, root.getList("CUSTOMER").size());
 		assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
@@ -180,16 +163,14 @@ public class SimplestCrud extends DasTest {
 
 	
 	public void testDelete() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Verify pre-condition
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		DataObject root = select.executeQuery();	
 		assertEquals(1, root.getList("CUSTOMER").size());	
 		
 		//Create and execute the delete command
-		Command delete = das.createCommand("delete from CUSTOMER where ID = 1");
-		delete.setConnection(getConnection());
+		Command delete = das.createCommand("delete from CUSTOMER where ID = 1");	
 		delete.execute();
 		
 		//Verify delete by reusing the original select command
@@ -200,15 +181,13 @@ public class SimplestCrud extends DasTest {
 	
 	
 	public void testUpdate() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Verify pre-condition
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		DataObject root = select.executeQuery();	
 		assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
 
-		Command update = das.createCommand("update CUSTOMER set LASTNAME = 'Pavick' where ID = 1");	
-		update.setConnection(getConnection());
+		Command update = das.createCommand("update CUSTOMER set LASTNAME = 'Pavick' where ID = 1");		
 		update.execute();
 		
 		//Verify update - reuse select command
@@ -218,15 +197,13 @@ public class SimplestCrud extends DasTest {
 	}
 	
 	public void testUpdateWithParameters() throws Exception {
-		DAS das = DAS.FACTORY.createDAS();
+		DAS das = DAS.FACTORY.createDAS(getConnection());
 		//Verify pre-condition
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-		select.setConnection(getConnection());
+		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");	
 		DataObject root = select.executeQuery();	
 		assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
 		
-		Command update = das.createCommand("update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID");	
-		update.setConnection(getConnection());
+		Command update = das.createCommand("update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID");		
 		update.setParameterValue("LASTNAME", "Pavick");
 		update.setParameterValue("ID", new Integer(1));
 		update.execute();
@@ -238,15 +215,13 @@ public class SimplestCrud extends DasTest {
 	}
     
     public void testUpdateWithParmarkers() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS();
+    	DAS das = DAS.FACTORY.createDAS(getConnection());
         //Verify pre-condition
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
-        select.setConnection(getConnection());
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 1"); 
         DataObject root = select.executeQuery();    
         assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
         
-        Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");  
-        update.setConnection(getConnection());
+        Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");      
         update.setParameterValue(1, "Pavick");
         update.setParameterValue(2, new Integer(1));
         update.execute();
