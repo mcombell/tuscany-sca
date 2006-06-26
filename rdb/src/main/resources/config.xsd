@@ -65,8 +65,7 @@
    <xsd:complexType name="Column">
       <xsd:attribute name="columnName" type="xsd:string"/>
       <xsd:attribute name="propertyName" type="xsd:string"/>
-      <xsd:attribute name="converterClassName" type="xsd:string"/>
-      <xsd:attribute name="columnType" type="xsd:string"/>
+      <xsd:attribute name="converterClassName" type="xsd:string"/>     
       <xsd:attribute name="primaryKey" type="xsd:boolean"/>
       <xsd:attribute name="generated" type="xsd:boolean"/>
       <xsd:attribute name="collision" type="xsd:boolean"/>    

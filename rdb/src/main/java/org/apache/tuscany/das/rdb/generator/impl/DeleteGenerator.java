@@ -19,7 +19,6 @@ package org.apache.tuscany.das.rdb.generator.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.Converter;
 import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
@@ -27,7 +26,7 @@ import org.apache.tuscany.das.rdb.impl.DeleteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
-public class DeleteGenerator {
+public class DeleteGenerator extends BaseGenerator {
 
 	public static final DeleteGenerator instance = new DeleteGenerator();
 
@@ -80,18 +79,7 @@ public class DeleteGenerator {
 		return deleteCommand;
 	}
 	
-	private Converter getConverter(Table t, String name) {
-		TableWrapper tw = new TableWrapper(t);
-		String converter = tw.getConverter(name);
-		if ( converter != null ) {
-			try {
-				return (Converter) Class.forName(converter).newInstance();
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		return null;
-	}
+
 
 }
 

@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.Converter;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -35,7 +34,7 @@ import org.apache.tuscany.das.rdb.util.DebugUtil;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 
-public class InsertGenerator {
+public class InsertGenerator extends BaseGenerator {
 
 	public static final InsertGenerator instance = new InsertGenerator();
 
@@ -92,7 +91,7 @@ public class InsertGenerator {
 			ParameterImpl p = new ParameterImpl();
 			p.setName(property.getName());
 			p.setType(property.getType());
-			p.setConverter(getConverter(table, property.getName()));
+			p.setConverter(getConverter(t, property.getName()));
 			p.setIndex(idx);
 			cmd.addParameter(p);
 
@@ -100,18 +99,6 @@ public class InsertGenerator {
 		DebugUtil.debugln(getClass(), debug, statement.toString());
 		return cmd;
 
-	}
-
-	private Converter getConverter(TableWrapper tw, String name) {
-		String converter = tw.getConverter(name);
-		if ( converter != null ) {
-			try {
-				return (Converter) Class.forName(converter).newInstance();
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		return null;
 	}
 
 	private List getAttributeProperties(DataObject obj, MappingWrapper config) {

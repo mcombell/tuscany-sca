@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.Converter;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -37,7 +36,7 @@ import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 
-public class UpdateGenerator {
+public class UpdateGenerator extends BaseGenerator {
 
 	private boolean debug = false;
 
@@ -111,7 +110,7 @@ public class UpdateGenerator {
 			ParameterImpl param = new ParameterImpl();
 			param.setName(p.getName());
 			param.setType(p.getType());
-			param.setConverter(getConverter(t, p.getName()));
+			param.setConverter(getConverter(table, p.getName()));
 			param.setIndex(idx);
 			updateCommand.addParameter(param);
 		}
@@ -157,18 +156,6 @@ public class UpdateGenerator {
 	}
 	
 	
-	private Converter getConverter(TableWrapper tw, String name) {
-		String converter = tw.getConverter(name);
-		if ( converter != null ) {
-			try {
-				return (Converter) Class.forName(converter).newInstance();
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		return null;
-	}
-
 	public Collection getUpdateParameters(DataObject changedObject, Table table) {
 		Type type = changedObject.getType();
 		TableWrapper wrapper = new TableWrapper(table);
@@ -181,7 +168,7 @@ public class UpdateGenerator {
 			Property attr = (Property) i.next();
 			String field = attr.getName();
 
-			ParameterImpl p = getParameter(wrapper, type.getProperty(field));
+			ParameterImpl p = getParameter(table, type.getProperty(field));
 			if (pkNames.contains(field)) {
 				pkParams.add(p);
 			} else {
@@ -193,11 +180,11 @@ public class UpdateGenerator {
 		
 	}
 
-	private ParameterImpl getParameter(TableWrapper wrapper, Property property) {
+	private ParameterImpl getParameter(Table table, Property property) {
 		ParameterImpl param = new ParameterImpl();
 		param.setName(property.getName());
 		param.setType(property.getType());
-		param.setConverter(getConverter(wrapper, property.getName()));
+		param.setConverter(getConverter(table, property.getName()));
 		
 		return param;
 	}
