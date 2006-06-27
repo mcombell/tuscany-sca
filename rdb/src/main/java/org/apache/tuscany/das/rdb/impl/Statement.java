@@ -17,6 +17,7 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.CallableStatement;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
-//TODO - Can use some refactoring.  Much code is duplicated in "execute" methods
+// TODO - Can use some refactoring. Much code is duplicated in "execute" methods
 public class Statement {
 
     protected final QueryString queryString;
@@ -133,22 +134,25 @@ public class Statement {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
-           
+
             if (param.getIndex() == 0)
                 param.setIndex(queryString.getParameterIndex(param.getName()));
             Object value = param.getValue();
             DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
-            if (value == null) {            
-                ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
-            } else {           
+            if (value == null) {
+                if (param.getType() == null) {
+                    ParameterMetaData pmd = ps.getParameterMetaData();
+                    ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
+                } else
+                    ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
+            } else {
                 ps.setObject(param.getIndex(), value);
             }
         }
         return ps.executeUpdate();
     }
 
-    protected PreparedStatement setParameters(PreparedStatement ps, Parameters parameters)
-            throws SQLException {
+    protected PreparedStatement setParameters(PreparedStatement ps, Parameters parameters) throws SQLException {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();

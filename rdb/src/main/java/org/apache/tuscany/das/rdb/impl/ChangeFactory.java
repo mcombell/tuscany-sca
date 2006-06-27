@@ -18,7 +18,6 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;

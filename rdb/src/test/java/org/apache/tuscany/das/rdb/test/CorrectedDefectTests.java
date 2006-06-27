@@ -27,7 +27,6 @@ import java.util.Random;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -153,7 +152,6 @@ public class CorrectedDefectTests extends DasTest {
         Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");      
         insert.setParameterValue("ID", new Integer(10));
         insert.setParameterValue("LASTNAME", null);
-        insert.setParameterType("LASTNAME", SDODataTypes.STRING);
         insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
         insert.execute();
 

@@ -17,16 +17,11 @@
 package org.apache.tuscany.das.rdb;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 /**
  * A Command is used to execute a read or write to a database
- * 
- * 
  */
 public interface Command {
-
-//	public static CommandFactory FACTORY = new CommandFactoryImpl();
 
 	/**
 	 * Performs the function defined by the command
@@ -60,16 +55,6 @@ public interface Command {
 	 *            the value for the Parameter
 	 */
 	public void setParameterValue(int index, Object value);
-
-    /**
-     * Sets the "type" of the associated Parameter
-     * 
-     * @param name
-     *            the name of this Parameter
-     * @param type
-     *            the SDODataTypes-defined "type" for the Parameter.
-     */
-    public void setParameterType(String string, Type dataType);
      
      /**
 	 * Returns the value of the associated Parameter
@@ -88,34 +73,5 @@ public interface Command {
 	 * @return the value of the Parameter
 	 */
 	public Object getParameterValue(int index);
-
-
-	/**
-	 * Provides the java.sql.Connection to be used for this executing this
-	 * command.
-	 * 
-	 * @param connection
-	 *            the java.sql.Connection
-	 */
-//	public void setConnection(Connection connection);
-
-	/**
-	 * Provides the java.sql.Connection to be used for this executing this
-	 * command.
-	 * 
-	 * @param connection
-	 *            the java.sql.Connection
-	 * @param manageTransactions
-	 *            <code>true</code> if the DAS should perform tx
-	 *            commit/rollback
-	 */
-//	public void setConnection(Connection connection, boolean manageTransactions);
-
-	/**
-	 * Cleans up and realeases all resources associated with this command. This
-	 * should be called when the application is done with this command.
-	 */
-	public void close();
-	
 
 }

@@ -18,13 +18,15 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Types;
 
-import org.apache.tuscany.das.rdb.SDODataTypes;
 
 import commonj.sdo.Type;
 
 public class SDODataTypeHelper {
 	
 	static public int sqlTypeFor(Type sdoType) {
+        if (sdoType == null)
+            return Types.OTHER;
+        
 		if ( sdoType == SDODataTypes.BOOLEAN)
 			return Types.BOOLEAN;
 		else if ( sdoType == SDODataTypes.STRING)

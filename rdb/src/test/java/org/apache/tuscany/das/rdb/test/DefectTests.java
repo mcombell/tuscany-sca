@@ -28,7 +28,6 @@ import java.util.Random;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.SDODataTypes;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -80,55 +79,6 @@ public class DefectTests extends DasTest {
 
     }
 
-
-
-    public void testDiltonsInsertWorkaround() throws Exception {
-
-        // String sql = "insert into conmgt.serverstatus (statusid,
-        // managedserverid, timestamp) values (316405209, 316405209, '2005-11-23
-        // 19:29:52.636')";
-        // String sql = "insert into conmgt.serverstatus (managedserverid,
-        // timestamp) values (316405209, '2005-11-23 19:29:52.636')";
-        String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (:serverid, :timestamp)";
-        DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand(sql);
-        insert.setParameterValue("serverid", new Integer(316405209));
-        insert.setParameterValue("timestamp", "2005-11-23 19:29:52.636");      
-        insert.execute();
-
-        // Verify
-        Command select = das.createCommand("Select * from conmgt.serverstatus");   
-        DataObject root = select.executeQuery();
-        assertEquals(1, root.getList("SERVERSTATUS").size());
-
-    }
-
-    public void testWASDefect330118() throws Exception {
-
-        // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
-
-        // Read all customers and add one
-        Command read = das.getCommand("all customers");
-        DataObject root = read.executeQuery();
-        int numCustomers = root.getList("CUSTOMER").size();
-
-        DataObject newCust = root.createDataObject("CUSTOMER");
-        newCust.set("ID", new Integer(100));
-        newCust.set("ADDRESS", "5528 Wells Fargo Drive");
-        newCust.set("LASTNAME", "Gerkin");
-
-        // Now delete this new customer
-        newCust.delete();
-
-       das.applyChanges(root);
-
-        // Verify
-        root = read.executeQuery();
-        assertEquals(numCustomers, root.getList("CUSTOMER").size());
-
-    }
-
     /**
      * Yin Chen reports ... "In the class Statement, method: public int
      * executeUpdate(Parameters parameters) - its tossing out RuntimeException
@@ -177,69 +127,7 @@ public class DefectTests extends DasTest {
 
     }
     
-    
 
-
-    /**
-     * Should be able to explicitly set a parameter to null.  But, should require
-     * that the parameter type is set.
-     */
-    public void testDiltonsNullParameterBug1() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");         
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", null);
-        insert.setParameterType("LASTNAME", SDODataTypes.STRING);
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
-        insert.execute();
-
-        //Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
-        DataObject root = select.executeQuery();    
-        assertEquals(1, root.getList("CUSTOMER").size());
-        assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
-
-    }
-   
-
-    /**
-     * Error by not setting a parameter
-     */    
-    public void testDiltonsNullParameterBug2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");         
-        insert.setParameterValue("ID", new Integer(10));
-//        insert.setParameterValue("LASTNAME", null);
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
-        
-        try {
-            insert.execute();
-            fail();
-        }
-        catch (RuntimeException e) {
-            //Expected since "LASTNAME" parameter not set
-        }
-    }    
-    
-    /**
-     * Set parameter to empty string
-     */    
-    public void testDiltonsNullParameterBug3() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");          
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", "");
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
-        insert.execute();
-
-        //Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
-        DataObject root = select.executeQuery();    
-        assertEquals(1, root.getList("CUSTOMER").size());
-        assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
-
-    }
-    
     public void testUpdateChildThatHasGeneratedKey() throws Exception {
 
         DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
@@ -292,7 +180,6 @@ public class DefectTests extends DasTest {
         //Modify customer
         customer.set( "LASTNAME", "Pavick" );
 
-
         das.applyChanges( root );
 
         //Verify changes
@@ -309,7 +196,8 @@ public class DefectTests extends DasTest {
      * Read and modify a customer.  
      * Provide needed Create/Update/Delete statements via xml file
      * 
-     * Same as in CrudWithChangeHistory but provided partial update statement
+     * Same as in CrudWithChangeHistory but provided partial update statement.
+     * That is, it does not update all columns
      * 
      * Fails if provided udpate statement does not include all parameters
      * 
@@ -335,28 +223,7 @@ public class DefectTests extends DasTest {
         assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
 
     }    
-    
-    
-    
-    
-    
-    
-    
-    /**
-     * Test problem with Random
-     */    
-    public void testRandomNumber() throws Exception {
-        
-        Random generator = new Random();
-        int number = generator.nextInt(1000) + 1;
-        assertTrue(number > 0 & number <= 1000);
 
-    }
-    
-    
-    public void testTablePropertyName() throws Exception {
-        
-    }
     
     
     

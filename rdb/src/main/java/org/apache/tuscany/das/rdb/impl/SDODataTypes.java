@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.tuscany.das.rdb;
+package org.apache.tuscany.das.rdb.impl;
 
 import commonj.sdo.Type;
 import commonj.sdo.helper.TypeHelper;
@@ -28,8 +28,8 @@ import commonj.sdo.helper.TypeHelper;
      
 	final public static Type BOOLEAN = helper.getType("commonj.sdo", "Boolean");
 	final public static Type BYTE = helper.getType("commonj.sdo", "Byte");
-	final public static Type BYTES = helper.getType("commonj.sdo", "ByteArray");
-	final public static Type CHARACTER = helper.getType("commonj.sdo", "Char");
+	final public static Type BYTES = helper.getType("commonj.sdo", "Bytes");
+	final public static Type CHARACTER = helper.getType("commonj.sdo", "Character");
 	final public static Type DATE = helper.getType("commonj.sdo", "Date");
 	final public static Type DATETIME = helper.getType("commonj.sdo", "Date");
 	final public static Type DAY = helper.getType("commonj.sdo", "Date");
