@@ -85,7 +85,7 @@ public class ConverterTests extends DasTest {
 		
 		//Verify 
 		assertEquals(kbday, root.getDate("CUSTOMER[1]/LASTNAME"));
-/*		
+		
 		//Modify
 		root.setDate("CUSTOMER[1]/LASTNAME", tbday);	
 		
@@ -96,7 +96,7 @@ public class ConverterTests extends DasTest {
 
 		//Verify 
 		assertEquals(tbday, root.getDate("CUSTOMER[1]/LASTNAME"));
-		*/
+		
 	}
 	
 }
