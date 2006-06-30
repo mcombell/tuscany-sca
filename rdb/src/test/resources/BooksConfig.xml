@@ -14,9 +14,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    
-    <Table tableName="BOOK">
+<Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+
+    <Command name="select book 1" SQL="select * from BOOK where BOOK_ID = 1" kind="Select"/>
+    <Command name="update book 1" SQL="update BOOK set OCC = ? where BOOK_ID = 1" kind="Update"/>
+
+	<Table tableName="BOOK">
         <Column columnName="BOOK_ID" primaryKey="true"/>
 	    <Column columnName="OCC" collision="true"/>
     </Table>

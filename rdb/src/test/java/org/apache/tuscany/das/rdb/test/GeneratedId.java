@@ -101,8 +101,9 @@ public class GeneratedId extends DasTest {
 
     // Test ability to propogate generated values back to owning data objects
     public void testPropagateIds() throws Exception {
+        
     	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
-        Command select = das.createCommand("Select * from COMPANY");      
+        Command select = das.getCommand("all companies");
         DataObject root = select.executeQuery();
 
         // Create a new Company

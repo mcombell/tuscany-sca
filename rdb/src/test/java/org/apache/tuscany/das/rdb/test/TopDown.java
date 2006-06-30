@@ -44,22 +44,21 @@ public class TopDown extends DasTest {
 
 	// Uses dynamic SDOs but user provides the model
 	public void testUserProvidedModelDynamic() throws SQLException, IOException {
-		DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomerOrder.xml"), getConnection());
-		// Build the select command
-		Command select = das
-				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
 
-		SDOUtil.registerStaticTypes(CustomerFactory.class);		
+        DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomerOrder.xml"), getConnection());
+
+        Command select = das.getCommand("Customer and Orders");
+        
+        SDOUtil.registerStaticTypes(CustomerFactory.class);		
 
 		// Parameterize the command	
-		select.setParameterValue("ID", new Integer(1));
+		select.setParameterValue(1, new Integer(1));
 
 		// Get the graph - DataGraphRoot is from the typed package
-		DataGraphRoot root = (DataGraphRoot) select.executeQuery();
+		DataObject root = select.executeQuery();
 
 		// Modify a customer
-		Customer customer = (Customer) root.getCustomers().get(0);
+        Customer customer = (Customer)root.getDataObject("customers[1]");
 		customer.setLastName("Pavick");
 
 		// Modify an order

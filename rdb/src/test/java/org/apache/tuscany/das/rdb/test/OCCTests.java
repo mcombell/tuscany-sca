@@ -32,20 +32,21 @@ public class OCCTests extends DasTest {
 
 	
 	public void testSimpleOCC() throws Exception {
+        
 		DAS das = DAS.FACTORY.createDAS(getConfig("BooksConfig.xml"), getConnection());
 		//Read a book instance
-		Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");	
+        Command select = das.getCommand("select book 1");
 		DataObject root = select.executeQuery();
 		DataObject book = root.getDataObject("BOOK[1]");
 		//Change a field to mark the instance 'dirty'
 		book.setInt("QUANTITY", 2);
 
 		// Explicitly change OCC column in database to force collision
-		Command update = das
-				.createCommand("update BOOK set OCC = :OCC where BOOK_ID = 1");	
-		update.setParameterValue("OCC", new Integer(100));
+        Command update = das.getCommand("update book 1");
+		update.setParameterValue(1, new Integer(100));
 		update.execute();		
 
+        //Try to apply changes an catch the OCC Exception
 		try {		
 			das.applyChanges(root);
 			fail("An OCCException should be thrown");

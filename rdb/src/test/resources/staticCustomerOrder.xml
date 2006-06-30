@@ -17,7 +17,9 @@
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 dataObjectModel="org.apache.tuscany.das.rdb.test.customer.DataGraphRoot">
-	
+
+  <Command name="Customer and Orders" SQL="SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?" kind="Select"/>
+		
   <Table tableName="CUSTOMER" typeName="Customer">
   	<Column columnName="ID" primaryKey="true"/>
   </Table>

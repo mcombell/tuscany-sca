@@ -23,11 +23,6 @@
     <Command name="all departments for company" SQL="select * from COMPANY inner join DEPARTMENT on COMPANY.ID = DEPARTMENT.COMPANYID where COMPANY.ID = :ID" kind="Select"/>
 
     <Command name="company by id with departments" SQL="select * from COMPANY left outer join DEPARTMENT on COMPANY.ID = DEPARTMENT.COMPANYID where COMPANY.ID = :ID" kind="Select"/>
-	
-<!--
-	   <ConnectionProperties dataSource="java:comp/env/jdbc/dastest"/>
--->  
-
 
     <Table tableName="COMPANY">
         <Column columnName="ID" primaryKey="true" generated="true"/>
