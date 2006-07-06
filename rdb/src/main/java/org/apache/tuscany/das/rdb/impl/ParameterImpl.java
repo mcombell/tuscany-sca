@@ -42,7 +42,7 @@ public class ParameterImpl  {
 	private int index;
 	private Type type;
 	private String name;
-	private Object value;
+	protected Object value = null;
 	private int direction = IN;
 	private Converter converter;
 	
@@ -121,4 +121,6 @@ public class ParameterImpl  {
 		buffer.append("\nValue: " + getValue());
 		return buffer.toString();
 	}
+	
+	
 }

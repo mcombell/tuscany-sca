@@ -46,7 +46,51 @@ public class OCCTests extends DasTest {
 		update.setParameterValue(1, new Integer(100));
 		update.execute();		
 
-        //Try to apply changes an catch the OCC Exception
+        //Try to apply changes and catch the expected OCC Exception
+		try {		
+			das.applyChanges(root);
+			fail("An OCCException should be thrown");
+		} catch (RuntimeException ex) {
+			if ( !ex.getMessage().equals("OCC Exception") )
+				throw ex;
+		}
+	}
+	
+	public void testManagedOCC() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(getConfig("ManagedBooksConfig.xml"), getConnection());
+		Command select = das.getCommand("select book 1");
+		DataObject root = select.executeQuery();
+		DataObject book = root.getDataObject("BOOK[1]");
+		//Change a field to mark the instance 'dirty'
+		book.setInt("QUANTITY", 2);
+		int occValue = book.getInt("OCC");
+		das.applyChanges(root);
+		
+		root = select.executeQuery();
+		book = root.getDataObject("BOOK[1]");
+		assertEquals(occValue + 1, book.getInt("OCC"));		
+	}
+	
+	public void testManagedOCCFailure() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(getConfig("ManagedBooksConfig.xml"), getConnection());
+		//Read a book instance
+        Command select = das.getCommand("select book 1");
+		DataObject root = select.executeQuery();
+		DataObject book = root.getDataObject("BOOK[1]");
+		//Change a field to mark the instance 'dirty'
+		book.setInt("QUANTITY", 2);
+
+		
+		DAS das2 = DAS.FACTORY.createDAS(getConfig("ManagedBooksConfig.xml"), getConnection());
+		//Read a book instance
+        Command select2= das2.getCommand("select book 1");
+		DataObject root2 = select2.executeQuery();
+		DataObject book2 = root2.getDataObject("BOOK[1]");
+		//Change a field to mark the instance 'dirty'
+		book2.setInt("QUANTITY", 5);
+		das2.applyChanges(root2);
+
+        //Try to apply changes and catch the expecetd OCC Exception
 		try {		
 			das.applyChanges(root);
 			fail("An OCCException should be thrown");

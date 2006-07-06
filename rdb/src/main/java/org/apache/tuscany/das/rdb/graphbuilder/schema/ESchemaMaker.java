@@ -76,6 +76,7 @@ public class ESchemaMaker {
 
 			ResultMetadata resultMetadata = (ResultMetadata) iter.next();
 
+			// Create a Type for each Table represented in the ResultSet
 			Iterator names = resultMetadata.getAllTablePropertyNames()
 					.iterator();
 			while (names.hasNext()) {
@@ -90,7 +91,7 @@ public class ESchemaMaker {
 			// TODO tablePropertyMap is temporary until Tuscany-203 is fixed
 			HashMap tablePropertyMap = new HashMap();
 			
-			for (int i = 1; i <= resultMetadata.getColumnNames().size(); i++) {
+			for (int i = 1; i <= resultMetadata.getResultSetSize(); i++) {
 
 				Property ref = rootType.getProperty(resultMetadata.getTablePropertyName(i));
 				
@@ -167,10 +168,7 @@ public class ESchemaMaker {
 				Property childProp = SDOUtil.createProperty(child, r.getName() + "_opposite", parent);
 				SDOUtil.setOpposite(parentProp, childProp);
 				SDOUtil.setOpposite(childProp, parentProp);
-				SDOUtil.setMany(parentProp, r.isMany());
-				
-								
-
+				SDOUtil.setMany(parentProp, r.isMany());										
 			}
 
 		}

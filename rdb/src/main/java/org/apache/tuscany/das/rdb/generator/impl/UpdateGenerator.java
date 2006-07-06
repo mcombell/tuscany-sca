@@ -26,6 +26,7 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
+import org.apache.tuscany.das.rdb.impl.ManagedParameterImpl;
 import org.apache.tuscany.das.rdb.impl.OptimisticWriteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
@@ -47,7 +48,9 @@ public class UpdateGenerator extends BaseGenerator {
 	}
 
 	public UpdateCommandImpl getUpdateCommand(MappingWrapper mapping, DataObject changedObject, Table table) {
-		ArrayList parameters = new ArrayList();
+		ArrayList updatedProperties = new ArrayList();
+		ArrayList managedProperties = new ArrayList();
+		ArrayList whereClauseProperties = new ArrayList();
 		Type type = changedObject.getType();
 		TableWrapper t = new TableWrapper(table);
 		StringBuffer statement = new StringBuffer("update ");
@@ -59,8 +62,8 @@ public class UpdateGenerator extends BaseGenerator {
 		Iterator i = getChangedFields(mapping, summary, changedObject).iterator();
 
 		while (i.hasNext()) {
-			Property attr = (Property) i.next();
-			Column c = t.getColumnByPropertyName(attr.getName());
+			Property property = (Property) i.next();
+			Column c = t.getColumnByPropertyName(property.getName());
 			if ((c != null) && (c.isCollision() || c.isPrimaryKey())) {
 				// get rid of comma if OCC or PK is last field
 				if (!i.hasNext()) {
@@ -68,33 +71,39 @@ public class UpdateGenerator extends BaseGenerator {
 							.delete(statement.length() - 2, statement.length());
 				}
 			} else {
-				parameters.add(attr);
-				statement.append(c == null ? attr.getName() : c.getColumnName());
+				updatedProperties.add(property);
+				statement.append(c == null ? property.getName() : c.getColumnName());
 				statement.append(" = ?");
 				if (i.hasNext())
 					statement.append(", ");
 			}
 		}
 
+		if ( t.getManagedColumnPropertyName() != null ) {
+			statement.append(", ");
+			statement.append(t.getManagedColumnPropertyName());
+			statement.append(" = ?");
+			managedProperties.add(changedObject.getProperty(t.getManagedColumnPropertyName()));
+		}
 		statement.append(" where ");
 
 		Iterator names = t.getPrimaryKeyNames().iterator();
-		Iterator properties = t.getPrimaryKeyProperties().iterator();
-		while (names.hasNext() && properties.hasNext()) {
+		Iterator pkProperties = t.getPrimaryKeyProperties().iterator();
+		while (names.hasNext() && pkProperties.hasNext()) {
 			String name = (String) names.next();
-			String property = (String) properties.next();
+			String property = (String) pkProperties.next();
 			statement.append(name);
 			statement.append(" = ?");
-			if (names.hasNext() && properties.hasNext())
+			if (names.hasNext() && pkProperties.hasNext())
 				statement.append(" and ");
-			parameters.add(type.getProperty(property));
+			whereClauseProperties.add(type.getProperty(property));
 		}
 
 		if (t.getCollisionColumn() != null) {
 			statement.append(" and ");
 			statement.append(t.getCollisionColumn().getColumnName());
 			statement.append(" = ?");
-			parameters.add(type.getProperty(t.getCollisionColumnPropertyName()));
+			whereClauseProperties.add(type.getProperty(t.getCollisionColumnPropertyName()));
 		}
 
 		
@@ -104,21 +113,31 @@ public class UpdateGenerator extends BaseGenerator {
 		else
 			updateCommand = new UpdateCommandImpl(statement.toString());
 		
-		Iterator params = parameters.iterator();
-		for (int idx = 1; params.hasNext(); idx++ ) {
-			Property p = (Property)params.next();
-			ParameterImpl param = new ParameterImpl();
-			param.setName(p.getName());
-			param.setType(p.getType());
-			param.setConverter(getConverter(table, p.getName()));
-			param.setIndex(idx);
-			updateCommand.addParameter(param);
+		
+		int idx = 1;
+		Iterator params = updatedProperties.iterator();		
+		while ( params.hasNext()) {
+			Property p = (Property)params.next();			
+			updateCommand.addParameter(createParameter(t, p, idx++));
 		}
+		
+		params = managedProperties.iterator();
+		while ( params.hasNext()) {
+			Property p = (Property)params.next();			
+			updateCommand.addParameter(createManagedParameter(t, p, idx++));
+		}
+		
+		params = whereClauseProperties.iterator();		
+		while ( params.hasNext()) {
+			Property p = (Property)params.next();			
+			updateCommand.addParameter(createParameter(t, p, idx++));
+		}
+		
 		DebugUtil.debugln(getClass(), debug, statement.toString());
 		return updateCommand;
 	}
 
-	private List getAttributeProperties(DataObject obj) {
+	private List getDataTypeProperties(DataObject obj) {
 		ArrayList fields = new ArrayList();
 		Iterator i = obj.getType().getProperties().iterator();
 		while ( i.hasNext() ) {
@@ -163,30 +182,48 @@ public class UpdateGenerator extends BaseGenerator {
 		ArrayList parameters = new ArrayList();
 		ArrayList pkParams = new ArrayList();
 		
-		Iterator i = getAttributeProperties(changedObject).iterator();
+		Iterator i = getDataTypeProperties(changedObject).iterator();
 		while (i.hasNext()) {
-			Property attr = (Property) i.next();
-			String field = attr.getName();
+			Property property = (Property) i.next();
+			String propertyName = property.getName();
 
-			ParameterImpl p = getParameter(table, type.getProperty(field));
-			if (pkNames.contains(field)) {
+			ParameterImpl p = createParameter(wrapper, type.getProperty(propertyName));
+			if (pkNames.contains(propertyName)) {
 				pkParams.add(p);
 			} else {
 				parameters.add(p);
 			}
 		}
-		parameters.addAll(pkParams);
+		parameters.addAll(pkParams);		
+		
 		return parameters;
 		
 	}
 
-	private ParameterImpl getParameter(Table table, Property property) {
-		ParameterImpl param = new ParameterImpl();
+	private ParameterImpl createManagedParameter(TableWrapper table, Property property, int idx) {
+		ParameterImpl param = new ManagedParameterImpl();
 		param.setName(property.getName());
 		param.setType(property.getType());
-		param.setConverter(getConverter(table, property.getName()));
+		param.setConverter(getConverter(table.getConverter(property.getName())));
+		if ( idx != -1)
+			param.setIndex(idx);
 		
 		return param;
 	}
+	private ParameterImpl createParameter(TableWrapper table, Property property) {
+		return createParameter(table, property, -1);
+	}
+	private ParameterImpl createParameter(TableWrapper table, Property property, int idx) {		
+		ParameterImpl param = new ParameterImpl();
+		param.setName(property.getName());
+		param.setType(property.getType());
+		param.setConverter(getConverter(table.getConverter(property.getName())));
+		if ( idx != -1)
+			param.setIndex(idx);
+		
+		return param;
+	}
+
+
 }
 

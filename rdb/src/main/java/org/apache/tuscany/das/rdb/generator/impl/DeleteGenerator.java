@@ -64,15 +64,16 @@ public class DeleteGenerator extends BaseGenerator {
 	}
 
 	public DeleteCommandImpl getDeleteCommand(Table t) {
+		TableWrapper tw = new TableWrapper(t);
 		DeleteCommandImpl deleteCommand = new DeleteCommandImpl(getDeleteStatement(t));
 		
-		Iterator i = getDeleteParameters(t).iterator();
+		Iterator i = tw.getPrimaryKeyProperties().iterator();
 		for(int idx=1; i.hasNext(); idx++) {
 			String property = (String) i.next();
 			ParameterImpl p = new ParameterImpl();
 			p.setName(property);
 			p.setType(SDODataTypes.OBJECT);
-			p.setConverter(getConverter(t, property));
+			p.setConverter(getConverter(tw.getConverter(property)));
 			p.setIndex(idx);
 			deleteCommand.addParameter(p);
 		}

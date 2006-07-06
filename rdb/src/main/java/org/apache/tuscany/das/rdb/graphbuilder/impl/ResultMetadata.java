@@ -39,9 +39,9 @@ public class ResultMetadata {
 
     private HashMap tableToColumnMap = new HashMap();
 
-    private ArrayList tablePropertyNames = new ArrayList();
+    private ArrayList typeNames = new ArrayList();
 
-    private ArrayList columnPropertyNames = new ArrayList();
+    private ArrayList propertyNames = new ArrayList();
 
     private final ResultSet resultSet;
 
@@ -69,52 +69,26 @@ public class ResultMetadata {
         for (int i = 1; i <= resultSetShape.getColumnCount(); i++) {
             String tableName = resultSetShape.getTableName(i);
 
-            String tableProperty = mappingWrapper
+            String typeName = mappingWrapper
                     .getTableTypeName(tableName);
-            String columnProperty = mappingWrapper.getColumnPropertyName(
+            String propertyName = mappingWrapper.getColumnPropertyName(
                     tableName, resultSetShape.getColumnName(i));
-            String converter = mappingWrapper.getConverter(tableName,
+            String converterName = mappingWrapper.getConverter(tableName,
                     resultSetShape.getColumnName(i));
-            if (converter != null) {
-                
-                try {
-                    
-                    Class converterClazz=  Class.forName(converter, true, Thread.currentThread().getContextClassLoader());
-                    if(null != converterClazz)
-                        converters[i - 1]=  (Converter) converterClazz.newInstance();
-                     
-                }catch( Exception e){
-                  //try loading below....
-                    converters[i - 1]= null; //safety
-                }
-                    
-                    
-                 if(null == converters[i - 1] )   
-                 try{   
-                    
-                    
-                    Converter convInstance = (Converter) Class.forName(
-                            converter).newInstance();
-                    converters[i - 1] = convInstance;
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-
-            } else {
-                // TODO make static
-                converters[i - 1] = new DefaultConverter();
-            }
+            
+            converters[i-1] = loadConverter(converterName);
+            
             DebugUtil.debugln(getClass(), debug, "Adding table/column: "
-                    + tableProperty + "/" + columnProperty);
-            tablePropertyNames.add(tableProperty);
-            columnPropertyNames.add(columnProperty);
+                    + typeName + "/" + propertyName);
+            typeNames.add(typeName);
+            propertyNames.add(propertyName);
 
             Collection columns = (Collection) tableToColumnMap
-                    .get(tableProperty);
+                    .get(typeName);
             if (columns == null)
                 columns = new ArrayList();
-            columns.add(columnProperty);
-            tableToColumnMap.put(tableProperty, columns);
+            columns.add(propertyName);
+            tableToColumnMap.put(typeName, columns);
         }
 
         // Add any tables defined in the model but not included in the ResultSet
@@ -138,17 +112,36 @@ public class ResultMetadata {
 
     }
 
+	private Converter loadConverter(String converterName) {
+		if (converterName != null) {
+		    
+		    try {
+		        
+		        Class converterClazz=  Class.forName(converterName, true, Thread.currentThread().getContextClassLoader());
+		        if(null != converterClazz)
+		            return (Converter) converterClazz.newInstance();		         
+		    } catch( Exception ex){
+		    	throw new RuntimeException(ex);
+		    }		
+		    
+	        try{   			        			        
+		        Class converterClazz = Class.forName(converterName);
+		        if ( converterClazz != null)
+		        	return (Converter)converterClazz.newInstance();		      
+		    } catch (Exception ex) {
+		        throw new RuntimeException(ex);
+		    }
+		}
+		return new DefaultConverter();
+	}
+
     private void debug(Object string) {
         if (debug)
             DebugUtil.debugln(getClass(), debug, string);
-    }
-
-    public Collection getColumnNames() {
-        return columnPropertyNames;
-    }
+    }   
 
     public String getColumnPropertyName(int i) {
-        return (String) columnPropertyNames.get(i - 1);
+        return (String) propertyNames.get(i - 1);
     }
 
     public String getDatabaseColumnName(int i) {
@@ -156,7 +149,7 @@ public class ResultMetadata {
     }
 
     public String getTableName(String columnName) {
-        return (String) tablePropertyNames.get(columnPropertyNames
+        return (String) typeNames.get(propertyNames
                 .indexOf(columnName));
     }
 
@@ -165,12 +158,12 @@ public class ResultMetadata {
     }
 
     public Type getDataType(String columnName) {
-        return resultSetShape.getColumnType(columnPropertyNames
+        return resultSetShape.getColumnType(propertyNames
                 .indexOf(columnName));
     }
 
     public String getTablePropertyName(int i) {
-        return (String) tablePropertyNames.get(i - 1);
+        return (String) typeNames.get(i - 1);
     }
 
     public Collection getAllTablePropertyNames() {
@@ -181,7 +174,7 @@ public class ResultMetadata {
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (Table Names: ");
-        Iterator i = tablePropertyNames.iterator();
+        Iterator i = typeNames.iterator();
         while (i.hasNext()) {
             String tableName = (String) i.next();
             result.append(' ');
@@ -191,7 +184,7 @@ public class ResultMetadata {
 
         result.append(" columnNames: ");
 
-        i = columnPropertyNames.iterator();
+        i = propertyNames.iterator();
         while (i.hasNext()) {
             String columnName = (String) i.next();
             result.append(' ');

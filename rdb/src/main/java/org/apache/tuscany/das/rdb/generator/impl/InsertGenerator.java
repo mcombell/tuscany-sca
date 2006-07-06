@@ -91,7 +91,7 @@ public class InsertGenerator extends BaseGenerator {
 			ParameterImpl p = new ParameterImpl();
 			p.setName(property.getName());
 			p.setType(property.getType());
-			p.setConverter(getConverter(t, property.getName()));
+			p.setConverter(getConverter(table.getConverter(property.getName())));
 			p.setIndex(idx);
 			cmd.addParameter(p);
 

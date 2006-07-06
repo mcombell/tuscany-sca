@@ -121,4 +121,15 @@ public class TableWrapper {
 		else
 			return c.getColumnName();
 	}
+
+	public String getManagedColumnPropertyName() {
+		Iterator i = table.getColumn().iterator();
+		while (i.hasNext()) {
+			Column c = (Column) i.next();
+			if (c.isManaged())
+				return c.getPropertyName() == null ? c.getColumnName() : c.getPropertyName();
+		}
+		return null;
+		
+	}
 }
