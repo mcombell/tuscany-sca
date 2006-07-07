@@ -20,7 +20,6 @@ import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.company.CompanyType;
-import org.apache.tuscany.das.rdb.test.company.DatagraphRoot;
 import org.apache.tuscany.das.rdb.test.company.DepartmentType;
 import org.apache.tuscany.das.rdb.test.company.EmployeeType;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
@@ -83,10 +82,10 @@ public class CompanyTests extends DasTest {
         
 
         // Get the graph
-        DatagraphRoot root = (DatagraphRoot) selectCommand.executeQuery();
+        DataObject root = selectCommand.executeQuery();
         
         
-        CompanyType company = (CompanyType) root.getCompanies().get(0);
+        CompanyType company = (CompanyType) root.getList("CompanyType").get(0);
 
         assertEquals("MegaCorp", company.getName());
 

@@ -24,7 +24,6 @@ import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.customer.AnOrder;
 import org.apache.tuscany.das.rdb.test.customer.Customer;
 import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
-import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -58,7 +57,7 @@ public class TopDown extends DasTest {
 		DataObject root = select.executeQuery();
 
 		// Modify a customer
-        Customer customer = (Customer)root.getDataObject("customers[1]");
+        Customer customer = (Customer)root.getDataObject("Customer[1]");
 		customer.setLastName("Pavick");
 
 		// Modify an order

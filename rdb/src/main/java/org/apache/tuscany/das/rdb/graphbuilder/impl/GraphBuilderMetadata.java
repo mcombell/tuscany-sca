@@ -95,11 +95,11 @@ public class GraphBuilderMetadata {
 	 * @return
 	 */
 	public Type getSchema() {
-		if ( this.schema == null ) {
-			ESchemaMaker schemaMaker = new ESchemaMaker(this);
+		ESchemaMaker schemaMaker = new ESchemaMaker(this);
+		if ( this.schema == null ) {		
 			return schemaMaker.createTypes();
 		} else {
-			return this.schema;
+			return schemaMaker.createTypes(this.schema);
 		}
 	}
 

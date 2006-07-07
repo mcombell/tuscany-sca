@@ -15,13 +15,6 @@
   limitations under the License.
  -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:this="http:///org.apache.tuscany.das.rdb.test/customer.xsd" targetNamespace="http:///org.apache.tuscany.das.rdb.test/customer.xsd">
-	<xsd:complexType name="DataGraphRoot">		
-	 	<xsd:sequence>
-	 		
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="customers" type="this:Customer"/>
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="orders" type="this:AnOrder"/>
-        </xsd:sequence>
-	</xsd:complexType>
 	
 	  <xsd:complexType name="Customer">
        <xsd:sequence>

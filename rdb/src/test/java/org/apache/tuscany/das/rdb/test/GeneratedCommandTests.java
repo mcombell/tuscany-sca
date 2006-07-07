@@ -24,7 +24,6 @@ import org.apache.tuscany.das.rdb.test.commands.ReadCustomersStaticTypesCommand;
 import org.apache.tuscany.das.rdb.test.commands.ReadCustomersWithShapeCommand;
 import org.apache.tuscany.das.rdb.test.commands.SimpleReadCustomersWithShapeCommand;
 import org.apache.tuscany.das.rdb.test.customer.Customer;
-import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -65,9 +64,9 @@ public class GeneratedCommandTests extends DasTest {
 		cmd.setConnection(getConnection());
 		cmd.setParameterValue("LASTNAME", "Williams");
 		
-		DataGraphRoot root = (DataGraphRoot) cmd.executeQuery();
+		DataObject root =  cmd.executeQuery();
 
-		List customers = root.getCustomers();
+		List customers = root.getList("Customer");
 		assertEquals(4, customers.size());
 		
 		Customer cust1 = (Customer) customers.get(0);

@@ -22,10 +22,11 @@ import java.util.Collection;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
-import org.apache.tuscany.das.rdb.test.customer.DataGraphRoot;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.sdo.util.SDOUtil;
+
+import commonj.sdo.DataObject;
 
 
 /**
@@ -45,9 +46,9 @@ public class SimplestStaticCrud extends DasTest {
 		Command select = das.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = :LASTNAME");		
 		select.setParameterValue("LASTNAME", "Williams");	
 		
-		DataGraphRoot root = (DataGraphRoot) select.executeQuery();
+		DataObject root = select.executeQuery();
 		
-		Collection customers = root.getCustomers();
+		Collection customers = root.getList("Customer");
 		assertEquals(4, customers.size());
 	}
 

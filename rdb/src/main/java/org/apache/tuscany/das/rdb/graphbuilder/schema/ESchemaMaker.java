@@ -25,8 +25,10 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultMetadata;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.sdo.helper.TypeHelperImpl;
 import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.apache.tuscany.sdo.util.SDOUtil;
+import org.eclipse.emf.ecore.EPackage;
 
 import commonj.sdo.Property;
 import commonj.sdo.Type;
@@ -43,6 +45,8 @@ public class ESchemaMaker {
 	private final GraphBuilderMetadata metadata;
 
 	private boolean debug = false;
+
+	private TypeHelper typeHelper = SDOUtil.createTypeHelper();
 
 	/**
 	 * Constructor for ESchemaMaker. Creates an SDO model based on the metadata
@@ -63,13 +67,12 @@ public class ESchemaMaker {
 	 */
 
 	public Type createTypes() {
-		TypeHelper types = SDOUtil.createTypeHelper();	
 		
 		DataObjectUtil.initRuntime();
 		SDOUtil.createDataGraph();
 
 	
-		Type rootType = SDOUtil.createType(types, getURI(), "DataGraphRoot", false);	
+		Type rootType = SDOUtil.createType(typeHelper, getURI(), "DataGraphRoot", false);	
 
 		Iterator iter = metadata.getResultMetadata().iterator();
 		while (iter.hasNext()) {
@@ -82,7 +85,7 @@ public class ESchemaMaker {
 			while (names.hasNext()) {
 				String tableName = (String) names.next();
 	
-				Type tableType = SDOUtil.createType(types, getURI(), tableName, false);										
+				Type tableType = SDOUtil.createType(typeHelper, getURI(), tableName, false);										
 				Property property = SDOUtil.createProperty(rootType, tableName, tableType);
 				SDOUtil.setMany(property,true);		
 				SDOUtil.setContainment(property, true);
@@ -178,6 +181,20 @@ public class ESchemaMaker {
 
 	private String getURI() {
 		return "http:///org.apache.tuscany.das.rdb/das";
+	}
+
+	public Type createTypes(Type aType) {
+		Type rootType = SDOUtil.createType(typeHelper, getURI() + "/DataGraphRoot", "DataGraphRoot", false);	
+		
+		EPackage pkg = ((TypeHelperImpl)typeHelper).getExtendedMetaData().getPackage(aType.getURI());
+		Iterator i = pkg.getEClassifiers().iterator();
+		while ( i.hasNext() ) {
+			Type type = (Type) i.next();
+			Property property = SDOUtil.createProperty(rootType, type.getName(), type);
+			SDOUtil.setContainment(property, true);
+			SDOUtil.setMany(property, true);			
+		}
+		return rootType;
 	}	
 	
 
