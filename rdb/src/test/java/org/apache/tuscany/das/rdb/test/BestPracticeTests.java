@@ -116,7 +116,7 @@ public class BestPracticeTests extends DasTest {
         // Verify the change
 
         select = das.getCommand("company by id with departments");
-        select.setParameterValue("ID", id);
+        select.setParameterValue(1, id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
                 .getString("NAME"));
@@ -132,7 +132,7 @@ public class BestPracticeTests extends DasTest {
 
         Command select = das.getCommand("company by id with departments");
         Integer idOfNoExistingCompany = new Integer(-1);
-        select.setParameterValue("ID", idOfNoExistingCompany);
+        select.setParameterValue(1, idOfNoExistingCompany);
         DataObject root = select.executeQuery();
         
         //Will fail if there is no property named "COMPANY"

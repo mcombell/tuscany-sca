@@ -78,54 +78,6 @@ public class DefectTests extends DasTest {
         assertEquals(1, root.getList("conmgt.serverstatus").size());
 
     }
-
-    /**
-     * Yin Chen reports ... "In the class Statement, method: public int
-     * executeUpdate(Parameters parameters) - its tossing out RuntimeException
-     * when the value of the parameter is null. "
-     * 
-     * His example build a update statement and sets one parameter value to be
-     * null. I will try to duplicate with an insert since that is simpler
-     * 
-     */
-    public void testYingChen12162005() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das
-                .createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");       
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", "Williams");
-        insert.setParameterValue("ADDRESS", null);
-        insert.execute();
-
-        // Verify
-        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
-        DataObject root = select.executeQuery();
-        assertEquals(1, root.getList("CUSTOMER").size());
-        assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
-
-    }
-
-    /**
-     * Try a workaround using CommandGroup
-     */
-    public void testYingChen12162005Workaraound() throws Exception {
-
-        // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfig.xml"),getConnection());      
-
-        Command insert = das.getCommand("insert customer");
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", "Williams");
-        insert.setParameterValue("ADDRESS", null);
-        insert.execute();
-
-        // Verify
-        Command select = das.getCommand("read customer 10");
-        DataObject root = select.executeQuery();
-        assertEquals(1, root.getList("CUSTOMER").size());
-        assertEquals("5528 Wells Fargo Dr", root.get("CUSTOMER[1]/ADDRESS"));
-
-    }
     
 
     public void testUpdateChildThatHasGeneratedKey() throws Exception {

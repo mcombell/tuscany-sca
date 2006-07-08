@@ -63,7 +63,7 @@ public class SDODataTypeHelper {
 			return java.sql.Types.VARCHAR;
 		else if ( sdoType == SDODataTypes.OBJECT )
 			return java.sql.Types.JAVA_OBJECT;
-		else if ( sdoType == SDODataTypes.SHORT )
+ 		else if ( sdoType == SDODataTypes.SHORT )
 			return java.sql.Types.SMALLINT;
 		else if ( sdoType == SDODataTypes.STRING )
 			return java.sql.Types.VARCHAR;

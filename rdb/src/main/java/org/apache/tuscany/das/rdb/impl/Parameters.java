@@ -104,8 +104,7 @@ public class Parameters {
 	}
 
 	public ParameterImpl findOrCreateParameterWithIndex(int index) {
-		return findOrCreateParameterWithIndex(index, ParameterImpl.IN,
-				SDODataTypes.OBJECT);
+        return findOrCreateParameterWithIndex(index, ParameterImpl.IN, null);
 	}
 
 	public void setParameter(int index, Object value) {

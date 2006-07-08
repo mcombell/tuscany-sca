@@ -64,7 +64,7 @@ public class OneToOneRelationshipTests extends DasTest {
                 .createDAS(getConfig("CompanyEmployeeConfig.xml"), getConnection());       
 
         Command read = das.getCommand("get named employee with company");
-        read.setParameterValue("NAME", "Mary Smith");
+        read.setParameterValue(1, "Mary Smith");
         DataObject root = read.executeQuery();
         DataObject company = root.getDataObject("EMPLOYEE[1]/company->employee");
 

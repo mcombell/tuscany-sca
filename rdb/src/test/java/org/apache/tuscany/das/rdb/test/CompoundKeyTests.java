@@ -43,11 +43,11 @@ public class CompoundKeyTests extends DasTest {
     public void testRead() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command getOrderDetails = das
-                .createCommand("Select * from ORDERDETAILS where ORDERID = :ORDERID AND PRODUCTID = :PRODUCTID");
+                .createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
        
 
-        getOrderDetails.setParameterValue("ORDERID", new Integer(1));
-        getOrderDetails.setParameterValue("PRODUCTID", new Integer(1));
+        getOrderDetails.setParameterValue(1, new Integer(1));
+        getOrderDetails.setParameterValue(2, new Integer(1));
 
         DataObject root = getOrderDetails.executeQuery();
 

@@ -26,7 +26,7 @@ import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
 public class ReadCustomersByLastnameCommand extends ReadCommandImpl {
 
-	private static final String sqlString = "select * from CUSTOMER where LASTNAME = :LASTNAME";
+	private static final String sqlString = "select * from CUSTOMER where LASTNAME = ?";
 	private static final Config mapping;
 	
 	static {

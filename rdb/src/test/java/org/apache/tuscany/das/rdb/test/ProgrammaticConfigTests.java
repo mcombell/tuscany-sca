@@ -117,7 +117,7 @@ public class ProgrammaticConfigTests extends DasTest {
      */
     public void test_4() throws Exception {
 
-        String statement = "SELECT * FROM BOOK WHERE BOOK.BOOK_ID = :ID";
+        String statement = "SELECT * FROM BOOK WHERE BOOK.BOOK_ID = ?";
 
         // Create Table config programmatically
         ConfigHelper helper = new ConfigHelper();
@@ -126,7 +126,7 @@ public class ProgrammaticConfigTests extends DasTest {
         
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         Command select = das.createCommand(statement);       
-        select.setParameterValue("ID", new Integer(1));
+        select.setParameterValue(1, new Integer(1));
 
         DataObject root = select.executeQuery();
         
@@ -138,7 +138,7 @@ public class ProgrammaticConfigTests extends DasTest {
         das.applyChanges(root);
         
         //Verify
-        select.setParameterValue("ID", new Integer(1001));
+        select.setParameterValue(1, new Integer(1001));
         root = select.executeQuery();
         assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
         

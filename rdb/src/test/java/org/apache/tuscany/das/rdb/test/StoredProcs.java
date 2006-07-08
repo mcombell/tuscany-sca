@@ -68,9 +68,9 @@ public class StoredProcs extends DasTest {
 	public void testGetNamedCompanyByName() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command read = das
-				.createCommand("{call GETNAMEDCOMPANY(:NAME)}");
+				.createCommand("{call GETNAMEDCOMPANY(?)}");
 	
-		read.setParameterValue("NAME", "MegaCorp");
+		read.setParameterValue(1, "MegaCorp");
 		DataObject root = read.executeQuery();
 
 		assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));

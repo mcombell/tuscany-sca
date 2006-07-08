@@ -59,19 +59,19 @@ public interface Command {
      /**
 	 * Returns the value of the associated Parameter
 	 * 
-	 * @param name
-	 *            the name of the Parameter
-	 * @return the value of the Parameter
-	 */
-	public Object getParameterValue(String name);
-
-	/**
-	 * Returns the value of the associated Parameter
-	 * 
 	 * @param index
 	 *            the index of the Parameter
 	 * @return the value of the Parameter
 	 */
 	public Object getParameterValue(int index);
 
+    
+    /**
+     * Returns the value of the database-generated key.  This method is specific to an "insert" 
+     * command and will be valid only after the command has been executed.
+     * 
+     * @return the generated key
+     */
+    public int getGeneratedKey();
+    
 }

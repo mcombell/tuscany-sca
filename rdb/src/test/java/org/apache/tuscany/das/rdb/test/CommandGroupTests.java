@@ -133,7 +133,7 @@ public class CommandGroupTests extends DasTest {
         int id = root.getInt("CUSTOMER[1]/ID");
 
         Command update = das.getCommand("update customer");
-        update.setParameterValue("ID", new Integer(id));
+        update.setParameterValue(1, new Integer(id));
         update.execute();
 
         // Verify update - reuse select command
@@ -158,7 +158,7 @@ public class CommandGroupTests extends DasTest {
 
         // Read the specific Customer from above and its related orders
         Command custOrders = das.getCommand("customer and orders");
-        custOrders.setParameterValue("ID", id);
+        custOrders.setParameterValue(1, id);
         root = custOrders.executeQuery();
 
         // Modify the first order and flush this change back to the database
@@ -168,7 +168,7 @@ public class CommandGroupTests extends DasTest {
 
         // Verify
         Command orderByID = das.getCommand("order by id");
-        orderByID.setParameterValue("ID", orderId);
+        orderByID.setParameterValue(1, orderId);
         assertEquals("Defibrillator", root.getString("ANORDER[1]/PRODUCT"));
 
     }

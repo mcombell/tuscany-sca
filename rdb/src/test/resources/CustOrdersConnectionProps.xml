@@ -19,9 +19,9 @@
     <Command name="all customers" SQL="select * from CUSTOMER" kind="Select"/>
     
     <Command name="customer and orders"
-        SQL="select * from CUSTOMER left join ANORDER on CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID"
+        SQL="select * from CUSTOMER left join ANORDER on CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?"
         kind="Select">
-        <Parameter name=":ID"/>
+<!--       <Parameter name=":ID"/>   --> 
     </Command>
     
     <Command name="customer and orders"

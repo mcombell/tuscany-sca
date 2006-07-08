@@ -85,9 +85,9 @@ public class CorrectedDefectTests extends DasTest {
 
         // verify cust1 relationship updates
         select = das
-                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");
+                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
       
-        select.setParameterValue("ID", new Integer(custID));
+        select.setParameterValue(1, new Integer(custID));
         root = select.executeQuery();
 
         assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/orders").size());
@@ -101,12 +101,12 @@ public class CorrectedDefectTests extends DasTest {
         // 19:29:52.636')";
         // String sql = "insert into conmgt.serverstatus (managedserverid,
         // timestamp) values (316405209, '2005-11-23 19:29:52.636')";
-        String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (:serverid, :timestamp)";
+        String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (?, ?)";
 
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand(sql);
-        insert.setParameterValue("serverid", new Integer(316405209));
-        insert.setParameterValue("timestamp", "2005-11-23 19:29:52.636");   
+        insert.setParameterValue(1, new Integer(316405209));
+        insert.setParameterValue(2, "2005-11-23 19:29:52.636");   
         insert.execute();
 
         // Verify
@@ -149,12 +149,12 @@ public class CorrectedDefectTests extends DasTest {
      */
     public void testDiltonsNullParameterBug1() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");      
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", null);
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
+        Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");      
+        insert.setParameterValue(1, new Integer(10));
+        insert.setParameterValue(2, null);
+        insert.setParameterValue(3, "5528 Wells Fargo Dr");
         insert.execute();
-
+        
         // Verify
         Command select = das.createCommand("Select * from CUSTOMER where ID = 10");     
         DataObject root = select.executeQuery();
@@ -168,10 +168,10 @@ public class CorrectedDefectTests extends DasTest {
      */
     public void testDiltonsNullParameterBug2() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");       
-        insert.setParameterValue("ID", new Integer(10));
+        Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");       
+        insert.setParameterValue(1, new Integer(10));
         // insert.setParameterValue("LASTNAME", null);
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
+        insert.setParameterValue(3, "5528 Wells Fargo Dr");
 
         try {
             insert.execute();
@@ -186,10 +186,10 @@ public class CorrectedDefectTests extends DasTest {
      */
     public void testDiltonsNullParameterBug3() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand("insert into CUSTOMER values (:ID, :LASTNAME, :ADDRESS)");    
-        insert.setParameterValue("ID", new Integer(10));
-        insert.setParameterValue("LASTNAME", "");
-        insert.setParameterValue("ADDRESS", "5528 Wells Fargo Dr");
+        Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");    
+        insert.setParameterValue(1, new Integer(10));
+        insert.setParameterValue(2, "");
+        insert.setParameterValue(3, "5528 Wells Fargo Dr");
         insert.execute();
 
         // Verify
@@ -223,4 +223,31 @@ public class CorrectedDefectTests extends DasTest {
         das.applyChanges(root);        
     }
 
+    /**
+     * Yin Chen reports ... "In the class Statement, method: public int
+     * executeUpdate(Parameters parameters) - its tossing out RuntimeException
+     * when the value of the parameter is null. "
+     * 
+     * His example build a update statement and sets one parameter value to be
+     * null. I will try to duplicate with an insert since that is simpler
+     * 
+     */
+    public void testYingChen12162005() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command insert = das
+                .createCommand("insert into CUSTOMER values (?, ?, ?)");       
+        insert.setParameterValue(1, new Integer(10));
+        insert.setParameterValue(2, "Williams");
+        insert.setParameterValue(3, null);
+        insert.execute();
+
+        // Verify
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 10");      
+        DataObject root = select.executeQuery();
+        assertEquals(1, root.getList("CUSTOMER").size());
+        assertNull(root.get("CUSTOMER[1]/ADDRESS"));
+
+    }
+
+    
 }

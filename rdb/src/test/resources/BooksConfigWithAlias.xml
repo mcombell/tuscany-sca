@@ -20,7 +20,7 @@
     
     <Command name="get Cat in the Hat" SQL="SELECT * FROM BOOK WHERE NAME = 'Cat in the Hat'" kind="Select"/>
     
-    <Command name="get book by ID" SQL="SELECT * FROM BOOK WHERE BOOK.BOOK_ID = :ID" kind="Select"/>
+    <Command name="get book by ID" SQL="SELECT * FROM BOOK WHERE BOOK.BOOK_ID = ?" kind="Select"/>
     
     
     

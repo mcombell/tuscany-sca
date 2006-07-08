@@ -109,6 +109,15 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 		return statement.getConnection();
 	}
 
+    
+    /* 
+     * The default impl is to throw an exception.  This is overridden by
+     * InsertCommandImpl
+     */
+    public int getGeneratedKey() {
+        
+        throw new RuntimeException("This method is only valid for insert commands");
+    }
 
 	public void close() {
 		statement.close();

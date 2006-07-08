@@ -29,87 +29,81 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
 
-
 public class RelationshipTests extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		new CustomerData(getAutoConnection()).refresh();
-		new OrderData(getAutoConnection()).refresh();
+    protected void setUp() throws Exception {
+        super.setUp();
 
-	}
+        new CustomerData(getAutoConnection()).refresh();
+        new OrderData(getAutoConnection()).refresh();
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    }
 
-	/**
-	 * Test ability to read a compound graph
-	 */
-	public void testRead() throws Exception {
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-		String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
+    /**
+     * Test ability to read a compound graph
+     */
+    public void testRead() throws Exception {
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"), getConnection());
-		// Read some customers and related orders
-		Command select = das.createCommand(statement);	
+        String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
 
-		DataObject root = select.executeQuery();
-		DataObject customer = root.getDataObject("CUSTOMER[1]");
+        DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"), getConnection());
+        // Read some customers and related orders
+        Command select = das.createCommand(statement);
 
-		assertEquals(2, customer.getList("orders").size());
+        DataObject root = select.executeQuery();
+        DataObject customer = root.getDataObject("CUSTOMER[1]");
 
-	}
+        assertEquals(2, customer.getList("orders").size());
 
-	/**
-	 * Same as above except uses xml file for relationhip and key information.
-	 * Employs CUD generation.
-	 */
-	public void testRelationshipModification2() throws Exception {
+    }
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerOrderMapping.xml"), getConnection());
-		// Read some customers and related orders
-		Command select = das
-				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");	
+    /**
+     * Same as above except uses xml file for relationhip and key information.
+     * Employs CUD generation.
+     */
+    public void testRelationshipModification2() throws Exception {
 
-		DataObject root = select.executeQuery();
+        DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerOrderMapping.xml"), getConnection());
+        // Read some customers and related orders
+        Command select = das
+                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
 
-		DataObject cust1 = root.getDataObject("CUSTOMER[1]");
-		DataObject cust2 = root.getDataObject("CUSTOMER[2]");
+        DataObject root = select.executeQuery();
 
-		// Save IDs
-		Integer cust1ID = (Integer) cust1.get("ID");
-		Integer cust2ID = (Integer) cust2.get("ID");
-		// save order count
-		Integer cust1OrderCount = new Integer(cust1.getList("orders").size());
-		Integer cust2OrderCount = new Integer(cust2.getList("orders").size());
+        DataObject cust1 = root.getDataObject("CUSTOMER[1]");
+        DataObject cust2 = root.getDataObject("CUSTOMER[2]");
 
-		// Move an order to cust1 from cust2
-		DataObject order = (DataObject) cust2.getList("orders").get(0);
-		cust1.getList("orders").add(order);
-			
+        // Save IDs
+        Integer cust1ID = (Integer) cust1.get("ID");
+        Integer cust2ID = (Integer) cust2.get("ID");
+        // save order count
+        Integer cust1OrderCount = new Integer(cust1.getList("orders").size());
+        Integer cust2OrderCount = new Integer(cust2.getList("orders").size());
 
-		// Flush changes	
-		das.applyChanges(root);
+        // Move an order to cust1 from cust2
+        DataObject order = (DataObject) cust2.getList("orders").get(0);
+        cust1.getList("orders").add(order);
 
-		// verify cust1 relationship updates
-		select = das
-				.createCommand(
-						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");	
-		select.setParameterValue("ID", cust1ID);
+        // Flush changes
+        das.applyChanges(root);
 
-		root = select.executeQuery();
-		assertEquals(cust1OrderCount.intValue() + 1, root.getList(
-				"CUSTOMER[1]/orders").size());
+        // verify cust1 relationship updates
+        select = das
+                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+        select.setParameterValue(1, cust1ID);
 
-		// verify cust2 relationship updates
-		select.setParameterValue("ID", cust2ID);
-		root = select.executeQuery();
-		assertEquals(cust2OrderCount.intValue() - 1, root.getList(
-				"CUSTOMER[1]/orders").size());
+        root = select.executeQuery();
+        assertEquals(cust1OrderCount.intValue() + 1, root.getList("CUSTOMER[1]/orders").size());
 
-	}
+        // verify cust2 relationship updates
+        select.setParameterValue(1, cust2ID);
+        root = select.executeQuery();
+        assertEquals(cust2OrderCount.intValue() - 1, root.getList("CUSTOMER[1]/orders").size());
+
+    }
 
 }

@@ -41,12 +41,12 @@ public class GraphMergeTests extends DasTest {
 	public void testSingleTableMerge() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command select = das
-				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");	
-		select.setParameterValue("ID", "3");
+				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= ?");	
+		select.setParameterValue(1, "3");
 		DataObject graph1 = select.executeQuery();
 		assertEquals(3, graph1.getList("CUSTOMER").size());
 
-		select.setParameterValue("ID", "5");
+		select.setParameterValue(1, "5");
 		DataObject graph2 = select.executeQuery();
 		assertEquals(5, graph2.getList("CUSTOMER").size());
 
@@ -60,16 +60,16 @@ public class GraphMergeTests extends DasTest {
 	public void testSingleTableMergeThreeGraphs() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command select = das
-				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= :ID");		
-		select.setParameterValue("ID", "3");
+				.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where ID <= ?");		
+		select.setParameterValue(1, "3");
 		DataObject graph1 = select.executeQuery();
 		assertEquals(3, graph1.getList("CUSTOMER").size());
 
-		select.setParameterValue("ID", "4");
+		select.setParameterValue(1, "4");
 		DataObject graph2 = select.executeQuery();
 		assertEquals(4, graph2.getList("CUSTOMER").size());
 
-		select.setParameterValue("ID", "5");
+		select.setParameterValue(1, "5");
 		DataObject graph3 = select.executeQuery();
 		assertEquals(5, graph3.getList("CUSTOMER").size());
 
@@ -90,15 +90,15 @@ public class GraphMergeTests extends DasTest {
     	DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         //Read some customers and related orders
         Command select = das.createCommand(
-                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");  
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");  
       
-        select.setParameterValue("ID", new Integer(1));
+        select.setParameterValue(1, new Integer(1));
         DataObject graph1 = select.executeQuery();
         
         DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
         assertEquals(2, customer.getList("orders").size());    
         
-        select.setParameterValue("ID", new Integer(2));
+        select.setParameterValue(1, new Integer(2));
         DataObject graph2 = select.executeQuery();
         DataObject customer2 = (DataObject)graph2.getList("CUSTOMER").get(0);
         assertEquals(1, graph2.getList("CUSTOMER").size());
@@ -125,9 +125,9 @@ public class GraphMergeTests extends DasTest {
     	DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         //Read some customers and related orders
         Command select = das.createCommand(
-                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = :ID");  
+                "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");  
      
-        select.setParameterValue("ID", new Integer(1));
+        select.setParameterValue(1, new Integer(1));
         DataObject graph1 = select.executeQuery();
         
         DataObject customer = (DataObject)graph1.getList("CUSTOMER").get(0);
