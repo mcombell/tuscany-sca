@@ -58,7 +58,7 @@ public class StoredProcs extends DasTest {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command read = das.createCommand("{call GETNAMEDCOMPANY(?)}");
 	
-		read.setParameterValue(1, "MegaCorp");
+		read.setParameter(1, "MegaCorp");
 		DataObject root = read.executeQuery();
 
 		assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
@@ -70,7 +70,7 @@ public class StoredProcs extends DasTest {
 		Command read = das
 				.createCommand("{call GETNAMEDCOMPANY(?)}");
 	
-		read.setParameterValue(1, "MegaCorp");
+		read.setParameter(1, "MegaCorp");
 		DataObject root = read.executeQuery();
 
 		assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
@@ -81,7 +81,7 @@ public class StoredProcs extends DasTest {
 	public void testGetCustomersAndOrder() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
 		Command read = das.createCommand("{call getCustomerAndOrders(?)}");
-		read.setParameterValue(1, new Integer(1));
+		read.setParameter(1, new Integer(1));
 		
 		DataObject root = read.executeQuery();
 
@@ -101,10 +101,10 @@ public class StoredProcs extends DasTest {
 	public void testGetNamedCustomers() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConfig("storedProcTest.xml"), getConnection());	
 		Command read = das.getCommand("getNamedCustomers");		
-		read.setParameterValue(1, "Williams");	
+		read.setParameter(1, "Williams");	
 		DataObject root = read.executeQuery();		
 		
-		Integer customersRead = (Integer) read.getParameterValue(2);
+		Integer customersRead = (Integer) read.getParameter(2);
 
 		assertEquals(4, customersRead.intValue());
 		assertEquals(customersRead.intValue(), root.getList("CUSTOMER").size());
@@ -119,7 +119,7 @@ public class StoredProcs extends DasTest {
 	public void testDelete() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command delete = das.createCommand("{call DELETECUSTOMER(?)}");		
-		delete.setParameterValue(1, new Integer(1));
+		delete.setParameter(1, new Integer(1));
 		delete.execute();
 
 		// Verify DELETE

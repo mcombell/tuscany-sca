@@ -52,7 +52,7 @@ public class GeneratedCommandTests extends DasTest {
 	public void testReadSomeCustomers() throws Exception {
 		ReadCustomersByLastnameCommand cmd = new ReadCustomersByLastnameCommand();
 		cmd.setConnection(getConnection());
-		cmd.setParameterValue(1, "Williams");
+		cmd.setParameter(1, "Williams");
 
 		DataObject root = cmd.executeQuery();
 		assertEquals(4, root.getList("CUSTOMER").size());
@@ -62,7 +62,7 @@ public class GeneratedCommandTests extends DasTest {
 	public void testReadCustomersStaticTypes() throws Exception {
 		ReadCustomersStaticTypesCommand cmd = new ReadCustomersStaticTypesCommand();
 		cmd.setConnection(getConnection());
-		cmd.setParameterValue(1, "Williams");
+		cmd.setParameter(1, "Williams");
 		
 		DataObject root =  cmd.executeQuery();
 

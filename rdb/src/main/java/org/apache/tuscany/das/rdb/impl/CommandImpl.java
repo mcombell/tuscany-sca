@@ -63,7 +63,7 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 		parameters.setParameter(name, value);
 	}
 
-	public void setParameterValue(int index, Object value) {
+	public void setParameter(int index, Object value) {
 		parameters.setParameter(index, value);
 	}
 
@@ -97,7 +97,7 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 		return p;
 	}
 
-	public Object getParameterValue(int index) {
+	public Object getParameter(int index) {
 		return parameters.parameterWithIndex(index).getValue();
 	}
 

@@ -51,7 +51,7 @@ public class TopDown extends DasTest {
         SDOUtil.registerStaticTypes(CustomerFactory.class);		
 
 		// Parameterize the command	
-		select.setParameterValue(1, new Integer(1));
+		select.setParameter(1, new Integer(1));
 
 		// Get the graph - DataGraphRoot is from the typed package
 		DataObject root = select.executeQuery();

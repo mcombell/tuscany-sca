@@ -44,7 +44,7 @@ public class SimplestStaticCrud extends DasTest {
 		SDOUtil.registerStaticTypes(CustomerFactory.class);
 		
 		Command select = das.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = ?");		
-		select.setParameterValue(1, "Williams");	
+		select.setParameter(1, "Williams");	
 		
 		DataObject root = select.executeQuery();
 		

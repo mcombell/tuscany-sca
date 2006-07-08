@@ -49,7 +49,7 @@ public class GeneratedId extends DasTest {
 
     	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into COMPANY (NAME) values (?)");       
-        insert.setParameterValue(1, "AAA Rental");
+        insert.setParameter(1, "AAA Rental");
         insert.execute();
 
         // Verify insert
@@ -67,11 +67,11 @@ public class GeneratedId extends DasTest {
 
     	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into COMPANY (NAME) values (?)");     
-        insert.setParameterValue(1, "AAA Rental");
+        insert.setParameter(1, "AAA Rental");
         insert.execute();
 
         // insert another using same command
-        insert.setParameterValue(1, "BBB Rental");
+        insert.setParameter(1, "BBB Rental");
         insert.execute();
 
         // Verify insert
@@ -87,14 +87,14 @@ public class GeneratedId extends DasTest {
     public void testInsert3() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into COMPANY (NAME) values (?)");      
-        insert.setParameterValue(1, "AAA Rental");
+        insert.setParameter(1, "AAA Rental");
         insert.execute();
 //       Integer key = (Integer) insert.getParameterValue("generated_key");
         Integer key = (Integer) insert.getGeneratedKey();
 
         // Verify insert
         Command select = das.createCommand("Select ID, NAME from COMPANY where ID = ?");     
-        select.setParameterValue(1, key);
+        select.setParameter(1, key);
         DataObject root = select.executeQuery();
         assertEquals(key, root.get("COMPANY[1]/ID"));
 
@@ -122,7 +122,7 @@ public class GeneratedId extends DasTest {
 
         // Verify the change
         select = das.createCommand("Select * from COMPANY where ID = ?");       
-        select.setParameterValue(1, id);
+        select.setParameter(1, id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 
@@ -152,7 +152,7 @@ public class GeneratedId extends DasTest {
 
         // Verify the change
         select = das.createCommand("Select * from COMPANY where ID = ?");      
-        select.setParameterValue(1, id);
+        select.setParameter(1, id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 
@@ -195,7 +195,7 @@ public class GeneratedId extends DasTest {
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = ?";
 
         select = das.createCommand(selectString);      
-        select.setParameterValue(1, id);
+        select.setParameter(1, id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 
@@ -239,7 +239,7 @@ public class GeneratedId extends DasTest {
         String selectString = "SELECT * FROM COMPANY LEFT JOIN DEPARTMENT ON COMPANY.ID = DEPARTMENT.COMPANYID WHERE COMPANY.ID = ?";
 
         select = das.createCommand(selectString);    
-        select.setParameterValue(1, id);
+        select.setParameter(1, id);
         root = select.executeQuery();
         assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 

@@ -91,7 +91,7 @@ public class CUDGeneration extends DasTest {
 						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
 
 		// Parameterize the command	
-		select.setParameterValue(1, new Integer(1));
+		select.setParameter(1, new Integer(1));
 
 		// Get the graph
 		DataObject root = select.executeQuery();

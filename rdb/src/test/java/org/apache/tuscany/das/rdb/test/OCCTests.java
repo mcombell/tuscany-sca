@@ -43,7 +43,7 @@ public class OCCTests extends DasTest {
 
 		// Explicitly change OCC column in database to force collision
         Command update = das.getCommand("update book 1");
-		update.setParameterValue(1, new Integer(100));
+		update.setParameter(1, new Integer(100));
 		update.execute();		
 
         //Try to apply changes and catch the expected OCC Exception

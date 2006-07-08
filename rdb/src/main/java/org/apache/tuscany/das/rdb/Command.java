@@ -37,16 +37,6 @@ public interface Command {
 	public DataObject executeQuery();
 
 	/**
-	 * Sets the value of the named Parameter
-	 * 
-	 * @param name
-	 *            the name of this Parameter
-	 * @param value
-	 *            the value for the Parameter
-	 */
-	public void setParameterValue(String name, Object value);
-
-	/**
 	 * Sets the value of the associated Parameter
 	 * 
 	 * @param index
@@ -54,7 +44,7 @@ public interface Command {
 	 * @param value
 	 *            the value for the Parameter
 	 */
-	public void setParameterValue(int index, Object value);
+	public void setParameter(int index, Object value);
      
      /**
 	 * Returns the value of the associated Parameter
@@ -63,7 +53,7 @@ public interface Command {
 	 *            the index of the Parameter
 	 * @return the value of the Parameter
 	 */
-	public Object getParameterValue(int index);
+	public Object getParameter(int index);
 
     
     /**

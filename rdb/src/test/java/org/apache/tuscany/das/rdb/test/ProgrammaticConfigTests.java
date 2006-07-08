@@ -126,7 +126,7 @@ public class ProgrammaticConfigTests extends DasTest {
         
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         Command select = das.createCommand(statement);       
-        select.setParameterValue(1, new Integer(1));
+        select.setParameter(1, new Integer(1));
 
         DataObject root = select.executeQuery();
         
@@ -138,7 +138,7 @@ public class ProgrammaticConfigTests extends DasTest {
         das.applyChanges(root);
         
         //Verify
-        select.setParameterValue(1, new Integer(1001));
+        select.setParameter(1, new Integer(1001));
         root = select.executeQuery();
         assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
         

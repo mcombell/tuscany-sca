@@ -94,13 +94,13 @@ public class RelationshipTests extends DasTest {
         // verify cust1 relationship updates
         select = das
                 .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
-        select.setParameterValue(1, cust1ID);
+        select.setParameter(1, cust1ID);
 
         root = select.executeQuery();
         assertEquals(cust1OrderCount.intValue() + 1, root.getList("CUSTOMER[1]/orders").size());
 
         // verify cust2 relationship updates
-        select.setParameterValue(1, cust2ID);
+        select.setParameter(1, cust2ID);
         root = select.executeQuery();
         assertEquals(cust2OrderCount.intValue() - 1, root.getList("CUSTOMER[1]/orders").size());
 

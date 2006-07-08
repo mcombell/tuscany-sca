@@ -46,8 +46,8 @@ public class CompoundKeyTests extends DasTest {
                 .createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
        
 
-        getOrderDetails.setParameterValue(1, new Integer(1));
-        getOrderDetails.setParameterValue(2, new Integer(1));
+        getOrderDetails.setParameter(1, new Integer(1));
+        getOrderDetails.setParameter(2, new Integer(1));
 
         DataObject root = getOrderDetails.executeQuery();
 

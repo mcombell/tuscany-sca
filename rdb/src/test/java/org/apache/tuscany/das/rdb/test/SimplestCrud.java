@@ -125,7 +125,7 @@ public class SimplestCrud extends DasTest {
 		Command readCustomers = das.createCommand("select * from CUSTOMER where LASTNAME = ?");		
 
 		//Parameterize the command
-		readCustomers.setParameterValue(1, "Williams");
+		readCustomers.setParameter(1, "Williams");
 		DataObject root = readCustomers.executeQuery();
 		
 		//Verify 
@@ -148,9 +148,9 @@ public class SimplestCrud extends DasTest {
 	public void testInsertWithParameters() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");	
-		insert.setParameterValue(1, new Integer(10));
-		insert.setParameterValue(2, "Williams");
-		insert.setParameterValue(3, "5528 Wells Fargo Dr");
+		insert.setParameter(1, new Integer(10));
+		insert.setParameter(2, "Williams");
+		insert.setParameter(3, "5528 Wells Fargo Dr");
 		insert.execute();
 
 		//Verify
@@ -204,8 +204,8 @@ public class SimplestCrud extends DasTest {
 		assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
 		
 		Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");		
-		update.setParameterValue(1, "Pavick");
-		update.setParameterValue(2, new Integer(1));
+		update.setParameter(1, "Pavick");
+		update.setParameter(2, new Integer(1));
 		update.execute();
 		
 		//Verify update - reuse select command
@@ -222,8 +222,8 @@ public class SimplestCrud extends DasTest {
         assertFalse(root.get("CUSTOMER[1]/LASTNAME").equals("Pavick"));
         
         Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");      
-        update.setParameterValue(1, "Pavick");
-        update.setParameterValue(2, new Integer(1));
+        update.setParameter(1, "Pavick");
+        update.setParameter(2, new Integer(1));
         update.execute();
         
         //Verify update - reuse select command
