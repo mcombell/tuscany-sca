@@ -17,12 +17,11 @@
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <Table tableName="CUSTOMER"
+	  
 	  create="insert into customer values (:ID, :LASTNAME, :ADDRESS)"
 	  update="update customer set lastname = :LASTNAME, address = :ADDRESS where ID = :ID"
       delete="delete from customer where ID = :ID">
-    <Column columnName="ID" primaryKey="true"/>
-    <Column columnName="LASTNAME"/>
-    <Column columnName="ADDRESS"/> 
+
   </Table>
 	
 </Config>
