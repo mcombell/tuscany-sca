@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.apache.tuscany</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
-            <version>incubating-M1</version>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
