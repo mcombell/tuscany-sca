@@ -115,7 +115,7 @@ public class DASImpl implements DAS {
         if (!commands.containsKey(name))
             throw new RuntimeException("CommandGroup has no command named: " + name);
         CommandImpl cmd = (CommandImpl) commands.get(name);
-        cmd.setConnection(getConnection());
+        cmd.setConnection(getConnection(), config);
         return cmd;
     }
 
@@ -132,7 +132,9 @@ public class DASImpl implements DAS {
 
     private void initializeConnection() {
        
-        if (config == null || config.getDataSource() == null)
+        if (config == null || 
+        		config.getConnectionInfo() == null || 
+        		config.getConnectionInfo().getDataSource() == null)
             throw new RuntimeException(
                     "No connection has been provided and no data source has been specified");
 
@@ -146,7 +148,7 @@ public class DASImpl implements DAS {
         }
         try {
             // TODO - I think we should rename this getDataSourceURL?
-            DataSource ds = (DataSource) ctx.lookup(config.getDataSource());
+            DataSource ds = (DataSource) ctx.lookup(config.getConnectionInfo().getDataSource());
             try {
                 connection = ds.getConnection();
                 connection.setAutoCommit(false);
@@ -182,7 +184,7 @@ public class DASImpl implements DAS {
      */
     private boolean managingConnections() {
 
-        if (config.getDataSource() == null)
+        if (config.getConnectionInfo().getDataSource() == null)
             return false;
         else
             return true;
@@ -221,7 +223,7 @@ public class DASImpl implements DAS {
             throw new RuntimeException("SQL => " + sql + " is not valid");
         }
 
-        returnCmd.setConnection(getConnection());
+        returnCmd.setConnection(getConnection(), config);
         return returnCmd;
     }
 

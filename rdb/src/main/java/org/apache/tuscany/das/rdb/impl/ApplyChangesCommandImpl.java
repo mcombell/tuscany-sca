@@ -45,7 +45,8 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl  {
     public ApplyChangesCommandImpl(Config config, Connection connection){
         this.configWrapper = new MappingWrapper(config); 
         if ( connection != null )
-     	   setConnection(connection);
+     	   setConnection(connection, config);
+        
     }
     
 	public void setConnection(ConnectionImpl connection) {

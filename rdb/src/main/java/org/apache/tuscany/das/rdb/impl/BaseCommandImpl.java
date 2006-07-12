@@ -18,6 +18,7 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Connection;
 
+import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
 public abstract class BaseCommandImpl {
@@ -28,6 +29,13 @@ public abstract class BaseCommandImpl {
         setConnection(new ConnectionImpl(connection));
     }
 
+    public void setConnection(Connection connection, Config config) {
+    	boolean managed = true;
+    	if ( config != null && config.getConnectionInfo() != null )
+    		managed = config.getConnectionInfo().isManagedtx();
+    	setConnection(connection, managed);
+    }
+    
     public void setConnection(Connection connection, boolean manageTransaction) {
         ConnectionImpl c = new ConnectionImpl(connection);
         c.setManageTransactions(manageTransaction);
