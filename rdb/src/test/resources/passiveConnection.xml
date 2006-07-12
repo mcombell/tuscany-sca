@@ -20,10 +20,4 @@
 	
 	<Command name="get a customer" SQL="Select * from CUSTOMER where ID = 1" kind="select"/>
 	
-  <Table tableName="CUSTOMER">
-    <Column columnName="ID" primaryKey="true"/>
-    <Column columnName="LASTNAME" />
-    <Column columnName="ADDRESS" />
-  </Table>
-	
 </Config>
