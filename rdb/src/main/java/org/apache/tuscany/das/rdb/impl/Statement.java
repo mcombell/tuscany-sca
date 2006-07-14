@@ -28,7 +28,7 @@ import org.apache.tuscany.das.rdb.util.DebugUtil;
 // TODO - Can use some refactoring. Much code is duplicated in "execute" methods
 public class Statement {
 
-    protected final QueryString queryString;
+    protected final String queryString;
 
     protected ConnectionImpl jdbcConnection;
 
@@ -39,7 +39,7 @@ public class Statement {
     private boolean isPaging = false;
 
     public Statement(String sqlString) {
-        this.queryString = new QueryString(sqlString);
+        this.queryString = sqlString; //new QueryString(sqlString);
     }
 
     public ResultSet executeQuery(Parameters parameters) throws SQLException {
@@ -58,8 +58,8 @@ public class Statement {
             Iterator inParams = parameters.inParams().iterator();
             while (inParams.hasNext()) {
                 ParameterImpl param = (ParameterImpl) inParams.next();
-                if (param.getIndex() == 0)
-                    param.setIndex(queryString.getParameterIndex(param.getName()));
+//                if (param.getIndex() == 0)
+//                    param.setIndex(queryString.getParameterIndex(param.getName()));
                 cs.setObject(param.getIndex(), param.getValue());
             }
 
@@ -67,8 +67,8 @@ public class Statement {
             Iterator outParams = parameters.outParams().iterator();
             while (outParams.hasNext()) {
                 ParameterImpl param = (ParameterImpl) outParams.next();
-                if (param.getIndex() == 0)
-                    param.setIndex(queryString.getParameterIndex(param.getName()));
+//                if (param.getIndex() == 0)
+//                    param.setIndex(queryString.getParameterIndex(param.getName()));
                 DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
                 cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
             }
@@ -99,8 +99,8 @@ public class Statement {
         Iterator inParams = parameters.inParams().iterator();
         while (inParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) inParams.next();
-            if (param.getIndex() == 0)
-                param.setIndex(queryString.getParameterIndex(param.getName()));
+//            if (param.getIndex() == 0)
+//                param.setIndex(queryString.getParameterIndex(param.getName()));
             cs.setObject(param.getIndex(), param.getValue());
         }
 
@@ -108,8 +108,8 @@ public class Statement {
         Iterator outParams = parameters.outParams().iterator();
         while (outParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) outParams.next();
-            if (param.getIndex() == 0)
-                param.setIndex(queryString.getParameterIndex(param.getName()));
+//            if (param.getIndex() == 0)
+//                param.setIndex(queryString.getParameterIndex(param.getName()));
             DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
             cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
         }
@@ -129,14 +129,14 @@ public class Statement {
      * has been specified and try setObject otherwise.
      */
     public int executeUpdate(Parameters parameters) throws SQLException {
-        DebugUtil.debugln(getClass(), debug, "Executing statement " + queryString.getPreparedString());
+        DebugUtil.debugln(getClass(), debug, "Executing statement " + queryString);
         PreparedStatement ps = getPreparedStatement();
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
-            if (param.getIndex() == 0)
-                param.setIndex(queryString.getParameterIndex(param.getName()));
+//            if (param.getIndex() == 0)
+//                param.setIndex(queryString.getParameterIndex(param.getName()));
             Object value = param.getValue();
             DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
             if (value == null) {
@@ -156,8 +156,8 @@ public class Statement {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
-            if (param.getIndex() == 0)
-                param.setIndex(queryString.getParameterIndex(param.getName()));
+//            if (param.getIndex() == 0)
+//                param.setIndex(queryString.getParameterIndex(param.getName()));
             ps.setObject(param.getIndex(), param.getValue());
         }
         return ps;

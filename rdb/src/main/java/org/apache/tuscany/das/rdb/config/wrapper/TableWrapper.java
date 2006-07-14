@@ -73,15 +73,6 @@ public class TableWrapper {
 		return c == null ? false : c.isGenerated();
 	}
 
-	// public Object getColumnNameByProperty(String propertyName) {
-	// Iterator i = table.getColumn().iterator();
-	// while (i.hasNext()) {
-	// Column c = (Column) i.next();
-	// if (propertyName.equals(c.getPropertyName()))
-	// return c.getName();
-	// }
-	// return propertyName;
-	// }
 
 	public String getConverter(String propertyName) {
 		Column c = getColumnByPropertyName(propertyName);

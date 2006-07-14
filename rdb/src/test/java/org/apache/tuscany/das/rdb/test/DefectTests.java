@@ -119,7 +119,7 @@ public class DefectTests extends DasTest {
 
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
-        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME where ID = :ID", "CUSTOMER");         
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = ? where ID = ?", "CUSTOMER", "LASTNAME ID");         
         
     	DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
     	

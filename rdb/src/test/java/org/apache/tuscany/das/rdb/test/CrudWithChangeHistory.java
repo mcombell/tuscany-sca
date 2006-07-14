@@ -56,8 +56,8 @@ public class CrudWithChangeHistory extends DasTest {
 
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
-        helper.addUpdateStatement("update CUSTOMER set LASTNAME = :LASTNAME, ADDRESS = :ADDRESS where ID = :ID",
-                "CUSTOMER");
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?",
+                "CUSTOMER", "LASTNAME ADDRESS ID");
 
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         // Read customer 1

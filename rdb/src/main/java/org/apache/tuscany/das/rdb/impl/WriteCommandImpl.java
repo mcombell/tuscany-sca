@@ -19,6 +19,7 @@ package org.apache.tuscany.das.rdb.impl;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import org.apache.tuscany.das.rdb.config.Config;
 
@@ -70,8 +71,8 @@ public abstract class WriteCommandImpl extends CommandImpl {
 	public String toString() {
 		
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("\nSQL: " + statement.queryString.getUnmodifiedString());
-		buffer.append("\nModified SQL: " + statement.queryString.getPreparedString());
+		buffer.append("\nSQL: " + statement.queryString);
+		
 		return buffer.toString();
 	}
 
@@ -79,6 +80,15 @@ public abstract class WriteCommandImpl extends CommandImpl {
 			throw new RuntimeException("No generated key is available");
 	}
 
+	public void addParameters(String parameters) {
+		StringTokenizer tokenizer = new StringTokenizer(parameters);
+		for (int idx=1; tokenizer.hasMoreTokens(); idx++) {
+			ParameterImpl p = new ParameterImpl();
+			p.setName(tokenizer.nextToken());		
+			p.setIndex(idx);
+			addParameter(p);
+		}
+	}
 	public void addParameters(Collection updateParameters) {
 		Iterator i = updateParameters.iterator();
 		while ( i.hasNext()) {

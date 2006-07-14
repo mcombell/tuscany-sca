@@ -116,7 +116,7 @@ public class GraphMerger {
 						createObjectWithSubtree(root, refObject
 							.getContainmentProperty(), refObject);
 					
-						refObject = (DataObject) registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
+						refObject = registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
 						if (ref.isMany()) {
 							newObject.getList(
 								newObject.getType().getProperty(ref.getName()))

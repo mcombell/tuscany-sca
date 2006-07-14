@@ -17,7 +17,6 @@
 package org.apache.tuscany.das.rdb.generator.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +39,7 @@ public class InsertGenerator extends BaseGenerator {
 
 	private static final boolean debug = false;
 
-	public InsertGenerator() {
+	private InsertGenerator() {
 		super();
 	}
 
@@ -129,23 +128,6 @@ public class InsertGenerator extends BaseGenerator {
 
 		return fields;
 
-	}
-
-	public Collection getInsertParameters(MappingWrapper config,
-			DataObject changedObject, Table table) {
-		ArrayList parameters = new ArrayList();
-		TableWrapper wrapper = new TableWrapper(table);
-
-		Iterator i = getAttributeProperties(changedObject, config).iterator();
-
-		while (i.hasNext()) {
-			Property attr = (Property) i.next();
-			if (!wrapper.isGeneratedColumnProperty(attr.getName()))
-				parameters.add(changedObject.getType().getProperty(
-						attr.getName()));
-		}
-
-		return parameters;
 	}
 
 	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {							

@@ -18,10 +18,17 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.SQLException;
 
+import org.apache.tuscany.das.rdb.config.Update;
+
 public class OptimisticWriteCommandImpl extends UpdateCommandImpl {
 
 	public OptimisticWriteCommandImpl(String sqlString) {
 		super(sqlString);
+	}
+
+	public OptimisticWriteCommandImpl(Update update) {
+		super(update);
+		addParameters(update.getParameters());
 	}
 
 	public void execute() {

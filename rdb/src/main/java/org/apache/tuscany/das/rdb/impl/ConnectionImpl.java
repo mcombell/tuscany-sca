@@ -70,15 +70,15 @@ public class ConnectionImpl {
 		}
 	}
 
-	public PreparedStatement prepareStatement(QueryString queryString)
+	public PreparedStatement prepareStatement(String queryString)
 			throws SQLException {
-		DebugUtil.debugln(getClass(), debug, "Preparing Statement: " + queryString.getPreparedString());
-		return connection.prepareStatement(queryString.getPreparedString(), java.sql.Statement.RETURN_GENERATED_KEYS);
+		DebugUtil.debugln(getClass(), debug, "Preparing Statement: " + queryString);
+		return connection.prepareStatement(queryString, java.sql.Statement.RETURN_GENERATED_KEYS);
 	}
 
-	public PreparedStatement preparePagedStatement(QueryString queryString) throws SQLException {
-		DebugUtil.debugln(getClass(), debug, "Preparing Statement: " + queryString.getPreparedString());
-		return connection.prepareStatement(queryString.getPreparedString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
+		DebugUtil.debugln(getClass(), debug, "Preparing Statement: " + queryString);
+		return connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	}
 
 	public void setManageTransactions(boolean manageTransactions) {
@@ -86,8 +86,8 @@ public class ConnectionImpl {
 		
 	}
 
-	public CallableStatement prepareCall(QueryString queryString) throws SQLException {
-		return connection.prepareCall(queryString.getPreparedString());
+	public CallableStatement prepareCall(String queryString) throws SQLException {
+		return connection.prepareCall(queryString);
 	}
 
 	

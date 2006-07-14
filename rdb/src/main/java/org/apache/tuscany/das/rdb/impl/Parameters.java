@@ -17,7 +17,6 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,18 +30,12 @@ public class Parameters {
 
 	private ArrayList inParams = new ArrayList();
 
-	private ArrayList outParams = new ArrayList();
-
-	private HashMap parametersByName = new HashMap();
+	private ArrayList outParams = new ArrayList();	
 
 	private static boolean debug = false;
 
 	public Parameters() {
 		super();
-	}
-
-	public ParameterImpl get(String name) {
-		return (ParameterImpl) parametersByName.get(name);
 	}
 
 	public ParameterImpl get(int index) {
@@ -64,21 +57,11 @@ public class Parameters {
 				|| (param.getDirection() == ParameterImpl.IN_OUT))
 			outParams.add(param);
 
-		this.parameters.add(param);
-		parametersByName.put(param.getName(), param);
+		this.parameters.add(param);		
 	}
 
 	public void add(ParameterImpl param) {
 		addParameter(param);
-	}
-
-	public ParameterImpl findOrCreateParameterNamed(String name) {
-		ParameterImpl param = get(name);
-		if (param == null) {
-			param = new ParameterImpl(name);
-			addParameter(param);
-		}
-		return param;
 	}
 
 	public ParameterImpl findOrCreateParameterWithIndex(int index, int direction,
@@ -112,26 +95,6 @@ public class Parameters {
 		param.setValue(value);
 	}
 
-	public void setParameter(String name, Object value) {
-		if (name == null)
-			throw new RuntimeException("Null parameter name not allowed");
-		ParameterImpl param = findOrCreateParameterNamed(name);
-		param.setValue(value);
-	}
-
-	public void setParameterWithType(String name, Type sdoType) {
-		if (name == null)
-			throw new RuntimeException("Null parameter name not allowed");
-		ParameterImpl p = findOrCreateParameterNamed(name);
-		p.setType(sdoType);
-	}
-
-    public void setParameterWithType(int index, Type sdoType) {
-        if (index == 0)
-            throw new RuntimeException("Null parameter index not allowed");
-        ParameterImpl p = findOrCreateParameterWithIndex(index);
-        p.setType(sdoType);
-    }
     
     public ParameterImpl parameterWithIndex(int index) {
 		Iterator i = parameters.iterator();

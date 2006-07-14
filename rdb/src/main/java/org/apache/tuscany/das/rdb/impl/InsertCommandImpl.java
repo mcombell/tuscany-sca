@@ -18,6 +18,8 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.SQLException;
 
+import org.apache.tuscany.das.rdb.config.Create;
+
 public class InsertCommandImpl extends WriteCommandImpl {
 
 	private int generatedKey;
@@ -26,6 +28,11 @@ public class InsertCommandImpl extends WriteCommandImpl {
 
 	public InsertCommandImpl(String sqlString) {
 		super(sqlString);
+	}
+
+	public InsertCommandImpl(Create create) {
+		super(create.getSql());
+		addParameters(create.getParameters());
 	}
 
 	protected boolean isInsert() {
@@ -38,17 +45,6 @@ public class InsertCommandImpl extends WriteCommandImpl {
 			return generatedKey;
 		
 		throw new RuntimeException("No generated key is available");
-	}
-
-	public Object getParameterValue(String name) {
-
-		if (name.equals("generated_key"))
-			if (hasGeneratedKey)
-				return new Integer(generatedKey);
-			else
-				throw new RuntimeException("No generated key available");
-		
-		return super.getParameterValue(name);
 	}
 
 	protected void subtypeProcessing() throws SQLException {

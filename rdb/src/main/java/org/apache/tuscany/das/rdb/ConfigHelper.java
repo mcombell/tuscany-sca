@@ -60,8 +60,8 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
         configWrapper.addTable(name, propertyName);
     }
     
-    public void addUpdateStatement(String statement, String tableName) {
-        configWrapper.addUpdateCommand(tableName, statement);
+    public void addUpdateStatement(String statement, String tableName, String parameters) {
+        configWrapper.addUpdateCommand(tableName, statement, parameters);
     }     
     
     

@@ -80,11 +80,11 @@ public class DataObjectMaker {
 				tableData.getTableName()).iterator();
 		while (columnNames.hasNext()) {
 			String columnName = (String) columnNames.next();
-			DataObject dataObject = (DataObject) obj;
-			Property p = findProperty(dataObject.getType(), columnName);
+			
+			Property p = findProperty(obj.getType(), columnName);
 			Object value = tableData.getColumnData(columnName);
 
-			dataObject.set(p, value);
+			obj.set(p, value);
 		}
 
 		return obj;

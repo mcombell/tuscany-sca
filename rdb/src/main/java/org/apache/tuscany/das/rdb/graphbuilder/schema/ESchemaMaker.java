@@ -116,7 +116,7 @@ public class ESchemaMaker {
 				// TODO temporary check until Tuscany-203 is fixed
 				if ( !addedProperties.contains(columnName)) {
 					addedProperties.add(columnName);
-					Type atype = (Type) resultMetadata.getDataType(i);					
+					Type atype = resultMetadata.getDataType(i);					
 	
 					SDOUtil.createProperty(ref.getType(), columnName, atype);				
 

@@ -16,7 +16,6 @@
 */
 package org.apache.tuscany.das.rdb.generator.impl;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.config.Table;
@@ -32,11 +31,11 @@ public class DeleteGenerator extends BaseGenerator {
 
 	private static final boolean debug = false;
 
-	public DeleteGenerator() {
+	private DeleteGenerator() {
 		super();
 	}
 
-	public String getDeleteStatement(Table t) {
+	private String getDeleteStatement(Table t) {
 		TableWrapper table = new TableWrapper(t);
 
 		StringBuffer statement = new StringBuffer();
@@ -56,11 +55,6 @@ public class DeleteGenerator extends BaseGenerator {
 
 		DebugUtil.debugln(getClass(), debug, statement.toString());
 		return statement.toString();
-	}
-
-	public Collection getDeleteParameters(Table table) {
-		TableWrapper wrapper = new TableWrapper(table);
-		return wrapper.getPrimaryKeyProperties();
 	}
 
 	public DeleteCommandImpl getDeleteCommand(Table t) {

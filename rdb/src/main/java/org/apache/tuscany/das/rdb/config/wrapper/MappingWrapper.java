@@ -29,6 +29,7 @@ import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.Update;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
@@ -367,9 +368,12 @@ public class MappingWrapper {
         throw new RuntimeException("Could not find relationship " + name + " in the configuration");
     }
 
-    public void addUpdateCommand(String tableName, String statement) {
+    public void addUpdateCommand(String tableName, String statement, String parameters) {
         Table table = findOrCreateTable(tableName);
-        table.setUpdate(statement);
+        Update update = ConfigFactoryImpl.eINSTANCE.createUpdate();
+        update.setSql(statement);
+        update.setParameters(parameters);
+        table.setUpdate(update);
         
     }
 

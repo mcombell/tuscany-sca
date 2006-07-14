@@ -17,7 +17,6 @@
 package org.apache.tuscany.das.rdb.generator.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class UpdateGenerator extends BaseGenerator {
 
 	public static UpdateGenerator instance = new UpdateGenerator();
 
-	public UpdateGenerator() {
+	private UpdateGenerator() {
 		super();
 	}
 
@@ -137,16 +136,6 @@ public class UpdateGenerator extends BaseGenerator {
 		return updateCommand;
 	}
 
-	private List getDataTypeProperties(DataObject obj) {
-		ArrayList fields = new ArrayList();
-		Iterator i = obj.getType().getProperties().iterator();
-		while ( i.hasNext() ) {
-			Property p = (Property) i.next();
-			if ( p.getType().isDataType())
-				fields.add(p);
-		}
-		return fields;
-	}
 
 
 	private List getChangedFields(MappingWrapper mapping, ChangeSummary summary, DataObject obj) {
@@ -175,30 +164,6 @@ public class UpdateGenerator extends BaseGenerator {
 	}
 	
 	
-	public Collection getUpdateParameters(DataObject changedObject, Table table) {
-		Type type = changedObject.getType();
-		TableWrapper wrapper = new TableWrapper(table);
-		Collection pkNames = wrapper.getPrimaryKeyProperties();
-		ArrayList parameters = new ArrayList();
-		ArrayList pkParams = new ArrayList();
-		
-		Iterator i = getDataTypeProperties(changedObject).iterator();
-		while (i.hasNext()) {
-			Property property = (Property) i.next();
-			String propertyName = property.getName();
-
-			ParameterImpl p = createParameter(wrapper, type.getProperty(propertyName));
-			if (pkNames.contains(propertyName)) {
-				pkParams.add(p);
-			} else {
-				parameters.add(p);
-			}
-		}
-		parameters.addAll(pkParams);		
-		
-		return parameters;
-		
-	}
 
 	private ParameterImpl createManagedParameter(TableWrapper table, Property property, int idx) {
 		ParameterImpl param = new ManagedParameterImpl();
@@ -210,9 +175,7 @@ public class UpdateGenerator extends BaseGenerator {
 		
 		return param;
 	}
-	private ParameterImpl createParameter(TableWrapper table, Property property) {
-		return createParameter(table, property, -1);
-	}
+	
 	private ParameterImpl createParameter(TableWrapper table, Property property, int idx) {		
 		ParameterImpl param = new ParameterImpl();
 		param.setName(property.getName());

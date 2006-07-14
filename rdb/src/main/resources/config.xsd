@@ -68,12 +68,24 @@
       <xsd:sequence>
          <xsd:element  maxOccurs="unbounded" minOccurs="0" name="Column"
             type="config:Column"/>
+         <xsd:element  maxOccurs="1" minOccurs="0" name="create" type="config:Create"/>
+         <xsd:element  maxOccurs="1" minOccurs="0" name="update" type="config:Update"/>
+         <xsd:element maxOccurs="1" minOccurs="0" name="delete" type="config:Delete"/>
       </xsd:sequence>
       <xsd:attribute name="tableName" type="xsd:string"/>
-      <xsd:attribute name="typeName" type="xsd:string"/>
-      <xsd:attribute name="create" type="xsd:string"/>
-      <xsd:attribute name="update" type="xsd:string"/>
-      <xsd:attribute name="delete" type="xsd:string"/>
+      <xsd:attribute name="typeName" type="xsd:string"/>      
+   </xsd:complexType>
+   <xsd:complexType name="Create">
+   	  <xsd:attribute name="sql" type="xsd:string"/>
+   	  <xsd:attribute name="parameters" type="xsd:string"/>
+   </xsd:complexType>
+    <xsd:complexType name="Update">
+   	  <xsd:attribute name="sql" type="xsd:string"/>
+   	  <xsd:attribute name="parameters" type="xsd:string"/>
+   </xsd:complexType>
+    <xsd:complexType name="Delete">
+   	  <xsd:attribute name="sql" type="xsd:string"/>
+   	  <xsd:attribute name="parameters" type="xsd:string"/>
    </xsd:complexType>
    <xsd:complexType name="KeyPair">
       <xsd:attribute name="primaryKeyColumn" type="xsd:string"/>

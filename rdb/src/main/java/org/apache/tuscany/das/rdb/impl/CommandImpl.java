@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.tuscany.das.rdb.Command;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 import commonj.sdo.helper.XSDHelper;
 
 public abstract class CommandImpl extends BaseCommandImpl implements Command {
@@ -59,24 +58,8 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 
 	public abstract DataObject executeQuery();
 
-	public void setParameterValue(String name, Object value) {
-		parameters.setParameter(name, value);
-	}
-
 	public void setParameter(int index, Object value) {
 		parameters.setParameter(index, value);
-	}
-
-	public void setParameterType(String name, Type dataType) {
-		parameters.setParameterWithType(name, dataType);
-	}
-
-	public void setParameterType(int index, Type dataType) {
-		parameters.setParameterWithType(index, dataType);
-	}
-
-	protected void addParameter(String name, Type sdoType) {
-		parameters.setParameterWithType(name, sdoType);
 	}
 
 	public void addParameter(ParameterImpl param) {
@@ -86,15 +69,6 @@ public abstract class CommandImpl extends BaseCommandImpl implements Command {
 
 	public List getParameters() {
 		return parameters.parameterList();
-	}
-
-	public Object getParameterValue(String name) {
-		ParameterImpl p = parameters.get(name);
-		if (p == null)
-			throw new RuntimeException("Parameter with name " + name
-					+ " not found");
-
-		return p;
 	}
 
 	public Object getParameter(int index) {

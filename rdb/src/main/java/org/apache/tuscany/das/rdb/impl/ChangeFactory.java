@@ -16,16 +16,18 @@
 */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.util.Iterator;
-
+import org.apache.tuscany.das.rdb.config.Create;
+import org.apache.tuscany.das.rdb.config.Delete;
 import org.apache.tuscany.das.rdb.config.Table;
+import org.apache.tuscany.das.rdb.config.Update;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
-import org.apache.tuscany.das.rdb.generator.impl.CudGenerator;
+import org.apache.tuscany.das.rdb.generator.impl.DeleteGenerator;
+import org.apache.tuscany.das.rdb.generator.impl.InsertGenerator;
+import org.apache.tuscany.das.rdb.generator.impl.UpdateGenerator;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 public class ChangeFactory {
@@ -39,8 +41,6 @@ public class ChangeFactory {
 	private DeleteCommandImpl deleteCommand;
 
 	private static final boolean debug = false;
-
-	private CudGenerator cudGenerator;
 
 	private final MappingWrapper mapping;
 
@@ -67,12 +67,6 @@ public class ChangeFactory {
 
 	public void setDeleteCommand(DeleteCommandImpl cmd) {
 		deleteCommand = cmd;
-	}
-
-	private CudGenerator getCudGenerator() {
-		if (this.cudGenerator == null) 
-			this.cudGenerator = new CudGenerator();
-		return this.cudGenerator;
 	}
 	
 	ChangeOperation createUpdateOperation(DataObject changedObject, String propagatedID) {
@@ -109,17 +103,12 @@ public class ChangeFactory {
 				}
 			}
 
-	
-			String createStatement = table.getCreate();
-			if ( createStatement == null ) {
-				createCommand = getCudGenerator().getInsertCommand(mapping, changedObject, table);
+			Create create = table.getCreate();
+		
+			if ( create == null ) {
+				createCommand = InsertGenerator.instance.getInsertCommand(mapping, changedObject, table);
 			} else {
-				createCommand = new InsertCommandImpl(createStatement);
-				Iterator i = getCudGenerator().getCreateParameters(mapping, changedObject, table).iterator();
-				while (i.hasNext()) {
-					Property p = (Property)i.next();				
-					createCommand.addParameter(p.getName(), p.getType());
-				}
+				createCommand = new InsertCommandImpl(create);						
 			}
 			createCommand.setConnection(connection);
 			createCommand.configWrapper = mapping;
@@ -141,15 +130,12 @@ public class ChangeFactory {
 				}
 			}
 			
-			String deleteStatement = table.getDelete();
-			if ( deleteStatement == null ) {
-				deleteCommand = getCudGenerator().getDeleteCommand(table);
+			Delete delete = table.getDelete();
+			
+			if ( delete == null ) {
+				deleteCommand = DeleteGenerator.instance.getDeleteCommand(table);
 			} else {
-				deleteCommand = new DeleteCommandImpl(deleteStatement);			
-				Iterator i = getCudGenerator().getDeleteParameters(table).iterator();
-				while (i.hasNext()) {
-					deleteCommand.addParameter((String)i.next(), SDODataTypes.OBJECT);
-				}
+				deleteCommand = new DeleteCommandImpl(delete);						
 			}
 			deleteCommand.setConnection(connection);
 		}
@@ -169,18 +155,17 @@ public class ChangeFactory {
 					throw new RuntimeException("Table " + changedObject.getType().getName() + " was changed in the DataGraph but is not present in the Config");
 				}
 			}
-			String updateStatement = table.getUpdate();
-			if ( updateStatement == null ) {
-				updateCommand = getCudGenerator().getUpdateCommand(mapping, changedObject,table);
+			
+			Update update = table.getUpdate();
+			
+			if ( update == null ) {
+				updateCommand = UpdateGenerator.instance.getUpdateCommand(mapping, changedObject,table);
 			} else {
 				TableWrapper t = new TableWrapper(table);
 				if ( t.getCollisionColumn() != null )
-					updateCommand = new OptimisticWriteCommandImpl(updateStatement);
+					updateCommand = new OptimisticWriteCommandImpl(update);
 				else
-					updateCommand = new UpdateCommandImpl(updateStatement);
-			
-			
-				updateCommand.addParameters(getCudGenerator().getUpdateParameters(changedObject, table));
+					updateCommand = new UpdateCommandImpl(update);				
 				
 			}
 			updateCommand.setConnection(connection);
