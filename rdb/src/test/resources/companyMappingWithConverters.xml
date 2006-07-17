@@ -15,7 +15,8 @@
   limitations under the License.
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dataObjectModel="org.apache.tuscany.das.rdb.test.company.CompanyType">
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+dataObjectModel="org.apache.tuscany.das.rdb.test/company.xsd">
   
   <Table tableName="COMPANY" typeName="CompanyType">
     <Column columnName="ID" primaryKey="true"/>

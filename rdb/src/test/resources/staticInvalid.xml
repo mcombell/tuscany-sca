@@ -15,21 +15,8 @@
   limitations under the License.
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-dataObjectModel="http:///org.apache.tuscany.das.rdb.test/customer.xsd">
-
-  <Command name="Customer and Orders" SQL="SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?" kind="Select"/>
-		
-  <Table tableName="CUSTOMER" typeName="Customer">
-  	<Column columnName="ID" primaryKey="true"/>
-  </Table>
-  <Table tableName="ANORDER" typeName="AnOrder">
-  	<Column columnName="ID" primaryKey="true"/>
-  	<Column columnName="CUSTOMER_ID"/>
-  </Table>
-	
-  <Relationship name="orders" primaryKeyTable="CUSTOMER" foreignKeyTable="ANORDER" many="true">
-     <KeyPair primaryKeyColumn="ID" foreignKeyColumn="CUSTOMER_ID"/>
-  </Relationship>	
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+dataObjectModel="invalidURI">
   
+	
 </Config>

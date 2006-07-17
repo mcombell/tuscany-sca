@@ -48,7 +48,7 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 		t.setTypeName("Customer");
 		mapping.getTable().add(t);
 		
-		mapping.setDataObjectModel("org.apache.tuscany.das.rdb.test.customer.Customer");
+		mapping.setDataObjectModel("http:///org.apache.tuscany.das.rdb.test/customer.xsd");
 	}
 	
 	public ReadCustomersStaticTypesCommand() {

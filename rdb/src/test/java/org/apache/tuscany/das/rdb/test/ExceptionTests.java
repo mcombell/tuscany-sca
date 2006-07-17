@@ -61,6 +61,18 @@ public class ExceptionTests extends DasTest {
 
     }
 
+    public void testUnregisteredTypes() throws Exception {
+    	DAS das = DAS.FACTORY.createDAS(getConfig("staticInvalid.xml"), getConnection());
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");                   
+
+        try {
+        	 readCustomers.executeQuery();
+            
+            fail("Exception should be thrown");
+        } catch (RuntimeException ex) {
+            assertEquals("SDO Types have not been registered for URI invalidURI", ex.getMessage());
+        }
+    }
 
     public void testMissingMapping() throws Exception {
     	SDOUtil.registerStaticTypes(CustomerFactory.class);

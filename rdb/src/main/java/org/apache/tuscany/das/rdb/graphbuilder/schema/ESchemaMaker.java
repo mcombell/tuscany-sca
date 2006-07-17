@@ -183,10 +183,12 @@ public class ESchemaMaker {
 		return "http:///org.apache.tuscany.das.rdb/das";
 	}
 
-	public Type createTypes(Type aType) {
+	public Type createTypes(String uri) {
 		Type rootType = SDOUtil.createType(typeHelper, getURI() + "/DataGraphRoot", "DataGraphRoot", false);	
 		
-		EPackage pkg = ((TypeHelperImpl)typeHelper).getExtendedMetaData().getPackage(aType.getURI());
+		EPackage pkg = ((TypeHelperImpl)typeHelper).getExtendedMetaData().getPackage(uri);
+		if ( pkg == null ) 
+			throw new RuntimeException("SDO Types have not been registered for URI " + uri);
 		Iterator i = pkg.getEClassifiers().iterator();
 		while ( i.hasNext() ) {
 			Type type = (Type) i.next();
