@@ -35,7 +35,7 @@
 
    <xsd:complexType name="ConnectionInfo">
       <xsd:attribute name="dataSource" type="xsd:string"/>
-      <xsd:attribute name="managedtx" type="xsd:boolean"/>
+      <xsd:attribute name="managedtx" type="xsd:boolean" default="true"/>
    </xsd:complexType>
 
    <xsd:complexType name="Command">
