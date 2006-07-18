@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
@@ -249,5 +250,58 @@ public class CorrectedDefectTests extends DasTest {
 
     }
 
-    
+    /**
+     * Formely tests concerning Tuscany-433. The error causing these tests was cleared up when
+     * the method for handling parameters was changed.
+     */
+    public void testReadModifyApply()
+        throws Exception
+    {
+
+
+        // Provide updatecommand programmatically via config
+        ConfigHelper helper = new ConfigHelper();
+        helper.addUpdateStatement("update CUSTOMER set LASTNAME = ? where ID = ?", "CUSTOMER", "LASTNAME ID");         
+        
+    	DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+    	
+        //Read customer 1
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );        
+        DataObject root = select.executeQuery();
+
+        DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );
+
+        //Modify customer
+        customer.set( "LASTNAME", "Pavick" );
+
+        das.applyChanges( root );
+
+        //Verify changes
+        root = select.executeQuery();
+        assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
+
+    }
+
+    public void testReadModifyApply1()
+        throws Exception
+    {
+    	DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithCUD2.xml"), getConnection());
+        //Read customer 1
+        Command select = das.createCommand( "Select * from CUSTOMER where ID = 1" );       
+        DataObject root = select.executeQuery();
+
+        DataObject customer = (DataObject) root.get( "CUSTOMER[1]" );
+
+        //Modify customer
+        customer.set( "LASTNAME", "Pavick" );
+
+        //Build apply changes command
+        das.applyChanges( root );
+
+        //Verify changes
+        root = select.executeQuery();
+        assertEquals( "Pavick", root.getString( "CUSTOMER[1]/LASTNAME" ) );
+
+    }    
+
 }

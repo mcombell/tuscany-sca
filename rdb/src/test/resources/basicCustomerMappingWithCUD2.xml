@@ -16,13 +16,13 @@
  -->
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <Table tableName="CUSTOMER"
-	  create="insert into customer values (:ID, :LASTNAME, :ADDRESS)"
-	  update="update customer set lastname = :LASTNAME where ID = :ID"
-      delete="delete from customer where ID = :ID">
-    <Column columnName="ID" primaryKey="true"/>
-    <Column columnName="LASTNAME"/>
-    <Column columnName="ADDRESS"/> 
+  <Table tableName="CUSTOMER">
+	  <create sql="insert into customer values (?, ?, ?)" parameters="ID LASTNAME ADDRESS"/>
+	  <update sql="update customer set lastname = ? where ID = ?" parameters="LASTNAME ID"/>
+      <delete sql="delete from customer where ID = ?" parameters="ID"/>
+      <Column columnName="ID" primaryKey="true"/>
+      <Column columnName="LASTNAME"/>
+      <Column columnName="ADDRESS"/> 
   </Table>
 	
 </Config>
