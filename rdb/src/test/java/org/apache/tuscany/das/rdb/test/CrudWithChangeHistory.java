@@ -48,6 +48,41 @@ public class CrudWithChangeHistory extends DasTest {
         super.tearDown();
     }
 
+    public void testDeleteAndCreate() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(
+				getConfig("basicCustomerMappingWithCUD2.xml"), getConnection());
+		// Read customer 1
+		Command select = das
+				.createCommand("Select * from CUSTOMER");
+		DataObject root = select.executeQuery();
+
+		DataObject customer = (DataObject) root.get("CUSTOMER[1]");
+
+		int customerId = customer.getInt("ID");
+		// Modify customer
+		customer.delete();
+
+		DataObject newCustomer = root.createDataObject("CUSTOMER");
+		newCustomer.setInt("ID", 9999);
+		newCustomer.setString("LASTNAME", "Jones");
+		
+		// Build apply changes command
+		das.applyChanges(root);
+
+		// Verify changes
+		root = select.executeQuery();
+		boolean found = false;
+		Iterator i = root.getList("CUSTOMER").iterator();
+		while ( i.hasNext()) {
+			customer = (DataObject)i.next();
+			assertFalse(customerId == customer.getInt("ID"));
+			if ( customer.getInt("ID") == 9999 )
+				found = true;
+		}
+		
+		assertTrue(found);
+
+	}
     /**
      * Read and modify a customer. Provide needed Create/Update/Delete
      * statements programatically

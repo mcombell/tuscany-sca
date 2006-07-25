@@ -22,6 +22,8 @@ package org.apache.tuscany.das.rdb.test;
  * 
  */
 
+import java.util.Iterator;
+
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
@@ -100,6 +102,31 @@ public class GeneratedId extends DasTest {
 
     }
 
+    // Test insert into row with generated ID and generated insert
+    public void testInsert4() throws Exception {
+
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"),getConnection());
+        Command select = das.getCommand("all companies");       
+        DataObject root = select.executeQuery();
+
+        DataObject company = root.createDataObject("COMPANY");
+        company.setString("NAME", "Phil's Tires");
+        // This shouldn't do anything
+        company.setInt("ID", 999);
+        
+        das.applyChanges(root);
+        
+        // Verify insert                 
+        root = select.executeQuery();
+
+        assertEquals(4, root.getList("COMPANY").size());
+        Iterator i = root.getList("COMPANY").iterator();
+        while ( i.hasNext()) {
+        	DataObject comp = (DataObject)i.next();
+        	assertFalse( comp.getInt("ID") == 999);
+        }        
+
+    }
     // Test ability to propogate generated values back to owning data objects
     public void testPropagateIds() throws Exception {
         

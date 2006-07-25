@@ -35,9 +35,6 @@ public class InsertCommandImpl extends WriteCommandImpl {
 		addParameters(create.getParameters());
 	}
 
-	protected boolean isInsert() {
-		return true;
-	}
 
 	public int getGeneratedKey() {
 
@@ -60,16 +57,5 @@ public class InsertCommandImpl extends WriteCommandImpl {
 
 	}
 
-	public String toString() {
-
-		String superString = super.toString();
-		StringBuffer buffer = new StringBuffer(superString);
-
-		buffer.append("\nGenerating key: " + hasGeneratedKey);
-		if (hasGeneratedKey)
-			buffer.append("\nGenerated key: " + generatedKey);
-
-		return buffer.toString();
-	}
 
 }

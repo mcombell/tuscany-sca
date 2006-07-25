@@ -44,9 +44,6 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
         configWrapper = new MappingWrapper(config);
     }
 
-    public Config newInstance() {
-        return factory.createConfig();
-    }
 
     public void addPrimaryKey(String columnName) {
         configWrapper.addPrimaryKey(columnName);

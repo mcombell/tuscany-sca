@@ -21,7 +21,7 @@
 
 	<Table tableName="BOOK">
         <Column columnName="BOOK_ID" primaryKey="true"/>
-	    <Column columnName="OCC" collision="true"/>
+	    <Column columnName="OCC" collision="true" propertyName="anOccColumn"/>
     </Table>
     
 </Config>

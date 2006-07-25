@@ -28,11 +28,8 @@ import org.apache.tuscany.das.rdb.generator.impl.UpdateGenerator;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 public class ChangeFactory {
-
-	private final Type type; 
 	
 	private InsertCommandImpl createCommand;
 
@@ -46,14 +43,9 @@ public class ChangeFactory {
 
 	private final ConnectionImpl connection; 
 	
-	public ChangeFactory(Type type, MappingWrapper mapping, ConnectionImpl connection) {
-		this.type = type;
+	public ChangeFactory(MappingWrapper mapping, ConnectionImpl connection) {	
 		this.mapping = mapping;
 		this.connection = connection;
-	}
-
-	public Type getType() {
-		return this.type;
 	}
 	
 	public void setCreateCommand(InsertCommandImpl cmd) {
@@ -138,6 +130,7 @@ public class ChangeFactory {
 				deleteCommand = new DeleteCommandImpl(delete);						
 			}
 			deleteCommand.setConnection(connection);
+			deleteCommand.configWrapper = mapping;
 		}
 		return deleteCommand;
 	}

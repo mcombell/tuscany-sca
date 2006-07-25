@@ -50,10 +50,6 @@ public class ParameterImpl  {
 		super();
 	}
 
-	public ParameterImpl(String name) {
-		this.name = name;
-	}
-
 	public ParameterImpl(int index) {
 		this.index = index;
 	}
@@ -113,14 +109,6 @@ public class ParameterImpl  {
 		return this.converter;
 	}
 
-
-	public String toString() {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("Index: " + getIndex());
-		buffer.append("\nName: " + getName());
-		buffer.append("\nValue: " + getValue());
-		return buffer.toString();
-	}
 	
 	
 }

@@ -190,19 +190,6 @@ public class MappingWrapper {
         return propertyName;
     }
 
-    public void addCollisionColumn(String columnName) {
-
-        if (config == null)
-            config = factory.createConfig();
-
-        QualifiedColumn occColumn = new QualifiedColumn(columnName);
-        Table t = findOrCreateTable(occColumn.getTableName());
-        Column c = findOrCreateColumn(t, occColumn.getColumnName());
-        c.setCollision(true);
-
-        config.getTable().add(t);
-    }
-
     public void addTable(String tableName, String typeName) {
         Table table = getTable(tableName);
         if (table != null)

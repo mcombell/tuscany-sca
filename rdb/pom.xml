@@ -63,8 +63,6 @@
                         <id>config</id>
                         <configuration>
                             <schemaFile>${basedir}/src/main/resources/config.xsd</schemaFile>
-                            <generateLoader>true</generateLoader>
-                            <generateSwitch>true</generateSwitch>
                             <noNotification>true</noNotification>
                             <noUnsettable>true</noUnsettable>
                         </configuration>
@@ -76,8 +74,6 @@
                         <id>company</id>
                         <configuration>
                             <schemaFile>${basedir}/src/test/resources/company.xsd</schemaFile>
-                            <generateLoader>true</generateLoader>
-                            <generateSwitch>true</generateSwitch>                           
                             <noUnsettable>true</noUnsettable>
                         </configuration>
                         <goals>
@@ -88,8 +84,6 @@
                         <id>customer</id>
                         <configuration>
                             <schemaFile>${basedir}/src/test/resources/customer.xsd</schemaFile>
-                            <generateLoader>true</generateLoader>
-                            <generateSwitch>true</generateSwitch>                        
                             <noUnsettable>true</noUnsettable>
                         </configuration>
                         <goals>

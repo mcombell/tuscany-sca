@@ -34,13 +34,6 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl  {
     private static final boolean debug = false;
 
     private ChangeSummarizer summarizer = new ChangeSummarizer();
-
-    public ApplyChangesCommandImpl() {
-    }
-
-    public ApplyChangesCommandImpl(Config config){
-    	this.configWrapper = new MappingWrapper(config);       
-    }
     
     public ApplyChangesCommandImpl(Config config, Connection connection){
         this.configWrapper = new MappingWrapper(config); 
@@ -53,17 +46,6 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl  {
 		summarizer.setConnection(connection);
 	}
 
-    public void addCreateCommand(Type type, Command cmd) {
-        summarizer.addCreateCommand(type, cmd);        
-    }
-
-    public void addUpdateCommand(Type type, Command cmd) {      
-        summarizer.addUpdateCommand(type, cmd);        
-    }
-
-    public void addDeleteCommand(Type type, Command cmd) {
-        summarizer.addDeleteCommand(type, cmd);       
-    }
 
     public void execute(DataObject root) {
         DebugUtil.debugln(getClass(), debug, "Executing ApplyChangesCmd");

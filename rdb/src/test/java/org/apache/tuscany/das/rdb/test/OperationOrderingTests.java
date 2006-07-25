@@ -16,6 +16,9 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CityData;
@@ -75,4 +78,44 @@ public class OperationOrderingTests extends DasTest {
 		assertEquals(numberOfStates + 1, root.getList("STATES").size());
 	}
 
+	public void testDeletes() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(getConfig("cityStates.xml"), getConnection());
+		Command select = das
+				.createCommand(
+						"Select * from STATES inner join CITIES on STATES.ID = CITIES.STATE_ID");		
+		DataObject root = select.executeQuery();
+
+		
+		DataObject firstState = root.getDataObject("STATES[1]");
+		String stateName = firstState.getString("NAME");
+		
+		ArrayList cityNames = new ArrayList();
+		Iterator i = firstState.getList("cities").iterator();
+		while ( i.hasNext()) {
+			DataObject firstCity = (DataObject) i.next();
+			cityNames.add(firstCity.getString("NAME"));			
+			firstCity.delete();					
+		}
+		firstState.delete();
+	
+		
+		
+		
+		das.applyChanges(root);
+	
+		root = select.executeQuery();
+		
+		Iterator iter = root.getList("STATES").iterator();
+		while ( iter.hasNext()) {
+			DataObject state = (DataObject)iter.next();
+			assertFalse(state.getString("NAME").equals(stateName));
+		}
+		
+		iter = root.getList("CITIES").iterator();
+		while ( iter.hasNext()) {
+			DataObject city = (DataObject)iter.next();
+			assertFalse(cityNames.contains(city.getString("NAME")));
+		}
+		
+	}
 }

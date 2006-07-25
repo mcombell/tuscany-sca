@@ -111,7 +111,7 @@ public class InsertGenerator extends BaseGenerator {
 			} else {
 				if ( obj.isSet(p) ) {
 					Relationship relationship = config.getRelationshipByReference(p);
-					if ( p.getOpposite().isMany() || (hasState(config, relationship, obj))) {							
+					if ((p.getOpposite() != null && p.getOpposite().isMany()) || (hasState(config, relationship, obj))) {							
 						RelationshipWrapper r = new RelationshipWrapper(
 							relationship);
 						Iterator keys = r.getForeignKeys().iterator();

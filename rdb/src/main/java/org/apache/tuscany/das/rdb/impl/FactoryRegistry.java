@@ -39,7 +39,7 @@ public class FactoryRegistry {
 		ChangeFactory factory = (ChangeFactory)registry.get(type);
 		if ( factory == null )  {
 			DebugUtil.debugln(getClass(), debug, "Creating new ChangeFactory for type " + type.getName());
-			factory = new ChangeFactory(type, mapping, connection);
+			factory = new ChangeFactory(mapping, connection);
 			registry.put(type, factory);
 		}
 		return factory;

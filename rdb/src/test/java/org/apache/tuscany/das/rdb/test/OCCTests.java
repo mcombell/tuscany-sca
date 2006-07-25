@@ -17,7 +17,10 @@
 package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
@@ -98,5 +101,30 @@ public class OCCTests extends DasTest {
 			if ( !ex.getMessage().equals("OCC Exception") )
 				throw ex;
 		}
+	}
+	
+	public void testProvidedConfig() throws Exception {
+		// Create config programmatically
+		Config config = ConfigFactory.INSTANCE.createConfig();
+		ConfigHelper helper = new ConfigHelper(config);
+		helper.addPrimaryKey("BOOK.BOOK_ID");
+		DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+
+		// Read a book instance
+		Command select = das
+				.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");
+		DataObject root = select.executeQuery();
+		DataObject book = root.getDataObject("BOOK[1]");
+		// Change a field to mark the instance 'dirty'
+		book.setInt("QUANTITY", 2);
+
+		// Flush the change
+
+		das.applyChanges(root);
+
+		// Verify
+		root = select.executeQuery();
+		book = root.getDataObject("BOOK[1]");
+		assertEquals(2, book.getInt("QUANTITY"));
 	}
 }

@@ -92,4 +92,21 @@ public class CompoundKeyTests extends DasTest {
         assertEquals(2, firstOrder.getList("ORDERDETAILS").size());
 
     }
+    
+    public void testReadAndDelete() throws Exception {
+    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
+        Command getOrderDetails = das
+                .createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
+       
+
+        getOrderDetails.setParameter(1, new Integer(1));
+        getOrderDetails.setParameter(2, new Integer(1));
+
+        DataObject root = getOrderDetails.executeQuery();
+
+        DataObject orderDetail = (DataObject) root.get("ORDERDETAILS[1]");
+        orderDetail.delete();
+        das.applyChanges(root);      
+
+    }
 }

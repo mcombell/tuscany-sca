@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.tuscany.das.rdb.util.DebugUtil;
+
 /**
  * DeleteList will sort delete operations so that child objects are deleted
  * before their parents
@@ -40,7 +42,7 @@ public class DeleteList {
 	}
 
 	public void add(ChangeOperation op) {
-		if (( order == null  ) || ( op.getTableName() == null ) ) {
+		if (( order.size() == 0  ) || ( op.getTableName() == null ) ) {
 			deleteOperations.add(op);
 		} else {
 			String name = op.getTableName();
@@ -54,11 +56,12 @@ public class DeleteList {
 	}
 
 	public Collection getSortedList() {
-		if  (( order != null  ) && ( opsByTableName.keySet().size() > 0) ) {
+		if  (( order.size() > 0  ) && ( opsByTableName.keySet().size() > 0) ) {
 			Iterator i = this.order.iterator();
 			while (i.hasNext()) {
 				String name = (String) i.next();
-				deleteOperations.addAll((Collection) opsByTableName.get(name));
+				if ( opsByTableName.get(name) != null)
+					deleteOperations.addAll((Collection) opsByTableName.get(name));
 			}
 		}
 		

@@ -23,8 +23,11 @@ import java.util.Date;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.test.customer.Customer;
+import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
 
@@ -97,6 +100,61 @@ public class ConverterTests extends DasTest {
 		//Verify 
 		assertEquals(tbday, root.getDate("CUSTOMER[1]/LASTNAME"));
 		
+	}
+	
+	public void testInvalidConverter1() throws Exception {
+
+		DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConverter.xml"), getConnection());
+		
+		// Build the select command to read a specific customer and related
+		// orders
+		Command select = das
+				.createCommand(
+						"SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+
+		// Parameterize the command	
+		select.setParameter(1, new Integer(1));
+
+		// Get the graph
+		try {
+			select.executeQuery();
+		} catch (Exception ex) {
+			assertEquals("java.lang.ClassNotFoundException: not.a.valid.class", ex.getMessage());
+		}
+
+	
+	}
+	
+	public void testInvalidConverter2() throws Exception {
+
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConverter.xml"), getConnection());
+		
+		// Build the select command to read a specific customer and related
+		// orders
+		Command select = das
+				.createCommand(
+						"SELECT * FROM ANORDER");	
+
+		// Get the graph
+		
+		DataObject root = select.executeQuery();
+		DataObject order = root.getDataObject("AnOrder[1]");
+		
+		Customer customer = (Customer) root.createDataObject("Customer");
+		customer.setID(700);
+		customer.setLastName("Daniel");
+		customer.setAddress("an address");		
+		
+		customer.getOrders().add(order);	
+		
+		try {
+			das.applyChanges(root);
+		} catch (Exception ex) {
+			assertEquals("java.lang.ClassNotFoundException: not.a.valid.class", ex.getMessage());
+		}
+
+	
 	}
 	
 }
