@@ -152,4 +152,31 @@ public class OneToOneRelationshipTests extends DasTest {
         assertEquals("Joe Hotshot", employee.getString("NAME"));
         
     }
+    
+    public void testRestrictedOneToOneRelationship() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(getConfig("OneToOneRestrictedConfig.xml"),
+				getConnection());
+
+		Command read = das.getCommand("get named employee with company");
+        read.setParameter(1, "Mary Smith");
+        DataObject root = read.executeQuery();
+        DataObject mary = root.getDataObject("EMPLOYEE[1]");
+        DataObject company = mary.getDataObject("company");
+
+        DataObject bob = root.createDataObject("EMPLOYEE");
+        bob.setString("NAME", "bob");
+        bob.setString("SN", "E0005");
+        bob.setInt("MANAGER", 0);
+        
+        bob.setDataObject("company", company);
+        
+        try {
+        	das.applyChanges(root);
+        	fail("Relationship modification should not be allowed.");
+        } catch (RuntimeException ex) {
+        	assertEquals("Can not modify a one to one relationship that is key restricted", ex.getMessage());        	
+        }
+        assertEquals("ACME Publishing", company.getString("NAME"));                
+		
+	}
 }

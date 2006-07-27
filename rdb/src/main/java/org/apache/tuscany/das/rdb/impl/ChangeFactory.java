@@ -76,9 +76,6 @@ public class ChangeFactory {
 		return new CreateOperation(getCreateCommand(changedObject), changedObject, propagatedID);
 	}
 	
-	ChangeOperation createInsertOperation(DataObject changedObject) {
-		return createInsertOperation(changedObject, null);
-	}
 
 
 	private InsertCommandImpl getCreateCommand(DataObject changedObject) {

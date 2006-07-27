@@ -63,6 +63,7 @@
       <xsd:attribute name="primaryKeyTable" type="xsd:string"/>
       <xsd:attribute name="foreignKeyTable" type="xsd:string"/>
       <xsd:attribute name="many" type="xsd:boolean"/>
+      <xsd:attribute name="keyRestricted" type="xsd:boolean"/>
    </xsd:complexType>
    <xsd:complexType name="Table">
       <xsd:sequence>

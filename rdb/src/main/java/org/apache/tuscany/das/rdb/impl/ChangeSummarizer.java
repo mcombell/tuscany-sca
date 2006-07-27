@@ -153,6 +153,8 @@ public class ChangeSummarizer {
 			Relationship rel = mw.getRelationshipByReference(ref);			
 			
 			if ( !rel.isMany()) {
+				if ( rel.isKeyRestricted())
+					throw new RuntimeException("Can not modify a one to one relationship that is key restricted");
 				// This is a one-one relationship
 				Table t = mapping.getTableByTypeName(changedObject.getType().getName());
 				TableWrapper tw = new TableWrapper(t);
