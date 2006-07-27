@@ -82,10 +82,10 @@
                         <tasks>
                             <mkdir dir="target/site/samples/java/javadoc" />
                             <copy todir='target/site/samples/java/javadoc' >
-                                    <fileset dir="../java/javadoc"/>
+                                    <fileset dir="../branches/java-post-M1/javadoc"/>
                             </copy>
                             <copy todir="target/site/samples/java/samples" >
-                                    <fileset dir="../java/samples">
+                                    <fileset dir="../branches/java-post-M1/samples">
                                             <patternset>
                                               <include name="**/*.htm*" />
                                               <include name="**/*.jpg" />
@@ -96,7 +96,7 @@
                             </copy>
                             <mkdir dir="target/site/samples/java/sampleapps" />
                             <copy todir="target/site/samples/java/sampleapps" >
-                                    <fileset dir="../java/sampleapps">
+                                    <fileset dir="../branches/java-post-M1/sampleapps">
                                             <patternset>
                                               <include name="**/*.htm*" />
                                               <include name="**/*.jpg" />
@@ -109,7 +109,12 @@
                             <copy todir="target/site/scripts"  >
                                      <fileset dir="src/site/scripts"/>
                             </copy>
-                            <copy file='../java/GettingStarted.htm' todir='target/site/samples/java'/>
+                            <mkdir dir="target/site/css" />
+                            <copy todir="target/site/css" >
+                                    <fileset dir="src/site/css">
+                                    </fileset>
+                            </copy>
+                            <copy file='../branches/java-post-M1/GettingStarted.htm' todir='target/site/samples/java'/>
                         </tasks>
                       </configuration>
                       <goals>
@@ -139,8 +144,11 @@
           <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-site-plugin</artifactId>
+           
            <configuration>
+           <!--
              <templateDirectory>file:///${basedir}/</templateDirectory>
+             -->
              <template>maven-site.vm</template>
            </configuration>
           </plugin>
