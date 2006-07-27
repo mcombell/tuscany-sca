@@ -141,8 +141,12 @@ public class Statement {
             DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
             if (value == null) {
                 if (param.getType() == null) {
-                    ParameterMetaData pmd = ps.getParameterMetaData();
-                    ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
+                	try {
+                		ParameterMetaData pmd = ps.getParameterMetaData();
+                		ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
+                	} catch (Exception ex) {
+                		ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(null));
+                	}
                 } else
                     ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
             } else {

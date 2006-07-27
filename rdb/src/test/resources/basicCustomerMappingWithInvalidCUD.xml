@@ -17,9 +17,9 @@
 <Config xsi:noNamespaceSchemaLocation="http:///org.apache.tuscany.das.rdb/config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <Table tableName="CUSTOMER">
-	  <create sql="insert into customer blah values (?, ?, ?)" parameters="ID LASTNAME ADDRESS"/>
-	  <update sql="update customer blah set lastname = ?, address = ? where ID = ?" parameters="LASTNAME ADDRESS ID"/>
-      <delete sql="delete from customer blah where ID = ?" parameters="ID"/>
+	  <create sql="isnert into customer blah values (?, ?, ?)" parameters="ID LASTNAME ADDRESS"/>
+	  <update sql="udpate customer blah set lastname = ?, address = ? where ID = ?" parameters="LASTNAME ADDRESS ID"/>
+      <delete sql="dleete from customer blah where ID = ?" parameters="ID"/>
      
     <Column columnName="ID" primaryKey="true"/>
     <Column columnName="LASTNAME"/>

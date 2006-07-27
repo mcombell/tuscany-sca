@@ -47,12 +47,12 @@ public class MySQLSetup extends DatabaseSetup {
 		    "  DELETE FROM CUSTOMER WHERE ID = theId ";
 
 
-//		String createGetNamedCustomers = 
-//			"CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) " +
-//		    " BEGIN " +
-//		    "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; " +
-//            "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " +
-//            " END ";
+		String createGetNamedCustomers = 
+			"CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) " +
+		    " BEGIN " +
+		    "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; " +
+            "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " +
+            " END ";
 		  
 		String createGetCustomerAndOrders = 
 			" CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) " +
@@ -70,8 +70,8 @@ public class MySQLSetup extends DatabaseSetup {
 			s.execute(createDeleteCustomer);
 			s.execute(createGetNamedCompany);
 			s.execute(createGetCustomerAndOrders);
-//			s.execute(createGetNamedCustomers);
-//TODO - add this back after DB2 problem is resolved
+			s.execute(createGetNamedCustomers);
+
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}		
@@ -79,8 +79,8 @@ public class MySQLSetup extends DatabaseSetup {
 	
 	
 	//Overrides for table creation
-	protected String getCreateCompany() {
-		return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30))";
+	protected String getCreateCompany() {		
+		return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), EOTMID INT)";
 	}
 	protected String getCreateEmployee() {
 		return "CREATE TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), SN VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)";
@@ -90,6 +90,10 @@ public class MySQLSetup extends DatabaseSetup {
 	}
 	protected String getCreateTypeTest() {
 		return "CREATE TABLE TYPETEST (ID INT PRIMARY KEY NOT NULL, ATIMESTAMP DATETIME, ADECIMAL DECIMAL(9,2), AFLOAT FLOAT)";
+	}
+	
+	protected String getCreateServerStatus() {
+		return "CREATE TABLE CONMGT.SERVERSTATUS (STATUSID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, MANAGEDSERVERID INTEGER NOT NULL, TIMESTAMP TIMESTAMP NOT NULL)";
 	}
 
 }

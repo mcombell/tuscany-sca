@@ -111,7 +111,7 @@ public class CorrectedDefectTests extends DasTest {
         insert.execute();
 
         // Verify
-        Command select = das.createCommand("Select * from conmgt.serverstatus");      
+        Command select = das.createCommand("Select * from conmgt.SERVERSTATUS");      
         DataObject root = select.executeQuery();
         assertEquals(1, root.getList("SERVERSTATUS").size());
 

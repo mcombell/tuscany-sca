@@ -56,8 +56,14 @@ public class DatabaseSetup extends TestSetup {
             connection.setAutoCommit(false);
 
         } catch (Exception e) {
-            if (e instanceof SQLException)
-                ((SQLException) e).getNextException().printStackTrace();
+            if (e instanceof SQLException) {
+            	if ( ((SQLException) e).getNextException() != null )
+            		((SQLException) e).getNextException().printStackTrace();
+            	else	
+            		e.printStackTrace();
+            			
+            }
+                
             throw new RuntimeException(e);
         }
 
@@ -106,7 +112,8 @@ public class DatabaseSetup extends TestSetup {
                 s.execute(statements[i]);
             } catch (SQLException e) {
                 // If the table does not exist then ignore the exception on drop
-                if (!e.getMessage().contains("does not exist"))
+                if ((!e.getMessage().contains("does not exist")) &&
+                		(!e.getMessage().contains("Unknown table")))
                     throw new RuntimeException(e);
             }
         }
