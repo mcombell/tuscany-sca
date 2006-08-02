@@ -24,8 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Column;
+import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.ConnectionInfo;
+import org.apache.tuscany.das.rdb.config.Create;
+import org.apache.tuscany.das.rdb.config.Delete;
 import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
@@ -190,7 +194,7 @@ public class MappingWrapper {
         return propertyName;
     }
 
-    public void addTable(String tableName, String typeName) {
+    public Table addTable(String tableName, String typeName) {
         Table table = getTable(tableName);
         if (table != null)
             throw new RuntimeException("Table " + tableName + "already exists");
@@ -200,6 +204,7 @@ public class MappingWrapper {
         table.setTypeName(typeName);
         config.getTable().add(table);
 
+        return table;
     }
 
     private Table findOrCreateTable(String tableName) {
@@ -355,13 +360,51 @@ public class MappingWrapper {
         throw new RuntimeException("Could not find relationship " + name + " in the configuration");
     }
 
-    public void addUpdateCommand(String tableName, String statement, String parameters) {
-        Table table = findOrCreateTable(tableName);
+    public void addUpdateStatement(Table table, String statement, String parameters) {
+    
         Update update = ConfigFactoryImpl.eINSTANCE.createUpdate();
         update.setSql(statement);
         update.setParameters(parameters);
         table.setUpdate(update);
         
     }
+
+    public void addDeleteStatement(Table table, String statement,
+			String parameters) {
+
+		Delete delete = ConfigFactoryImpl.eINSTANCE.createDelete();
+		delete.setSql(statement);
+		delete.setParameters(parameters);
+		table.setDelete(delete);
+
+	}
+
+    
+    public void addCreateStatement(Table table, String statement,
+			String parameters) {
+
+		Create create = ConfigFactoryImpl.eINSTANCE.createCreate();
+		create.setSql(statement);
+		create.setParameters(parameters);
+		table.setCreate(create);
+
+	}
+	public void addConnectionInfo(String dataSourceName, boolean managedtx) {
+		ConnectionInfo info = ConfigFactoryImpl.eINSTANCE.createConnectionInfo();
+		info.setDataSource(dataSourceName);
+		info.setManagedtx(managedtx);
+		config.setConnectionInfo(info);		
+	}
+
+	public Command addCommand(String name, String sql, String kind) {
+		Command cmd = ConfigFactoryImpl.eINSTANCE.createCommand();
+		cmd.setName(name);
+		cmd.setKind(kind);
+		cmd.setSQL(sql);
+		
+		config.getCommand().add(cmd);
+		
+		return cmd;
+	}
 
 }

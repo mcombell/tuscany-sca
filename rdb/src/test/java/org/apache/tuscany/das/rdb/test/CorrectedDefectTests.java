@@ -28,6 +28,7 @@ import java.util.Random;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
@@ -261,7 +262,8 @@ public class CorrectedDefectTests extends DasTest {
 
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
-        helper.addUpdateStatement("update CUSTOMER set LASTNAME = ? where ID = ?", "CUSTOMER", "LASTNAME ID");         
+        Table customerTable = helper.addTable("CUSTOMER", "CUSTOMER");
+        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ? where ID = ?", "LASTNAME ID");         
         
     	DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
     	

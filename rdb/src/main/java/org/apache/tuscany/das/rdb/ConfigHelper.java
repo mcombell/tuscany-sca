@@ -16,8 +16,10 @@
  */
 package org.apache.tuscany.das.rdb;
 
+import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
@@ -53,15 +55,49 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
         configWrapper.addRelationship(parentName, childName);
     }
     
-    public void addTable(String name, String propertyName) {
-        configWrapper.addTable(name, propertyName);
+    public Table addTable(String name, String propertyName) {
+        return configWrapper.addTable(name, propertyName);
     }
     
-    public void addUpdateStatement(String statement, String tableName, String parameters) {
-        configWrapper.addUpdateCommand(tableName, statement, parameters);
+    public void addUpdateStatement(Table table, String statement, String parameters) {
+        configWrapper.addUpdateStatement(table, statement, parameters);
     }     
     
+    public void addCreateStatement(Table table, String statement, String parameters) {
+    	configWrapper.addCreateStatement(table, statement, parameters);
+    }
     
+    public void addDeleteStatement(Table table, String statement, String parameters) {
+    	configWrapper.addDeleteStatement(table, statement, parameters);
+    }
+    
+    public void addConnectionInfo(String dataSourceName, boolean managedtx) {
+    	configWrapper.addConnectionInfo(dataSourceName, managedtx);
+    }
+    
+    public void addConnectionInfo(String dataSourceName) {
+    	configWrapper.addConnectionInfo(dataSourceName, true);
+    }
+    
+    public void setDataObjectModel(String dataObjectModel) {
+    	configWrapper.getConfig().setDataObjectModel(dataObjectModel);
+    }
+    
+    public Command addSelectCommand(String name, String sql) {
+    	return configWrapper.addCommand(name, sql, "select");
+    }
+    
+    public Command addUpdateCommand(String name, String sql) {
+    	return configWrapper.addCommand(name, sql, "update");
+    }
+    
+    public Command addInsertCommand(String name, String sql) {
+    	return configWrapper.addCommand(name, sql, "insert");    	
+    }
+    
+    public Command addDeleteCommand(String name, String sql) {
+    	return configWrapper.addCommand(name, sql, "delete");
+    }
     
     public Config getConfig() {
         return config;

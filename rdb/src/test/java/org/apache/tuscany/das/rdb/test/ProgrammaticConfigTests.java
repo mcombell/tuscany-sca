@@ -16,9 +16,14 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.List;
+
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConnectionInfo;
+import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.test.data.BookData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
@@ -142,5 +147,151 @@ public class ProgrammaticConfigTests extends DasTest {
         root = select.executeQuery();
         assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
         
+    }
+    
+    /**
+     * Simple unit test for ConnectionInfo
+     * @throws Exception
+     */
+    public void testConnectionInfo() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addConnectionInfo("jdbc/adatasource");
+    	
+    	Config config = helper.getConfig();
+    	ConnectionInfo info = config.getConnectionInfo();
+    	assertEquals(info.getDataSource(), "jdbc/adatasource");
+    	assertEquals(info.isManagedtx(), true);
+    }
+    
+    /**
+     * Simple unit test for ConnectionInfo
+     * @throws Exception
+     */
+    public void testConnectionInfo2() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addConnectionInfo("jdbc/adatasource", false);
+    	
+    	Config config = helper.getConfig();
+    	ConnectionInfo info = config.getConnectionInfo();
+    	assertEquals(info.getDataSource(), "jdbc/adatasource");
+    	assertEquals(info.isManagedtx(), false);
+    }
+    
+    /**
+     * Simple unit test for adding a select command
+     * @throws Exception
+     */
+    public void testAddSelectCommand() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addSelectCommand("get all customers", "select * from customers");
+    	
+    	Config config = helper.getConfig();
+    	List commands = config.getCommand();
+    	assertEquals(1, commands.size());
+    	org.apache.tuscany.das.rdb.config.Command cmd = (org.apache.tuscany.das.rdb.config.Command) commands.get(0);
+    	assertEquals("select", cmd.getKind());
+    	assertEquals("get all customers", cmd.getName());
+    	assertEquals("select * from customers", cmd.getSQL());
+    }
+    
+    
+    /**
+     * Simple unit test for adding an update command
+     * @throws Exception
+     */
+    public void testAddUpdateCommand() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addUpdateCommand("update a customer", "update customers set name = ? where id = ?");
+    	
+    	Config config = helper.getConfig();
+    	List commands = config.getCommand();
+    	assertEquals(1, commands.size());
+    	org.apache.tuscany.das.rdb.config.Command cmd = (org.apache.tuscany.das.rdb.config.Command) commands.get(0);
+    	assertEquals("update", cmd.getKind());
+    	assertEquals("update a customer", cmd.getName());
+    	assertEquals("update customers set name = ? where id = ?", cmd.getSQL());
+    }
+    
+    /**
+     * Simple unit test for adding an insert command
+     * @throws Exception
+     */
+    public void testAddInsertCommand() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addInsertCommand("insert customer", "insert into customers(ID,NAME) values (?,?)");
+    	
+    	Config config = helper.getConfig();
+    	List commands = config.getCommand();
+    	assertEquals(1, commands.size());
+    	org.apache.tuscany.das.rdb.config.Command cmd = (org.apache.tuscany.das.rdb.config.Command) commands.get(0);
+    	assertEquals("insert", cmd.getKind());
+    	assertEquals("insert customer", cmd.getName());
+    	assertEquals("insert into customers(ID,NAME) values (?,?)", cmd.getSQL());
+    }
+    
+    /**
+     * Simple unit test for adding a delete command
+     * @throws Exception
+     */
+    public void testAddDeleteCommand() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.addDeleteCommand("delete customer", "delete from customers where id = ?");
+    	
+    	Config config = helper.getConfig();
+    	List commands = config.getCommand();
+    	assertEquals(1, commands.size());
+    	org.apache.tuscany.das.rdb.config.Command cmd = (org.apache.tuscany.das.rdb.config.Command) commands.get(0);
+    	assertEquals("delete", cmd.getKind());
+    	assertEquals("delete customer", cmd.getName());
+    	assertEquals("delete from customers where id = ?", cmd.getSQL());
+    }
+    
+    /**
+     * Simple unit test for DataObjectModel
+     * @throws Exception
+     */
+    public void testDataObjectModel() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	helper.setDataObjectModel("org.apache.tuscany/mytypes");
+    	
+    	Config config = helper.getConfig();
+    	assertEquals("org.apache.tuscany/mytypes", config.getDataObjectModel());
+    	
+    }
+    
+    /**
+     * Simple unit test for adding a Delete statement to a Table
+     * @throws Exception
+     */
+    public void testAddDeleteStatement() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	Table table = helper.addTable("widgets", "WIDGETS");
+    	helper.addDeleteStatement(table, "delete from widgets where id = ?", "ID");
+    	
+    	Config cfg = helper.getConfig();
+    	assertEquals(1, cfg.getTable().size());
+    	Table widgets = (Table) cfg.getTable().get(0);
+    	assertEquals("delete from widgets where id = ?", widgets.getDelete().getSql());
+    	assertEquals("WIDGETS", widgets.getTypeName());
+    	assertEquals("ID", widgets.getDelete().getParameters());
+    	
+    }
+    
+    /**
+     * Simple unit test for adding a Create statement to a Table
+     * @throws Exception
+     */
+    public void testAddCreateStatement() throws Exception {
+    	ConfigHelper helper = new ConfigHelper();
+    	Table table = helper.addTable("widgets", "WIDGETS");
+    	helper.addCreateStatement(table, "insert into widgets values (?,?)", "ID NAME");
+    	
+    	Config cfg = helper.getConfig();
+    	assertEquals(1, cfg.getTable().size());
+    	Table widgets = (Table) cfg.getTable().get(0);
+    	assertEquals("insert into widgets values (?,?)", widgets.getCreate().getSql());
+    	assertEquals("WIDGETS", widgets.getTypeName());
+    	assertEquals("ID NAME", widgets.getCreate().getParameters());
+    	
     }
 }

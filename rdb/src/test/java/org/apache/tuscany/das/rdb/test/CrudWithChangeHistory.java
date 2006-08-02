@@ -30,6 +30,7 @@ import java.util.Iterator;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderDetailsData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
@@ -91,8 +92,9 @@ public class CrudWithChangeHistory extends DasTest {
 
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
-        helper.addUpdateStatement("update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?",
-                "CUSTOMER", "LASTNAME ADDRESS ID");
+        Table customerTable = helper.addTable("CUSTOMER", "CUSTOMER");
+        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?",
+                "LASTNAME ADDRESS ID");
 
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         // Read customer 1
