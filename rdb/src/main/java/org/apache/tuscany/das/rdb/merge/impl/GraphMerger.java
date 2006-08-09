@@ -22,14 +22,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.MultiTableRegistry;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.TableRegistry;
+import org.apache.tuscany.sdo.helper.TypeHelperImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
+import org.apache.tuscany.sdo.util.SDOUtil;
+import org.eclipse.emf.ecore.EPackage;
 
 import commonj.sdo.ChangeSummary;
+import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
+import commonj.sdo.Type;
+import commonj.sdo.helper.TypeHelper;
 
 public class GraphMerger {
 
@@ -44,6 +51,44 @@ public class GraphMerger {
 		// Empty Constructor
 	}
 
+		// TODO Replace EMF reference with SDOUtil function when available
+		// (Tuscany-583)
+	public DataObject emptyGraph(Config config) {
+
+		if (config.getDataObjectModel() == null)
+			throw new RuntimeException(
+					"DataObjectModel must be specified in the Config");
+
+		String uri = "http:///org.apache.tuscany.das.rdb/das";
+		TypeHelper typeHelper = SDOUtil.createTypeHelper();
+		Type rootType = SDOUtil.createType(typeHelper, uri + "/DataGraphRoot",
+				"DataGraphRoot", false);
+
+		EPackage pkg = ((TypeHelperImpl) typeHelper).getExtendedMetaData()
+				.getPackage(config.getDataObjectModel());
+		if (pkg == null)
+			throw new RuntimeException(
+					"SDO Types have not been registered for URI " + uri);
+		Iterator i = pkg.getEClassifiers().iterator();
+		while (i.hasNext()) {
+			Type type = (Type) i.next();
+			Property property = SDOUtil.createProperty(rootType,
+					type.getName(), type);
+			SDOUtil.setContainment(property, true);
+			SDOUtil.setMany(property, true);
+		}
+
+		// Create the DataGraph
+		DataGraph g = SDOUtil.createDataGraph();
+
+		// Create the root object
+		g.createRootObject(rootType);
+
+		ChangeSummary summary = g.getChangeSummary();
+		summary.beginLogging();
+
+		return g.getRootObject();
+	}
 	public DataObject merge(List graphs) {
 		DataObject primaryGraph = (DataObject) graphs.get(0);
 

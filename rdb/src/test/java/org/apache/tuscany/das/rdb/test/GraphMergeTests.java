@@ -19,11 +19,15 @@ package org.apache.tuscany.das.rdb.test;
 import java.util.ArrayList;
 
 import org.apache.tuscany.das.rdb.Command;
+import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.merge.impl.GraphMerger;
+import org.apache.tuscany.das.rdb.test.customer.Customer;
+import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
+import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
 
@@ -37,7 +41,42 @@ public class GraphMergeTests extends DasTest {
 		
 	}
 
-
+	public void testCreateEmptyGraph() throws Exception {
+		String typeUri = "http:///org.apache.tuscany.das.rdb.test/customer.xsd";
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		ConfigHelper helper = new ConfigHelper();
+		helper.setDataObjectModel(typeUri);
+		DataObject graph = new GraphMerger().emptyGraph(helper.getConfig());
+		assertEquals(0, graph.getList("Customer").size());
+		assertEquals(0, graph.getList("AnOrder").size());
+		
+	}
+	
+	public void testCreateEmptyGraphAndAddCustomer() throws Exception {
+		String typeUri = "http:///org.apache.tuscany.das.rdb.test/customer.xsd";
+		SDOUtil.registerStaticTypes(CustomerFactory.class);
+		ConfigHelper helper = new ConfigHelper();
+		helper.setDataObjectModel(typeUri);
+		helper.addTable("CUSTOMER", "Customer");
+		helper.addPrimaryKey("CUSTOMER.ID");
+		
+		DataObject graph = new GraphMerger().emptyGraph(helper.getConfig());
+		Customer c = (Customer) graph.createDataObject("Customer");
+		c.setID(4000);
+		c.setLastName("Smith");
+		c.setAddress("400 Fourth Street");
+		
+		DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+		das.applyChanges(graph);
+		
+		Command cmd = das.createCommand("select * from CUSTOMER order by ID desc");
+		graph = cmd.executeQuery();
+		assertEquals(6, graph.getList("Customer").size());
+		assertEquals("Smith", graph.getDataObject("Customer[1]").getString("lastName"));
+		assertEquals("400 Fourth Street", graph.getDataObject("Customer[1]").getString("address"));
+		
+	}
+	
 	public void testSingleTableMerge() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
 		Command select = das
