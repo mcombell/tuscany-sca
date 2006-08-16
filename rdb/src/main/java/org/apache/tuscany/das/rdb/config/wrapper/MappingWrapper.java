@@ -43,7 +43,7 @@ import commonj.sdo.Property;
 
 public class MappingWrapper {
 
-    private static final ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+    private static final ConfigFactory factory = ConfigFactory.INSTANCE;
 
     private static final boolean debug = false;
 
@@ -201,7 +201,7 @@ public class MappingWrapper {
         if (table != null)
             throw new RuntimeException("Table " + tableName + "already exists");
 
-        table = ConfigFactoryImpl.eINSTANCE.createTable();
+        table = ConfigFactory.INSTANCE.createTable();
         table.setTableName(tableName);
         table.setTypeName(typeName);
         config.getTable().add(table);
@@ -212,7 +212,7 @@ public class MappingWrapper {
     private Table findOrCreateTable(String tableName) {
         Table table = getTable(tableName);
         if (table == null) {
-            table = ConfigFactoryImpl.eINSTANCE.createTable();
+            table = ConfigFactory.INSTANCE.createTable();
             table.setTableName(tableName);
             config.getTable().add(table);
         }
@@ -228,7 +228,7 @@ public class MappingWrapper {
                 return c;
         }
 
-        Column c = ConfigFactoryImpl.eINSTANCE.createColumn();
+        Column c = ConfigFactory.INSTANCE.createColumn();
         c.setColumnName(name);
         t.getColumn().add(c);
         return c;
@@ -364,7 +364,7 @@ public class MappingWrapper {
 
     public void addUpdateStatement(Table table, String statement, String parameters) {
     
-        Update update = ConfigFactoryImpl.eINSTANCE.createUpdate();
+        Update update = ConfigFactory.INSTANCE.createUpdate();
         update.setSql(statement);
         update.setParameters(parameters);
         table.setUpdate(update);
@@ -374,7 +374,7 @@ public class MappingWrapper {
     public void addDeleteStatement(Table table, String statement,
 			String parameters) {
 
-		Delete delete = ConfigFactoryImpl.eINSTANCE.createDelete();
+		Delete delete = ConfigFactory.INSTANCE.createDelete();
 		delete.setSql(statement);
 		delete.setParameters(parameters);
 		table.setDelete(delete);
@@ -385,21 +385,21 @@ public class MappingWrapper {
     public void addCreateStatement(Table table, String statement,
 			String parameters) {
 
-		Create create = ConfigFactoryImpl.eINSTANCE.createCreate();
+		Create create = ConfigFactory.INSTANCE.createCreate();
 		create.setSql(statement);
 		create.setParameters(parameters);
 		table.setCreate(create);
 
 	}
 	public void addConnectionInfo(String dataSourceName, boolean managedtx) {
-		ConnectionInfo info = ConfigFactoryImpl.eINSTANCE.createConnectionInfo();
+		ConnectionInfo info = ConfigFactory.INSTANCE.createConnectionInfo();
 		info.setDataSource(dataSourceName);
 		info.setManagedtx(managedtx);
 		config.setConnectionInfo(info);		
 	}
 
 	public Command addCommand(String name, String sql, String kind) {
-		Command cmd = ConfigFactoryImpl.eINSTANCE.createCommand();
+		Command cmd = ConfigFactory.INSTANCE.createCommand();
 		cmd.setName(name);
 		cmd.setKind(kind);
 		cmd.setSQL(sql);

@@ -32,7 +32,7 @@ public class ReadCustomersByLastnameCommand extends ReadCommandImpl {
 	private static final Config mapping;
 	
 	static {
-		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+		ConfigFactory factory = ConfigFactory.INSTANCE;
 		mapping = factory.createConfig();
 		Table t = factory.createTable();
 		Column id = factory.createColumn();

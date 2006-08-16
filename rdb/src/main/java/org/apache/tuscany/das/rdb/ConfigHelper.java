@@ -36,7 +36,7 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
     private MappingWrapper configWrapper;
 
-    private ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+    private ConfigFactory factory = ConfigFactory.INSTANCE;
 
     public ConfigHelper() {
         config = factory.createConfig();

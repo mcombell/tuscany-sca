@@ -37,7 +37,7 @@ public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
 	private static final Config config;
 
 	static {
-		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+		ConfigFactory factory = ConfigFactory.INSTANCE;
 		config = factory.createConfig();
 		Table t = factory.createTable();
 		Column id = factory.createColumn();

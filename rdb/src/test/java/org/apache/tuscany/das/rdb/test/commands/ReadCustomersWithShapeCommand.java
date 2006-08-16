@@ -31,7 +31,7 @@ public class ReadCustomersWithShapeCommand extends ReadCommandImpl {
 	static ArrayList descriptor = new ArrayList();
 	
 	static {
-		ConfigFactory factory = ConfigFactoryImpl.eINSTANCE;
+		ConfigFactory factory = ConfigFactory.INSTANCE;
 		
 		ResultDescriptor desc1 = factory.createResultDescriptor();
 		desc1.setColumnName("ID");
