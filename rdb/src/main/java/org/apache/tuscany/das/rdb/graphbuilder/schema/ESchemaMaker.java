@@ -21,16 +21,15 @@ package org.apache.tuscany.das.rdb.graphbuilder.schema;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultMetadata;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
-import org.apache.tuscany.sdo.helper.TypeHelperImpl;
 import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.apache.tuscany.sdo.util.SDOUtil;
-import org.eclipse.emf.ecore.EPackage;
 
 import commonj.sdo.Property;
 import commonj.sdo.Type;
@@ -188,10 +187,11 @@ public class ESchemaMaker {
 	public Type createTypes(String uri) {
 		Type rootType = SDOUtil.createType(typeHelper, getURI() + "/DataGraphRoot", "DataGraphRoot", false);	
 		
-		EPackage pkg = ((TypeHelperImpl)typeHelper).getExtendedMetaData().getPackage(uri);
-		if ( pkg == null ) 
+		List types = SDOUtil.getTypes(typeHelper, uri);
+		if ( types == null )
 			throw new RuntimeException("SDO Types have not been registered for URI " + uri);
-		Iterator i = pkg.getEClassifiers().iterator();
+		
+		Iterator i = types.iterator();
 		while ( i.hasNext() ) {
 			Type type = (Type) i.next();
 			Property property = SDOUtil.createProperty(rootType, type.getName(), type);

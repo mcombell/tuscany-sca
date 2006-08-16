@@ -28,10 +28,8 @@ import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.QualifiedColumn;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.MultiTableRegistry;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.TableRegistry;
-import org.apache.tuscany.sdo.helper.TypeHelperImpl;
 import org.apache.tuscany.sdo.impl.ChangeSummaryImpl;
 import org.apache.tuscany.sdo.util.SDOUtil;
-import org.eclipse.emf.ecore.EPackage;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
@@ -66,12 +64,11 @@ public class GraphMerger {
 		Type rootType = SDOUtil.createType(typeHelper, uri + "/DataGraphRoot",
 				"DataGraphRoot", false);
 
-		EPackage pkg = ((TypeHelperImpl) typeHelper).getExtendedMetaData()
-				.getPackage(config.getDataObjectModel());
-		if (pkg == null)
-			throw new RuntimeException(
-					"SDO Types have not been registered for URI " + uri);
-		Iterator i = pkg.getEClassifiers().iterator();
+		List types = SDOUtil.getTypes(typeHelper, config.getDataObjectModel());
+		if ( types == null )
+			throw new RuntimeException("SDO Types have not been registered for URI " + config.getDataObjectModel());
+		
+		Iterator i = types.iterator();
 		while (i.hasNext()) {
 			Type type = (Type) i.next();
 			Property property = SDOUtil.createProperty(rootType,
