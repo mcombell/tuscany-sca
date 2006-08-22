@@ -23,8 +23,8 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.Parameter;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
@@ -33,7 +33,7 @@ import commonj.sdo.helper.TypeHelper;
 
 public class SPCommandImpl extends ReadCommandImpl {
     
-    public SPCommandImpl(String sqlString, Config config, List params) {
+    public SPCommandImpl(String sqlString, MappingWrapper config, List params) {
         super(sqlString, config, null);
         Iterator i = params.iterator();
         for (int idx = 1; i.hasNext(); idx++) {

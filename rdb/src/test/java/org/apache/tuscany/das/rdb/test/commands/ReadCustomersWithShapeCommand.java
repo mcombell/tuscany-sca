@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ResultDescriptor;
-import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
 public class ReadCustomersWithShapeCommand extends ReadCommandImpl {
@@ -54,7 +54,7 @@ public class ReadCustomersWithShapeCommand extends ReadCommandImpl {
 		
 	}
 	public ReadCustomersWithShapeCommand() {
-		super(sqlString, null, descriptor);		
+		super(sqlString, new MappingWrapper(), descriptor);		
 	}
 
 }

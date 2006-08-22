@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.GraphBuilderMetadata;
 import org.apache.tuscany.das.rdb.graphbuilder.impl.ResultSetProcessor;
@@ -39,10 +38,9 @@ public class ReadCommandImpl extends CommandImpl {
 
     private int endRow = Integer.MAX_VALUE;   
 
-    public ReadCommandImpl(String sqlString, Config mapping, List resultDescriptor) {
+    public ReadCommandImpl(String sqlString, MappingWrapper mapping, List resultDescriptor) {
         super(sqlString);
-        if (mapping != null)
-            setMappingModel(mapping);
+        this.configWrapper = mapping;
         
         if ( resultDescriptor != null && !resultDescriptor.isEmpty()) 
         	this.resultSetShape = new ResultSetShape(resultDescriptor);
@@ -118,9 +116,6 @@ public class ReadCommandImpl extends CommandImpl {
         this.endRow = endRow;
     }
 
-    private void setMappingModel(Config config) {
-        configWrapper = new MappingWrapper(config);    
-    }   
 
     protected void enablePaging() {
         statement.enablePaging();

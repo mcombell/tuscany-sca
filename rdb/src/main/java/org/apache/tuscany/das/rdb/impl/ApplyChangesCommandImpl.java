@@ -20,13 +20,10 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.Connection;
 
-import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.Type;
 
 /**
  * 
@@ -37,10 +34,10 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl  {
 
     private ChangeSummarizer summarizer = new ChangeSummarizer();
     
-    public ApplyChangesCommandImpl(Config config, Connection connection){
-        this.configWrapper = new MappingWrapper(config); 
+    public ApplyChangesCommandImpl(MappingWrapper config, Connection connection){
+        this.configWrapper = config; 
         if ( connection != null )
-     	   setConnection(connection, config);
+     	   setConnection(connection, config.getConfig());
         
     }
     

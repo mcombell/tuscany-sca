@@ -34,10 +34,6 @@ public class DASFactoryImpl implements DASFactory {
 	public DAS createDAS(Config config) {
 		return new DASImpl(config);
 	}
-	
-	public DAS createDAS() {
-		return new DASImpl();
-	}
 
 	public DAS createDAS(InputStream configStream, Connection connection) {
 		return new DASImpl(configStream, connection);

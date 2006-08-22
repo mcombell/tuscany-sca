@@ -22,13 +22,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.graphbuilder.schema.ESchemaMaker;
 import org.apache.tuscany.das.rdb.impl.ResultSetShape;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Type;
 
@@ -37,14 +36,13 @@ import commonj.sdo.Type;
  */
 public class GraphBuilderMetadata {
 
-	private Config mappingModel;
+	private MappingWrapper configWrapper;
 	private final Collection resultSets = new ArrayList();
-	private boolean debug = false;
 	private String typeURI;
 
 
 	public GraphBuilderMetadata(Collection results, Config model, ResultSetShape shape) throws SQLException {
-		this.mappingModel = model;
+		this.configWrapper = new MappingWrapper(model);
 		if (model != null) {
 			this.typeURI = model.getDataObjectModel();		
 		}
@@ -52,35 +50,23 @@ public class GraphBuilderMetadata {
 		Iterator i = results.iterator();
 		while (i.hasNext()) {
 			ResultSet rs = (ResultSet) i.next();
-			ResultMetadata resultMetadata = new ResultMetadata(rs, mappingModel, shape);
+			ResultMetadata resultMetadata = new ResultMetadata(rs, configWrapper, shape);
 			resultSets.add(resultMetadata);
 		}
 
-		DebugUtil.debugln(getClass(), debug, "Mapping model: " + mappingModel);
 	}
 	
 
 	public Collection getResultMetadata() {
 		return this.resultSets;
 	}
-	
-
-	public boolean hasMappingModel() {
-		return mappingModel == null ? false : true;
-	}
-
 
 	/**
 	 * @return
 	 */
 	
 	public Collection getRelationships() {
-		if (!hasMappingModel())  {
-			DebugUtil.debugln(getClass(), debug, "No relationships to return");
-			return Collections.EMPTY_LIST;
-		}
-		
-		return mappingModel.getRelationship();
+		return configWrapper.getConfig().getRelationship();
 	}
 
 
@@ -96,7 +82,7 @@ public class GraphBuilderMetadata {
 		}
 	}
 
-	public Config getMapping() {
-		return this.mappingModel;
+	public MappingWrapper getConfigWrapper() {
+		return this.configWrapper;
 	}
 }

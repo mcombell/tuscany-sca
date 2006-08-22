@@ -39,7 +39,7 @@ import commonj.sdo.Type;
 
 public class ResultMetadata {
 
-    private HashMap tableToColumnMap = new HashMap();
+    private HashMap tableToPropertyMap = new HashMap();
 
     private ArrayList typeNames = new ArrayList();
 
@@ -49,17 +49,17 @@ public class ResultMetadata {
 
     private final ResultSetShape resultSetShape;
 
-    private final MappingWrapper mappingWrapper;
+    private final MappingWrapper configWrapper;
 
     private Converter[] converters;
 
     private static boolean debug = false;
 
-    public ResultMetadata(ResultSet rs, Config model, ResultSetShape shape)
+    public ResultMetadata(ResultSet rs, MappingWrapper cfgWrapper, ResultSetShape shape)
             throws SQLException {
-        debug("Creating new ResultMetadata with mapping model " + model);
+        
         this.resultSet = rs;
-        this.mappingWrapper = new MappingWrapper(model);
+        this.configWrapper = cfgWrapper;
 
         if (shape == null)
             this.resultSetShape = new ResultSetShape(rs.getMetaData());
@@ -68,50 +68,61 @@ public class ResultMetadata {
 
         this.converters = new Converter[resultSetShape.getColumnCount()];
 
+        HashMap impliedRelationships = new HashMap();
         for (int i = 1; i <= resultSetShape.getColumnCount(); i++) {
             String tableName = resultSetShape.getTableName(i);
 
-            String typeName = mappingWrapper
+            String typeName = configWrapper
                     .getTableTypeName(tableName);
-            String propertyName = mappingWrapper.getColumnPropertyName(
-                    tableName, resultSetShape.getColumnName(i));
-            String converterName = mappingWrapper.getConverter(tableName,
+            String columnName = resultSetShape.getColumnName(i);
+            
+            if ( columnName.contains("_ID") ) 
+            	impliedRelationships.put(columnName, tableName);
+            else if ( columnName.equalsIgnoreCase("ID"))
+            	configWrapper.addImpliedPrimaryKey(tableName, columnName);
+            
+            String propertyName = configWrapper.getColumnPropertyName(
+                    tableName, columnName);
+            String converterName = configWrapper.getConverter(tableName,
                     resultSetShape.getColumnName(i));
             
             converters[i-1] = loadConverter(converterName);
             
-            DebugUtil.debugln(getClass(), debug, "Adding table/column: "
-                    + typeName + "/" + propertyName);
             typeNames.add(typeName);
             propertyNames.add(propertyName);
 
-            Collection columns = (Collection) tableToColumnMap
+            Collection properties = (Collection) tableToPropertyMap
                     .get(typeName);
-            if (columns == null)
-                columns = new ArrayList();
-            columns.add(propertyName);
-            tableToColumnMap.put(typeName, columns);
+            if (properties == null)
+                properties = new ArrayList();
+            properties.add(propertyName);
+            tableToPropertyMap.put(typeName, properties);
         }
 
+        Iterator i = impliedRelationships.keySet().iterator();
+        while ( i.hasNext())  {
+        	String columnName = (String) i.next();
+        	String pkTableName = columnName.substring(0, columnName.indexOf("_ID"));
+        	String fkTableName = (String) impliedRelationships.get(columnName);
+        	ArrayList pkTableProperties = (ArrayList) tableToPropertyMap.get(pkTableName);
+        	if (( pkTableProperties != null ) && (pkTableProperties.contains("ID"))) {        		
+        		configWrapper.addImpliedRelationship(pkTableName, fkTableName, columnName);
+        	}
+        }
         // Add any tables defined in the model but not included in the ResultSet
         // to the list of propertyNames
+        Config model = configWrapper.getConfig();
         if (model != null) {
             Iterator tablesFromModel = model.getTable().iterator();
             while (tablesFromModel.hasNext()) {
                 TableWrapper t = new TableWrapper((Table) tablesFromModel
                         .next());
-                if (tableToColumnMap.get(t.getTypeName()) == null)
-                    tableToColumnMap.put(t.getTypeName(),
+                if (tableToPropertyMap.get(t.getTypeName()) == null)
+                    tableToPropertyMap.put(t.getTypeName(),
                             Collections.EMPTY_LIST);
             }
         }
-
-        if (debug) {
-            DebugUtil.debugln(getClass(), debug, toString());
-            DebugUtil
-                    .debugln(getClass(), debug, this.resultSetShape.toString());
-        }
-
+     
     }
 
 	private Converter loadConverter(String converterName) {
@@ -156,7 +167,7 @@ public class ResultMetadata {
     }
 
     public int getTableSize(String tableName) {
-        return ((Collection) tableToColumnMap.get(tableName)).size();
+        return ((Collection) tableToPropertyMap.get(tableName)).size();
     }
 
     public Type getDataType(String columnName) {
@@ -169,7 +180,7 @@ public class ResultMetadata {
     }
 
     public Collection getAllTablePropertyNames() {
-        return tableToColumnMap.keySet();
+        return tableToPropertyMap.keySet();
     }
 
     public String toString() {
@@ -195,7 +206,7 @@ public class ResultMetadata {
         }
 
         result.append(" mappingModel: ");
-        result.append(this.mappingWrapper.getConfig());
+        result.append(this.configWrapper.getConfig());
 
         result.append(" resultSet: ");
         result.append(resultSet);
@@ -211,7 +222,7 @@ public class ResultMetadata {
      * @return
      */
     public int getNumberOfTables() {
-        return tableToColumnMap.keySet().size();
+        return tableToPropertyMap.keySet().size();
     }
 
     /**
@@ -222,41 +233,32 @@ public class ResultMetadata {
      * @param i
      * @return
      */
-    public boolean isPKColumn(int i) {
-        if (debug) {
-            DebugUtil.debugln(getClass(), debug, "Checking to see if "
-                    + getColumnPropertyName(i) + " is a PK column in "
-                    + getTablePropertyName(i));
-        }
-        if (!hasMappingModel()) {
-            if (debug)
-                DebugUtil
-                        .debugln(getClass(), debug,
-                                "No mapping model exists, all columns will be considered PK columns");
-            return true;
-        } else {
-            Table t = mappingWrapper.getTableByTypeName(getTablePropertyName(i));
-            if (t == null)
-                return true;
-            Column c = mappingWrapper.getColumn(t, getDatabaseColumnName(i));
+    public boolean isPKColumn(int i) {     
 
-            if (c == null)
-                return false;
+    	Table t = configWrapper.getTableByTypeName(getTablePropertyName(i));
+		if (t == null)
+			return true;
 
-            if (c.isPrimaryKey())
-                return true;
-        }
-        return false;
-    }
+		// If no Columns have been defined, consider every column to be part of
+		// the PK
+		if (t.getColumn().isEmpty())
+			return true;
 
-    public boolean hasMappingModel() {
-        return mappingWrapper.getConfig() == null ? false : true;
+		Column c = configWrapper.getColumn(t, getDatabaseColumnName(i));
+
+		if (c == null)
+			return false;
+
+		if (c.isPrimaryKey())
+			return true;
+
+		return false;
     }
 
     /**
-     * @param i
-     * @return
-     */
+	 * @param i
+	 * @return
+	 */
     public Type getDataType(int i) {
         return resultSetShape.getColumnType(i);
     }
@@ -266,7 +268,7 @@ public class ResultMetadata {
      * @return
      */
     public Collection getColumnNames(String tableName) {
-        return (Collection) tableToColumnMap.get(tableName);
+        return (Collection) tableToPropertyMap.get(tableName);
     }
 
     public ResultSet getResultSet() {
@@ -278,7 +280,7 @@ public class ResultMetadata {
     }
 
     public boolean isRecursive() {
-        return mappingWrapper.hasRecursiveRelationships();
+        return configWrapper.hasRecursiveRelationships();
     }
 
     public Converter getConverter(int i) {

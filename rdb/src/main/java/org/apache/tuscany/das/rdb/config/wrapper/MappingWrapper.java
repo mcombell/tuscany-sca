@@ -36,7 +36,6 @@ import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.Update;
-import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Property;
@@ -50,11 +49,14 @@ public class MappingWrapper {
     private Config config;
 
     public MappingWrapper() {
-        // Empty Constructor
+    	config = factory.createConfig();        
     }
 
     public MappingWrapper(Config mapping) {
-        this.config = mapping;
+    	if ( mapping == null ) 
+    		this.config = factory.createConfig();
+    	else
+    		this.config = mapping;
     }
 
     public Config getConfig() {
@@ -62,13 +64,12 @@ public class MappingWrapper {
     }
 
     public Table getTable(String tableName) {
-        if (config == null)
-            return null;
+       
         DebugUtil.debugln(getClass(), debug, "Looking for table " + tableName);
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
-            if (tableName.equals(t.getTableName()))
+            if (tableName.equalsIgnoreCase(t.getTableName()))
                 return t;
         }
 
@@ -76,8 +77,7 @@ public class MappingWrapper {
     }
 
     public Table getTableByTypeName(String typeName) {
-        if (config == null)
-            return null;
+       
         DebugUtil.debugln(getClass(), debug, "Looking for table by property: " + typeName);
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
@@ -88,15 +88,38 @@ public class MappingWrapper {
         }
         return null;
 
-        // throw new RuntimeException("Table with property name " + name
-        // + " not found.");
-
     }
 
-    public void addRelationship(String parentName, String childName) {
+    public void addImpliedRelationship(String parentTableName, String childTableName, String fkColumnName) {    	
 
-        if (config == null)
-            config = factory.createConfig();
+    	// Don't create a relationship for something like Book.Book_ID
+    	if ( parentTableName.equalsIgnoreCase(childTableName) )
+    		return;
+    	
+    	// Don't create a relationship if one already exists in the config
+    	 Iterator i = config.getRelationship().iterator();
+    	 while ( i.hasNext() ) {
+    		 Relationship r = (Relationship) i.next();
+    		 if ( r.getPrimaryKeyTable().equals(parentTableName) && r.getForeignKeyTable().equals(childTableName))
+    			 return;
+    	 }
+    	 
+         Relationship r = factory.createRelationship();
+         r.setName(childTableName);
+         r.setPrimaryKeyTable(parentTableName);
+         r.setForeignKeyTable(childTableName);
+
+         KeyPair pair = factory.createKeyPair();
+         pair.setPrimaryKeyColumn("ID");
+         pair.setForeignKeyColumn(fkColumnName);
+
+         r.getKeyPair().add(pair);
+         r.setMany(true);
+
+         config.getRelationship().add(r);
+    }
+    
+    public Relationship addRelationship(String parentName, String childName) {
 
         QualifiedColumn parent = new QualifiedColumn(parentName);
         QualifiedColumn child = new QualifiedColumn(childName);
@@ -116,6 +139,8 @@ public class MappingWrapper {
         r.setMany(true);
 
         config.getRelationship().add(r);
+        
+        return r;
 
     }
 
@@ -126,8 +151,6 @@ public class MappingWrapper {
     }
     
     public void addPrimaryKey(List columnNames) {
-        if (config == null)
-            config = factory.createConfig();
 
         Iterator i = columnNames.iterator();
         while (i.hasNext()) {
@@ -209,7 +232,7 @@ public class MappingWrapper {
         return table;
     }
 
-    private Table findOrCreateTable(String tableName) {
+    private Table findOrCreateTable(String tableName) {    	
         Table table = getTable(tableName);
         if (table == null) {
             table = ConfigFactory.INSTANCE.createTable();
@@ -308,8 +331,6 @@ public class MappingWrapper {
     }
 
     public void addConverter(String name, String converter) {
-        if (config == null)
-            config = factory.createConfig();
 
         QualifiedColumn column = new QualifiedColumn(name);
         Table t = findOrCreateTable(column.getTableName());
@@ -407,6 +428,24 @@ public class MappingWrapper {
 		config.getCommand().add(cmd);
 		
 		return cmd;
+	}
+
+	public void addImpliedPrimaryKey(String tableName, String columnName) {
+		Table t = findOrCreateTable(tableName);
+		
+		Iterator i = t.getColumn().iterator();
+		boolean hasPK = false;
+		while ( i.hasNext() ) {
+			Column c = (Column) i.next();
+			if ( c.isPrimaryKey() )
+				hasPK = true;
+		}
+		
+		if ( !hasPK ) {
+			Column c = findOrCreateColumn(t, columnName);
+			c.setPrimaryKey(true);
+		}	
+		
 	}
 
 }

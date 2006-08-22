@@ -21,8 +21,8 @@ package org.apache.tuscany.das.rdb;
 import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
-import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 
 /**
@@ -53,8 +53,8 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
         configWrapper.addPrimaryKey(columnName);
     }
     
-    public void addRelationship(String parentName, String childName) {
-        configWrapper.addRelationship(parentName, childName);
+    public Relationship addRelationship(String parentName, String childName) {
+        return configWrapper.addRelationship(parentName, childName);
     }
     
     public Table addTable(String name, String propertyName) {

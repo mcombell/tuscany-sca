@@ -34,6 +34,7 @@ import org.apache.tuscany.das.rdb.test.ExceptionTests;
 import org.apache.tuscany.das.rdb.test.GeneratedCommandTests;
 import org.apache.tuscany.das.rdb.test.GeneratedId;
 import org.apache.tuscany.das.rdb.test.GraphMergeTests;
+import org.apache.tuscany.das.rdb.test.ImpliedRelationshipTests;
 import org.apache.tuscany.das.rdb.test.NameMappingTests;
 import org.apache.tuscany.das.rdb.test.OCCTests;
 import org.apache.tuscany.das.rdb.test.OneToOneRelationshipTests;
@@ -95,6 +96,7 @@ public class AllCommonTests {
         suite.addTest(new TestSuite (ProgrammaticConfigTests.class));
         suite.addTest(new TestSuite (AliasTests.class));
        
+        suite.addTest(new TestSuite (ImpliedRelationshipTests.class));
 		//$JUnit-END$
 		return suite;
 	}

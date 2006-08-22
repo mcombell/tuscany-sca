@@ -33,6 +33,8 @@ import javax.sql.DataSource;
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.config.Config;
+import org.apache.tuscany.das.rdb.config.ConfigFactory;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.util.ConfigUtil;
 
 import commonj.sdo.DataObject;
@@ -45,7 +47,7 @@ import commonj.sdo.DataObject;
  */
 public class DASImpl implements DAS {
 
-    private Config config;
+    private MappingWrapper configWrapper;
 
     private Connection connection;
 
@@ -57,15 +59,17 @@ public class DASImpl implements DAS {
     }
 
     public DASImpl(Config inConfig) {
-    	this.config = inConfig;
+    	if ( inConfig == null ) 
+    		inConfig = ConfigFactory.INSTANCE.createConfig();
+    	this.configWrapper = new MappingWrapper(inConfig);
         
-        Iterator i = config.getCommand().iterator();
+        Iterator i = configWrapper.getConfig().getCommand().iterator();
         while (i.hasNext()) {
             org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
                     .next();
             String kind = commandConfig.getKind();
             if (kind.equalsIgnoreCase("select"))                             
-                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), config, commandConfig.getResultDescriptor()));
+                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getResultDescriptor()));
             else if (kind.equalsIgnoreCase("update"))
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("insert"))
@@ -73,7 +77,7 @@ public class DASImpl implements DAS {
             else if (kind.equalsIgnoreCase("delete"))
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("procedure"))
-            	commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(),config, commandConfig.getParameter()));
+            	commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(),configWrapper, commandConfig.getParameter()));
             else
                 throw new RuntimeException("Invalid kind of command: " + kind);
 
@@ -81,9 +85,7 @@ public class DASImpl implements DAS {
 
     }
 
-    public DASImpl() {
-		// Empty Constructor
-	}
+ 
 
 	public DASImpl(Config inConfig, Connection inConnection) {
 		this(inConfig);
@@ -95,6 +97,7 @@ public class DASImpl implements DAS {
 	}
 
 	public DASImpl(Connection inConnection) {
+		this(ConfigFactory.INSTANCE.createConfig());
 		setConnection(inConnection);
 	}
 
@@ -104,7 +107,7 @@ public class DASImpl implements DAS {
      * @see org.apache.tuscany.das.rdb.CommandGroup#getApplyChangesCommand()
      */
     public ApplyChangesCommandImpl getApplyChangesCommand() {
-        ApplyChangesCommandImpl cmd = new ApplyChangesCommandImpl(config, connection);
+        ApplyChangesCommandImpl cmd = new ApplyChangesCommandImpl(configWrapper, connection);
         return cmd;
     }
 
@@ -117,7 +120,7 @@ public class DASImpl implements DAS {
         if (!commands.containsKey(name))
             throw new RuntimeException("CommandGroup has no command named: " + name);
         CommandImpl cmd = (CommandImpl) commands.get(name);
-        cmd.setConnection(getConnection(), config);
+        cmd.setConnection(getConnection(), configWrapper.getConfig());
         return cmd;
     }
 
@@ -133,7 +136,7 @@ public class DASImpl implements DAS {
     }
 
     private void initializeConnection() {
-       
+       Config config = configWrapper.getConfig();
         if (config == null || 
         		config.getConnectionInfo() == null || 
         		config.getConnectionInfo().getDataSource() == null)
@@ -150,7 +153,7 @@ public class DASImpl implements DAS {
         }
         try {
             // TODO - I think we should rename this getDataSourceURL?
-            DataSource ds = (DataSource) ctx.lookup(config.getConnectionInfo().getDataSource());
+            DataSource ds = (DataSource) ctx.lookup(configWrapper.getConfig().getConnectionInfo().getDataSource());
             try {
                 connection = ds.getConnection();
                 connection.setAutoCommit(false);
@@ -186,7 +189,7 @@ public class DASImpl implements DAS {
      */
     private boolean managingConnections() {
 
-        if (config.getConnectionInfo().getDataSource() == null)
+        if (configWrapper.getConfig().getConnectionInfo().getDataSource() == null)
             return false;
         else
             return true;
@@ -194,14 +197,14 @@ public class DASImpl implements DAS {
     }
 
     public Command createCommand(String sql) {
-        return baseCreateCommand(sql, this.config);
+        return baseCreateCommand(sql, this.configWrapper);
     }
 
     public Command createCommand(String sql, Config config) {
-        return baseCreateCommand(sql, config);
+        return baseCreateCommand(sql, new MappingWrapper(config));
     }
 
-    private Command baseCreateCommand(String sql, Config config) {
+    private Command baseCreateCommand(String sql, MappingWrapper config) {
     	CommandImpl returnCmd = null;
         sql = sql.trim(); // Remove leading white space
         char firstChar = Character.toUpperCase(sql.charAt(0));
@@ -225,7 +228,7 @@ public class DASImpl implements DAS {
             throw new RuntimeException("SQL => " + sql + " is not valid");
         }
 
-        returnCmd.setConnection(getConnection(), config);
+        returnCmd.setConnection(getConnection(), config.getConfig());
         return returnCmd;
     }
 

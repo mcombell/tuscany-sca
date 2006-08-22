@@ -25,7 +25,7 @@ import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.ResultDescriptor;
 import org.apache.tuscany.das.rdb.config.Table;
-import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
 public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
@@ -75,7 +75,7 @@ public class SimpleReadCustomersWithShapeCommand extends ReadCommandImpl {
 	}
 
 	public SimpleReadCustomersWithShapeCommand() {
-		super(sqlString, config, descriptor);		
+		super(sqlString, new MappingWrapper(config), descriptor);		
 	}
 
 }

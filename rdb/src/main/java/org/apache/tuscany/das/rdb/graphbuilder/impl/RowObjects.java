@@ -60,7 +60,7 @@ public class RowObjects {
 	}
 
 	void processRelationships() {
-		MappingWrapper wrapper = new MappingWrapper(metadata.getMapping());
+		MappingWrapper wrapper = metadata.getConfigWrapper();
 		if (wrapper.hasRecursiveRelationships()) {
 			processRecursiveRelationships(wrapper);
 			return;

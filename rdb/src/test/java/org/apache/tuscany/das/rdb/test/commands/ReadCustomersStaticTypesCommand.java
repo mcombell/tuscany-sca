@@ -22,7 +22,7 @@ import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.ConfigFactory;
 import org.apache.tuscany.das.rdb.config.Table;
-import org.apache.tuscany.das.rdb.config.impl.ConfigFactoryImpl;
+import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
 
@@ -54,7 +54,7 @@ public class ReadCustomersStaticTypesCommand extends ReadCommandImpl {
 	}
 	
 	public ReadCustomersStaticTypesCommand() {
-		super(sqlString, mapping, null);		
+		super(sqlString, new MappingWrapper(mapping), null);		
 	}
 
 

@@ -58,6 +58,7 @@ public class ProgrammaticConfigTests extends DasTest {
         // Read a book instance
         Command select = das.createCommand("SELECT * FROM BOOK WHERE BOOK_ID = 1");      
         DataObject root = select.executeQuery();
+        
         DataObject book = root.getDataObject("BOOK[1]");
         // Change a field to mark the instance 'dirty'
         book.setInt("QUANTITY", 2);        

@@ -129,53 +129,54 @@ public class ESchemaMaker {
 			}
 		}
 
-		if (metadata.hasMappingModel()) {
-			MappingWrapper wrapper = new MappingWrapper(metadata.getMapping());
-			Iterator i = metadata.getRelationships().iterator();
-			while (i.hasNext()) {
-				Relationship r = (Relationship) i.next();
 
-				String parentName = wrapper.getTableTypeName(r.getPrimaryKeyTable());
-				String childName = wrapper.getTableTypeName(r.getForeignKeyTable());
-				
-				if (parentName == null) {
-					throw new RuntimeException("The parent table ("
-							+ r.getPrimaryKeyTable() + ") in relationship "
-							+ r.getName()
-							+ " was not found in the mapping information.");
-				} else if (childName == null) {
-					throw new RuntimeException("The child table ("
-							+ r.getForeignKeyTable() + ") in relationship "
-							+ r.getName()
-							+ " was not found in the mapping information.");
-				}
-				
-				Property parentProperty = rootType.getProperty(parentName);
-				Property childProperty = rootType.getProperty(childName);
-				
-				if (parentProperty == null) {
-					throw new RuntimeException("The parent table ("
-							+ parentName + ") in relationship "
-							+ r.getName()
-							+ " was not found.");
-				} else if (childProperty == null) {
-					throw new RuntimeException("The child table ("
-							+ childName + ") in relationship "
-							+ r.getName()
-							+ " was not found.");
-				}
-				
-				Type parent = parentProperty.getType();
-				Type child = childProperty.getType();								
-				
-				Property parentProp = SDOUtil.createProperty(parent, r.getName(), child);	
-				Property childProp = SDOUtil.createProperty(child, r.getName() + "_opposite", parent);
-				SDOUtil.setOpposite(parentProp, childProp);
-				SDOUtil.setOpposite(childProp, parentProp);
-				SDOUtil.setMany(parentProp, r.isMany());										
+		MappingWrapper wrapper = metadata.getConfigWrapper();
+		Iterator i = metadata.getRelationships().iterator();
+		while (i.hasNext()) {
+			Relationship r = (Relationship) i.next();
+
+			String parentName = wrapper
+					.getTableTypeName(r.getPrimaryKeyTable());
+			String childName = wrapper.getTableTypeName(r.getForeignKeyTable());
+
+			if (parentName == null) {
+				throw new RuntimeException("The parent table ("
+						+ r.getPrimaryKeyTable() + ") in relationship "
+						+ r.getName()
+						+ " was not found in the mapping information.");
+			} else if (childName == null) {
+				throw new RuntimeException("The child table ("
+						+ r.getForeignKeyTable() + ") in relationship "
+						+ r.getName()
+						+ " was not found in the mapping information.");
 			}
 
+			Property parentProperty = rootType.getProperty(parentName);
+			Property childProperty = rootType.getProperty(childName);
+
+			if (parentProperty == null) {
+				throw new RuntimeException("The parent table (" + parentName
+						+ ") in relationship " + r.getName()
+						+ " was not found.");
+			} else if (childProperty == null) {
+				throw new RuntimeException("The child table (" + childName
+						+ ") in relationship " + r.getName()
+						+ " was not found.");
+			}
+
+			Type parent = parentProperty.getType();
+			Type child = childProperty.getType();
+
+			Property parentProp = SDOUtil.createProperty(parent, r.getName(),
+					child);
+			Property childProp = SDOUtil.createProperty(child, r.getName()
+					+ "_opposite", parent);
+			SDOUtil.setOpposite(parentProp, childProp);
+			SDOUtil.setOpposite(childProp, parentProp);
+			SDOUtil.setMany(parentProp, r.isMany());
 		}
+
+
 		
 		return rootType;
 	}

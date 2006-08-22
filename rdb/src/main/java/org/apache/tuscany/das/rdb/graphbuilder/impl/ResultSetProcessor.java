@@ -115,7 +115,7 @@ public class ResultSetProcessor {
 		while (tables.hasNext()) {
 			TableData rawDataFromRow = (TableData) tables.next();
 			
-			if ( (resultMetadata.hasMappingModel()) && (!rawDataFromRow.hasValidPrimaryKey() ) )
+			if ( !rawDataFromRow.hasValidPrimaryKey()  )
 				continue;   
 
 			String tableName = rawDataFromRow.getTableName();
