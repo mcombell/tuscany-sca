@@ -21,25 +21,21 @@
     <Command name="customer and orders"
         SQL="select * from CUSTOMER left join ANORDER on CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?"
         kind="Select">
-<!--       <Parameter name=":ID"/>   --> 
     </Command>
     
     <Command name="customer and orders"
         SQL="select * from CUSTOMER left join ANORDER on CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?"
         kind="Select">
-        <Parameter name=":ID"/>
     </Command>
     
     <!-- Test usage of '?' rather than named parameter -->
     <Command name="order by id with ?" SQL="select * from ANORDER where ANORDER.ID = ?"
         kind="Select">
-        <Parameter name=":ID"/>
     </Command>
     
     <Command name="update customer"
         SQL="update CUSTOMER set LASTNAME = 'Pavick' where ID = ?"
         kind="Update">
-        <Parameter name="ID"/>
     </Command>      
     
     <Table tableName="CUSTOMER">

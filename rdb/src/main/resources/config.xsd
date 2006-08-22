@@ -49,8 +49,7 @@
       <xsd:attribute name="SQL" type="xsd:string"/>
       <xsd:attribute name="kind" type="xsd:string"/>
    </xsd:complexType>
-   <xsd:complexType name="Parameter">
-      <xsd:attribute name="name" type="xsd:string"/>
+   <xsd:complexType name="Parameter">     
       <xsd:attribute name="columnType" type="xsd:string"/>
       <xsd:attribute name="direction" type="xsd:string"/>
    </xsd:complexType>
