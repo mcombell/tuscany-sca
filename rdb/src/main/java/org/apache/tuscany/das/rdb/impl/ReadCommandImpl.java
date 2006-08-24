@@ -18,9 +18,7 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -58,9 +56,9 @@ public class ReadCommandImpl extends CommandImpl {
 
         boolean success = false;
         try {
-            ResultSet rs = statement.executeQuery(parameters);
+            List results = statement.executeQuery(parameters);
             success = true;
-            return buildGraph(rs);
+            return buildGraph(results);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -71,10 +69,7 @@ public class ReadCommandImpl extends CommandImpl {
         }
     }
 
-    protected DataObject buildGraph(ResultSet result) throws SQLException {
-
-        List results = new ArrayList();
-        results.add(result);
+    protected DataObject buildGraph(List results) throws SQLException {      
 
         // Before we use the mappingModel, do some checking/updating. If
         // inferrable information

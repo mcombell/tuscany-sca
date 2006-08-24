@@ -30,6 +30,17 @@ import java.sql.SQLException;
  */
 public class JavaStoredProcs {
 
+	public static void getAllCustomersAndAllOrders(ResultSet[] result1, ResultSet[] result2) throws SQLException {		
+		Connection conn = DriverManager.getConnection("jdbc:default:connection");
+        PreparedStatement ps = conn
+                .prepareStatement("SELECT * FROM CUSTOMER");
+        
+        result1[0] = ps.executeQuery();
+        
+        PreparedStatement ps2 = conn.prepareStatement("select * from anorder");       
+        result2[0] = ps2.executeQuery();          
+        
+	}
     public static void getAllCompanies(ResultSet[] results) throws SQLException {
 
         Connection conn = DriverManager.getConnection("jdbc:default:connection");

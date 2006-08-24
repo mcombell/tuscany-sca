@@ -21,12 +21,14 @@ package org.apache.tuscany.das.rdb.test;
 
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
+import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.helper.TypeHelper;
 
 
 public class StoredProcs extends DasTest {
@@ -44,10 +46,22 @@ public class StoredProcs extends DasTest {
 		super.tearDown();
 	}
 
+	public void testMultipleResultSets() throws Exception {
+		DAS das = DAS.FACTORY.createDAS(getConnection());
+		Command read = das.createCommand("{call GETALLCUSTOMERSANDORDERS()}");
+		
+		DataObject root = read.executeQuery();
+
+		//Verify
+		assertEquals(5, root.getList("CUSTOMER").size());
+		assertEquals(4, root.getList("ANORDER").size());
+	}
+	
 	// Call a simple stored proc to read all companies
 	public void testGetCompanies() throws Exception {
 		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command read = das.createCommand("{call GETALLCOMPANIES()}");	
+		Command read = das.createCommand("{call GETALLCOMPANIES()}");
+
 		DataObject root = read.executeQuery();
 
 		//Verify

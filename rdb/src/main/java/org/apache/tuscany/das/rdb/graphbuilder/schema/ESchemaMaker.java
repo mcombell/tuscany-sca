@@ -86,10 +86,12 @@ public class ESchemaMaker {
 			while (names.hasNext()) {
 				String tableName = (String) names.next();
 	
-				Type tableType = SDOUtil.createType(typeHelper, getURI(), tableName, false);										
-				Property property = SDOUtil.createProperty(rootType, tableName, tableType);
-				SDOUtil.setMany(property,true);		
-				SDOUtil.setContainment(property, true);
+				if ( rootType.getProperty(tableName) == null ) {
+					Type tableType = SDOUtil.createType(typeHelper, getURI(), tableName, false);										
+					Property property = SDOUtil.createProperty(rootType, tableName, tableType);
+					SDOUtil.setMany(property,true);		
+					SDOUtil.setContainment(property, true);
+				}
 			}
 		
 			// TODO tablePropertyMap is temporary until Tuscany-203 is fixed

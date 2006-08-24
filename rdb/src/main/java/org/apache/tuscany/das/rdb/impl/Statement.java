@@ -23,7 +23,10 @@ import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tuscany.das.rdb.util.DebugUtil;
 
@@ -44,24 +47,22 @@ public class Statement {
         this.queryString = sqlString; //new QueryString(sqlString);
     }
 
-    public ResultSet executeQuery(Parameters parameters) throws SQLException {
+    public List executeQuery(Parameters parameters) throws SQLException {
 
         PreparedStatement ps = getPreparedStatement();
         ps = setParameters(ps, parameters);
         ResultSet rs = ps.executeQuery();
 
-        return rs;
+        return Collections.singletonList(rs);
     }
 
-    public ResultSet executeCall(Parameters parameters) throws SQLException {
-        try {
+    public List executeCall(Parameters parameters) throws SQLException {
+      
             CallableStatement cs = jdbcConnection.prepareCall(queryString);
 
             Iterator inParams = parameters.inParams().iterator();
             while (inParams.hasNext()) {
                 ParameterImpl param = (ParameterImpl) inParams.next();
-//                if (param.getIndex() == 0)
-//                    param.setIndex(queryString.getParameterIndex(param.getName()));
                 cs.setObject(param.getIndex(), param.getValue());
             }
 
@@ -69,8 +70,6 @@ public class Statement {
             Iterator outParams = parameters.outParams().iterator();
             while (outParams.hasNext()) {
                 ParameterImpl param = (ParameterImpl) outParams.next();
-//                if (param.getIndex() == 0)
-//                    param.setIndex(queryString.getParameterIndex(param.getName()));
                 DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
                 cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
             }
@@ -79,19 +78,19 @@ public class Statement {
             // executeQuery
             // for SP
             cs.execute();
-            ResultSet results = cs.getResultSet();
-
+            ArrayList results = new ArrayList();
+            results.add(cs.getResultSet());
+            while ( cs.getMoreResults(java.sql.Statement.KEEP_CURRENT_RESULT) ) {
+            	results.add(cs.getResultSet());
+            }
+            
             Iterator i = parameters.outParams().iterator();
             while (i.hasNext()) {
                 ParameterImpl param = (ParameterImpl) i.next();
                 param.setValue(cs.getObject(param.getIndex()));
             }
 
-            return results;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw ex;
-        }
+            return results;       
 
     }
 
@@ -137,8 +136,6 @@ public class Statement {
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
-//            if (param.getIndex() == 0)
-//                param.setIndex(queryString.getParameterIndex(param.getName()));
             Object value = param.getValue();
             DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
             if (value == null) {
@@ -162,8 +159,6 @@ public class Statement {
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
-//            if (param.getIndex() == 0)
-//                param.setIndex(queryString.getParameterIndex(param.getName()));
             ps.setObject(param.getIndex(), param.getValue());
         }
         return ps;

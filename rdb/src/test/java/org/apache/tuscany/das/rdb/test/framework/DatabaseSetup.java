@@ -33,6 +33,9 @@ public class DatabaseSetup extends TestSetup {
     protected String driverName = "Not initialized";
 
     protected String databaseURL = "Not initialized";
+    
+    protected String userName = null;
+    protected String password = null;
 
     private Connection connection;
 
@@ -54,7 +57,11 @@ public class DatabaseSetup extends TestSetup {
         try {
 
             Class.forName(driverName).newInstance();
-            connection = DriverManager.getConnection(databaseURL);
+            if ( userName != null ) {
+            	connection = DriverManager.getConnection(databaseURL, userName, password);
+            } else {
+            	connection = DriverManager.getConnection(databaseURL);
+            }
             connection.setAutoCommit(false);
 
         } catch (Exception e) {
@@ -78,9 +85,14 @@ public class DatabaseSetup extends TestSetup {
         s = connection.createStatement();
 
         try {
+        	dropTriggers();
+        	dropSequences();
             dropTables();
             dropProcedures();
+           
+            createSequences();            
             createTables();
+            createTriggers();
             createProcedures();
             connection.commit();
         } catch (SQLException e) {
@@ -121,6 +133,22 @@ public class DatabaseSetup extends TestSetup {
         }
     }
 
+    protected void dropTriggers() {
+    	
+    }
+    
+    protected void createTriggers() {
+    	
+    }
+    
+    protected void dropSequences() {
+    	
+    }
+    
+  protected void createSequences() {
+    	
+    }
+    
     protected void dropProcedures() {
 
 //        System.out.println("Dropping procedures");
@@ -128,7 +156,7 @@ public class DatabaseSetup extends TestSetup {
         String[] statements = {
 
         "DROP PROCEDURE GETALLCOMPANIES", "DROP PROCEDURE DELETECUSTOMER", "DROP PROCEDURE GETNAMEDCOMPANY",
-                "DROP PROCEDURE GETCUSTOMERANDORDERS", "DROP PROCEDURE GETNAMEDCUSTOMERS"
+                "DROP PROCEDURE GETCUSTOMERANDORDERS", "DROP PROCEDURE GETNAMEDCUSTOMERS", "DROP PROCEDURE GETALLCUSTOMERSANDORDERS"
 
         };
 
@@ -137,7 +165,7 @@ public class DatabaseSetup extends TestSetup {
                 s.execute(statements[i]);
             } catch (SQLException e) {
                 // If the proc does not exist then ignore the exception on drop
-                if (!e.getMessage().contains("does not exist"))
+                if (!e.getMessage().contains("does not exist") && !e.getMessage().contains("42704"))
                     throw new RuntimeException(e);
             }
         }
@@ -178,6 +206,7 @@ public class DatabaseSetup extends TestSetup {
             s.execute("CREATE PROCEDURE GETNAMEDCOMPANY(theName VARCHAR(100)) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCompany'");
             s.execute("CREATE PROCEDURE GETCUSTOMERANDORDERS(theID INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getCustomerAndOrders'");
             s.execute("CREATE PROCEDURE GETNAMEDCUSTOMERS(theName VARCHAR(100), OUT theCount INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCustomers'");
+            s.execute("CREATE PROCEDURE GETALLCUSTOMERSANDORDERS() PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 2 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCustomersAndAllOrders'");
             // TODO - "GETNAMEDCUSTOMERS" is failing on DB2 with SQLCODE: 42723. Need to investigate
         } catch (SQLException e) {
             throw new RuntimeException(e);

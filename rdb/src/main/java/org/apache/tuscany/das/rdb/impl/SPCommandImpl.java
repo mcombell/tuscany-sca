@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
@@ -60,10 +59,10 @@ public class SPCommandImpl extends ReadCommandImpl {
 
 		boolean success = false;
 		try {
-			ResultSet rs = statement.executeCall(parameters);
+			List results = statement.executeCall(parameters);
 			success = true;
 			
-			return buildGraph(rs);
+			return buildGraph(results);
 		} catch (SQLException e) {
 			DebugUtil.debugln(getClass(), debug, e);
 			throw new RuntimeException(e);
