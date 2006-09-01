@@ -34,7 +34,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.tuscany</groupId>
+            <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
@@ -56,7 +56,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.tuscany</groupId>
+                <groupId>org.apache.tuscany.sdo</groupId>
                 <artifactId>tuscany-sdo-plugin</artifactId>
                 <executions>
                     <execution>
