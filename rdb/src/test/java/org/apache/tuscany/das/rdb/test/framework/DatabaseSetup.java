@@ -41,6 +41,14 @@ public class DatabaseSetup extends TestSetup {
 
     protected Statement s;
 
+    
+    // Data Types
+    protected String stringType = "VARCHAR";
+    protected String integerType = "INT";
+	protected String timestampType = "TIMESTAMP";
+	protected String floatType = "FLOAT";
+	protected String decimalType = "DECIMAL";
+    
     public DatabaseSetup(Test test) {
         super(test);
         initConnectionProtocol();
@@ -220,57 +228,132 @@ public class DatabaseSetup extends TestSetup {
     //
 
     protected String getCreateCustomer() {
-        return "CREATE TABLE CUSTOMER (ID INT PRIMARY KEY NOT NULL, LASTNAME VARCHAR(30) DEFAULT 'Garfugengheist', ADDRESS VARCHAR(30))";
-    }
+		return "CREATE TABLE CUSTOMER (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, " + getStringColumn("LASTNAME", 30)
+				+ " DEFAULT 'Garfugengheist', "
+				+ getStringColumn("ADDRESS", 30) + ")";
+	}
 
-    protected String getCreateAnOrder() {
-        return "CREATE TABLE ANORDER (ID INT PRIMARY KEY NOT NULL, PRODUCT VARCHAR(30), QUANTITY INT, CUSTOMER_ID INT)";
-    }
+	protected String getCreateAnOrder() {
+		return "CREATE TABLE ANORDER (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, " + getStringColumn("PRODUCT", 30)
+				+ ", " + getIntegerColumn("QUANTITY") + ","
+				+ getIntegerColumn("CUSTOMER_ID") + ")";
+	}
 
-    protected String getCreateOrderDetails() {
-        return "CREATE TABLE ORDERDETAILS (ORDERID INT NOT NULL, PRODUCTID INT NOT NULL, PRICE FLOAT, PRIMARY KEY (ORDERID, PRODUCTID))";
-    }
+	protected String getCreateOrderDetails() {
+		return "CREATE TABLE ORDERDETAILS (" + getIntegerColumn("ORDERID")
+				+ " NOT NULL, " + getIntegerColumn("PRODUCTID")
+				+ " NOT NULL, PRICE FLOAT, PRIMARY KEY (ORDERID, PRODUCTID))";
+	}
 
-    protected String getCreateItem() {
-        return "CREATE TABLE ITEM (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(30))";
-    }
+	protected String getCreateItem() {
+		return "CREATE TABLE ITEM (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 30) + ")";
+	}
 
-    protected String getCreateCompany() {
-        return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30), EOTMID INT)";
-    }
+	protected String getCreateCompany() {
+		return "CREATE TABLE COMPANY (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + " , "
+				+ getStringColumn("NAME", 30) + ", "
+				+ getIntegerColumn("EOTMID") + ")";
+	}
 
-    protected String getCreateEmployee() {
-        return "CREATE TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30), SN VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)";
-    }
+	protected String getCreateEmployee() {
+		return "CREATE TABLE EMPLOYEE (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + ","
+				+ getStringColumn("NAME", 30) + "," + getStringColumn("SN", 10)
+				+ ", MANAGER SMALLINT, " + getIntegerColumn("DEPARTMENTID")
+				+ ")";
+	}
 
-    protected String getCreateDepartment() {
-        return "CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30), LOCATION VARCHAR(30), NUMBER VARCHAR(10), COMPANYID INT)";
-    }
+	protected String getCreateDepartment() {
+		return "CREATE TABLE DEPARTMENT (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + ", "
+				+ getStringColumn("NAME", 30) + ","
+				+ getStringColumn("LOCATION", 30) + ", "
+				+ getStringColumn("DEPNUMBER", 10) + ","
+				+ getIntegerColumn("COMPANYID") + ")";
+	}
 
-    protected String getCreateBook() {
-        return "CREATE TABLE BOOK (BOOK_ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)";
-    }
+	protected String getCreateBook() {
+		return "CREATE TABLE BOOK (" + getIntegerColumn("BOOK_ID")
+				+ " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 50) + ","
+				+ getStringColumn("AUTHOR", 30) + ", "
+				+ getIntegerColumn("QUANTITY") + "," + getIntegerColumn("OCC")
+				+ ")";
+	}
 
-    protected String getCreatePart() {
-        return "CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT )";
-    }
+	protected String getCreatePart() {
+		return "CREATE TABLE PART (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, NAME VARCHAR(50),  "
+				+ getIntegerColumn("QUANTITY") + ","
+				+ getIntegerColumn("PARENT_ID") + " )";
+	}
 
-    protected String getCreateTypeTest() {
-        return "CREATE TABLE TYPETEST (ID INT PRIMARY KEY NOT NULL, ATIMESTAMP TIMESTAMP, ADECIMAL DECIMAL(9,2), AFLOAT FLOAT)";
-    }
+	protected String getCreateTypeTest() {
+		return "CREATE TABLE TYPETEST (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, " + getTimeStampColumn("ATIMESTAMP")
+				+ "," + getDecimalColumn("ADECIMAL", 9, 2) + "," + getFloatColumn("AFLOAT") + ")";
+	}
 
-    protected String getCreateStates() {
-        return "CREATE TABLE STATES (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(2))";
-    }
+	
 
-    protected String getCreateCities() {
-        return "CREATE TABLE CITIES (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), STATE_ID INT, CONSTRAINT FK1 FOREIGN KEY (STATE_ID) REFERENCES STATES (ID) ON DELETE NO ACTION ON UPDATE NO ACTION)";
-    }
+	protected String getCreateStates() {
+		return "CREATE TABLE STATES (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 2) + ")";
+	}
 
-    protected String getCreateServerStatus() {
+	protected String getCreateCities() {
+		return "CREATE TABLE CITIES (" + getIntegerColumn("ID")
+				+ " PRIMARY KEY NOT NULL," + getStringColumn("NAME", 50) + ","
+				+ getIntegerColumn("STATE_ID") + ","
+				+ getForeignKeyConstraint("STATES", "ID", "STATE_ID") + ")";
+	}
 
-        return "CREATE TABLE CONMGT.SERVERSTATUS (STATUSID INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY  (START WITH 1 ,INCREMENT BY 1), MANAGEDSERVERID INTEGER NOT NULL, TIMESTAMP TIMESTAMP NOT NULL)";
+	protected String getCreateServerStatus() {
 
-    }
+		return "CREATE TABLE CONMGT.SERVERSTATUS (STATUSID INTEGER PRIMARY KEY NOT NULL "
+				+ getGeneratedKeyClause()
+				+ "  (START WITH 1 ,INCREMENT BY 1), MANAGEDSERVERID INTEGER NOT NULL, TIMESTAMP TIMESTAMP NOT NULL)";
+
+	}
+
+	
+	protected String getForeignKeyConstraint(String pkTable, String pkColumn, String foreignKey) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("CONSTRAINT FK1 FOREIGN KEY (");
+		buffer.append(foreignKey);
+		buffer.append(") REFERENCES ");
+		buffer.append(pkTable);
+		buffer.append("(");
+		buffer.append(pkColumn);
+		buffer.append(") ON DELETE NO ACTION ON UPDATE NO ACTION");
+		return buffer.toString();
+	}
+	
+	protected String getStringColumn(String name, int length) {
+		return name + ' ' + stringType + "(" + new Integer(length).toString() + ")";
+	}
+	
+	protected String getIntegerColumn(String name) {
+		return name + ' ' + integerType;
+	}
+	
+	protected String getGeneratedKeyClause() {
+		return "GENERATED ALWAYS AS IDENTITY";
+	}
+	
+	protected String getTimeStampColumn(String name) {
+		return name + ' ' + timestampType;
+	}
+	
+	protected String getDecimalColumn(String name, int size1, int size2) {
+		return name + ' ' + decimalType + "(" + new Integer(size1).toString() + ',' + new Integer(size2).toString() + ")";
+	}
+	
+	protected String getFloatColumn(String name) {
+		return name + ' ' + floatType;
+	}
 
 }

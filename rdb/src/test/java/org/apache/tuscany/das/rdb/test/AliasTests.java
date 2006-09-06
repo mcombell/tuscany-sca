@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.Iterator;
+
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.BookData;
@@ -86,9 +88,15 @@ public class AliasTests extends DasTest{
 	    //select.setConnection(getConnection());
 	    
 	    root = select.executeQuery();
-	    assertEquals("Fyodor Dostoevskii", root.getString( "Book[1]/Writer" ) );
-	    
-	    bookToChange = root.getDataObject("Book[1]");
+	    bookToChange = null;
+	    Iterator i = root.getList("Book").iterator();
+	    while (i.hasNext()) {
+	    	DataObject d = (DataObject)i.next();
+	    	if ( "Fyodor Dostoevskii".equals(d.getString("Writer")) )
+	    		bookToChange = d;
+	    }
+	    assertFalse(bookToChange == null);	   
+	    	  
 	    bookToChange.delete();
 	    
 	    das.applyChanges( root );

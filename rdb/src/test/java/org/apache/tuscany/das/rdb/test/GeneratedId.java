@@ -210,7 +210,7 @@ public class GeneratedId extends DasTest {
         DataObject department = root.createDataObject("DEPARTMENT");
         department.setString("NAME", "Do-rite Pest Control");
         department.setString("LOCATION", "The boonies");
-        department.setString("NUMBER", "101");
+        department.setString("DEPNUMBER", "101");
 
         // Associate the new department with the new company
         company.getList("departments").add(department);
@@ -254,7 +254,7 @@ public class GeneratedId extends DasTest {
         department.setString("NAME", "Do-rite Pest Control");
         // Do not set this property to force storing NULL to DB
         // department.setString("LOCATION", "The boonies");
-        department.setString("NUMBER", "101");
+        department.setString("DEPNUMBER", "101");
 
         // Associate the new department with the new company
         company.getList("departments").add(department);

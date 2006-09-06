@@ -54,7 +54,7 @@ public class CompanyTests extends DasTest {
         // Build the select command
         Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
-                + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
+                + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.DEPNUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
                 + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");     
 
         // Get the graph
@@ -79,7 +79,7 @@ public class CompanyTests extends DasTest {
         // Build the select command
         Command selectCommand = das.createCommand("select COMPANY.NAME, "
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
-                + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.NUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
+                + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.DEPNUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
                 + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");
         
 

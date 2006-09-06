@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tuscany.das.rdb.Command;
@@ -60,9 +61,17 @@ public class BestPracticeTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
         Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery(); 
-        DataObject firstCompany = root.getDataObject("COMPANY[1]");
-        List departments = firstCompany.getList("departments");
-        assertEquals(0, departments.size());
+        
+        Iterator i = root.getList("COMPANY").iterator();
+        while ( i.hasNext()) {
+        	DataObject d = (DataObject) i.next();
+        	List departments = d.getList("departments");
+        	if (d.getString("NAME").equals("Do-rite plumbing") || d.getString("NAME").equals("ACME Publishing")) {        		
+            	assertEquals(0, departments.size());
+        	} else {
+        		assertEquals(1, departments.size());
+        	}
+        }            
 
     }  
     
@@ -104,7 +113,7 @@ public class BestPracticeTests extends DasTest {
         DataObject department = root.createDataObject("DEPARTMENT");
         department.setString("NAME", "Do-rite Pest Control");
         department.setString("LOCATION", "The boonies");
-        department.setString("NUMBER", "101");
+        department.setString("DEPNUMBER", "101");
    
         // Associate the new department with the new company
         company.getList("departments").add(department);
