@@ -65,6 +65,7 @@ public abstract class TestData {
 	protected void deleteRowsFromTable() throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("delete from " + getTableName());
 		ps.execute();
+		ps.close();
 	}
 	
 	protected void insertRows() throws SQLException {
@@ -85,5 +86,6 @@ public abstract class TestData {
 			ps.execute();
 			ps.clearParameters();
 		}
+		ps.close();
 	}
 }
