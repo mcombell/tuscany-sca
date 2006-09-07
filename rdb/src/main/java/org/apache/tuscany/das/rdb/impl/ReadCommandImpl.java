@@ -81,9 +81,11 @@ public class ReadCommandImpl extends CommandImpl {
         // Create the DataGraph
         DataGraph g = SDOUtil.createDataGraph();
 
-        // Create the root object
-        g.createRootObject(gbmd.getSchema());
+        // Create the root object       
+        g.createRootObject(gbmd.getRootType());
 
+        SDOUtil.registerDataGraphTypes(g, gbmd.getDefinedTypes());
+        
         ChangeSummary summary = g.getChangeSummary();
 
         ResultSetProcessor rsp = new ResultSetProcessor(g.getRootObject(), gbmd);
