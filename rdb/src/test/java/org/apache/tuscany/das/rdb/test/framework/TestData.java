@@ -21,13 +21,21 @@ package org.apache.tuscany.das.rdb.test.framework;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public abstract class TestData {
 	
 	protected Object[][] data;
 	private int currentRow = -1;
 	protected Connection connection;
-	
+    
+    
+    protected static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:ss:mm.SSS");
+    protected static Timestamp timestamp = getTimestamp();
 
 	public TestData(Connection c, Object[][] customerData) {
 		this.connection = c; 
@@ -88,4 +96,32 @@ public abstract class TestData {
 		}
 		ps.close();
 	}
+    
+    //Utilities
+    protected static Date getDate() {
+        
+        try {
+            return dateFormat.parse("1966-12-20 00:00:00.0");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    protected static Date getDate(String timeStamp) {
+        
+        try {
+            return dateFormat.parse("1966-12-20 00:00:00.0");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static Timestamp getTimestamp() {
+        return new Timestamp(getDate().getTime());
+    }
+    
+    public static Timestamp getTimestamp(String timeStamp) {
+        return new Timestamp(getDate(timeStamp).getTime());
+    }
+    
 }

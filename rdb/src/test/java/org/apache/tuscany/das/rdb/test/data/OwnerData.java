@@ -19,23 +19,37 @@
 package org.apache.tuscany.das.rdb.test.data;
 
 import java.sql.Connection;
+import java.sql.Types;
 
-import org.apache.tuscany.das.rdb.test.framework.TestData;
+import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
 
-public class TypesData extends TestData {
-			
-	private static Object[][] customerData = {
-			{new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89)}
-			};
+public class OwnerData extends TestDataWithExplicitColumns {
 
-	public TypesData(Connection connection) {
-		super(connection, customerData);
-	}
+/*    CREATE TABLE OWNER (
+            ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+            NAME VARCHAR(20) NULL,
+            CONTACT_PHONE VARCHAR(20) NULL,
+            OCC_COUNT INTEGER UNSIGNED NULL,
+            PRIMARY KEY(ID)
+          );*/
+    
+	//id omitted.  id is auto-generated.
+    private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER}; 
 	
+	private static Object[][] data = { 
+            { "Fanny", "222-2222", new Integer(1) },
+			{ "Manny", "333-3333", new Integer(1) },
+			{ "Sammy", "444-4444", new Integer(1)} };
+
+	private static String[] columns = { "NAME", "CONTACT_PHONE", "OCC_COUNT" };
+
+	public OwnerData(Connection connection) {
+		super(connection, data, columns, columnTypes);
+	}
+
 	public String getTableName() {
-		return "TYPETEST";
+		return "OWNER";
 	}
 
-	
 }

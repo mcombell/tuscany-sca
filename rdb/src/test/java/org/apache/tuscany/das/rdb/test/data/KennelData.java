@@ -19,23 +19,37 @@
 package org.apache.tuscany.das.rdb.test.data;
 
 import java.sql.Connection;
+import java.sql.Types;
 
-import org.apache.tuscany.das.rdb.test.framework.TestData;
+import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
 
-public class TypesData extends TestData {
-			
-	private static Object[][] customerData = {
-			{new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89)}
-			};
+public class KennelData extends TestDataWithExplicitColumns {
 
-	public TypesData(Connection connection) {
-		super(connection, customerData);
-	}
+/*    CREATE TABLE KENNEL (
+            ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+            NUMBER INTEGER UNSIGNED NULL,
+            KIND VARCHAR(20) NULL,
+            OCC_COUNT INTEGER UNSIGNED NULL,
+            PRIMARY KEY(ID)
+          );*/
+    
+	//id omitted.  id is auto-generated.
+    private static int[] columnTypes = {Types.INTEGER, Types.VARCHAR, Types.INTEGER}; 
 	
+	private static Object[][] data = { 
+            { new Integer(100), "Small", new Integer(1) },
+			{ new Integer(101), "Small", new Integer(1) },
+			{ new Integer(102), "Large", new Integer(1)} };
+
+	private static String[] columns = { "NUMBER", "KIND", "OCC_COUNT" };
+
+	public KennelData(Connection connection) {
+		super(connection, data, columns, columnTypes);
+	}
+
 	public String getTableName() {
-		return "TYPETEST";
+		return "KENNEL";
 	}
 
-	
 }

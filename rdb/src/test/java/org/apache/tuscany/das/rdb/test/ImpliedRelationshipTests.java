@@ -14,78 +14,77 @@ import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 
 public class ImpliedRelationshipTests extends DasTest {
-	protected void setUp() throws Exception {
-		super.setUp();
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		new CustomerData(getAutoConnection()).refresh();
-		new OrderData(getAutoConnection()).refresh();
-	}
+        new CustomerData(getAutoConnection()).refresh();
+        new OrderData(getAutoConnection()).refresh();
+    }
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-	/**
-	 * Ensure that an implied relationship is not created when a defined one already exists
-	 * @throws Exception
-	 */
-	public void testRelationshipAlreadyDefined() throws Exception {
-		ConfigHelper helper = new ConfigHelper();
-		Relationship r = helper.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
-		r.setName("definedRelationship");
-		
-		DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
-		Command select = das.createCommand("select * from CUSTOMER left join ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
-		
-		DataObject root = select.executeQuery();
-		DataObject cust = root.getDataObject("CUSTOMER[1]");
-		Iterator i = cust.getType().getProperties().iterator();
-		while ( i.hasNext()) {
-			Property p = (Property)i.next();
-			if ( !p.getType().isDataType() ) 
-				assertEquals(p.getName(), "definedRelationship");			
-		}
-	}
-	
-	/**
-	 * Add a new Order to a list of Customers without defining any config information
-	 * @throws Exception
-	 */
-	public void testAddNewOrder() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
+    /**
+     * Ensure that an implied relationship is not created when a defined one already exists
+     * 
+     * @throws Exception
+     */
+    public void testRelationshipAlreadyDefined() throws Exception {
+        ConfigHelper helper = new ConfigHelper();
+        Relationship r = helper.addRelationship("CUSTOMER.ID", "ANORDER.CUSTOMER_ID");
+        r.setName("definedRelationship");
 
-		Command select = das
-				.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
+        DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
+        Command select = das.createCommand("select * from CUSTOMER left join ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
 
-		DataObject root = select.executeQuery();
+        DataObject root = select.executeQuery();
+        DataObject cust = root.getDataObject("CUSTOMER[1]");
+        Iterator i = cust.getType().getProperties().iterator();
+        while (i.hasNext()) {
+            Property p = (Property) i.next();
+            if (!p.getType().isDataType())
+                assertEquals(p.getName(), "definedRelationship");
+        }
+    }
 
-		DataObject cust = root.getDataObject("CUSTOMER[1]");
+    /**
+     * Add a new Order to a list of Customers without defining any config information
+     * 
+     * @throws Exception
+     */
+    public void testAddNewOrder() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
 
-		// Save ID and Order Count
-		int custID = cust.getInt("ID");
-		int custOrderCount = cust.getList("ANORDER").size();
+        Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
 
-		// Create a new Order and add to customer1
-		DataObject order = root.createDataObject("ANORDER");
+        DataObject root = select.executeQuery();
 
-		order.set("ID", new Integer(99));
-		order.set("PRODUCT", "The 99th product");
-		order.set("QUANTITY", new Integer(99));
-		cust.getList("ANORDER").add(order);
+        DataObject cust = root.getDataObject("CUSTOMER[1]");
 
-		assertEquals(custOrderCount + 1, cust.getList("ANORDER").size());
+        // Save ID and Order Count
+        int custID = cust.getInt("ID");
+        int custOrderCount = cust.getList("ANORDER").size();
 
-		// Build apply changes command
-		das.applyChanges(root);
+        // Create a new Order and add to customer1
+        DataObject order = root.createDataObject("ANORDER");
 
-		// verify cust1 relationship updates
-		select = das
-				.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+        order.set("ID", new Integer(99));
+        order.set("PRODUCT", "The 99th product");
+        order.set("QUANTITY", new Integer(99));
+        cust.getList("ANORDER").add(order);
 
-		select.setParameter(1, new Integer(custID));
-		root = select.executeQuery();
+        assertEquals(custOrderCount + 1, cust.getList("ANORDER").size());
 
-		assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/ANORDER")
-				.size());
-	}
+        // Build apply changes command
+        das.applyChanges(root);
+
+        // verify cust1 relationship updates
+        select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+
+        select.setParameter(1, new Integer(custID));
+        root = select.executeQuery();
+
+        assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/ANORDER").size());
+    }
 }

@@ -20,22 +20,22 @@ package org.apache.tuscany.das.rdb.test.data;
 
 import java.sql.Connection;
 
-import org.apache.tuscany.das.rdb.test.framework.TestData;
+import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
+public class OwnerDogData extends RelationshipData {
 
-public class TypesData extends TestData {
-			
-	private static Object[][] customerData = {
-			{new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89)}
-			};
+    public static Object[][] data = { { "Fanny", "Fido" }, { "Manny", "Max" }, { "Sammy", "Saddie" } };
 
-	public TypesData(Connection connection) {
-		super(connection, customerData);
-	}
-	
-	public String getTableName() {
-		return "TYPETEST";
-	}
+    public OwnerDogData(Connection c) {
+        super(c, data);
+    }
 
-	
+    protected String getParentRetrievalStatement() {
+        return "select ID from OWNER where NAME = ?";
+    }
+
+    protected String getChildUpdateStatement() {
+        return "update DOG set OWNER_ID = ? where NAME = ?";
+    }
+
 }
