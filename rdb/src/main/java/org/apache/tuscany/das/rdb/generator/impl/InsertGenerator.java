@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.generator.impl;
 
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -30,7 +31,7 @@ import org.apache.tuscany.das.rdb.config.wrapper.RelationshipWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.InsertCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -39,7 +40,7 @@ public class InsertGenerator extends BaseGenerator {
 
 	public static final InsertGenerator instance = new InsertGenerator();
 
-	private static final boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(InsertGenerator.class);
 
 	private InsertGenerator() {
 		super();
@@ -97,7 +98,9 @@ public class InsertGenerator extends BaseGenerator {
 			cmd.addParameter(p);
 
 		}
-		DebugUtil.debugln(getClass(), debug, statement.toString());
+        if(this.logger.isDebugEnabled())
+            this.logger.debug(statement.toString());
+
 		return cmd;
 
 	}
@@ -113,7 +116,7 @@ public class InsertGenerator extends BaseGenerator {
 			} else {
 				if ( obj.isSet(p) ) {
 					Relationship relationship = config.getRelationshipByReference(p);
-					if ((p.getOpposite() != null && p.getOpposite().isMany()) || (hasState(config, relationship, obj))) {							
+					if ((p.getOpposite() != null && p.getOpposite().isMany()) || (hasState(config, relationship, obj))) {
 						RelationshipWrapper r = new RelationshipWrapper(
 							relationship);
 						Iterator keys = r.getForeignKeys().iterator();
@@ -132,17 +135,17 @@ public class InsertGenerator extends BaseGenerator {
 
 	}
 
-	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {							
-			
+	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {
+
 			if ( !rel.isMany()) {
 				Table t = config.getTableByTypeName(changedObject.getType().getName());
 				TableWrapper tw = new TableWrapper(t);
 				RelationshipWrapper rw = new RelationshipWrapper(rel);
 				if (( rel.getForeignKeyTable().equals(t.getTableName())) &&
 						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
-					return true;			
+					return true;
 			}
-				
+
 		return false;
 	}
 

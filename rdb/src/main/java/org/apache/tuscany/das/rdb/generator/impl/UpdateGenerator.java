@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.generator.impl;
 
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -31,7 +32,7 @@ import org.apache.tuscany.das.rdb.impl.ManagedParameterImpl;
 import org.apache.tuscany.das.rdb.impl.OptimisticWriteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.UpdateCommandImpl;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
@@ -40,7 +41,7 @@ import commonj.sdo.Type;
 
 public class UpdateGenerator extends BaseGenerator {
 
-	private boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(UpdateGenerator.class);
 
 	public static UpdateGenerator instance = new UpdateGenerator();
 
@@ -58,7 +59,7 @@ public class UpdateGenerator extends BaseGenerator {
 		statement.append(table.getTableName());
 		statement.append(" set ");
 
-		
+
 		ChangeSummary summary = changedObject.getDataGraph().getChangeSummary();
 		Iterator i = getChangedFields(mapping, summary, changedObject).iterator();
 
@@ -107,34 +108,36 @@ public class UpdateGenerator extends BaseGenerator {
 			whereClauseProperties.add(type.getProperty(t.getCollisionColumnPropertyName()));
 		}
 
-		
+
 		UpdateCommandImpl updateCommand;
 		if ( t.getCollisionColumn() != null )
 			updateCommand = new OptimisticWriteCommandImpl(statement.toString());
 		else
 			updateCommand = new UpdateCommandImpl(statement.toString());
-		
-		
+
+
 		int idx = 1;
-		Iterator params = updatedProperties.iterator();		
+		Iterator params = updatedProperties.iterator();
 		while ( params.hasNext()) {
-			Property p = (Property)params.next();			
+			Property p = (Property)params.next();
 			updateCommand.addParameter(createParameter(t, p, idx++));
 		}
-		
+
 		params = managedProperties.iterator();
 		while ( params.hasNext()) {
-			Property p = (Property)params.next();			
+			Property p = (Property)params.next();
 			updateCommand.addParameter(createManagedParameter(t, p, idx++));
 		}
-		
-		params = whereClauseProperties.iterator();		
+
+		params = whereClauseProperties.iterator();
 		while ( params.hasNext()) {
-			Property p = (Property)params.next();			
+			Property p = (Property)params.next();
 			updateCommand.addParameter(createParameter(t, p, idx++));
 		}
-		
-		DebugUtil.debugln(getClass(), debug, statement.toString());
+
+        if(this.logger.isDebugEnabled())
+		    this.logger.debug(statement.toString());
+
 		return updateCommand;
 	}
 
@@ -149,9 +152,9 @@ public class UpdateGenerator extends BaseGenerator {
 				changes.add(setting.getProperty());
 			} else  {
 				Property ref = setting.getProperty();
-				if ( !ref.isMany() ) {												
+				if ( !ref.isMany() ) {
 					RelationshipWrapper r = new RelationshipWrapper(mapping.getRelationshipByReference(ref));
-					
+
 					Iterator keys = r.getForeignKeys().iterator();
 					while ( keys.hasNext()) {
 						String key = (String) keys.next();
@@ -159,13 +162,13 @@ public class UpdateGenerator extends BaseGenerator {
 						changes.add(p);
 					}
 				}
-					
+
 			}
 		}
 		return changes;
 	}
-	
-	
+
+
 
 	private ParameterImpl createManagedParameter(TableWrapper table, Property property, int idx) {
 		ParameterImpl param = new ManagedParameterImpl();
@@ -174,18 +177,18 @@ public class UpdateGenerator extends BaseGenerator {
 		param.setConverter(getConverter(table.getConverter(property.getName())));
 		if ( idx != -1)
 			param.setIndex(idx);
-		
+
 		return param;
 	}
-	
-	private ParameterImpl createParameter(TableWrapper table, Property property, int idx) {		
+
+	private ParameterImpl createParameter(TableWrapper table, Property property, int idx) {
 		ParameterImpl param = new ParameterImpl();
 		param.setName(property.getName());
 		param.setType(property.getType());
 		param.setConverter(getConverter(table.getConverter(property.getName())));
 		if ( idx != -1)
 			param.setIndex(idx);
-		
+
 		return param;
 	}
 

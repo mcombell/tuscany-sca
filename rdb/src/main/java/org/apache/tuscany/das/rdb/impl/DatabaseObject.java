@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.impl;
 
@@ -22,13 +22,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Config;
 import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -36,18 +37,18 @@ import commonj.sdo.Property;
 /**
  * DatabaseObject wraps DataObject. If a field is an FK field, it will return
  * the value from the parent.
- * 
- * 
+ *
+ *
  */
 public class DatabaseObject {
+
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(DatabaseObject.class);
 
     private final MappingWrapper mappingWrapper;
 
     private final DataObject dataObject;
 
     private Property parentReference;
-
-    private static final boolean debug = false;
 
     private HashMap keyMappings = new HashMap();
 
@@ -64,7 +65,9 @@ public class DatabaseObject {
             Iterator i = relationships.iterator();
             while (i.hasNext()) {
                 Relationship r = (Relationship) i.next();
-                DebugUtil.debugln(getClass(), debug, "Initializing relationship: " + r.getName());
+                if(this.logger.isDebugEnabled())
+                    this.logger.debug("Initializing relationship: " + r.getName());
+
                 if (r.getForeignKeyTable().equals(getTypeName())) {
                     List pairs = r.getKeyPair();
                     Iterator iter = pairs.iterator();

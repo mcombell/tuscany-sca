@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.config.wrapper;
 
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Column;
 import org.apache.tuscany.das.rdb.config.Command;
 import org.apache.tuscany.das.rdb.config.Config;
@@ -36,7 +37,7 @@ import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.Update;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.Property;
 
@@ -44,16 +45,16 @@ public class MappingWrapper {
 
     private static final ConfigFactory factory = ConfigFactory.INSTANCE;
 
-    private static final boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(MappingWrapper.class);
 
     private Config config;
 
     public MappingWrapper() {
-    	config = factory.createConfig();        
+    	config = factory.createConfig();
     }
 
     public MappingWrapper(Config mapping) {
-    	if ( mapping == null ) 
+    	if ( mapping == null )
     		this.config = factory.createConfig();
     	else
     		this.config = mapping;
@@ -64,8 +65,10 @@ public class MappingWrapper {
     }
 
     public Table getTable(String tableName) {
-       
-        DebugUtil.debugln(getClass(), debug, "Looking for table " + tableName);
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Looking for table " + tableName);
+
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
@@ -77,8 +80,10 @@ public class MappingWrapper {
     }
 
     public Table getTableByTypeName(String typeName) {
-       
-        DebugUtil.debugln(getClass(), debug, "Looking for table by property: " + typeName);
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Looking for table by property: " + typeName);
+
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
@@ -90,12 +95,12 @@ public class MappingWrapper {
 
     }
 
-    public void addImpliedRelationship(String parentTableName, String childTableName, String fkColumnName) {    	
+    public void addImpliedRelationship(String parentTableName, String childTableName, String fkColumnName) {
 
     	// Don't create a relationship for something like Book.Book_ID
     	if ( parentTableName.equalsIgnoreCase(childTableName) )
     		return;
-    	
+
     	// Don't create a relationship if one already exists in the config
     	 Iterator i = config.getRelationship().iterator();
     	 while ( i.hasNext() ) {
@@ -103,7 +108,7 @@ public class MappingWrapper {
     		 if ( r.getPrimaryKeyTable().equals(parentTableName) && r.getForeignKeyTable().equals(childTableName))
     			 return;
     	 }
-    	 
+
          Relationship r = factory.createRelationship();
          r.setName(childTableName);
          r.setPrimaryKeyTable(parentTableName);
@@ -118,7 +123,7 @@ public class MappingWrapper {
 
          config.getRelationship().add(r);
     }
-    
+
     public Relationship addRelationship(String parentName, String childName) {
 
         QualifiedColumn parent = new QualifiedColumn(parentName);
@@ -128,7 +133,9 @@ public class MappingWrapper {
         r.setName(child.getTableName());
         r.setPrimaryKeyTable(parent.getTableName());
         r.setForeignKeyTable(child.getTableName());
-        DebugUtil.debugln(getClass(), debug, "Created relationship from " + r.getPrimaryKeyTable() + " to "
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Created relationship from " + r.getPrimaryKeyTable() + " to "
                 + r.getForeignKeyTable() + " named " + r.getName());
 
         KeyPair pair = factory.createKeyPair();
@@ -139,17 +146,17 @@ public class MappingWrapper {
         r.setMany(true);
 
         config.getRelationship().add(r);
-        
+
         return r;
 
     }
 
 
-    
-    public void addPrimaryKey(String columnName) {     
+
+    public void addPrimaryKey(String columnName) {
     	addPrimaryKey(Collections.singletonList(columnName));
     }
-    
+
     public void addPrimaryKey(List columnNames) {
 
         Iterator i = columnNames.iterator();
@@ -159,7 +166,7 @@ public class MappingWrapper {
             QualifiedColumn pkColumn = new QualifiedColumn(columnName);
             Table t = findOrCreateTable(pkColumn.getTableName());
             Column c = findOrCreateColumn(t, pkColumn.getColumnName());
-            c.setPrimaryKey(true);           
+            c.setPrimaryKey(true);
         }
     }
 
@@ -185,8 +192,10 @@ public class MappingWrapper {
                 return c;
             }
         }
-        DebugUtil
-                .debugln(getClass(), debug, "WARNING: Could not find column " + columnName + " in table " + t.getTableName());
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("WARNING: Could not find column " + columnName + " in table " + t.getTableName());
+
         return null;
     }
 
@@ -201,8 +210,10 @@ public class MappingWrapper {
             if (c.getPropertyName() != null && c.getPropertyName().equals(propertyName))
                 return c;
         }
-        DebugUtil.debugln(getClass(), debug, "WARNING: Could not find column " + propertyName + " in table "
-                + t.getTableName());
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("WARNING: Could not find column " + propertyName + " in table " + t.getTableName());
+
         return null;
     }
 
@@ -232,7 +243,7 @@ public class MappingWrapper {
         return table;
     }
 
-    private Table findOrCreateTable(String tableName) {    	
+    private Table findOrCreateTable(String tableName) {
         Table table = getTable(tableName);
         if (table == null) {
             table = ConfigFactory.INSTANCE.createTable();
@@ -284,7 +295,9 @@ public class MappingWrapper {
 
     // TODO optimize
     public ArrayList getInsertOrder() {
-        DebugUtil.debugln(getClass(), debug, "Getting insert order");
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Getting insert order");
+
         ArrayList inserts = new ArrayList();
         HashMap parentToChild = new HashMap();
 
@@ -319,7 +332,9 @@ public class MappingWrapper {
 
         }
 
-        DebugUtil.debugln(getClass(), debug, inserts);
+        if(this.logger.isDebugEnabled())
+            this.logger.debug(inserts);
+
         return inserts;
     }
 
@@ -384,12 +399,12 @@ public class MappingWrapper {
     }
 
     public void addUpdateStatement(Table table, String statement, String parameters) {
-    
+
         Update update = ConfigFactory.INSTANCE.createUpdate();
         update.setSql(statement);
         update.setParameters(parameters);
         table.setUpdate(update);
-        
+
     }
 
     public void addDeleteStatement(Table table, String statement,
@@ -402,7 +417,7 @@ public class MappingWrapper {
 
 	}
 
-    
+
     public void addCreateStatement(Table table, String statement,
 			String parameters) {
 
@@ -416,7 +431,7 @@ public class MappingWrapper {
 		ConnectionInfo info = ConfigFactory.INSTANCE.createConnectionInfo();
 		info.setDataSource(dataSourceName);
 		info.setManagedtx(managedtx);
-		config.setConnectionInfo(info);		
+		config.setConnectionInfo(info);
 	}
 
 	public Command addCommand(String name, String sql, String kind) {
@@ -424,15 +439,15 @@ public class MappingWrapper {
 		cmd.setName(name);
 		cmd.setKind(kind);
 		cmd.setSQL(sql);
-		
+
 		config.getCommand().add(cmd);
-		
+
 		return cmd;
 	}
 
 	public void addImpliedPrimaryKey(String tableName, String columnName) {
 		Table t = findOrCreateTable(tableName);
-		
+
 		Iterator i = t.getColumn().iterator();
 		boolean hasPK = false;
 		while ( i.hasNext() ) {
@@ -440,12 +455,12 @@ public class MappingWrapper {
 			if ( c.isPrimaryKey() )
 				hasPK = true;
 		}
-		
+
 		if ( !hasPK ) {
 			Column c = findOrCreateColumn(t, columnName);
 			c.setPrimaryKey(true);
-		}	
-		
+		}
+
 	}
 
 }

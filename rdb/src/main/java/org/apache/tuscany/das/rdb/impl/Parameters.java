@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.impl;
 
@@ -22,19 +22,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.log4j.Logger;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.Type;
 
 public class Parameters {
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(Parameters.class);
 
 	private ArrayList parameters = new ArrayList();
 
 	private ArrayList inParams = new ArrayList();
 
-	private ArrayList outParams = new ArrayList();	
-
-	private static boolean debug = false;
+	private ArrayList outParams = new ArrayList();
 
 	public Parameters() {
 		super();
@@ -52,14 +52,14 @@ public class Parameters {
 		return inParams;
 	}
 
-	private void addParameter(ParameterImpl param) {		
+	private void addParameter(ParameterImpl param) {
 		if (param.getDirection() == ParameterImpl.IN)
 			inParams.add(param);
 		else if ((param.getDirection() == ParameterImpl.OUT)
 				|| (param.getDirection() == ParameterImpl.IN_OUT))
 			outParams.add(param);
 
-		this.parameters.add(param);		
+		this.parameters.add(param);
 	}
 
 	public void add(ParameterImpl param) {
@@ -75,8 +75,9 @@ public class Parameters {
 			if (param.getIndex() == index)
 				return param;
 		}
-		DebugUtil.debugln(getClass(), debug,
-				"Creating new parameter with index " + index);
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Creating new parameter with index " + index);
+
 		ParameterImpl newParam = new ParameterImpl(index);
 		newParam.setDirection(direction);
 		newParam.setType(sdoType);
@@ -97,7 +98,7 @@ public class Parameters {
 		param.setValue(value);
 	}
 
-    
+
     public ParameterImpl parameterWithIndex(int index) {
 		Iterator i = parameters.iterator();
 		while (i.hasNext()) {

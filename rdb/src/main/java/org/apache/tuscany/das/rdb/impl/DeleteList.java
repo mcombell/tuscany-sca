@@ -23,8 +23,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.util.DebugUtil;
-
 /**
  * DeleteList will sort delete operations so that child objects are deleted
  * before their parents

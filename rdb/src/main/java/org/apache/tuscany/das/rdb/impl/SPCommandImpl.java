@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.impl;
 
@@ -22,16 +22,18 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Parameter;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 import commonj.sdo.helper.TypeHelper;
 
 public class SPCommandImpl extends ReadCommandImpl {
-    
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(SPCommandImpl.class);
+
     public SPCommandImpl(String sqlString, MappingWrapper config, List params) {
         super(sqlString, config, null);
         Iterator i = params.iterator();
@@ -43,7 +45,7 @@ public class SPCommandImpl extends ReadCommandImpl {
 			String typeName = p.getColumnType().substring(index + 1);
 
 			Type sdoType = TypeHelper.INSTANCE.getType(pkg, typeName);
-			
+
 
 			int direction = ParameterImpl.IN;
 			if ("OUT".equalsIgnoreCase(p.getDirection()))
@@ -51,8 +53,8 @@ public class SPCommandImpl extends ReadCommandImpl {
 			else if ("INOUT".equalsIgnoreCase(p.getDirection()))
 				direction = ParameterImpl.IN_OUT;
 			parameters.findOrCreateParameterWithIndex(idx, direction, sdoType);
-		}    	
-        
+		}
+
     }
 
 	public DataObject executeQuery() {
@@ -61,10 +63,12 @@ public class SPCommandImpl extends ReadCommandImpl {
 		try {
 			List results = statement.executeCall(parameters);
 			success = true;
-			
+
 			return buildGraph(results);
 		} catch (SQLException e) {
-			DebugUtil.debugln(getClass(), debug, e);
+            if(this.logger.isDebugEnabled())
+                this.logger.debug(e);
+
 			throw new RuntimeException(e);
 		} finally {
 			if (success)
@@ -73,7 +77,7 @@ public class SPCommandImpl extends ReadCommandImpl {
 				statement.getConnection().errorCleanUp();
 		}
 	}
-	
+
 	public void execute() {
 
 		boolean success = false;

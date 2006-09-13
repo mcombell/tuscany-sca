@@ -6,21 +6,22 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.graphbuilder.impl;
 
 import java.util.Iterator;
 
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.log4j.Logger;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -31,7 +32,7 @@ public class DataObjectMaker {
 
 	private final DataObject rootObject;
 
-	private boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(DataObjectMaker.class);
 
 	public DataObjectMaker(DataObject root) {
 		this.rootObject = root;
@@ -45,8 +46,8 @@ public class DataObjectMaker {
 			ResultMetadata resultMetadata) {
 		// Get a Type from the package and create a standalone DataObject
 
-		DebugUtil.debugln(getClass(), this.debug, "Looking for Type for "
-				+ tableData.getTableName());
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Looking for Type for " + tableData.getTableName());
 
 		Type tableClass = findTableTypeByPropertyName(tableData.getTableName());
 
@@ -82,7 +83,7 @@ public class DataObjectMaker {
 				tableData.getTableName()).iterator();
 		while (columnNames.hasNext()) {
 			String columnName = (String) columnNames.next();
-			
+
 			Property p = findProperty(obj.getType(), columnName);
 			Object value = tableData.getColumnData(columnName);
 
@@ -110,7 +111,7 @@ public class DataObjectMaker {
 			if (tableName.equals(p.getType().getName()))
 				return p.getType();
 		}
-		
+
 		return null;
 	}
 

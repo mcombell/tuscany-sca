@@ -33,12 +33,11 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.ResultSetShape;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
 
 import commonj.sdo.Type;
 
 public class ResultMetadata {
-
+            
     private HashMap tableToPropertyMap = new HashMap();
 
     private ArrayList typeNames = new ArrayList();
@@ -52,8 +51,6 @@ public class ResultMetadata {
     private final MappingWrapper configWrapper;
 
     private Converter[] converters;
-
-    private static boolean debug = false;
 
     public ResultMetadata(ResultSet rs, MappingWrapper cfgWrapper, ResultSetShape shape)
             throws SQLException {
@@ -118,8 +115,7 @@ public class ResultMetadata {
                 TableWrapper t = new TableWrapper((Table) tablesFromModel
                         .next());
                 if (tableToPropertyMap.get(t.getTypeName()) == null)
-                    tableToPropertyMap.put(t.getTypeName(),
-                            Collections.EMPTY_LIST);
+                    tableToPropertyMap.put(t.getTypeName(), Collections.EMPTY_LIST);
             }
         }
      
@@ -148,10 +144,10 @@ public class ResultMetadata {
 		return new DefaultConverter();
 	}
 
-    private void debug(Object string) {
-        if (debug)
-            DebugUtil.debugln(getClass(), debug, string);
-    }   
+    //private void debug(Object string) {
+    //    if (debug)
+    //        DebugUtil.debugln(getClass(), debug, string);
+    //}   
 
     public String getColumnPropertyName(int i) {
         return (String) propertyNames.get(i - 1);

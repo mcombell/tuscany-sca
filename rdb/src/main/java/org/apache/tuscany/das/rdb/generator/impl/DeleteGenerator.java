@@ -6,32 +6,33 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.generator.impl;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.TableWrapper;
 import org.apache.tuscany.das.rdb.impl.DeleteCommandImpl;
 import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.SDODataTypes;
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 public class DeleteGenerator extends BaseGenerator {
 
 	public static final DeleteGenerator instance = new DeleteGenerator();
 
-	private static final boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(DeleteGenerator.class);
 
 	private DeleteGenerator() {
 		super();
@@ -55,14 +56,16 @@ public class DeleteGenerator extends BaseGenerator {
 				statement.append(" and ");
 		}
 
-		DebugUtil.debugln(getClass(), debug, statement.toString());
+		if(this.logger.isDebugEnabled())
+		    this.logger.debug(statement.toString());
+
 		return statement.toString();
 	}
 
 	public DeleteCommandImpl getDeleteCommand(Table t) {
 		TableWrapper tw = new TableWrapper(t);
 		DeleteCommandImpl deleteCommand = new DeleteCommandImpl(getDeleteStatement(t));
-		
+
 		Iterator i = tw.getPrimaryKeyProperties().iterator();
 		for(int idx=1; i.hasNext(); idx++) {
 			String property = (String) i.next();
@@ -75,7 +78,7 @@ public class DeleteGenerator extends BaseGenerator {
 		}
 		return deleteCommand;
 	}
-	
+
 
 
 }

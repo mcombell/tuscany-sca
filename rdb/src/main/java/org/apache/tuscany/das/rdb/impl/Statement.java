@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.impl;
 
@@ -28,16 +28,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.log4j.Logger;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 // TODO - Can use some refactoring. Much code is duplicated in "execute" methods
 public class Statement {
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(Statement.class);
 
     protected final String queryString;
 
     protected ConnectionImpl jdbcConnection;
-
-    private static final boolean debug = false;
 
     private PreparedStatement preparedStatement;
 
@@ -57,7 +57,7 @@ public class Statement {
     }
 
     public List executeCall(Parameters parameters) throws SQLException {
-      
+
             CallableStatement cs = jdbcConnection.prepareCall(queryString);
 
             Iterator inParams = parameters.inParams().iterator();
@@ -70,7 +70,9 @@ public class Statement {
             Iterator outParams = parameters.outParams().iterator();
             while (outParams.hasNext()) {
                 ParameterImpl param = (ParameterImpl) outParams.next();
-                DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
+                if(this.logger.isDebugEnabled())
+                    this.logger.debug("Registering parameter " + param.getName());
+
                 cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
             }
 
@@ -83,14 +85,14 @@ public class Statement {
             while ( cs.getMoreResults(java.sql.Statement.KEEP_CURRENT_RESULT) ) {
             	results.add(cs.getResultSet());
             }
-            
+
             Iterator i = parameters.outParams().iterator();
             while (i.hasNext()) {
                 ParameterImpl param = (ParameterImpl) i.next();
                 param.setValue(cs.getObject(param.getIndex()));
             }
 
-            return results;       
+            return results;
 
     }
 
@@ -111,7 +113,10 @@ public class Statement {
             ParameterImpl param = (ParameterImpl) outParams.next();
 //            if (param.getIndex() == 0)
 //                param.setIndex(queryString.getParameterIndex(param.getName()));
-            DebugUtil.debugln(getClass(), debug, "Registering parameter " + param.getName());
+
+            if(this.logger.isDebugEnabled())
+                this.logger.debug("Registering parameter " + param.getName());
+
             cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
         }
 
@@ -130,14 +135,18 @@ public class Statement {
      * has been specified and try setObject otherwise.
      */
     public int executeUpdate(Parameters parameters) throws SQLException {
-        DebugUtil.debugln(getClass(), debug, "Executing statement " + queryString);
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Executing statement " + queryString);
+
         PreparedStatement ps = getPreparedStatement();
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
             Object value = param.getValue();
-            DebugUtil.debugln(getClass(), debug, "Setting parameter " + param.getIndex() + " to " + value);
+            if(this.logger.isDebugEnabled())
+                this.logger.debug("Setting parameter " + param.getIndex() + " to " + value);
+
             if (value == null) {
                 if (param.getType() == null) {
                 	try {
@@ -173,7 +182,9 @@ public class Statement {
     }
 
     private PreparedStatement getPreparedStatement() throws SQLException {
-        DebugUtil.debugln(getClass(), debug, "Getting prepared statement");
+        if(this.logger.isDebugEnabled())
+            this.logger.debug("Getting prepared statement");
+
         if (preparedStatement == null)
             if (isPaging)
                 preparedStatement = jdbcConnection.preparePagedStatement(queryString);

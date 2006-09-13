@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.das.rdb.test.framework;
 
@@ -22,18 +22,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.apache.tuscany.das.rdb.util.DebugUtil;
+import org.apache.log4j.Logger;
+import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 
 public abstract class TestDataWithExplicitColumns extends TestData {
 
-	protected String[] columns;
-	protected int[] sqlTypes;
-	
-	private static boolean debug = false;
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(TestDataWithExplicitColumns.class);
 
-	public TestDataWithExplicitColumns(Connection c, Object[][] data,
-			String[] columns, int[] sqlTypes) {
+	protected String[] columns;
+
+    protected int[] sqlTypes;
+
+	public TestDataWithExplicitColumns(Connection c, Object[][] data, String[] columns, int[] sqlTypes) {
 		super(c, data);
 		this.columns = columns;
 		this.sqlTypes = sqlTypes;
@@ -42,7 +43,7 @@ public abstract class TestDataWithExplicitColumns extends TestData {
 	private String getColumn(int i) {
 		return columns[i - 1];
 	}
-	
+
 	private int getSqlType(int i) {
 		return (sqlTypes[i - 1]);
 	}
@@ -58,7 +59,7 @@ public abstract class TestDataWithExplicitColumns extends TestData {
 		sql.append(" (");
 		for (int i = 1; i <= size(); i++) {
 			sql.append(getColumn(i));
-			if ( i < size() ) 
+			if ( i < size() )
 				sql.append(',');
 		}
 		sql.append(" )");
@@ -68,8 +69,10 @@ public abstract class TestDataWithExplicitColumns extends TestData {
 			sql.append("?,");
 		}
 		sql.append("?)");
-		
-		DebugUtil.debugln(getClass(), debug, sql.toString());
+
+        if(this.logger.isDebugEnabled())
+            this.logger.debug(sql.toString());
+
 		PreparedStatement ps = connection.prepareStatement(sql.toString());
 
 		while (next()) {
