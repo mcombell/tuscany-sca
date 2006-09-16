@@ -32,7 +32,6 @@
 
     <modules>
         <module>rdb</module>
-        <module>../samples/das</module>
     </modules>
 
     <!-- definition of repositories where the parent pom can be found -->
