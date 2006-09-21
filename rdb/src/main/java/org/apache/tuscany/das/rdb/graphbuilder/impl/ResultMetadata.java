@@ -122,32 +122,27 @@ public class ResultMetadata {
     }
 
 	private Converter loadConverter(String converterName) {
-		if (converterName != null) {
-		    
-		    try {
-		        
-		        Class converterClazz=  Class.forName(converterName, true, Thread.currentThread().getContextClassLoader());
-		        if(null != converterClazz)
-		            return (Converter) converterClazz.newInstance();		         
-		    } catch( Exception ex){
-		    	throw new RuntimeException(ex);
-		    }		
-		    
-	        try{   			        			        
-		        Class converterClazz = Class.forName(converterName);
-		        if ( converterClazz != null)
-		        	return (Converter)converterClazz.newInstance();		      
-		    } catch (Exception ex) {
-		        throw new RuntimeException(ex);
-		    }
-		}
-		return new DefaultConverter();
-	}
+        if (converterName != null) {
 
-    //private void debug(Object string) {
-    //    if (debug)
-    //        DebugUtil.debugln(getClass(), debug, string);
-    //}   
+            try {
+                Class converterClazz = Class.forName(converterName, true, Thread.currentThread().getContextClassLoader());
+                if (null != converterClazz)
+                    return (Converter) converterClazz.newInstance();
+
+                converterClazz = Class.forName(converterName);
+                if (converterClazz != null)
+                    return (Converter) converterClazz.newInstance();
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (InstantiationException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return new DefaultConverter();
+    }
+
 
     public String getColumnPropertyName(int i) {
         return (String) propertyNames.get(i - 1);
@@ -263,7 +258,7 @@ public class ResultMetadata {
      * @param tableName
      * @return
      */
-    public Collection getColumnNames(String tableName) {
+    public Collection getPropertyNames(String tableName) {
         return (Collection) tableToPropertyMap.get(tableName);
     }
 

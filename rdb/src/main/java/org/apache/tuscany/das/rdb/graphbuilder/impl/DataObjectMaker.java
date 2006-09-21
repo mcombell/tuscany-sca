@@ -68,24 +68,23 @@ public class DataObjectMaker {
 
 			if (p.isContainment() && p.getType().equals(tableClass)) {
 				if (p.isMany())
-					rootObject.getList(p).add(obj);
-				// TODO This was a performance optimization for EMF in SDO 1.1,
-				// check to see if there is
-				// something equivalent in SDO 2.0
-				// ((InternalEList) this.dataGraph.eGet(ref)).addUnique(obj);
+					rootObject.getList(p).add(obj);			
 				else
 					this.rootObject.set(p, obj);
 			}
 
 		}
 
-		Iterator columnNames = resultMetadata.getColumnNames(
+		Iterator columnNames = resultMetadata.getPropertyNames(
 				tableData.getTableName()).iterator();
 		while (columnNames.hasNext()) {
-			String columnName = (String) columnNames.next();
+			String propertyName = (String) columnNames.next();
 
-			Property p = findProperty(obj.getType(), columnName);
-			Object value = tableData.getColumnData(columnName);
+			Property p = findProperty(obj.getType(), propertyName);
+			if ( p == null ) 
+				throw new RuntimeException("Type " + obj.getType().getName() + " does not contain a property named " + propertyName);
+			
+			Object value = tableData.getColumnData(propertyName);
 
 			obj.set(p, value);
 		}
