@@ -26,7 +26,6 @@ import org.apache.tuscany.das.rdb.test.data.DogData;
 import org.apache.tuscany.das.rdb.test.data.KennelData;
 import org.apache.tuscany.das.rdb.test.data.OwnerData;
 import org.apache.tuscany.das.rdb.test.data.OwnerDogData;
-import org.apache.tuscany.das.rdb.test.data.TypesData;
 import org.apache.tuscany.das.rdb.test.data.VisitData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 import org.apache.tuscany.das.rdb.test.framework.TestData;

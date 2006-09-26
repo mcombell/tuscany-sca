@@ -28,7 +28,7 @@ public class KennelData extends TestDataWithExplicitColumns {
 
 /*    CREATE TABLE KENNEL (
             ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-            NUMBER INTEGER UNSIGNED NULL,
+            KNUMBER INTEGER UNSIGNED NULL,
             KIND VARCHAR(20) NULL,
             OCC_COUNT INTEGER UNSIGNED NULL,
             PRIMARY KEY(ID)
@@ -42,7 +42,7 @@ public class KennelData extends TestDataWithExplicitColumns {
 			{ new Integer(101), "Small", new Integer(1) },
 			{ new Integer(102), "Large", new Integer(1)} };
 
-	private static String[] columns = { "NUMBER", "KIND", "OCC_COUNT" };
+	private static String[] columns = { "KNUMBER", "KIND", "OCC_COUNT" };
 
 	public KennelData(Connection connection) {
 		super(connection, data, columns, columnTypes);

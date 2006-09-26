@@ -76,15 +76,20 @@ public class DatabaseSetup extends TestSetup {
             }
             connection.setAutoCommit(false);
 
-        } catch (Exception e) {
-            if (e instanceof SQLException) {
-                if (((SQLException) e).getNextException() != null)
-                    ((SQLException) e).getNextException().printStackTrace();
-                else
-                    e.printStackTrace();
+        } catch (SQLException e) {
 
+            if (e.getNextException() != null) {
+                e.getNextException().printStackTrace();
+            } else {
+                e.printStackTrace();
             }
 
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -322,7 +327,7 @@ public class DatabaseSetup extends TestSetup {
     protected String getCreateKennel() {
         return "CREATE TABLE KENNEL (" 
         + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
-        + getIntegerColumn("NUMBER") + ", "
+        + getIntegerColumn("KNUMBER") + ", "
         + getStringColumn("KIND", 20) + ", " 
         + getIntegerColumn("OCC_COUNT") + ", " 
         + "PRIMARY KEY(ID))";
