@@ -59,9 +59,10 @@ public class DASImpl implements DAS {
     }
 
     public DASImpl(Config inConfig) {
-    	if ( inConfig == null ) 
-    		inConfig = ConfigFactory.INSTANCE.createConfig();
-    	this.configWrapper = new MappingWrapper(inConfig);
+    	Config cfg = inConfig;
+    	if ( cfg == null ) 
+    		cfg = ConfigFactory.INSTANCE.createConfig();
+    	this.configWrapper = new MappingWrapper(cfg);
         
         Iterator i = configWrapper.getConfig().getCommand().iterator();
         while (i.hasNext()) {
@@ -73,7 +74,7 @@ public class DASImpl implements DAS {
             else if (kind.equalsIgnoreCase("update"))
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("insert"))
-                commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL()));
+                commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL(),new String[0]));
             else if (kind.equalsIgnoreCase("delete"))
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
             else if (kind.equalsIgnoreCase("procedure"))
@@ -189,10 +190,11 @@ public class DASImpl implements DAS {
      */
     private boolean managingConnections() {
 
-        if (configWrapper.getConfig().getConnectionInfo().getDataSource() == null)
+        if (configWrapper.getConfig().getConnectionInfo().getDataSource() == null) {
             return false;
-        else
-            return true;
+        }
+       
+        return true;
 
     }
 
@@ -204,16 +206,16 @@ public class DASImpl implements DAS {
         return baseCreateCommand(sql, new MappingWrapper(config));
     }
 
-    private Command baseCreateCommand(String sql, MappingWrapper config) {
+    private Command baseCreateCommand(String inSql, MappingWrapper config) {
     	CommandImpl returnCmd = null;
-        sql = sql.trim(); // Remove leading white space
+        String sql = inSql.trim(); // Remove leading white space
         char firstChar = Character.toUpperCase(sql.charAt(0));
         switch (firstChar) {
         case 'S':
             returnCmd =  new ReadCommandImpl(sql, config, null);
             break;
         case 'I':
-            returnCmd =  new InsertCommandImpl(sql);
+            returnCmd =  new InsertCommandImpl(sql, new String[0]);
             break;
         case 'U':
             returnCmd =  new UpdateCommandImpl(sql);
