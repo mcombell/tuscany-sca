@@ -44,7 +44,7 @@ public class Statement {
     private boolean isPaging = false;
 
     public Statement(String sqlString) {
-        this.queryString = sqlString; //new QueryString(sqlString);
+        this.queryString = sqlString; 
     }
 
     public List executeQuery(Parameters parameters) throws SQLException {
@@ -152,7 +152,7 @@ public class Statement {
                 	try {
                 		ParameterMetaData pmd = ps.getParameterMetaData();
                 		ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
-                	} catch (Exception ex) {
+                	} catch (SQLException ex) {
                 		ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(null));
                 	}
                 } else
@@ -196,9 +196,11 @@ public class Statement {
 
     public Integer getGeneratedKey() throws SQLException {
 
-        ResultSet rs = getPreparedStatement().getGeneratedKeys();
-        if (rs.next())
-            return new Integer(rs.getInt(1));
+    	if ( getConnection().supportsGeneratedKeys() ) {
+    		ResultSet rs = getPreparedStatement().getGeneratedKeys();
+    		if (rs.next())
+          	  return new Integer(rs.getInt(1));
+    	}
 
         return null;
     }

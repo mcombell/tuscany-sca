@@ -20,6 +20,7 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,13 +35,20 @@ public class ConnectionImpl {
 	private Connection connection;
 
 	private boolean managingTransaction = true;
+	private final boolean supportsGeneratedKeys;
 
 	public ConnectionImpl(Connection connection) {
 		this.connection = connection;
-
+		
 		try {
+			DatabaseMetaData dbmd = connection.getMetaData();
+			// Derby says they don't support generated keys, but they do for our purposes. 
+			if ( dbmd.supportsGetGeneratedKeys() || dbmd.getDatabaseProductName().contains("Derby") )
+				this.supportsGeneratedKeys = true;
+			else
+				this.supportsGeneratedKeys = false;
 			if (connection.getAutoCommit())
-				throw new RuntimeException("AutoCommit must be off!");
+				throw new RuntimeException("AutoCommit must be off");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -77,11 +85,16 @@ public class ConnectionImpl {
 		}
 	}
 
-	public PreparedStatement prepareStatement(String queryString) throws SQLException {
-        if(this.logger.isDebugEnabled())
-            this.logger.debug("Preparing Statement: " + queryString);
+	public PreparedStatement prepareStatement(String queryString)
+			throws SQLException {
+		if (this.logger.isDebugEnabled())
+			this.logger.debug("Preparing Statement: " + queryString);
 
-		return connection.prepareStatement(queryString, java.sql.Statement.RETURN_GENERATED_KEYS);
+		if (this.supportsGeneratedKeys)
+			return connection.prepareStatement(queryString,
+					java.sql.Statement.RETURN_GENERATED_KEYS);
+		else
+			return connection.prepareStatement(queryString);
 	}
 
 	public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
@@ -98,5 +111,9 @@ public class ConnectionImpl {
 
 	public CallableStatement prepareCall(String queryString) throws SQLException {
 		return connection.prepareCall(queryString);
+	}
+
+	public boolean supportsGeneratedKeys() {
+		return this.supportsGeneratedKeys;
 	}
 }
