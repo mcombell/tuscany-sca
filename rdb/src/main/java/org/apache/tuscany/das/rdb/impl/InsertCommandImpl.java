@@ -24,39 +24,42 @@ import org.apache.tuscany.das.rdb.config.Create;
 
 public class InsertCommandImpl extends WriteCommandImpl {
 
-	private int generatedKey;
-
-	private boolean hasGeneratedKey = false;
-
-	public InsertCommandImpl(String sqlString) {
+	private String[] keys;
+	
+	public InsertCommandImpl(String sqlString, String[] generatedKeys) {
 		super(sqlString);
+		keys = generatedKeys;
 	}
 
 	public InsertCommandImpl(Create create) {
 		super(create.getSql());
 		addParameters(create.getParameters());
+		this.keys = new String[0];
 	}
 
+	public void execute() {
 
-	public int getGeneratedKey() {
-
-		if (hasGeneratedKey)
-			return generatedKey;
-		
-		throw new RuntimeException("No generated key is available");
-	}
-
-	protected void subtypeProcessing() throws SQLException {
-		loadGeneratedKey();
-	}
-
-	private void loadGeneratedKey() throws SQLException {
-		Integer key = statement.getGeneratedKey();
-		if (key != null) {
-			hasGeneratedKey = true;
-			generatedKey = key.intValue();
+		boolean success = false;
+		try {
+			statement.executeUpdate(parameters, keys);
+			subtypeProcessing();
+			success = true;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (success)
+				statement.getConnection().cleanUp();
+			else
+				statement.getConnection().errorCleanUp();
 		}
 
+	}
+	public int getGeneratedKey() {		
+		try {
+			return statement.getGeneratedKey();
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 

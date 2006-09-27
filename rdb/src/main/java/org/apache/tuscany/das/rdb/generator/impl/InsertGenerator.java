@@ -56,9 +56,12 @@ public class InsertGenerator extends BaseGenerator {
 		Iterator i = getAttributeProperties(changedObject, config).iterator();
 
 		ArrayList attributes = new ArrayList();
+		ArrayList generatedKeys = new ArrayList();
 		while (i.hasNext()) {
 			Property attr = (Property) i.next();
-			if (!table.isGeneratedColumnProperty(attr.getName())) {
+			if (table.isGeneratedColumnProperty(attr.getName())) {
+				generatedKeys.add(attr.getName());
+			} else {
 				attributes.add(attr.getName());
 				parameters.add(changedObject.getType().getProperty(
 						attr.getName()));
@@ -86,7 +89,7 @@ public class InsertGenerator extends BaseGenerator {
 				statement.append(")");
 		}
 
-		InsertCommandImpl cmd = new InsertCommandImpl(statement.toString());
+		InsertCommandImpl cmd = new InsertCommandImpl(statement.toString(), (String[]) generatedKeys.toArray(new String[0]));
 		Iterator params = parameters.iterator();
 		for (int idx = 1; params.hasNext(); idx++) {
 			Property property = (Property) params.next();

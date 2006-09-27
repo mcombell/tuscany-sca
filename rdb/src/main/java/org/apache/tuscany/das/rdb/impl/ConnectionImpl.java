@@ -24,6 +24,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
@@ -35,18 +36,18 @@ public class ConnectionImpl {
 	private Connection connection;
 
 	private boolean managingTransaction = true;
-	private final boolean supportsGeneratedKeys;
+	private final boolean useGetGeneratedKeys;
 
 	public ConnectionImpl(Connection connection) {
 		this.connection = connection;
 		
 		try {
 			DatabaseMetaData dbmd = connection.getMetaData();
-			// Derby says they don't support generated keys, but they do for our purposes. 
-			if ( dbmd.supportsGetGeneratedKeys() || dbmd.getDatabaseProductName().contains("Derby") )
-				this.supportsGeneratedKeys = true;
+		 
+			if (dbmd.getDatabaseProductName().contains("Oracle") )
+				this.useGetGeneratedKeys = false;
 			else
-				this.supportsGeneratedKeys = false;
+				this.useGetGeneratedKeys = true;
 			if (connection.getAutoCommit())
 				throw new RuntimeException("AutoCommit must be off");
 		} catch (SQLException e) {
@@ -85,16 +86,18 @@ public class ConnectionImpl {
 		}
 	}
 
-	public PreparedStatement prepareStatement(String queryString)
+	public PreparedStatement prepareStatement(String queryString, String[] returnKeys)
 			throws SQLException {
 		if (this.logger.isDebugEnabled())
 			this.logger.debug("Preparing Statement: " + queryString);
 
-		if (this.supportsGeneratedKeys)
-			return connection.prepareStatement(queryString,
-					java.sql.Statement.RETURN_GENERATED_KEYS);
-		else
-			return connection.prepareStatement(queryString);
+		if ( useGetGeneratedKeys )
+			return connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
+		
+		else if (returnKeys.length > 0)
+			return connection.prepareStatement(queryString, returnKeys);
+		
+		return connection.prepareStatement(queryString);
 	}
 
 	public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
@@ -113,7 +116,7 @@ public class ConnectionImpl {
 		return connection.prepareCall(queryString);
 	}
 
-	public boolean supportsGeneratedKeys() {
-		return this.supportsGeneratedKeys;
+	public boolean useGetGeneratedKeys() {
+		return this.useGetGeneratedKeys;
 	}
 }

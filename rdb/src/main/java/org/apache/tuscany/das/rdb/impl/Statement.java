@@ -49,7 +49,7 @@ public class Statement {
 
     public List executeQuery(Parameters parameters) throws SQLException {
 
-        PreparedStatement ps = getPreparedStatement();
+        PreparedStatement ps = getPreparedStatement(new String[0]);
         ps = setParameters(ps, parameters);
         ResultSet rs = ps.executeQuery();
 
@@ -102,8 +102,6 @@ public class Statement {
         Iterator inParams = parameters.inParams().iterator();
         while (inParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) inParams.next();
-//            if (param.getIndex() == 0)
-//                param.setIndex(queryString.getParameterIndex(param.getName()));
             cs.setObject(param.getIndex(), param.getValue());
         }
 
@@ -111,8 +109,6 @@ public class Statement {
         Iterator outParams = parameters.outParams().iterator();
         while (outParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) outParams.next();
-//            if (param.getIndex() == 0)
-//                param.setIndex(queryString.getParameterIndex(param.getName()));
 
             if(this.logger.isDebugEnabled())
                 this.logger.debug("Registering parameter " + param.getName());
@@ -130,15 +126,22 @@ public class Statement {
 
     }
 
+    public int executeUpdate(Parameters parameters, String[] generatedKeys) throws SQLException {
+    	return executeUpdate(getPreparedStatement(generatedKeys), parameters);
+    }
+    
+    public int executeUpdate(Parameters parameters) throws SQLException {
+    	return executeUpdate(parameters, new String[0]);
+    }
+    
     /**
      * TODO - We need to look at using specific ps.setXXX methods when a type
      * has been specified and try setObject otherwise.
      */
-    public int executeUpdate(Parameters parameters) throws SQLException {
+    private int executeUpdate(PreparedStatement ps, Parameters parameters) throws SQLException {
         if(this.logger.isDebugEnabled())
             this.logger.debug("Executing statement " + queryString);
-
-        PreparedStatement ps = getPreparedStatement();
+      
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
@@ -181,23 +184,21 @@ public class Statement {
         return this.jdbcConnection;
     }
 
-    private PreparedStatement getPreparedStatement() throws SQLException {
-        if(this.logger.isDebugEnabled())
-            this.logger.debug("Getting prepared statement");
+    private PreparedStatement getPreparedStatement(String[] returnKeys) throws SQLException {
 
         if (preparedStatement == null)
             if (isPaging)
                 preparedStatement = jdbcConnection.preparePagedStatement(queryString);
             else
-                preparedStatement = jdbcConnection.prepareStatement(queryString);
+                preparedStatement = jdbcConnection.prepareStatement(queryString, returnKeys);
 
         return preparedStatement;
     }
 
     public Integer getGeneratedKey() throws SQLException {
 
-    	if ( getConnection().supportsGeneratedKeys() ) {
-    		ResultSet rs = getPreparedStatement().getGeneratedKeys();
+    	if ( getConnection().useGetGeneratedKeys() ) {
+    		ResultSet rs = preparedStatement.getGeneratedKeys();
     		if (rs.next())
           	  return new Integer(rs.getInt(1));
     	}
