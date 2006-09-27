@@ -261,8 +261,7 @@ public class CrudWithChangeHistory extends DasTest {
         // Modify customer
         customer.set("LASTNAME", "Pavick");
 
-        DataObject customerForDelete = root.getDataObject("CUSTOMER[2]");
-        String deletedLastName = customerForDelete.getString("LASTNAME");
+        DataObject customerForDelete = getCustomerByLastName(root, "Daniel");       
         customerForDelete.delete();
 
         DataObject newCustomer = root.createDataObject("CUSTOMER");
@@ -276,7 +275,7 @@ public class CrudWithChangeHistory extends DasTest {
         root = select.executeQuery();
         assertEquals("Pavick", getCustomerByLastName(root, "Pavick").getString("LASTNAME"));
         assertEquals("NewCustomer", getCustomerByLastName(root, "NewCustomer").getString("LASTNAME"));
-        assertNull(getCustomerByLastName(root, deletedLastName));
+        assertNull(getCustomerByLastName(root, "Daniel"));
 
     }
 
