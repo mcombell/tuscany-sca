@@ -97,9 +97,9 @@ public class CommandGroupTests extends DasTest {
      */
     public void testReadWithParmmarker() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());     
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());     
         
-        Command read = das.getCommand("order by id with ?");
+        Command read = das.getCommand("order by id");
         read.setParameter(1, new Integer(1));
         DataObject root = read.executeQuery();
 
@@ -107,26 +107,13 @@ public class CommandGroupTests extends DasTest {
 
     }   
     
-    /**
-     * Specify connection properties in config
-     */
-    public void testReadWithConnectionProperties() throws Exception {
-
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());   
-        
-        Command read = das.getCommand("all customers");
-        DataObject root = read.executeQuery();
-
-        assertEquals(5, root.getList("CUSTOMER").size());
-
-    }
 
     /**
      * Specify connection properties in config. Add explicit update command
      */
     public void testUpdate() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustOrdersConnectionProps.xml"), getConnection());       
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
         
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();

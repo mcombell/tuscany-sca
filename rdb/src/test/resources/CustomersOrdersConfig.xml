@@ -30,6 +30,11 @@
         kind="Select">       
     </Command>
     
+    <Command name="update customer"
+        SQL="update CUSTOMER set LASTNAME = 'Pavick' where ID = ?"
+        kind="Update">
+    </Command>  
+     
     <Table tableName="CUSTOMER">
         <Column columnName="ID" primaryKey="true"/>
     </Table>
