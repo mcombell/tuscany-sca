@@ -145,4 +145,22 @@ public class AliasTests extends DasTest{
 	
 	    assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));
 	 }
+	
+	/**
+	 * Test ability to assign DataObject type and propertyaliases with xml file
+	 */
+	public void testRead() throws Exception {
+
+		DAS das = DAS.FACTORY.createDAS(getConfig("customerMapping.xml"), getConnection());
+		// Read a customer
+		Command select = das.createCommand(
+				"SELECT * FROM CUSTOMER WHERE CUSTOMER.ID = 1");	
+
+		DataObject root = select.executeQuery();
+		DataObject customer = root.getDataObject("Customer[1]");
+		assertEquals(1, customer.getInt("id"));
+		assertEquals("1212 foobar lane", customer.getString("address"));
+		assertEquals("Williams", customer.getString("lastname"));
+		
+	}
 }
