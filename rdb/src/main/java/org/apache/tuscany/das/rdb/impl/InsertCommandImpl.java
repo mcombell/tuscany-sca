@@ -41,8 +41,7 @@ public class InsertCommandImpl extends WriteCommandImpl {
 
 		boolean success = false;
 		try {
-			statement.executeUpdate(parameters, keys);
-			subtypeProcessing();
+			statement.executeUpdate(parameters, keys);			
 			success = true;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

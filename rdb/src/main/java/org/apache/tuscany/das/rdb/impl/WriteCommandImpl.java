@@ -36,8 +36,7 @@ public abstract class WriteCommandImpl extends CommandImpl {
 
 		boolean success = false;
 		try {
-			statement.executeUpdate(parameters);
-			subtypeProcessing();
+			statement.executeUpdate(parameters);		
 			success = true;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -58,15 +57,6 @@ public abstract class WriteCommandImpl extends CommandImpl {
 		return configWrapper.getConfig();
 	}
 
-	
-	/**
-	 * Subclasses add specific bahavior
-	 * Default is to do nothing
-	 */
-	protected void subtypeProcessing() throws SQLException {
-		if ( false )
-			throw new SQLException();
-	}
 	
 	public String toString() {
 		
