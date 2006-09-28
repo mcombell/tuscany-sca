@@ -81,9 +81,10 @@ public class UpdateGenerator extends BaseGenerator {
 			}
 		}
 
-		if ( t.getManagedColumnPropertyName() != null ) {
+		Column c = t.getManagedColumn();
+		if ( c != null ) {
 			statement.append(", ");
-			statement.append(t.getManagedColumnPropertyName());
+			statement.append(c.getColumnName());
 			statement.append(" = ?");
 			managedProperties.add(changedObject.getProperty(t.getManagedColumnPropertyName()));
 		}

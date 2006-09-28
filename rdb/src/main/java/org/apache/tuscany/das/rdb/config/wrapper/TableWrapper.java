@@ -125,4 +125,14 @@ public class TableWrapper {
 		return null;
 		
 	}
+
+	public Column getManagedColumn() {
+		Iterator i = table.getColumn().iterator();
+		while (i.hasNext()) {
+			Column c = (Column) i.next();
+			if (c.isManaged())
+				return c;
+		}
+		return null;
+	}
 }
