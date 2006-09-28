@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
+import java.math.BigDecimal;
+
 public class ManagedParameterImpl extends ParameterImpl {
 	
 	public void setValue(Object oldValue) {
@@ -27,7 +29,9 @@ public class ManagedParameterImpl extends ParameterImpl {
 	private Object updateValue(Object oldValue) {
 		if ( oldValue instanceof Integer) 
 			return new Integer( ((Integer)oldValue).intValue() + 1);
-		else 
+		else if ( oldValue instanceof BigDecimal ) 
+			return ((BigDecimal)oldValue).add(new BigDecimal(1));
+		else
 			throw new RuntimeException("Unsupported type for managed column: " + oldValue.getClass().getName());		
 	}
 	
