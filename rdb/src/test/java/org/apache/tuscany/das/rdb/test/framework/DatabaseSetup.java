@@ -142,7 +142,8 @@ public class DatabaseSetup extends TestSetup {
                 s.execute(statements[i]);
             } catch (SQLException e) {
                 // If the table does not exist then ignore the exception on drop
-                if ((!e.getMessage().contains("does not exist")) && (!e.getMessage().contains("Unknown table")))
+                if ((!e.getMessage().contains("does not exist")) && (!e.getMessage().contains("Unknown table"))
+                		&& (!e.getMessage().contains("42704")))
                     throw new RuntimeException(e);
             }
         }
