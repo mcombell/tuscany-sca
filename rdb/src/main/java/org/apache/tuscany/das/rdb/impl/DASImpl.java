@@ -152,11 +152,12 @@ public class DASImpl implements DAS {
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
-        try {
-            // TODO - I think we should rename this getDataSourceURL?
+        try {          
             DataSource ds = (DataSource) ctx.lookup(configWrapper.getConfig().getConnectionInfo().getDataSource());
             try {
                 connection = ds.getConnection();
+                if ( connection == null ) 
+                	throw new RuntimeException("Could not obtain a Connection from DataSource");
                 connection.setAutoCommit(false);
                 setConnection(connection);
             } catch (SQLException e) {
