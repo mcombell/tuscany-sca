@@ -28,100 +28,99 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public abstract class TestData {
-	
-	protected Object[][] data;
-	private int currentRow = -1;
-	protected Connection connection;
-    
-    
+
     protected static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:ss:mm.SSS");
+
     protected static Timestamp timestamp = getTimestamp();
-
-	public TestData(Connection c, Object[][] customerData) {
-		this.connection = c; 
-		this.data = customerData;
-	}
-
-	public int size() {
-		return data[0].length;
-	}
-	
-	public int numberOfRows() {
-		return data.length;
-	}
-	
-	public boolean next() {
-		++currentRow;
-		if ( currentRow < numberOfRows() ) 
-			return true;
-		else
-			return false;
-	}
-
-	public abstract String getTableName();
-	
-	
-	public Object getObject(int i) {
-		return data[currentRow][i-1];
-	}
-	
-	public void refresh() throws SQLException {
-		deleteRowsFromTable();
-		insertRows();
-	}
-	
-	protected void deleteRowsFromTable() throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("delete from " + getTableName());
-		ps.execute();
-		ps.close();
-	}
-	
-	protected void insertRows() throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("insert into ");
-		sql.append(getTableName());
-		sql.append(" values (");
-		for ( int i=1; i < size(); i++) {
-			sql.append("?,");
-		}
-		sql.append("?)");
-		PreparedStatement ps = connection.prepareStatement(sql.toString());
-		
-		while ( next() ) {
-			for ( int i=1; i <= size(); i++ ) {
-				ps.setObject(i, getObject(i));
-			}
-			ps.execute();
-			ps.clearParameters();
-		}
-		ps.close();
-	}
     
-    //Utilities
+    protected Object[][] data;
+
+    protected Connection connection;
+
+    private int currentRow = -1;
+ 
+
+    public TestData(Connection c, Object[][] customerData) {
+        this.connection = c;
+        this.data = customerData;
+    }
+
+    public int size() {
+        return data[0].length;
+    }
+
+    public int numberOfRows() {
+        return data.length;
+    }
+
+    public boolean next() {
+        ++currentRow;
+        return currentRow < numberOfRows();
+    }
+
+    public abstract String getTableName();
+
+    public Object getObject(int i) {
+        return data[currentRow][i - 1];
+    }
+
+    public void refresh() throws SQLException {
+        deleteRowsFromTable();
+        insertRows();
+    }
+
+    protected void deleteRowsFromTable() throws SQLException {
+        PreparedStatement ps = connection.prepareStatement("delete from " + getTableName());
+        ps.execute();
+        ps.close();
+    }
+
+    protected void insertRows() throws SQLException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("insert into ");
+        sql.append(getTableName());
+        sql.append(" values (");
+        for (int i = 1; i < size(); i++) {
+            sql.append("?,");
+        }
+        sql.append("?)");
+        PreparedStatement ps = connection.prepareStatement(sql.toString());
+
+        while (next()) {
+            for (int i = 1; i <= size(); i++) {
+                ps.setObject(i, getObject(i));
+            }
+            ps.execute();
+            ps.clearParameters();
+        }
+        ps.close();
+    }
+
+    // Utilities
     protected static Date getDate() {
-        
+
         try {
             return dateFormat.parse("1966-12-20 00:00:00.0");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     protected static Date getDate(String timeStamp) {
-        
+
         try {
             return dateFormat.parse("1966-12-20 00:00:00.0");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static Timestamp getTimestamp() {
         return new Timestamp(getDate().getTime());
     }
-    
+
     public static Timestamp getTimestamp(String timeStamp) {
         return new Timestamp(getDate(timeStamp).getTime());
     }
-    
+
 }

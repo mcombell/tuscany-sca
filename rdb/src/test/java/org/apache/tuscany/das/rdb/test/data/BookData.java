@@ -23,25 +23,23 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class BookData extends TestDataWithExplicitColumns {
 
-	//CREATE TABLE BOOK (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)
+    // CREATE TABLE BOOK (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)
 
-	private static int[] bookTypes = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
-	
-	private static Object[][] bookData = {
-			{ new Integer(1), "The Brothers Karamazov", "Fyodor Dostoevsky", new Integer(5), new Integer(17) },
-			{ new Integer(2), "Cat in the Hat", "Doctor Seuss", new Integer(10), new Integer(1) }};
+    private static int[] bookTypes = { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
 
-	private static String[] bookColumns = { "BOOK_ID", "NAME", "AUTHOR", "QUANTITY", "OCC"};
-	
-	public BookData(Connection connection) {
-		super(connection, bookData, bookColumns, bookTypes);
-	}
+    private static Object[][] bookData = { { new Integer(1), "The Brothers Karamazov", "Fyodor Dostoevsky", new Integer(5), new Integer(17) },
+            { new Integer(2), "Cat in the Hat", "Doctor Seuss", new Integer(10), new Integer(1) } };
 
-	public String getTableName() {
-		return "BOOK";
-	}
+    private static String[] bookColumns = { "BOOK_ID", "NAME", "AUTHOR", "QUANTITY", "OCC" };
+
+    public BookData(Connection connection) {
+        super(connection, bookData, bookColumns, bookTypes);
+    }
+
+    public String getTableName() {
+        return "BOOK";
+    }
 
 }

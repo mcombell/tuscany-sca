@@ -18,185 +18,148 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-
 import org.apache.tuscany.das.rdb.Command;
 import org.apache.tuscany.das.rdb.DAS;
-import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CustomerData;
 import org.apache.tuscany.das.rdb.test.data.OrderData;
 import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
-import commonj.sdo.helper.TypeHelper;
-
 
 public class StoredProcs extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
+    protected void setUp() throws Exception {
+        super.setUp();
 
-		new CompanyData(getAutoConnection()).refresh();
-		new CustomerData(getAutoConnection()).refresh();
-		new OrderData(getAutoConnection()).refresh();
-		
-	}
+        new CompanyData(getAutoConnection()).refresh();
+        new CustomerData(getAutoConnection()).refresh();
+        new OrderData(getAutoConnection()).refresh();
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    }
 
-	public void testMultipleResultSets() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command read = das.createCommand("{call GETALLCUSTOMERSANDORDERS()}");
-		
-		DataObject root = read.executeQuery();
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-		//Verify
-		assertEquals(5, root.getList("CUSTOMER").size());
-		assertEquals(4, root.getList("ANORDER").size());
-	}
-	
-	// Call a simple stored proc to read all companies
-	public void testGetCompanies() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command read = das.createCommand("{call GETALLCOMPANIES()}");
+    public void testMultipleResultSets() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command read = das.createCommand("{call GETALLCUSTOMERSANDORDERS()}");
 
-		DataObject root = read.executeQuery();
+        DataObject root = read.executeQuery();
 
-		//Verify
-		assertEquals(3, root.getList("COMPANY").size());
-		assertTrue(root.getInt("COMPANY[1]/ID") > 0);
+        // Verify
+        assertEquals(5, root.getList("CUSTOMER").size());
+        assertEquals(4, root.getList("ANORDER").size());
+    }
 
-	}
+    // Call a simple stored proc to read all companies
+    public void testGetCompanies() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command read = das.createCommand("{call GETALLCOMPANIES()}");
 
-	public void testGetNamedCompany() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command read = das.createCommand("{call GETNAMEDCOMPANY(?)}");
-	
-		read.setParameter(1, "MegaCorp");
-		DataObject root = read.executeQuery();
+        DataObject root = read.executeQuery();
 
-		assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
+        // Verify
+        assertEquals(3, root.getList("COMPANY").size());
+        assertTrue(root.getInt("COMPANY[1]/ID") > 0);
 
-	}
+    }
 
-	public void testGetNamedCompanyByName() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command read = das
-				.createCommand("{call GETNAMEDCOMPANY(?)}");
-	
-		read.setParameter(1, "MegaCorp");
-		DataObject root = read.executeQuery();
+    public void testGetNamedCompany() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command read = das.createCommand("{call GETNAMEDCOMPANY(?)}");
 
-		assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
-	}
+        read.setParameter(1, "MegaCorp");
+        DataObject root = read.executeQuery();
 
+        assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
 
-	// Retreive heirarchy using a stored proc ... new programming model
-	public void testGetCustomersAndOrder() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
-		Command read = das.createCommand("{call getCustomerAndOrders(?)}");
-		read.setParameter(1, new Integer(1));
-		
-		DataObject root = read.executeQuery();
+    }
 
-		DataObject customer = (DataObject) root.getList("CUSTOMER").get(0);
-		assertEquals(2, customer.getList("orders").size());
+    public void testGetNamedCompanyByName() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command read = das.createCommand("{call GETNAMEDCOMPANY(?)}");
 
-	}
+        read.setParameter(1, "MegaCorp");
+        DataObject root = read.executeQuery();
 
-	/**
-	 * Call a stored proc requiring an in parameter and producing an out
-	 * parameter and a resultset
-	 * 
-	 * This stored proc takes a lastname argument and returns a graph of
-	 * customers with that last name. The number of read customers is returned
-	 * in the out parameter
-	 */
-	public void testGetNamedCustomers() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConfig("storedProcTest.xml"), getConnection());	
-		Command read = das.getCommand("getNamedCustomers");		
-		read.setParameter(1, "Williams");	
-		DataObject root = read.executeQuery();		
-		
-		Integer customersRead = (Integer) read.getParameter(2);
+        assertEquals("MegaCorp", root.getString("COMPANY[1]/NAME"));
+    }
 
-		assertEquals(4, customersRead.intValue());
-		assertEquals(customersRead.intValue(), root.getList("CUSTOMER").size());
+    // Retreive heirarchy using a stored proc ... new programming model
+    public void testGetCustomersAndOrder() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
+        Command read = das.createCommand("{call getCustomerAndOrders(?)}");
+        read.setParameter(1, new Integer(1));
 
-	}
-	
-	//TODO - Resolve issue with programmatic creation of GETNAMEDCUSTOMERS on DB2 and
-	//re-enable this test
-	
-	
-	// Simplest possible SP write
-	public void testDelete() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command delete = das.createCommand("{call DELETECUSTOMER(?)}");		
-		delete.setParameter(1, new Integer(1));
-		delete.execute();
+        DataObject root = read.executeQuery();
 
-		// Verify DELETE
-		Command select = das.createCommand("Select * from CUSTOMER where ID = 1");		
-		DataObject root = select.executeQuery();
-		assertTrue(root.getList("CUSTOMER").isEmpty());
+        DataObject customer = (DataObject) root.getList("CUSTOMER").get(0);
+        assertEquals(2, customer.getList("orders").size());
 
-	}
+    }
 
-/*	// For debug
-	public void testRawCall() throws Exception {
+    /**
+     * Call a stored proc requiring an in parameter and producing an out parameter and a resultset
+     * 
+     * This stored proc takes a lastname argument and returns a graph of customers with that last name. The number of read customers is returned in
+     * the out parameter
+     */
+    public void testGetNamedCustomers() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConfig("storedProcTest.xml"), getConnection());
+        Command read = das.getCommand("getNamedCustomers");
+        read.setParameter(1, "Williams");
+        DataObject root = read.executeQuery();
 
-		Connection c = getConnection();
-		CallableStatement cs = c.prepareCall("{call GETNAMEDCUSTOMERS(?,?)}");
-		ParameterMetaData pm = cs.getParameterMetaData();
-		int count = pm.getParameterCount();
-		for (int i = 1; i <= count; i++) {
-			int mode = pm.getParameterMode(i);
-			if (mode == ParameterMetaData.parameterModeOut
-					|| mode == ParameterMetaData.parameterModeInOut)
-				cs.registerOutParameter(i, pm.getParameterType(i));
-		}
-		cs.setString(1, "Williams");
-		// cs.registerOutParameter(2,java.sql.Types.INTEGER);
-		boolean isResultSet = cs.execute();
-		System.out.println("Has a result set => " + isResultSet);
-		ResultSet rs = cs.getResultSet();
+        Integer customersRead = (Integer) read.getParameter(2);
 
-		if (isResultSet) {
-			System.out.println("Results are: ");
-			while (rs.next()) {
-				System.out.println(rs.getObject(2));
-			}
-		}
-		System.out.println("Count is =>" + cs.getObject(2));
-		c.commit();
-	}
+        assertEquals(4, customersRead.intValue());
+        assertEquals(customersRead.intValue(), root.getList("CUSTOMER").size());
 
-	// For debug
-	public void testRawCall2() throws Exception {
+    }
 
-		Connection c = getConnection();
-		CallableStatement cs = c.prepareCall("{call getCustomerAndOrders(?)}");
-		cs.setObject(1, new Integer(1));
-		boolean isResultSet = cs.execute();
-		System.out.println("call getCustomerAndOrders(?) has a result set => "
-				+ isResultSet);
-		ResultSet rs = cs.getResultSet();
+    // TODO - Resolve issue with programmatic creation of GETNAMEDCUSTOMERS on DB2 and
+    // re-enable this test
 
-		write(rs);
-		c.commit();
-	}
+    // Simplest possible SP write
+    public void testDelete() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command delete = das.createCommand("{call DELETECUSTOMER(?)}");
+        delete.setParameter(1, new Integer(1));
+        delete.execute();
 
-	public void testGetAllOrders() throws Exception {
+        // Verify DELETE
+        Command select = das.createCommand("Select * from CUSTOMER where ID = 1");
+        DataObject root = select.executeQuery();
+        assertTrue(root.getList("CUSTOMER").isEmpty());
 
-		System.out.println("all orders");
-		Connection c = getConnection();
-		PreparedStatement s = c.prepareStatement("select * from anorder");
-		write (s.executeQuery());
-		c.commit();
+    }
 
-	}*/
-	
+    /*
+     * // For debug public void testRawCall() throws Exception {
+     * 
+     * Connection c = getConnection(); CallableStatement cs = c.prepareCall("{call GETNAMEDCUSTOMERS(?,?)}"); ParameterMetaData pm =
+     * cs.getParameterMetaData(); int count = pm.getParameterCount(); for (int i = 1; i <= count; i++) { int mode = pm.getParameterMode(i); if (mode ==
+     * ParameterMetaData.parameterModeOut || mode == ParameterMetaData.parameterModeInOut) cs.registerOutParameter(i, pm.getParameterType(i)); }
+     * cs.setString(1, "Williams"); // cs.registerOutParameter(2,java.sql.Types.INTEGER); boolean isResultSet = cs.execute(); System.out.println("Has
+     * a result set => " + isResultSet); ResultSet rs = cs.getResultSet();
+     * 
+     * if (isResultSet) { System.out.println("Results are: "); while (rs.next()) { System.out.println(rs.getObject(2)); } } System.out.println("Count
+     * is =>" + cs.getObject(2)); c.commit(); }
+     *  // For debug public void testRawCall2() throws Exception {
+     * 
+     * Connection c = getConnection(); CallableStatement cs = c.prepareCall("{call getCustomerAndOrders(?)}"); cs.setObject(1, new Integer(1));
+     * boolean isResultSet = cs.execute(); System.out.println("call getCustomerAndOrders(?) has a result set => " + isResultSet); ResultSet rs =
+     * cs.getResultSet();
+     * 
+     * write(rs); c.commit(); }
+     * 
+     * public void testGetAllOrders() throws Exception {
+     * 
+     * System.out.println("all orders"); Connection c = getConnection(); PreparedStatement s = c.prepareStatement("select * from anorder"); write
+     * (s.executeQuery()); c.commit();
+     *  }
+     */
+
 }

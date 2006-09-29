@@ -36,72 +36,72 @@ public class BestPracticeTests extends DasTest {
 
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         new CompanyData(getAutoConnection()).refresh();
         new DepartmentData(getAutoConnection()).refresh();
         new EmployeeData(getAutoConnection()).refresh();
         new CompanyDeptData(getAutoConnection()).refresh();
         new DepEmpData(getAutoConnection()).refresh();
-        
+
     }
 
     //Read list of companies
     public void testReadCompanies() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
         Command read = das.getCommand("all companies");
-        DataObject root = read.executeQuery(); 
+        DataObject root = read.executeQuery();
         assertEquals(3, root.getList("COMPANY").size());
 
     }
-    
+
     //Read list of companies
     public void testReadCompaniesWithDepartments() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
         Command read = das.getCommand("all companies and departments");
-        DataObject root = read.executeQuery(); 
-        
-        Iterator i = root.getList("COMPANY").iterator();
-        while ( i.hasNext()) {
-        	DataObject d = (DataObject) i.next();
-        	List departments = d.getList("departments");
-        	if (d.getString("NAME").equals("Do-rite plumbing") || d.getString("NAME").equals("ACME Publishing")) {        		
-            	assertEquals(0, departments.size());
-        	} else {
-        		assertEquals(1, departments.size());
-        	}
-        }            
+        DataObject root = read.executeQuery();
 
-    }  
-    
+        Iterator i = root.getList("COMPANY").iterator();
+        while (i.hasNext()) {
+            DataObject d = (DataObject) i.next();
+            List departments = d.getList("departments");
+            if (d.getString("NAME").equals("Do-rite plumbing") || d.getString("NAME").equals("ACME Publishing")) {
+                assertEquals(0, departments.size());
+            } else {
+                assertEquals(1, departments.size());
+            }
+        }
+
+    }
+
     public void testddDepartmentToFirstCompany() throws Exception {
-        
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());      
+
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
         Command read = das.getCommand("all companies and departments");
         DataObject root = read.executeQuery();
         DataObject firstCustomer = root.getDataObject("COMPANY[1]");
         int deptCount = firstCustomer.getList("departments").size();
-        
+
         DataObject newDepartment = root.createDataObject("DEPARTMENT");
-        firstCustomer.getList("departments").add(newDepartment); 
-        
-        das.applyChanges(root);        
-        
+        firstCustomer.getList("departments").add(newDepartment);
+
+        das.applyChanges(root);
+
         //verify
         root = read.executeQuery();
         firstCustomer = root.getDataObject("COMPANY[1]");
-        assertEquals (deptCount + 1, firstCustomer.getList("departments").size());
-    }  
-    
+        assertEquals(deptCount + 1, firstCustomer.getList("departments").size());
+    }
+
     /**
      * Test ability to correctly flush heirarchy of objects that have generated
      * keys
      */
     public void testFlushCreateHeirarchy() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());       
-        Command select = das.getCommand("all companies and departments");        
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
+        Command select = das.getCommand("all companies and departments");
         DataObject root = select.executeQuery();
 
         // Create a new Company
@@ -114,12 +114,12 @@ public class BestPracticeTests extends DasTest {
         department.setString("NAME", "Do-rite Pest Control");
         department.setString("LOCATION", "The boonies");
         department.setString("DEPNUMBER", "101");
-   
+
         // Associate the new department with the new company
         company.getList("departments").add(department);
 
         // Get apply command
-        das.applyChanges(root);      
+        das.applyChanges(root);
 
         // Save the id
         Integer id = (Integer) company.get("ID");
@@ -129,25 +129,24 @@ public class BestPracticeTests extends DasTest {
         select = das.getCommand("company by id with departments");
         select.setParameter(1, id);
         root = select.executeQuery();
-        assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]")
-                .getString("NAME"));
+        assertEquals("Do-rite Pest Control", root.getDataObject("COMPANY[1]").getString("NAME"));
 
     }
-    
+
     /**
      * Test ability to get an empty graph with the Types/Properties intact
      */
     public void testGetEmptyGraph() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());      
+        DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
 
         Command select = das.getCommand("company by id with departments");
         Integer idOfNoExistingCompany = new Integer(-1);
         select.setParameter(1, idOfNoExistingCompany);
         DataObject root = select.executeQuery();
-        
+
         //Will fail if there is no property named "COMPANY"
-        assertEquals(0, root.getList("COMPANY").size()); 
+        assertEquals(0, root.getList("COMPANY").size());
 
     }
 

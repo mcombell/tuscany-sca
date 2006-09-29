@@ -48,7 +48,7 @@ public class ResultSetShapeTests extends DasTest {
      */
     public void testReadSingle() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"),getConnection());    
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomerConfigWithIDConverter.xml"), getConnection());    
         // Create and initialize command to read customers
         Command readCustomers = das.getCommand("literal");          
 

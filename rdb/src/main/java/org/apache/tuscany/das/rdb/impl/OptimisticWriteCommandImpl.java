@@ -39,7 +39,7 @@ public class OptimisticWriteCommandImpl extends UpdateCommandImpl {
 		try {
 			int rowsAffected = statement.executeUpdate(parameters);
 			success = true;
-			if ( rowsAffected == 0 ) 
+			if (rowsAffected == 0) 
 				throw new RuntimeException("OCC Exception");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

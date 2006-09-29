@@ -24,18 +24,21 @@ import junit.framework.TestSuite;
 import org.apache.tuscany.das.rdb.test.ReadDBSchemaTests;
 import org.apache.tuscany.das.rdb.test.framework.DB2Setup;
 
-public class AllTestsDB2 {
-	
-	
-	public static Test suite() {	
-		
-		TestSuite suite = new TestSuite();
-		suite.addTest(AllCommonTests.suite());
-		suite.addTest(new TestSuite (ReadDBSchemaTests.class));
+public final class AllTestsDB2 {
 
-		TestSuite suite2 = new TestSuite("All DAS tests on DB2");
-		suite2.addTest(new DB2Setup(suite));
-		return suite2;
+    private AllTestsDB2() {
+        
+    }
+    
+    public static Test suite() {
 
-	}
+        TestSuite suite = new TestSuite();
+        suite.addTest(AllCommonTests.suite());
+        suite.addTest(new TestSuite(ReadDBSchemaTests.class));
+
+        TestSuite suite2 = new TestSuite("All DAS tests on DB2");
+        suite2.addTest(new DB2Setup(suite));
+        return suite2;
+
+    }
 }

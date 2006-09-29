@@ -22,23 +22,20 @@ import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
-
 public class CompanyDeptData extends RelationshipData {
 
-	public static Object[][] data = {
-		{"MegaCorp", "Advanced Technologies"}
-		};
-	
-	public CompanyDeptData(Connection c) {
-		super(c, data);
-	}
+    public static Object[][] data = { { "MegaCorp", "Advanced Technologies" } };
 
-	protected String getParentRetrievalStatement() {
-		return "select id from company where name = ?";
-	}
+    public CompanyDeptData(Connection c) {
+        super(c, data);
+    }
 
-	protected String getChildUpdateStatement() {
-		return "update department set companyid = ? where department.name = ?";
-	}
+    protected String getParentRetrievalStatement() {
+        return "select id from company where name = ?";
+    }
+
+    protected String getChildUpdateStatement() {
+        return "update department set companyid = ? where department.name = ?";
+    }
 
 }

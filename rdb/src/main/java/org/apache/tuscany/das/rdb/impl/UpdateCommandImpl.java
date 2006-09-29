@@ -22,13 +22,13 @@ import org.apache.tuscany.das.rdb.config.Update;
 
 public class UpdateCommandImpl extends WriteCommandImpl {
 
-	public UpdateCommandImpl(String sqlString) {
-		super(sqlString);
-	}
-	
-	public UpdateCommandImpl(Update update) {
-		super(update.getSql());
-		addParameters(update.getParameters());
-	}
+    public UpdateCommandImpl(String sqlString) {
+        super(sqlString);
+    }
+
+    public UpdateCommandImpl(Update update) {
+        super(update.getSql());
+        addParameters(update.getParameters());
+    }
 
 }

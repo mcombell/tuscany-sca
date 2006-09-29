@@ -40,9 +40,9 @@ import org.apache.tuscany.das.rdb.util.ConfigUtil;
 import commonj.sdo.DataObject;
 
 /**
- * An ConfiguredCommandFactory produces instances of Command and
- * ApplyChangesCommand. This factory is initialized with a configuration that
- * defines the commands it produces.
+ * An ConfiguredCommandFactory produces instances of Command and ApplyChangesCommand. This 
+ * factory is initialized with a configuration that defines
+ * the commands it produces.
  * 
  */
 public class DASImpl implements DAS {
@@ -55,54 +55,53 @@ public class DASImpl implements DAS {
 
     public DASImpl(InputStream stream) {
         this(ConfigUtil.loadConfig(stream));
-        
+
     }
 
     public DASImpl(Config inConfig) {
-    	Config cfg = inConfig;
-    	if ( cfg == null ) 
-    		cfg = ConfigFactory.INSTANCE.createConfig();
-    	this.configWrapper = new MappingWrapper(cfg);
-        
+        Config cfg = inConfig;
+        if (cfg == null)
+            cfg = ConfigFactory.INSTANCE.createConfig();
+        this.configWrapper = new MappingWrapper(cfg);
+
         Iterator i = configWrapper.getConfig().getCommand().iterator();
         while (i.hasNext()) {
-            org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i
-                    .next();
+            org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i.next();
             String kind = commandConfig.getKind();
-            if (kind.equalsIgnoreCase("select"))                             
-                commands.put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getResultDescriptor()));
-            else if (kind.equalsIgnoreCase("update"))
+            if (kind.equalsIgnoreCase("select")) {
+                commands
+                        .put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getResultDescriptor()));
+            } else if (kind.equalsIgnoreCase("update")) {
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
-            else if (kind.equalsIgnoreCase("insert"))
-                commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL(),new String[0]));
-            else if (kind.equalsIgnoreCase("delete"))
+            } else if (kind.equalsIgnoreCase("insert")) {
+                commands.put(commandConfig.getName(), new InsertCommandImpl(commandConfig.getSQL(), new String[0]));
+            } else if (kind.equalsIgnoreCase("delete")) {
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
-            else if (kind.equalsIgnoreCase("procedure"))
-            	commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(),configWrapper, commandConfig.getParameter()));
-            else
+            } else if (kind.equalsIgnoreCase("procedure")) {
+                commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getParameter()));
+            } else {
                 throw new RuntimeException("Invalid kind of command: " + kind);
+            }
 
         }
 
     }
 
- 
+    public DASImpl(Config inConfig, Connection inConnection) {
+        this(inConfig);
+        setConnection(inConnection);
+    }
 
-	public DASImpl(Config inConfig, Connection inConnection) {
-		this(inConfig);
-		setConnection(inConnection);
-	}
+    public DASImpl(InputStream configStream, Connection inConnection) {
+        this(ConfigUtil.loadConfig(configStream), inConnection);
+    }
 
-	public DASImpl(InputStream configStream, Connection inConnection) {
-		this(ConfigUtil.loadConfig(configStream), inConnection);	
-	}
+    public DASImpl(Connection inConnection) {
+        this(ConfigFactory.INSTANCE.createConfig());
+        setConnection(inConnection);
+    }
 
-	public DASImpl(Connection inConnection) {
-		this(ConfigFactory.INSTANCE.createConfig());
-		setConnection(inConnection);
-	}
-
-	/*
+    /*
      * (non-Javadoc)
      * 
      * @see org.apache.tuscany.das.rdb.CommandGroup#getApplyChangesCommand()
@@ -125,7 +124,6 @@ public class DASImpl implements DAS {
         return cmd;
     }
 
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -137,12 +135,10 @@ public class DASImpl implements DAS {
     }
 
     private void initializeConnection() {
-       Config config = configWrapper.getConfig();
-        if (config == null || 
-        		config.getConnectionInfo() == null || 
-        		config.getConnectionInfo().getDataSource() == null)
-            throw new RuntimeException(
-                    "No connection has been provided and no data source has been specified");
+        Config config = configWrapper.getConfig();
+        if (config == null || config.getConnectionInfo() == null || config.getConnectionInfo().getDataSource() == null) {
+            throw new RuntimeException("No connection has been provided and no data source has been specified");
+        }
 
         Connection connection = null;
 
@@ -152,12 +148,12 @@ public class DASImpl implements DAS {
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
-        try {          
+        try {
             DataSource ds = (DataSource) ctx.lookup(configWrapper.getConfig().getConnectionInfo().getDataSource());
             try {
                 connection = ds.getConnection();
-                if ( connection == null ) 
-                	throw new RuntimeException("Could not obtain a Connection from DataSource");
+                if (connection == null)
+                    throw new RuntimeException("Could not obtain a Connection from DataSource");
                 connection.setAutoCommit(false);
                 setConnection(connection);
             } catch (SQLException e) {
@@ -186,15 +182,14 @@ public class DASImpl implements DAS {
     }
 
     /**
-     * If the config has connection properties then we are "managing" the
-     * connection via DataSource
+     * If the config has connection properties then we are "managing" the connection via DataSource
      */
     private boolean managingConnections() {
 
         if (configWrapper.getConfig().getConnectionInfo().getDataSource() == null) {
             return false;
         }
-       
+
         return true;
 
     }
@@ -208,35 +203,35 @@ public class DASImpl implements DAS {
     }
 
     private Command baseCreateCommand(String inSql, MappingWrapper config) {
-    	CommandImpl returnCmd = null;
+        CommandImpl returnCmd = null;
         String sql = inSql.trim(); // Remove leading white space
         char firstChar = Character.toUpperCase(sql.charAt(0));
         switch (firstChar) {
-        case 'S':
-            returnCmd =  new ReadCommandImpl(sql, config, null);
-            break;
-        case 'I':
-            returnCmd =  new InsertCommandImpl(sql, new String[0]);
-            break;
-        case 'U':
-            returnCmd =  new UpdateCommandImpl(sql);
-            break;
-        case 'D':
-            returnCmd =  new DeleteCommandImpl(sql);
-            break;
-        case '{':
-            returnCmd =  new SPCommandImpl(sql, config, Collections.EMPTY_LIST);
-            break;
-        default:
-            throw new RuntimeException("SQL => " + sql + " is not valid");
+            case 'S':
+                returnCmd = new ReadCommandImpl(sql, config, null);
+                break;
+            case 'I':
+                returnCmd = new InsertCommandImpl(sql, new String[0]);
+                break;
+            case 'U':
+                returnCmd = new UpdateCommandImpl(sql);
+                break;
+            case 'D':
+                returnCmd = new DeleteCommandImpl(sql);
+                break;
+            case '{':
+                returnCmd = new SPCommandImpl(sql, config, Collections.EMPTY_LIST);
+                break;
+            default:
+                throw new RuntimeException("SQL => " + sql + " is not valid");
         }
 
         returnCmd.setConnection(getConnection(), config.getConfig());
         return returnCmd;
     }
 
-	public void applyChanges(DataObject root) {
-		getApplyChangesCommand().execute(root);			
-	}
+    public void applyChanges(DataObject root) {
+        getApplyChangesCommand().execute(root);
+    }
 
 }

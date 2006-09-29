@@ -43,10 +43,8 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testRead() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command getOrderDetails = das
-                .createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
-       
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command getOrderDetails = das.createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
 
         getOrderDetails.setParameter(1, new Integer(1));
         getOrderDetails.setParameter(2, new Integer(1));
@@ -59,10 +57,9 @@ public class CompoundKeyTests extends DasTest {
     }
 
     public void testReadModifyWrite2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
-        Command getOrderDetails = das
-                .createCommand("Select * from ORDERDETAILS where ORDERID = 1 AND PRODUCTID = 1");
-     
+        DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
+        Command getOrderDetails = das.createCommand("Select * from ORDERDETAILS where ORDERID = 1 AND PRODUCTID = 1");
+
         DataObject root = getOrderDetails.executeQuery();
 
         DataObject orderDetails = (DataObject) root.get("ORDERDETAILS[1]");
@@ -72,8 +69,8 @@ public class CompoundKeyTests extends DasTest {
         orderDetails.setFloat("PRICE", 0f);
 
         // Build apply changes command
-       
-        das.applyChanges(root);        
+
+        das.applyChanges(root);
 
         // Verify
         root = getOrderDetails.executeQuery();
@@ -81,11 +78,10 @@ public class CompoundKeyTests extends DasTest {
         assertEquals(0f, orderDetails.getFloat("PRICE"), 0.01);
 
     }
-    
+
     public void testReadOrdersAndDetails2() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
-        Command read = das
-                .createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");      
+        DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
+        Command read = das.createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");
 
         DataObject root = read.executeQuery();
 
@@ -94,12 +90,10 @@ public class CompoundKeyTests extends DasTest {
         assertEquals(2, firstOrder.getList("ORDERDETAILS").size());
 
     }
-    
+
     public void testReadAndDelete() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
-        Command getOrderDetails = das
-                .createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
-       
+        DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
+        Command getOrderDetails = das.createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
 
         getOrderDetails.setParameter(1, new Integer(1));
         getOrderDetails.setParameter(2, new Integer(1));
@@ -108,7 +102,7 @@ public class CompoundKeyTests extends DasTest {
 
         DataObject orderDetail = (DataObject) root.get("ORDERDETAILS[1]");
         orderDetail.delete();
-        das.applyChanges(root);      
+        das.applyChanges(root);
 
     }
 }

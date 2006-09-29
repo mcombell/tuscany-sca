@@ -32,13 +32,18 @@ import commonj.sdo.helper.XMLHelper;
  * instance from an InputStream
  * 
  */
-public class ConfigUtil {
+public final class ConfigUtil {
 
+    private ConfigUtil() {
+        
+    }
+    
     public static Config loadConfig(InputStream configStream) {
 
-        if (configStream == null)
-            throw new RuntimeException(
-                    "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name");
+        if (configStream == null) {
+            throw new RuntimeException("Cannot load configuration from a null InputStream. "
+                    + "Possibly caused by an incorrect config xml file name");
+        }
 
         SDOUtil.registerStaticTypes(ConfigFactory.class);
         XMLHelper helper = XMLHelper.INSTANCE;

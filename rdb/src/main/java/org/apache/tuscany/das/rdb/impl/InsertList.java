@@ -22,28 +22,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 /**
- * InsertList will sort ChangeOperation objects so that parents are inserted
- * before children
- *
- *
+ * InsertList will sort ChangeOperation objects so that parents are inserted before children
+ * 
+ * 
  */
 public class InsertList {
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(InsertList.class);
 
-    private HashMap opsByTableName = new HashMap();
+    private Map opsByTableName = new HashMap();
 
-    private ArrayList insertOperations = new ArrayList();
+    private List insertOperations = new ArrayList();
 
-    private ArrayList order;
+    private List order;
 
     public void add(ChangeOperation op) {
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Adding insert operation ");
+        }
 
         // If nothing has been added yet, or this is no ordering, simply
         // add the operation to the list
@@ -51,9 +53,10 @@ public class InsertList {
             insertOperations.add(op);
         } else {
             String name = op.getTableName();
-            ArrayList ops = (ArrayList) opsByTableName.get(name);
-            if (ops == null)
+            List ops = (List) opsByTableName.get(name);
+            if (ops == null) {
                 ops = new ArrayList();
+            }
 
             ops.add(op);
             opsByTableName.put(name, ops);
@@ -61,28 +64,32 @@ public class InsertList {
     }
 
     public Collection getSortedList() {
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Getting sorted insert list");
+        }
 
         if ((order.size() > 0) && opsByTableName.keySet().size() > 0) {
             Iterator i = this.order.iterator();
             while (i.hasNext()) {
                 String name = (String) i.next();
-                if(this.logger.isDebugEnabled())
+                if (this.logger.isDebugEnabled()) {
                     this.logger.debug("Adding operations for table " + name);
+                }
 
                 // A null here means a table is in the config but hasn't been changed here
-                if (opsByTableName.get(name) != null)
+                if (opsByTableName.get(name) != null) {
                     insertOperations.addAll((Collection) opsByTableName.get(name));
+                }
             }
         }
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Returning " + insertOperations.size() + " insert operations");
+        }
 
         return insertOperations;
     }
 
-    public void setOrder(ArrayList insertOrder) {
+    public void setOrder(List insertOrder) {
         this.order = insertOrder;
     }
 

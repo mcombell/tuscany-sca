@@ -20,7 +20,12 @@
 package org.apache.tuscany.das.rdb.util;
 
 /* Import necessary log4j API classes */
-import org.apache.log4j.*;
+import org.apache.log4j.Appender;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 /**
  * Helper class for logging using external log utility : log4j
@@ -29,13 +34,14 @@ import org.apache.log4j.*;
  * @author lresende
  */
 
-public class LoggerFactory {
-    public final static LoggerFactory INSTANCE = new LoggerFactory();
-    
-    private static Layout _defaultLayout = null;
-    private static Appender _defaultAppender = null;
+public final class LoggerFactory {
+    public static final LoggerFactory INSTANCE = new LoggerFactory();
 
-    static{
+    private static Layout _defaultLayout;
+
+    private static Appender _defaultAppender;
+
+    static {
         synchronized (LoggerFactory.class) {
             _defaultLayout = new PatternLayout(LoggerLayout.Layout());
             _defaultAppender = new ConsoleAppender(_defaultLayout);
@@ -46,27 +52,26 @@ public class LoggerFactory {
 
     }
 
-    public Logger getLogger(Class loggingClass){
-         Logger logger = Logger.getLogger(loggingClass);
-         logger.setLevel(Level.OFF);
-         logger.addAppender(_defaultAppender);
-         
-         return logger;
-     }
+    public Logger getLogger(Class loggingClass) {
+        Logger logger = Logger.getLogger(loggingClass);
+        logger.setLevel(Level.OFF);
+        logger.addAppender(_defaultAppender);
 
+        return logger;
+    }
 
-    public Logger getLogger(Class loggingClass, Level logLevel){
+    public Logger getLogger(Class loggingClass, Level logLevel) {
         Logger logger = Logger.getLogger(loggingClass);
         logger.setLevel(logLevel);
         logger.addAppender(_defaultAppender);
-        
+
         return logger;
     }
 
     public static void main(String[] args) {
-        
+
         Logger log = LoggerFactory.INSTANCE.getLogger(LoggerFactory.class);
-        if(log.isDebugEnabled()){
+        if (log.isDebugEnabled()) {
             log.debug("something");
         }
 

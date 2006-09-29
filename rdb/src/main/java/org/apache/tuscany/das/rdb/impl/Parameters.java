@@ -30,84 +30,81 @@ import commonj.sdo.Type;
 public class Parameters {
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(Parameters.class);
 
-	private ArrayList parameters = new ArrayList();
+    private List parameters = new ArrayList();
 
-	private ArrayList inParams = new ArrayList();
+    private List inParams = new ArrayList();
 
-	private ArrayList outParams = new ArrayList();
+    private List outParams = new ArrayList();
 
-	public Parameters() {
-		super();
-	}
+    public Parameters() {
+        super();
+    }
 
-	public ParameterImpl get(int index) {
-		return (ParameterImpl) parameters.get(index);
-	}
+    public ParameterImpl get(int index) {
+        return (ParameterImpl) parameters.get(index);
+    }
 
-	public List outParams() {
-		return outParams;
-	}
+    public List outParams() {
+        return outParams;
+    }
 
-	public List inParams() {
-		return inParams;
-	}
+    public List inParams() {
+        return inParams;
+    }
 
-	private void addParameter(ParameterImpl param) {
-		if (param.getDirection() == ParameterImpl.IN)
-			inParams.add(param);
-		else if ((param.getDirection() == ParameterImpl.OUT)
-				|| (param.getDirection() == ParameterImpl.IN_OUT))
-			outParams.add(param);
+    private void addParameter(ParameterImpl param) {
+        if (param.getDirection() == ParameterImpl.IN)
+            inParams.add(param);
+        else if ((param.getDirection() == ParameterImpl.OUT) || (param.getDirection() == ParameterImpl.IN_OUT))
+            outParams.add(param);
 
-		this.parameters.add(param);
-	}
+        this.parameters.add(param);
+    }
 
-	public void add(ParameterImpl param) {
-		addParameter(param);
-	}
+    public void add(ParameterImpl param) {
+        addParameter(param);
+    }
 
-	public ParameterImpl findOrCreateParameterWithIndex(int index, int direction,
-			Type sdoType) {
-		Iterator i = parameters.iterator();
-		while (i.hasNext()) {
-			ParameterImpl param = (ParameterImpl) i.next();
+    public ParameterImpl findOrCreateParameterWithIndex(int index, int direction, Type sdoType) {
+        Iterator i = parameters.iterator();
+        while (i.hasNext()) {
+            ParameterImpl param = (ParameterImpl) i.next();
 
-			if (param.getIndex() == index)
-				return param;
-		}
-        if(this.logger.isDebugEnabled())
+            if (param.getIndex() == index)
+                return param;
+        }
+        if (this.logger.isDebugEnabled())
             this.logger.debug("Creating new parameter with index " + index);
 
-		ParameterImpl newParam = new ParameterImpl(index);
-		newParam.setDirection(direction);
-		newParam.setType(sdoType);
-		addParameter(newParam);
-		return newParam;
-	}
+        ParameterImpl newParam = new ParameterImpl(index);
+        newParam.setDirection(direction);
+        newParam.setType(sdoType);
+        addParameter(newParam);
+        return newParam;
+    }
 
-	public List parameterList() {
-		return parameters;
-	}
+    public List parameterList() {
+        return parameters;
+    }
 
-	public ParameterImpl findOrCreateParameterWithIndex(int index) {
+    public ParameterImpl findOrCreateParameterWithIndex(int index) {
         return findOrCreateParameterWithIndex(index, ParameterImpl.IN, null);
-	}
+    }
 
-	public void setParameter(int index, Object value) {
-		ParameterImpl param = findOrCreateParameterWithIndex(index);
-		param.setValue(value);
-	}
-
+    public void setParameter(int index, Object value) {
+        ParameterImpl param = findOrCreateParameterWithIndex(index);
+        param.setValue(value);
+    }
 
     public ParameterImpl parameterWithIndex(int index) {
-		Iterator i = parameters.iterator();
-		while (i.hasNext()) {
-			ParameterImpl param = (ParameterImpl) i.next();
+        Iterator i = parameters.iterator();
+        while (i.hasNext()) {
+            ParameterImpl param = (ParameterImpl) i.next();
 
-			if (param.getIndex() == index)
-				return param;
-		}
-		return null;
-	}
+            if (param.getIndex() == index)
+                return param;
+        }
+        return null;
+    }
 
 }

@@ -22,95 +22,98 @@ import org.apache.tuscany.das.rdb.Converter;
 
 import commonj.sdo.Type;
 
-public class ParameterImpl  {
+public class ParameterImpl {
 
-	/**
-	 * Value for "Direction" that indicates that a parameter is soley for input.
-	 */
-	final static int IN = 1;
+    /**
+     * Value for "Direction" that indicates that a parameter is soley for input.
+     */
+    static final int IN = 1;
 
-	/**
-	 * Value for "Direction" that indicates that a parameter is soley for
-	 * output. Out parameters only apply to Stored Procedures
-	 */
-	final static int OUT = 2;
+    /**
+     * Value for "Direction" that indicates that a parameter is soley for output. 
+     * Out parameters only apply to Stored Procedures
+     */
+    static final int OUT = 2;
 
-	/**
-	 * Value for "Direction" that indicates that a parameter is for both input
-	 * and output. In-out parameters only apply to stored procedures
-	 */
-	final static int IN_OUT = 3;
-	
-	private int index;
-	private Type type;
-	private String name;
-	protected Object value = null;
-	private int direction = IN;
-	private Converter converter;
-	
-	public ParameterImpl() {
-		super();
-	}
+    /**
+     * Value for "Direction" that indicates that a parameter is for both input and output. 
+     * In-out parameters only apply to stored procedures
+     */
+    static final int IN_OUT = 3;
 
-	public ParameterImpl(int index) {
-		this.index = index;
-	}
+    protected Object value;
 
+    private int index;
 
-	public void setType(Type type) {
-		this.type = type;
-	}
+    private Type type;
 
-	public void setIndex(int index) {
-		if ( index == 0 ) 
-			throw new RuntimeException("Index of zero not allowed");
-		this.index = index;
-	}
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private int direction = IN;
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    private Converter converter;
 
-	public void setDirection(int direction) {
-		this.direction = direction;
-	}
+    
+    public ParameterImpl() {
+        super();
+    }
 
-	public Type getType() {
-		return this.type;
-	}
+    public ParameterImpl(int index) {
+        this.index = index;
+    }
 
-	public int getIndex() {
-		return this.index;
-	}
+    public void setType(Type type) {
+        this.type = type;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setIndex(int index) {
+        if (index == 0)
+            throw new RuntimeException("Index of zero not allowed");
+        this.index = index;
+    }
 
-	public Object getValue() {
-		if ( getConverter() != null ) {
-			return getConverter().getColumnValue(this.value);
-		} else {
-			return this.value;
-		}
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getDirection() {
-		return this.direction;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	public void setConverter(Converter converter) {
-		this.converter = converter;		
-	}
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
-	public Converter getConverter() {
-		return this.converter;
-	}
+    public Type getType() {
+        return this.type;
+    }
 
-	
-	
+    public int getIndex() {
+        return this.index;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Object getValue() {
+        if (getConverter() != null) {
+            return getConverter().getColumnValue(this.value);
+        } else {
+            return this.value;
+        }
+    }
+
+    public int getDirection() {
+        return this.direction;
+    }
+
+    public void setConverter(Converter converter) {
+        this.converter = converter;
+    }
+
+    public Converter getConverter() {
+        return this.converter;
+    }
+
 }

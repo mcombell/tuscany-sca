@@ -55,7 +55,7 @@ public class PagerImpl implements Pager {
 	
 	public DataObject previous() {
 		int start = idx - (2 * size);
-		if ( start < 1 ) 
+		if (start < 1)
 			start = 1;
 		int end = start + size;
 		idx = end; 

@@ -33,18 +33,19 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 // TODO - Can use some refactoring. Much code is duplicated in "execute" methods
 public class Statement {
-    private final Logger logger = LoggerFactory.INSTANCE.getLogger(Statement.class);
 
     protected final String queryString;
 
     protected ConnectionImpl jdbcConnection;
 
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(Statement.class);
+    
     private PreparedStatement preparedStatement;
 
-    private boolean isPaging = false;
+    private boolean isPaging;
 
     public Statement(String sqlString) {
-        this.queryString = sqlString; 
+        this.queryString = sqlString;
     }
 
     public List executeQuery(Parameters parameters) throws SQLException {
@@ -58,41 +59,41 @@ public class Statement {
 
     public List executeCall(Parameters parameters) throws SQLException {
 
-            CallableStatement cs = jdbcConnection.prepareCall(queryString);
+        CallableStatement cs = jdbcConnection.prepareCall(queryString);
 
-            Iterator inParams = parameters.inParams().iterator();
-            while (inParams.hasNext()) {
-                ParameterImpl param = (ParameterImpl) inParams.next();
-                cs.setObject(param.getIndex(), param.getValue());
-            }
+        Iterator inParams = parameters.inParams().iterator();
+        while (inParams.hasNext()) {
+            ParameterImpl param = (ParameterImpl) inParams.next();
+            cs.setObject(param.getIndex(), param.getValue());
+        }
 
-            // register out parameters
-            Iterator outParams = parameters.outParams().iterator();
-            while (outParams.hasNext()) {
-                ParameterImpl param = (ParameterImpl) outParams.next();
-                if(this.logger.isDebugEnabled())
-                    this.logger.debug("Registering parameter " + param.getName());
+        // register out parameters
+        Iterator outParams = parameters.outParams().iterator();
+        while (outParams.hasNext()) {
+            ParameterImpl param = (ParameterImpl) outParams.next();
+            if (this.logger.isDebugEnabled())
+                this.logger.debug("Registering parameter " + param.getName());
 
-                cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
-            }
+            cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
+        }
 
-            // Using execute because Derby does not currenlty support
-            // executeQuery
-            // for SP
-            cs.execute();
-            ArrayList results = new ArrayList();
+        // Using execute because Derby does not currenlty support
+        // executeQuery
+        // for SP
+        cs.execute();
+        List results = new ArrayList();
+        results.add(cs.getResultSet());
+        while (cs.getMoreResults(java.sql.Statement.KEEP_CURRENT_RESULT)) {
             results.add(cs.getResultSet());
-            while ( cs.getMoreResults(java.sql.Statement.KEEP_CURRENT_RESULT) ) {
-            	results.add(cs.getResultSet());
-            }
+        }
 
-            Iterator i = parameters.outParams().iterator();
-            while (i.hasNext()) {
-                ParameterImpl param = (ParameterImpl) i.next();
-                param.setValue(cs.getObject(param.getIndex()));
-            }
+        Iterator i = parameters.outParams().iterator();
+        while (i.hasNext()) {
+            ParameterImpl param = (ParameterImpl) i.next();
+            param.setValue(cs.getObject(param.getIndex()));
+        }
 
-            return results;
+        return results;
 
     }
 
@@ -110,7 +111,7 @@ public class Statement {
         while (outParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) outParams.next();
 
-            if(this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled())
                 this.logger.debug("Registering parameter " + param.getName());
 
             cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
@@ -127,37 +128,37 @@ public class Statement {
     }
 
     public int executeUpdate(Parameters parameters, String[] generatedKeys) throws SQLException {
-    	return executeUpdate(getPreparedStatement(generatedKeys), parameters);
+        return executeUpdate(getPreparedStatement(generatedKeys), parameters);
     }
-    
+
     public int executeUpdate(Parameters parameters) throws SQLException {
-    	return executeUpdate(parameters, new String[0]);
+        return executeUpdate(parameters, new String[0]);
     }
-    
+
     /**
      * TODO - We need to look at using specific ps.setXXX methods when a type
      * has been specified and try setObject otherwise.
      */
     private int executeUpdate(PreparedStatement ps, Parameters parameters) throws SQLException {
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled())
             this.logger.debug("Executing statement " + queryString);
-      
+
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
             Object value = param.getValue();
-            if(this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled())
                 this.logger.debug("Setting parameter " + param.getIndex() + " to " + value);
 
             if (value == null) {
                 if (param.getType() == null) {
-                	try {
-                		ParameterMetaData pmd = ps.getParameterMetaData();
-                		ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
-                	} catch (SQLException ex) {
-                		ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(null));
-                	}
+                    try {
+                        ParameterMetaData pmd = ps.getParameterMetaData();
+                        ps.setNull(param.getIndex(), pmd.getParameterType(param.getIndex()));
+                    } catch (SQLException ex) {
+                        ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(null));
+                    }
                 } else
                     ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
             } else {
@@ -197,11 +198,11 @@ public class Statement {
 
     public Integer getGeneratedKey() throws SQLException {
 
-    	if ( getConnection().useGetGeneratedKeys() ) {
-    		ResultSet rs = preparedStatement.getGeneratedKeys();
-    		if (rs.next())
-          	  return new Integer(rs.getInt(1));
-    	}
+        if (getConnection().useGetGeneratedKeys()) {
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next())
+                return new Integer(rs.getInt(1));
+        }
 
         return null;
     }

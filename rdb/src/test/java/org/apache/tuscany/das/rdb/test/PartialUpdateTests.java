@@ -29,6 +29,10 @@ import commonj.sdo.DataObject;
 
 public class PartialUpdateTests extends DasTest {
 
+    public PartialUpdateTests() {
+        super();
+    }
+
     protected void setUp() throws Exception {
         super.setUp();
         new CustomerData(getAutoConnection()).refresh();
@@ -38,13 +42,9 @@ public class PartialUpdateTests extends DasTest {
         super.tearDown();
     }
 
-    public PartialUpdateTests() {
-        super();
-    }
-
     public void testPartialUpdate() throws SQLException {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");       
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
 
         // Read
         DataObject root = readCustomers.executeQuery();
@@ -53,11 +53,11 @@ public class PartialUpdateTests extends DasTest {
         // Verify
         assertEquals(1, customer.getInt("ID"));
 
-        Command update = das.createCommand("update CUSTOMER set LASTNAME = 'modified' where ID = 1");       
+        Command update = das.createCommand("update CUSTOMER set LASTNAME = 'modified' where ID = 1");
         update.execute();
 
         customer.setString("ADDRESS", "main street");
-    
+
         das.applyChanges(root);
 
         root = readCustomers.executeQuery();
@@ -70,8 +70,8 @@ public class PartialUpdateTests extends DasTest {
     }
 
     public void testPartialInsert() throws SQLException {
-    	DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");     
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
 
         // Read
         DataObject root = readCustomers.executeQuery();
@@ -82,10 +82,10 @@ public class PartialUpdateTests extends DasTest {
         newCust.set("ADDRESS", "5528 Wells Fargo Drive");
         // Purposely do not set lastname to let it default to 'Garfugengheist'
         // newCust.set("LASTNAME", "Gerkin" );
-        
+
         das.applyChanges(root);
 
-        Command readNewCust = das.createCommand("select * from CUSTOMER where ID = 100");      
+        Command readNewCust = das.createCommand("select * from CUSTOMER where ID = 100");
         root = readNewCust.executeQuery();
 
         // If partial insert was not used, LASTNAME would not be

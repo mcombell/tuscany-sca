@@ -22,16 +22,16 @@ import org.apache.tuscany.das.rdb.Converter;
 
 public class StringToLongConverter implements Converter {
 
-	public StringToLongConverter() {
-		super();
-	}
+    public StringToLongConverter() {
+        super();
+    }
 
-	public Object getPropertyValue(Object columnData) {
-		return new Long(columnData.toString());
-	}
+    public Object getPropertyValue(Object columnData) {
+        return new Long(columnData.toString());
+    }
 
-	public Object getColumnValue(Object columnData) {
-		return columnData.toString();
-	}
+    public Object getColumnValue(Object columnData) {
+        return columnData.toString();
+    }
 
 }

@@ -18,14 +18,13 @@
  */
 package org.apache.tuscany.das.rdb.impl;
 
-
 import commonj.sdo.DataObject;
 
 public class CreateOperation extends ChangeOperation {
 
-	public CreateOperation(InsertCommandImpl command, DataObject changedObject, String ID) {
-		super(command, changedObject);
-		this.propagatedID = ID;
-	}
+    public CreateOperation(InsertCommandImpl command, DataObject changedObject, String ID) {
+        super(command, changedObject);
+        this.propagatedID = ID;
+    }
 
 }

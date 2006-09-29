@@ -28,19 +28,17 @@ import junit.framework.Test;
 
 public class DatabaseSetup extends TestSetup {
 
+    protected Statement s;
+
     protected String platformName = "Not initialized";
 
     protected String driverName = "Not initialized";
 
     protected String databaseURL = "Not initialized";
 
-    protected String userName = null;
+    protected String userName;
 
-    protected String password = null;
-
-    private Connection connection;
-
-    protected Statement s;
+    protected String password;
 
     // Data Types
     protected String stringType = "VARCHAR";
@@ -52,7 +50,9 @@ public class DatabaseSetup extends TestSetup {
     protected String floatType = "FLOAT";
 
     protected String decimalType = "DECIMAL";
-    
+
+    private Connection connection;
+
     public DatabaseSetup(Test test) {
         super(test);
         initConnectionProtocol();
@@ -130,11 +130,12 @@ public class DatabaseSetup extends TestSetup {
         // System.out.println("Dropping tables");
 
         String[] statements = {
-
-        "DROP TABLE CUSTOMER", "DROP TABLE ANORDER", "DROP TABLE ORDERDETAILS", "DROP TABLE ITEM", "DROP TABLE COMPANY", "DROP TABLE EMPLOYEE",
-                "DROP TABLE DEPARTMENT", "DROP TABLE BOOK", "DROP TABLE PART", "DROP TABLE TYPETEST", "DROP TABLE CITIES", "DROP TABLE STATES",
-                "DROP TABLE conmgt.SERVERSTATUS", "DROP TABLE DOG", "DROP TABLE OWNER", "DROP TABLE KENNEL", "DROP TABLE VISIT"
-
+            "DROP TABLE CUSTOMER", "DROP TABLE ANORDER", "DROP TABLE ORDERDETAILS", 
+            "DROP TABLE ITEM", "DROP TABLE COMPANY", "DROP TABLE EMPLOYEE",
+            "DROP TABLE DEPARTMENT", "DROP TABLE BOOK", "DROP TABLE PART", 
+            "DROP TABLE TYPETEST", "DROP TABLE CITIES", "DROP TABLE STATES",
+            "DROP TABLE conmgt.SERVERSTATUS", "DROP TABLE DOG", "DROP TABLE OWNER", 
+            "DROP TABLE KENNEL", "DROP TABLE VISIT"
         };
 
         for (int i = 0; i < statements.length; i++) {
@@ -142,9 +143,10 @@ public class DatabaseSetup extends TestSetup {
                 s.execute(statements[i]);
             } catch (SQLException e) {
                 // If the table does not exist then ignore the exception on drop
-                if ((!e.getMessage().contains("does not exist")) && (!e.getMessage().contains("Unknown table"))
-                		&& (!e.getMessage().contains("42704")))
+                if ((!e.getMessage().contains("does not exist")) && (!e.getMessage().contains("Unknown table")) 
+                        && (!e.getMessage().contains("42704"))) {
                     throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -171,8 +173,9 @@ public class DatabaseSetup extends TestSetup {
 
         String[] statements = {
 
-        "DROP PROCEDURE GETALLCOMPANIES", "DROP PROCEDURE DELETECUSTOMER", "DROP PROCEDURE GETNAMEDCOMPANY", "DROP PROCEDURE GETCUSTOMERANDORDERS",
-                "DROP PROCEDURE GETNAMEDCUSTOMERS", "DROP PROCEDURE GETALLCUSTOMERSANDORDERS"
+            "DROP PROCEDURE GETALLCOMPANIES", "DROP PROCEDURE DELETECUSTOMER", 
+            "DROP PROCEDURE GETNAMEDCOMPANY", "DROP PROCEDURE GETCUSTOMERANDORDERS",
+            "DROP PROCEDURE GETNAMEDCUSTOMERS", "DROP PROCEDURE GETALLCUSTOMERSANDORDERS"
 
         };
 
@@ -181,8 +184,9 @@ public class DatabaseSetup extends TestSetup {
                 s.execute(statements[i]);
             } catch (SQLException e) {
                 // If the proc does not exist then ignore the exception on drop
-                if (!e.getMessage().contains("does not exist") && !e.getMessage().contains("42704"))
+                if (!e.getMessage().contains("does not exist") && !e.getMessage().contains("42704")) {
                     throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -222,18 +226,25 @@ public class DatabaseSetup extends TestSetup {
         // System.out.println("Creating procedures");
         try {
 
-            s
-                    .execute("CREATE PROCEDURE GETALLCOMPANIES() PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCompanies'");
-            s
-                    .execute("CREATE PROCEDURE DELETECUSTOMER(theId int) PARAMETER STYLE JAVA LANGUAGE JAVA MODIFIES SQL DATA EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.deleteCustomer'");
-            s
-                    .execute("CREATE PROCEDURE GETNAMEDCOMPANY(theName VARCHAR(100)) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCompany'");
-            s
-                    .execute("CREATE PROCEDURE GETCUSTOMERANDORDERS(theID INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getCustomerAndOrders'");
-            s
-                    .execute("CREATE PROCEDURE GETNAMEDCUSTOMERS(theName VARCHAR(100), OUT theCount INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCustomers'");
-            s
-                    .execute("CREATE PROCEDURE GETALLCUSTOMERSANDORDERS() PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 2 EXTERNAL NAME 'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCustomersAndAllOrders'");
+            s.execute("CREATE PROCEDURE GETALLCOMPANIES() PARAMETER STYLE JAVA LANGUAGE JAVA "
+                            + "READS SQL DATA DYNAMIC RESULT SETS 1 "
+                            + "EXTERNAL NAME " 
+                            + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCompanies'");
+            s.execute("CREATE PROCEDURE DELETECUSTOMER(theId int) PARAMETER STYLE JAVA LANGUAGE JAVA " 
+                    + "MODIFIES SQL DATA EXTERNAL NAME " 
+                    + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.deleteCustomer'");
+            s.execute("CREATE PROCEDURE GETNAMEDCOMPANY(theName VARCHAR(100)) PARAMETER STYLE JAVA LANGUAGE JAVA " 
+                    + "READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME " 
+                    + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCompany'");
+            s.execute("CREATE PROCEDURE GETCUSTOMERANDORDERS(theID INTEGER) PARAMETER STYLE JAVA LANGUAGE JAVA " 
+                    + "READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME " 
+                    + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getCustomerAndOrders'");
+            s.execute("CREATE PROCEDURE GETNAMEDCUSTOMERS(theName VARCHAR(100), OUT theCount INTEGER) " 
+                    + "PARAMETER STYLE JAVA LANGUAGE JAVA READS SQL DATA DYNAMIC RESULT SETS 1 EXTERNAL NAME " 
+                    + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getNamedCustomers'");
+            s.execute("CREATE PROCEDURE GETALLCUSTOMERSANDORDERS() PARAMETER STYLE JAVA LANGUAGE JAVA " 
+                    + "READS SQL DATA DYNAMIC RESULT SETS 2 EXTERNAL NAME " 
+                    + "'org.apache.tuscany.das.rdb.test.framework.JavaStoredProcs.getAllCustomersAndAllOrders'");
             // TODO - "GETNAMEDCUSTOMERS" is failing on DB2 with SQLCODE: 42723. Need to investigate
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -247,47 +258,56 @@ public class DatabaseSetup extends TestSetup {
     //
 
     protected String getCreateCustomer() {
-        return "CREATE TABLE CUSTOMER (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " + getStringColumn("LASTNAME", 30)
+        return "CREATE TABLE CUSTOMER (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " 
+            + getStringColumn("LASTNAME", 30)
                 + " DEFAULT 'Garfugengheist', " + getStringColumn("ADDRESS", 30) + ")";
     }
 
     protected String getCreateAnOrder() {
-        return "CREATE TABLE ANORDER (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " + getStringColumn("PRODUCT", 30) + ", "
+        return "CREATE TABLE ANORDER (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " 
+            + getStringColumn("PRODUCT", 30) + ", "
                 + getIntegerColumn("QUANTITY") + "," + getIntegerColumn("CUSTOMER_ID") + ")";
     }
 
     protected String getCreateOrderDetails() {
-        return "CREATE TABLE ORDERDETAILS (" + getIntegerColumn("ORDERID") + " NOT NULL, " + getIntegerColumn("PRODUCTID")
+        return "CREATE TABLE ORDERDETAILS (" + getIntegerColumn("ORDERID") + " NOT NULL, " 
+            + getIntegerColumn("PRODUCTID")
                 + " NOT NULL, PRICE FLOAT, PRIMARY KEY (ORDERID, PRODUCTID))";
     }
 
     protected String getCreateItem() {
-        return "CREATE TABLE ITEM (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 30) + ")";
+        return "CREATE TABLE ITEM (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " 
+            + getStringColumn("NAME", 30) + ")";
     }
 
     protected String getCreateCompany() {
-        return "CREATE TABLE COMPANY (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + " , "
+        return "CREATE TABLE COMPANY (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " 
+            + getGeneratedKeyClause() + " , "
                 + getStringColumn("NAME", 30) + ", " + getIntegerColumn("EOTMID") + ")";
     }
 
     protected String getCreateEmployee() {
-        return "CREATE TABLE EMPLOYEE (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + ","
+        return "CREATE TABLE EMPLOYEE (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " 
+            + getGeneratedKeyClause() + ","
                 + getStringColumn("NAME", 30) + "," + getStringColumn("SN", 10) + ", MANAGER SMALLINT, " + getIntegerColumn("DEPARTMENTID") + ")";
     }
 
     protected String getCreateDepartment() {
-        return "CREATE TABLE DEPARTMENT (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " + getGeneratedKeyClause() + ", "
+        return "CREATE TABLE DEPARTMENT (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " 
+            + getGeneratedKeyClause() + ", "
                 + getStringColumn("NAME", 30) + "," + getStringColumn("LOCATION", 30) + ", " + getStringColumn("DEPNUMBER", 10) + ","
                 + getIntegerColumn("COMPANYID") + ")";
     }
 
     protected String getCreateBook() {
-        return "CREATE TABLE BOOK (" + getIntegerColumn("BOOK_ID") + " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 50) + ","
+        return "CREATE TABLE BOOK (" + getIntegerColumn("BOOK_ID") + " PRIMARY KEY NOT NULL, " 
+            + getStringColumn("NAME", 50) + ","
                 + getStringColumn("AUTHOR", 30) + ", " + getIntegerColumn("QUANTITY") + "," + getIntegerColumn("OCC") + ")";
     }
 
     protected String getCreatePart() {
-        return "CREATE TABLE PART (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, NAME VARCHAR(50),  " + getIntegerColumn("QUANTITY") + ","
+        return "CREATE TABLE PART (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, NAME VARCHAR(50),  " 
+            + getIntegerColumn("QUANTITY") + ","
                 + getIntegerColumn("PARENT_ID") + " )";
     }
 
@@ -324,26 +344,17 @@ public class DatabaseSetup extends TestSetup {
         return "CREATE TABLE OWNER (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getStringColumn("NAME", 20) + ", "
                 + getStringColumn("CONTACT_PHONE", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
     }
-    
+
     protected String getCreateKennel() {
-        return "CREATE TABLE KENNEL (" 
-        + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
-        + getIntegerColumn("KNUMBER") + ", "
-        + getStringColumn("KIND", 20) + ", " 
-        + getIntegerColumn("OCC_COUNT") + ", " 
-        + "PRIMARY KEY(ID))";
+        return "CREATE TABLE KENNEL (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getIntegerColumn("KNUMBER") + ", "
+                + getStringColumn("KIND", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
     }
-    
+
     protected String getCreateVisit() {
-        return "CREATE TABLE VISIT (" 
-        + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
-        + getTimestampColumn("CHECK_IN") + ", "
-        + getTimestampColumn("CHECK_OUT") + ", "
-        + getIntegerColumn("OCC_COUNT") + ", " 
-        + "PRIMARY KEY(ID))";
+        return "CREATE TABLE VISIT (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getTimestampColumn("CHECK_IN")
+                + ", " + getTimestampColumn("CHECK_OUT") + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
     }
-    
-    
+
     // /////////////////
 
     protected String getForeignKeyConstraint(String pkTable, String pkColumn, String foreignKey) {
@@ -380,7 +391,6 @@ public class DatabaseSetup extends TestSetup {
 
     protected String getTimestampColumn(String name) {
         return name + ' ' + timestampType;
-    }   
-    
-    
+    }
+
 }

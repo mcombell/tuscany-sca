@@ -21,65 +21,66 @@ package org.apache.tuscany.das.rdb.graphbuilder.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
-
 /**
- *
+ * 
  */
 public class TableData {
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(TableData.class);
 
-	private HashMap columnData = new HashMap();
-	private ArrayList primaryKey = new ArrayList();
-	private final String name;
-	private boolean hasValidPrimaryKey = true;
+    private Map columnData = new HashMap();
 
-	public TableData(String tableName) {
-        if(this.logger.isDebugEnabled())
+    private List primaryKey = new ArrayList();
+
+    private final String name;
+
+    private boolean hasValidPrimaryKey = true;
+
+    public TableData(String tableName) {
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Creating TableData for table " + tableName);
+        }
 
-		this.name = tableName;
-	}
+        this.name = tableName;
+    }
 
-
-	public void addData(String columnName, boolean isPrimaryKeyColumn, Object data) {
-        if(this.logger.isDebugEnabled())
+    public void addData(String columnName, boolean isPrimaryKeyColumn, Object data) {
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Adding column " + columnName + " with value " + data);
+        }
 
-		columnData.put(columnName, data);
-		if ( isPrimaryKeyColumn ) {
-			if ( data == null ) {
-
-                if(this.logger.isDebugEnabled())
+        columnData.put(columnName, data);
+        if (isPrimaryKeyColumn) {
+            if (data == null) {
+                if (this.logger.isDebugEnabled()) {
                     this.logger.debug("Column " + columnName + " is a primary key column and is null");
+                }
+                hasValidPrimaryKey = false;
+            }
+            primaryKey.add(data);
+        }
+    }
 
-				hasValidPrimaryKey = false;
-			}
-			primaryKey.add(data);
-		}
-	}
+    public Object getColumnData(String columnName) {
+        return columnData.get(columnName);
+    }
 
-	public Object getColumnData(String columnName) {
-		return columnData.get(columnName);
-	}
+    public String getTableName() {
+        return this.name;
+    }
 
-	public String getTableName() {
-		return this.name;
-	}
+    /**
+     * @return
+     */
+    public List getPrimaryKeyValues() {
+        return primaryKey;
+    }
 
-
-	/**
-	 * @return
-	 */
-	public List getPrimaryKeyValues() {
-		return primaryKey;
-	}
-
-
-	public boolean hasValidPrimaryKey() {
-		return hasValidPrimaryKey;
-	}
+    public boolean hasValidPrimaryKey() {
+        return hasValidPrimaryKey;
+    }
 }

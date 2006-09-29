@@ -53,55 +53,57 @@ import org.apache.tuscany.das.rdb.test.TopDown;
 import org.apache.tuscany.das.rdb.test.TypeTests;
 import org.apache.tuscany.das.rdb.test.typed.SimplestStaticCrud;
 
-public class AllCommonTests {
+public final class AllCommonTests {
 
-	public static Test suite() {
-		TestSuite suite = new TestSuite("All platform-common DAS tests");
-		//$JUnit-BEGIN$
-		
-		suite.addTest(new TestSuite (SimplestCrud.class));
-		suite.addTest(new TestSuite (CrudWithChangeHistory.class));
-		suite.addTest(new TestSuite (SimplestStaticCrud.class));
-		suite.addTest(new TestSuite (Paging.class));
-		suite.addTest(new TestSuite (GeneratedId.class));
-    	
-		suite.addTest(new TestSuite (StoredProcs.class));
-    	suite.addTest(new TestSuite (CUDGeneration.class));
-		suite.addTest(new TestSuite (TopDown.class));
-		suite.addTest(new TestSuite (OCCTests.class));
-		suite.addTest(new TestSuite (RecursiveTests.class));
-
-		suite.addTest(new TestSuite (GraphMergeTests.class));
-		suite.addTest(new TestSuite (CompoundKeyTests.class));
-		suite.addTest(new TestSuite (RelationshipTests.class));		
-		suite.addTest(new TestSuite (GeneratedCommandTests.class));
-		
-		suite.addTest(new TestSuite (CompanyTests.class));
-		suite.addTest(new TestSuite (ResultSetShapeTests.class));
-		suite.addTest(new TestSuite (TypeTests.class));
-		suite.addTest(new TestSuite (OperationOrderingTests.class));
-		suite.addTest(new TestSuite (ConverterTests.class));
-
-		suite.addTest(new TestSuite (PartialUpdateTests.class));
-		suite.addTest(new TestSuite (ExceptionTests.class));
-		suite.addTest(new TestSuite (PassiveConnectionTests.class));
-		suite.addTest(new TestSuite (SerializationTests.class));
-		
-        suite.addTest(new TestSuite (CommandGroupTests.class));
-        suite.addTest(new TestSuite (BestPracticeTests.class));
-        suite.addTest(new TestSuite (CorrectedDefectTests.class));
-        suite.addTest(new TestSuite (OneToOneRelationshipTests.class));
-       
-        suite.addTest(new TestSuite (ProgrammaticConfigTests.class));
-        suite.addTest(new TestSuite (AliasTests.class));
-       
-        suite.addTest(new TestSuite (ImpliedRelationshipTests.class));
-        
-        suite.addTest(new TestSuite (KennelTests.class));
+    private AllCommonTests() {  
+    }
     
-        
-		//$JUnit-END$
-		return suite;
-	}
+    public static Test suite() {
+        TestSuite suite = new TestSuite("All platform-common DAS tests");
+        // $JUnit-BEGIN$
+
+        suite.addTest(new TestSuite(SimplestCrud.class));
+        suite.addTest(new TestSuite(CrudWithChangeHistory.class));
+        suite.addTest(new TestSuite(SimplestStaticCrud.class));
+        suite.addTest(new TestSuite(Paging.class));
+        suite.addTest(new TestSuite(GeneratedId.class));
+
+        suite.addTest(new TestSuite(StoredProcs.class));
+        suite.addTest(new TestSuite(CUDGeneration.class));
+        suite.addTest(new TestSuite(TopDown.class));
+        suite.addTest(new TestSuite(OCCTests.class));
+        suite.addTest(new TestSuite(RecursiveTests.class));
+
+        suite.addTest(new TestSuite(GraphMergeTests.class));
+        suite.addTest(new TestSuite(CompoundKeyTests.class));
+        suite.addTest(new TestSuite(RelationshipTests.class));
+        suite.addTest(new TestSuite(GeneratedCommandTests.class));
+
+        suite.addTest(new TestSuite(CompanyTests.class));
+        suite.addTest(new TestSuite(ResultSetShapeTests.class));
+        suite.addTest(new TestSuite(TypeTests.class));
+        suite.addTest(new TestSuite(OperationOrderingTests.class));
+        suite.addTest(new TestSuite(ConverterTests.class));
+
+        suite.addTest(new TestSuite(PartialUpdateTests.class));
+        suite.addTest(new TestSuite(ExceptionTests.class));
+        suite.addTest(new TestSuite(PassiveConnectionTests.class));
+        suite.addTest(new TestSuite(SerializationTests.class));
+
+        suite.addTest(new TestSuite(CommandGroupTests.class));
+        suite.addTest(new TestSuite(BestPracticeTests.class));
+        suite.addTest(new TestSuite(CorrectedDefectTests.class));
+        suite.addTest(new TestSuite(OneToOneRelationshipTests.class));
+
+        suite.addTest(new TestSuite(ProgrammaticConfigTests.class));
+        suite.addTest(new TestSuite(AliasTests.class));
+
+        suite.addTest(new TestSuite(ImpliedRelationshipTests.class));
+
+        suite.addTest(new TestSuite(KennelTests.class));
+
+        //$JUnit-END$
+        return suite;
+    }
 
 }

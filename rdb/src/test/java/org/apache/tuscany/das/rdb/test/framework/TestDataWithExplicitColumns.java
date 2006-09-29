@@ -25,63 +25,64 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
-
 public abstract class TestDataWithExplicitColumns extends TestData {
 
-    private final Logger logger = LoggerFactory.INSTANCE.getLogger(TestDataWithExplicitColumns.class);
-
-	protected String[] columns;
+    protected String[] columns;
 
     protected int[] sqlTypes;
+    
+    private final Logger logger = LoggerFactory.INSTANCE.getLogger(TestDataWithExplicitColumns.class);
 
-	public TestDataWithExplicitColumns(Connection c, Object[][] data, String[] columns, int[] sqlTypes) {
-		super(c, data);
-		this.columns = columns;
-		this.sqlTypes = sqlTypes;
-	}
+    public TestDataWithExplicitColumns(Connection c, Object[][] data, String[] columns, int[] sqlTypes) {
+        super(c, data);
+        this.columns = columns;
+        this.sqlTypes = sqlTypes;
+    }
 
-	private String getColumn(int i) {
-		return columns[i - 1];
-	}
+    private String getColumn(int i) {
+        return columns[i - 1];
+    }
 
-	private int getSqlType(int i) {
-		return (sqlTypes[i - 1]);
-	}
+    private int getSqlType(int i) {
+        return sqlTypes[i - 1];
+    }
 
-	// Create an insert statement of the following form ...
-	//    "INSERT INTO table_name (column1, column2,...) VALUES (value1, value2,....)"
-	// This is necessary for tables with a generated column since the PK value is not provided
-	protected void insertRows() throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("insert into ");
-		sql.append(getTableName());
+    // Create an insert statement of the following form ...
+    // "INSERT INTO table_name (column1, column2,...) VALUES (value1, value2,....)"
+    // This is necessary for tables with a generated column since the PK value is not provided
+    protected void insertRows() throws SQLException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("insert into ");
+        sql.append(getTableName());
 
-		sql.append(" (");
-		for (int i = 1; i <= size(); i++) {
-			sql.append(getColumn(i));
-			if ( i < size() )
-				sql.append(',');
-		}
-		sql.append(" )");
+        sql.append(" (");
+        for (int i = 1; i <= size(); i++) {
+            sql.append(getColumn(i));
+            if (i < size()) {
+                sql.append(',');
+            }
+        }
+        sql.append(" )");
 
-		sql.append(" values (");
-		for (int i = 1; i < size(); i++) {
-			sql.append("?,");
-		}
-		sql.append("?)");
+        sql.append(" values (");
+        for (int i = 1; i < size(); i++) {
+            sql.append("?,");
+        }
+        sql.append("?)");
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(sql.toString());
+        }
 
-		PreparedStatement ps = connection.prepareStatement(sql.toString());
+        PreparedStatement ps = connection.prepareStatement(sql.toString());
 
-		while (next()) {
-			for (int i = 1; i <= size(); i++) {
-				ps.setObject(i, getObject(i), getSqlType(i));
-			}
-			ps.execute();
-			ps.clearParameters();
-		}
-	}
+        while (next()) {
+            for (int i = 1; i <= size(); i++) {
+                ps.setObject(i, getObject(i), getSqlType(i));
+            }
+            ps.execute();
+            ps.clearParameters();
+        }
+    }
 
 }

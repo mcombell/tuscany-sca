@@ -33,90 +33,91 @@ public class ConnectionImpl {
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(ConnectionImpl.class);
 
-	private Connection connection;
+    private Connection connection;
 
-	private boolean managingTransaction = true;
-	private final boolean useGetGeneratedKeys;
+    private boolean managingTransaction = true;
 
-	public ConnectionImpl(Connection connection) {
-		this.connection = connection;
-		
-		try {
-			DatabaseMetaData dbmd = connection.getMetaData();
-		 
-			if (dbmd.getDatabaseProductName().contains("Oracle") )
-				this.useGetGeneratedKeys = false;
-			else
-				this.useGetGeneratedKeys = true;
-			if (connection.getAutoCommit())
-				throw new RuntimeException("AutoCommit must be off");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+    private final boolean useGetGeneratedKeys;
 
-	}
+    public ConnectionImpl(Connection connection) {
+        this.connection = connection;
 
-	public Connection getJDBCConnection() {
-		return connection;
-	}
+        try {
+            DatabaseMetaData dbmd = connection.getMetaData();
 
-	public void cleanUp() {
-		try {
-			if (managingTransaction) {
-                if(this.logger.isDebugEnabled())
+            if (dbmd.getDatabaseProductName().contains("Oracle")) {
+                this.useGetGeneratedKeys = false;
+            } else {
+                this.useGetGeneratedKeys = true;
+            }
+            if (connection.getAutoCommit())
+                throw new RuntimeException("AutoCommit must be off");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Connection getJDBCConnection() {
+        return connection;
+    }
+
+    public void cleanUp() {
+        try {
+            if (managingTransaction) {
+                if (this.logger.isDebugEnabled())
                     this.logger.debug("Committing Transaction");
 
-				connection.commit();
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public void errorCleanUp() {
-		try {
-			if (managingTransaction) {
-                if(this.logger.isDebugEnabled())
+    public void errorCleanUp() {
+        try {
+            if (managingTransaction) {
+                if (this.logger.isDebugEnabled())
                     this.logger.debug("Rolling back Transaction");
 
-				connection.rollback();
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public PreparedStatement prepareStatement(String queryString, String[] returnKeys)
-			throws SQLException {
-		if (this.logger.isDebugEnabled())
-			this.logger.debug("Preparing Statement: " + queryString);
-
-		if ( useGetGeneratedKeys )
-			return connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
-		
-		else if (returnKeys.length > 0)
-			return connection.prepareStatement(queryString, returnKeys);
-		
-		return connection.prepareStatement(queryString);
-	}
-
-	public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
-        if(this.logger.isDebugEnabled())
+    public PreparedStatement prepareStatement(String queryString, String[] returnKeys) throws SQLException {
+        if (this.logger.isDebugEnabled())
             this.logger.debug("Preparing Statement: " + queryString);
 
-		return connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	}
+        if (useGetGeneratedKeys)
+            return connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
 
-	public void setManageTransactions(boolean manageTransactions) {
-		managingTransaction = manageTransactions;
+        else if (returnKeys.length > 0)
+            return connection.prepareStatement(queryString, returnKeys);
 
-	}
+        return connection.prepareStatement(queryString);
+    }
 
-	public CallableStatement prepareCall(String queryString) throws SQLException {
-		return connection.prepareCall(queryString);
-	}
+    public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
+        if (this.logger.isDebugEnabled())
+            this.logger.debug("Preparing Statement: " + queryString);
 
-	public boolean useGetGeneratedKeys() {
-		return this.useGetGeneratedKeys;
-	}
+        return connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    }
+
+    public void setManageTransactions(boolean manageTransactions) {
+        managingTransaction = manageTransactions;
+
+    }
+
+    public CallableStatement prepareCall(String queryString) throws SQLException {
+        return connection.prepareCall(queryString);
+    }
+
+    public boolean useGetGeneratedKeys() {
+        return this.useGetGeneratedKeys;
+    }
 }

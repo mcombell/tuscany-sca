@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Column;
@@ -43,21 +44,22 @@ import commonj.sdo.Property;
 
 public class MappingWrapper {
 
-    private static final ConfigFactory factory = ConfigFactory.INSTANCE;
+    private static final ConfigFactory FACTORY = ConfigFactory.INSTANCE;
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(MappingWrapper.class);
 
     private Config config;
 
     public MappingWrapper() {
-    	config = factory.createConfig();
+        config = FACTORY.createConfig();
     }
 
     public MappingWrapper(Config mapping) {
-    	if ( mapping == null )
-    		this.config = factory.createConfig();
-    	else
-    		this.config = mapping;
+        if (mapping == null) {
+            this.config = FACTORY.createConfig();
+        } else {
+            this.config = mapping;
+        }
     }
 
     public Config getConfig() {
@@ -66,14 +68,16 @@ public class MappingWrapper {
 
     public Table getTable(String tableName) {
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Looking for table " + tableName);
+        }
 
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
-            if (tableName.equalsIgnoreCase(t.getTableName()))
+            if (tableName.equalsIgnoreCase(t.getTableName())) {
                 return t;
+            }
         }
 
         return null;
@@ -81,15 +85,17 @@ public class MappingWrapper {
 
     public Table getTableByTypeName(String typeName) {
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Looking for table by property: " + typeName);
+        }
 
         Iterator i = config.getTable().iterator();
         while (i.hasNext()) {
             Table t = (Table) i.next();
             TableWrapper wrapper = new TableWrapper(t);
-            if (typeName.equals(wrapper.getTypeName()))
+            if (typeName.equals(wrapper.getTypeName())) {
                 return t;
+            }
         }
         return null;
 
@@ -97,31 +103,33 @@ public class MappingWrapper {
 
     public void addImpliedRelationship(String parentTableName, String childTableName, String fkColumnName) {
 
-    	// Don't create a relationship for something like Book.Book_ID
-    	if ( parentTableName.equalsIgnoreCase(childTableName) )
-    		return;
+        // Don't create a relationship for something like Book.Book_ID
+        if (parentTableName.equalsIgnoreCase(childTableName)) {
+            return;
+        }
 
-    	// Don't create a relationship if one already exists in the config
-    	 Iterator i = config.getRelationship().iterator();
-    	 while ( i.hasNext() ) {
-    		 Relationship r = (Relationship) i.next();
-    		 if ( r.getPrimaryKeyTable().equals(parentTableName) && r.getForeignKeyTable().equals(childTableName))
-    			 return;
-    	 }
+        // Don't create a relationship if one already exists in the config
+        Iterator i = config.getRelationship().iterator();
+        while (i.hasNext()) {
+            Relationship r = (Relationship) i.next();
+            if (r.getPrimaryKeyTable().equals(parentTableName) && r.getForeignKeyTable().equals(childTableName)) {
+                return;
+            }
+        }
 
-         Relationship r = factory.createRelationship();
-         r.setName(childTableName);
-         r.setPrimaryKeyTable(parentTableName);
-         r.setForeignKeyTable(childTableName);
+        Relationship r = FACTORY.createRelationship();
+        r.setName(childTableName);
+        r.setPrimaryKeyTable(parentTableName);
+        r.setForeignKeyTable(childTableName);
 
-         KeyPair pair = factory.createKeyPair();
-         pair.setPrimaryKeyColumn("ID");
-         pair.setForeignKeyColumn(fkColumnName);
+        KeyPair pair = FACTORY.createKeyPair();
+        pair.setPrimaryKeyColumn("ID");
+        pair.setForeignKeyColumn(fkColumnName);
 
-         r.getKeyPair().add(pair);
-         r.setMany(true);
+        r.getKeyPair().add(pair);
+        r.setMany(true);
 
-         config.getRelationship().add(r);
+        config.getRelationship().add(r);
     }
 
     public Relationship addRelationship(String parentName, String childName) {
@@ -129,16 +137,17 @@ public class MappingWrapper {
         QualifiedColumn parent = new QualifiedColumn(parentName);
         QualifiedColumn child = new QualifiedColumn(childName);
 
-        Relationship r = factory.createRelationship();
+        Relationship r = FACTORY.createRelationship();
         r.setName(child.getTableName());
         r.setPrimaryKeyTable(parent.getTableName());
         r.setForeignKeyTable(child.getTableName());
 
-        if(this.logger.isDebugEnabled())
-            this.logger.debug("Created relationship from " + r.getPrimaryKeyTable() + " to "
-                + r.getForeignKeyTable() + " named " + r.getName());
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Created relationship from " + r.getPrimaryKeyTable() 
+                    + " to " + r.getForeignKeyTable() + " named " + r.getName());
+        }
 
-        KeyPair pair = factory.createKeyPair();
+        KeyPair pair = FACTORY.createKeyPair();
         pair.setPrimaryKeyColumn(parent.getColumnName());
         pair.setForeignKeyColumn(child.getColumnName());
 
@@ -151,10 +160,8 @@ public class MappingWrapper {
 
     }
 
-
-
     public void addPrimaryKey(String columnName) {
-    	addPrimaryKey(Collections.singletonList(columnName));
+        addPrimaryKey(Collections.singletonList(columnName));
     }
 
     public void addPrimaryKey(List columnNames) {
@@ -172,19 +179,22 @@ public class MappingWrapper {
 
     public String getTableTypeName(String tableName) {
         Table t = getTable(tableName);
-        if (t == null)
+        if (t == null) {
             return tableName;
+        }
         String propertyName = t.getTypeName();
 
-        if (propertyName == null)
+        if (propertyName == null) {
             return tableName;
+        }
 
         return propertyName;
     }
 
     public Column getColumn(Table t, String columnName) {
-        if (t == null)
+        if (t == null) {
             return null;
+        }
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
@@ -193,15 +203,17 @@ public class MappingWrapper {
             }
         }
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("WARNING: Could not find column " + columnName + " in table " + t.getTableName());
+        }
 
         return null;
     }
 
     public Column getColumnByPropertyName(Table t, String propertyName) {
-        if (t == null)
+        if (t == null) {
             return null;
+        }
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
@@ -211,7 +223,7 @@ public class MappingWrapper {
                 return c;
         }
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled())
             this.logger.debug("WARNING: Could not find column " + propertyName + " in table " + t.getTableName());
 
         return null;
@@ -281,7 +293,7 @@ public class MappingWrapper {
     }
 
     public Collection getRelationshipsByChildTable(String name) {
-        ArrayList results = new ArrayList();
+        List results = new ArrayList();
         if (config != null) {
             Iterator i = getConfig().getRelationship().iterator();
             while (i.hasNext()) {
@@ -294,15 +306,16 @@ public class MappingWrapper {
     }
 
     // TODO optimize
-    public ArrayList getInsertOrder() {
-        if(this.logger.isDebugEnabled())
+    public List getInsertOrder() {
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Getting insert order");
+        }
 
-        ArrayList inserts = new ArrayList();
-        HashMap parentToChild = new HashMap();
+        List inserts = new ArrayList();
+        Map parentToChild = new HashMap();
 
-        ArrayList parents = new ArrayList();
-        ArrayList children = new ArrayList();
+        List parents = new ArrayList();
+        List children = new ArrayList();
         if (config != null) {
             Iterator i = getConfig().getRelationship().iterator();
             while (i.hasNext()) {
@@ -332,14 +345,14 @@ public class MappingWrapper {
 
         }
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled())
             this.logger.debug(inserts);
 
         return inserts;
     }
 
-    public ArrayList getDeleteOrder() {
-        ArrayList deleteOrder = new ArrayList();
+    public List getDeleteOrder() {
+        List deleteOrder = new ArrayList();
         deleteOrder.addAll(getInsertOrder());
         Collections.reverse(deleteOrder);
         return deleteOrder;
@@ -362,8 +375,8 @@ public class MappingWrapper {
         return null;
     }
 
-    public HashMap getConverters(Table table) {
-        HashMap converters = new HashMap();
+    public Map getConverters(Table table) {
+        Map converters = new HashMap();
 
         Iterator columns = table.getColumn().iterator();
         while (columns.hasNext()) {
@@ -407,60 +420,58 @@ public class MappingWrapper {
 
     }
 
-    public void addDeleteStatement(Table table, String statement,
-			String parameters) {
+    public void addDeleteStatement(Table table, String statement, String parameters) {
 
-		Delete delete = ConfigFactory.INSTANCE.createDelete();
-		delete.setSql(statement);
-		delete.setParameters(parameters);
-		table.setDelete(delete);
+        Delete delete = ConfigFactory.INSTANCE.createDelete();
+        delete.setSql(statement);
+        delete.setParameters(parameters);
+        table.setDelete(delete);
 
-	}
+    }
 
+    public void addCreateStatement(Table table, String statement, String parameters) {
 
-    public void addCreateStatement(Table table, String statement,
-			String parameters) {
+        Create create = ConfigFactory.INSTANCE.createCreate();
+        create.setSql(statement);
+        create.setParameters(parameters);
+        table.setCreate(create);
 
-		Create create = ConfigFactory.INSTANCE.createCreate();
-		create.setSql(statement);
-		create.setParameters(parameters);
-		table.setCreate(create);
+    }
 
-	}
-	public void addConnectionInfo(String dataSourceName, boolean managedtx) {
-		ConnectionInfo info = ConfigFactory.INSTANCE.createConnectionInfo();
-		info.setDataSource(dataSourceName);
-		info.setManagedtx(managedtx);
-		config.setConnectionInfo(info);
-	}
+    public void addConnectionInfo(String dataSourceName, boolean managedtx) {
+        ConnectionInfo info = ConfigFactory.INSTANCE.createConnectionInfo();
+        info.setDataSource(dataSourceName);
+        info.setManagedtx(managedtx);
+        config.setConnectionInfo(info);
+    }
 
-	public Command addCommand(String name, String sql, String kind) {
-		Command cmd = ConfigFactory.INSTANCE.createCommand();
-		cmd.setName(name);
-		cmd.setKind(kind);
-		cmd.setSQL(sql);
+    public Command addCommand(String name, String sql, String kind) {
+        Command cmd = ConfigFactory.INSTANCE.createCommand();
+        cmd.setName(name);
+        cmd.setKind(kind);
+        cmd.setSQL(sql);
 
-		config.getCommand().add(cmd);
+        config.getCommand().add(cmd);
 
-		return cmd;
-	}
+        return cmd;
+    }
 
-	public void addImpliedPrimaryKey(String tableName, String columnName) {
-		Table t = findOrCreateTable(tableName);
+    public void addImpliedPrimaryKey(String tableName, String columnName) {
+        Table t = findOrCreateTable(tableName);
 
-		Iterator i = t.getColumn().iterator();
-		boolean hasPK = false;
-		while ( i.hasNext() ) {
-			Column c = (Column) i.next();
-			if ( c.isPrimaryKey() )
-				hasPK = true;
-		}
+        Iterator i = t.getColumn().iterator();
+        boolean hasPK = false;
+        while (i.hasNext()) {
+            Column c = (Column) i.next();
+            if (c.isPrimaryKey())
+                hasPK = true;
+        }
 
-		if ( !hasPK ) {
-			Column c = findOrCreateColumn(t, columnName);
-			c.setPrimaryKey(true);
-		}
+        if (!hasPK) {
+            Column c = findOrCreateColumn(t, columnName);
+            c.setPrimaryKey(true);
+        }
 
-	}
+    }
 
 }

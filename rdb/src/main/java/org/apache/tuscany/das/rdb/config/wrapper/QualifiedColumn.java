@@ -32,7 +32,7 @@ public class QualifiedColumn {
 		tableName = name.substring(0, name.indexOf('.'));
 		columnName = name.substring(name.indexOf('.') + 1);
 
-        if(this.logger.isDebugEnabled()){
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Table name:  " + tableName);
             this.logger.debug("Column name: " + columnName);
         }

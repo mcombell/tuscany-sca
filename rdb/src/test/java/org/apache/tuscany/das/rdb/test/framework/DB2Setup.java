@@ -22,16 +22,16 @@ import junit.framework.Test;
 
 public class DB2Setup extends DatabaseSetup {
 
-	public DB2Setup(Test test) {
-		super(test);
-	}
+    public DB2Setup(Test test) {
+        super(test);
+    }
 
-	protected void initConnectionProtocol() {
-		
-		platformName = "DB2";
-		driverName = "com.ibm.db2.jcc.DB2Driver";
-		databaseURL = "jdbc:db2:DASTEST";
-		
-	}
-	
+    protected void initConnectionProtocol() {
+
+        platformName = "DB2";
+        driverName = "com.ibm.db2.jcc.DB2Driver";
+        databaseURL = "jdbc:db2:DASTEST";
+
+    }
+
 }

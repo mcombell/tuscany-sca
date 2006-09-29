@@ -23,25 +23,22 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class CompanyData extends TestDataWithExplicitColumns {
 
-	//CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30))
-	
-	private static int[] columnTypes = {Types.VARCHAR}; 
-	
-	private static Object[][] companyData = { { "ACME Publishing" },
-			{ "Do-rite plumbing" },
-			{ "MegaCorp" } };
+    // CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30))
 
-	private static String[] companyColumns = { "NAME" };
+    private static int[] columnTypes = { Types.VARCHAR };
 
-	public CompanyData(Connection connection) {
-		super(connection, companyData, companyColumns, columnTypes);
-	}
+    private static Object[][] companyData = { { "ACME Publishing" }, { "Do-rite plumbing" }, { "MegaCorp" } };
 
-	public String getTableName() {
-		return "COMPANY";
-	}
+    private static String[] companyColumns = { "NAME" };
+
+    public CompanyData(Connection connection) {
+        super(connection, companyData, companyColumns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "COMPANY";
+    }
 
 }

@@ -22,54 +22,55 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
- * DeleteList will sort delete operations so that child objects are deleted
- * before their parents
+ * DeleteList will sort delete operations so that child objects are deleted before their parents
  * 
  * 
  */
 public class DeleteList {
 
-	private HashMap opsByTableName = new HashMap();
+    private Map opsByTableName = new HashMap();
 
-	private ArrayList order;
-	
-	private ArrayList deleteOperations = new ArrayList();
+    private List order;
 
-	public DeleteList() {
-		super();
-	}
+    private List deleteOperations = new ArrayList();
 
-	public void add(ChangeOperation op) {
-		if (( order.size() == 0  ) || ( op.getTableName() == null ) ) {
-			deleteOperations.add(op);
-		} else {
-			String name = op.getTableName();
-			ArrayList ops = (ArrayList) opsByTableName.get(name);
-			if (ops == null)
-				ops = new ArrayList();
+    public DeleteList() {
+        super();
+    }
 
-			ops.add(op);
-			opsByTableName.put(name, ops);
-		}
-	}
+    public void add(ChangeOperation op) {
+        if ((order.size() == 0) || (op.getTableName() == null)) {
+            deleteOperations.add(op);
+        } else {
+            String name = op.getTableName();
+            List ops = (List) opsByTableName.get(name);
+            if (ops == null)
+                ops = new ArrayList();
 
-	public Collection getSortedList() {
-		if  (( order.size() > 0  ) && ( opsByTableName.keySet().size() > 0) ) {
-			Iterator i = this.order.iterator();
-			while (i.hasNext()) {
-				String name = (String) i.next();
-				if ( opsByTableName.get(name) != null)
-					deleteOperations.addAll((Collection) opsByTableName.get(name));
-			}
-		}
-		
-		return deleteOperations;
-	}
+            ops.add(op);
+            opsByTableName.put(name, ops);
+        }
+    }
 
-	public void setOrder(ArrayList deleteOrder) {
-		this.order = deleteOrder;
-	}
+    public Collection getSortedList() {
+        if ((order.size() > 0) && (opsByTableName.keySet().size() > 0)) {
+            Iterator i = this.order.iterator();
+            while (i.hasNext()) {
+                String name = (String) i.next();
+                if (opsByTableName.get(name) != null)
+                    deleteOperations.addAll((Collection) opsByTableName.get(name));
+            }
+        }
+
+        return deleteOperations;
+    }
+
+    public void setOrder(List deleteOrder) {
+        this.order = deleteOrder;
+    }
 
 }

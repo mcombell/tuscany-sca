@@ -33,61 +33,58 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
 
-
 public class TypeTests extends DasTest {
 
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-		new TypesData(getAutoConnection()).refresh();
-	}
-	
-	/**
-	 * Read various types.  
-	 */
-	public void testRead() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		//Read customer 1
-		Command select = das.createCommand("Select * from TYPETEST where ID = 1");		
-		DataObject root = select.executeQuery();
-		
-		DataObject types = (DataObject)root.get("TYPETEST[1]");
-		
-		java.sql.Timestamp ts = (java.sql.Timestamp)types.get("ATIMESTAMP");
-		assertEquals(ts, TypesData.getTimestamp());
-		
-		float decimal = types.getFloat("ADECIMAL");
-		assertEquals(1234567.89f, decimal, .0001);
+    protected void setUp() throws Exception {
+        super.setUp();
+        new TypesData(getAutoConnection()).refresh();
+    }
 
-	}
-	
+    /**
+     * Read various types.
+     */
+    public void testRead() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        // Read customer 1
+        Command select = das.createCommand("Select * from TYPETEST where ID = 1");
+        DataObject root = select.executeQuery();
+
+        DataObject types = (DataObject) root.get("TYPETEST[1]");
+
+        java.sql.Timestamp ts = (java.sql.Timestamp) types.get("ATIMESTAMP");
+        assertEquals(ts, TypesData.getTimestamp());
+
+        float decimal = types.getFloat("ADECIMAL");
+        assertEquals(1234567.89f, decimal, .0001);
+
+    }
 
     /**
      * Write various types.  
      * TODO - Need to rethink the Timestamp write.  My current thinking id that writes of non-SDO2 defined types 
      * require a converter
      */
-/*    public void testWrite() throws Exception {
+    /*    public void testWrite() throws Exception {
 
-        //Read customer 1
-        Command select = Command.FACTORY.createCommand("Select * from TYPETEST where ID = 1");  
-        select.setConnection(getConnection());
-        DataObject root = select.executeQuery();
-        
-        DataObject types = (DataObject)root.get("TYPETEST[1]");
-        Date now = new Date();
-        types.set("ATIMESTAMP", now);
-        
-        ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
-        apply.setConnection(getConnection());
-        apply.addPrimaryKey("TYPETEST.ID");
-        apply.execute(root);
-        
-        //Verify
-        root = select.executeQuery();
-        java.sql.Timestamp ts = (java.sql.Timestamp)types.get("ATIMESTAMP");
-        assertEquals(now, ts);
-        
-    }*/
-	
+     //Read customer 1
+     Command select = Command.FACTORY.createCommand("Select * from TYPETEST where ID = 1");  
+     select.setConnection(getConnection());
+     DataObject root = select.executeQuery();
+     
+     DataObject types = (DataObject)root.get("TYPETEST[1]");
+     Date now = new Date();
+     types.set("ATIMESTAMP", now);
+     
+     ApplyChangesCommand apply = Command.FACTORY.createApplyChangesCommand();
+     apply.setConnection(getConnection());
+     apply.addPrimaryKey("TYPETEST.ID");
+     apply.execute(root);
+     
+     //Verify
+     root = select.executeQuery();
+     java.sql.Timestamp ts = (java.sql.Timestamp)types.get("ATIMESTAMP");
+     assertEquals(now, ts);
+     
+     }*/
+
 }

@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.tuscany.das.rdb.Converter;
 import org.apache.tuscany.das.rdb.config.Column;
@@ -37,12 +39,12 @@ import org.apache.tuscany.das.rdb.impl.ResultSetShape;
 import commonj.sdo.Type;
 
 public class ResultMetadata {
-            
-    private HashMap tableToPropertyMap = new HashMap();
 
-    private ArrayList typeNames = new ArrayList();
+    private Map tableToPropertyMap = new HashMap();
 
-    private ArrayList propertyNames = new ArrayList();
+    private List typeNames = new ArrayList();
+
+    private List propertyNames = new ArrayList();
 
     private final ResultSet resultSet;
 
@@ -52,59 +54,57 @@ public class ResultMetadata {
 
     private Converter[] converters;
 
-    public ResultMetadata(ResultSet rs, MappingWrapper cfgWrapper, ResultSetShape shape)
-            throws SQLException {
-        
+    public ResultMetadata(ResultSet rs, MappingWrapper cfgWrapper, ResultSetShape shape) throws SQLException {
+
         this.resultSet = rs;
         this.configWrapper = cfgWrapper;
 
-        if (shape == null)
+        if (shape == null) {
             this.resultSetShape = new ResultSetShape(rs.getMetaData());
-        else
+        } else {
             this.resultSetShape = shape;
+        }
 
         this.converters = new Converter[resultSetShape.getColumnCount()];
 
-        HashMap impliedRelationships = new HashMap();
+        Map impliedRelationships = new HashMap();
         for (int i = 1; i <= resultSetShape.getColumnCount(); i++) {
             String tableName = resultSetShape.getTableName(i);
 
-            String typeName = configWrapper
-                    .getTableTypeName(tableName);
+            String typeName = configWrapper.getTableTypeName(tableName);
             String columnName = resultSetShape.getColumnName(i);
-            
-            if ( columnName.contains("_ID") ) 
-            	impliedRelationships.put(columnName, tableName);
-            else if ( columnName.equalsIgnoreCase("ID"))
-            	configWrapper.addImpliedPrimaryKey(tableName, columnName);
-            
-            String propertyName = configWrapper.getColumnPropertyName(
-                    tableName, columnName);
-            String converterName = configWrapper.getConverter(tableName,
-                    resultSetShape.getColumnName(i));
-            
-            converters[i-1] = loadConverter(converterName);
-            
+
+            if (columnName.contains("_ID")) {
+                impliedRelationships.put(columnName, tableName);
+            } else if (columnName.equalsIgnoreCase("ID")) {
+                configWrapper.addImpliedPrimaryKey(tableName, columnName);
+            }
+
+            String propertyName = configWrapper.getColumnPropertyName(tableName, columnName);
+            String converterName = configWrapper.getConverter(tableName, resultSetShape.getColumnName(i));
+
+            converters[i - 1] = loadConverter(converterName);
+
             typeNames.add(typeName);
             propertyNames.add(propertyName);
 
-            Collection properties = (Collection) tableToPropertyMap
-                    .get(typeName);
-            if (properties == null)
+            Collection properties = (Collection) tableToPropertyMap.get(typeName);
+            if (properties == null) {
                 properties = new ArrayList();
+            }
             properties.add(propertyName);
             tableToPropertyMap.put(typeName, properties);
         }
 
         Iterator i = impliedRelationships.keySet().iterator();
-        while ( i.hasNext())  {
-        	String columnName = (String) i.next();
-        	String pkTableName = columnName.substring(0, columnName.indexOf("_ID"));
-        	String fkTableName = (String) impliedRelationships.get(columnName);
-        	ArrayList pkTableProperties = (ArrayList) tableToPropertyMap.get(pkTableName);
-        	if (( pkTableProperties != null ) && (pkTableProperties.contains("ID"))) {        		
-        		configWrapper.addImpliedRelationship(pkTableName, fkTableName, columnName);
-        	}
+        while (i.hasNext()) {
+            String columnName = (String) i.next();
+            String pkTableName = columnName.substring(0, columnName.indexOf("_ID"));
+            String fkTableName = (String) impliedRelationships.get(columnName);
+            List pkTableProperties = (List) tableToPropertyMap.get(pkTableName);
+            if ((pkTableProperties != null) && (pkTableProperties.contains("ID"))) {
+                configWrapper.addImpliedRelationship(pkTableName, fkTableName, columnName);
+            }
         }
         // Add any tables defined in the model but not included in the ResultSet
         // to the list of propertyNames
@@ -112,26 +112,29 @@ public class ResultMetadata {
         if (model != null) {
             Iterator tablesFromModel = model.getTable().iterator();
             while (tablesFromModel.hasNext()) {
-                TableWrapper t = new TableWrapper((Table) tablesFromModel
-                        .next());
-                if (tableToPropertyMap.get(t.getTypeName()) == null)
+                TableWrapper t = new TableWrapper((Table) tablesFromModel.next());
+                if (tableToPropertyMap.get(t.getTypeName()) == null) {
                     tableToPropertyMap.put(t.getTypeName(), Collections.EMPTY_LIST);
+                }
             }
         }
-     
+
     }
 
-	private Converter loadConverter(String converterName) {
+    private Converter loadConverter(String converterName) {
         if (converterName != null) {
 
             try {
-                Class converterClazz = Class.forName(converterName, true, Thread.currentThread().getContextClassLoader());
-                if (null != converterClazz)
+                Class converterClazz = Class.forName(converterName, true, 
+                        Thread.currentThread().getContextClassLoader());
+                if (null != converterClazz) {
                     return (Converter) converterClazz.newInstance();
+                }
 
                 converterClazz = Class.forName(converterName);
-                if (converterClazz != null)
+                if (converterClazz != null) {
                     return (Converter) converterClazz.newInstance();
+                }
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             } catch (IllegalAccessException ex) {
@@ -143,7 +146,6 @@ public class ResultMetadata {
         return new DefaultConverter();
     }
 
-
     public String getColumnPropertyName(int i) {
         return (String) propertyNames.get(i - 1);
     }
@@ -153,8 +155,7 @@ public class ResultMetadata {
     }
 
     public String getTableName(String columnName) {
-        return (String) typeNames.get(propertyNames
-                .indexOf(columnName));
+        return (String) typeNames.get(propertyNames.indexOf(columnName));
     }
 
     public int getTableSize(String tableName) {
@@ -162,8 +163,7 @@ public class ResultMetadata {
     }
 
     public Type getDataType(String columnName) {
-        return resultSetShape.getColumnType(propertyNames
-                .indexOf(columnName));
+        return resultSetShape.getColumnType(propertyNames.indexOf(columnName));
     }
 
     public String getTablePropertyName(int i) {
@@ -224,32 +224,36 @@ public class ResultMetadata {
      * @param i
      * @return
      */
-    public boolean isPKColumn(int i) {     
+    public boolean isPKColumn(int i) {
 
-    	Table t = configWrapper.getTableByTypeName(getTablePropertyName(i));
-		if (t == null)
-			return true;
+        Table t = configWrapper.getTableByTypeName(getTablePropertyName(i));
+        if (t == null) {
+            return true;
+        }
 
-		// If no Columns have been defined, consider every column to be part of
-		// the PK
-		if (t.getColumn().isEmpty())
-			return true;
+        // If no Columns have been defined, consider every column to be part of
+        // the PK
+        if (t.getColumn().isEmpty()) {
+            return true;
+        }
 
-		Column c = configWrapper.getColumn(t, getDatabaseColumnName(i));
+        Column c = configWrapper.getColumn(t, getDatabaseColumnName(i));
 
-		if (c == null)
-			return false;
+        if (c == null) {
+            return false;
+        }
 
-		if (c.isPrimaryKey())
-			return true;
+        if (c.isPrimaryKey()) {
+            return true;
+        }
 
-		return false;
+        return false;
     }
 
     /**
-	 * @param i
-	 * @return
-	 */
+     * @param i
+     * @return
+     */
     public Type getDataType(int i) {
         return resultSetShape.getColumnType(i);
     }

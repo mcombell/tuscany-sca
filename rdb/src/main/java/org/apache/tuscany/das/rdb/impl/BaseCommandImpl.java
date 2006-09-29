@@ -32,12 +32,13 @@ public abstract class BaseCommandImpl {
     }
 
     public void setConnection(Connection connection, Config config) {
-    	boolean managed = true;
-    	if ( config != null && config.getConnectionInfo() != null )
-    		managed = config.getConnectionInfo().isManagedtx();
-    	setConnection(connection, managed);
+        boolean managed = true;
+        if (config != null && config.getConnectionInfo() != null) {
+            managed = config.getConnectionInfo().isManagedtx();
+        }
+        setConnection(connection, managed);
     }
-    
+
     public void setConnection(Connection connection, boolean manageTransaction) {
         ConnectionImpl c = new ConnectionImpl(connection);
         c.setManageTransactions(manageTransaction);
@@ -45,6 +46,5 @@ public abstract class BaseCommandImpl {
     }
 
     public abstract void setConnection(ConnectionImpl c);
-
 
 }

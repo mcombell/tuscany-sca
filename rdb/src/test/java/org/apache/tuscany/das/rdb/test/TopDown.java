@@ -35,41 +35,40 @@ import commonj.sdo.DataObject;
 
 public class TopDown extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		new CustomerData(getAutoConnection()).refresh();
-		new OrderData(getAutoConnection()).refresh();
+    protected void setUp() throws Exception {
+        super.setUp();
 
-	}
+        new CustomerData(getAutoConnection()).refresh();
+        new OrderData(getAutoConnection()).refresh();
 
-	// Uses dynamic SDOs but user provides the model
-	public void testUserProvidedModelDynamic() throws SQLException, IOException {
+    }
+
+    // Uses dynamic SDOs but user provides the model
+    public void testUserProvidedModelDynamic() throws SQLException, IOException {
 
         DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomerOrder.xml"), getConnection());
 
         Command select = das.getCommand("Customer and Orders");
-        
-        SDOUtil.registerStaticTypes(CustomerFactory.class);		
 
-		// Parameterize the command	
-		select.setParameter(1, new Integer(1));
+        SDOUtil.registerStaticTypes(CustomerFactory.class);
 
-		// Get the graph - DataGraphRoot is from the typed package
-		DataObject root = select.executeQuery();
+        // Parameterize the command
+        select.setParameter(1, new Integer(1));
 
-		// Modify a customer
-        Customer customer = (Customer)root.getDataObject("Customer[1]");
-		customer.setLastName("Pavick");
+        // Get the graph - DataGraphRoot is from the typed package
+        DataObject root = select.executeQuery();
 
-		// Modify an order
-		AnOrder order = (AnOrder) customer.getOrders().get(0);
-		order.setProduct("Kitchen Sink 001");
+        // Modify a customer
+        Customer customer = (Customer) root.getDataObject("Customer[1]");
+        customer.setLastName("Pavick");
 
-		// Flush changes
-		das.applyChanges((DataObject) root);
+        // Modify an order
+        AnOrder order = (AnOrder) customer.getOrders().get(0);
+        order.setProduct("Kitchen Sink 001");
 
-	}
+        // Flush changes
+        das.applyChanges((DataObject) root);
 
+    }
 
 }

@@ -22,10 +22,14 @@ package org.apache.tuscany.das.rdb.util;
  * Log4J layout helper for Tuscany DAS
  * @author lresende
  */
-public class LoggerLayout {
-    
-    public static String Layout(){
-        
+public final class LoggerLayout {
+
+    private LoggerLayout() {
+
+    }
+
+    public static String Layout() {
+
         /*
          *  Substitute symbols
          *  %c Logger, %c{2 } last 2 partial names
@@ -45,7 +49,7 @@ public class LoggerLayout {
          *  Caution: %C, %F, %l, %L, %M slow down program run!
          *  Note, %n is newline
          */
-        
+
         return "[DAS RDB] - %c{1}.%M (%L) : %m %n";
     }
 

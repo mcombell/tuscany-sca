@@ -29,43 +29,42 @@ import commonj.sdo.DataObject;
 
 public class RecursiveTests extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		new PartData(getAutoConnection()).refresh();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+        new PartData(getAutoConnection()).refresh();
+    }
 
-	public void testReadEngineParts() throws Exception {
-		
-		DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"), getConnection());		
-		//Table definition
-		//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
+    public void testReadEngineParts() throws Exception {
 
-	
-		Command select = das.getCommand("readEngineParts");				
-		
-		// Need to set the key explicitly. The aggregate of columns not working
-		// because of null values
-		DataObject root = select.executeQuery();
+        DAS das = DAS.FACTORY.createDAS(getConfig("PartsConfig.xml"), getConnection());
+        // Table definition
+        // CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT );
 
-		assertEquals(5, root.getList("PART").size());
-	//	printList(root.getList("PART"));
-		DataObject engine = root.getDataObject("PART.0");
-		assertEquals("Engine", engine.getString("NAME"));
-		
-		assertEquals(3, engine.getList("subparts").size());
-		
-		DataObject piston = null;
-		Iterator i = engine.getList("subparts").iterator();
-		while ( i.hasNext() ) {
-			DataObject obj = (DataObject)i.next();
-			if ( obj.getString("NAME").equals("Piston"))
-				piston = obj;
-		}
-		
-		assertEquals("Piston", piston.getString("NAME"));
-		assertEquals(1, piston.getList("subparts").size());
-		assertEquals("Piston Ring", piston.getDataObject("subparts.0").getString("NAME"));
+        Command select = das.getCommand("readEngineParts");
 
-	}
-	
+        // Need to set the key explicitly. The aggregate of columns not working
+        // because of null values
+        DataObject root = select.executeQuery();
+
+        assertEquals(5, root.getList("PART").size());
+        // printList(root.getList("PART"));
+        DataObject engine = root.getDataObject("PART.0");
+        assertEquals("Engine", engine.getString("NAME"));
+
+        assertEquals(3, engine.getList("subparts").size());
+
+        DataObject piston = null;
+        Iterator i = engine.getList("subparts").iterator();
+        while (i.hasNext()) {
+            DataObject obj = (DataObject) i.next();
+            if (obj.getString("NAME").equals("Piston"))
+                piston = obj;
+        }
+
+        assertEquals("Piston", piston.getString("NAME"));
+        assertEquals(1, piston.getList("subparts").size());
+        assertEquals("Piston Ring", piston.getDataObject("subparts.0").getString("NAME"));
+
+    }
+
 }

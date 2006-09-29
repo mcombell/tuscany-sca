@@ -21,6 +21,7 @@ package org.apache.tuscany.das.rdb.impl;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.Column;
@@ -35,10 +36,9 @@ import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 
 /**
- * DatabaseObject wraps DataObject. If a field is an FK field, it will return
- * the value from the parent.
- *
- *
+ * DatabaseObject wraps DataObject. If a field is an FK field, it will return the value from the parent.
+ * 
+ * 
  */
 public class DatabaseObject {
 
@@ -50,7 +50,7 @@ public class DatabaseObject {
 
     private Property parentReference;
 
-    private HashMap keyMappings = new HashMap();
+    private Map keyMappings = new HashMap();
 
     public DatabaseObject(Config model, DataObject changedObject) {
         this.mappingWrapper = new MappingWrapper(model);
@@ -65,9 +65,9 @@ public class DatabaseObject {
             Iterator i = relationships.iterator();
             while (i.hasNext()) {
                 Relationship r = (Relationship) i.next();
-                if(this.logger.isDebugEnabled())
+                if (this.logger.isDebugEnabled()) {
                     this.logger.debug("Initializing relationship: " + r.getName());
-
+                }
                 if (r.getForeignKeyTable().equals(getTypeName())) {
                     List pairs = r.getKeyPair();
                     Iterator iter = pairs.iterator();
@@ -82,17 +82,20 @@ public class DatabaseObject {
 
     public Object get(String parameter) {
 
-        if (isPartOfPrimaryKey(parameter))
+        if (isPartOfPrimaryKey(parameter)) {
             return dataObject.get(parameter);
+        }
 
         Relationship r = (Relationship) keyMappings.get(parameter);
-        if (r == null)
+        if (r == null) {
             return dataObject.get(parameter);
+        }
 
         Property parentRef = getParentReference(r.getPrimaryKeyTable());
         DataObject parent = dataObject.getDataObject(parentRef);
-        if (parent == null)
+        if (parent == null) {
             return null;
+        }
         String parentKey = getParentKey(r, parameter);
         return parent.get(parentKey);
 
@@ -103,8 +106,9 @@ public class DatabaseObject {
         Iterator i = keyPairs.iterator();
         while (i.hasNext()) {
             KeyPair pair = (KeyPair) i.next();
-            if (pair.getForeignKeyColumn().equals(parameter))
+            if (pair.getForeignKeyColumn().equals(parameter)) {
                 return pair.getPrimaryKeyColumn();
+            }
         }
         return null;
     }
@@ -124,10 +128,10 @@ public class DatabaseObject {
     }
 
     public String getTableName() {
-        if (mappingWrapper.getConfig() != null)
+        if (mappingWrapper.getConfig() != null) {
             return mappingWrapper.getTableByTypeName(getTypeName()).getTableName();
-        else
-            return null;
+        } 
+        return null;       
     }
 
     public String getTypeName() {
@@ -139,14 +143,19 @@ public class DatabaseObject {
     }
 
     private boolean isPartOfPrimaryKey(String parameter) {
-        if (mappingWrapper.getConfig() == null)
+        if (mappingWrapper.getConfig() == null) {
             return false;
+        }
+        
         Table t = mappingWrapper.getTable(getTableName());
-        if (t == null)
+        if (t == null) {
             return false;
+        }
         Column c = mappingWrapper.getColumnByPropertyName(t, parameter);
-        if (c == null)
+        if (c == null) {
             return false;
+        }
+        
         return c.isPrimaryKey();
     }
 

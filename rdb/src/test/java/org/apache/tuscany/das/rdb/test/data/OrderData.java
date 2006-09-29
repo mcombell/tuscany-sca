@@ -22,23 +22,18 @@ import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.test.framework.TestData;
 
-
 public class OrderData extends TestData {
 
+    public static Object[][] orderData = { { new Integer(1), "recombobulator", new Integer(47), new Integer(1) },
+            { new Integer(2), "wrench", new Integer(17), new Integer(3) }, { new Integer(3), "pliers", new Integer(500), new Integer(1) },
+            { new Integer(4), "Tooth Paste", new Integer(12), new Integer(2) } };
 
-	public static Object[][] orderData = {
-			{new Integer(1), "recombobulator", new Integer(47), new Integer(1)},
-			{new Integer(2), "wrench", new Integer(17), new Integer(3)},
-			{new Integer(3), "pliers", new Integer(500), new Integer(1)},
-			{new Integer(4), "Tooth Paste", new Integer(12), new Integer(2)}
-	};
-	
-	public OrderData(Connection c) {
-		super(c, orderData);
-	}
-	
-	public String getTableName() {
-		return "ANORDER";
-	}
+    public OrderData(Connection c) {
+        super(c, orderData);
+    }
+
+    public String getTableName() {
+        return "ANORDER";
+    }
 
 }

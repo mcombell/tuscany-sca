@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.tuscany.das.rdb.config.Config;
@@ -40,171 +41,151 @@ import commonj.sdo.helper.TypeHelper;
 
 public class GraphMerger {
 
-	private HashMap keys = new HashMap();
+    private static Logger logger = Logger.getLogger("GraphMerger");
 
-	private TableRegistry registry = new MultiTableRegistry();
+    private Map keys = new HashMap();
 
-	private static Logger logger = Logger.getLogger("GraphMerger");
+    private TableRegistry registry = new MultiTableRegistry();
 
-	//TODO lots of cleanup/design
-	public GraphMerger() {
-		// Empty Constructor
-	}
+    // TODO lots of cleanup/design
+    public GraphMerger() {
+        // Empty Constructor
+    }
 
-		// TODO Replace EMF reference with SDOUtil function when available
-		// (Tuscany-583)
-	public DataObject emptyGraph(Config config) {
+    // TODO Replace EMF reference with SDOUtil function when available
+    // (Tuscany-583)
+    public DataObject emptyGraph(Config config) {
 
-		if (config.getDataObjectModel() == null)
-			throw new RuntimeException(
-					"DataObjectModel must be specified in the Config");
+        if (config.getDataObjectModel() == null)
+            throw new RuntimeException("DataObjectModel must be specified in the Config");
 
-		String uri = "http:///org.apache.tuscany.das.rdb/das";
-		TypeHelper typeHelper = SDOUtil.createTypeHelper();
-		Type rootType = SDOUtil.createType(typeHelper, uri + "/DataGraphRoot",
-				"DataGraphRoot", false);
+        String uri = "http:///org.apache.tuscany.das.rdb/das";
+        TypeHelper typeHelper = SDOUtil.createTypeHelper();
+        Type rootType = SDOUtil.createType(typeHelper, uri + "/DataGraphRoot", "DataGraphRoot", false);
 
-		List types = SDOUtil.getTypes(typeHelper, config.getDataObjectModel());
-		if ( types == null )
-			throw new RuntimeException("SDO Types have not been registered for URI " + config.getDataObjectModel());
-		
-		Iterator i = types.iterator();
-		while (i.hasNext()) {
-			Type type = (Type) i.next();
-			Property property = SDOUtil.createProperty(rootType,
-					type.getName(), type);
-			SDOUtil.setContainment(property, true);
-			SDOUtil.setMany(property, true);
-		}
+        List types = SDOUtil.getTypes(typeHelper, config.getDataObjectModel());
+        if (types == null)
+            throw new RuntimeException("SDO Types have not been registered for URI " + config.getDataObjectModel());
 
-		// Create the DataGraph
-		DataGraph g = SDOUtil.createDataGraph();
+        Iterator i = types.iterator();
+        while (i.hasNext()) {
+            Type type = (Type) i.next();
+            Property property = SDOUtil.createProperty(rootType, type.getName(), type);
+            SDOUtil.setContainment(property, true);
+            SDOUtil.setMany(property, true);
+        }
 
-		// Create the root object
-		g.createRootObject(rootType);
+        // Create the DataGraph
+        DataGraph g = SDOUtil.createDataGraph();
 
-		ChangeSummary summary = g.getChangeSummary();
-		summary.beginLogging();
+        // Create the root object
+        g.createRootObject(rootType);
 
-		return g.getRootObject();
-	}
-	public DataObject merge(List graphs) {
-		DataObject primaryGraph = (DataObject) graphs.get(0);
+        ChangeSummary summary = g.getChangeSummary();
+        summary.beginLogging();
 
-		Iterator i = graphs.iterator();
-		if (i.hasNext())
-			i.next();
-		while (i.hasNext()) {
-			primaryGraph = merge(primaryGraph, (DataObject) i.next());
-		}
+        return g.getRootObject();
+    }
 
-		return primaryGraph;
-	}
+    public DataObject merge(List graphs) {
+        DataObject primaryGraph = (DataObject) graphs.get(0);
 
-	public DataObject merge(DataObject primary, DataObject secondary) {
-		addGraphToRegistry(primary);
+        Iterator i = graphs.iterator();
+        if (i.hasNext())
+            i.next();
+        while (i.hasNext()) {
+            primaryGraph = merge(primaryGraph, (DataObject) i.next());
+        }
 
-		ChangeSummary summary =  primary
-				.getDataGraph().getChangeSummary();
-		summary.endLogging();
-		Iterator i = secondary.getType().getProperties().iterator();
+        return primaryGraph;
+    }
 
-		while (i.hasNext()) {
-			Property p = (Property) i.next();
+    public DataObject merge(DataObject primary, DataObject secondary) {
+        addGraphToRegistry(primary);
 
-			Iterator objects = secondary.getList(p.getName()).iterator();
-			while (objects.hasNext()) {
-				DataObject object = (DataObject) objects.next();
-				createObjectWithSubtree(primary, p, object);
-			}
-		}
-		((ChangeSummaryImpl)summary).resumeLogging();
-		return primary;
-	}
+        ChangeSummary summary = primary.getDataGraph().getChangeSummary();
+        summary.endLogging();
+        Iterator i = secondary.getType().getProperties().iterator();
 
-	private void createObjectWithSubtree(DataObject root, Property p,
-			DataObject object) {
-		Object pk = getPrimaryKey(object);
+        while (i.hasNext()) {
+            Property p = (Property) i.next();
 
-		if (!registry.contains(object.getType().getName(), Collections
-				.singletonList(pk))) {
-	//		logger.info("creating " + object.getType().getName() + " with pk " + pk);
-			DataObject newObject = root.createDataObject(p.getName());
+            Iterator objects = secondary.getList(p.getName()).iterator();
+            while (objects.hasNext()) {
+                DataObject object = (DataObject) objects.next();
+                createObjectWithSubtree(primary, p, object);
+            }
+        }
+        ((ChangeSummaryImpl) summary).resumeLogging();
+        return primary;
+    }
 
-			
+    private void createObjectWithSubtree(DataObject root, Property p, DataObject object) {
+        Object pk = getPrimaryKey(object);
 
-			Iterator attrs = object.getType().getProperties().iterator();
-			while (attrs.hasNext()) {
-				Property attr = (Property) attrs.next();
-				if ( attr.getType().isDataType()) {
-					newObject.set(attr.getName(), object.get(attr));
-				} 
-			}
-			registry.put(object.getType().getName(), Collections
-					.singletonList(pk), newObject);
+        if (!registry.contains(object.getType().getName(), Collections.singletonList(pk))) {
+            DataObject newObject = root.createDataObject(p.getName());
+            Iterator attrs = object.getType().getProperties().iterator();
+            while (attrs.hasNext()) {
+                Property attr = (Property) attrs.next();
+                if (attr.getType().isDataType()) {
+                    newObject.set(attr.getName(), object.get(attr));
+                }
+            }
+            registry.put(object.getType().getName(), Collections.singletonList(pk), newObject);
+            Iterator refs = object.getType().getProperties().iterator();
+            while (refs.hasNext()) {
+                Property ref = (Property) refs.next();
+                if (!ref.getType().isDataType()) {
+                    List refObjects;
+                    if (!ref.isMany()) {
+                        refObjects = Collections.singletonList(object.get(ref));
+                    } else {
+                        refObjects = (List) object.get(ref);
+                    }
+                    Iterator iter = refObjects.iterator();
+                    while (iter.hasNext()) {
+                        DataObject refObject = (DataObject) iter.next();
+                        createObjectWithSubtree(root, refObject.getContainmentProperty(), refObject);
+                        refObject = registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
+                        if (ref.isMany()) {
+                            newObject.getList(newObject.getType().getProperty(ref.getName())).add(refObject);
+                        } else {
+                            newObject.set(newObject.getType().getProperty(ref.getName()), refObject);
+                        }
+                    }
+                }
+            }
+        }
 
-			Iterator refs = object.getType().getProperties().iterator();
-			while (refs.hasNext()) {
-				Property ref = (Property) refs.next();
-				if ( !ref.getType().isDataType()) {
-					List refObjects;
-					if (!ref.isMany()) {
-						refObjects = Collections.singletonList(object.get(ref));
-					} else {
-						refObjects = (List) object.get(ref);
-					}
+    }
 
-					Iterator iter = refObjects.iterator();
-					while (iter.hasNext()) {
-						DataObject refObject = (DataObject) iter.next();
-						createObjectWithSubtree(root, refObject
-							.getContainmentProperty(), refObject);
-					
-						refObject = registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
-						if (ref.isMany()) {
-							newObject.getList(
-								newObject.getType().getProperty(ref.getName()))
-								.add(refObject);
-						} else
-							newObject.set(newObject.getType().getProperty(
-									ref.getName()), refObject);
-					}
-				}
+    private void addGraphToRegistry(DataObject graph1) {
+        Iterator i = graph1.getType().getProperties().iterator();
+        while (i.hasNext()) {
+            Property p = (Property) i.next();
+            Iterator objects = graph1.getList(p).iterator();
+            while (objects.hasNext()) {
+                DataObject object = (DataObject) objects.next();
+                Object pk = object.get(getPrimaryKeyName(object));
+                logger.finest("Adding object with pk " + pk + " to registry");
+                registry.put(object.getType().getName(), Collections.singletonList(pk), object);
+            }
+        }
+    }
 
-			}
+    private Object getPrimaryKey(DataObject object) {
+        String pkName = getPrimaryKeyName(object);
+        return object.get(pkName);
+    }
 
-		}
-	
-	}
+    private String getPrimaryKeyName(DataObject object) {
+        return (String) keys.get(object.getType().getName());
+    }
 
-	private void addGraphToRegistry(DataObject graph1) {
-		Iterator i = graph1.getType().getProperties().iterator();
-		while (i.hasNext()) {
-			Property p = (Property) i.next();
-			Iterator objects = graph1.getList(p).iterator();
-			while (objects.hasNext()) {
-				DataObject object = (DataObject) objects.next();
-				Object pk = object.get(getPrimaryKeyName(object));
-				logger.finest("Adding object with pk " + pk + " to registry");
-				registry.put(object.getType().getName(), Collections
-						.singletonList(pk), object);
-			}
-		}
-	}
-
-	private Object getPrimaryKey(DataObject object) {
-		String pkName = getPrimaryKeyName(object);
-		return object.get(pkName);
-	}
-
-	private String getPrimaryKeyName(DataObject object) {
-		return (String) keys.get(object.getType().getName());
-	}
-
-	public void addPrimaryKey(String key) {
-		QualifiedColumn column = new QualifiedColumn(key);
-		logger.finest("Adding " + column.getTableName() + " "
-				+ column.getColumnName() + " to keys");
-		keys.put(column.getTableName(), column.getColumnName());
-	}
+    public void addPrimaryKey(String key) {
+        QualifiedColumn column = new QualifiedColumn(key);
+        logger.finest("Adding " + column.getTableName() + " " + column.getColumnName() + " to keys");
+        keys.put(column.getTableName(), column.getColumnName());
+    }
 }

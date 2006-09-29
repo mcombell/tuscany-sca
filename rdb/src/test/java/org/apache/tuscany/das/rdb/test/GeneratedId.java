@@ -107,7 +107,7 @@ public class GeneratedId extends DasTest {
     // Test insert into row with generated ID and generated insert
     public void testInsert4() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"),getConnection());
+    	DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
         Command select = das.getCommand("all companies");       
         DataObject root = select.executeQuery();
 
@@ -123,9 +123,9 @@ public class GeneratedId extends DasTest {
 
         assertEquals(4, root.getList("COMPANY").size());
         Iterator i = root.getList("COMPANY").iterator();
-        while ( i.hasNext()) {
+        while (i.hasNext()) {
         	DataObject comp = (DataObject)i.next();
-        	assertFalse( comp.getInt("ID") == 999);
+        	assertFalse(comp.getInt("ID") == 999);
         }        
 
     }

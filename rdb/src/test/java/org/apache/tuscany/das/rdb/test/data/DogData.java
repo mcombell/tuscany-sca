@@ -39,11 +39,11 @@ public class DogData extends TestDataWithExplicitColumns {
     private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER}; 
 	
 	private static Object[][] data = { 
-            { "Fido", "Mutt", new Integer(1) },
-			{ "Max", "German Shepherd", new Integer(1) },
-			{ "Saddie", "Collie", new Integer(1)} };
+            {"Fido", "Mutt", new Integer(1)},
+			{"Max", "German Shepherd", new Integer(1)},
+			{"Saddie", "Collie", new Integer(1)}};
 
-	private static String[] columns = { "NAME", "BREED", "OCC_COUNT" };
+	private static String[] columns = {"NAME", "BREED", "OCC_COUNT"};
 
 	public DogData(Connection connection) {
 		super(connection, data, columns, columnTypes);

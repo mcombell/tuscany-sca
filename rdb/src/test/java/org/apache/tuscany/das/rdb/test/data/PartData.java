@@ -23,32 +23,24 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class PartData extends TestDataWithExplicitColumns {
 
+    // CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT )
 
-	//CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT )
-	
-	private static String[] partColumns = { "ID" , "NAME", "QUANTITY", "PARENT_ID"};
-	
-	private static int[] columnTypes = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
-	
-	private static Object[][] partData = {
-			{new Integer(1), "Engine", 		new Integer(1), null}, 
-			{new Integer(2), "Block", 		new Integer(1), new Integer(1)}, 
-			{new Integer(3), "Cam Shaft", 	new Integer(2), new Integer(1)}, 
-			{new Integer(4), "Piston", 		new Integer(8), new Integer(1)},
-			{new Integer(5), "Piston Ring", new Integer(2), new Integer(4)}
-			};
-	
-	public PartData(Connection connection) {
-		super(connection, partData, partColumns, columnTypes);
-	}
+    private static String[] partColumns = { "ID", "NAME", "QUANTITY", "PARENT_ID" };
 
-	public String getTableName() {
-		return "PART";
-	}
+    private static int[] columnTypes = { Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
+
+    private static Object[][] partData = { { new Integer(1), "Engine", new Integer(1), null },
+            { new Integer(2), "Block", new Integer(1), new Integer(1) }, { new Integer(3), "Cam Shaft", new Integer(2), new Integer(1) },
+            { new Integer(4), "Piston", new Integer(8), new Integer(1) }, { new Integer(5), "Piston Ring", new Integer(2), new Integer(4) } };
+
+    public PartData(Connection connection) {
+        super(connection, partData, partColumns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "PART";
+    }
 
 }
-
-

@@ -19,8 +19,7 @@
 package org.apache.tuscany.das.rdb.test;
 
 /*
- * This provdes the simplest examples that make use of the change history. The
- * assumptions are:
+ * This provdes the simplest examples that make use of the change history. The assumptions are:
  * 
  * Single type Change history utilized Dynamic DataObjects
  * 
@@ -52,51 +51,48 @@ public class CrudWithChangeHistory extends DasTest {
     }
 
     public void testDeleteAndCreate() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(
-				getConfig("basicCustomerMappingWithCUD2.xml"), getConnection());
-		// Read customer 1
-		Command select = das
-				.createCommand("Select * from CUSTOMER");
-		DataObject root = select.executeQuery();
+        DAS das = DAS.FACTORY.createDAS(getConfig("basicCustomerMappingWithCUD2.xml"), getConnection());
+        // Read customer 1
+        Command select = das.createCommand("Select * from CUSTOMER");
+        DataObject root = select.executeQuery();
 
-		DataObject customer = (DataObject) root.get("CUSTOMER[1]");
+        DataObject customer = (DataObject) root.get("CUSTOMER[1]");
 
-		int customerId = customer.getInt("ID");
-		// Modify customer
-		customer.delete();
+        int customerId = customer.getInt("ID");
+        // Modify customer
+        customer.delete();
 
-		DataObject newCustomer = root.createDataObject("CUSTOMER");
-		newCustomer.setInt("ID", 9999);
-		newCustomer.setString("LASTNAME", "Jones");
-		
-		// Build apply changes command
-		das.applyChanges(root);
+        DataObject newCustomer = root.createDataObject("CUSTOMER");
+        newCustomer.setInt("ID", 9999);
+        newCustomer.setString("LASTNAME", "Jones");
 
-		// Verify changes
-		root = select.executeQuery();
-		boolean found = false;
-		Iterator i = root.getList("CUSTOMER").iterator();
-		while ( i.hasNext()) {
-			customer = (DataObject)i.next();
-			assertFalse(customerId == customer.getInt("ID"));
-			if ( customer.getInt("ID") == 9999 )
-				found = true;
-		}
-		
-		assertTrue(found);
+        // Build apply changes command
+        das.applyChanges(root);
 
-	}
+        // Verify changes
+        root = select.executeQuery();
+        boolean found = false;
+        Iterator i = root.getList("CUSTOMER").iterator();
+        while (i.hasNext()) {
+            customer = (DataObject) i.next();
+            assertFalse(customerId == customer.getInt("ID"));
+            if (customer.getInt("ID") == 9999)
+                found = true;
+        }
+
+        assertTrue(found);
+
+    }
+
     /**
-     * Read and modify a customer. Provide needed Create/Update/Delete
-     * statements programatically
+     * Read and modify a customer. Provide needed Create/Update/Delete statements programatically
      */
     public void testReadModifyApply() throws Exception {
 
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
         Table customerTable = helper.addTable("CUSTOMER", "CUSTOMER");
-        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?",
-                "LASTNAME ADDRESS ID");
+        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?", "LASTNAME ADDRESS ID");
 
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         // Read customer 1
@@ -118,8 +114,7 @@ public class CrudWithChangeHistory extends DasTest {
     }
 
     /**
-     * Read and modify a customer. Provide needed Create/Update/Delete
-     * statements via xml file
+     * Read and modify a customer. Provide needed Create/Update/Delete statements via xml file
      */
     public void testReadModifyApply1() throws Exception {
 
@@ -143,8 +138,7 @@ public class CrudWithChangeHistory extends DasTest {
     }
 
     /**
-     * Same as previous but: Utilizes generated CUD statements Key info provided
-     * programatically
+     * Same as previous but: Utilizes generated CUD statements Key info provided programatically
      */
     public void testReadModifyApply2() throws Exception {
 
@@ -191,8 +185,7 @@ public class CrudWithChangeHistory extends DasTest {
     }
 
     /**
-     * Test ability to handle multiple changes to the graph including
-     * Creates/Updates/Deletes Employs generated CUD
+     * Test ability to handle multiple changes to the graph including Creates/Updates/Deletes Employs generated CUD
      */
     public void testReadModifyDeleteInsertApply() throws Exception {
 
@@ -261,7 +254,7 @@ public class CrudWithChangeHistory extends DasTest {
         // Modify customer
         customer.set("LASTNAME", "Pavick");
 
-        DataObject customerForDelete = getCustomerByLastName(root, "Daniel");       
+        DataObject customerForDelete = getCustomerByLastName(root, "Daniel");
         customerForDelete.delete();
 
         DataObject newCustomer = root.createDataObject("CUSTOMER");

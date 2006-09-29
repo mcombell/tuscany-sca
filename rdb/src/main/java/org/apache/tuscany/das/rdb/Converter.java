@@ -19,36 +19,34 @@
 package org.apache.tuscany.das.rdb;
 
 /**
- * A lightweight Table-column <--> DataObject-property converter framework.
- * Converters allow a user to insert a transformation between a column value and
- * is destination DataObject property value. For example, by default, a VARCHAR
- * column will be represented as a String in its corresponding DataObject
- * property. A user could insert a converter that transforms the the VARCHAR
- * value to an Integer. If this is done then although the column returns
- * character data, the DataObject property will be an Integer
+ * A lightweight Table-column <--> DataObject-property converter framework. Converters 
+ * allow a user to insert a transformation between a column value
+ * and is destination DataObject property value. For example, by default, a VARCHAR 
+ * column will be represented as a String in its corresponding
+ * DataObject property. A user could insert a converter that transforms the the VARCHAR 
+ * value to an Integer. If this is done then although the column
+ * returns character data, the DataObject property will be an Integer
  * 
  * 
  */
 public interface Converter {
 
-	/**
-	 * Transform the columnData object to a new value and possibly new type.
-	 * This should be the invers operation of #getColumnValue
-	 * 
-	 * @param columnData
-	 *            The column value to transorm
-	 * @return Returns the transformed value
-	 */
-	public Object getPropertyValue(Object columnData);
+    /**
+     * Transform the columnData object to a new value and possibly new type. This should be the invers operation of #getColumnValue
+     * 
+     * @param columnData
+     *            The column value to transorm
+     * @return Returns the transformed value
+     */
+    public Object getPropertyValue(Object columnData);
 
-	/**
-	 * Transform the columnData object to a new value and possibly new type.
-	 * This should be the invers operation of #getPropertyValue
-	 * 
-	 * @param propertyData
-	 *            The property value to transform
-	 * @return Returns the transformed value
-	 */
-	public Object getColumnValue(Object propertyData);
+    /**
+     * Transform the columnData object to a new value and possibly new type. This should be the invers operation of #getPropertyValue
+     * 
+     * @param propertyData
+     *            The property value to transform
+     * @return Returns the transformed value
+     */
+    public Object getColumnValue(Object propertyData);
 
 }

@@ -37,33 +37,25 @@ public class MySQLSetup extends DatabaseSetup {
 	}
 	
 	
-	protected void createProcedures () {
+	protected void createProcedures() {
 		
-		String createGetAllCompanies = 
-			"CREATE PROCEDURE `dastest`.`GETALLCOMPANIES` () "+ 
-			"	SELECT * FROM COMPANY ";
-		  
-		  
-		String createDeleteCustomer = 
-			"CREATE PROCEDURE `dastest`.`DELETECUSTOMER` (theId INT) " +
-		    "  DELETE FROM CUSTOMER WHERE ID = theId ";
+		String createGetAllCompanies = "CREATE PROCEDURE `dastest`.`GETALLCOMPANIES` () "
+				+ "	SELECT * FROM COMPANY ";
 
+		String createDeleteCustomer = "CREATE PROCEDURE `dastest`.`DELETECUSTOMER` (theId INT) "
+				+ "  DELETE FROM CUSTOMER WHERE ID = theId ";
 
-		String createGetNamedCustomers = 
-			"CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) " +
-		    " BEGIN " +
-		    "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; " +
-            "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " +
-            " END ";
-		  
-		String createGetCustomerAndOrders = 
-			" CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) " +
-		    " SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID =  theId "; 
-		
+		String createGetNamedCustomers = "CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) "
+				+ " BEGIN "
+				+ "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; "
+				+ "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); "
+				+ " END ";
 
-		String createGetNamedCompany = 
-			" CREATE PROCEDURE `dastest`.`GETNAMEDCOMPANY` (theName VARCHAR(100)) " +
-		    " SELECT * FROM COMPANY WHERE NAME = theName"; 
+		String createGetCustomerAndOrders = " CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) "
+				+ " SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID =  theId ";
+
+		String createGetNamedCompany = " CREATE PROCEDURE `dastest`.`GETNAMEDCOMPANY` (theName VARCHAR(100)) "
+				+ " SELECT * FROM COMPANY WHERE NAME = theName"; 
 		
 		System.out.println("Creating procedures");
 		try {

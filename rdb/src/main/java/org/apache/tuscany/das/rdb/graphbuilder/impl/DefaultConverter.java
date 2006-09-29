@@ -70,7 +70,7 @@ public class DefaultConverter implements Converter {
 //			return String.valueOf(data.toString());
 //		}
 
-		if ( data instanceof Blob ) {
+		if (data instanceof Blob) {
 			Blob b = (Blob) data;
 			try {
 				return b.getBytes(1, (int)b.length());

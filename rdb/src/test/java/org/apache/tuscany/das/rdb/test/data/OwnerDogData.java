@@ -24,7 +24,7 @@ import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
 public class OwnerDogData extends RelationshipData {
 
-    public static Object[][] data = { { "Fanny", "Fido" }, { "Manny", "Max" }, { "Sammy", "Saddie" } };
+    public static Object[][] data = {{"Fanny", "Fido"}, {"Manny", "Max"}, {"Sammy", "Saddie"}};
 
     public OwnerDogData(Connection c) {
         super(c, data);

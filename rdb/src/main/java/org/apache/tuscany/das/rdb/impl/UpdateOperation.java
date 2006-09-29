@@ -24,9 +24,9 @@ import commonj.sdo.DataObject;
 
 public class UpdateOperation extends ChangeOperation {
 
-	public UpdateOperation(UpdateCommandImpl command, DataObject changedObject, String id) {
-		super(command, changedObject);
-		this.propagatedID = id;
-	}
+    public UpdateOperation(UpdateCommandImpl command, DataObject changedObject, String id) {
+        super(command, changedObject);
+        this.propagatedID = id;
+    }
 
 }

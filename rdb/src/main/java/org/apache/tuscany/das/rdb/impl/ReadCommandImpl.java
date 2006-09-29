@@ -40,7 +40,7 @@ public class ReadCommandImpl extends CommandImpl {
         super(sqlString);
         this.configWrapper = mapping;
         
-        if ( resultDescriptor != null && !resultDescriptor.isEmpty()) 
+        if (resultDescriptor != null && !resultDescriptor.isEmpty()) 
         	this.resultSetShape = new ResultSetShape(resultDescriptor);
     }
 

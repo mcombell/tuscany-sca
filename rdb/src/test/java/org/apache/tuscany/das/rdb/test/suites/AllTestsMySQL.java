@@ -23,14 +23,17 @@ import junit.framework.TestSuite;
 
 import org.apache.tuscany.das.rdb.test.framework.MySQLSetup;
 
-public class AllTestsMySQL {
-	
-	
-	public static Test suite() {
-		
-		TestSuite suite = new TestSuite("All DAS tests on MySQL");
-		suite.addTest(new MySQLSetup(AllCommonTests.suite()));
-		return suite;
-		
-	}
+public final class AllTestsMySQL {
+
+    private AllTestsMySQL() {
+        
+    }
+    
+    public static Test suite() {
+
+        TestSuite suite = new TestSuite("All DAS tests on MySQL");
+        suite.addTest(new MySQLSetup(AllCommonTests.suite()));
+        return suite;
+
+    }
 }

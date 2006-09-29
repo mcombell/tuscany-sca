@@ -24,13 +24,12 @@ import junit.framework.TestSuite;
 import org.apache.tuscany.das.rdb.test.framework.DerbySetup;
 
 public class AllTestsDerby extends TestSuite {
-	
-	
-	public static Test suite() {
-		
-		TestSuite suite = new TestSuite("All DAS tests on Derby");
-		suite.addTest(new DerbySetup(AllCommonTests.suite()));
-		return suite;
-		
-	}
+
+    public static Test suite() {
+
+        TestSuite suite = new TestSuite("All DAS tests on Derby");
+        suite.addTest(new DerbySetup(AllCommonTests.suite()));
+        return suite;
+
+    }
 }

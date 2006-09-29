@@ -38,61 +38,60 @@ public class SPCommandImpl extends ReadCommandImpl {
         super(sqlString, config, null);
         Iterator i = params.iterator();
         for (int idx = 1; i.hasNext(); idx++) {
-			Parameter p = (Parameter) i.next();
+            Parameter p = (Parameter) i.next();
 
-			int index = p.getColumnType().lastIndexOf('.');
-			String pkg = p.getColumnType().substring(0, index);
-			String typeName = p.getColumnType().substring(index + 1);
+            int index = p.getColumnType().lastIndexOf('.');
+            String pkg = p.getColumnType().substring(0, index);
+            String typeName = p.getColumnType().substring(index + 1);
 
-			Type sdoType = TypeHelper.INSTANCE.getType(pkg, typeName);
+            Type sdoType = TypeHelper.INSTANCE.getType(pkg, typeName);
 
-
-			int direction = ParameterImpl.IN;
-			if ("OUT".equalsIgnoreCase(p.getDirection()))
-				direction = ParameterImpl.OUT;
-			else if ("INOUT".equalsIgnoreCase(p.getDirection()))
-				direction = ParameterImpl.IN_OUT;
-			parameters.findOrCreateParameterWithIndex(idx, direction, sdoType);
-		}
+            int direction = ParameterImpl.IN;
+            if ("OUT".equalsIgnoreCase(p.getDirection()))
+                direction = ParameterImpl.OUT;
+            else if ("INOUT".equalsIgnoreCase(p.getDirection()))
+                direction = ParameterImpl.IN_OUT;
+            parameters.findOrCreateParameterWithIndex(idx, direction, sdoType);
+        }
 
     }
 
-	public DataObject executeQuery() {
+    public DataObject executeQuery() {
 
-		boolean success = false;
-		try {
-			List results = statement.executeCall(parameters);
-			success = true;
+        boolean success = false;
+        try {
+            List results = statement.executeCall(parameters);
+            success = true;
 
-			return buildGraph(results);
-		} catch (SQLException e) {
-            if(this.logger.isDebugEnabled())
+            return buildGraph(results);
+        } catch (SQLException e) {
+            if (this.logger.isDebugEnabled())
                 this.logger.debug(e);
 
-			throw new RuntimeException(e);
-		} finally {
-			if (success)
-				statement.getConnection().cleanUp();
-			else
-				statement.getConnection().errorCleanUp();
-		}
-	}
+            throw new RuntimeException(e);
+        } finally {
+            if (success)
+                statement.getConnection().cleanUp();
+            else
+                statement.getConnection().errorCleanUp();
+        }
+    }
 
-	public void execute() {
+    public void execute() {
 
-		boolean success = false;
-		try {
-			statement.executeUpdateCall(parameters);
-			success = true;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (success)
-				statement.getConnection().cleanUp();
-			else
-				statement.getConnection().errorCleanUp();
-		}
+        boolean success = false;
+        try {
+            statement.executeUpdateCall(parameters);
+            success = true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (success)
+                statement.getConnection().cleanUp();
+            else
+                statement.getConnection().errorCleanUp();
+        }
 
-	}
+    }
 
 }

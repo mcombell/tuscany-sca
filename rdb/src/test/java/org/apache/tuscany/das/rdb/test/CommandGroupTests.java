@@ -35,21 +35,16 @@ import commonj.sdo.DataObject;
 
 /**
  * 
- * This tests use of the XML Config file. Tests will utilize the
- * customer-orders-orderdetails tables. The plan is for the config file to have
- * a section that applies to all commands and another that applies to specific
- * commands.
+ * This tests use of the XML Config file. Tests will utilize the customer-orders-orderdetails tables. The plan is for the config file to have a
+ * section that applies to all commands and another that applies to specific commands.
  * 
- * The config file will be used to initialize a command factory that will then
- * return named commands.
+ * The config file will be used to initialize a command factory that will then return named commands.
  * 
  * There will be two read commands:
  * 
- * 1) Return all customers 2) Return a specific customer (by ID) and related
- * orders and order details
+ * 1) Return all customers 2) Return a specific customer (by ID) and related orders and order details
  * 
- * A test will demonstrate the creation of the factory and then reuse of
- * commands created from the same config data file
+ * A test will demonstrate the creation of the factory and then reuse of commands created from the same config data file
  * 
  */
 public class CommandGroupTests extends DasTest {
@@ -66,11 +61,11 @@ public class CommandGroupTests extends DasTest {
     }
 
     /**
-     * Read 
+     * Read
      */
     public void testRead() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
 
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -80,11 +75,11 @@ public class CommandGroupTests extends DasTest {
     }
 
     /**
-     * Read 
+     * Read
      */
     public void testReadUsingConfigInput() throws Exception {
-    	Config config = ConfigUtil.loadConfig(getConfig("CustomersOrdersConfig.xml"));
-        DAS das = DAS.FACTORY.createDAS(config, getConnection());       
+        Config config = ConfigUtil.loadConfig(getConfig("CustomersOrdersConfig.xml"));
+        DAS das = DAS.FACTORY.createDAS(config, getConnection());
 
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
@@ -92,29 +87,29 @@ public class CommandGroupTests extends DasTest {
         assertEquals(5, root.getList("CUSTOMER").size());
 
     }
+
     /**
      * Read an order using parm marker
      */
     public void testReadWithParmmarker() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());     
-        
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
+
         Command read = das.getCommand("order by id");
         read.setParameter(1, new Integer(1));
         DataObject root = read.executeQuery();
 
         assertEquals("recombobulator", root.getString("ANORDER[1]/PRODUCT"));
 
-    }   
-    
+    }
 
     /**
      * Specify connection properties in config. Add explicit update command
      */
     public void testUpdate() throws Exception {
 
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
-        
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
+
         Command read = das.getCommand("all customers");
         DataObject root = read.executeQuery();
         // Verify precondition
@@ -132,13 +127,12 @@ public class CommandGroupTests extends DasTest {
     }
 
     /**
-     * Read all customers, select a specific customer. Then read that customer
-     * and related orders. Modify an order and flush changes back
+     * Read all customers, select a specific customer. Then read that customer and related orders. Modify an order and flush changes back
      */
     public void testRead2() throws Exception {
 
         // Create the group and set common connection
-        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());       
+        DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
 
         // Read all customers and remember the first one
         Command read = das.getCommand("all customers");

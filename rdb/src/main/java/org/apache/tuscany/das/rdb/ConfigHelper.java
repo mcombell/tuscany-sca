@@ -30,7 +30,8 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
  * Manual contrution fo COnfig is an alternative to providing needed configuration
  * information in an XML file
  * 
- */public class ConfigHelper {
+ */
+public class ConfigHelper {
 
     private Config config;
 
@@ -48,59 +49,58 @@ import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
         configWrapper = new MappingWrapper(config);
     }
 
-
     public void addPrimaryKey(String columnName) {
         configWrapper.addPrimaryKey(columnName);
     }
-    
+
     public Relationship addRelationship(String parentName, String childName) {
         return configWrapper.addRelationship(parentName, childName);
     }
-    
+
     public Table addTable(String name, String propertyName) {
         return configWrapper.addTable(name, propertyName);
     }
-    
+
     public void addUpdateStatement(Table table, String statement, String parameters) {
         configWrapper.addUpdateStatement(table, statement, parameters);
-    }     
-    
+    }
+
     public void addCreateStatement(Table table, String statement, String parameters) {
-    	configWrapper.addCreateStatement(table, statement, parameters);
+        configWrapper.addCreateStatement(table, statement, parameters);
     }
-    
+
     public void addDeleteStatement(Table table, String statement, String parameters) {
-    	configWrapper.addDeleteStatement(table, statement, parameters);
+        configWrapper.addDeleteStatement(table, statement, parameters);
     }
-    
+
     public void addConnectionInfo(String dataSourceName, boolean managedtx) {
-    	configWrapper.addConnectionInfo(dataSourceName, managedtx);
+        configWrapper.addConnectionInfo(dataSourceName, managedtx);
     }
-    
+
     public void addConnectionInfo(String dataSourceName) {
-    	configWrapper.addConnectionInfo(dataSourceName, true);
+        configWrapper.addConnectionInfo(dataSourceName, true);
     }
-    
+
     public void setDataObjectModel(String dataObjectModel) {
-    	configWrapper.getConfig().setDataObjectModel(dataObjectModel);
+        configWrapper.getConfig().setDataObjectModel(dataObjectModel);
     }
-    
+
     public Command addSelectCommand(String name, String sql) {
-    	return configWrapper.addCommand(name, sql, "select");
+        return configWrapper.addCommand(name, sql, "select");
     }
-    
+
     public Command addUpdateCommand(String name, String sql) {
-    	return configWrapper.addCommand(name, sql, "update");
+        return configWrapper.addCommand(name, sql, "update");
     }
-    
+
     public Command addInsertCommand(String name, String sql) {
-    	return configWrapper.addCommand(name, sql, "insert");    	
+        return configWrapper.addCommand(name, sql, "insert");
     }
-    
+
     public Command addDeleteCommand(String name, String sql) {
-    	return configWrapper.addCommand(name, sql, "delete");
+        return configWrapper.addCommand(name, sql, "delete");
     }
-    
+
     public Config getConfig() {
         return config;
     }

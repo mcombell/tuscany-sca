@@ -46,10 +46,11 @@ public class InsertCommandImpl extends WriteCommandImpl {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			if (success)
+			if (success) {
 				statement.getConnection().cleanUp();
-			else
+			} else {
 				statement.getConnection().errorCleanUp();
+			}
 		}
 
 	}

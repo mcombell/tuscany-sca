@@ -25,45 +25,44 @@ import commonj.sdo.DataObject;
  */
 public interface Command {
 
-	/**
-	 * Performs the function defined by the command
-	 */
-	public void execute();
-
-	/**
-	 * Performs the function defined by the command and return the results in
-	 * the root DataObject
-	 * 
-	 * @return the root DataObject
-	 */
-	public DataObject executeQuery();
-
-	/**
-	 * Sets the value of the associated Parameter
-	 * 
-	 * @param index
-	 *            the index of the Parameter
-	 * @param value
-	 *            the value for the Parameter
-	 */
-	public void setParameter(int index, Object value);
-     
-     /**
-	 * Returns the value of the associated Parameter
-	 * 
-	 * @param index
-	 *            the index of the Parameter
-	 * @return the value of the Parameter
-	 */
-	public Object getParameter(int index);
-
-    
     /**
-     * Returns the value of the database-generated key.  This method is specific to an "insert" 
-     * command and will be valid only after the command has been executed.
+     * Performs the function defined by the command
+     */
+    void execute();
+
+    /**
+     * Performs the function defined by the command and return the results in the root DataObject
+     * 
+     * @return the root DataObject
+     */
+    DataObject executeQuery();
+
+    /**
+     * Sets the value of the associated Parameter
+     * 
+     * @param index
+     *            the index of the Parameter
+     * @param value
+     *            the value for the Parameter
+     */
+    void setParameter(int index, Object value);
+
+    /**
+     * Returns the value of the associated Parameter
+     * 
+     * @param index
+     *            the index of the Parameter
+     * @return the value of the Parameter
+     */
+    Object getParameter(int index);
+
+    /**
+     * Returns the value of the database-generated key. This method is specific 
+     * to an "insert" command and will be valid only after the command has
+     * been executed.
      * 
      * @return the generated key
      */
-    public int getGeneratedKey();
-    
+    int getGeneratedKey();
+
 }

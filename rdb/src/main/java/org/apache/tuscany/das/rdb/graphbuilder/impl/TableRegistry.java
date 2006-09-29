@@ -25,21 +25,23 @@ import commonj.sdo.DataObject;
 /**
  */
 public interface TableRegistry {
-	/**
-	 * Get the table with the specified name and primary key
-	 * @param tableName
-	 * @param primaryKey
-	 * @return EDataObject
-	 */
-	public DataObject get(String tableName, List primaryKey);
+    /**
+     * Get the table with the specified name and primary key
+     * 
+     * @param tableName
+     * @param primaryKey
+     * @return DataObject
+     */
+    DataObject get(String tableName, List primaryKey);
 
-	/**
-	 * Add the table with the specified name and primary key
-	 * @param tableName
-	 * @param primaryKey
-	 * @param value
-	 */
-	public void put(String tableName, List primaryKey, DataObject value);
+    /**
+     * Add the table with the specified name and primary key
+     * 
+     * @param tableName
+     * @param primaryKey
+     * @param value
+     */
+    void put(String tableName, List primaryKey, DataObject value);
 
-	public boolean contains(String name, List list);
+    boolean contains(String name, List list);
 }

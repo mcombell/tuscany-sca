@@ -28,59 +28,61 @@ import commonj.sdo.DataObject;
 /**
  */
 public abstract class ChangeOperation {
+    protected DatabaseObject dObject;
+
+    protected String propagatedID;
+    
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(ChangeOperation.class);
 
-	private final WriteCommandImpl writeCommand;
+    private final WriteCommandImpl writeCommand;
 
-	protected DatabaseObject dObject;
+    private boolean isInsert;
+    
 
-	protected String propagatedID = null;
+    public ChangeOperation(DeleteCommandImpl command) {
+        writeCommand = command;
+    }
 
-	private boolean isInsert = false;
+    public ChangeOperation(InsertCommandImpl command, DataObject changedObject) {
+        writeCommand = command;
+        dObject = new DatabaseObject(command.getMappingModel(), changedObject);
+        this.isInsert = true;
+    }
 
-	public ChangeOperation(DeleteCommandImpl command) {
-		writeCommand = command;
-	}
+    public ChangeOperation(UpdateCommandImpl command, DataObject changedObject) {
+        writeCommand = command;
+        dObject = new DatabaseObject(command.getMappingModel(), changedObject);
+    }
 
-	public ChangeOperation(InsertCommandImpl command, DataObject changedObject) {
-		writeCommand = command;
-		dObject = new DatabaseObject(command.getMappingModel(), changedObject);
-		this.isInsert = true;
-	}
-
-	public ChangeOperation(UpdateCommandImpl command, DataObject changedObject) {
-		writeCommand = command;
-		dObject = new DatabaseObject(command.getMappingModel(), changedObject);
-	}
-
-	public void execute() {
-        if(this.logger.isDebugEnabled())
+    public void execute() {
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Executing change operation");
+        }
 
-		Iterator i = writeCommand.getParameters().iterator();
-		while (i.hasNext()) {
-			ParameterImpl parm = (ParameterImpl) i.next();
+        Iterator i = writeCommand.getParameters().iterator();
+        while (i.hasNext()) {
+            ParameterImpl parm = (ParameterImpl) i.next();
 
-            if(this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("setting " + parm.getName() + " to " + dObject.get(parm.getName()));
+            }
 
-			parm.setValue(dObject.get(parm.getName()));
-		}
+            parm.setValue(dObject.get(parm.getName()));
+        }
 
-		writeCommand.execute();
+        writeCommand.execute();
 
-		if ( isInsert && ( propagatedID != null )) {
-            if(this.logger.isDebugEnabled())
+        if (isInsert && (propagatedID != null)) {
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Propagating key " + propagatedID);
+            }
+            int id = writeCommand.getGeneratedKey();
+            dObject.setPropagatedID(propagatedID, id);
+        }
+    }
 
-			int id = writeCommand.getGeneratedKey();
-			dObject.setPropagatedID(propagatedID, id);
-		}
-	}
-
-	public String getTableName() {
-		return dObject.getTableName();
-	}
-
+    public String getTableName() {
+        return dObject.getTableName();
+    }
 
 }

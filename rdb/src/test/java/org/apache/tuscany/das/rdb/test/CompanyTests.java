@@ -49,13 +49,13 @@ public class CompanyTests extends DasTest {
 
     public void testSimple() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMapping.xml"), getConnection());
-    	
+        DAS das = DAS.FACTORY.createDAS(getConfig("companyMapping.xml"), getConnection());
+
         // Build the select command
-        Command selectCommand = das.createCommand("select COMPANY.NAME, "
+        Command selectCommand = das.createCommand("select COMPANY.NAME, " 
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.DEPNUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
-                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");     
+                + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");
 
         // Get the graph
         DataObject root = selectCommand.executeQuery();
@@ -74,19 +74,17 @@ public class CompanyTests extends DasTest {
 
     public void testSimpleStatic() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"), getConnection());
-    	SDOUtil.registerStaticTypes(CompanyFactory.class);
+        DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"), getConnection());
+        SDOUtil.registerStaticTypes(CompanyFactory.class);
         // Build the select command
-        Command selectCommand = das.createCommand("select COMPANY.NAME, "
+        Command selectCommand = das.createCommand("select COMPANY.NAME, " 
                 + "EMPLOYEE.NAME, EMPLOYEE.SN, EMPLOYEE.MANAGER, "
                 + "DEPARTMENT.NAME, DEPARTMENT.LOCATION, DEPARTMENT.DEPNUMBER from COMPANY, DEPARTMENT, EMPLOYEE "
                 + "where COMPANY.ID=DEPARTMENT.COMPANYID and DEPARTMENT.ID=EMPLOYEE.DEPARTMENTID");
-        
 
         // Get the graph
         DataObject root = selectCommand.executeQuery();
-        
-        
+
         CompanyType company = (CompanyType) root.getList("CompanyType").get(0);
 
         assertEquals("MegaCorp", company.getName());

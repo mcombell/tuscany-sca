@@ -30,29 +30,27 @@ import org.apache.tuscany.sdo.util.SDOUtil;
 
 import commonj.sdo.DataObject;
 
-
 /**
  */
 public class SimplestStaticCrud extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		new CustomerData(getAutoConnection()).refresh();
-	}
-	
-	public void testRead() throws Exception {
-		InputStream mapping = getClass().getClassLoader().getResourceAsStream("basicStaticCustomer.xml");
-		DAS das = DAS.FACTORY.createDAS(mapping, getConnection());
-		SDOUtil.registerStaticTypes(CustomerFactory.class);
-		
-		Command select = das.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = ?");		
-		select.setParameter(1, "Williams");	
-		
-		DataObject root = select.executeQuery();
-		
-		Collection customers = root.getList("Customer");
-		assertEquals(4, customers.size());
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+        new CustomerData(getAutoConnection()).refresh();
+    }
 
+    public void testRead() throws Exception {
+        InputStream mapping = getClass().getClassLoader().getResourceAsStream("basicStaticCustomer.xml");
+        DAS das = DAS.FACTORY.createDAS(mapping, getConnection());
+        SDOUtil.registerStaticTypes(CustomerFactory.class);
+
+        Command select = das.createCommand("Select ID, LASTNAME, ADDRESS from CUSTOMER where LASTNAME = ?");
+        select.setParameter(1, "Williams");
+
+        DataObject root = select.executeQuery();
+
+        Collection customers = root.getList("Customer");
+        assertEquals(4, customers.size());
+    }
 
 }

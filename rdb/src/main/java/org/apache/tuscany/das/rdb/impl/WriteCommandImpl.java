@@ -26,60 +26,60 @@ import org.apache.tuscany.das.rdb.config.Config;
 import commonj.sdo.DataObject;
 
 public abstract class WriteCommandImpl extends CommandImpl {
-	
 
-	public WriteCommandImpl(String sqlString) {
-		super(sqlString);
-	}	
 
-	public void execute() {
+    public WriteCommandImpl(String sqlString) {
+        super(sqlString);
+    }
 
-		boolean success = false;
-		try {
-			statement.executeUpdate(parameters);		
-			success = true;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (success)
-				statement.getConnection().cleanUp();
-			else
-				statement.getConnection().errorCleanUp();
-		}
+    public void execute() {
 
-	}
+        boolean success = false;
+        try {
+            statement.executeUpdate(parameters);
+            success = true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (success) {
+                statement.getConnection().cleanUp();
+            } else {
+                statement.getConnection().errorCleanUp();
+            }
+        }
 
-	public DataObject executeQuery() {
-		throw new UnsupportedOperationException();
-	}
+    }
 
-	public Config getMappingModel() {
-		return configWrapper.getConfig();
-	}
+    public DataObject executeQuery() {
+        throw new UnsupportedOperationException();
+    }
 
-	
-	public String toString() {
-		
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("\nSQL: " + statement.queryString);
-		
-		return buffer.toString();
-	}
+    public Config getMappingModel() {
+        return configWrapper.getConfig();
+    }
 
-	public int getGeneratedKey() {
-			throw new RuntimeException("No generated key is available");
-	}
+    public String toString() {
 
-	public void addParameters(String parameters) {
-		StringTokenizer tokenizer = new StringTokenizer(parameters);
-		for (int idx=1; tokenizer.hasMoreTokens(); idx++) {
-			ParameterImpl p = new ParameterImpl();
-			p.setName(tokenizer.nextToken());		
-			p.setIndex(idx);
-			addParameter(p);
-		}
-	}
-	
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("\nSQL: " + statement.queryString);
+
+        return buffer.toString();
+    }
+
+    public int getGeneratedKey() {
+        throw new RuntimeException("No generated key is available");
+    }
+
+    public void addParameters(String parameters) {
+        StringTokenizer tokenizer = new StringTokenizer(parameters);
+        for (int idx = 1; tokenizer.hasMoreTokens(); idx++) {
+            ParameterImpl p = new ParameterImpl();
+            p.setName(tokenizer.nextToken());
+            p.setIndex(idx);
+            addParameter(p);
+        }
+    }
+
 
 
 }

@@ -20,6 +20,7 @@ package org.apache.tuscany.das.rdb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Updates don't have to be sorted, so this class is a simple wrapper of ArrayList. 
@@ -27,18 +28,18 @@ import java.util.Collection;
  */
 public class UpdateList {
 
-	private ArrayList updates = new ArrayList();
+    private List updates = new ArrayList();
 
-	public UpdateList() {
-		super();
-	}
+    public UpdateList() {
+        super();
+    }
 
-	public void add(ChangeOperation c) {
-		updates .add(c);
-	}
+    public void add(ChangeOperation c) {
+        updates.add(c);
+    }
 
-	public Collection getSortedList() {
-		return updates;
-	}
+    public Collection getSortedList() {
+        return updates;
+    }
 
 }

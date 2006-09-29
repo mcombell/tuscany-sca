@@ -28,58 +28,55 @@ import org.apache.tuscany.das.rdb.impl.ParameterImpl;
 import org.apache.tuscany.das.rdb.impl.SDODataTypes;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
-public class DeleteGenerator extends BaseGenerator {
+public final class DeleteGenerator extends BaseGenerator {
 
-	public static final DeleteGenerator instance = new DeleteGenerator();
+    public static final DeleteGenerator INSTANCE = new DeleteGenerator();
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(DeleteGenerator.class);
 
-	private DeleteGenerator() {
-		super();
-	}
+    private DeleteGenerator() {
+        super();
+    }
 
-	private String getDeleteStatement(Table t) {
-		TableWrapper table = new TableWrapper(t);
+    private String getDeleteStatement(Table t) {
+        TableWrapper table = new TableWrapper(t);
 
-		StringBuffer statement = new StringBuffer();
-		statement.append("delete from ");
-		statement.append(t.getTableName());
-		statement.append(" where ");
+        StringBuffer statement = new StringBuffer();
+        statement.append("delete from ");
+        statement.append(t.getTableName());
+        statement.append(" where ");
 
-		Iterator names = table.getPrimaryKeyNames().iterator();
-		Iterator properties = table.getPrimaryKeyProperties().iterator();
-		while (names.hasNext() && properties.hasNext()) {
-			String name = (String) names.next();
-			statement.append(name);
-			statement.append(" = ?");
-			if (names.hasNext() && properties.hasNext())
-				statement.append(" and ");
-		}
+        Iterator names = table.getPrimaryKeyNames().iterator();
+        Iterator properties = table.getPrimaryKeyProperties().iterator();
+        while (names.hasNext() && properties.hasNext()) {
+            String name = (String) names.next();
+            statement.append(name);
+            statement.append(" = ?");
+            if (names.hasNext() && properties.hasNext())
+                statement.append(" and ");
+        }
 
-		if(this.logger.isDebugEnabled())
-		    this.logger.debug(statement.toString());
+        if (this.logger.isDebugEnabled())
+            this.logger.debug(statement.toString());
 
-		return statement.toString();
-	}
+        return statement.toString();
+    }
 
-	public DeleteCommandImpl getDeleteCommand(Table t) {
-		TableWrapper tw = new TableWrapper(t);
-		DeleteCommandImpl deleteCommand = new DeleteCommandImpl(getDeleteStatement(t));
+    public DeleteCommandImpl getDeleteCommand(Table t) {
+        TableWrapper tw = new TableWrapper(t);
+        DeleteCommandImpl deleteCommand = new DeleteCommandImpl(getDeleteStatement(t));
 
-		Iterator i = tw.getPrimaryKeyProperties().iterator();
-		for(int idx=1; i.hasNext(); idx++) {
-			String property = (String) i.next();
-			ParameterImpl p = new ParameterImpl();
-			p.setName(property);
-			p.setType(SDODataTypes.OBJECT);
-			p.setConverter(getConverter(tw.getConverter(property)));
-			p.setIndex(idx);
-			deleteCommand.addParameter(p);
-		}
-		return deleteCommand;
-	}
-
-
+        Iterator i = tw.getPrimaryKeyProperties().iterator();
+        for (int idx = 1; i.hasNext(); idx++) {
+            String property = (String) i.next();
+            ParameterImpl p = new ParameterImpl();
+            p.setName(property);
+            p.setType(SDODataTypes.OBJECT);
+            p.setConverter(getConverter(tw.getConverter(property)));
+            p.setIndex(idx);
+            deleteCommand.addParameter(p);
+        }
+        return deleteCommand;
+    }
 
 }
-

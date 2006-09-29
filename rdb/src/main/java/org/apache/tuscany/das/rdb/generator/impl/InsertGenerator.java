@@ -36,120 +36,124 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 
-public class InsertGenerator extends BaseGenerator {
+public final class InsertGenerator extends BaseGenerator {
 
-	public static final InsertGenerator instance = new InsertGenerator();
+    public static final InsertGenerator INSTANCE = new InsertGenerator();
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(InsertGenerator.class);
 
-	private InsertGenerator() {
-		super();
-	}
+    private InsertGenerator() {
+        super();
+    }
 
-	public InsertCommandImpl getInsertCommand(MappingWrapper config,
-			DataObject changedObject, Table t) {
-		ArrayList parameters = new ArrayList();
-		TableWrapper table = new TableWrapper(t);
-		StringBuffer statement = new StringBuffer("insert into ");
-		statement.append(t.getTableName());
+    public InsertCommandImpl getInsertCommand(MappingWrapper config, DataObject changedObject, Table t) {
+        List parameters = new ArrayList();
+        TableWrapper table = new TableWrapper(t);
+        StringBuffer statement = new StringBuffer("insert into ");
+        statement.append(t.getTableName());
 
-		Iterator i = getAttributeProperties(changedObject, config).iterator();
+        Iterator i = getAttributeProperties(changedObject, config).iterator();
 
-		ArrayList attributes = new ArrayList();
-		ArrayList generatedKeys = new ArrayList();
-		while (i.hasNext()) {
-			Property attr = (Property) i.next();
-			if (table.isGeneratedColumnProperty(attr.getName())) {
-				generatedKeys.add(attr.getName());
-			} else {
-				attributes.add(attr.getName());
-				parameters.add(changedObject.getType().getProperty(
-						attr.getName()));
-			}
-		}
+        List attributes = new ArrayList();
+        List generatedKeys = new ArrayList();
+        while (i.hasNext()) {
+            Property attr = (Property) i.next();
+            if (table.isGeneratedColumnProperty(attr.getName())) {
+                generatedKeys.add(attr.getName());
+            } else {
+                attributes.add(attr.getName());
+                parameters.add(changedObject.getType().getProperty(attr.getName()));
+            }
+        }
 
-		statement.append("(");
-		Iterator attrs = attributes.iterator();
-		while (attrs.hasNext()) {
-			String name = (String) attrs.next();
-			statement.append("");
-			statement.append(name);
-			if (attrs.hasNext())
-				statement.append(", ");
-			else
-				statement.append(")");
-		}
+        statement.append("(");
+        Iterator attrs = attributes.iterator();
+        while (attrs.hasNext()) {
+            String name = (String) attrs.next();
+            statement.append("");
+            statement.append(name);
+            if (attrs.hasNext()) {
+                statement.append(", ");
+            } else {
+                statement.append(")");
+            }
+        }
 
-		statement.append(" values (");
-		for (int idx = 1; idx <= attributes.size(); idx++) {
-			statement.append('?');
-			if (idx < attributes.size())
-				statement.append(", ");
-			else
-				statement.append(")");
-		}
+        statement.append(" values (");
+        for (int idx = 1; idx <= attributes.size(); idx++) {
+            statement.append('?');
+            if (idx < attributes.size()) {
+                statement.append(", ");
+            } else {
+                statement.append(")");
+            }
+        }
 
-		InsertCommandImpl cmd = new InsertCommandImpl(statement.toString(), (String[]) generatedKeys.toArray(new String[0]));
-		Iterator params = parameters.iterator();
-		for (int idx = 1; params.hasNext(); idx++) {
-			Property property = (Property) params.next();
-			ParameterImpl p = new ParameterImpl();
-			p.setName(property.getName());
-			p.setType(property.getType());
-			p.setConverter(getConverter(table.getConverter(property.getName())));
-			p.setIndex(idx);
-			cmd.addParameter(p);
+        InsertCommandImpl cmd = new InsertCommandImpl(statement.toString(), 
+                (String[]) generatedKeys.toArray(new String[0]));
+        Iterator params = parameters.iterator();
+        for (int idx = 1; params.hasNext(); idx++) {
+            Property property = (Property) params.next();
+            ParameterImpl p = new ParameterImpl();
+            p.setName(property.getName());
+            p.setType(property.getType());
+            p.setConverter(getConverter(table.getConverter(property.getName())));
+            p.setIndex(idx);
+            cmd.addParameter(p);
 
-		}
-        if(this.logger.isDebugEnabled())
+        }
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(statement.toString());
+        }
 
-		return cmd;
+        return cmd;
 
-	}
+    }
 
-	private List getAttributeProperties(DataObject obj, MappingWrapper config) {
-		ArrayList fields = new ArrayList();
-		Iterator i = obj.getType().getProperties().iterator();
-		while (i.hasNext()) {
-			Property p = (Property) i.next();
-			if (p.getType().isDataType()) {
-				if (obj.isSet(p))
-					fields.add(p);
-			} else {
-				if ( obj.isSet(p) ) {
-					Relationship relationship = config.getRelationshipByReference(p);
-					if ((p.getOpposite() != null && p.getOpposite().isMany()) || (hasState(config, relationship, obj))) {
-						RelationshipWrapper r = new RelationshipWrapper(
-							relationship);
-						Iterator keys = r.getForeignKeys().iterator();
-						while (keys.hasNext()) {
-							String key = (String) keys.next();
-							Property keyProp = obj.getType().getProperty(key);
-							fields.add(keyProp);
-						}
-					}
+    private List getAttributeProperties(DataObject obj, MappingWrapper config) {
+        List fields = new ArrayList();
+        Iterator i = obj.getType().getProperties().iterator();
+        while (i.hasNext()) {
+            Property p = (Property) i.next();
+            if (p.getType().isDataType()) {
+                if (obj.isSet(p)) {
+                    fields.add(p);
+                }
+            } else {
+                if (obj.isSet(p)) {
+                    Relationship relationship = config.getRelationshipByReference(p);
+                    if ((p.getOpposite() != null && p.getOpposite().isMany()) 
+                            || (hasState(config, relationship, obj))) {
+                        RelationshipWrapper r = new RelationshipWrapper(relationship);
+                        Iterator keys = r.getForeignKeys().iterator();
+                        while (keys.hasNext()) {
+                            String key = (String) keys.next();
+                            Property keyProp = obj.getType().getProperty(key);
+                            fields.add(keyProp);
+                        }
+                    }
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		return fields;
+        return fields;
 
-	}
+    }
 
-	private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {
+    private boolean hasState(MappingWrapper config, Relationship rel, DataObject changedObject) {
 
-			if ( !rel.isMany()) {
-				Table t = config.getTableByTypeName(changedObject.getType().getName());
-				TableWrapper tw = new TableWrapper(t);
-				RelationshipWrapper rw = new RelationshipWrapper(rel);
-				if (( rel.getForeignKeyTable().equals(t.getTableName())) &&
-						( Collections.disjoint(tw.getPrimaryKeyProperties(),rw.getForeignKeys()) ))
-					return true;
-			}
+        if (!rel.isMany()) {
+            Table t = config.getTableByTypeName(changedObject.getType().getName());
+            TableWrapper tw = new TableWrapper(t);
+            RelationshipWrapper rw = new RelationshipWrapper(rel);
+            if ((rel.getForeignKeyTable().equals(t.getTableName())) 
+                    && (Collections.disjoint(tw.getPrimaryKeyProperties(), rw.getForeignKeys()))) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

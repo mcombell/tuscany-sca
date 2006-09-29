@@ -29,107 +29,110 @@ import commonj.sdo.helper.TypeHelper;
  */
 public class ResultSetTypeMap {
 
-	public static ResultSetTypeMap instance = new ResultSetTypeMap();
+    public static ResultSetTypeMap instance = new ResultSetTypeMap();
 
-	/**
-	 * Constructor for ResultSetTypeMap.
-	 */
-	protected ResultSetTypeMap() {
-		// Empty Constructor
-	}
+    /**
+     * Constructor for ResultSetTypeMap.
+     */
+    protected ResultSetTypeMap() {
+        // Empty Constructor
+    }
 
-	/**
-	 * These mappings taken primarily from "JDBC API and Tutorial and Reference" by
-	 * Fisher, Ellis and Bruce.
-	 * 
-	 * @param type
-	 * @param isNullable
-	 * @return
-	 */
-	public Type getEDataType(int type, boolean isNullable) {
-     
-	    TypeHelper helper = TypeHelper.INSTANCE;
+    /**
+     * These mappings taken primarily from "JDBC API and Tutorial and Reference" by Fisher, Ellis and Bruce.
+     * 
+     * @param type
+     * @param isNullable
+     * @return
+     */
+    public Type getEDataType(int type, boolean isNullable) {
+
+        TypeHelper helper = TypeHelper.INSTANCE;
         SDOPackage.eINSTANCE.eClass();
-		switch (type) {
+        switch (type) {
 
-		case Types.CHAR:
-		case Types.VARCHAR:
-		case Types.LONGVARCHAR:
-			return helper.getType("commonj.sdo", "String");
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.LONGVARCHAR:
+                return helper.getType("commonj.sdo", "String");
 
-		case Types.NUMERIC:
-		case Types.DECIMAL:
-			return helper.getType("commonj.sdo", "Decimal");
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                return helper.getType("commonj.sdo", "Decimal");
 
-		case Types.BIT:
-		case Types.BOOLEAN:
-			if (isNullable)
-				return helper.getType("commonj.sdo", "Boolean");
-			else
-				return helper.getType("commonj.sdo", "boolean");
+            case Types.BIT:
+            case Types.BOOLEAN:
+                if (isNullable) {
+                    return helper.getType("commonj.sdo", "Boolean");
+                }
+                return helper.getType("commonj.sdo", "boolean");
+                
 
-		case Types.TINYINT:
-		case Types.SMALLINT:
-		case Types.INTEGER:
-			if (isNullable) {               
-				return helper.getType("commonj.sdo", "IntObject");
-            } else
-				return helper.getType("commonj.sdo", "Int");
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.INTEGER:
+                if (isNullable) {
+                    return helper.getType("commonj.sdo", "IntObject");
+                } 
+                
+                return helper.getType("commonj.sdo", "Int");
+               
 
-		case Types.BIGINT:
-			if (isNullable)
-				return helper.getType("commonj.sdo", "Long");
-			else
-				return helper.getType("commonj.sdo", "long");
+            case Types.BIGINT:
+                if (isNullable) {
+                    return helper.getType("commonj.sdo", "Long");
+                } 
+                return helper.getType("commonj.sdo", "long");
 
-		case Types.REAL:
-			if (isNullable)
-				return helper.getType("commonj.sdo", "Float");
-			else
-				return helper.getType("commonj.sdo", "float");
+            case Types.REAL:
+                if (isNullable) {
+                    return helper.getType("commonj.sdo", "Float");
+                } 
+                return helper.getType("commonj.sdo", "float");
+                
 
-		case Types.FLOAT:
-		case Types.DOUBLE:
-			if (isNullable)
-				return helper.getType("commonj.sdo", "Double");
-			else
-				return helper.getType("commonj.sdo", "double");
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                if (isNullable) {
+                    return helper.getType("commonj.sdo", "Double");
+                }
+                return helper.getType("commonj.sdo", "double");
+              
 
-		case Types.BINARY:
-		case Types.VARBINARY:
-		case Types.LONGVARBINARY:
-			return helper.getType("commonj.sdo", "ByteArray");
+            case Types.BINARY:
+            case Types.VARBINARY:
+            case Types.LONGVARBINARY:
+                return helper.getType("commonj.sdo", "ByteArray");
 
-		case Types.DATE:
-		case Types.TIME:
-		case Types.TIMESTAMP:
-			return helper.getType("commonj.sdo", "Date");
+            case Types.DATE:
+            case Types.TIME:
+            case Types.TIMESTAMP:
+                return helper.getType("commonj.sdo", "Date");
 
-		case Types.CLOB:
-			return helper.getType("commonj.sdo", "Clob");
+            case Types.CLOB:
+                return helper.getType("commonj.sdo", "Clob");
 
-		case Types.BLOB:
-			return helper.getType("commonj.sdo", "Blob");
+            case Types.BLOB:
+                return helper.getType("commonj.sdo", "Blob");
 
-		case Types.ARRAY:
-			return helper.getType("commonj.sdo", "Array");
+            case Types.ARRAY:
+                return helper.getType("commonj.sdo", "Array");
 
-		case Types.DISTINCT:
-		case Types.STRUCT:
-		case Types.REF:
-		case Types.DATALINK:
-		case Types.JAVA_OBJECT:
-			return helper.getType("commonj.sdo", "Object");
+            case Types.DISTINCT:
+            case Types.STRUCT:
+            case Types.REF:
+            case Types.DATALINK:
+            case Types.JAVA_OBJECT:
+                return helper.getType("commonj.sdo", "Object");
 
-		default:
-            return helper.getType("commonj.sdo", "Object");
-		}
+            default:
+                return helper.getType("commonj.sdo", "Object");
+        }
 
-	}
+    }
 
-
-	public Type getType(int columnType, boolean b) {
-		return getEDataType(columnType, b);
-	}
+    public Type getType(int columnType, boolean b) {
+        return getEDataType(columnType, b);
+    }
 
 }

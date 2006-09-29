@@ -135,7 +135,7 @@ public class ExceptionTests extends DasTest {
 
 		try {
 			read.executeQuery();
-		} catch ( Exception ex ) {
+		} catch (Exception ex) {
 			assertEquals("The parent table (xxx) in relationship ORDERDETAILS was not found.", ex.getMessage());
 		}	
 

@@ -29,12 +29,12 @@ public class EmployeeData extends TestDataWithExplicitColumns {
 	private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.SMALLINT};
 
 	private static Object[][] employeeData = { 
-        { "John Jones", "E0001", new Boolean(false) },
-		{ "Mary Smith", "E0002", new Boolean(true)},
-		{ "Jane Doe", "E0003", new Boolean(false)},
-		{ "Al Smith", "E0004", new Boolean(true) } };
+        {"John Jones", "E0001", new Boolean(false)},
+		{"Mary Smith", "E0002", new Boolean(true)},
+		{"Jane Doe", "E0003", new Boolean(false)},
+		{"Al Smith", "E0004", new Boolean(true)}};
 
-	private static String[] employeeColumns = { "NAME", "SN", "MANAGER" };
+	private static String[] employeeColumns = {"NAME", "SN", "MANAGER"};
 	
 	public EmployeeData(Connection connection) {
 		super(connection, employeeData, employeeColumns, columnTypes);

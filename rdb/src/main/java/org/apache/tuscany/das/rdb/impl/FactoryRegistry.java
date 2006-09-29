@@ -19,6 +19,7 @@
 package org.apache.tuscany.das.rdb.impl;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
@@ -30,28 +31,28 @@ public class FactoryRegistry {
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(FactoryRegistry.class);
 
-	private HashMap registry = new HashMap();
+    private Map registry = new HashMap();
 
     private final MappingWrapper mapping;
 
     private final ConnectionImpl connection;
 
-	public FactoryRegistry(MappingWrapper mapping, ConnectionImpl connection) {
-		this.mapping = mapping;
-		this.connection = connection;
-	}
+    public FactoryRegistry(MappingWrapper mapping, ConnectionImpl connection) {
+        this.mapping = mapping;
+        this.connection = connection;
+    }
 
-	public ChangeFactory getFactory(Type type) {
-		ChangeFactory factory = (ChangeFactory)registry.get(type);
-		if ( factory == null )  {
-            if(this.logger.isDebugEnabled())
+    public ChangeFactory getFactory(Type type) {
+        ChangeFactory factory = (ChangeFactory) registry.get(type);
+        if (factory == null) {
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Creating new ChangeFactory for type " + type.getName());
+            }
 
-			factory = new ChangeFactory(mapping, connection);
-			registry.put(type, factory);
-		}
-		return factory;
-	}
-
+            factory = new ChangeFactory(mapping, connection);
+            registry.put(type, factory);
+        }
+        return factory;
+    }
 
 }

@@ -26,29 +26,33 @@ import commonj.sdo.DataObject;
  */
 public class SingleTableRegistry implements TableRegistry {
 
-	//private HashMap<List,DataObject> values = new HashMap<List,DataObject>();
+    // private HashMap<List,DataObject> values = new HashMap<List,DataObject>();
 
-	public SingleTableRegistry() {
-		// Empty Constructor
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#get(java.lang.String, java.util.List)
-	 */
-	public DataObject get(String tableName, List primaryKey) {
-		return null;
-	}
+    public SingleTableRegistry() {
+        // Empty Constructor
+    }
 
-	/* (non-Javadoc)
-	 * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#put(java.lang.String, java.util.List, java.lang.Object)
-	 */
-	public void put(String tableName, List primaryKey, DataObject value) {
-		// do nothing
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#get(java.lang.String, java.util.List)
+     */
+    public DataObject get(String tableName, List primaryKey) {
+        return null;
+    }
 
-	public boolean contains(String name, List list) {
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.ibm.ws.sdo.mediator.jdbc.graphbuilder.impl.TableRegistry#put(java.lang.String, java.util.List, java.lang.Object)
+     */
+    public void put(String tableName, List primaryKey, DataObject value) {
+        // do nothing
+
+    }
+
+    public boolean contains(String name, List list) {
+        return false;
+    }
 
 }

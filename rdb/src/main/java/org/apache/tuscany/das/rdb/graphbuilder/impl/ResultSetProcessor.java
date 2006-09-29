@@ -28,113 +28,114 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 import commonj.sdo.DataObject;
 
 /**
- *
- * A ResultSetProcessor is used to transform the data in a ResultSet into a set
- * of inter-related EDataObjects.
+ * 
+ * A ResultSetProcessor is used to transform the data in a ResultSet into a set of inter-related EDataObjects.
  */
 public class ResultSetProcessor {
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(ResultSetProcessor.class);
 
-	private TableRegistry registry;
+    private TableRegistry registry;
 
-	private GraphBuilderMetadata metadata;
+    private GraphBuilderMetadata metadata;
 
-	private final DataObjectMaker doMaker;
+    private final DataObjectMaker doMaker;
 
-	public ResultSetProcessor(DataObject g, GraphBuilderMetadata gbmd) {
+    public ResultSetProcessor(DataObject g, GraphBuilderMetadata gbmd) {
 
-		this.metadata = gbmd;
-		if (metadata.getRelationships().size() == 0)
-			registry = new SingleTableRegistry();
-		else
-			registry = new MultiTableRegistry();
+        this.metadata = gbmd;
+        if (metadata.getRelationships().size() == 0) {
+            registry = new SingleTableRegistry();
+        } else {
+            registry = new MultiTableRegistry();
+        }
 
-		doMaker = new DataObjectMaker(g);
+        doMaker = new DataObjectMaker(g);
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(metadata);
+        }
 
-	}
+    }
 
-	//private void debug(Object output) {
-	//	DebugUtil.debugln(getClass(), debug, output);
-	//}
+    // private void debug(Object output) {
+    // DebugUtil.debugln(getClass(), debug, output);
+    // }
 
-	/**
-	 * Process the ResultSet. For each row in the ResultSet, a
-	 *
-	 * @link ResultSetRow object will be created to represent the row as a set
-	 *       of EDataObjects. Then, the relevant relationships will be
-	 *       constructed between each object in the
-	 * @link ResultSetRow.
-	 *
-	 * @param rs
-	 *            The ResultSet
-	 */
-	public void processResults(int start, int end) throws SQLException {
+    /**
+     * Process the ResultSet. For each row in the ResultSet, a
+     * 
+     * @link ResultSetRow object will be created to represent the row as a set of EDataObjects. Then, 
+     * the relevant relationships will be constructed
+     *       between each object in the
+     * @link ResultSetRow.
+     * 
+     * @param rs
+     *            The ResultSet
+     */
+    public void processResults(int start, int end) throws SQLException {
 
-		Iterator i = metadata.getResultMetadata().iterator();
-		while ( i.hasNext()) {
-			ResultMetadata resultMetadata = (ResultMetadata)i.next();
-			ResultSet results = resultMetadata.getResultSet();
+        Iterator i = metadata.getResultMetadata().iterator();
+        while (i.hasNext()) {
+            ResultMetadata resultMetadata = (ResultMetadata) i.next();
+            ResultSet results = resultMetadata.getResultSet();
 
-			processResultSet(results, resultMetadata, start, end);
+            processResultSet(results, resultMetadata, start, end);
 
-			//TODO These statements HAVE to be closed or we will have major problems
-			//results.getStatement().close();
-			results.close();
-		}
+            // TODO These statements HAVE to be closed or we will have major problems
+            // results.getStatement().close();
+            results.close();
+        }
 
-	}
+    }
 
+    private void processResultSet(ResultSet rs, ResultMetadata rsMetadata, int start, int end) throws SQLException {
 
-	private void processResultSet(ResultSet rs, ResultMetadata rsMetadata,
-			int start, int end) throws SQLException {
+        if (rs.getType() == ResultSet.TYPE_FORWARD_ONLY) {
+            while (rs.next() && start < end) {
+                ResultSetRow rsr = new ResultSetRow(rs, rsMetadata);
+                addRowToGraph(rsr, rsMetadata);
+                ++start;
+            }
+        } else {
+            while (rs.absolute(start) && start < end) {
+                ResultSetRow rsr = new ResultSetRow(rs, rsMetadata);
+                addRowToGraph(rsr, rsMetadata);
+                ++start;
+            }
+        }
+    }
 
-		if ( rs.getType() == ResultSet.TYPE_FORWARD_ONLY) {
-			while (rs.next() && start < end) {
-				ResultSetRow rsr = new ResultSetRow(rs, rsMetadata);
-				addRowToGraph(rsr, rsMetadata);
-				++start;
-			}
-		} else {
-			while (rs.absolute(start) && start < end) {
-				ResultSetRow rsr = new ResultSetRow(rs, rsMetadata);
-				addRowToGraph(rsr, rsMetadata);
-				++start;
-			}
-		}
-	}
+    /**
+     * @param row
+     * @param resultMetadata
+     */
+    private void addRowToGraph(ResultSetRow row, ResultMetadata resultMetadata) {
+        RowObjects tableObjects = new RowObjects(metadata, registry);
+        Iterator tables = row.getAllTableData().iterator();
+        while (tables.hasNext()) {
+            TableData rawDataFromRow = (TableData) tables.next();
 
-	/**
-	 * @param row
-	 * @param resultMetadata
-	 */
-	private void addRowToGraph(ResultSetRow row, ResultMetadata resultMetadata) {
-		RowObjects tableObjects = new RowObjects(metadata, registry);
-		Iterator tables = row.getAllTableData().iterator();
-		while (tables.hasNext()) {
-			TableData rawDataFromRow = (TableData) tables.next();
+            if (!rawDataFromRow.hasValidPrimaryKey()) {
+                continue;
+            }
 
-			if ( !rawDataFromRow.hasValidPrimaryKey()  )
-				continue;
+            String tableName = rawDataFromRow.getTableName();
+            DataObject tableObject = registry.get(tableName, rawDataFromRow.getPrimaryKeyValues());
+            if (tableObject == null) {
+                tableObject = doMaker.createAndAddDataObject(rawDataFromRow, resultMetadata);
 
-			String tableName = rawDataFromRow.getTableName();
-			DataObject tableObject = registry.get(tableName, rawDataFromRow
-					.getPrimaryKeyValues());
-			if (tableObject == null) {
-				tableObject = doMaker.createAndAddDataObject(rawDataFromRow, resultMetadata);
+                if (this.logger.isDebugEnabled()) {
+                    this.logger.debug("Putting table " + tableName + " with PK " 
+                            + rawDataFromRow.getPrimaryKeyValues() + " into registry");
+                }
 
-                if(this.logger.isDebugEnabled())
-                    this.logger.debug("Putting table " + tableName + " with PK " + rawDataFromRow.getPrimaryKeyValues() + " into registry");
+                registry.put(tableName, rawDataFromRow.getPrimaryKeyValues(), tableObject);
+            }
+            tableObjects.put(tableName, tableObject);
+        }
 
-				registry.put(tableName, rawDataFromRow.getPrimaryKeyValues(), tableObject);
-			}
-			tableObjects.put(tableName, tableObject);
-		}
+        tableObjects.processRelationships();
 
-		tableObjects.processRelationships();
-
-	}
+    }
 
 }

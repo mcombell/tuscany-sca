@@ -22,18 +22,18 @@ import org.apache.tuscany.das.rdb.Converter;
 
 public class StringToIntegerConverter implements Converter {
 
-	public StringToIntegerConverter() {
-		super();
-	}
+    public StringToIntegerConverter() {
+        super();
+    }
 
-	public Object getPropertyValue(Object columnData) {
-	//	System.out.println("Converting object..  " + columnData);
-		
-		return new Integer(columnData.toString());
-	}
+    public Object getPropertyValue(Object columnData) {
+        // System.out.println("Converting object.. " + columnData);
 
-	public Object getColumnValue(Object columnData) {
-		return columnData.toString();
-	}
+        return new Integer(columnData.toString());
+    }
+
+    public Object getColumnValue(Object columnData) {
+        return columnData.toString();
+    }
 
 }

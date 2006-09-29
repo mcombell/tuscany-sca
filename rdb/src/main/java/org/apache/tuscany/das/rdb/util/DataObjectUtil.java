@@ -29,47 +29,51 @@ import commonj.sdo.helper.DataFactory;
 
 /**
  */
-public class DataObjectUtil {
-	
-	//Utilities
-	public static DataObject getRestoredCopy(DataObject changedDO) {
-	    DataObject changedCopy = getCopy(changedDO);
-	    restoreAttributeValues(changedCopy, changedDO);
-	    return changedCopy;
-	}
+public final class DataObjectUtil {
 
-	public static DataObject getCopy(DataObject original) {
-		
-		DataObject copy = DataFactory.INSTANCE.create(original.getType());
-		
-		//Fill in values
-		Iterator i = original.getType().getProperties().iterator();
-		while (i.hasNext()) {
-			Property feature = (Property) i.next();
-			copy.set(feature, original.get(feature));
-		}
-		return copy;
-	}	
+    private DataObjectUtil() {
+        
+    }
+    
+    // Utilities
+    public static DataObject getRestoredCopy(DataObject changedDO) {
+        DataObject changedCopy = getCopy(changedDO);
+        restoreAttributeValues(changedCopy, changedDO);
+        return changedCopy;
+    }
 
-	/**
+    public static DataObject getCopy(DataObject original) {
+
+        DataObject copy = DataFactory.INSTANCE.create(original.getType());
+
+        // Fill in values
+        Iterator i = original.getType().getProperties().iterator();
+        while (i.hasNext()) {
+            Property feature = (Property) i.next();
+            copy.set(feature, original.get(feature));
+        }
+        return copy;
+    }
+
+    /**
      * @param changedCopy
      * @return
      */
     private static void restoreAttributeValues(DataObject changedCopy, DataObject changedDO) {
-        
-		ChangeSummary changeSummary = changedDO.getDataGraph().getChangeSummary();
-		List changes = changeSummary.getOldValues(changedDO);
-		if ( changes == null )
-			return;
-		
-		Iterator i = changes.iterator();
-		while (i.hasNext()) {
-		    Setting s = (Setting) i.next();    
-		    if ( s.getProperty().getType().isDataType() )
-		    	changedCopy.set(s.getProperty(), s.getValue());
-		}
-   }
 
-	
+        ChangeSummary changeSummary = changedDO.getDataGraph().getChangeSummary();
+        List changes = changeSummary.getOldValues(changedDO);
+        if (changes == null) {
+            return;
+        }
+
+        Iterator i = changes.iterator();
+        while (i.hasNext()) {
+            Setting s = (Setting) i.next();
+            if (s.getProperty().getType().isDataType()) {
+                changedCopy.set(s.getProperty(), s.getValue());
+            }
+        }
+    }
 
 }

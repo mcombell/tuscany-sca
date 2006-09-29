@@ -27,25 +27,24 @@ import org.apache.tuscany.das.rdb.config.Config;
 
 public class DASFactoryImpl implements DASFactory {
 
-	public DAS createDAS(InputStream configStream) {
-		return new DASImpl(configStream);
-	}
+    public DAS createDAS(InputStream configStream) {
+        return new DASImpl(configStream);
+    }
 
-	public DAS createDAS(Config config) {
-		return new DASImpl(config);
-	}
+    public DAS createDAS(Config config) {
+        return new DASImpl(config);
+    }
 
-	public DAS createDAS(InputStream configStream, Connection connection) {
-		return new DASImpl(configStream, connection);
-	}
+    public DAS createDAS(InputStream configStream, Connection connection) {
+        return new DASImpl(configStream, connection);
+    }
 
-	public DAS createDAS(Config config, Connection connection) {
-		return new DASImpl(config, connection);
-	}
+    public DAS createDAS(Config config, Connection connection) {
+        return new DASImpl(config, connection);
+    }
 
-	public DAS createDAS(Connection connection) {
-		return new DASImpl(connection);
-	}
-
+    public DAS createDAS(Connection connection) {
+        return new DASImpl(connection);
+    }
 
 }

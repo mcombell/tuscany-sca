@@ -29,74 +29,71 @@ import commonj.sdo.DataObject;
 import commonj.sdo.helper.XSDHelper;
 
 public abstract class CommandImpl extends BaseCommandImpl implements Command {
-
-	protected Statement statement;
-
-	protected Parameters parameters = new Parameters();
-
-	protected static final boolean debug = false;
-
-	protected ResultSetShape resultSetShape;
-
-	public CommandImpl(String sqlString) {
-		statement = new Statement(sqlString);
-
-		try {
-			URL url = getClass().getResource("/xml/sdoJava.xsd");
-			if (url == null)
-				throw new RuntimeException(
-					"Could not find resource: xml/sdoJava.xsd");
-		
-			InputStream inputStream = url.openStream();
-			XSDHelper.INSTANCE.define(inputStream, url.toString());
-			inputStream.close();
-		} catch ( IOException ex ) {
-			throw new RuntimeException(ex);
-		}
-
-	}
-
-	public abstract void execute();
-
-	public abstract DataObject executeQuery();
-
-	public void setParameter(int index, Object value) {
-		parameters.setParameter(index, value);
-	}
-
-	public void addParameter(ParameterImpl param) {
-		parameters.add(param);
-	}
-
-
-	public List getParameters() {
-		return parameters.parameterList();
-	}
-
-	public Object getParameter(int index) {
-		return parameters.parameterWithIndex(index).getValue();
-	}
-
-	public void setConnection(ConnectionImpl connection) {
-		statement.setConnection(connection);
-	}
-
-	protected ConnectionImpl getConnection() {
-		return statement.getConnection();
-	}
-
     
-    /* 
-     * The default impl is to throw an exception.  This is overridden by
-     * InsertCommandImpl
+    protected Statement statement;
+
+    protected Parameters parameters = new Parameters();
+
+   
+
+    protected ResultSetShape resultSetShape;
+
+    public CommandImpl(String sqlString) {
+        statement = new Statement(sqlString);
+
+        try {
+            URL url = getClass().getResource("/xml/sdoJava.xsd");
+            if (url == null) {
+                throw new RuntimeException("Could not find resource: xml/sdoJava.xsd");
+            }
+
+            InputStream inputStream = url.openStream();
+            XSDHelper.INSTANCE.define(inputStream, url.toString());
+            inputStream.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
+    public abstract void execute();
+
+    public abstract DataObject executeQuery();
+
+    public void setParameter(int index, Object value) {
+        parameters.setParameter(index, value);
+    }
+
+    public void addParameter(ParameterImpl param) {
+        parameters.add(param);
+    }
+
+    public List getParameters() {
+        return parameters.parameterList();
+    }
+
+    public Object getParameter(int index) {
+        return parameters.parameterWithIndex(index).getValue();
+    }
+
+    public void setConnection(ConnectionImpl connection) {
+        statement.setConnection(connection);
+    }
+
+    protected ConnectionImpl getConnection() {
+        return statement.getConnection();
+    }
+
+    /*
+     * The default impl is to throw an exception. This is overridden by InsertCommandImpl
      */
     public int getGeneratedKey() {
-        
+
         throw new RuntimeException("This method is only valid for insert commands");
     }
 
-	public void close() {
-		statement.close();
-	}
+    public void close() {
+        statement.close();
+    }
 
 }

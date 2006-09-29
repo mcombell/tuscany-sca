@@ -25,51 +25,53 @@ import java.util.Date;
 
 import org.apache.tuscany.das.rdb.Converter;
 
+public class SillyDateStringConverter implements Converter {
 
-public class SillyDateStringConverter  implements Converter {
+    private static DateFormat myformat = new SimpleDateFormat("yyyy.MM.dd");
 
-	public SillyDateStringConverter() {
-		super();
-	}
+    private static Date kbday;
 
-	private static DateFormat myformat = new SimpleDateFormat("yyyy.MM.dd");
+    private static Date tbday;
 
-	private static Date kbday;
+    public SillyDateStringConverter() {
+        super();
+    }
 
-	private static Date tbday;
+    static {
+        try {
+            kbday = myformat.parse("1957.09.27");
+            tbday = myformat.parse("1966.12.20");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	static {
-		try {
-			kbday = myformat.parse("1957.09.27");
-			tbday = myformat.parse("1966.12.20");
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public Object getPropertyValue(Object columnData) {
 
-	public Object getPropertyValue(Object columnData) {
+        if (columnData.equals("Williams")) {
+            return kbday;
+        }
 
-		if (columnData.equals("Williams"))
-			return kbday;
+        if (columnData.equals("Pavick")) {
+            return tbday;
+        }
 
-		if (columnData.equals("Pavick"))
-			return tbday;
+        throw new IllegalArgumentException();
 
-		throw new IllegalArgumentException();
+    }
 
-	}
+    public Object getColumnValue(Object propertyData) {
 
-	public Object getColumnValue(Object propertyData) {
+        if (propertyData.equals(kbday)) {
+            return "Williams";
+        }
 
-		if (propertyData.equals(kbday))
-			return "Williams";
+        if (propertyData.equals(tbday)) {
+            return "Pavick";
+        }
 
-		if (propertyData.equals(tbday))
-			return "Pavick";
+        throw new IllegalArgumentException();
 
-		throw new IllegalArgumentException();
-		
-	}
-
+    }
 
 }

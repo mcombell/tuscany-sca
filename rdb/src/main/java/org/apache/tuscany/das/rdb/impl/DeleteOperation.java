@@ -33,7 +33,7 @@ public class DeleteOperation extends ChangeOperation {
 	 */
 	public DeleteOperation(DeleteCommandImpl command, DataObject changedObject) {
 		super(command);
-		this.dObject = new DatabaseObject(command.getMappingModel(),DataObjectUtil.getRestoredCopy(changedObject));
+		this.dObject = new DatabaseObject(command.getMappingModel(), DataObjectUtil.getRestoredCopy(changedObject));
 
 	}
 

@@ -38,11 +38,11 @@ public class OwnerData extends TestDataWithExplicitColumns {
     private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER}; 
 	
 	private static Object[][] data = { 
-            { "Fanny", "222-2222", new Integer(1) },
-			{ "Manny", "333-3333", new Integer(1) },
-			{ "Sammy", "444-4444", new Integer(1)} };
+            {"Fanny", "222-2222", new Integer(1)},
+			{"Manny", "333-3333", new Integer(1)},
+			{"Sammy", "444-4444", new Integer(1)}};
 
-	private static String[] columns = { "NAME", "CONTACT_PHONE", "OCC_COUNT" };
+	private static String[] columns = {"NAME", "CONTACT_PHONE", "OCC_COUNT"};
 
 	public OwnerData(Connection connection) {
 		super(connection, data, columns, columnTypes);

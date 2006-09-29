@@ -25,32 +25,32 @@ import org.apache.tuscany.das.rdb.config.Table;
 import org.apache.tuscany.das.rdb.config.wrapper.MappingWrapper;
 import org.apache.tuscany.das.rdb.impl.ReadCommandImpl;
 
-
 public class ReadCustomersByLastnameCommand extends ReadCommandImpl {
 
-	private static final String sqlString = "select * from CUSTOMER where LASTNAME = ?";
-	private static final Config mapping;
-	
-	static {
-		ConfigFactory factory = ConfigFactory.INSTANCE;
-		mapping = factory.createConfig();
-		Table t = factory.createTable();
-		Column id = factory.createColumn();
-		id.setColumnName("ID");
-		id.setPrimaryKey(true);
-		Column lastname = factory.createColumn();
-		lastname.setColumnName("LASTNAME");
-		Column address = factory.createColumn();
-		address.setColumnName("ADDRESS");
-		
-		t.getColumn().add(id);
-		t.getColumn().add(lastname);
-		t.getColumn().add(address);
-		t.setTableName("CUSTOMER");
-		mapping.getTable().add(t);
-	}
-	
-	public ReadCustomersByLastnameCommand() {
-		super(sqlString, new MappingWrapper(mapping), null);
-	}
+    private static final String SQL_STRING = "select * from CUSTOMER where LASTNAME = ?";
+
+    private static final Config CONFIG;
+
+    static {
+        ConfigFactory factory = ConfigFactory.INSTANCE;
+        CONFIG = factory.createConfig();
+        Table t = factory.createTable();
+        Column id = factory.createColumn();
+        id.setColumnName("ID");
+        id.setPrimaryKey(true);
+        Column lastname = factory.createColumn();
+        lastname.setColumnName("LASTNAME");
+        Column address = factory.createColumn();
+        address.setColumnName("ADDRESS");
+
+        t.getColumn().add(id);
+        t.getColumn().add(lastname);
+        t.getColumn().add(address);
+        t.setTableName("CUSTOMER");
+        CONFIG.getTable().add(t);
+    }
+
+    public ReadCustomersByLastnameCommand() {
+        super(SQL_STRING, new MappingWrapper(CONFIG), null);
+    }
 }

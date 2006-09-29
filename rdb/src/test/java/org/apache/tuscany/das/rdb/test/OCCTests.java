@@ -56,7 +56,7 @@ public class OCCTests extends DasTest {
 			das.applyChanges(root);
 			fail("An OCCException should be thrown");
 		} catch (RuntimeException ex) {
-			if ( !ex.getMessage().equals("OCC Exception") )
+			if (!ex.getMessage().equals("OCC Exception"))
 				throw ex;
 		}
 	}
@@ -88,7 +88,7 @@ public class OCCTests extends DasTest {
 		
 		DAS das2 = DAS.FACTORY.createDAS(getConfig("ManagedBooksConfig.xml"), getConnection());
 		//Read a book instance
-        Command select2= das2.getCommand("select book 1");
+        Command select2 = das2.getCommand("select book 1");
 		DataObject root2 = select2.executeQuery();
 		DataObject book2 = root2.getDataObject("BOOK[1]");
 		//Change a field to mark the instance 'dirty'
@@ -100,7 +100,7 @@ public class OCCTests extends DasTest {
 			das.applyChanges(root);
 			fail("An OCCException should be thrown");
 		} catch (RuntimeException ex) {
-			if ( !ex.getMessage().equals("OCC Exception") )
+			if (!ex.getMessage().equals("OCC Exception"))
 				throw ex;
 		}
 	}

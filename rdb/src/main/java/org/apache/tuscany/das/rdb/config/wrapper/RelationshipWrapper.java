@@ -21,26 +21,27 @@ package org.apache.tuscany.das.rdb.config.wrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.tuscany.das.rdb.config.KeyPair;
 import org.apache.tuscany.das.rdb.config.Relationship;
 
 public class RelationshipWrapper {
 
-	private Relationship relationship;
+    private Relationship relationship;
 
-	public RelationshipWrapper(Relationship r) {
-		this.relationship = r;
-	}
-	
-	public Collection getForeignKeys() {
-		ArrayList keys = new ArrayList();
-		Iterator i = this.relationship.getKeyPair().iterator();
-		while ( i.hasNext()) {
-			KeyPair pair = (KeyPair) i.next();
-			keys.add(pair.getForeignKeyColumn());
-		}
-		return keys;
-	}
+    public RelationshipWrapper(Relationship r) {
+        this.relationship = r;
+    }
+
+    public Collection getForeignKeys() {
+        List keys = new ArrayList();
+        Iterator i = this.relationship.getKeyPair().iterator();
+        while (i.hasNext()) {
+            KeyPair pair = (KeyPair) i.next();
+            keys.add(pair.getForeignKeyColumn());
+        }
+        return keys;
+    }
 
 }

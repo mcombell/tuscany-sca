@@ -23,31 +23,25 @@ import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.test.framework.TestData;
 
-
 public class StateData extends TestData {
+    private static Object[][] stateData = { { new Integer(1), "NC" }, { new Integer(2), "CO" }, { new Integer(3), "CA" } };
+    
+    public StateData(Connection c) {
+        super(c, stateData);
+    }
 
-	public StateData(Connection c) {
-		super(c, stateData);
-	}
+    public String getTableName() {
+        return "STATES";
+    }
 
-	public String getTableName() {
-		return "STATES";
-	}
-	
-	private static Object[][] stateData = {
-		{new Integer(1), "NC"}, 
-		{new Integer(2), "CO"},
-		{new Integer(3), "CA"}
-		};
 
-	public void doDeletes() throws SQLException {
-		deleteRowsFromTable();
-	}
+    public void doDeletes() throws SQLException {
+        deleteRowsFromTable();
+    }
 
-	public void doInserts() throws SQLException {
-		insertRows();
-		
-	}
+    public void doInserts() throws SQLException {
+        insertRows();
 
+    }
 
 }

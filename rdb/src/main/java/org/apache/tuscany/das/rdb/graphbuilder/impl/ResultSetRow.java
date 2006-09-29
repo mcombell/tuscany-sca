@@ -22,159 +22,151 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
-
 /**
- *
- * A ResultSetRow is used to transform a single row of a ResultSet into a set of
- * EDataObjects.
+ * 
+ * A ResultSetRow is used to transform a single row of a ResultSet into a set of EDataObjects.
  */
 public class ResultSetRow {
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(ResultSetRow.class);
 
-	private final ResultMetadata metadata;
+    private final ResultMetadata metadata;
 
-	private HashMap tableMap = new HashMap();
+    private Map tableMap = new HashMap();
 
-	private ArrayList allTableData;
+    private List allTableData;
 
-	/**
-	 * Method ResultSetRow.
-	 *
-	 * @param rs
-	 *            A ResultSet positioned on the desired row
-	 * @param ePackage
-	 *            The package used to create EDataObjects
-	 */
-	public ResultSetRow(ResultSet rs, ResultMetadata m) throws SQLException {
-		this.metadata = m;
-		if (m.isRecursive())
-			processRecursiveRow(rs);
-		else
-			processRow(rs);
-	}
+    /**
+     * Method ResultSetRow.
+     * 
+     * @param rs
+     *            A ResultSet positioned on the desired row
+     * @param ePackage
+     *            The package used to create EDataObjects
+     */
+    public ResultSetRow(ResultSet rs, ResultMetadata m) throws SQLException {
+        this.metadata = m;
+        if (m.isRecursive())
+            processRecursiveRow(rs);
+        else
+            processRow(rs);
+    }
 
-	/**
-	 * Processes a single row in the ResultSet Method processRow.
-	 *
-	 * @param rs
-	 */
-	private void processRow(ResultSet rs) throws SQLException {
+    /**
+     * Processes a single row in the ResultSet Method processRow.
+     * 
+     * @param rs
+     */
+    private void processRow(ResultSet rs) throws SQLException {
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled())
             this.logger.debug("");
-		for (int i = 1; i <= metadata.getResultSetSize(); i++) {
-			Object data = getObject(rs, i);
+        for (int i = 1; i <= metadata.getResultSetSize(); i++) {
+            Object data = getObject(rs, i);
 
-			TableData table = getRawData(metadata.getTablePropertyName(i));
-			if(this.logger.isDebugEnabled())
-			    this.logger.debug("Adding column: "
-					+ metadata.getColumnPropertyName(i) + "\tValue: " + data
-					+ "\tTable: " + metadata.getTablePropertyName(i));
-			table.addData(metadata.getColumnPropertyName(i), metadata
-					.isPKColumn(i), data);
-		}
+            TableData table = getRawData(metadata.getTablePropertyName(i));
+            if (this.logger.isDebugEnabled())
+                this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+                        + metadata.getTablePropertyName(i));
+            table.addData(metadata.getColumnPropertyName(i), metadata.isPKColumn(i), data);
+        }
 
-	}
+    }
 
-	public void processRecursiveRow(ResultSet rs) throws SQLException {
-		this.allTableData = new ArrayList();
-		int i = 1;
-        if(this.logger.isDebugEnabled())
-		    this.logger.debug("");
+    public void processRecursiveRow(ResultSet rs) throws SQLException {
+        this.allTableData = new ArrayList();
+        int i = 1;
+        if (this.logger.isDebugEnabled())
+            this.logger.debug("");
 
-		while (i <= metadata.getResultSetSize()) {
-            if(this.logger.isDebugEnabled())
+        while (i <= metadata.getResultSetSize()) {
+            if (this.logger.isDebugEnabled())
                 this.logger.debug("");
-			TableData table = new TableData(metadata.getTablePropertyName(i));
-			this.allTableData.add(table);
+            TableData table = new TableData(metadata.getTablePropertyName(i));
+            this.allTableData.add(table);
 
-			while ( (i <= metadata.getResultSetSize()) && (metadata.isPKColumn(i))) {
-				Object data = getObject(rs, i);
-				if(this.logger.isDebugEnabled())
-				    this.logger.debug("Adding column: "
-						+ metadata.getColumnPropertyName(i) + "\tValue: " + data
-						+ "\tTable: " + metadata.getTablePropertyName(i));
-				table.addData(metadata.getColumnPropertyName(i), true, data);
-				i++;
-			}
+            while ((i <= metadata.getResultSetSize()) && (metadata.isPKColumn(i))) {
+                Object data = getObject(rs, i);
+                if (this.logger.isDebugEnabled())
+                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+                            + metadata.getTablePropertyName(i));
+                table.addData(metadata.getColumnPropertyName(i), true, data);
+                i++;
+            }
 
-			while ( (i <= metadata.getResultSetSize()) &&
-					(!metadata.isPKColumn(i))) {
-				Object data = getObject(rs, i);
-                if(this.logger.isDebugEnabled())
-                    this.logger.debug("Adding column: "
-						+ metadata.getColumnPropertyName(i) + "\tValue: " + data
-						+ "\tTable: " + metadata.getTablePropertyName(i));
-				table.addData(metadata.getColumnPropertyName(i), false, data);
-				i++;
-			}
-		}
-	}
+            while ((i <= metadata.getResultSetSize()) && (!metadata.isPKColumn(i))) {
+                Object data = getObject(rs, i);
+                if (this.logger.isDebugEnabled())
+                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+                            + metadata.getTablePropertyName(i));
+                table.addData(metadata.getColumnPropertyName(i), false, data);
+                i++;
+            }
+        }
+    }
 
-	/**
-	 * @param rs
-	 * @param metadata
-	 * @param i
-	 * @return
-	 */
-	private Object getObject(ResultSet rs,  int i)
-			throws SQLException {
+    /**
+     * @param rs
+     * @param metadata
+     * @param i
+     * @return
+     */
+    private Object getObject(ResultSet rs, int i) throws SQLException {
 
-		Object data = rs.getObject(i);
+        Object data = rs.getObject(i);
 
-		if (rs.wasNull())
-			return null;
-		else
-			return metadata.getConverter(i).getPropertyValue(data);
-	}
+        if (rs.wasNull())
+            return null;
+        else
+            return metadata.getConverter(i).getPropertyValue(data);
+    }
 
-	/**
-	 * Returns a HashMap that holds data for the specified table
-	 *
-	 * @param tableName
-	 *            The name of the table
-	 * @return HashMap
-	 */
-	public TableData getTable(String tableName) {
-		return (TableData) tableMap.get(tableName);
-	}
+    /**
+     * Returns a HashMap that holds data for the specified table
+     * 
+     * @param tableName
+     *            The name of the table
+     * @return HashMap
+     */
+    public TableData getTable(String tableName) {
+        return (TableData) tableMap.get(tableName);
+    }
 
-	/**
-	 * Returns a HashMap that holds data for the specified table If the HashMap
-	 * doesn't exist, it will be created. This is used internally to build the
-	 * ResultSetRow, whereas getTable is used externally to retrieve existing
-	 * table data.
-	 *
-	 * @param tableName
-	 *            The name of the table
-	 * @return HashMap
-	 */
-	private TableData getRawData(String tableName) {
+    /**
+     * Returns a HashMap that holds data for the specified table If the HashMap doesn't exist, it will be created. This is used internally to build
+     * the ResultSetRow, whereas getTable is used externally to retrieve existing table data.
+     * 
+     * @param tableName
+     *            The name of the table
+     * @return HashMap
+     */
+    private TableData getRawData(String tableName) {
 
-		TableData table = (TableData) tableMap.get(tableName);
+        TableData table = (TableData) tableMap.get(tableName);
 
-		if (table == null) {
-			table = new TableData(tableName);
-			tableMap.put(tableName, table);
-		}
+        if (table == null) {
+            table = new TableData(tableName);
+            tableMap.put(tableName, table);
+        }
 
-		return table;
-	}
+        return table;
+    }
 
-	public ArrayList getAllTableData() {
-		if ( this.allTableData == null ) {
-			this.allTableData = new ArrayList();
-			this.allTableData.addAll(tableMap.values());
-		}
+    public List getAllTableData() {
+        if (this.allTableData == null) {
+            this.allTableData = new ArrayList();
+            this.allTableData.addAll(tableMap.values());
+        }
 
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled())
             this.logger.debug(allTableData);
 
-		return this.allTableData;
-	}
+        return this.allTableData;
+    }
 
 }

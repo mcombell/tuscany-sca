@@ -27,35 +27,38 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 import commonj.sdo.DataObject;
 
 /**
- *
+ * 
  */
-public class ApplyChangesCommandImpl extends BaseCommandImpl  {
+public class ApplyChangesCommandImpl extends BaseCommandImpl {
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(ApplyChangesCommandImpl.class);
 
     private ChangeSummarizer summarizer = new ChangeSummarizer();
 
-    public ApplyChangesCommandImpl(MappingWrapper config, Connection connection){
+    public ApplyChangesCommandImpl(MappingWrapper config, Connection connection) {
         this.configWrapper = config;
-        if ( connection != null )
-     	   setConnection(connection, config.getConfig());
+        if (connection != null) {
+            setConnection(connection, config.getConfig());
+        }
 
     }
 
-	public void setConnection(ConnectionImpl connection) {
-		summarizer.setConnection(connection);
-	}
-
+    public void setConnection(ConnectionImpl connection) {
+        summarizer.setConnection(connection);
+    }
 
     public void execute(DataObject root) {
-        if(this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Executing ApplyChangesCmd");
+        }
 
-        if (summarizer.getConnection() == null)
+        if (summarizer.getConnection() == null) {
             throw new RuntimeException("A connection must be provided");
+        }
 
-        if (!root.equals(root.getDataGraph().getRootObject()))
+        if (!root.equals(root.getDataGraph().getRootObject())) {
             throw new RuntimeException("'root' argument must be the root of the datagraph");
+        }
 
         summarizer.setMapping(configWrapper);
 
@@ -66,10 +69,11 @@ public class ApplyChangesCommandImpl extends BaseCommandImpl  {
             changes.execute();
             success = true;
         } finally {
-            if (success)
+            if (success) {
                 summarizer.getConnection().cleanUp();
-            else
+            } else {
                 summarizer.getConnection().errorCleanUp();
+            }
         }
     }
 

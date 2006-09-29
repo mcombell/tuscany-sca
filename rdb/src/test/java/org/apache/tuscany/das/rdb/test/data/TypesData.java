@@ -22,20 +22,16 @@ import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.test.framework.TestData;
 
-
 public class TypesData extends TestData {
-			
-	private static Object[][] customerData = {
-			{new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89)}
-			};
 
-	public TypesData(Connection connection) {
-		super(connection, customerData);
-	}
-	
-	public String getTableName() {
-		return "TYPETEST";
-	}
+    private static Object[][] customerData = { { new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89) } };
 
-	
+    public TypesData(Connection connection) {
+        super(connection, customerData);
+    }
+
+    public String getTableName() {
+        return "TYPETEST";
+    }
+
 }
