@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><!-- Copyright (c) 2005 The Apache Software Foundation or its licensors,
+as applicable. Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+the specific language governing permissions and limitations under the License. -->
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type"> <meta content="text/css" http-equiv="Content-Style-Type"><title>Tuscany End User Sample Testing</title><!-- LINK rel="stylesheet" href="ait.css" type="text/css" -->
+<style type="text/css" media="all">
+@import url("../../../css/maven-base.css");
+@import url("../../../css/maven-theme.css");
+@import url("../../../css/site.css");
+</style><link rel="stylesheet" href="./css/print.css" type="text/css" media="print"></head>
+<body>
+<h2>Tuscany End User Sample Testing</h2>
+<h3>Initial Setup</h3>&nbsp;
+&nbsp; &nbsp;Most of the following only needs to be done once
+unless noted otherwise.<br><ul>
+<li>Follow the steps to build
+Tuscany core from either the <a target="_blank" href="../../companyweb/readme.htm">samples
+readme</a> or the more
+comprehensive instructions in the <a href="http://incubator.apache.org/tuscany/get-involved.html" target="_blank">Getting Involved with Apache Tuscany</a>
+page. This step
+needs to be done when ever you have new source to test.</li>
+<li>Change directory
+to <span style="font-weight: bold;">java/samples/das/testing/tomcat</span>.</li>
+<li>Download
+Tomcat Core 5.5.<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span>&nbsp;</span>zip
+for Windows or &nbsp;tar.gz for Linux &nbsp;from <a href="http://tomcat.apache.org/download-55.cgi" target="_blank">Apache
+Tomcat</a>.</li><li>You may have to create/edit {user home}/build.properties to
+change the property <b>tuscany.acceptance.tomcat.zipped</b> to tell the build
+environment where the tomcat distribution zip file is located. </li>
+<li>You may
+have to edit build.xml &nbsp;to change the property <span style="font-weight: bold;">tuscany.acceptance.tomcat.version</span>
+to match the&nbsp;<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span></span>
+to the specific version that you downloaded.</li><li>During
+the build Maven
+references the dependency jsr173 jar which is not in any maven 2.0
+repository to resolve this you need to add it to your local Maven
+repository by :&nbsp;</li><ul><li>Downloading the
+latest binary Apache <a href="http://xmlbeans.apache.org/sourceAndBinaries/index.html#XMLBeans+Binary+and+Development+Kit" target="_blank">XML Bean distribution</a> &nbsp;(
+<a href="http://mirrors.ibiblio.org/pub/mirrors/apache/xmlbeans/xmlbeans-current.zip">xmlbeans-current.zip</a>
+, <a href="http://mirrors.ibiblio.org/pub/mirrors/apache/xmlbeans/xmlbeans-current.tgz">xmlbeans-current.tgz</a>)
+unpack and jsr173_1.0_api.jar should be&nbsp;in the lib directory.</li><li><code>
+mvn install:install-file
+<br>-Dfile=jsr173_api.jar
+<br>-DgroupId=javax.xml <br>
+-DartifactId=jsr173 <br>
+-Dversion=1.0 <br>
+-Dpackaging=jar</code>
+</li></ul></ul><h3>&nbsp;Running</h3>In
+the <span style="font-weight: bold;">java/samples/das/testing/tomcat </span>
+directory<b> </b>run maven:<br><code>mvn</code><br><h3>Explanation</h3>Maven&nbsp;does
+the following:<br><ul><li>Unpacks the
+Tomcat distribution into the target directory to ensure a pristine
+environment.</li><li>It adds the appropriate Tuscany and it
+dependencies jars into Tomcat <a href="../../companyweb/readme.htm#Tomcat_Setup" target="_blank"><small><span style="font-style: italic;">(for more&nbsp; details)</span></small></a></li><li>Does
+the necessary changes
+to Tomcat's configuration as required.&nbsp;<a href="../../companyweb/readme.htm#Tomcat_Setup" target="_blank"><small><span style="font-style: italic;">(for more&nbsp; details)</span></small></a></li><li>Deploys
+Tuscany's DAS sample war files into Tomcat.</li><li>Starts
+Tomcat (You should see another window running Tomcat)&nbsp;</li><li>Begins
+running HTML unit tests that should closely match running the samples
+as a user would.</li></ul>If all goes well at the end you
+should see:<br>
+<pre>[INFO] ----------------------------------------------------------------------------<br>[INFO] Reactor Summary:<br>[INFO] ----------------------------------------------------------------------------<br>[INFO] Tuscany Testing in Tomcat .............................. SUCCESS [0.340s]<br>[INFO] Tuscany Testing Tomcat DAS Sample - Companyweb ......... SUCCESS [48.350s]<br>[INFO] ----------------------------------------------------------------------------<br>[INFO] ----------------------------------------------------------------------------<br>[INFO] BUILD SUCCESSFUL<br>[INFO] ----------------------------------------------------------------------------<br>[INFO] Total time: 49 seconds<br>[INFO] Finished at: Tue Aug 08 15:30:28 EDT 2006<br>[INFO] Final Memory: 7M/15M<br>[INFO] ----------------------------------------------------------------------------<br><br></pre><h3>Cleanup</h3>Close
+the Tomcat window and issue <code>mvn clean</code>.<p><b><font size="4">Note</font></b></p>
+<p>Because the html unit tests execute multiple user actions that change the contents of the database tables, is recommended
+that you always run these tests in a clean environment (after a mvn clean),
+otherwise you may experience failure on some tests as the expected result data might have been affected by previous test runs.</p>
+
+</body></html>
