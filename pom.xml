@@ -33,6 +33,8 @@
     <modules>
         <module>rdb</module>
         <module>samples</module>
+        <module>distribution/binary</module>
+        <module>distribution/samples</module>
     </modules>
 
     <!-- definition of repositories where the parent pom can be found -->
