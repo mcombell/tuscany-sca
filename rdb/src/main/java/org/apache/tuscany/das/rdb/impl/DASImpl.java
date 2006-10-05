@@ -60,17 +60,20 @@ public class DASImpl implements DAS {
 
     public DASImpl(Config inConfig) {
         Config cfg = inConfig;
-        if (cfg == null)
+        if (cfg == null) {
             cfg = ConfigFactory.INSTANCE.createConfig();
+        }
         this.configWrapper = new MappingWrapper(cfg);
 
         Iterator i = configWrapper.getConfig().getCommand().iterator();
         while (i.hasNext()) {
-            org.apache.tuscany.das.rdb.config.Command commandConfig = (org.apache.tuscany.das.rdb.config.Command) i.next();
+            org.apache.tuscany.das.rdb.config.Command commandConfig = 
+                (org.apache.tuscany.das.rdb.config.Command) i.next();
             String kind = commandConfig.getKind();
             if (kind.equalsIgnoreCase("select")) {
                 commands
-                        .put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getResultDescriptor()));
+                        .put(commandConfig.getName(), new ReadCommandImpl(commandConfig.getSQL(), 
+                                configWrapper, commandConfig.getResultDescriptor()));
             } else if (kind.equalsIgnoreCase("update")) {
                 commands.put(commandConfig.getName(), new UpdateCommandImpl(commandConfig.getSQL()));
             } else if (kind.equalsIgnoreCase("insert")) {
@@ -78,7 +81,8 @@ public class DASImpl implements DAS {
             } else if (kind.equalsIgnoreCase("delete")) {
                 commands.put(commandConfig.getName(), new DeleteCommandImpl(commandConfig.getSQL()));
             } else if (kind.equalsIgnoreCase("procedure")) {
-                commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(), configWrapper, commandConfig.getParameter()));
+                commands.put(commandConfig.getName(), new SPCommandImpl(commandConfig.getSQL(), 
+                        configWrapper, commandConfig.getParameter()));
             } else {
                 throw new RuntimeException("Invalid kind of command: " + kind);
             }
@@ -117,8 +121,9 @@ public class DASImpl implements DAS {
      * @see org.apache.tuscany.das.rdb.CommandGroup#getCommand(java.lang.String)
      */
     public Command getCommand(String name) {
-        if (!commands.containsKey(name))
+        if (!commands.containsKey(name)) {
             throw new RuntimeException("CommandGroup has no command named: " + name);
+        }
         CommandImpl cmd = (CommandImpl) commands.get(name);
         cmd.setConnection(getConnection(), configWrapper.getConfig());
         return cmd;
@@ -129,14 +134,16 @@ public class DASImpl implements DAS {
     }
 
     public Connection getConnection() {
-        if (connection == null)
+        if (connection == null) {
             initializeConnection();
+        }
         return connection;
     }
 
     private void initializeConnection() {
         Config config = configWrapper.getConfig();
-        if (config == null || config.getConnectionInfo() == null || config.getConnectionInfo().getDataSource() == null) {
+        if (config == null || config.getConnectionInfo() == null 
+                || config.getConnectionInfo().getDataSource() == null) {
             throw new RuntimeException("No connection has been provided and no data source has been specified");
         }
 
@@ -152,8 +159,9 @@ public class DASImpl implements DAS {
             DataSource ds = (DataSource) ctx.lookup(configWrapper.getConfig().getConnectionInfo().getDataSource());
             try {
                 connection = ds.getConnection();
-                if (connection == null)
+                if (connection == null) {
                     throw new RuntimeException("Could not obtain a Connection from DataSource");
+                }
                 connection.setAutoCommit(false);
                 setConnection(connection);
             } catch (SQLException e) {
@@ -167,18 +175,20 @@ public class DASImpl implements DAS {
 
     public void releaseResources() {
 
-        if (managingConnections())
+        if (managingConnections()) {
             closeConnection();
+        }
     }
 
     private void closeConnection() {
-        if (connection != null)
+        if (connection != null) {
             try {
                 connection.close();
                 connection = null;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
     }
 
     /**

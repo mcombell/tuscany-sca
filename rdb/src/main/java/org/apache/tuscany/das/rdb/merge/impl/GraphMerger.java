@@ -56,16 +56,18 @@ public class GraphMerger {
     // (Tuscany-583)
     public DataObject emptyGraph(Config config) {
 
-        if (config.getDataObjectModel() == null)
+        if (config.getDataObjectModel() == null) {
             throw new RuntimeException("DataObjectModel must be specified in the Config");
+        }
 
         String uri = "http:///org.apache.tuscany.das.rdb/das";
         TypeHelper typeHelper = SDOUtil.createTypeHelper();
         Type rootType = SDOUtil.createType(typeHelper, uri + "/DataGraphRoot", "DataGraphRoot", false);
 
         List types = SDOUtil.getTypes(typeHelper, config.getDataObjectModel());
-        if (types == null)
+        if (types == null) {
             throw new RuntimeException("SDO Types have not been registered for URI " + config.getDataObjectModel());
+        }
 
         Iterator i = types.iterator();
         while (i.hasNext()) {
@@ -91,8 +93,9 @@ public class GraphMerger {
         DataObject primaryGraph = (DataObject) graphs.get(0);
 
         Iterator i = graphs.iterator();
-        if (i.hasNext())
+        if (i.hasNext()) {
             i.next();
+        }
         while (i.hasNext()) {
             primaryGraph = merge(primaryGraph, (DataObject) i.next());
         }
@@ -147,7 +150,8 @@ public class GraphMerger {
                     while (iter.hasNext()) {
                         DataObject refObject = (DataObject) iter.next();
                         createObjectWithSubtree(root, refObject.getContainmentProperty(), refObject);
-                        refObject = registry.get(refObject.getType().getName(), Collections.singletonList(getPrimaryKey(refObject)));
+                        refObject = registry.get(refObject.getType().getName(), 
+                                Collections.singletonList(getPrimaryKey(refObject)));
                         if (ref.isMany()) {
                             newObject.getList(newObject.getType().getProperty(ref.getName())).add(refObject);
                         } else {

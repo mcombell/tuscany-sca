@@ -25,20 +25,19 @@ import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
 
 public class DepartmentData extends TestDataWithExplicitColumns {
-	
-	private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 
-	private static Object[][] deptData = {{"Advanced Technologies", "NY",
-			"123"}};
+    private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 
-	private static String[] deptColumns = {"NAME", "LOCATION", "DEPNUMBER"};
-	
-	public DepartmentData(Connection connection) {
-		super(connection, deptData, deptColumns, columnTypes);
-	}
-	
-	public String getTableName() {
-		return "DEPARTMENT";
-	}
+    private static Object[][] deptData = {{"Advanced Technologies", "NY", "123" }};
+
+    private static String[] deptColumns = {"NAME", "LOCATION", "DEPNUMBER"};
+
+    public DepartmentData(Connection connection) {
+        super(connection, deptData, deptColumns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "DEPARTMENT";
+    }
 
 }

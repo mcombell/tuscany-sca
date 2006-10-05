@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.Command;
@@ -44,7 +43,7 @@ public class TopDown extends DasTest {
     }
 
     // Uses dynamic SDOs but user provides the model
-    public void testUserProvidedModelDynamic() throws SQLException, IOException {
+    public void testUserProvidedModelDynamic() throws SQLException {
 
         DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomerOrder.xml"), getConnection());
 
@@ -53,7 +52,7 @@ public class TopDown extends DasTest {
         SDOUtil.registerStaticTypes(CustomerFactory.class);
 
         // Parameterize the command
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
 
         // Get the graph - DataGraphRoot is from the typed package
         DataObject root = select.executeQuery();

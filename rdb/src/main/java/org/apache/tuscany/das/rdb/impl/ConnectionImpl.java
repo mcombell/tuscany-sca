@@ -50,8 +50,9 @@ public class ConnectionImpl {
             } else {
                 this.useGetGeneratedKeys = true;
             }
-            if (connection.getAutoCommit())
+            if (connection.getAutoCommit()) {
                 throw new RuntimeException("AutoCommit must be off");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -65,9 +66,9 @@ public class ConnectionImpl {
     public void cleanUp() {
         try {
             if (managingTransaction) {
-                if (this.logger.isDebugEnabled())
+                if (this.logger.isDebugEnabled()) {
                     this.logger.debug("Committing Transaction");
-
+                }
                 connection.commit();
             }
         } catch (SQLException e) {
@@ -78,9 +79,9 @@ public class ConnectionImpl {
     public void errorCleanUp() {
         try {
             if (managingTransaction) {
-                if (this.logger.isDebugEnabled())
+                if (this.logger.isDebugEnabled()) {
                     this.logger.debug("Rolling back Transaction");
-
+                }
                 connection.rollback();
             }
         } catch (SQLException e) {
@@ -89,21 +90,23 @@ public class ConnectionImpl {
     }
 
     public PreparedStatement prepareStatement(String queryString, String[] returnKeys) throws SQLException {
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Preparing Statement: " + queryString);
+        }
 
-        if (useGetGeneratedKeys)
+        if (useGetGeneratedKeys) {
             return connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
-
-        else if (returnKeys.length > 0)
+        } else if (returnKeys.length > 0) {
             return connection.prepareStatement(queryString, returnKeys);
+        }
 
         return connection.prepareStatement(queryString);
     }
 
     public PreparedStatement preparePagedStatement(String queryString) throws SQLException {
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Preparing Statement: " + queryString);
+        }
 
         return connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
     }

@@ -79,7 +79,8 @@ public class KennelTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConnection());
 
         // Build the select command
-        Command selectCommand = das.createCommand("select * from OWNER, DOG where DOG.OWNER_ID = OWNER.ID and OWNER.NAME = 'Fanny'");
+        Command selectCommand = das.createCommand("select * from OWNER, DOG "
+                + "where DOG.OWNER_ID = OWNER.ID and OWNER.NAME = 'Fanny'");
 
         // Get the graph
         DataObject root = selectCommand.executeQuery();

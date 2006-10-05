@@ -50,7 +50,8 @@ public class RelationshipTests extends DasTest {
      */
     public void testRead() throws Exception {
 
-        String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
+        String statement = "SELECT * FROM CUSTOMER LEFT JOIN ANORDER "
+                + "ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID = 1";
 
         DAS das = DAS.FACTORY.createDAS(getConfig("customerOrderRelationshipMapping.xml"), getConnection());
         // Read some customers and related orders
@@ -83,8 +84,8 @@ public class RelationshipTests extends DasTest {
         Integer cust1ID = (Integer) cust1.get("ID");
         Integer cust2ID = (Integer) cust2.get("ID");
         // save order count
-        Integer cust1OrderCount = new Integer(cust1.getList("orders").size());
-        Integer cust2OrderCount = new Integer(cust2.getList("orders").size());
+        Integer cust1OrderCount = Integer.valueOf(cust1.getList("orders").size());
+        Integer cust2OrderCount = Integer.valueOf(cust2.getList("orders").size());
 
         // Move an order to cust1 from cust2
         DataObject order = (DataObject) cust2.getList("orders").get(0);
@@ -95,7 +96,8 @@ public class RelationshipTests extends DasTest {
 
         // verify cust1 relationship updates
         select = das
-                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+                .createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON "
+                        + "CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
         select.setParameter(1, cust1ID);
 
         root = select.executeQuery();

@@ -71,8 +71,9 @@ public class Statement {
         Iterator outParams = parameters.outParams().iterator();
         while (outParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) outParams.next();
-            if (this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Registering parameter " + param.getName());
+            }
 
             cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
         }
@@ -111,8 +112,9 @@ public class Statement {
         while (outParams.hasNext()) {
             ParameterImpl param = (ParameterImpl) outParams.next();
 
-            if (this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Registering parameter " + param.getName());
+            }
 
             cs.registerOutParameter(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
         }
@@ -140,16 +142,18 @@ public class Statement {
      * has been specified and try setObject otherwise.
      */
     private int executeUpdate(PreparedStatement ps, Parameters parameters) throws SQLException {
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Executing statement " + queryString);
+        }
 
         Iterator i = parameters.inParams().iterator();
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
             Object value = param.getValue();
-            if (this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Setting parameter " + param.getIndex() + " to " + value);
+            }
 
             if (value == null) {
                 if (param.getType() == null) {
@@ -159,8 +163,9 @@ public class Statement {
                     } catch (SQLException ex) {
                         ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(null));
                     }
-                } else
+                } else {
                     ps.setNull(param.getIndex(), SDODataTypeHelper.sqlTypeFor(param.getType()));
+                }
             } else {
                 ps.setObject(param.getIndex(), value);
             }
@@ -187,11 +192,13 @@ public class Statement {
 
     private PreparedStatement getPreparedStatement(String[] returnKeys) throws SQLException {
 
-        if (preparedStatement == null)
-            if (isPaging)
+        if (preparedStatement == null) {
+            if (isPaging) {
                 preparedStatement = jdbcConnection.preparePagedStatement(queryString);
-            else
+            } else {
                 preparedStatement = jdbcConnection.prepareStatement(queryString, returnKeys);
+            }
+        }
 
         return preparedStatement;
     }
@@ -200,8 +207,9 @@ public class Statement {
 
         if (getConnection().useGetGeneratedKeys()) {
             ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next())
-                return new Integer(rs.getInt(1));
+            if (rs.next()) {
+                return Integer.valueOf(rs.getInt(1));
+            }
         }
 
         return null;

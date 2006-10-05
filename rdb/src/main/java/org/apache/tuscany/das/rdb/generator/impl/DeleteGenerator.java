@@ -52,12 +52,14 @@ public final class DeleteGenerator extends BaseGenerator {
             String name = (String) names.next();
             statement.append(name);
             statement.append(" = ?");
-            if (names.hasNext() && properties.hasNext())
+            if (names.hasNext() && properties.hasNext()) {
                 statement.append(" and ");
+            }
         }
 
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(statement.toString());
+        }
 
         return statement.toString();
     }

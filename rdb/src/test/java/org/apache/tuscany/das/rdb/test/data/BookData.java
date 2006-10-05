@@ -27,12 +27,13 @@ public class BookData extends TestDataWithExplicitColumns {
 
     // CREATE TABLE BOOK (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), AUTHOR VARCHAR(30), QUANTITY INT, OCC INTEGER)
 
-    private static int[] bookTypes = { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
+    private static int[] bookTypes = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 
-    private static Object[][] bookData = { { new Integer(1), "The Brothers Karamazov", "Fyodor Dostoevsky", new Integer(5), new Integer(17) },
-            { new Integer(2), "Cat in the Hat", "Doctor Seuss", new Integer(10), new Integer(1) } };
+    private static Object[][] bookData = {{Integer.valueOf(1), "The Brothers Karamazov", "Fyodor Dostoevsky", 
+            Integer.valueOf(5), Integer.valueOf(17)},
+        {Integer.valueOf(2), "Cat in the Hat", "Doctor Seuss", Integer.valueOf(10), Integer.valueOf(1)}};
 
-    private static String[] bookColumns = { "BOOK_ID", "NAME", "AUTHOR", "QUANTITY", "OCC" };
+    private static String[] bookColumns = {"BOOK_ID", "NAME", "AUTHOR", "QUANTITY", "OCC"};
 
     public BookData(Connection connection) {
         super(connection, bookData, bookColumns, bookTypes);

@@ -63,15 +63,20 @@ public class ConverterTests extends DasTest {
     }
 
     /**
-     * This tests the use of an arbitrary converter. The column converted is a VARCAHAR. ResultSetShape is used to specify that the property will be a
+     * This tests the use of an arbitrary converter. The column 
+     * converted is a VARCAHAR. ResultSetShape is used to specify 
+     * that the property will be a
      * SDODataTypes.DATE.
      * 
-     * So this example uses a converter that transforms a string column into a date property and conversely, a date property back to a string for the
+     * So this example uses a converter that transforms a string column 
+     * into a date property and conversely, a date property back to a string for the
      * underlying column.
      * 
-     * The converter returns 1957.09.27 if the column value is "Williams" and 1966.12.20 if the value is "Pavick"
+     * The converter returns 1957.09.27 if the column value is "Williams" 
+     * and 1966.12.20 if the value is "Pavick"
      * 
-     * On write, the converter returns "Pavick" if the property value is 1966.12.20 and "Williams" if the property value is 1957.09.27
+     * On write, the converter returns "Pavick" if the property value is 
+     * 1966.12.20 and "Williams" if the property value is 1957.09.27
      * 
      */
     public void testArbitraryConverter() throws Exception {
@@ -105,10 +110,11 @@ public class ConverterTests extends DasTest {
 
         // Build the select command to read a specific customer and related
         // orders
-        Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+        Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER "
+                + "ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
 
         // Parameterize the command
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
 
         // Get the graph
         try {

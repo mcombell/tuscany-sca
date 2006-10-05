@@ -91,7 +91,7 @@ public class StoredProcs extends DasTest {
     public void testGetCustomersAndOrder() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         Command read = das.createCommand("{call getCustomerAndOrders(?)}");
-        read.setParameter(1, new Integer(1));
+        read.setParameter(1, Integer.valueOf(1));
 
         DataObject root = read.executeQuery();
 
@@ -101,9 +101,12 @@ public class StoredProcs extends DasTest {
     }
 
     /**
-     * Call a stored proc requiring an in parameter and producing an out parameter and a resultset
+     * Call a stored proc requiring an in parameter and producing 
+     * an out parameter and a resultset
      * 
-     * This stored proc takes a lastname argument and returns a graph of customers with that last name. The number of read customers is returned in
+     * This stored proc takes a lastname argument and returns a 
+     * graph of customers with that last name. The number of read 
+     * customers is returned in
      * the out parameter
      */
     public void testGetNamedCustomers() throws Exception {
@@ -126,7 +129,7 @@ public class StoredProcs extends DasTest {
     public void testDelete() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command delete = das.createCommand("{call DELETECUSTOMER(?)}");
-        delete.setParameter(1, new Integer(1));
+        delete.setParameter(1, Integer.valueOf(1));
         delete.execute();
 
         // Verify DELETE
@@ -135,31 +138,5 @@ public class StoredProcs extends DasTest {
         assertTrue(root.getList("CUSTOMER").isEmpty());
 
     }
-
-    /*
-     * // For debug public void testRawCall() throws Exception {
-     * 
-     * Connection c = getConnection(); CallableStatement cs = c.prepareCall("{call GETNAMEDCUSTOMERS(?,?)}"); ParameterMetaData pm =
-     * cs.getParameterMetaData(); int count = pm.getParameterCount(); for (int i = 1; i <= count; i++) { int mode = pm.getParameterMode(i); if (mode ==
-     * ParameterMetaData.parameterModeOut || mode == ParameterMetaData.parameterModeInOut) cs.registerOutParameter(i, pm.getParameterType(i)); }
-     * cs.setString(1, "Williams"); // cs.registerOutParameter(2,java.sql.Types.INTEGER); boolean isResultSet = cs.execute(); System.out.println("Has
-     * a result set => " + isResultSet); ResultSet rs = cs.getResultSet();
-     * 
-     * if (isResultSet) { System.out.println("Results are: "); while (rs.next()) { System.out.println(rs.getObject(2)); } } System.out.println("Count
-     * is =>" + cs.getObject(2)); c.commit(); }
-     *  // For debug public void testRawCall2() throws Exception {
-     * 
-     * Connection c = getConnection(); CallableStatement cs = c.prepareCall("{call getCustomerAndOrders(?)}"); cs.setObject(1, new Integer(1));
-     * boolean isResultSet = cs.execute(); System.out.println("call getCustomerAndOrders(?) has a result set => " + isResultSet); ResultSet rs =
-     * cs.getResultSet();
-     * 
-     * write(rs); c.commit(); }
-     * 
-     * public void testGetAllOrders() throws Exception {
-     * 
-     * System.out.println("all orders"); Connection c = getConnection(); PreparedStatement s = c.prepareStatement("select * from anorder"); write
-     * (s.executeQuery()); c.commit();
-     *  }
-     */
 
 }

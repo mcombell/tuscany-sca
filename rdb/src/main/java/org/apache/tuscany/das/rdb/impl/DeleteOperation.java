@@ -24,17 +24,15 @@ import commonj.sdo.DataObject;
 
 public class DeleteOperation extends ChangeOperation {
 
-	
-	/**
-	 * @param command
-	 * @param changedObject
-	 * Objects deleted from the graph have lost their "settings" and must
-	 * be restored
-	 */
-	public DeleteOperation(DeleteCommandImpl command, DataObject changedObject) {
-		super(command);
-		this.dObject = new DatabaseObject(command.getMappingModel(), DataObjectUtil.getRestoredCopy(changedObject));
+    /**
+     * @param command
+     * @param changedObject
+     *            Objects deleted from the graph have lost their "settings" and must be restored
+     */
+    public DeleteOperation(DeleteCommandImpl command, DataObject changedObject) {
+        super(command);
+        this.dObject = new DatabaseObject(command.getMappingModel(), DataObjectUtil.getRestoredCopy(changedObject));
 
-	}
+    }
 
 }

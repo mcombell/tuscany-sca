@@ -19,8 +19,7 @@
 package org.apache.tuscany.das.rdb.test;
 
 /*
- * Test the ability to query Database schema(metadata) information using regular DAS APIs
- * This is speciic to DB2
+ * Test the ability to query Database schema(metadata) information using regular DAS APIs This is speciic to DB2
  * 
  */
 
@@ -30,35 +29,27 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
 
-
 public class ReadDBSchemaTests extends DasTest {
 
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-	
-	
-	public void testReadTableInfo() throws Exception {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		Command select = das.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");			
-		DataObject root = select.executeQuery();
-		
-		DataObject table = (DataObject)root.get("SYSTABLES[1]");
-		
-		assertEquals('T', table.getChar("TYPE"));
-			
-	}
+    public void testReadTableInfo() throws Exception {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        Command select = das.createCommand("SELECT * from SYSIBM.SYSTABLES WHERE TYPE = 'T'");
+        DataObject root = select.executeQuery();
 
-	
-	
-	//Utilities
-	
+        DataObject table = (DataObject) root.get("SYSTABLES[1]");
 
-	
+        assertEquals('T', table.getChar("TYPE"));
+
+    }
+
+    //Utilities
+
 }

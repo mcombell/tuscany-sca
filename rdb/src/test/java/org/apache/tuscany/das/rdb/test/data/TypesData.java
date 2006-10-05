@@ -24,7 +24,8 @@ import org.apache.tuscany.das.rdb.test.framework.TestData;
 
 public class TypesData extends TestData {
 
-    private static Object[][] customerData = { { new Integer(1), timestamp, new Float(1234567.89), new Float(1234567.89) } };
+    private static Object[][] customerData = {{Integer.valueOf(1), TIMESTAMP, 
+            new Float(1234567.89), new Float(1234567.89)}};
 
     public TypesData(Connection connection) {
         super(connection, customerData);

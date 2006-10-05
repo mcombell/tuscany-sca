@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.data.CompanyData;
 import org.apache.tuscany.das.rdb.test.data.CompanyDeptData;
@@ -47,13 +46,13 @@ public class DefectTests extends DasTest {
         super.setUp();
         new CustomerData(getAutoConnection()).refresh();
         new OrderData(getAutoConnection()).refresh();
-        
+
         new CompanyData(getAutoConnection()).refresh();
         new DepartmentData(getAutoConnection()).refresh();
         new EmployeeData(getAutoConnection()).refresh();
         new CompanyDeptData(getAutoConnection()).refresh();
         new DepEmpData(getAutoConnection()).refresh();
-        
+
     }
 
     protected void tearDown() throws Exception {
@@ -68,41 +67,40 @@ public class DefectTests extends DasTest {
         // String sql = "insert into conmgt.serverstatus (statusid,
         // managedserverid, timestamp) values (316405209, 316405209, '2005-11-23
         // 19:29:52.636')";
-        String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) values (316405209, '2005-11-23 19:29:52.636')";
+        String sql = "insert into conmgt.serverstatus (managedserverid, timestamp) " 
+                + "values (316405209, '2005-11-23 19:29:52.636')";
         DAS das = DAS.FACTORY.createDAS(getConnection());
-        Command insert = das.createCommand(sql);       
+        Command insert = das.createCommand(sql);
         insert.execute();
 
         // Verify
-        Command select = das
-                .createCommand("Select * from conmgt.serverstatus where statusid = 316405209");        
+        Command select = das.createCommand("Select * from conmgt.serverstatus where statusid = 316405209");
         DataObject root = select.executeQuery();
         assertEquals(1, root.getList("conmgt.serverstatus").size());
 
     }
-    
 
     public void testUpdateChildThatHasGeneratedKey() throws Exception {
 
         DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"));
-                        
+
         //Read a specific company based on the known ID
         Command readCust = das.getCommand("all companies and departments");
-        DataObject root = readCust.executeQuery();       
+        DataObject root = readCust.executeQuery();
         DataObject lastCustomer = root.getDataObject("COMPANY[3]");
         Iterator i = lastCustomer.getList("departments").iterator();
         Random generator = new Random();
         int random = generator.nextInt(1000) + 1;
         DataObject department;
         while (i.hasNext()) {
-            department = (DataObject)i.next();
+            department = (DataObject) i.next();
             System.out.println("Modifying department: " + department.getString("NAME"));
             department.setString("NAME", "Dept-" + random);
             random = random + 1;
-        } 
-        
-       das.applyChanges(root);
-        
-    }  
-    
+        }
+
+        das.applyChanges(root);
+
+    }
+
 }

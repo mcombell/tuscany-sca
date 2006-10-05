@@ -29,7 +29,7 @@ import commonj.sdo.helper.TypeHelper;
  */
 public class ResultSetTypeMap {
 
-    public static ResultSetTypeMap instance = new ResultSetTypeMap();
+    public static final ResultSetTypeMap INSTANCE = new ResultSetTypeMap();
 
     /**
      * Constructor for ResultSetTypeMap.

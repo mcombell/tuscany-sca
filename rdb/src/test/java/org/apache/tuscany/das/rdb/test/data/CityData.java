@@ -25,8 +25,11 @@ import org.apache.tuscany.das.rdb.test.framework.TestData;
 
 public class CityData extends TestData {
 
-    private static Object[][] cityData = { { new Integer(1), "Lizard Lick", "1" }, { new Integer(2), "Morrisville", "1" },
-            { new Integer(3), "Breckenridge", "2" }, { new Integer(4), "Barstow", "3" }, { new Integer(5), "Sacramento", "3" }
+    private static Object[][] cityData = {{Integer.valueOf(1), "Lizard Lick", "1"}, 
+        {Integer.valueOf(2), "Morrisville", "1"},
+        {Integer.valueOf(3), "Breckenridge", "2"}, 
+        {Integer.valueOf(4), "Barstow", "3"}, 
+        {Integer.valueOf(5), "Sacramento", "3"}
 
     };
 

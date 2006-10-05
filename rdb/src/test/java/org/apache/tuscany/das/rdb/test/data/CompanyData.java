@@ -27,11 +27,11 @@ public class CompanyData extends TestDataWithExplicitColumns {
 
     // CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY ,NAME VARCHAR(30))
 
-    private static int[] columnTypes = { Types.VARCHAR };
+    private static int[] columnTypes = {Types.VARCHAR};
 
-    private static Object[][] companyData = { { "ACME Publishing" }, { "Do-rite plumbing" }, { "MegaCorp" } };
+    private static Object[][] companyData = {{"ACME Publishing"}, {"Do-rite plumbing"}, {"MegaCorp"}};
 
-    private static String[] companyColumns = { "NAME" };
+    private static String[] companyColumns = {"NAME"};
 
     public CompanyData(Connection connection) {
         super(connection, companyData, companyColumns, columnTypes);

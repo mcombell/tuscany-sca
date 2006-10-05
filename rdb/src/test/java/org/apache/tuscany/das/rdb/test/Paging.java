@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-
 import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.Command;
@@ -30,78 +29,72 @@ import org.apache.tuscany.das.rdb.test.framework.DasTest;
 
 import commonj.sdo.DataObject;
 
-
-
 public class Paging extends DasTest {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		new CustomerData(getAutoConnection()).refresh();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+        new CustomerData(getAutoConnection()).refresh();
+    }
 
-	public void testPaging() throws SQLException  {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-		//Build command to read all customers
-		Command custCommand = das.createCommand("select * from CUSTOMER order by ID");	
+    public void testPaging() throws SQLException {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        // Build command to read all customers
+        Command custCommand = das.createCommand("select * from CUSTOMER order by ID");
 
-		//Create a pager with the command
-		Pager pager = new PagerImpl(custCommand, 2);
+        // Create a pager with the command
+        Pager pager = new PagerImpl(custCommand, 2);
 
-		//Get and work with first page
-		DataObject root = pager.next();
-		DataObject customer1 = root.getDataObject("CUSTOMER[1]");
-		DataObject customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(1, customer1.getInt("ID"));
-		assertEquals(2, customer2.getInt("ID"));
+        // Get and work with first page
+        DataObject root = pager.next();
+        DataObject customer1 = root.getDataObject("CUSTOMER[1]");
+        DataObject customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(1, customer1.getInt("ID"));
+        assertEquals(2, customer2.getInt("ID"));
 
-		//Get and work with the second page
-		root = pager.next();
-		customer1 = root.getDataObject("CUSTOMER[1]");
-		customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(3, customer1.getInt("ID"));
-		assertEquals(4, customer2.getInt("ID"));
-		
-		// First page again
-		root = pager.previous();
-		customer1 = root.getDataObject("CUSTOMER[1]");
-		customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(1, customer1.getInt("ID"));
-		assertEquals(2, customer2.getInt("ID"));
+        // Get and work with the second page
+        root = pager.next();
+        customer1 = root.getDataObject("CUSTOMER[1]");
+        customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(3, customer1.getInt("ID"));
+        assertEquals(4, customer2.getInt("ID"));
 
-	}
-	
-	
-	public void testRandomPage() throws SQLException {
-		DAS das = DAS.FACTORY.createDAS(getConnection());
-	//Build the select command
-		Command select = das
-				.createCommand("select * from CUSTOMER order by ID");	
+        // First page again
+        root = pager.previous();
+        customer1 = root.getDataObject("CUSTOMER[1]");
+        customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(1, customer1.getInt("ID"));
+        assertEquals(2, customer2.getInt("ID"));
 
-		//Create a pager
-		Pager pager = new PagerImpl(select, 2);
+    }
 
-		//Get the first page
-		DataObject root = pager.getPage(1);
-		DataObject customer1 = root.getDataObject("CUSTOMER[1]");
-		DataObject customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(1, customer1.getInt("ID"));
-		assertEquals(2, customer2.getInt("ID"));
+    public void testRandomPage() throws SQLException {
+        DAS das = DAS.FACTORY.createDAS(getConnection());
+        // Build the select command
+        Command select = das.createCommand("select * from CUSTOMER order by ID");
 
-		//Get the second page
-		root = pager.getPage(2);
-		customer1 = root.getDataObject("CUSTOMER[1]");
-		customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(3, customer1.getInt("ID"));
-		assertEquals(4, customer2.getInt("ID"));
+        // Create a pager
+        Pager pager = new PagerImpl(select, 2);
 
-		
-		// Get the first page again
-		root = pager.getPage(1);
-		customer1 = root.getDataObject("CUSTOMER[1]");
-		customer2 = root.getDataObject("CUSTOMER[2]");
-		assertEquals(1, customer1.getInt("ID"));
-		assertEquals(2, customer2.getInt("ID"));
-	}
+        // Get the first page
+        DataObject root = pager.getPage(1);
+        DataObject customer1 = root.getDataObject("CUSTOMER[1]");
+        DataObject customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(1, customer1.getInt("ID"));
+        assertEquals(2, customer2.getInt("ID"));
 
+        // Get the second page
+        root = pager.getPage(2);
+        customer1 = root.getDataObject("CUSTOMER[1]");
+        customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(3, customer1.getInt("ID"));
+        assertEquals(4, customer2.getInt("ID"));
+
+        // Get the first page again
+        root = pager.getPage(1);
+        customer1 = root.getDataObject("CUSTOMER[1]");
+        customer2 = root.getDataObject("CUSTOMER[2]");
+        assertEquals(1, customer1.getInt("ID"));
+        assertEquals(2, customer2.getInt("ID"));
+    }
 
 }

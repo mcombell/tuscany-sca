@@ -68,8 +68,9 @@ public class MultiTableRegistry implements TableRegistry {
      * @param value
      */
     public void put(String tableName, List primaryKey, DataObject value) {
-        if (getPkMap(tableName).put(primaryKey, value) == null)
+        if (getPkMap(tableName).put(primaryKey, value) == null) {
             getCreateValueList(tableName).add(value);
+        }
     }
 
     /**

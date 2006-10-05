@@ -24,7 +24,8 @@ import java.sql.SQLException;
 import org.apache.tuscany.das.rdb.test.framework.TestData;
 
 public class StateData extends TestData {
-    private static Object[][] stateData = { { new Integer(1), "NC" }, { new Integer(2), "CO" }, { new Integer(3), "CA" } };
+    private static Object[][] stateData = {{Integer.valueOf(1), "NC"}, {Integer.valueOf(2), "CO"}, 
+        {Integer.valueOf(3), "CA"}};
     
     public StateData(Connection c) {
         super(c, stateData);

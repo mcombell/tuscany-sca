@@ -141,7 +141,7 @@ public class BestPracticeTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConfig("CompanyConfig.xml"), getConnection());
 
         Command select = das.getCommand("company by id with departments");
-        Integer idOfNoExistingCompany = new Integer(-1);
+        Integer idOfNoExistingCompany = Integer.valueOf(-1);
         select.setParameter(1, idOfNoExistingCompany);
         DataObject root = select.executeQuery();
 

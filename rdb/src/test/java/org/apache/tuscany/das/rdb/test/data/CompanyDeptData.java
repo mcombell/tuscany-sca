@@ -24,7 +24,7 @@ import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
 public class CompanyDeptData extends RelationshipData {
 
-    public static Object[][] data = { { "MegaCorp", "Advanced Technologies" } };
+    private static Object[][] data = {{"MegaCorp", "Advanced Technologies"}};
 
     public CompanyDeptData(Connection c) {
         super(c, data);

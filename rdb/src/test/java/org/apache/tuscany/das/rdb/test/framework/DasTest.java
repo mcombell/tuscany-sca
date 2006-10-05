@@ -18,8 +18,6 @@
  */
 package org.apache.tuscany.das.rdb.test.framework;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -67,16 +65,19 @@ public class DasTest extends TestCase {
      * This provides the default connection for runing single test cases on a chosen platform.
      */
     private Connection primGetConnection() {
-        if (connection == null)
+        if (connection == null) {
             defaultSetup();
+        }
         return connection;
     }
 
     /**
-     * This is a bit of a hack since it counts on constructor initialization of the DatabaseSet up class and also calls its setUp method directly.
+     * This is a bit of a hack since it counts on constructor initialization 
+     * of the DatabaseSet up class and also calls its setUp method directly.
      * This is a misuse of this JUnit TestSetup subclass .
      * 
-     * TODO - refactor to avoid this hackiness ... could move this logic to its own class that is then invoked by DatabaseSetUp
+     * TODO - refactor to avoid this hackiness ... could move this logic to its 
+     * own class that is then invoked by DatabaseSetUp
      */
     private void defaultSetup() {
 
@@ -91,11 +92,11 @@ public class DasTest extends TestCase {
     }
 
     // Utilities
-    protected InputStream getConfig(String fileName) throws FileNotFoundException {
+    protected InputStream getConfig(String fileName) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
     }
 
-    protected void write(String label, ResultSet rs) throws IOException, SQLException {
+    protected void write(String label, ResultSet rs) throws SQLException {
 
         ResultSetMetaData md = rs.getMetaData();
         int count = md.getColumnCount();
@@ -133,8 +134,9 @@ public class DasTest extends TestCase {
                     System.out.println();
                 } else if (!p.getType().isDataType()) {
                     DataObject child = obj.getDataObject(p);
-                    if (child != null)
+                    if (child != null) {
                         System.out.println("[ " + p.getName() + " ] " + "[ " + child.get("ID") + " ]");
+                    }
                 } else {
                     System.out.println("[ " + p.getName() + " ] " + obj.get(p));
                 }

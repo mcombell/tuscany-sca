@@ -24,8 +24,9 @@ import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
 public class DepEmpData extends RelationshipData {
 
-    private static Object[][] data = { { "Advanced Technologies", "John Jones" }, { "Advanced Technologies", "Jane Doe" },
-            { "Advanced Technologies", "Al Smith" } };
+    private static Object[][] data = {{"Advanced Technologies", "John Jones"}, 
+        {"Advanced Technologies", "Jane Doe"},
+        {"Advanced Technologies", "Al Smith"}};
 
     public DepEmpData(Connection c) {
         super(c, data);

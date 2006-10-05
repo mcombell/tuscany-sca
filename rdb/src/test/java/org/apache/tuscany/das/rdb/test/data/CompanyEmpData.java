@@ -25,7 +25,7 @@ import org.apache.tuscany.das.rdb.test.framework.RelationshipData;
 
 public class CompanyEmpData extends RelationshipData {
 
-    public static Object[][] data = {
+    protected static Object[][] data = {
         {"Mary Smith", "ACME Publishing" },
         {"Jane Doe", "Do-rite plumbing"},
         {"Al Smith", "MegaCorp"}};

@@ -22,24 +22,22 @@ import java.sql.Connection;
 
 import org.apache.tuscany.das.rdb.test.framework.TestData;
 
-
 public class OrderDetailsData extends TestData {
 
-	//CREATE TABLE ORDERDETAILS (ORDERID INT NOT NULL, PRODUCTID INT NOT NULL, PRICE FLOAT, PRIMARY KEY (ORDERID, PRODUCTID))
+    // CREATE TABLE ORDERDETAILS (ORDERID INT NOT NULL, PRODUCTID INT NOT NULL, PRICE FLOAT, 
+    // PRIMARY KEY (ORDERID, PRODUCTID))
 
-	public static Object[][] orderDetailsData = {
-			{new Integer(1), new Integer(1), new Float(1.1)},
-			{new Integer(1), new Integer(2), new Float(1.2)},
-			{new Integer(2), new Integer(1), new Float(2.1)},
-			{new Integer(2), new Integer(2), new Float(2.2)}
-	};
-	
-	public OrderDetailsData(Connection c) {
-		super(c, orderDetailsData);
-	}
-	
-	public String getTableName() {
-		return "ORDERDETAILS";
-	}
+    protected static Object[][] orderDetailsData = {{Integer.valueOf(1), Integer.valueOf(1), new Float(1.1)},
+        {Integer.valueOf(1), Integer.valueOf(2), new Float(1.2)}, 
+        {Integer.valueOf(2), Integer.valueOf(1), new Float(2.1)},
+        {Integer.valueOf(2), Integer.valueOf(2), new Float(2.2)}};
+
+    public OrderDetailsData(Connection c) {
+        super(c, orderDetailsData);
+    }
+
+    public String getTableName() {
+        return "ORDERDETAILS";
+    }
 
 }

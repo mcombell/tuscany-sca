@@ -23,33 +23,31 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class KennelData extends TestDataWithExplicitColumns {
 
-/*    CREATE TABLE KENNEL (
-            ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-            KNUMBER INTEGER UNSIGNED NULL,
-            KIND VARCHAR(20) NULL,
-            OCC_COUNT INTEGER UNSIGNED NULL,
-            PRIMARY KEY(ID)
-          );*/
-    
-	//id omitted.  id is auto-generated.
-    private static int[] columnTypes = {Types.INTEGER, Types.VARCHAR, Types.INTEGER}; 
-	
-	private static Object[][] data = { 
-            {new Integer(100), "Small", new Integer(1)},
-			{new Integer(101), "Small", new Integer(1)},
-			{new Integer(102), "Large", new Integer(1)}};
+    /*    CREATE TABLE KENNEL (
+     ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+     KNUMBER INTEGER UNSIGNED NULL,
+     KIND VARCHAR(20) NULL,
+     OCC_COUNT INTEGER UNSIGNED NULL,
+     PRIMARY KEY(ID)
+     );*/
 
-	private static String[] columns = {"KNUMBER", "KIND", "OCC_COUNT"};
+    //id omitted.  id is auto-generated.
+    private static int[] columnTypes = {Types.INTEGER, Types.VARCHAR, Types.INTEGER};
 
-	public KennelData(Connection connection) {
-		super(connection, data, columns, columnTypes);
-	}
+    private static Object[][] data = {{Integer.valueOf(100), "Small", Integer.valueOf(1)}, 
+        {Integer.valueOf(101), "Small", Integer.valueOf(1)},
+        {Integer.valueOf(102), "Large", Integer.valueOf(1)}};
 
-	public String getTableName() {
-		return "KENNEL";
-	}
+    private static String[] columns = {"KNUMBER", "KIND", "OCC_COUNT"};
+
+    public KennelData(Connection connection) {
+        super(connection, data, columns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "KENNEL";
+    }
 
 }

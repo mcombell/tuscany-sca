@@ -23,33 +23,31 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class OwnerData extends TestDataWithExplicitColumns {
 
-/*    CREATE TABLE OWNER (
-            ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-            NAME VARCHAR(20) NULL,
-            CONTACT_PHONE VARCHAR(20) NULL,
-            OCC_COUNT INTEGER UNSIGNED NULL,
-            PRIMARY KEY(ID)
-          );*/
-    
-	//id omitted.  id is auto-generated.
-    private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER}; 
-	
-	private static Object[][] data = { 
-            {"Fanny", "222-2222", new Integer(1)},
-			{"Manny", "333-3333", new Integer(1)},
-			{"Sammy", "444-4444", new Integer(1)}};
+    /*    CREATE TABLE OWNER (
+     ID INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+     NAME VARCHAR(20) NULL,
+     CONTACT_PHONE VARCHAR(20) NULL,
+     OCC_COUNT INTEGER UNSIGNED NULL,
+     PRIMARY KEY(ID)
+     );*/
 
-	private static String[] columns = {"NAME", "CONTACT_PHONE", "OCC_COUNT"};
+    //id omitted.  id is auto-generated.
+    private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 
-	public OwnerData(Connection connection) {
-		super(connection, data, columns, columnTypes);
-	}
+    private static Object[][] data = {{"Fanny", "222-2222", Integer.valueOf(1)}, 
+        {"Manny", "333-3333", Integer.valueOf(1)},
+        {"Sammy", "444-4444", Integer.valueOf(1)}};
 
-	public String getTableName() {
-		return "OWNER";
-	}
+    private static String[] columns = {"NAME", "CONTACT_PHONE", "OCC_COUNT"};
+
+    public OwnerData(Connection connection) {
+        super(connection, data, columns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "OWNER";
+    }
 
 }

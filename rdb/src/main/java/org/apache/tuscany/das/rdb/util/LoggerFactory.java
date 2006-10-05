@@ -37,14 +37,14 @@ import org.apache.log4j.PatternLayout;
 public final class LoggerFactory {
     public static final LoggerFactory INSTANCE = new LoggerFactory();
 
-    private static Layout _defaultLayout;
+    private static Layout defaultLayout;
 
-    private static Appender _defaultAppender;
+    private static Appender defaultAppender;
 
     static {
         synchronized (LoggerFactory.class) {
-            _defaultLayout = new PatternLayout(LoggerLayout.Layout());
-            _defaultAppender = new ConsoleAppender(_defaultLayout);
+            defaultLayout = new PatternLayout(LoggerLayout.layout());
+            defaultAppender = new ConsoleAppender(defaultLayout);
         }
     }
 
@@ -55,7 +55,7 @@ public final class LoggerFactory {
     public Logger getLogger(Class loggingClass) {
         Logger logger = Logger.getLogger(loggingClass);
         logger.setLevel(Level.OFF);
-        logger.addAppender(_defaultAppender);
+        logger.addAppender(defaultAppender);
 
         return logger;
     }
@@ -63,7 +63,7 @@ public final class LoggerFactory {
     public Logger getLogger(Class loggingClass, Level logLevel) {
         Logger logger = Logger.getLogger(loggingClass);
         logger.setLevel(logLevel);
-        logger.addAppender(_defaultAppender);
+        logger.addAppender(defaultAppender);
 
         return logger;
     }

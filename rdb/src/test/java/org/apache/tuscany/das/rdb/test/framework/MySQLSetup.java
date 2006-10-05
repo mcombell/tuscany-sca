@@ -24,70 +24,75 @@ import junit.framework.Test;
 
 public class MySQLSetup extends DatabaseSetup {
 
-	public MySQLSetup(Test test) {
-		super(test);
-	}
+    public MySQLSetup(Test test) {
+        super(test);
+    }
 
-	protected void initConnectionProtocol() {
-		
-		platformName = "MySQL";
-		driverName = "com.mysql.jdbc.Driver";
-		databaseURL = "jdbc:mysql:///dastest?user=dastester&password=dastester";
+    protected void initConnectionProtocol() {
 
-	}
-	
-	
-	protected void createProcedures() {
-		
-		String createGetAllCompanies = "CREATE PROCEDURE `dastest`.`GETALLCOMPANIES` () "
-				+ "	SELECT * FROM COMPANY ";
+        platformName = "MySQL";
+        driverName = "com.mysql.jdbc.Driver";
+        databaseURL = "jdbc:mysql:///dastest?user=dastester&password=dastester";
 
-		String createDeleteCustomer = "CREATE PROCEDURE `dastest`.`DELETECUSTOMER` (theId INT) "
-				+ "  DELETE FROM CUSTOMER WHERE ID = theId ";
+    }
 
-		String createGetNamedCustomers = "CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), OUT theCount INTEGER ) "
-				+ " BEGIN "
-				+ "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; "
-				+ "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); "
-				+ " END ";
+    protected void createProcedures() {
 
-		String createGetCustomerAndOrders = " CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) "
-				+ " SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID WHERE CUSTOMER.ID =  theId ";
+        String createGetAllCompanies = "CREATE PROCEDURE `dastest`.`GETALLCOMPANIES` () " 
+            + "    SELECT * FROM COMPANY ";
 
-		String createGetNamedCompany = " CREATE PROCEDURE `dastest`.`GETNAMEDCOMPANY` (theName VARCHAR(100)) "
-				+ " SELECT * FROM COMPANY WHERE NAME = theName"; 
-		
-		System.out.println("Creating procedures");
-		try {
-			
-			s.execute(createGetAllCompanies);
-			s.execute(createDeleteCustomer);
-			s.execute(createGetNamedCompany);
-			s.execute(createGetCustomerAndOrders);
-			s.execute(createGetNamedCustomers);
+        String createDeleteCustomer = "CREATE PROCEDURE `dastest`.`DELETECUSTOMER` (theId INT) " 
+            + "  DELETE FROM CUSTOMER WHERE ID = theId ";
 
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}		
-	}
-	
-	
-	//Overrides for table creation
-	protected String getCreateCompany() {		
-		return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), EOTMID INT)";
-	}
-	protected String getCreateEmployee() {
-		return "CREATE TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), SN VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)";
-	}
-	protected String getCreateDepartment() {
-		return "CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), LOCATION VARCHAR(30), NUMBER VARCHAR(10), COMPANYID INT, EOTM INT)";
-	}
-	protected String getCreateTypeTest() {
-		return "CREATE TABLE TYPETEST (ID INT PRIMARY KEY NOT NULL, ATIMESTAMP DATETIME, ADECIMAL DECIMAL(9,2), AFLOAT FLOAT)";
-	}
-	
-	protected String getCreateServerStatus() {
-		return "CREATE TABLE CONMGT.SERVERSTATUS (STATUSID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, MANAGEDSERVERID INTEGER NOT NULL, TIMESTAMP TIMESTAMP NOT NULL)";
-	}
+        String createGetNamedCustomers = "CREATE PROCEDURE `dastest`.`GETNAMEDCUSTOMERS`(IN thename VARCHAR(30), "
+                + "OUT theCount INTEGER ) " + " BEGIN "
+                + "  SELECT * FROM CUSTOMER AS CUSTOMER WHERE LASTNAME = theName; "
+                + "  SET theCount =  (SELECT COUNT(*) FROM CUSTOMER WHERE LASTNAME = theName); " + " END ";
+
+        String createGetCustomerAndOrders = " CREATE PROCEDURE `dastest`.`GETCUSTOMERANDORDERS` (theId INT) "
+                + " SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID "
+                        + "WHERE CUSTOMER.ID =  theId ";
+
+        String createGetNamedCompany = " CREATE PROCEDURE `dastest`.`GETNAMEDCOMPANY` (theName VARCHAR(100)) "
+                + " SELECT * FROM COMPANY WHERE NAME = theName";
+
+        System.out.println("Creating procedures");
+        try {
+
+            s.execute(createGetAllCompanies);
+            s.execute(createDeleteCustomer);
+            s.execute(createGetNamedCompany);
+            s.execute(createGetCustomerAndOrders);
+            s.execute(createGetNamedCustomers);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Overrides for table creation
+    protected String getCreateCompany() {
+        return "CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), EOTMID INT)";
+    }
+
+    protected String getCreateEmployee() {
+        return "CREATE TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), " 
+                + "SN VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)";
+    }
+
+    protected String getCreateDepartment() {
+        return "CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), " 
+                + "LOCATION VARCHAR(30), NUMBER VARCHAR(10), COMPANYID INT, EOTM INT)";
+    }
+
+    protected String getCreateTypeTest() {
+        return "CREATE TABLE TYPETEST (ID INT PRIMARY KEY NOT NULL, ATIMESTAMP DATETIME, ADECIMAL DECIMAL(9,2), " 
+                + "AFLOAT FLOAT)";
+    }
+
+    protected String getCreateServerStatus() {
+        return "CREATE TABLE CONMGT.SERVERSTATUS (STATUSID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " 
+                + "MANAGEDSERVERID INTEGER NOT NULL, TIMESTAMP TIMESTAMP NOT NULL)";
+    }
 
 }

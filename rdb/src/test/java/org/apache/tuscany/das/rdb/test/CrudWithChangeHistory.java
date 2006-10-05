@@ -76,8 +76,9 @@ public class CrudWithChangeHistory extends DasTest {
         while (i.hasNext()) {
             customer = (DataObject) i.next();
             assertFalse(customerId == customer.getInt("ID"));
-            if (customer.getInt("ID") == 9999)
+            if (customer.getInt("ID") == 9999) {
                 found = true;
+            }
         }
 
         assertTrue(found);
@@ -92,7 +93,8 @@ public class CrudWithChangeHistory extends DasTest {
         // Provide updatecommand programmatically via config
         ConfigHelper helper = new ConfigHelper();
         Table customerTable = helper.addTable("CUSTOMER", "CUSTOMER");
-        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ?, ADDRESS = ? where ID = ?", "LASTNAME ADDRESS ID");
+        helper.addUpdateStatement(customerTable, "update CUSTOMER set LASTNAME = ?, ADDRESS = ? "
+                + "where ID = ?", "LASTNAME ADDRESS ID");
 
         DAS das = DAS.FACTORY.createDAS(helper.getConfig(), getConnection());
         // Read customer 1
@@ -211,7 +213,7 @@ public class CrudWithChangeHistory extends DasTest {
 
         // Create a new customer
         DataObject cust4 = root.createDataObject("CUSTOMER");
-        cust4.set("ID", new Integer(100));
+        cust4.set("ID", Integer.valueOf(100));
         cust4.set("ADDRESS", "5528 Wells Fargo Drive");
         cust4.set("LASTNAME", "Gerkin");
 
@@ -220,23 +222,23 @@ public class CrudWithChangeHistory extends DasTest {
 
         // Verify deletes
         select = das.createCommand("Select * from CUSTOMER where ID = ?");
-        select.setParameter(1, new Integer(cust2ID));
+        select.setParameter(1, Integer.valueOf(cust2ID));
         root = select.executeQuery();
         assertTrue(root.getList("CUSTOMER").isEmpty());
         // reparameterize same command
-        select.setParameter(1, new Integer(cust3ID));
+        select.setParameter(1, Integer.valueOf(cust3ID));
         root = select.executeQuery();
         assertTrue(root.getList("CUSTOMER").isEmpty());
 
         // verify insert
-        select.setParameter(1, new Integer(100));
+        select.setParameter(1, Integer.valueOf(100));
         root = select.executeQuery();
         assertEquals(1, root.getList("CUSTOMER").size());
         assertEquals("5528 Wells Fargo Drive", root.getString("CUSTOMER[1]/ADDRESS"));
         assertEquals("Gerkin", root.getString("CUSTOMER[1]/LASTNAME"));
 
         // verify update
-        select.setParameter(1, new Integer(cust1ID));
+        select.setParameter(1, Integer.valueOf(cust1ID));
         root = select.executeQuery();
         assertEquals("Pavick", root.getString("CUSTOMER[1]/LASTNAME"));
 
@@ -339,8 +341,9 @@ public class CrudWithChangeHistory extends DasTest {
         Iterator i = root.getList("CUSTOMER").iterator();
         while (i.hasNext()) {
             DataObject obj = (DataObject) i.next();
-            if (name.equals(obj.getString("LASTNAME")))
+            if (name.equals(obj.getString("LASTNAME"))) {
                 return obj;
+            }
         }
         return null;
     }

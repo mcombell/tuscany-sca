@@ -41,7 +41,7 @@ import commonj.sdo.Type;
 
 public final class UpdateGenerator extends BaseGenerator {
 
-    public static UpdateGenerator instance = new UpdateGenerator();
+    public static final UpdateGenerator INSTANCE = new UpdateGenerator();
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(UpdateGenerator.class);
 

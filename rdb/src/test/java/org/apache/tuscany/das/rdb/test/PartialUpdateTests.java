@@ -78,7 +78,7 @@ public class PartialUpdateTests extends DasTest {
 
         // Create a new customer
         DataObject newCust = root.createDataObject("CUSTOMER");
-        newCust.set("ID", new Integer(100));
+        newCust.set("ID", Integer.valueOf(100));
         newCust.set("ADDRESS", "5528 Wells Fargo Drive");
         // Purposely do not set lastname to let it default to 'Garfugengheist'
         // newCust.set("LASTNAME", "Gerkin" );

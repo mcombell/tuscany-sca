@@ -23,26 +23,27 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 public class QualifiedColumn {
 
-	private final String tableName;
-	private final String columnName;
+    private final String tableName;
+
+    private final String columnName;
 
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(QualifiedColumn.class);
 
-	public QualifiedColumn(String name) {
-		tableName = name.substring(0, name.indexOf('.'));
-		columnName = name.substring(name.indexOf('.') + 1);
+    public QualifiedColumn(String name) {
+        tableName = name.substring(0, name.indexOf('.'));
+        columnName = name.substring(name.indexOf('.') + 1);
 
         if (this.logger.isDebugEnabled()) {
             this.logger.debug("Table name:  " + tableName);
             this.logger.debug("Column name: " + columnName);
         }
-	}
+    }
 
-	public String getTableName() {
-		return this.tableName;
-	}
+    public String getTableName() {
+        return this.tableName;
+    }
 
-	public String getColumnName() {
-		return this.columnName;
-	}
+    public String getColumnName() {
+        return this.columnName;
+    }
 }

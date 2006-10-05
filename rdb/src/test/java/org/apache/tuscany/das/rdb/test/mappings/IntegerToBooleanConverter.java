@@ -22,21 +22,22 @@ import org.apache.tuscany.das.rdb.Converter;
 
 public class IntegerToBooleanConverter implements Converter {
 
-	public IntegerToBooleanConverter() {
-		super();
-	}
+    public IntegerToBooleanConverter() {
+        super();
+    }
 
-	public Object getPropertyValue(Object columnData) {
-		Integer value = (Integer) columnData;
-		return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;
-	}
-	
-	public Object getColumnValue(Object propertyData) {
-		Boolean value = (Boolean) propertyData;
-		if (value.booleanValue())
-			return new Integer(1);
-		else
-			return new Integer(0);
-	}
+    public Object getPropertyValue(Object columnData) {
+        Integer value = (Integer) columnData;
+        return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;
+    }
+
+    public Object getColumnValue(Object propertyData) {
+        Boolean value = (Boolean) propertyData;
+        if (value.booleanValue()) {
+            return Integer.valueOf(1);
+        } 
+        return Integer.valueOf(0);
+    }
+    
 
 }

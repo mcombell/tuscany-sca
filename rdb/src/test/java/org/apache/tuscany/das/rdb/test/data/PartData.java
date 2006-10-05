@@ -27,13 +27,15 @@ public class PartData extends TestDataWithExplicitColumns {
 
     // CREATE TABLE PART (ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(50), QUANTITY INT, PARENT_ID INT )
 
-    private static String[] partColumns = { "ID", "NAME", "QUANTITY", "PARENT_ID" };
+    private static String[] partColumns = {"ID", "NAME", "QUANTITY", "PARENT_ID"};
 
-    private static int[] columnTypes = { Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
+    private static int[] columnTypes = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 
-    private static Object[][] partData = { { new Integer(1), "Engine", new Integer(1), null },
-            { new Integer(2), "Block", new Integer(1), new Integer(1) }, { new Integer(3), "Cam Shaft", new Integer(2), new Integer(1) },
-            { new Integer(4), "Piston", new Integer(8), new Integer(1) }, { new Integer(5), "Piston Ring", new Integer(2), new Integer(4) } };
+    private static Object[][] partData = {{Integer.valueOf(1), "Engine", Integer.valueOf(1), null},
+        {Integer.valueOf(2), "Block", Integer.valueOf(1), Integer.valueOf(1)}, 
+        {Integer.valueOf(3), "Cam Shaft", Integer.valueOf(2), Integer.valueOf(1)},
+        {Integer.valueOf(4), "Piston", Integer.valueOf(8), Integer.valueOf(1)}, 
+        {Integer.valueOf(5), "Piston Ring", Integer.valueOf(2), Integer.valueOf(4)}};
 
     public PartData(Connection connection) {
         super(connection, partData, partColumns, columnTypes);

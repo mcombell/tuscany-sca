@@ -57,8 +57,9 @@ public class RecursiveTests extends DasTest {
         Iterator i = engine.getList("subparts").iterator();
         while (i.hasNext()) {
             DataObject obj = (DataObject) i.next();
-            if (obj.getString("NAME").equals("Piston"))
+            if (obj.getString("NAME").equals("Piston")) {
                 piston = obj;
+            }
         }
 
         assertEquals("Piston", piston.getString("NAME"));

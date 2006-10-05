@@ -67,8 +67,9 @@ public class ParameterImpl {
     }
 
     public void setIndex(int index) {
-        if (index == 0)
+        if (index == 0) {
             throw new RuntimeException("Index of zero not allowed");
+        }
         this.index = index;
     }
 
@@ -99,9 +100,9 @@ public class ParameterImpl {
     public Object getValue() {
         if (getConverter() != null) {
             return getConverter().getColumnValue(this.value);
-        } else {
-            return this.value;
-        }
+        } 
+      
+        return this.value;        
     }
 
     public int getDirection() {

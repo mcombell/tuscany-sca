@@ -40,8 +40,9 @@ public class ReadCommandImpl extends CommandImpl {
         super(sqlString);
         this.configWrapper = mapping;
         
-        if (resultDescriptor != null && !resultDescriptor.isEmpty()) 
-        	this.resultSetShape = new ResultSetShape(resultDescriptor);
+        if (resultDescriptor != null && !resultDescriptor.isEmpty()) {
+            this.resultSetShape = new ResultSetShape(resultDescriptor);
+        }
     }
 
    
@@ -51,8 +52,9 @@ public class ReadCommandImpl extends CommandImpl {
 
     public DataObject executeQuery() {
 
-        if (statement.getConnection() == null)
+        if (statement.getConnection() == null) {
             throw new RuntimeException("A DASConnection object must be specified before executing the query.");
+        }
 
         boolean success = false;
         try {
@@ -62,10 +64,11 @@ public class ReadCommandImpl extends CommandImpl {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (success)
+            if (success) {
                 statement.getConnection().cleanUp();
-            else
+            } else {
                 statement.getConnection().errorCleanUp();
+            }
         }
     }
 

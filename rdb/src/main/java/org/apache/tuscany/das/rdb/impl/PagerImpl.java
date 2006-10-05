@@ -25,42 +25,45 @@ import commonj.sdo.DataObject;
 
 public class PagerImpl implements Pager {
 
-	private final ReadCommandImpl command;
-	private final int size;
-	private int idx = 1;
+    private final ReadCommandImpl command;
 
-	public PagerImpl(Command command, int size) {
-		this.command = (ReadCommandImpl)command;
-		this.command.enablePaging();
-		this.size = size;
-	}
+    private final int size;
 
-	public DataObject next() {
-		int start = idx;
-		int end = idx + size;
-		idx += size;
-		command.setStartRow(start);
-		command.setEndRow(end);
-		return command.executeQuery();
-	}
+    private int idx = 1;
 
-	public DataObject getPage(int page) {
-		int end = (page * size) + 1;
-		int start = end - size;
-		idx = end;
-		command.setStartRow(start);
-		command.setEndRow(end);
-		return command.executeQuery();
-	}
-	
-	public DataObject previous() {
-		int start = idx - (2 * size);
-		if (start < 1)
-			start = 1;
-		int end = start + size;
-		idx = end; 
-		command.setStartRow(start);
-		command.setEndRow(end);
-		return command.executeQuery();
-	}
+    public PagerImpl(Command command, int size) {
+        this.command = (ReadCommandImpl) command;
+        this.command.enablePaging();
+        this.size = size;
+    }
+
+    public DataObject next() {
+        int start = idx;
+        int end = idx + size;
+        idx += size;
+        command.setStartRow(start);
+        command.setEndRow(end);
+        return command.executeQuery();
+    }
+
+    public DataObject getPage(int page) {
+        int end = (page * size) + 1;
+        int start = end - size;
+        idx = end;
+        command.setStartRow(start);
+        command.setEndRow(end);
+        return command.executeQuery();
+    }
+
+    public DataObject previous() {
+        int start = idx - (2 * size);
+        if (start < 1) {
+            start = 1;
+        }
+        int end = start + size;
+        idx = end;
+        command.setStartRow(start);
+        command.setEndRow(end);
+        return command.executeQuery();
+    }
 }

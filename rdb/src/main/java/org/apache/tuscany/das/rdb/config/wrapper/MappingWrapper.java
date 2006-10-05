@@ -217,14 +217,18 @@ public class MappingWrapper {
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (c.getColumnName().equals(propertyName))
+            if (c.getColumnName().equals(propertyName)) {
                 return c;
-            if (c.getPropertyName() != null && c.getPropertyName().equals(propertyName))
+            }
+            
+            if (c.getPropertyName() != null && c.getPropertyName().equals(propertyName)) {
                 return c;
+            }
         }
 
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("WARNING: Could not find column " + propertyName + " in table " + t.getTableName());
+        }
 
         return null;
     }
@@ -232,20 +236,23 @@ public class MappingWrapper {
     public String getColumnPropertyName(String tableName, String columnName) {
         Table t = getTable(tableName);
         Column c = getColumn(t, columnName);
-        if (c == null)
+        if (c == null) {
             return columnName;
+        }
 
         String propertyName = c.getPropertyName();
-        if (propertyName == null)
+        if (propertyName == null) {
             return c.getColumnName();
+        }
 
         return propertyName;
     }
 
     public Table addTable(String tableName, String typeName) {
         Table table = getTable(tableName);
-        if (table != null)
+        if (table != null) {
             throw new RuntimeException("Table " + tableName + "already exists");
+        }
 
         table = ConfigFactory.INSTANCE.createTable();
         table.setTableName(tableName);
@@ -270,8 +277,9 @@ public class MappingWrapper {
         Iterator i = t.getColumn().iterator();
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (name.equals(c.getColumnName()))
+            if (name.equals(c.getColumnName())) {
                 return c;
+            }
         }
 
         Column c = ConfigFactory.INSTANCE.createColumn();
@@ -285,8 +293,9 @@ public class MappingWrapper {
             Iterator i = getConfig().getRelationship().iterator();
             while (i.hasNext()) {
                 Relationship r = (Relationship) i.next();
-                if (r.getPrimaryKeyTable().equals(r.getForeignKeyTable()))
+                if (r.getPrimaryKeyTable().equals(r.getForeignKeyTable())) {
                     return true;
+                }
             }
         }
         return false;
@@ -298,8 +307,9 @@ public class MappingWrapper {
             Iterator i = getConfig().getRelationship().iterator();
             while (i.hasNext()) {
                 Relationship r = (Relationship) i.next();
-                if (name.equals(r.getForeignKeyTable()))
+                if (name.equals(r.getForeignKeyTable())) {
                     results.add(r);
+                }
             }
         }
         return results;
@@ -324,17 +334,16 @@ public class MappingWrapper {
                 children.add(r.getForeignKeyTable());
                 parentToChild.put(r.getPrimaryKeyTable(), r.getForeignKeyTable());
             }
-
             while (parents.size() > 0) {
                 String parent = (String) parents.get(0);
                 if (!children.contains(parent)) {
-                    if (!inserts.contains(parent))
+                    if (!inserts.contains(parent)) {
                         inserts.add(parent);
-
+                    }
                     String child = (String) parentToChild.get(parent);
-                    if (!inserts.contains(child))
+                    if (!inserts.contains(child)) {
                         inserts.add(child);
-
+                    }
                     parents.remove(parent);
                     children.remove(child);
                 } else {
@@ -342,11 +351,11 @@ public class MappingWrapper {
                 }
             }
             inserts.addAll(children);
-
         }
 
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(inserts);
+        }
 
         return inserts;
     }
@@ -370,8 +379,9 @@ public class MappingWrapper {
     public String getConverter(String tableName, String columnName) {
         Table t = getTable(tableName);
         Column c = getColumn(t, columnName);
-        if (c != null)
+        if (c != null) {
             return c.getConverterClassName();
+        }
         return null;
     }
 
@@ -383,8 +393,9 @@ public class MappingWrapper {
             Column c = (Column) columns.next();
             if (c.getConverterClassName() != null) {
                 String property = c.getPropertyName();
-                if (property == null)
+                if (property == null) {
                     property = c.getColumnName();
+                }
                 converters.put(property, c.getConverterClassName());
             }
         }
@@ -395,8 +406,9 @@ public class MappingWrapper {
         Iterator i = config.getRelationship().iterator();
         while (i.hasNext()) {
             Relationship r = (Relationship) i.next();
-            if (ref.getName().equals(r.getName()) || ref.getOpposite().getName().equals(r.getName()))
+            if (ref.getName().equals(r.getName()) || ref.getOpposite().getName().equals(r.getName())) {
                 return r;
+            }
         }
         throw new RuntimeException("Could not find relationship " + ref.getName() + " in the configuration");
     }
@@ -405,8 +417,9 @@ public class MappingWrapper {
         Iterator i = config.getRelationship().iterator();
         while (i.hasNext()) {
             Relationship r = (Relationship) i.next();
-            if (name.equals(r.getName()))
+            if (name.equals(r.getName())) {
                 return r;
+            }
         }
         throw new RuntimeException("Could not find relationship " + name + " in the configuration");
     }
@@ -463,8 +476,9 @@ public class MappingWrapper {
         boolean hasPK = false;
         while (i.hasNext()) {
             Column c = (Column) i.next();
-            if (c.isPrimaryKey())
+            if (c.isPrimaryKey()) {
                 hasPK = true;
+            }
         }
 
         if (!hasPK) {

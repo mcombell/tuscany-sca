@@ -32,21 +32,23 @@ package org.apache.tuscany.das.rdb;
 public interface Converter {
 
     /**
-     * Transform the columnData object to a new value and possibly new type. This should be the invers operation of #getColumnValue
+     * Transform the columnData object to a new value and possibly 
+     * new type. This should be the invers operation of #getColumnValue
      * 
      * @param columnData
      *            The column value to transorm
      * @return Returns the transformed value
      */
-    public Object getPropertyValue(Object columnData);
+    Object getPropertyValue(Object columnData);
 
     /**
-     * Transform the columnData object to a new value and possibly new type. This should be the invers operation of #getPropertyValue
+     * Transform the columnData object to a new value and possibly new 
+     * type. This should be the invers operation of #getPropertyValue
      * 
      * @param propertyData
      *            The property value to transform
      * @return Returns the transformed value
      */
-    public Object getColumnValue(Object propertyData);
+    Object getColumnValue(Object propertyData);
 
 }

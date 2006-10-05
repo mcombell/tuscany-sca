@@ -153,7 +153,7 @@ public class ChangeFactory {
             }
             Update update = table.getUpdate();
             if (update == null) {
-                updateCommand = UpdateGenerator.instance.getUpdateCommand(mapping, changedObject, table);
+                updateCommand = UpdateGenerator.INSTANCE.getUpdateCommand(mapping, changedObject, table);
             } else {
                 TableWrapper t = new TableWrapper(table);
                 if (t.getCollisionColumn() != null) {

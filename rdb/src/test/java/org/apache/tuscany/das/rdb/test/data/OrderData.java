@@ -24,9 +24,11 @@ import org.apache.tuscany.das.rdb.test.framework.TestData;
 
 public class OrderData extends TestData {
 
-    public static Object[][] orderData = { { new Integer(1), "recombobulator", new Integer(47), new Integer(1) },
-            { new Integer(2), "wrench", new Integer(17), new Integer(3) }, { new Integer(3), "pliers", new Integer(500), new Integer(1) },
-            { new Integer(4), "Tooth Paste", new Integer(12), new Integer(2) } };
+    protected static Object[][] orderData = {
+        {Integer.valueOf(1), "recombobulator", Integer.valueOf(47), Integer.valueOf(1)},
+        {Integer.valueOf(2), "wrench", Integer.valueOf(17), Integer.valueOf(3)}, 
+        {Integer.valueOf(3), "pliers", Integer.valueOf(500), Integer.valueOf(1)},
+        {Integer.valueOf(4), "Tooth Paste", Integer.valueOf(12), Integer.valueOf(2)}};
 
     public OrderData(Connection c) {
         super(c, orderData);

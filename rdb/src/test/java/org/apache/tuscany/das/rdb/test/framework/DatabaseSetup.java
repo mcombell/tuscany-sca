@@ -289,20 +289,23 @@ public class DatabaseSetup extends TestSetup {
     protected String getCreateEmployee() {
         return "CREATE TABLE EMPLOYEE (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " 
             + getGeneratedKeyClause() + ","
-                + getStringColumn("NAME", 30) + "," + getStringColumn("SN", 10) + ", MANAGER SMALLINT, " + getIntegerColumn("DEPARTMENTID") + ")";
+                + getStringColumn("NAME", 30) + "," + getStringColumn("SN", 10) + ", MANAGER SMALLINT, " 
+                + getIntegerColumn("DEPARTMENTID") + ")";
     }
 
     protected String getCreateDepartment() {
         return "CREATE TABLE DEPARTMENT (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL " 
             + getGeneratedKeyClause() + ", "
-                + getStringColumn("NAME", 30) + "," + getStringColumn("LOCATION", 30) + ", " + getStringColumn("DEPNUMBER", 10) + ","
+                + getStringColumn("NAME", 30) + "," + getStringColumn("LOCATION", 30) + ", " 
+                + getStringColumn("DEPNUMBER", 10) + ","
                 + getIntegerColumn("COMPANYID") + ")";
     }
 
     protected String getCreateBook() {
         return "CREATE TABLE BOOK (" + getIntegerColumn("BOOK_ID") + " PRIMARY KEY NOT NULL, " 
             + getStringColumn("NAME", 50) + ","
-                + getStringColumn("AUTHOR", 30) + ", " + getIntegerColumn("QUANTITY") + "," + getIntegerColumn("OCC") + ")";
+                + getStringColumn("AUTHOR", 30) + ", " + getIntegerColumn("QUANTITY") + "," 
+                + getIntegerColumn("OCC") + ")";
     }
 
     protected String getCreatePart() {
@@ -312,16 +315,19 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getCreateTypeTest() {
-        return "CREATE TABLE TYPETEST (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " + getTimestampColumn("ATIMESTAMP") + ","
+        return "CREATE TABLE TYPETEST (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " 
+                + getTimestampColumn("ATIMESTAMP") + ","
                 + getDecimalColumn("ADECIMAL", 9, 2) + "," + getFloatColumn("AFLOAT") + ")";
     }
 
     protected String getCreateStates() {
-        return "CREATE TABLE STATES (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " + getStringColumn("NAME", 2) + ")";
+        return "CREATE TABLE STATES (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL, " 
+                + getStringColumn("NAME", 2) + ")";
     }
 
     protected String getCreateCities() {
-        return "CREATE TABLE CITIES (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL," + getStringColumn("NAME", 50) + ","
+        return "CREATE TABLE CITIES (" + getIntegerColumn("ID") + " PRIMARY KEY NOT NULL," 
+                + getStringColumn("NAME", 50) + ","
                 + getIntegerColumn("STATE_ID") + "," + getForeignKeyConstraint("STATES", "ID", "STATE_ID") + ")";
     }
 
@@ -335,24 +341,31 @@ public class DatabaseSetup extends TestSetup {
     // Dog Kennel Schema
 
     protected String getCreateDog() {
-        return "CREATE TABLE DOG (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getIntegerColumn("OWNER_ID") + " , "
-                + getStringColumn("NAME", 20) + ", " + getStringColumn("BREED", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", "
+        return "CREATE TABLE DOG (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
+            + getIntegerColumn("OWNER_ID") + " , "
+                + getStringColumn("NAME", 20) + ", " + getStringColumn("BREED", 20) + ", " 
+                + getIntegerColumn("OCC_COUNT") + ", "
                 + "PRIMARY KEY(ID))";
     }
 
     protected String getCreateOwner() {
-        return "CREATE TABLE OWNER (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getStringColumn("NAME", 20) + ", "
-                + getStringColumn("CONTACT_PHONE", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
+        return "CREATE TABLE OWNER (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
+            + getStringColumn("NAME", 20) + ", "
+                + getStringColumn("CONTACT_PHONE", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", " 
+                + "PRIMARY KEY(ID))";
     }
 
     protected String getCreateKennel() {
-        return "CREATE TABLE KENNEL (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getIntegerColumn("KNUMBER") + ", "
+        return "CREATE TABLE KENNEL (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() 
+            + " , " + getIntegerColumn("KNUMBER") + ", "
                 + getStringColumn("KIND", 20) + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
     }
 
     protected String getCreateVisit() {
-        return "CREATE TABLE VISIT (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " + getTimestampColumn("CHECK_IN")
-                + ", " + getTimestampColumn("CHECK_OUT") + ", " + getIntegerColumn("OCC_COUNT") + ", " + "PRIMARY KEY(ID))";
+        return "CREATE TABLE VISIT (" + getIntegerColumn("ID") + " NOT NULL " + getGeneratedKeyClause() + " , " 
+            + getTimestampColumn("CHECK_IN")
+                + ", " + getTimestampColumn("CHECK_OUT") + ", " + getIntegerColumn("OCC_COUNT") + ", " 
+                + "PRIMARY KEY(ID))";
     }
 
     // /////////////////
@@ -370,7 +383,7 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getStringColumn(String name, int length) {
-        return name + ' ' + stringType + "(" + new Integer(length).toString() + ")";
+        return name + ' ' + stringType + "(" + Integer.valueOf(length).toString() + ")";
     }
 
     protected String getIntegerColumn(String name) {
@@ -382,7 +395,8 @@ public class DatabaseSetup extends TestSetup {
     }
 
     protected String getDecimalColumn(String name, int size1, int size2) {
-        return name + ' ' + decimalType + "(" + new Integer(size1).toString() + ',' + new Integer(size2).toString() + ")";
+        return name + ' ' + decimalType + "(" + Integer.valueOf(size1).toString() + ',' 
+            + Integer.valueOf(size2).toString() + ")";
     }
 
     protected String getFloatColumn(String name) {

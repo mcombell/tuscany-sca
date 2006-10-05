@@ -18,12 +18,10 @@
  */
 package org.apache.tuscany.das.rdb.test;
 
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.Command;
-import org.apache.tuscany.das.rdb.ConfigHelper;
 import org.apache.tuscany.das.rdb.DAS;
 import org.apache.tuscany.das.rdb.test.company.CompanyFactory;
 import org.apache.tuscany.das.rdb.test.customer.CustomerFactory;
@@ -57,25 +55,25 @@ public class ExceptionTests extends DasTest {
     }
 
     public void testMissingConnection() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS((Connection)null);
-       
+        DAS das = DAS.FACTORY.createDAS((Connection) null);
+
         try {
-        	Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
+            Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
             readCustomers.executeQuery();
             fail("RuntimeException should be thrown");
-        } catch (RuntimeException ex) {        	     
+        } catch (RuntimeException ex) {
             assertEquals("No connection has been provided and no data source has been specified", ex.getMessage());
         }
 
     }
 
     public void testUnregisteredTypes() throws Exception {
-    	DAS das = DAS.FACTORY.createDAS(getConfig("staticInvalid.xml"), getConnection());
-        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");                   
+        DAS das = DAS.FACTORY.createDAS(getConfig("staticInvalid.xml"), getConnection());
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
 
         try {
-        	 readCustomers.executeQuery();
-            
+            readCustomers.executeQuery();
+
             fail("Exception should be thrown");
         } catch (RuntimeException ex) {
             assertEquals("SDO Types have not been registered for URI invalidURI", ex.getMessage());
@@ -83,13 +81,13 @@ public class ExceptionTests extends DasTest {
     }
 
     public void testMissingMapping() throws Exception {
-    	SDOUtil.registerStaticTypes(CustomerFactory.class);
-    	DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomer.xml"), getConnection());
-        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");                   
+        SDOUtil.registerStaticTypes(CustomerFactory.class);
+        DAS das = DAS.FACTORY.createDAS(getConfig("staticCustomer.xml"), getConnection());
+        Command readCustomers = das.createCommand("select * from CUSTOMER where ID = 1");
 
         try {
-        	 readCustomers.executeQuery();
-            
+            readCustomers.executeQuery();
+
             fail("Exception should be thrown");
         } catch (RuntimeException ex) {
             assertEquals("An SDO Type with name CUSTOMER was not found", ex.getMessage());
@@ -102,12 +100,11 @@ public class ExceptionTests extends DasTest {
      */
     public void testEmptyStream() throws Exception {
         try {
-        	DAS.FACTORY.createDAS(getConfig("NonExistingFile.xml"));          
+            DAS.FACTORY.createDAS(getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
         } catch (RuntimeException e) {
-            assertEquals(
-                    "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name",
-                    e.getMessage());
+            assertEquals("Cannot load configuration from a null InputStream. Possibly caused " 
+                    + "by an incorrect config xml file name", e.getMessage());
         }
     }
 
@@ -119,39 +116,34 @@ public class ExceptionTests extends DasTest {
             DAS.FACTORY.createDAS(getConfig("NonExistingFile.xml"));
             fail("Error should be thrown");
         } catch (RuntimeException e) {
-            assertEquals(
-                    "Cannot load configuration from a null InputStream. Possibly caused by an incorrect config xml file name",
-                    e.getMessage());
+            assertEquals("Cannot load configuration from a null InputStream. Possibly caused "
+                    + "by an incorrect config xml file name", e.getMessage());
         }
     }
-    
 
     public void testReadOrdersAndDetails2() throws Exception {
 
-    	DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConfig1.xml"), getConnection());
-        Command read = das
-				.createCommand(
-						"SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");		
+        DAS das = DAS.FACTORY.createDAS(getConfig("InvalidConfig1.xml"), getConnection());
+        Command read = das.createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS "
+                + "ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");
 
-		try {
-			read.executeQuery();
-		} catch (Exception ex) {
-			assertEquals("The parent table (xxx) in relationship ORDERDETAILS was not found.", ex.getMessage());
-		}	
+        try {
+            read.executeQuery();
+        } catch (Exception ex) {
+            assertEquals("The parent table (xxx) in relationship ORDERDETAILS was not found.", ex.getMessage());
+        }
 
     }
-  
-    
-    public void testMismatchedDataObjectModel() throws FileNotFoundException, SQLException {
-    	SDOUtil.registerStaticTypes(CompanyFactory.class);
-    	DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"), getConnection());
-    	Command read = das.createCommand("select * from company");
-    	try {
-    		read.executeQuery();
-    	} catch (RuntimeException ex) {
-    		assertEquals("Type CompanyType does not contain a property named ID", ex.getMessage());
-    	}
+
+    public void testMismatchedDataObjectModel() throws SQLException {
+        SDOUtil.registerStaticTypes(CompanyFactory.class);
+        DAS das = DAS.FACTORY.createDAS(getConfig("companyMappingWithConverters.xml"), getConnection());
+        Command read = das.createCommand("select * from company");
+        try {
+            read.executeQuery();
+        } catch (RuntimeException ex) {
+            assertEquals("Type CompanyType does not contain a property named ID", ex.getMessage());
+        }
     }
-   
-    
+
 }

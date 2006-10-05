@@ -47,10 +47,11 @@ public class SPCommandImpl extends ReadCommandImpl {
             Type sdoType = TypeHelper.INSTANCE.getType(pkg, typeName);
 
             int direction = ParameterImpl.IN;
-            if ("OUT".equalsIgnoreCase(p.getDirection()))
+            if ("OUT".equalsIgnoreCase(p.getDirection())) {
                 direction = ParameterImpl.OUT;
-            else if ("INOUT".equalsIgnoreCase(p.getDirection()))
+            } else if ("INOUT".equalsIgnoreCase(p.getDirection())) {
                 direction = ParameterImpl.IN_OUT;
+            }
             parameters.findOrCreateParameterWithIndex(idx, direction, sdoType);
         }
 
@@ -65,15 +66,17 @@ public class SPCommandImpl extends ReadCommandImpl {
 
             return buildGraph(results);
         } catch (SQLException e) {
-            if (this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug(e);
+            }
 
             throw new RuntimeException(e);
         } finally {
-            if (success)
+            if (success) {
                 statement.getConnection().cleanUp();
-            else
+            } else {
                 statement.getConnection().errorCleanUp();
+            }
         }
     }
 
@@ -86,10 +89,11 @@ public class SPCommandImpl extends ReadCommandImpl {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (success)
+            if (success) {
                 statement.getConnection().cleanUp();
-            else
+            } else {
                 statement.getConnection().errorCleanUp();
+            }
         }
 
     }

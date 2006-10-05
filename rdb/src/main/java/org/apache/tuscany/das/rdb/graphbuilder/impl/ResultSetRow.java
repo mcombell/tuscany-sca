@@ -51,10 +51,11 @@ public class ResultSetRow {
      */
     public ResultSetRow(ResultSet rs, ResultMetadata m) throws SQLException {
         this.metadata = m;
-        if (m.isRecursive())
+        if (m.isRecursive()) {
             processRecursiveRow(rs);
-        else
+        } else {
             processRow(rs);
+        }
     }
 
     /**
@@ -64,15 +65,18 @@ public class ResultSetRow {
      */
     private void processRow(ResultSet rs) throws SQLException {
 
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("");
+        }
         for (int i = 1; i <= metadata.getResultSetSize(); i++) {
             Object data = getObject(rs, i);
 
             TableData table = getRawData(metadata.getTablePropertyName(i));
-            if (this.logger.isDebugEnabled())
-                this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+            if (this.logger.isDebugEnabled()) {
+                this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " 
+                        + data + "\tTable: "
                         + metadata.getTablePropertyName(i));
+            }
             table.addData(metadata.getColumnPropertyName(i), metadata.isPKColumn(i), data);
         }
 
@@ -81,29 +85,35 @@ public class ResultSetRow {
     public void processRecursiveRow(ResultSet rs) throws SQLException {
         this.allTableData = new ArrayList();
         int i = 1;
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("");
+        }
 
         while (i <= metadata.getResultSetSize()) {
-            if (this.logger.isDebugEnabled())
+            if (this.logger.isDebugEnabled()) {
                 this.logger.debug("");
+            }
             TableData table = new TableData(metadata.getTablePropertyName(i));
             this.allTableData.add(table);
 
             while ((i <= metadata.getResultSetSize()) && (metadata.isPKColumn(i))) {
                 Object data = getObject(rs, i);
-                if (this.logger.isDebugEnabled())
-                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+                if (this.logger.isDebugEnabled()) {
+                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) 
+                            + "\tValue: " + data + "\tTable: "
                             + metadata.getTablePropertyName(i));
+                }
                 table.addData(metadata.getColumnPropertyName(i), true, data);
                 i++;
             }
 
             while ((i <= metadata.getResultSetSize()) && (!metadata.isPKColumn(i))) {
                 Object data = getObject(rs, i);
-                if (this.logger.isDebugEnabled())
-                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) + "\tValue: " + data + "\tTable: "
+                if (this.logger.isDebugEnabled()) {
+                    this.logger.debug("Adding column: " + metadata.getColumnPropertyName(i) 
+                            + "\tValue: " + data + "\tTable: "
                             + metadata.getTablePropertyName(i));
+                }
                 table.addData(metadata.getColumnPropertyName(i), false, data);
                 i++;
             }
@@ -120,10 +130,12 @@ public class ResultSetRow {
 
         Object data = rs.getObject(i);
 
-        if (rs.wasNull())
+        if (rs.wasNull()) {
             return null;
-        else
-            return metadata.getConverter(i).getPropertyValue(data);
+        } 
+            
+        return metadata.getConverter(i).getPropertyValue(data);
+        
     }
 
     /**
@@ -138,7 +150,8 @@ public class ResultSetRow {
     }
 
     /**
-     * Returns a HashMap that holds data for the specified table If the HashMap doesn't exist, it will be created. This is used internally to build
+     * Returns a HashMap that holds data for the specified table If the HashMap 
+     * doesn't exist, it will be created. This is used internally to build
      * the ResultSetRow, whereas getTable is used externally to retrieve existing table data.
      * 
      * @param tableName
@@ -163,8 +176,9 @@ public class ResultSetRow {
             this.allTableData.addAll(tableMap.values());
         }
 
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug(allTableData);
+        }
 
         return this.allTableData;
     }

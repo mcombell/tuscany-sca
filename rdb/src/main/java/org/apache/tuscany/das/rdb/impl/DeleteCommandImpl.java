@@ -22,13 +22,13 @@ import org.apache.tuscany.das.rdb.config.Delete;
 
 public class DeleteCommandImpl extends WriteCommandImpl {
 
-	public DeleteCommandImpl(String sqlString) {
-		super(sqlString);
-	}
+    public DeleteCommandImpl(String sqlString) {
+        super(sqlString);
+    }
 
-	public DeleteCommandImpl(Delete delete) {
-		super(delete.getSql());
-		addParameters(delete.getParameters());
-	}
+    public DeleteCommandImpl(Delete delete) {
+        super(delete.getSql());
+        addParameters(delete.getParameters());
+    }
 
 }

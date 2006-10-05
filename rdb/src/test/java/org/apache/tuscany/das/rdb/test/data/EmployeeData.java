@@ -23,25 +23,22 @@ import java.sql.Types;
 
 import org.apache.tuscany.das.rdb.test.framework.TestDataWithExplicitColumns;
 
-
 public class EmployeeData extends TestDataWithExplicitColumns {
 
-	private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.SMALLINT};
+    private static int[] columnTypes = {Types.VARCHAR, Types.VARCHAR, Types.SMALLINT};
 
-	private static Object[][] employeeData = { 
-        {"John Jones", "E0001", new Boolean(false)},
-		{"Mary Smith", "E0002", new Boolean(true)},
-		{"Jane Doe", "E0003", new Boolean(false)},
-		{"Al Smith", "E0004", new Boolean(true)}};
+    private static Object[][] employeeData = {{"John Jones", "E0001", Boolean.valueOf(false)}, 
+        {"Mary Smith", "E0002", Boolean.valueOf(true)},
+        {"Jane Doe", "E0003", Boolean.valueOf(false)}, {"Al Smith", "E0004", Boolean.valueOf(true)}};
 
-	private static String[] employeeColumns = {"NAME", "SN", "MANAGER"};
-	
-	public EmployeeData(Connection connection) {
-		super(connection, employeeData, employeeColumns, columnTypes);
-	}
-	
-	public String getTableName() {
-		return "EMPLOYEE";
-	}
+    private static String[] employeeColumns = {"NAME", "SN", "MANAGER"};
+
+    public EmployeeData(Connection connection) {
+        super(connection, employeeData, employeeColumns, columnTypes);
+    }
+
+    public String getTableName() {
+        return "EMPLOYEE";
+    }
 
 }

@@ -24,21 +24,21 @@ import junit.framework.Test;
 
 public class DerbySetup extends DatabaseSetup {
 
-	public DerbySetup(Test test) {
-		super(test);
-	}
+    public DerbySetup(Test test) {
+        super(test);
+    }
 
-	protected void initConnectionProtocol() {
-		
-		//Set the derby property to explicitly specify the database location relative 
-                //from current directory to "target"
-		Properties p = System.getProperties();
-		p.put("derby.system.home", "target");
+    protected void initConnectionProtocol() {
 
-		platformName = "Derby";
-		driverName = "org.apache.derby.jdbc.EmbeddedDriver";
-		databaseURL = "jdbc:derby:dastest; create = true";
-		
-	}
-	
+        // Set the derby property to explicitly specify the database location relative
+        // from current directory to "target"
+        Properties p = System.getProperties();
+        p.put("derby.system.home", "target");
+
+        platformName = "Derby";
+        driverName = "org.apache.derby.jdbc.EmbeddedDriver";
+        databaseURL = "jdbc:derby:dastest; create = true";
+
+    }
+
 }

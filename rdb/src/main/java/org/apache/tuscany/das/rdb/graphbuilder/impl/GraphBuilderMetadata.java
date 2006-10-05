@@ -87,10 +87,11 @@ public class GraphBuilderMetadata {
      */
     public Type getRootType() {
         if (this.rootType == null) {
-            if (this.typeURI == null)
+            if (this.typeURI == null) {
                 createDynamicTypes();
-            else
+            } else {
                 createDynamicRoot();
+            }
         }
 
         return this.rootType;
@@ -135,6 +136,11 @@ public class GraphBuilderMetadata {
 
                 Property ref = root.getProperty(resultMetadata.getTablePropertyName(i));
 
+                if (ref == null) {
+                    throw new RuntimeException("Could not find table " + resultMetadata.getTablePropertyName(i) 
+                            + " in the SDO model");
+                }
+                
                 // TODO Temporary code to check to see if a property has already been added.
                 // Replace when Tuscany-203 is fixed
                 List addedProperties = (List) tablePropertyMap.get(ref.getName());
@@ -143,8 +149,7 @@ public class GraphBuilderMetadata {
                     tablePropertyMap.put(ref.getName(), addedProperties);
                 }
 
-                if (ref == null)
-                    throw new RuntimeException("Could not find table " + resultMetadata.getTablePropertyName(i) + " in the SDO model");
+ 
 
                 String columnName = resultMetadata.getColumnPropertyName(i);
 
@@ -169,10 +174,12 @@ public class GraphBuilderMetadata {
             String childName = wrapper.getTableTypeName(r.getForeignKeyTable());
 
             if (parentName == null) {
-                throw new RuntimeException("The parent table (" + r.getPrimaryKeyTable() + ") in relationship " + r.getName()
+                throw new RuntimeException("The parent table (" + r.getPrimaryKeyTable() 
+                        + ") in relationship " + r.getName()
                         + " was not found in the mapping information.");
             } else if (childName == null) {
-                throw new RuntimeException("The child table (" + r.getForeignKeyTable() + ") in relationship " + r.getName()
+                throw new RuntimeException("The child table (" + r.getForeignKeyTable() 
+                        + ") in relationship " + r.getName()
                         + " was not found in the mapping information.");
             }
 
@@ -180,9 +187,11 @@ public class GraphBuilderMetadata {
             Property childProperty = root.getProperty(childName);
 
             if (parentProperty == null) {
-                throw new RuntimeException("The parent table (" + parentName + ") in relationship " + r.getName() + " was not found.");
+                throw new RuntimeException("The parent table (" + parentName + ") in relationship " 
+                        + r.getName() + " was not found.");
             } else if (childProperty == null) {
-                throw new RuntimeException("The child table (" + childName + ") in relationship " + r.getName() + " was not found.");
+                throw new RuntimeException("The child table (" + childName + ") in relationship " 
+                        + r.getName() + " was not found.");
             }
 
             Type parent = parentProperty.getType();
@@ -210,8 +219,9 @@ public class GraphBuilderMetadata {
         Type root = SDOUtil.createType(typeHelper, getDefaultURI() + "/DataGraphRoot", "DataGraphRoot", false);
 
         List types = SDOUtil.getTypes(typeHelper, typeURI);
-        if (types == null)
+        if (types == null) {
             throw new RuntimeException("SDO Types have not been registered for URI " + typeURI);
+        }
 
         Iterator i = types.iterator();
         while (i.hasNext()) {
@@ -226,11 +236,12 @@ public class GraphBuilderMetadata {
     public List getDefinedTypes() {
         if (this.typeURI == null) {
             return SDOUtil.getTypes(typeHelper, getDefaultURI());
-        } else {
-            List types = SDOUtil.getTypes(typeHelper, typeURI);
-            types.add(rootType);
-            return types;
-        }
+        } 
+            
+        List types = SDOUtil.getTypes(typeHelper, typeURI);
+        types.add(rootType);
+        return types;
+        
     }
 
 }

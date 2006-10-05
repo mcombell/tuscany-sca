@@ -23,71 +23,62 @@ import java.sql.SQLException;
 
 import org.apache.tuscany.das.rdb.Converter;
 
-
 public class DefaultConverter implements Converter {
 
-	public DefaultConverter() {
-		super();
-	}
+    public DefaultConverter() {
+        super();
+    }
 
-	public Object getColumnValue(Object data) {
-		return data;
-	}
-	
-	public Object getPropertyValue(Object data)  {
-//		if (type.isInstance(data))
-//			return data;
-//
-//		if ( data == null ) 
-//			return null;
-//		
-//		String name = type.getInstanceClass().getName();
-//		if (name == "java.lang.Byte" || name == "byte") {
-//			return new Byte(data.toString());
-//		}
-//
-//		else if (name == "java.lang.Double" || name == "double") {
-//			return new Double(data.toString());
-//		}
-//
-//		else if (name == "java.lang.Float" || name == "float") {
-//			return new Float(data.toString());
-//		}
-//
-//		else if (name == "java.lang.Integer" || name == "int") {
-//			return new Integer(data.toString());
-//		}
-//
-//		else if (name == "java.lang.Long" || name == "long") {
-//			return new Long(data.toString());
-//		}
-//
-//		else if (name == "java.lang.Short" || name == "short") {
-//			return new Short(data.toString());
-//		}
-//
-//		else if (name == "java.lang.String") {
-//			return String.valueOf(data.toString());
-//		}
+    public Object getColumnValue(Object data) {
+        return data;
+    }
 
-		if (data instanceof Blob) {
-			Blob b = (Blob) data;
-			try {
-				return b.getBytes(1, (int)b.length());
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			return data;
-		}
+    public Object getPropertyValue(Object data) {
+        // if (type.isInstance(data))
+        // return data;
+        //
+        // if ( data == null )
+        // return null;
+        //
+        // String name = type.getInstanceClass().getName();
+        // if (name == "java.lang.Byte" || name == "byte") {
+        // return new Byte(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.Double" || name == "double") {
+        // return new Double(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.Float" || name == "float") {
+        // return new Float(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.Integer" || name == "int") {
+        // return new Integer(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.Long" || name == "long") {
+        // return new Long(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.Short" || name == "short") {
+        // return new Short(data.toString());
+        // }
+        //
+        // else if (name == "java.lang.String") {
+        // return String.valueOf(data.toString());
+        // }
 
-
-		 
-//		else {
-//		
-//			throw new IllegalArgumentException("The database value of type "
-//					+ data.getClass().getName() + " must be converted to type "
-//					+ type.getInstanceClass().getName());
-//		}
-	}
+        if (data instanceof Blob) {
+            Blob b = (Blob) data;
+            try {
+                return b.getBytes(1, (int) b.length());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } 
+       
+        return data;
+       
+    }
 }

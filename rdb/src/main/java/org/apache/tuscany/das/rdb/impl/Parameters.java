@@ -53,10 +53,11 @@ public class Parameters {
     }
 
     private void addParameter(ParameterImpl param) {
-        if (param.getDirection() == ParameterImpl.IN)
+        if (param.getDirection() == ParameterImpl.IN) {
             inParams.add(param);
-        else if ((param.getDirection() == ParameterImpl.OUT) || (param.getDirection() == ParameterImpl.IN_OUT))
+        } else if ((param.getDirection() == ParameterImpl.OUT) || (param.getDirection() == ParameterImpl.IN_OUT)) {
             outParams.add(param);
+        }
 
         this.parameters.add(param);
     }
@@ -70,11 +71,13 @@ public class Parameters {
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
-            if (param.getIndex() == index)
+            if (param.getIndex() == index) {
                 return param;
+            }
         }
-        if (this.logger.isDebugEnabled())
+        if (this.logger.isDebugEnabled()) {
             this.logger.debug("Creating new parameter with index " + index);
+        }
 
         ParameterImpl newParam = new ParameterImpl(index);
         newParam.setDirection(direction);
@@ -101,8 +104,9 @@ public class Parameters {
         while (i.hasNext()) {
             ParameterImpl param = (ParameterImpl) i.next();
 
-            if (param.getIndex() == index)
+            if (param.getIndex() == index) {
                 return param;
+            }
         }
         return null;
     }

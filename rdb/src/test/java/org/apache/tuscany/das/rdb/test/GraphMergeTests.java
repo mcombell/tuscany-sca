@@ -131,13 +131,13 @@ public class GraphMergeTests extends DasTest {
         Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON " 
                 + "CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
 
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
         DataObject graph1 = select.executeQuery();
 
         DataObject customer = (DataObject) graph1.getList("CUSTOMER").get(0);
         assertEquals(2, customer.getList("orders").size());
 
-        select.setParameter(1, new Integer(2));
+        select.setParameter(1, Integer.valueOf(2));
         DataObject graph2 = select.executeQuery();
         DataObject customer2 = (DataObject) graph2.getList("CUSTOMER").get(0);
         assertEquals(1, graph2.getList("CUSTOMER").size());
@@ -166,7 +166,7 @@ public class GraphMergeTests extends DasTest {
         Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON " 
                 + "CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
 
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
         DataObject graph1 = select.executeQuery();
 
         DataObject customer = (DataObject) graph1.getList("CUSTOMER").get(0);

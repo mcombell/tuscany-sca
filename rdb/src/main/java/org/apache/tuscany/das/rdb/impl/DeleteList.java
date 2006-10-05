@@ -48,9 +48,9 @@ public class DeleteList {
         } else {
             String name = op.getTableName();
             List ops = (List) opsByTableName.get(name);
-            if (ops == null)
+            if (ops == null) {
                 ops = new ArrayList();
-
+            }
             ops.add(op);
             opsByTableName.put(name, ops);
         }
@@ -61,8 +61,9 @@ public class DeleteList {
             Iterator i = this.order.iterator();
             while (i.hasNext()) {
                 String name = (String) i.next();
-                if (opsByTableName.get(name) != null)
+                if (opsByTableName.get(name) != null) {
                     deleteOperations.addAll((Collection) opsByTableName.get(name));
+                }
             }
         }
 

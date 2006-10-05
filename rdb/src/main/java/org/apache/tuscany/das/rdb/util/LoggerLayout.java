@@ -28,7 +28,7 @@ public final class LoggerLayout {
 
     }
 
-    public static String Layout() {
+    public static String layout() {
 
         /*
          *  Substitute symbols

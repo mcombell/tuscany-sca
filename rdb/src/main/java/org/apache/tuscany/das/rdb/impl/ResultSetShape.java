@@ -29,8 +29,11 @@ import commonj.sdo.Type;
 import commonj.sdo.helper.TypeHelper;
 
 /**
- * Describes the structure of the result set returned from execution of a SELECT statement. This description is typcially not required since the shape
- * can be retreived from the JDBC ResultSetMetadata. However, some platforms such as Oracle do not support fully suport ResultSetMedata.
+ * Describes the structure of the result set returned from 
+ * execution of a SELECT statement. This description is typcially 
+ * not required since the shape can be retreived from the JDBC 
+ * ResultSetMetadata. However, some platforms such as Oracle do not 
+ * support fully suport ResultSetMedata.
  * <p>
  * There may also be a performance boost when using this interface.
  * 
@@ -49,7 +52,7 @@ public class ResultSetShape {
         tables = new String[metadata.getColumnCount()];
         types = new Type[metadata.getColumnCount()];
 
-        ResultSetTypeMap typeMap = ResultSetTypeMap.instance;
+        ResultSetTypeMap typeMap = ResultSetTypeMap.INSTANCE;
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
             tables[i - 1] = metadata.getTableName(i);
             columns[i - 1] = metadata.getColumnName(i);
@@ -74,8 +77,10 @@ public class ResultSetShape {
             String typeName = desc.getColumnType().substring(idx + 1);
 
             types[i] = helper.getType(uri, typeName);
-            if (types[i] == null)
-                throw new RuntimeException("Could not find type " + desc.getColumnType() + " for column " + desc.getColumnName());
+            if (types[i] == null) {
+                throw new RuntimeException("Could not find type " + desc.getColumnType() 
+                        + " for column " + desc.getColumnName());
+            }
         }
 
     }
@@ -104,10 +109,11 @@ public class ResultSetShape {
             result.append('\t');
             result.append(tables[i]);
             result.append('\t');
-            if (types[i] == null)
+            if (types[i] == null) {
                 result.append("null");
-            else
+            } else {
                 result.append(types[i].getName());
+            }
             result.append('\n');
         }
 

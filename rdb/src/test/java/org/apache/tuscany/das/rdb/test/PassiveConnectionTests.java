@@ -19,8 +19,8 @@
 package org.apache.tuscany.das.rdb.test;
 
 /*
- * Test capability to participate in an extenrlly managed transaction. The
- * client is managing the transaction boundary so the DAS will not issue
+ * Test capability to participate in an extenrlly managed transaction. 
+ * The client is managing the transaction boundary so the DAS will not issue
  * commit/rollback
  * 
  */
@@ -44,51 +44,51 @@ public class PassiveConnectionTests extends DasTest {
     }
 
     /**
-	 * Read and modify a customer. Uses a "passive" connection
-	 */
+     * Read and modify a customer. Uses a "passive" connection
+     */
     public void testReadModifyApply() throws Exception {
 
-		// Create and initialize a DAS connection and initialize for externally
-		// managed transaction boundaries
-		java.sql.Connection c = getConnection();
+        // Create and initialize a DAS connection and initialize for externally
+        // managed transaction boundaries
+        java.sql.Connection c = getConnection();
 
-		DAS das = DAS.FACTORY.createDAS(getConfig("passiveConnection.xml"), c);
-		// Read customer 1
-		Command select = das.getCommand("get a customer");
-		DataObject root = select.executeQuery();
+        DAS das = DAS.FACTORY.createDAS(getConfig("passiveConnection.xml"), c);
+        // Read customer 1
+        Command select = das.getCommand("get a customer");
+        DataObject root = select.executeQuery();
 
-		DataObject customer = (DataObject) root.get("CUSTOMER[1]");
+        DataObject customer = (DataObject) root.get("CUSTOMER[1]");
 
-		String lastName = customer.getString("LASTNAME");
-		
-		// Modify customer
-		customer.set("LASTNAME", "Pavick");
+        String lastName = customer.getString("LASTNAME");
 
-		try {
-			das.applyChanges(root);
+        // Modify customer
+        customer.set("LASTNAME", "Pavick");
 
-			throw new Exception("Test Exception");
+        try {
+            das.applyChanges(root);
 
-			// Since the DAS is not managing tx boundaries, I must
-		} catch (Exception e) {
-			// assert here to make sure we didn't run into some hidden error
-			assertEquals("Test Exception", e.getMessage());
-			// Roll back the transaction
-			c.rollback();
-		}
+            throw new Exception("Test Exception");
 
-		// Verify that the changes did not go through
-		root = select.executeQuery();
-		assertEquals(lastName, root.getString("CUSTOMER[1]/LASTNAME"));
+            // Since the DAS is not managing tx boundaries, I must
+        } catch (Exception e) {
+            // assert here to make sure we didn't run into some hidden error
+            assertEquals("Test Exception", e.getMessage());
+            // Roll back the transaction
+            c.rollback();
+        }
 
-		// Try again
-		customer = (DataObject) root.get("CUSTOMER[1]");
-		customer.set("LASTNAME", "Pavick");
-		das.applyChanges(root);
-		c.commit();
+        // Verify that the changes did not go through
+        root = select.executeQuery();
+        assertEquals(lastName, root.getString("CUSTOMER[1]/LASTNAME"));
 
-		root = select.executeQuery();
-		assertEquals("Pavick", root.getString("CUSTOMER[1]/LASTNAME"));
+        // Try again
+        customer = (DataObject) root.get("CUSTOMER[1]");
+        customer.set("LASTNAME", "Pavick");
+        das.applyChanges(root);
+        c.commit();
+
+        root = select.executeQuery();
+        assertEquals("Pavick", root.getString("CUSTOMER[1]/LASTNAME"));
     }
 
 }

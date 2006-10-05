@@ -143,7 +143,7 @@ public class SimplestCrud extends DasTest {
     public void testInsertWithParameters() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");
-        insert.setParameter(1, new Integer(10));
+        insert.setParameter(1, Integer.valueOf(10));
         insert.setParameter(2, "Williams");
         insert.setParameter(3, "5528 Wells Fargo Dr");
         insert.execute();
@@ -198,7 +198,7 @@ public class SimplestCrud extends DasTest {
 
         Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");
         update.setParameter(1, "Pavick");
-        update.setParameter(2, new Integer(1));
+        update.setParameter(2, Integer.valueOf(1));
         update.execute();
 
         // Verify update - reuse select command
@@ -216,7 +216,7 @@ public class SimplestCrud extends DasTest {
 
         Command update = das.createCommand("update CUSTOMER set LASTNAME = ? where ID = ?");
         update.setParameter(1, "Pavick");
-        update.setParameter(2, new Integer(1));
+        update.setParameter(2, Integer.valueOf(1));
         update.execute();
 
         //Verify update - reuse select command

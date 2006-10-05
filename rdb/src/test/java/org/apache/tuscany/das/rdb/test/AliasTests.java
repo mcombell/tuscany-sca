@@ -72,7 +72,7 @@ public class AliasTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConfig("BooksConfigWithAlias.xml"), getConnection());
 
         Command select = das.getCommand("get book by ID");
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
 
         // *******Verifys a column entry is readable
         DataObject root = select.executeQuery();
@@ -123,7 +123,7 @@ public class AliasTests extends DasTest {
 
         DAS das = DAS.FACTORY.createDAS(getConfig("BooksConfigWithAlias.xml"), getConnection());
         Command select = das.getCommand("get book by ID");
-        select.setParameter(1, new Integer(1));
+        select.setParameter(1, Integer.valueOf(1));
 
         DataObject root = select.executeQuery();
 
@@ -137,7 +137,7 @@ public class AliasTests extends DasTest {
         root = select.executeQuery();
 
         // Verify
-        select.setParameter(1, new Integer(1001));
+        select.setParameter(1, Integer.valueOf(1001));
         root = select.executeQuery();
 
         assertEquals("Ant Colonies of the Old World", root.getString("Book[1]/NAME"));

@@ -45,10 +45,7 @@ public abstract class RelationshipData {
 
     public boolean next() {
         ++currentRow;
-        if (currentRow < numberOfRows())
-            return true;
-        else
-            return false;
+        return currentRow < numberOfRows();
     }
 
     public void refresh() throws SQLException {

@@ -63,7 +63,8 @@ public class CorrectedDefectTests extends DasTest {
     public void testAddNewOrder() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
         // Read some customers and related orders
-        Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
+        Command select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER "
+                + "ON CUSTOMER.ID = ANORDER.CUSTOMER_ID");
 
         DataObject root = select.executeQuery();
 
@@ -76,9 +77,9 @@ public class CorrectedDefectTests extends DasTest {
         // Create a new Order and add to customer1
         DataObject order = root.createDataObject("ANORDER");
 
-        order.set("ID", new Integer(99));
+        order.set("ID", Integer.valueOf(99));
         order.set("PRODUCT", "The 99th product");
-        order.set("QUANTITY", new Integer(99));
+        order.set("QUANTITY", Integer.valueOf(99));
         cust.getList("orders").add(order);
 
         assertEquals(custOrderCount + 1, cust.getList("orders").size());
@@ -87,9 +88,10 @@ public class CorrectedDefectTests extends DasTest {
         das.applyChanges(root);
 
         // verify cust1 relationship updates
-        select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
+        select = das.createCommand("SELECT * FROM CUSTOMER LEFT JOIN ANORDER "
+                + "ON CUSTOMER.ID = ANORDER.CUSTOMER_ID where CUSTOMER.ID = ?");
 
-        select.setParameter(1, new Integer(custID));
+        select.setParameter(1, Integer.valueOf(custID));
         root = select.executeQuery();
 
         assertEquals(custOrderCount + 1, root.getList("CUSTOMER[1]/orders").size());
@@ -107,7 +109,7 @@ public class CorrectedDefectTests extends DasTest {
 
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand(sql);
-        insert.setParameter(1, new Integer(316405209));
+        insert.setParameter(1, Integer.valueOf(316405209));
         insert.setParameter(2, "2005-11-23 19:29:52.636");
         insert.execute();
 
@@ -129,7 +131,7 @@ public class CorrectedDefectTests extends DasTest {
         int numCustomers = root.getList("CUSTOMER").size();
 
         DataObject newCust = root.createDataObject("CUSTOMER");
-        newCust.set("ID", new Integer(100));
+        newCust.set("ID", Integer.valueOf(100));
         newCust.set("ADDRESS", "5528 Wells Fargo Drive");
         newCust.set("LASTNAME", "Gerkin");
 
@@ -151,7 +153,7 @@ public class CorrectedDefectTests extends DasTest {
     public void testDiltonsNullParameterBug1() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");
-        insert.setParameter(1, new Integer(10));
+        insert.setParameter(1, Integer.valueOf(10));
         insert.setParameter(2, null);
         insert.setParameter(3, "5528 Wells Fargo Dr");
         insert.execute();
@@ -170,7 +172,7 @@ public class CorrectedDefectTests extends DasTest {
     public void testDiltonsNullParameterBug2() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");
-        insert.setParameter(1, new Integer(10));
+        insert.setParameter(1, Integer.valueOf(10));
         // insert.setParameterValue("LASTNAME", null);
         insert.setParameter(3, "5528 Wells Fargo Dr");
 
@@ -188,7 +190,7 @@ public class CorrectedDefectTests extends DasTest {
     public void testDiltonsNullParameterBug3() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");
-        insert.setParameter(1, new Integer(10));
+        insert.setParameter(1, Integer.valueOf(10));
         insert.setParameter(2, "");
         insert.setParameter(3, "5528 Wells Fargo Dr");
         insert.execute();
@@ -236,7 +238,7 @@ public class CorrectedDefectTests extends DasTest {
     public void testYingChen12162005() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command insert = das.createCommand("insert into CUSTOMER values (?, ?, ?)");
-        insert.setParameter(1, new Integer(10));
+        insert.setParameter(1, Integer.valueOf(10));
         insert.setParameter(2, "Williams");
         insert.setParameter(3, null);
         insert.execute();

@@ -24,31 +24,33 @@ import org.apache.tuscany.das.rdb.config.Update;
 
 public class OptimisticWriteCommandImpl extends UpdateCommandImpl {
 
-	public OptimisticWriteCommandImpl(String sqlString) {
-		super(sqlString);
-	}
+    public OptimisticWriteCommandImpl(String sqlString) {
+        super(sqlString);
+    }
 
-	public OptimisticWriteCommandImpl(Update update) {
-		super(update);
-		addParameters(update.getParameters());
-	}
+    public OptimisticWriteCommandImpl(Update update) {
+        super(update);
+        addParameters(update.getParameters());
+    }
 
-	public void execute() {
+    public void execute() {
 
-		boolean success = false;
-		try {
-			int rowsAffected = statement.executeUpdate(parameters);
-			success = true;
-			if (rowsAffected == 0) 
-				throw new RuntimeException("OCC Exception");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (success)
-				statement.getConnection().cleanUp();
-			else
-				statement.getConnection().errorCleanUp();
-		}
+        boolean success = false;
+        try {
+            int rowsAffected = statement.executeUpdate(parameters);
+            success = true;
+            if (rowsAffected == 0) {
+                throw new RuntimeException("An update collision occurred");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (success) {
+                statement.getConnection().cleanUp();
+            } else {
+                statement.getConnection().errorCleanUp();
+            }
+        }
 
-	}
+    }
 }

@@ -37,7 +37,7 @@ public interface DASFactory {
      *            A stream over a DAS config file
      * @return returns a DAS instance
      */
-    public DAS createDAS(InputStream configStream);
+    DAS createDAS(InputStream configStream);
     
     /**
      * Creates a DAS based on the provide config file stream and connection
@@ -45,7 +45,7 @@ public interface DASFactory {
      * @param connection
      * @return
      */
-    public DAS createDAS(InputStream configStream, Connection connection);
+    DAS createDAS(InputStream configStream, Connection connection);
     
     /**
      * Creates a DAS based on the provided config
@@ -54,7 +54,7 @@ public interface DASFactory {
      *            A DAS config object
      * @return returns a DAS instance
      */
-    public DAS createDAS(Config config);
+    DAS createDAS(Config config);
 
     /**
      * Creates a DAS based on the provided config and connection
@@ -62,14 +62,14 @@ public interface DASFactory {
      * @param connection
      * @return
      */
-    public DAS createDAS(Config config, Connection connection);
+    DAS createDAS(Config config, Connection connection);
 
     /**
      * Creates a DAS based on the provided connection
      * @param connection
      * @return
      */
-    public DAS createDAS(Connection connection);
+    DAS createDAS(Connection connection);
     
 
 }

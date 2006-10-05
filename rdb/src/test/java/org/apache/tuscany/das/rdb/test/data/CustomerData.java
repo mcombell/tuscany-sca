@@ -24,9 +24,9 @@ import org.apache.tuscany.das.rdb.test.framework.TestData;
 
 public class CustomerData extends TestData {
 
-    private static Object[][] customerData = { { new Integer(1), "Williams", "1212 foobar lane" },
-            { new Integer(2), "Daniel", "156 Brentfield Loop" }, { new Integer(3), "Williams", "456 penny lane" },
-            { new Integer(4), "Williams", "5000 pineville" }, { new Integer(5), "Williams", "100000 firefly lane" } };
+    private static Object[][] customerData = {{Integer.valueOf(1), "Williams", "1212 foobar lane"},
+        {Integer.valueOf(2), "Daniel", "156 Brentfield Loop"}, {Integer.valueOf(3), "Williams", "456 penny lane"},
+        {Integer.valueOf(4), "Williams", "5000 pineville"}, {Integer.valueOf(5), "Williams", "100000 firefly lane"}};
 
     public CustomerData(Connection connection) {
         super(connection, customerData);

@@ -46,8 +46,8 @@ public class CompoundKeyTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConnection());
         Command getOrderDetails = das.createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
 
-        getOrderDetails.setParameter(1, new Integer(1));
-        getOrderDetails.setParameter(2, new Integer(1));
+        getOrderDetails.setParameter(1, Integer.valueOf(1));
+        getOrderDetails.setParameter(2, Integer.valueOf(1));
 
         DataObject root = getOrderDetails.executeQuery();
 
@@ -81,7 +81,8 @@ public class CompoundKeyTests extends DasTest {
 
     public void testReadOrdersAndDetails2() throws Exception {
         DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
-        Command read = das.createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");
+        Command read = das.createCommand("SELECT * FROM ANORDER LEFT JOIN ORDERDETAILS " 
+                + "ON ANORDER.ID = ORDERDETAILS.ORDERID ORDER BY ANORDER.ID");
 
         DataObject root = read.executeQuery();
 
@@ -95,8 +96,8 @@ public class CompoundKeyTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConfig("OrdersOrderDetailsConfig.xml"), getConnection());
         Command getOrderDetails = das.createCommand("Select * from ORDERDETAILS where ORDERID = ? AND PRODUCTID = ?");
 
-        getOrderDetails.setParameter(1, new Integer(1));
-        getOrderDetails.setParameter(2, new Integer(1));
+        getOrderDetails.setParameter(1, Integer.valueOf(1));
+        getOrderDetails.setParameter(2, Integer.valueOf(1));
 
         DataObject root = getOrderDetails.executeQuery();
 

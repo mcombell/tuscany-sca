@@ -27,9 +27,9 @@ import org.apache.tuscany.das.rdb.util.LoggerFactory;
 
 public abstract class TestDataWithExplicitColumns extends TestData {
 
-    protected String[] columns;
+    private String[] columns;
 
-    protected int[] sqlTypes;
+    private int[] sqlTypes;
     
     private final Logger logger = LoggerFactory.INSTANCE.getLogger(TestDataWithExplicitColumns.class);
 

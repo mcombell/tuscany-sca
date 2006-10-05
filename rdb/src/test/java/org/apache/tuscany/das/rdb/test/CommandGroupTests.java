@@ -35,7 +35,8 @@ import commonj.sdo.DataObject;
 
 /**
  * 
- * This tests use of the XML Config file. Tests will utilize the customer-orders-orderdetails tables. The plan is for the config file to have a
+ * This tests use of the XML Config file. Tests will utilize the 
+ * customer-orders-orderdetails tables. The plan is for the config file to have a
  * section that applies to all commands and another that applies to specific commands.
  * 
  * The config file will be used to initialize a command factory that will then return named commands.
@@ -96,7 +97,7 @@ public class CommandGroupTests extends DasTest {
         DAS das = DAS.FACTORY.createDAS(getConfig("CustomersOrdersConfig.xml"), getConnection());
 
         Command read = das.getCommand("order by id");
-        read.setParameter(1, new Integer(1));
+        read.setParameter(1, Integer.valueOf(1));
         DataObject root = read.executeQuery();
 
         assertEquals("recombobulator", root.getString("ANORDER[1]/PRODUCT"));
@@ -117,7 +118,7 @@ public class CommandGroupTests extends DasTest {
         int id = root.getInt("CUSTOMER[1]/ID");
 
         Command update = das.getCommand("update customer");
-        update.setParameter(1, new Integer(id));
+        update.setParameter(1, Integer.valueOf(id));
         update.execute();
 
         // Verify update - reuse select command
@@ -127,7 +128,8 @@ public class CommandGroupTests extends DasTest {
     }
 
     /**
-     * Read all customers, select a specific customer. Then read that customer and related orders. Modify an order and flush changes back
+     * Read all customers, select a specific customer. Then read that 
+     * customer and related orders. Modify an order and flush changes back
      */
     public void testRead2() throws Exception {
 
