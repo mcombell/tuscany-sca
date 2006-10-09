@@ -22,7 +22,7 @@ comprehensive instructions in the <a href="http://incubator.apache.org/tuscany/g
 page. This step
 needs to be done when ever you have new source to test.</li>
 <li>Change directory
-to <span style="font-weight: bold;">java/samples/das/testing/tomcat</span>.</li>
+to <span style="font-weight: bold;">java/das/samples/testing/tomcat</span>.</li>
 <li>Download
 Tomcat Core 5.5.<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span>&nbsp;</span>zip
 for Windows or &nbsp;tar.gz for Linux &nbsp;from <a href="http://tomcat.apache.org/download-55.cgi" target="_blank">Apache
@@ -32,22 +32,7 @@ environment where the tomcat distribution zip file is located. </li>
 <li>You may
 have to edit build.xml &nbsp;to change the property <span style="font-weight: bold;">tuscany.acceptance.tomcat.version</span>
 to match the&nbsp;<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span></span>
-to the specific version that you downloaded.</li><li>During
-the build Maven
-references the dependency jsr173 jar which is not in any maven 2.0
-repository to resolve this you need to add it to your local Maven
-repository by :&nbsp;</li><ul><li>Downloading the
-latest binary Apache <a href="http://xmlbeans.apache.org/sourceAndBinaries/index.html#XMLBeans+Binary+and+Development+Kit" target="_blank">XML Bean distribution</a> &nbsp;(
-<a href="http://mirrors.ibiblio.org/pub/mirrors/apache/xmlbeans/xmlbeans-current.zip">xmlbeans-current.zip</a>
-, <a href="http://mirrors.ibiblio.org/pub/mirrors/apache/xmlbeans/xmlbeans-current.tgz">xmlbeans-current.tgz</a>)
-unpack and jsr173_1.0_api.jar should be&nbsp;in the lib directory.</li><li><code>
-mvn install:install-file
-<br>-Dfile=jsr173_api.jar
-<br>-DgroupId=javax.xml <br>
--DartifactId=jsr173 <br>
--Dversion=1.0 <br>
--Dpackaging=jar</code>
-</li></ul></ul><h3>&nbsp;Running</h3>In
+to the specific version that you downloaded.</li></ul><h3>&nbsp;Running</h3>In
 the <span style="font-weight: bold;">java/samples/das/testing/tomcat </span>
 directory<b> </b>run maven:<br><code>mvn</code><br><h3>Explanation</h3>Maven&nbsp;does
 the following:<br><ul><li>Unpacks the
