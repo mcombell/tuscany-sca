@@ -1,4 +1,4 @@
-Apache Tuscany M1 build (May, 2006)
+Apache Tuscany M2 build (October, 2006)
 ===================================
 
 http://incubator.apache.org/tuscany/
