@@ -29,6 +29,8 @@
         <fileSet>
             <includes>
                 <include>*.txt</include>
+                <include>*.htm</include>
+                <include>*.html</include>
             </includes>
         </fileSet>
     </fileSets>
