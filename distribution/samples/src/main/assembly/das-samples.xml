@@ -53,7 +53,7 @@
     
     <dependencySets>
             <dependencySet>
-                <outputDirectory>bin</outputDirectory>
+                <outputDirectory></outputDirectory>
                 <includes>
                     <include>org.apache.tuscany.das.samples:sample-companyweb</include>
                 </includes>
