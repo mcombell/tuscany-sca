@@ -1,51 +1,8 @@
-<html xmlns:v="urn:schemas-microsoft-com:vml"
-xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
-xmlns="http://www.w3.org/TR/REC-html40">
+<html xmlns="http://www.w3.org/TR/REC-html40">
 
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 10">
-<meta name=Originator content="Microsoft Word 10">
 <title>Tuscany RDB DAS Sample</title>
-<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
- name="place"/>
-<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
- name="State"/>
-<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
- name="City"/>
-<!--[if gte mso 9]><xml>
- <o:DocumentProperties>
-  <o:Author>IBM_USER</o:Author>
-  <o:LastAuthor>IBM_USER</o:LastAuthor>
-  <o:Revision>2</o:Revision>
-  <o:TotalTime>487</o:TotalTime>
-  <o:Created>2006-05-17T18:53:00Z</o:Created>
-  <o:LastSaved>2006-05-17T18:53:00Z</o:LastSaved>
-  <o:Pages>1</o:Pages>
-  <o:Words>1174</o:Words>
-  <o:Characters>6695</o:Characters>
-  <o:Company>IBM</o:Company>
-  <o:Lines>55</o:Lines>
-  <o:Paragraphs>15</o:Paragraphs>
-  <o:CharactersWithSpaces>7854</o:CharactersWithSpaces>
-  <o:Version>10.6735</o:Version>
- </o:DocumentProperties>
-</xml><![endif]--><!--[if gte mso 9]><xml>
- <w:WordDocument>
-  <w:SpellingState>Clean</w:SpellingState>
-  <w:GrammarState>Clean</w:GrammarState>
-  <w:Compatibility>
-   <w:BreakWrappedTables/>
-   <w:SnapToGridInCell/>
-   <w:WrapTextWithPunct/>
-   <w:UseAsianBreakRules/>
-  </w:Compatibility>
-  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
- </w:WordDocument>
-</xml><![endif]-->
 <style>
 <!--
  /* Font Definitions */
@@ -335,69 +292,27 @@ ul
 
 <div class=Section1>
 
-<p class=MsoNormal><span class=GramE><span style='font-size:9.0pt'>Copyright<span
-style='color:black'> </span>(c)<span style='color:black'> </span>2005<span
-style='color:black'> </span>The<span style='color:black'> </span>Apache<span
-style='color:black'> </span>Software<span style='color:black'> </span>Foundation<span
-style='color:black'> </span>or<span style='color:black'> </span>its<span
-style='color:black'> </span>licensors,<span style='color:black'> </span>as<span
-style='color:black'> </span>applicable.</span></span><span style='font-size:
-9.0pt'><o:p></o:p></span></p>
+<p class=MsoNormal><span style="font-size: 9pt">&nbsp;</span></p>
+<pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+&quot;License&quot;); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-<p class=MsoNormal><span style='font-size:9.0pt'>Licensed<span
-style='color:black'> </span>under<span style='color:black'> </span>the<span
-style='color:black'> </span>Apache<span style='color:black'> </span>License,<span
-style='color:black'> </span>Version<span style='color:black'> </span>2.0<span
-style='color:black'> </span>(the<span style='color:black'> </span>&quot;License&quot;);
-you<span style='color:black'> </span>may<span style='color:black'> </span>not<span
-style='color:black'> </span>use<span style='color:black'> </span>this<span
-style='color:black'> </span>file<span style='color:black'> </span>except<span
-style='color:black'> </span>in<span style='color:black'> </span>compliance<span
-style='color:black'> </span>with<span style='color:black'> </span>the<span
-style='color:black'> </span>License. You<span style='color:black'> </span>may<span
-style='color:black'> </span>obtain<span style='color:black'> </span>a<span
-style='color:black'> </span>copy<span style='color:black'> </span>of<span
-style='color:black'> </span>the<span style='color:black'> </span>License<span
-style='color:black'> </span>at<o:p></o:p></span></p>
+http://www.apache.org/licenses/LICENSE-2.0
 
-<p class=MsoNormal><span style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;color:black'><span
-style='mso-spacerun:yes'>   </span><span style='mso-spacerun:yes'>  </span></span><span
-style='font-size:9.0pt'>http://www.apache.org/licenses/LICENSE-2.0<o:p></o:p></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt'>Unless<span style='color:black'>
-</span>required<span style='color:black'> </span>by<span style='color:black'> </span>applicable<span
-style='color:black'> </span>law<span style='color:black'> </span>or<span
-style='color:black'> </span>agreed<span style='color:black'> </span>to<span
-style='color:black'> </span>in<span style='color:black'> </span>writing,<span
-style='color:black'> </span>software distributed<span style='color:black'> </span>under<span
-style='color:black'> </span>the<span style='color:black'> </span>License<span
-style='color:black'> </span>is<span style='color:black'> </span>distributed<span
-style='color:black'> </span>on<span style='color:black'> </span>an<span
-style='color:black'> </span>&quot;AS<span style='color:black'> </span>IS&quot;<span
-style='color:black'> </span>BASIS, WITHOUT<span style='color:black'> </span>WARRANTIES<span
-style='color:black'> </span>OR<span style='color:black'> </span>CONDITIONS<span
-style='color:black'> </span>OF<span style='color:black'> </span>ANY<span
-style='color:black'> </span>KIND,<span style='color:black'> </span>either<span
-style='color:black'> </span>express<span style='color:black'> </span>or<span
-style='color:black'> </span>implied. See<span style='color:black'> </span>the<span
-style='color:black'> </span>License<span style='color:black'> </span>for<span
-style='color:black'> </span>the<span style='color:black'> </span>specific<span
-style='color:black'> </span>language<span style='color:black'> </span>governing<span
-style='color:black'> </span>permissions<span style='color:black'> </span>and
-limitations<span style='color:black'> </span>under<span style='color:black'> </span>the<span
-style='color:black'> </span>License.<o:p></o:p></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal align=right style='text-align:right'><span style='font-size:
-9.0pt'>Kevin Williams<o:p></o:p></span></p>
-
-<p class=MsoNormal align=right style='text-align:right'><span style='font-size:
-9.0pt'>V-0.4<o:p></o:p></span></p>
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.   </a></pre>
+<p class=MsoNormal><span style="font-size: 9pt"><br>
+&nbsp;</span></p>
+<p class=MsoNormal><span style='font-size:9.0pt'>
+<o:p>&nbsp;</o:p></span></p>
 
 <h1><st1:State><st1:place>Tuscany</st1:place></st1:State> RDB DAS Sample (<span
 class=SpellE>companyweb</span>)</h1>
@@ -586,10 +501,10 @@ name}/</a></p>
 
 <p class=MsoNormal style='margin-left:1.0in'><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal style='margin-left:1.0in'>NOTE: for the M1 version of <st1:State><st1:place>Tuscany</st1:place></st1:State>
+<p class=MsoNormal style='margin-left:1.0in'>NOTE: for the M2 version of <st1:State><st1:place>Tuscany</st1:place></st1:State>
 sample the <span class=SpellE><span class=GramE>url</span></span> is:</p>
 
-<p class=MsoNormal style='margin-left:1.5in'>http://localhost:8080/sample-companyweb-incubating-M1/<o:p></o:p></p>
+<p class=MsoNormal style='margin-left:1.5in'>http://localhost:8080/sample-companyweb-1.0-incubator-M2/<o:p></o:p></p>
 
 <p class=MsoNormal><sub><o:p>&nbsp;</o:p></sub></p>
 
@@ -658,18 +573,17 @@ to run this sample.<span style='mso-spacerun:yes'>  </span>These jars are
 available <b style='mso-bidi-font-weight:normal'>only</b> after you have
 successfully downloaded and built Tuscany/java.<span style='mso-spacerun:yes'> 
 </span>Instructions for building can be found here: </p>
+<p class=MsoNormal>&nbsp;</p>
 
-<p class=MsoNormal style='margin-left:.5in'><a
-href="https://svn.apache.org/repos/asf/incubator/tuscany/java/BUILDING.txt">https://svn.apache.org/repos/asf/incubator/tuscany/java/BUILDING.txt</a></p>
+<p class=MsoNormal style='margin-left:.5in'>
+<a href="http://incubator.apache.org/tuscany/java-projects.html">
+http://incubator.apache.org/tuscany/java-projects.html</a></p>
+<p class=MsoNormal style='margin-left:.5in'>
+<o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal><span class=GramE>Dependency jar</span> locations:</p>
+<p class=MsoNormal><u><b><span class=GramE>Dependency jar</span> locations:</b></u></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt'>For
-Step #4<o:p></o:p></span></p>
 
 <ul style='margin-top:0in' type=disc>
  <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
@@ -710,16 +624,13 @@ Step #4<o:p></o:p></span></p>
 </ul>
 
 <p class=MsoNormal><span style='font-size:10.0pt'><o:p>&nbsp;</o:p></span></p>
-<p class=MsoNormal><font size="2">&nbsp;&nbsp; Note: All these dependencies, 
-except for derby.jar are now included on the companyweb war file.</font></p>
+<p class=MsoNormal><font size="2">&nbsp;&nbsp; <b>Note</b>: Except for derby.jar 
+all of these dependencies are included in the companyweb war file.</font></p>
 <p class=MsoNormal>&nbsp;</p>
 
-<p class=MsoNormal>Application artifact locations:</p>
+<p class=MsoNormal><u><b>Application artifact locations:</b></u></p>
 
 <p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt'><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt'>For
-Step #5<o:p></o:p></span></p>
 
 <ul style='margin-top:0in' type=disc>
  <li class=MsoNormal style='mso-list:l11 level1 lfo10;tab-stops:list .5in'><span
@@ -729,10 +640,11 @@ Step #5<o:p></o:p></span></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>Conventions:</p>
+<p class=MsoNormal><u><b>Conventions:</b></u></p>
 
 <ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
+ <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'>
+	<span
      style='font-size:10.0pt'>{<span class=GramE>user</span>} refers the
      directory where Maven2 is installed on your machine.<span
      style='mso-spacerun:yes'>  </span>On my machine, “{user}” is “C:\Documents
@@ -740,14 +652,14 @@ Step #5<o:p></o:p></span></p>
  <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
      style='font-size:10.0pt'>{<span class=SpellE>Tomcat_Home</span>} refers to
      the directory that Tomcat is installed on your machine.<span
-     style='mso-spacerun:yes'>  </span>On my machine, this is “C:\Program
+     style='mso-spacerun:yes'>  </span>For example, “C:\Program
      Files\Apache Software Foundation\Tomcat 5.5”<o:p></o:p></span></li>
  <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
      style='font-size:10.0pt'>{<span class=GramE>latest</span> version} means
      the tag associated with the latest version available in the maven2
      repository.<span style='mso-spacerun:yes'>  </span>For example the version
-     of <span class=SpellE>ecore</span>-{latest version}.jar that I used for
-     testing this sample is “ecore-2.2.0-RC4.jar”<o:p></o:p></span></li>
+     of <span class=SpellE>ecore</span>-{latest version}.jar used for
+     testing this sample is “ecore-2.2.1.jar”<o:p></o:p></span></li>
  <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
      style='font-size:10.0pt'>{build directory root} refers to the target
      directory for the <span class=SpellE>tuscany</span>/java source you are
