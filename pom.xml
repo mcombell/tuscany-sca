@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany</groupId>
         <artifactId>parent</artifactId>
-        <version>1-incubator-SNAPSHOT</version>
+        <version>1-incubator</version>
     </parent>
     <groupId>org.apache.tuscany.das</groupId>
     <artifactId>tuscany-das</artifactId>
