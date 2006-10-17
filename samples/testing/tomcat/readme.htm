@@ -28,26 +28,28 @@
 <h2>Tuscany End User Sample Testing</h2>
 <h3>Initial Setup</h3>&nbsp;
 &nbsp; &nbsp;Most of the following only needs to be done once
-unless noted otherwise.<br><ul>
-<li>Follow the steps to build
-Tuscany core from either the <a target="_blank" href="../../companyweb/readme.htm">samples
-readme</a> or the more
-comprehensive instructions in the <a href="http://incubator.apache.org/tuscany/get-involved.html" target="_blank">Getting Involved with Apache Tuscany</a>
-page. This step
-needs to be done when ever you have new source to test.</li>
+unless noted otherwise.<br>
+<ul>
+<li>Follow the steps to build Tuscany DAS Companyweb sample application from <a target="_blank" href="http://incubator.apache.org/tuscany/java_das_overview.html">Tuscany DAS Java Overview</a>.</li>
+
 <li>Change directory
 to <span style="font-weight: bold;">java/das/samples/testing/tomcat</span>.</li>
+
 <li>Download
 Tomcat Core 5.5.<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span>&nbsp;</span>zip
 for Windows or &nbsp;tar.gz for Linux &nbsp;from <a href="http://tomcat.apache.org/download-55.cgi" target="_blank">Apache
-Tomcat</a>.</li><li>You may have to create/edit {user home}/build.properties to
+Tomcat</a>.</li>
+
+<li>You can place the tomcat distribution in your java/samples/das/testing/tomcat directory or, alternatively, you can create/edit {user home}/build.properties to
 change the property <b>tuscany.acceptance.tomcat.zipped</b> to tell the build
 environment where the tomcat distribution zip file is located. </li>
-<li>You may
-have to edit build.xml &nbsp;to change the property <span style="font-weight: bold;">tuscany.acceptance.tomcat.version</span>
+<li>You may have to edit build.xml &nbsp;to change the property <span style="font-weight: bold;">tuscany.acceptance.tomcat.version</span>
 to match the&nbsp;<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span></span>
-to the specific version that you downloaded.</li></ul><h3>&nbsp;Running</h3>In
-the <span style="font-weight: bold;">java/samples/das/testing/tomcat </span>
+to the specific version that you downloaded.</li>
+</ul>
+
+<h3>&nbsp;Running</h3>In
+the <span style="font-weight: bold;">java/das/samples/testing/tomcat </span>
 directory<b> </b>run maven:<br><code>mvn</code><br><h3>Explanation</h3>Maven&nbsp;does
 the following:<br><ul><li>Unpacks the
 Tomcat distribution into the target directory to ensure a pristine

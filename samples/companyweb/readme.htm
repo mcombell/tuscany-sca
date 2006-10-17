@@ -383,7 +383,7 @@ style='mso-spacerun:yes'>  </span></p>
 <p class=MsoNormal>Alternatively, you can deploy the sample to your own configured
 Tomcat installation by following the instructions below.<span
 style='mso-spacerun:yes'>  </span>These instructions assume that you have
-downloaded the <st1:State><st1:place>Tuscany</st1:place></st1:State> source and
+downloaded the Tuscany sample distribution or Tuscany source and
 run our maven build, see the following link to more details steps on how to 
 build DAS Sample applications
 <a href="http://incubator.apache.org/tuscany/java_das_overview.html">
@@ -404,19 +404,13 @@ mso-bidi-font-family:Arial;mso-font-kerning:0pt'>Set Up<o:p></o:p></span></h1>
      download is <span class=SpellE>derby.jar</span></li>
  <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Stop
      Tomcat</li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Move
-     the following files (details in appendix) to {<span class=SpellE>Tomcat_Home</span>}/common/lib:</li>
- <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>
-	<span
-      class=SpellE>derby.jar</span></li>
- </ol>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Add
-     the sample war file (details in appendix) to {<span class=SpellE>Tomcat_Home</span>}/<span
+ <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Copy derby.jar (from the derby distribution) to {<span class=SpellE>Tomcat_Home</span>}/common/lib:</li>
+  <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Add
+     the sample war file to {<span class=SpellE>Tomcat_Home</span>}/<span
      class=SpellE>webapps</span></li>
  <ol style='margin-top:0in' start=1 type=a>
   <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>sample-<span
-      class=SpellE>companyweb-xxx.war</span></li>
+      class=SpellE>companyweb-xxx.war (e.g. sample-companyweb-1.0-incubator-M2-SNAPSHOT.war)</span></li>
  </ol>
  <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Install
      the canned <st1:City><st1:place>Derby</st1:place></st1:City> database to
@@ -558,110 +552,6 @@ directives (commands) from the <span class=SpellE><b style='mso-bidi-font-weight
 normal'>CompanyClient</b></span><b style='mso-bidi-font-weight:normal'> </b>and
 reads and writes to the derby database instance appropriately.<b
 style='mso-bidi-font-weight:normal'> <o:p></o:p></b></p>
-
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><o:p>&nbsp;</o:p></b></p>
-
-<h1>Appendix</h1>
-
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal>The following specifies the location of all dependency jars needed
-to run this sample.<span style='mso-spacerun:yes'>  </span>These jars are
-available <b style='mso-bidi-font-weight:normal'>only</b> after you have
-successfully downloaded and built Tuscany/java.<span style='mso-spacerun:yes'> 
-</span>Instructions for building can be found here: </p>
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal style='margin-left:.5in'>
-<a href="http://incubator.apache.org/tuscany/java-projects.html">
-http://incubator.apache.org/tuscany/java-projects.html</a></p>
-<p class=MsoNormal style='margin-left:.5in'>
-<o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal><u><b><span class=GramE>Dependency jar</span> locations:</b></u></p>
-
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>tuscany-das-rdb-xxx.jar</span></span><span
-     style='font-size:10.0pt'> – {build directory root}/java/<span
-     class=SpellE>das/rdb/target</span><o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>sdo-api-xxx.jar</span></span><span
-     style='font-size:10.0pt'> – {build directory root}/java/spec/<span
-     class=SpellE>sdo</span>/target<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>tuscany-sdo-impl-xxx.jar</span></span><span
-     style='font-size:10.0pt'> – {build directory root}//java/<span
-     class=SpellE>sdo/impl/target</span><o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>xsd</span></span><span
-     style='font-size:10.0pt'>{latest version}.jar –
-     {user}/.m2/repository/org/eclipse/xsd<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>ecore</span></span><span
-     style='font-size:10.0pt'>-{latest version}.jar –
-     {user}/.m2/repository/org/eclipse/emf/ecore<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>ecore</span></span><span
-     style='font-size:10.0pt'>-change-{latest version}.jar –
-     {user}/.m2/repository/org/eclipse/emf/ecore-change<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>ecore-xmi</span></span><span
-     style='font-size:10.0pt'>-{latest version}.jar <span
-     style='mso-spacerun:yes'> </span>– {user}/.m2/repository/org/eclipse/emf/ecore-xmi<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     style='font-size:10.0pt'>common-{latest version}.jar<span
-     style='mso-spacerun:yes'>  </span>– {user}/.m2/repository/org/eclipse/emf/common<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l8 level1 lfo4;tab-stops:list .5in'><span
-     class=SpellE><span style='font-size:10.0pt'>derby.jar</span></span><span
-     style='font-size:10.0pt'> – Extract from the archive file you downloaded
-     in step #2<o:p></o:p></span></li>
-</ul>
-
-<p class=MsoNormal><span style='font-size:10.0pt'><o:p>&nbsp;</o:p></span></p>
-<p class=MsoNormal><font size="2">&nbsp;&nbsp; <b>Note</b>: Except for derby.jar 
-all of these dependencies are included in the companyweb war file.</font></p>
-<p class=MsoNormal>&nbsp;</p>
-
-<p class=MsoNormal><u><b>Application artifact locations:</b></u></p>
-
-<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt'><o:p>&nbsp;</o:p></span></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l11 level1 lfo10;tab-stops:list .5in'><span
-     style='font-size:10.0pt'>sample-<span class=SpellE>companyweb-xxx.war</span>
-     - {build directory root}/java/samples/<span class=SpellE>das/companyweb/target</span><o:p></o:p></span></li>
-</ul>
-
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal><u><b>Conventions:</b></u></p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'>
-	<span
-     style='font-size:10.0pt'>{<span class=GramE>user</span>} refers the
-     directory where Maven2 is installed on your machine.<span
-     style='mso-spacerun:yes'>  </span>On my machine, “{user}” is “C:\Documents
-     and Settings\Administrator”<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
-     style='font-size:10.0pt'>{<span class=SpellE>Tomcat_Home</span>} refers to
-     the directory that Tomcat is installed on your machine.<span
-     style='mso-spacerun:yes'>  </span>For example, “C:\Program
-     Files\Apache Software Foundation\Tomcat 5.5”<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
-     style='font-size:10.0pt'>{<span class=GramE>latest</span> version} means
-     the tag associated with the latest version available in the maven2
-     repository.<span style='mso-spacerun:yes'>  </span>For example the version
-     of <span class=SpellE>ecore</span>-{latest version}.jar used for
-     testing this sample is “ecore-2.2.1.jar”<o:p></o:p></span></li>
- <li class=MsoNormal style='mso-list:l0 level1 lfo5;tab-stops:list .5in'><span
-     style='font-size:10.0pt'>{build directory root} refers to the target
-     directory for the <span class=SpellE>tuscany</span>/java source you are
-     building from<o:p></o:p></span></li>
-</ul>
 
 </div>
 
