@@ -47,6 +47,18 @@
          <fileMode>644</fileMode>
         </fileSet>
         -->
+
+
+        <fileSet>
+         <directory>../../samples/companyweb/dastest</directory>
+         <outputDirectory>databases/dastest</outputDirectory>
+         <lineEnding>keep</lineEnding>
+         <includes>
+            <include>**/*.*</include>
+         </includes>
+         <fileMode>644</fileMode>
+        </fileSet>
+
 	
     </fileSets>
     

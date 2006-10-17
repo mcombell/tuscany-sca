@@ -426,9 +426,14 @@ mso-bidi-font-family:Arial;mso-font-kerning:0pt'>Set Up<o:p></o:p></span></h1>
       {<span class=SpellE>Tomcat_Home</span>}/Databases</li>
   <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>Copy
       the <span class=SpellE>dastest</span> folder (and all its contents) from {build
-      directory root}/java/samples/<span class=SpellE>das/companyweb</span> to
+      directory root}/java/das/samples/companyweb to
       {<span class=SpellE>Tomcat_Home</span>}/Databases.<span
       style='mso-spacerun:yes'>   </span></li>
+      <br>
+      <br>
+      NOTE: If you are running this from a sample distribution, the canned database is available in the distribution, inside the databases directory.
+      <br>
+      <br>
  </ol>
  <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Define
      a DataSource by adding a <span class=SpellE>datasource</span> definition
@@ -465,7 +470,7 @@ class=SpellE><span class=GramE>driverClassName</span></span>=&quot;<span
 class=SpellE>org.apache.derby.jdbc.EmbeddedDriver</span>&quot;<o:p></o:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
 class=SpellE><span class=GramE>url</span></span>=&quot;<span class=SpellE>jdbc:derby:Databases/dastest</span>&quot;/&gt;<o:p></o:p></span></pre>
-
+<br>
 <p class=MsoNormal style='margin-left:.5in'><span
 style='mso-spacerun:yes'> </span>NOTE: If you are NOT starting Tomcat as a
 service then you will need to provide the absolute path in the above <span
@@ -496,17 +501,9 @@ sample Company WEB”</span><o:p></o:p></p>
 your browser to :</p>
 
 <p class=MsoNormal style='margin-left:1.5in'><a
-href="http://localhost:8080/sample-companyweb-%7bversion%20name%7d/">http://localhost:8080/sample-companyweb-{version
-name}/</a></p>
+href="http://localhost:8080/sample-companyweb/">http://localhost:8080/sample-companyweb/</a></p>
 
 <p class=MsoNormal style='margin-left:1.0in'><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal style='margin-left:1.0in'>NOTE: for the M2 version of <st1:State><st1:place>Tuscany</st1:place></st1:State>
-sample the <span class=SpellE><span class=GramE>url</span></span> is:</p>
-
-<p class=MsoNormal style='margin-left:1.5in'>http://localhost:8080/sample-companyweb-1.0-incubator-M2/<o:p></o:p></p>
-
-<p class=MsoNormal><sub><o:p>&nbsp;</o:p></sub></p>
 
 <h1>Sample Architecture</h1>
 
