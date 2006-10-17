@@ -1,0 +1,53 @@
+What's new in DAS Java M2
+
+   DAS Core features
+
+      - MySQL support
+
+      - Static Data Objects
+
+      - Dynamic root for static graphs
+
+      - "Unique" attribute on relationships
+
+      - Explicit ResultSet shape definition
+
+      - Improved logging
+
+      - Programmatic Configuration
+
+      - Helper for empty SDO Graph
+
+      - Convention over configuration
+
+         - Column named "ID" is the PK
+
+         - Column named "xxx_ID" is the FK to table "xxx"
+
+
+   DAS Samples
+
+      - Tomcat integration and automated DAS samples testing (htmlUnit)
+
+      - DAS Samples now have all dependencies and source code inside the sample war 
+
+
+   For detailed user documentation and feature descriptions, access Tuscany DAS Wiki page
+   
+      http://wiki.apache.org/ws/Tuscany/TuscanyJava/DAS_Java_Overview
+
+   Downloading
+
+     http://incubator.apache.org/tuscany/downloads.html#Apache%20Tuscany%20Java%20Downloads
+
+
+Details are described below.
+
+   DAS Java M2 is a superset of previous DAS Java M1 release.
+   Anything in M1 is also in M2, but M2 contains features and bugfixes not present in M1 release.
+
+Compatibility Concerns
+
+   - We have removed support for named parameters and previous DAS configuration files will have to be updated as needed.
+
+
