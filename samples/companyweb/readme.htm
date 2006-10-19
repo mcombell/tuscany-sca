@@ -1,27 +1,53 @@
-<html xmlns="http://www.w3.org/TR/REC-html40">
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
 
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="readme_files/filelist.xml">
 <title>Tuscany RDB DAS Sample</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="City"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="State"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>IBM_USER</o:Author>
+  <o:LastAuthor>IBM_USER</o:LastAuthor>
+  <o:Revision>3</o:Revision>
+  <o:TotalTime>16</o:TotalTime>
+  <o:Created>2006-10-19T16:54:00Z</o:Created>
+  <o:LastSaved>2006-10-19T17:10:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>714</o:Words>
+  <o:Characters>4076</o:Characters>
+  <o:Company>IBM</o:Company>
+  <o:Lines>33</o:Lines>
+  <o:Paragraphs>9</o:Paragraphs>
+  <o:CharactersWithSpaces>4781</o:CharactersWithSpaces>
+  <o:Version>10.6735</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
 <style>
 <!--
- /* Font Definitions */
- @font-face
-	{font-family:Helv;
-	panose-1:2 11 6 4 2 2 2 3 2 4;
-	mso-font-alt:Arial;
-	mso-font-charset:0;
-	mso-generic-font-family:swiss;
-	mso-font-format:other;
-	mso-font-pitch:variable;
-	mso-font-signature:3 0 0 0 1 0;}
-@font-face
-	{font-family:Wingdings;
-	panose-1:5 0 0 0 0 0 0 0 0 0;
-	mso-font-charset:2;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:0 268435456 0 0 -2147483648 0;}
  /* Style Definitions */
  p.MsoNormal, li.MsoNormal, div.MsoNormal
 	{mso-style-parent:"";
@@ -104,162 +130,212 @@ div.Section1
 	{page:Section1;}
  /* List Definitions */
  @list l0
-	{mso-list-id:280770398;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1591061486 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l0:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
+	{mso-list-id:61222257;
+	mso-list-template-ids:-241238724;}
 @list l1
-	{mso-list-id:400835612;
+	{mso-list-id:109520856;
 	mso-list-type:hybrid;
-	mso-list-template-ids:1528458504 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+	mso-list-template-ids:2095364756 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
 @list l1:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;}
+@list l2
+	{mso-list-id:203906862;
+	mso-list-template-ids:1109012252;}
+@list l2:level1
+	{mso-level-start-at:8;
 	mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l1:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l2
+	text-indent:-.25in;}
+@list l3
+	{mso-list-id:415592251;
+	mso-list-template-ids:-511440876;}
+@list l4
 	{mso-list-id:646667692;
 	mso-list-type:hybrid;
 	mso-list-template-ids:-728441462 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l2:level1
+@list l4:level1
 	{mso-level-number-format:bullet;
 	mso-level-text:\F0B7;
 	mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
 	text-indent:-.25in;
 	font-family:Symbol;}
-@list l3
+@list l4:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level3
+	{mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5
 	{mso-list-id:975526902;
 	mso-list-type:hybrid;
 	mso-list-template-ids:1435802096 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
-@list l3:level1
-	{mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4
-	{mso-list-id:1071007661;
-	mso-list-type:simple;
-	mso-list-template-ids:-338687628;}
-@list l4:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	mso-level-legacy:yes;
-	mso-level-legacy-indent:0in;
-	mso-level-legacy-space:0in;
-	margin-left:0in;
-	text-indent:0in;
-	font-family:Helv;
-	mso-ansi-font-weight:normal;}
-@list l5
-	{mso-list-id:1305811547;
-	mso-list-type:hybrid;
-	mso-list-template-ids:42887628 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
 @list l5:level1
 	{mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
 	text-indent:-.25in;}
 @list l5:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:1.0in;
+	{mso-level-tab-stop:1.0in;
 	mso-level-number-position:left;
 	text-indent:-.25in;}
 @list l5:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:1.5in;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
+	{mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
 @list l6
-	{mso-list-id:1605966365;
+	{mso-list-id:1305811547;
 	mso-list-type:hybrid;
-	mso-list-template-ids:14685132 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+	mso-list-template-ids:1677090400 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
 @list l6:level1
 	{mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
 	text-indent:-.25in;}
-@list l7
-	{mso-list-id:1727725721;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1480507190 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l7:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
+@list l6:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
 	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
+	text-indent:-.25in;}
+@list l6:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l6:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l6:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l7
+	{mso-list-id:1519539635;
+	mso-list-template-ids:-91987502;}
+@list l7:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
 @list l8
-	{mso-list-id:1766462262;
-	mso-list-type:hybrid;
-	mso-list-template-ids:2029450580 67698689 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+	{mso-list-id:1545750289;
+	mso-list-template-ids:642011556;}
 @list l8:level1
 	{mso-level-number-format:bullet;
 	mso-level-text:\F0B7;
 	mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
 	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
 	font-family:Symbol;}
-@list l8:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:1.0in;
+@list l9
+	{mso-list-id:1605966365;
+	mso-list-type:hybrid;
+	mso-list-template-ids:14685132 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l9:level1
+	{mso-level-tab-stop:.5in;
 	mso-level-number-position:left;
 	text-indent:-.25in;}
-@list l9
-	{mso-list-id:1923829381;
-	mso-list-template-ids:559690966;}
-@list l9:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
 @list l9:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:1.0in;
+	{mso-level-tab-stop:1.0in;
 	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:"Courier New";
-	mso-bidi-font-family:"Times New Roman";}
-@list l10
-	{mso-list-id:2004123601;
-	mso-list-type:hybrid;
-	mso-list-template-ids:2035459332 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l10:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
+	text-indent:-.25in;}
+@list l9:level3
+	{mso-level-tab-stop:1.5in;
 	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l11
-	{mso-list-id:2114665119;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1704226536 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l11:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
+	text-indent:-.25in;}
+@list l9:level4
+	{mso-level-tab-stop:2.0in;
 	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
+	text-indent:-.25in;}
+@list l9:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l9:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l9:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l9:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l9:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
 ol
 	{margin-bottom:0in;}
 ul
@@ -283,6 +359,12 @@ ul
 	font-family:"Times New Roman";}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
+ <u1:shapelayout u2:ext="edit">
+  <u1:idmap u2:ext="edit" data="1"/>
+ </u1:shapelayout>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
   <o:idmap v:ext="edit" data="1"/>
  </o:shapelayout></xml><![endif]-->
@@ -290,7 +372,8 @@ ul
 
 <body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
 
-<div class=Section1>
+<div class=Section1><!--
+
 
 <p class=MsoNormal><span style="font-size: 9pt">&nbsp;</span></p>
 <pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
@@ -314,190 +397,190 @@ under the License.   </a></pre>
 <p class=MsoNormal><span style='font-size:9.0pt'>
 <o:p>&nbsp;</o:p></span></p>
 
-<h1><st1:State><st1:place>Tuscany</st1:place></st1:State> RDB DAS Sample (<span
-class=SpellE>companyweb</span>)</h1>
+-->
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<h1><st1:State><st1:place><st1:State><st1:place>Tuscany</st1:place></st1:State></st1:place></st1:State>
+RDB DAS Sample (<span class=SpellE>companyweb</span>)<o:p></o:p></h1>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>This stand-alone sample demonstrates the SDO RDB Data Access
-Service in the context of a simple web application.</p>
+Service in the context of a simple web application.<o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>The application starts with a canned database of Companies
 and their related Departments.<span style='mso-spacerun:yes'>  </span>Through
-the web page interface, a user can:</p>
+the web page interface, a user can:<o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l3 level1 lfo1;tab-stops:list .5in'>Display
+ <li class=MsoNormal style='mso-list:l5 level1 lfo3;tab-stops:list .5in'>Display
      all Companies in the database</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo1;tab-stops:list .5in'>Display
+ <li class=MsoNormal style='mso-list:l5 level1 lfo3;tab-stops:list .5in'>Display
      all Companies and related Departments</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo1;tab-stops:list .5in'>Add a
+ <li class=MsoNormal style='mso-list:l5 level1 lfo3;tab-stops:list .5in'>Add a
      new Department to a Company</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo1;tab-stops:list .5in'>Delete
+ <li class=MsoNormal style='mso-list:l5 level1 lfo3;tab-stops:list .5in'>Delete
      all Departments from a Company</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo1;tab-stops:list .5in'>Change
-     the names of Departments in a Company</li>
+ <li class=MsoNormal style='mso-list:l5 level1 lfo3;tab-stops:list .5in'>Change
+     the names of Departments in a Company<o:p></o:p></li>
 </ol>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>So, this simple application covers all CRUD operations as
 well as the some relationship manipulation (adding a Department associates that
 Department with the Company).<span style='mso-spacerun:yes'>  </span>The sample
-runs on Tomcat 5.5 and employs a <st1:City><st1:place>Derby</st1:place></st1:City>
+runs on Tomcat 5.5 and employs a <st1:City><st1:place><st1:City><st1:place>Derby</st1:place></st1:City></st1:place></st1:City>
 database accessed via a DataSource.</p>
-
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <h1>Running the sample</h1>
 
-<p class=MsoNormal>There are two options for running this sample:</p>
+<p class=MsoNormal>There are two options for running this sample:<o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l6 level1 lfo12;tab-stops:list .5in'>Run
+ <li class=MsoNormal style='mso-list:l9 level1 lfo6;tab-stops:list .5in'>Run
      from Tomcat configured by the build</li>
- <li class=MsoNormal style='mso-list:l6 level1 lfo12;tab-stops:list .5in'>
-	Deploying the CompanyWeb WAR into a Tomcat you configure yourself</li>
+ <li class=MsoNormal style='mso-list:l9 level1 lfo6;tab-stops:list .5in'>Deploying
+     the <span class=SpellE>CompanyWeb</span> WAR into a Tomcat you configure
+     yourself</li>
 </ol>
 
-<h3>Running from Tomcat configured by the build<o:p></o:p></h3>
+<h3>Running from Tomcat configured by the build<u3:p></u3:p></h3>
 
 <p class=MsoNormal>This sample application is deployed (along with the canned
 test database) to an instance of Tomcat as part of our automated sample
 testing.<span style='mso-spacerun:yes'>  </span>This means you can run the
-java/das/samples/testing/tomcat build (see java/das/samples/testing/tomcat/<span class=GramE>readme.htm
-)</span><span style='mso-spacerun:yes'>  </span>and then access the application
-by pointing your browser to http://localhost:8080/sample-companyweb/.<span
+java/<span class=SpellE>das</span>/samples/testing/tomcat build (see
+java/das/samples/testing/tomcat/<span class=GramE>readme.htm )</span><span
+style='mso-spacerun:yes'>  </span>and then access the application by pointing
+your browser to <span class=MsoHyperlink>http://localhost:8080/sample-companyweb/</span>.<span
 style='mso-spacerun:yes'>  </span></p>
 
-<h3>Deploying the CompanyWeb WAR into a Tomcat you configure yourself</h3>
+<h3>Deploying the <span class=SpellE>CompanyWeb</span> WAR into a Tomcat you
+configure yourself</h3>
 
-<p class=MsoNormal>Alternatively, you can deploy the sample to your own configured
-Tomcat installation by following the instructions below.<span
+<p class=MsoNormal>Alternatively, you can deploy the sample to your own
+configured Tomcat installation by following the instructions below.<span
 style='mso-spacerun:yes'>  </span>These instructions assume that you have
-downloaded the Tuscany sample distribution or Tuscany source and
-run our maven build, see the following link to more details steps on how to 
-build DAS Sample applications
-<a href="http://incubator.apache.org/tuscany/java_das_overview.html">
-http://incubator.apache.org/tuscany/java_das_overview.html</a> .</p>
+downloaded the Tuscany sample distribution or Tuscany source and run our maven
+build, see the following link to more details steps on how to build DAS Sample
+applications <a
+href="http://incubator.apache.org/tuscany/java_das_overview.html">http://incubator.apache.org/tuscany/java_das_overview.html</a>
+.</p>
 
 <h1><span style='font-size:12.0pt;mso-bidi-font-size:16.0pt;font-family:"Times New Roman";
-mso-bidi-font-family:Arial;mso-font-kerning:0pt'>Set Up<o:p></o:p></span></h1>
+mso-bidi-font-family:Arial;mso-font-kerning:0pt'>Set Up<u3:p></u3:p></span></h1>
 
 <ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Download
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Download
      and install the most recent stable version of Tomcat 5.5.<span
      style='mso-spacerun:yes'>  </span>You can find it here: <a
      href="http://tomcat.apache.org/download-55.cgi">http://tomcat.apache.org/download-55.cgi</a></li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Download
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Download
      the most recent official release of <st1:City><st1:place>Derby</st1:place></st1:City>
      from here: <a href="http://db.apache.org/derby/index.html">http://db.apache.org/derby/index.html</a>.<span
      style='mso-spacerun:yes'>  </span>The only file you’ll need from this
      download is <span class=SpellE>derby.jar</span></li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Stop
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Stop
      Tomcat</li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Copy derby.jar (from the derby distribution) to {<span class=SpellE>Tomcat_Home</span>}/common/lib:</li>
-  <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Add
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Copy <span
+     class=SpellE>derby.jar</span> (from the derby distribution) to {<span
+     class=SpellE>Tomcat_Home</span>}/common/lib:</li>
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Add
      the sample war file to {<span class=SpellE>Tomcat_Home</span>}/<span
      class=SpellE>webapps</span></li>
  <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>sample-<span
-      class=SpellE>companyweb-xxx.war (e.g. sample-companyweb-1.0-incubator-M2-SNAPSHOT.war)</span></li>
+  <li class=MsoNormal style='mso-list:l6 level2 lfo9;tab-stops:list 1.0in'>sample-<span
+      class=SpellE>companyweb-xxx.war</span> (e.g. “sample-companyweb-1.0-incubator-M2.war”)</li>
  </ol>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Install
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Install
      the canned <st1:City><st1:place>Derby</st1:place></st1:City> database to
      Tomcat: </li>
  <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>Create
+  <li class=MsoNormal style='mso-list:l6 level2 lfo9;tab-stops:list 1.0in'>Create
       {<span class=SpellE>Tomcat_Home</span>}/Databases</li>
-  <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>Copy
-      the <span class=SpellE>dastest</span> folder (and all its contents) from {build
-      directory root}/java/das/samples/companyweb to
-      {<span class=SpellE>Tomcat_Home</span>}/Databases.<span
-      style='mso-spacerun:yes'>   </span></li>
+  <li class=MsoNormal style='mso-list:l6 level2 lfo9;tab-stops:list 1.0in'>Copy
+      the <span class=SpellE>dastest</span> folder (and all its contents) from
+      {build directory root}/java/<span class=SpellE>das/samples/companyweb</span>
+      to {<span class=SpellE>Tomcat_Home</span>}/Databases.<span
+      style='mso-spacerun:yes'>   </span><br>
       <br>
-      <br>
-      NOTE: If you are running this from a sample distribution, the canned database is available in the distribution, inside the databases directory.
-      <br>
-      <br>
+      <b style='mso-bidi-font-weight:normal'>NOTE</b>: If you are running this
+      from a sample distribution, the canned database is available in the
+      distribution, inside the databases directory. </li>
  </ol>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Define
+</ol>
+
+<p class=MsoNormal style='margin-left:.75in'><o:p>&nbsp;</o:p></p>
+
+<ol style='margin-top:0in' start=7 type=1>
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Define
      a DataSource by adding a <span class=SpellE>datasource</span> definition
      to {<span class=SpellE><span class=codefrag>Tomcat_Home</span></span><span
      class=codefrag>}/conf/<span class=SpellE>server.xml</span></span>.</li>
  <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l5 level2 lfo2;tab-stops:list 1.0in'>Find
+  <li class=MsoNormal style='mso-list:l6 level2 lfo9;tab-stops:list 1.0in'>Find
       the end-of-section marker <span class=codefrag>&lt;/<span class=SpellE>GlobalNamingResources</span>&gt;</span>
-      and add the following lines just above it: </li>
+      and add the following lines just above it: <o:p></o:p></li>
  </ol>
 </ol>
 
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
 
 <pre><span style='mso-spacerun:yes'>        </span><span class=GramE><span
 style='font-size:9.0pt'>&lt;!--</span></span><span style='font-size:9.0pt'> Global <span
-class=SpellE>Datasource</span> for </span><st1:City><st1:place><span
-  style='font-size:9.0pt'>Derby</span></st1:place></st1:City><span
-style='font-size:9.0pt'> <span class=SpellE>dastest</span> database --&gt;<o:p></o:p></span></pre><pre><span
+class=SpellE>Datasource</span> for <st1:City><st1:place>Derby</st1:place></st1:City> <span
+class=SpellE>dastest</span> database --&gt;<u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>         </span>&lt;Resource name=&quot;<span
-class=SpellE>jdbc/dastest</span>&quot;<o:p></o:p></span></pre><pre><span
+class=SpellE>jdbc/dastest</span>&quot;<u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
-class=GramE>type</span>=&quot;<span class=SpellE>javax.sql.DataSource</span>&quot;<span style='mso-spacerun:yes'>  </span>auth=&quot;Container&quot;<o:p></o:p></span></pre><pre><span
+class=GramE>type</span>=&quot;<span class=SpellE>javax.sql.DataSource</span>&quot;<span style='mso-spacerun:yes'>  </span>auth=&quot;Container&quot;<u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
-class=GramE>description</span>=&quot;</span><st1:City><st1:place><span
-  style='font-size:9.0pt'>Derby</span></st1:place></st1:City><span
-style='font-size:9.0pt'> database for DAS Company sample&quot;<o:p></o:p></span></pre><pre><span
+class=GramE>description</span>=&quot;<st1:City><st1:place>Derby</st1:place></st1:City> database for DAS Company sample&quot;<u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
 class=SpellE><span class=GramE>maxActive</span></span>=&quot;100&quot; <span
-class=SpellE>maxIdle</span>=&quot;30&quot; <span class=SpellE>maxWait</span>=&quot;10000&quot;<o:p></o:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>username=&quot;&quot; password=&quot;&quot; <o:p></o:p></span></pre><pre><span
+class=SpellE>maxIdle</span>=&quot;30&quot; <span class=SpellE>maxWait</span>=&quot;10000&quot;<u3:p></u3:p></span></pre><pre><span
+style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>username=&quot;&quot; password=&quot;&quot; <u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
 class=SpellE><span class=GramE>driverClassName</span></span>=&quot;<span
-class=SpellE>org.apache.derby.jdbc.EmbeddedDriver</span>&quot;<o:p></o:p></span></pre><pre><span
+class=SpellE>org.apache.derby.jdbc.EmbeddedDriver</span>&quot;<u3:p></u3:p></span></pre><pre><span
 style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span><span
-class=SpellE><span class=GramE>url</span></span>=&quot;<span class=SpellE>jdbc:derby:Databases/dastest</span>&quot;/&gt;<o:p></o:p></span></pre>
-<br>
+class=SpellE><span class=GramE>url</span></span>=&quot;<span class=SpellE>jdbc:derby:Databases/dastest</span>&quot;/&gt;<u3:p></u3:p></span></pre>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
 <p class=MsoNormal style='margin-left:.5in'><span
-style='mso-spacerun:yes'> </span>NOTE: If you are NOT starting Tomcat as a
-service then you will need to provide the absolute path in the above <span
-class=SpellE><span class=GramE>url</span></span>.<span
-style='mso-spacerun:yes'>  </span>Fore example:</p>
+style='mso-spacerun:yes'> </span><b style='mso-bidi-font-weight:normal'>NOTE</b>:
+You must include the absolute path to the “Databases” directory in the above <span
+class=SpellE><span class=GramE>url</span></span> attribute.<span
+style='mso-spacerun:yes'>  </span>Fore example:<o:p></o:p></p>
 
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
 
-<pre><span style='mso-spacerun:yes'>         </span><span class=SpellE>url</span>=&quot;jdbc:derby:c:\apache-tomcat-5.5.17\Databases/dastest&quot;/&gt;<span
-style='font-size:9.0pt'><o:p></o:p></span></pre>
+<pre><span style='mso-spacerun:yes'>         </span><span class=SpellE>url</span>=&quot;jdbc:derby:c:\apache-tomcat-5.5.17\Databases/dastest&quot;/&gt;</pre><u3:p></u3:p>
 
 <p class=MsoNormal style='margin-left:.5in'><span
 style='mso-spacerun:yes'> </span></p>
 
 <ol style='margin-top:0in' start=8 type=1>
- <li class=MsoNormal style='mso-list:l5 level1 lfo2;tab-stops:list .5in'>Start
-     tomcat and either:</li>
+ <li class=MsoNormal style='mso-list:l6 level1 lfo9;tab-stops:list .5in'>Start
+     tomcat and point your browser to: <a
+     href="http://localhost:8080/sample-companyweb-%7bversion%20tag%7d/"><span
+     style='color:windowtext;text-decoration:none;text-underline:none'>http://localhost:8080/sample-companyweb-{version
+     tag}/</span></a><o:p></o:p></li>
 </ol>
 
-<p class=MsoNormal style='margin-left:1.0in'><span class=GramE>go</span> to the
-manager console <a href="http://localhost:8080/manager/html">http://localhost:8080/manager/html</a>
-and select the application named “<span style='font-size:10.0pt'>Tuscany DAS
-sample Company WEB”</span><o:p></o:p></p>
+<p class=MsoNormal style='margin-left:1.5in'><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal style='margin-left:.5in'><span class=GramE>or</span>:</p>
+<p class=MsoNormal style='margin-left:1.5in'><span class=GramE>example</span>: <span
+class=MsoHyperlink>http://localhost:8080/sample-companyweb-1.0-incubator-M2/</span><o:p></o:p></p>
 
-<p class=MsoNormal style='margin-left:1.0in'><span class=GramE>point</span>
-your browser to :</p>
-
-<p class=MsoNormal style='margin-left:1.5in'><a
-href="http://localhost:8080/sample-companyweb/">http://localhost:8080/sample-companyweb/</a></p>
-
-<p class=MsoNormal style='margin-left:1.0in'><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal style='margin-left:1.0in'><u3:p>&nbsp;</u3:p></p>
 
 <h1>Sample Architecture</h1>
 
@@ -505,20 +588,20 @@ href="http://localhost:8080/sample-companyweb/">http://localhost:8080/sample-com
 style='mso-spacerun:yes'>  </span>The main components of this application are:</p>
 
 <ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l2 level1 lfo3;tab-stops:list .5in'>The
+ <li class=MsoNormal style='mso-list:l4 level1 lfo15;tab-stops:list .5in'>The
      RDB Data Access Service (DAS)</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo3;tab-stops:list .5in'>SDO</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo3;tab-stops:list .5in'><span
+ <li class=MsoNormal style='mso-list:l4 level1 lfo15;tab-stops:list .5in'>SDO</li>
+ <li class=MsoNormal style='mso-list:l4 level1 lfo15;tab-stops:list .5in'><span
      class=SpellE>CompanyClient.java</span></li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo3;tab-stops:list .5in'><span
+ <li class=MsoNormal style='mso-list:l4 level1 lfo15;tab-stops:list .5in'><span
      class=SpellE>Company.jsp</span></li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo3;tab-stops:list .5in'>The
-     canned <st1:City><st1:place>Derby</st1:place></st1:City> database</li>
+ <li class=MsoNormal style='mso-list:l4 level1 lfo15;tab-stops:list .5in'>The
+     canned <st1:City><st1:place>Derby</st1:place></st1:City> database<o:p></o:p></li>
 </ul>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p><o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>The <span class=SpellE><b style='mso-bidi-font-weight:normal'>CompanyClient</b></span>
 uses the <b style='mso-bidi-font-weight:normal'>DAS</b> directly and provides
@@ -528,32 +611,31 @@ high-level services to the <span class=SpellE>jsp</span> such as:</p>
 final List <span class=SpellE>getCompanies</span>()</p>
 
 <p class=MsoNormal>This is a good place to look for how you might use the DAS
-in your own application.</p>
+in your own application.<o:p></o:p></p>
 
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>The <span class=SpellE><b style='mso-bidi-font-weight:normal'>Company.jsp</b></span>
 responds to client interaction by invoking services of the <span class=SpellE>CompanyClient</span>.<span
 style='mso-spacerun:yes'>  </span>It receives data from the <span class=SpellE>CompanyClient</span>
-as SDO data graphs and manipulates SDOs directly to display data.</p>
+as SDO data graphs and manipulates SDOs directly to display data.<o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>The canned <st1:City><st1:place><b style='mso-bidi-font-weight:
-  normal'>Derby</b></st1:place></st1:City><b style='mso-bidi-font-weight:normal'>
-database</b> comes preloaded with Companies and related Departments.<span
-style='mso-spacerun:yes'>  </span>The <st1:City><st1:place>Derby</st1:place></st1:City>
-database instance is a simple file folder.</p>
+normal'>Derby</st1:place></st1:City> database</b> comes preloaded with
+Companies and related Departments.<span style='mso-spacerun:yes'>  </span>The <st1:City><st1:place>Derby</st1:place></st1:City>
+database instance is a simple file folder.<o:p></o:p></p>
 
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
 
 <p class=MsoNormal>The <b style='mso-bidi-font-weight:normal'>DAS</b> accepts
 directives (commands) from the <span class=SpellE><b style='mso-bidi-font-weight:
 normal'>CompanyClient</b></span><b style='mso-bidi-font-weight:normal'> </b>and
 reads and writes to the derby database instance appropriately.<b
-style='mso-bidi-font-weight:normal'> <o:p></o:p></b></p>
+style='mso-bidi-font-weight:normal'> </b></p>
 
-</div>
+<u3:p></u3:p></div>
 
 </body>
 
