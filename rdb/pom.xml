@@ -31,6 +31,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
+            <version>${sdo.version}</version>
         </dependency>
 
         <dependency>

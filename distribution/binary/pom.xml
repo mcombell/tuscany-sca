@@ -29,10 +29,6 @@
     <name>Tuscany DAS Distribution</name>
     <description>Tuscany Distribution for DAS.</description>
 
-    <properties>
-        <sdo.version>1.0-incubator-M2-SNAPSHOT</sdo.version>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.das</groupId>
