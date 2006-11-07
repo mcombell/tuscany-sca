@@ -87,6 +87,8 @@ DataFactoryImpl::DataFactoryImpl()
 DataFactoryImpl::~DataFactoryImpl()
 {
 
+   resolvePending.clear();
+   
     TYPES_MAP::iterator typeIter;
     for (typeIter = types.begin() ; typeIter != types.end() ; ++typeIter)
     {
@@ -144,11 +146,6 @@ DataFactoryImpl& DataFactoryImpl::operator=(const DataFactoryImpl& inmdg)
 void DataFactoryImpl::copyTypes(const DataFactoryImpl& inmdg)
 {
 
-    if (isResolved)
-    {
-    SDO_THROW_EXCEPTION("copyTypes",
-        SDOUnsupportedOperationException, "Copying Type after data graph completed");
-    }
 
     TYPES_MAP::const_iterator typeIter;
     TYPES_MAP::iterator typeIter2;
@@ -245,12 +242,6 @@ void DataFactoryImpl::addType(const char* uri, const char* inTypeName,
 {
 
 
-    if (isResolved)
-    {
-    SDO_THROW_EXCEPTION("DataFactory::addType",
-        SDOUnsupportedOperationException, "Adding Type after data graph completed");
-    }
-
     if (inTypeName == 0 || strlen(inTypeName) == 0)
     {
     SDO_THROW_EXCEPTION("DataFactory::addType",
@@ -265,6 +256,7 @@ void DataFactoryImpl::addType(const char* uri, const char* inTypeName,
     {
         SDOString fullTypeName = getFullTypeName(uri, inTypeName);
         types[fullTypeName] = new TypeImpl(uri, inTypeName, isSeq, isOp, isAbs, isData, isFromList);
+        resolvePending[fullTypeName] = types[fullTypeName];
     }
 }
 
@@ -309,10 +301,11 @@ bool DataFactoryImpl::checkForValidChangeSummary(TypeImpl* t)
     // None of the containing types can have a cs already.
     // None of the properties of this type can hold a type
     // which has a change summary.
-    if (isResolved)
+
+   if (t->isResolved)
     {
-    SDO_THROW_EXCEPTION("DataFactory::addChangeSummary",
-        SDOUnsupportedOperationException, "Adding Change Summary after data graph completed");
+    SDO_THROW_EXCEPTION("DataFactory::checkForValidChangeSummary",
+        SDOUnsupportedOperationException, "Adding Change Summary after type completed");
     }
 
     if (cstypes.size() > 0) {
@@ -373,12 +366,6 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
                                       bool    rdonly,
                                       bool cont)
 {
-    if (isResolved)
-    {
-    SDO_THROW_EXCEPTION("DataFactory::addPropertyToType",
-        SDOUnsupportedOperationException, "Adding Properties after data graph completed");
-    }
-
 
 
     TYPES_MAP::iterator typeIter, typeIter2;
@@ -469,6 +456,13 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
         // cannot try to make a property containment on a data type
     }
 */
+
+    if ((typeIter->second)->isResolved)
+    {
+    SDO_THROW_EXCEPTION("DataFactory::addPropertyToType",
+        SDOUnsupportedOperationException, "Adding Properties after type completed");
+    }
+
     ((typeIter->second)->addProperty(propname, *(typeIter2->second),many,rdonly, cont));
     return;
 }
@@ -1365,17 +1359,17 @@ TypeList DataFactoryImpl::getTypes() const
 
 void DataFactoryImpl::resolve()
 {
-    if (isResolved) return; 
 
     TYPES_MAP::iterator typeIter;
-    for (typeIter = types.begin() ; typeIter != types.end();
+    for (typeIter = resolvePending.begin() ; typeIter != resolvePending.end();
     ++typeIter) 
     {
         (typeIter->second)->initCompoundProperties();
         (typeIter->second)->validateChangeSummary();
     }
+    // Need to empty the resolvePending set.
+    resolvePending.clear();
 
-    isResolved = true;
 }
 
 // ===================================================================
@@ -1388,7 +1382,11 @@ void DataFactoryImpl::resolve()
 RefCountingPointer<DataObject> DataFactoryImpl::create(const char* uri, const char* typeName) 
 {
 
-    if (!isResolved)
+// New types can always be added now, so if there are any that haven't been
+// resolved, do them now. The isResolved boolean is superseded by the
+// resolvePending set being non-empty.
+
+   if (!resolvePending.empty())
     {
         // Allow creation of types and properties before resolve.
         if (uri != 0 && !strcmp(uri,Type::SDOTypeNamespaceURI.c_str())) {

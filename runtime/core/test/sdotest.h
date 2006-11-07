@@ -43,6 +43,8 @@ class sdotest {
         static int  comparefiles(char* fn1, char*fn2);
         static int dumpproperties(FILE *f, DataObjectPtr root);
         static int printset(FILE *f, ChangeSummaryPtr cs);
+        static void populateFactory(DataFactoryPtr dfp);
+      
 
         static int xsdtosdo();
 
@@ -173,6 +175,7 @@ class sdotest {
         static int maintest();
         static int jira490();
         static int jira705();
+        static int jira546();
         
         static int b48602();
         static int b48736();

@@ -119,48 +119,57 @@ return 1;
 
 }
 
+// The compatibleFactory() test creates a series of factories that are either
+// identical or very similar so we need a function that populates a data
+// factory with the common part.
+
+void sdotest::populateFactory(DataFactoryPtr dfp)
+{
+   
+   dfp->addType("Namespace", "Project");
+   dfp->addType("Namespace", "WorkPackage");
+   dfp->addType("Namespace", "LineItem");
+   dfp->addType("Namespace", "StringHolder");
+ 
+   dfp->addType("Namespace", "Root");
+   dfp->addPropertyToType("Namespace","Root","project",
+                         "Namespace","Project", false, false, true);
+
+   dfp->addPropertyToType("Namespace","StringHolder","value",
+                         "commonj.sdo","String", false, false, false);
+   
+   dfp->addPropertyToType("Namespace","Project","id",
+                         "commonj.sdo","String", false, false, false);
+    
+   dfp->addPropertyToType("Namespace","Project","string",
+                         "Namespace","StringHolder", false, false, true);
+ 
+   dfp->addPropertyToType("Namespace","WorkPackage","name",
+                         "commonj.sdo","String", false, false, false);
+    
+
+   dfp->addPropertyToType("Namespace","WorkPackage","string",
+                         "Namespace","StringHolder", false, false, true);
+
+   dfp->addPropertyToType("Namespace","LineItem","itemname",
+                         "commonj.sdo","String", false, false, false);
+
+   dfp->addPropertyToType("Namespace","LineItem","string",
+                         "Namespace","StringHolder", false, false, true);
+
+   dfp->addPropertyToType("Namespace","Project","packages",
+                         "Namespace","WorkPackage", true, false, true);
+
+   dfp->addPropertyToType("Namespace","WorkPackage","lineitems",
+                         "Namespace","LineItem", true, false, true);
+   
+}
+
 int sdotest::compatiblefactory()
 {
     DataFactoryPtr f1 = DataFactory::getDataFactory();
+    populateFactory(f1);
 
-    f1->addType("Namespace","Project");
-    f1->addType("Namespace","WorkPackage");
-    f1->addType("Namespace","LineItem");
-    f1->addType("Namespace","StringHolder");
- 
-    f1->addType("Namespace","Root");
-    f1->addPropertyToType("Namespace","Root","project",
-                           "Namespace","Project", false, false, true);
-
-    f1->addPropertyToType("Namespace","StringHolder","value",
-                           "commonj.sdo","String", false, false, false);
-   
-    f1->addPropertyToType("Namespace","Project","id",
-                           "commonj.sdo","String", false, false, false);
-    
-    f1->addPropertyToType("Namespace","Project","string",
-                           "Namespace","StringHolder", false, false, true);
- 
-    f1->addPropertyToType("Namespace","WorkPackage","name",
-                           "commonj.sdo","String", false, false, false);
-    
-
-    f1->addPropertyToType("Namespace","WorkPackage","string",
-                           "Namespace","StringHolder", false, false, true);
-
-    f1->addPropertyToType("Namespace","LineItem","itemname",
-                           "commonj.sdo","String", false, false, false);
-
-    f1->addPropertyToType("Namespace","LineItem","string",
-                           "Namespace","StringHolder", false, false, true);
-
-    f1->addPropertyToType("Namespace","Project","packages",
-                           "Namespace","WorkPackage", true, false, true);
-
-    f1->addPropertyToType("Namespace","WorkPackage","lineitems",
-                           "Namespace","LineItem", true, false, true);
-
-  
     // project
     //    id (string)
     //    string (StringHolder)
@@ -178,45 +187,7 @@ int sdotest::compatiblefactory()
     // factories 1 and 2 are compatible
 
     DataFactoryPtr f2 = DataFactory::getDataFactory();
-    
-    f2->addType("Namespace","Project");
-    f2->addType("Namespace","WorkPackage");
-    f2->addType("Namespace","LineItem");
-    f2->addType("Namespace","StringHolder");
- 
-    f2->addType("Namespace","Root");
-    f2->addPropertyToType("Namespace","Root","project",
-                           "Namespace","Project", false, false, true);
-
- 
-    f2->addPropertyToType("Namespace","StringHolder","value",
-                           "commonj.sdo","String", false, false, false);
-   
-    f2->addPropertyToType("Namespace","Project","id",
-                           "commonj.sdo","String", false, false, false);
-    
-    f2->addPropertyToType("Namespace","Project","string",
-                           "Namespace","StringHolder", false, false, true);
- 
-    f2->addPropertyToType("Namespace","WorkPackage","name",
-                           "commonj.sdo","String", false, false, false);
-    
-
-    f2->addPropertyToType("Namespace","WorkPackage","string",
-                           "Namespace","StringHolder", false, false, true);
-
-    f2->addPropertyToType("Namespace","LineItem","itemname",
-                           "commonj.sdo","String", false, false, false);
-
-    f2->addPropertyToType("Namespace","LineItem","string",
-                           "Namespace","StringHolder", false, false, true);
-
-    f2->addPropertyToType("Namespace","Project","packages",
-                           "Namespace","WorkPackage", true, false, true);
-
-    f2->addPropertyToType("Namespace","WorkPackage","lineitems",
-                           "Namespace","LineItem", true, false, true);
-
+    populateFactory(f2);    
 
     // factory 3 has no project type
 

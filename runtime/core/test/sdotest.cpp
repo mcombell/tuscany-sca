@@ -92,7 +92,134 @@ int  sdotest::rcptest()
     }
 }
 
+// JIRA 546 relaxes the restriction that when the data factory creates its
+// first data object then the type structure known to that data factory is
+// resolved and becomes read only. So, now we can add types after the first
+// data object is created. We must also show that when data objects are copied
+// from one data factory to another, the correct tests are performed to ensure
+// that the destination factory contains the types required by the incoming
+// data object and if not the copy is rejected.
+int  sdotest::jira546()
+{
 
+    try {
+        DataFactoryPtr mdg;
+
+        mdg  = DataFactory::getDataFactory();
+
+        mdg->addType("myspace","Root1");
+
+        mdg->addType("myspace","Company1");
+
+        mdg->addPropertyToType("myspace","Company1","name1",
+                           "commonj.sdo","String", false, false, false);
+    
+        mdg->addPropertyToType("myspace","Company1","id1",
+                           "commonj.sdo","String", false, false, false);
+
+        mdg->addPropertyToType("myspace","Root1","companies1",
+                           "myspace","Company1", true, false, true);
+
+        const Type& tcc1 = mdg->getType("myspace","Root1");
+
+
+        DataObjectPtr dop1 = mdg->create((Type&)tcc1);
+
+        // The preceding data object creation forced a resolve of the type
+        // system. Can we still extend it?
+
+        mdg->addType("myspace","Root2");
+
+        mdg->addType("myspace","Company2");
+
+        mdg->addPropertyToType("myspace","Company2","name2",
+                           "commonj.sdo","String", false, false, false);
+    
+        mdg->addPropertyToType("myspace","Company2","id2",
+                           "commonj.sdo","String", false, false, false);
+
+        mdg->addPropertyToType("myspace","Root2","companies2",
+                           "myspace","Company2", true, false, true);
+
+        const Type& tcc2 = mdg->getType("myspace","Root2");
+
+        DataObjectPtr dop2 = mdg->create((Type&)tcc2);
+
+    }
+    catch (SDORuntimeException e)
+    {
+        if (!silent) cout << "JIRA-546 test (part 1) failed." << endl;
+        return 0;
+    }
+
+    try {
+       DataFactoryPtr dfp_left = DataFactory::getDataFactory();
+       DataFactoryPtr dfp_right = DataFactory::getDataFactory();
+
+       populateFactory(dfp_left);
+       populateFactory(dfp_right);
+
+       // Extend each data factories with an additional type, the two types
+       // being different. Prior to TUSCANY-546 this would have made them
+       // incompatible.
+
+       dfp_left->addType("Namespace", "LeftType");
+       dfp_left->addPropertyToType("Namespace",
+                                   "LeftType",
+                                   "leftProperty",
+                                   "commonj.sdo",
+                                   "String",
+                                   false,
+                                   false,
+                                   false);
+
+       dfp_right->addType("Namespace", "RightType");
+       dfp_right->addPropertyToType("Namespace",
+                                    "RightType",
+                                    "rightProperty",
+                                    "commonj.sdo",
+                                    "String",
+                                    false,
+                                    false,
+                                    false);
+
+       // Create a data object in the left factory
+       DataObjectPtr root = dfp_left->create("Namespace", "Root");
+       DataObjectPtr project = root->createDataObject("project");
+       project->setCString("id", "The TTP Project");
+       DataObjectPtr str = project->createDataObject("string");
+       str->setCString("value", "The Recursive Acronym Project");
+       DataObjectPtr wp1 = project->createDataObject("packages");
+       DataObjectPtr wp2 = project->createDataObject("packages");
+       wp1->setCString("name", "Work Package 1");
+       wp2->setCString("name", "Work Package 2");
+       DataObjectPtr li1 = wp1->createDataObject("lineitems");
+       DataObjectPtr li2 = wp1->createDataObject("lineitems");
+       DataObjectPtr li3 = wp2->createDataObject("lineitems");
+       DataObjectPtr li4 = wp2->createDataObject("lineitems");
+       li1->setCString("itemname", "LineItem 1");
+       li2->setCString("itemname", "LineItem 2");
+       li3->setCString("itemname", "LineItem 3");
+       li4->setCString("itemname", "LineItem 4");
+       DataObjectPtr str1 = li1->createDataObject("string");
+       DataObjectPtr str2 = li2->createDataObject("string");
+       DataObjectPtr str3 = li3->createDataObject("string");
+       DataObjectPtr str4 = li4->createDataObject("string");
+       str1->setCString("value", "String1");
+       str2->setCString("value", "String2");
+       str3->setCString("value", "String3");
+       str4->setCString("value", "String4");
+
+       if (!transferto(root, dfp_right, false)) return 0;
+
+       return 1;
+    }
+    catch (SDORuntimeException e)
+    {
+       if (!silent) cout << "JIRA-546 test (part 2) failed." << endl;
+       return 0;
+    }
+}
 
 int sdotest::changesummarytest()
 {

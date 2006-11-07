@@ -675,6 +675,7 @@ public:
 private:
     typedef std::map<std::string, TypeImpl*> TYPES_MAP;
     TYPES_MAP    types;
+    TYPES_MAP    resolvePending; // Set of types that have not yet been resolved.
 
     std::vector<DataFactory*> compatibleFactories;
 
