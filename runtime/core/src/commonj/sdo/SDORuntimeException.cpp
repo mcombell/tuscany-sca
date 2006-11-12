@@ -37,6 +37,10 @@ SDORuntimeException :: SDORuntimeException(const char* name,
     message_text = new char[strlen(msg_text)+1];
     strcpy(message_text,msg_text);
 
+    locations[0].file = 0;
+    locations[0].line = 0;
+    locations[0].function = 0; 
+
 } // end SDORuntimeException constuctor
   
 // ========================================================================
@@ -51,13 +55,22 @@ SDORuntimeException ::  SDORuntimeException(const SDORuntimeException& c)
     strcpy(class_name, c.getEClassName());
     message_text = new char[strlen(c.getMessageText())+1];
     strcpy(message_text,c.getMessageText());
-    for (int i=0;i<c.location_set;i++)
+    if (c.location_set)
     {
-        locations[i].file = new char[strlen(c.locations[i].file) + 1];
-        strcpy(locations[i].file,c.locations[i].file);
-        locations[i].line = c.locations[i].line;
-        locations[i].function = new char[strlen(c.locations[i].function) + 1];
-        strcpy(locations[i].function, c.locations[i].function);
+        for (int i=0;i<c.location_set;i++)
+        {
+            locations[i].file = new char[strlen(c.locations[i].file) + 1];
+            strcpy(locations[i].file,c.locations[i].file);
+            locations[i].line = c.locations[i].line;
+            locations[i].function = new char[strlen(c.locations[i].function) + 1];
+            strcpy(locations[i].function, c.locations[i].function);
+        }
+    }
+    else
+    {
+        locations[0].file = 0;
+        locations[0].line = 0;
+        locations[0].function = 0; 
     }
 }
            
