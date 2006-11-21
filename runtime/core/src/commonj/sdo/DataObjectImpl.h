@@ -597,6 +597,13 @@ class DataObjectImpl : public DataObject
     virtual std::ostream& printSelf(std::ostream &os);
 
 private:
+	/**
+	 * This method is used internally to find the index of a 
+	 * property. If differs from the public getPropertyIndex method
+	 * in that if the type of the containing object is open a new
+	 * index is created. In the public version and error is thrown
+	 */
+	virtual unsigned int getPropertyIndexInternal(const Property& p);
 
     virtual void validateIndex(unsigned int index);
     virtual void checkFactory(DataObjectPtr dob, unsigned int propertyIndex);

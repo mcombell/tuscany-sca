@@ -495,7 +495,7 @@ namespace sdo {
 #define setPrimitiveFromProperty(primval,primtype)\
   void DataObjectImpl::set ##primval (const Property& property, primtype value)\
   {\
-      set ##primval (getPropertyIndex(property),value);\
+      set ##primval (getPropertyIndexInternal(property),value);\
   }
 
 /** @def setCharsFromProperty
@@ -506,7 +506,7 @@ namespace sdo {
 #define setCharsFromProperty(primval,primtype)\
   void DataObjectImpl::set ##primval (const Property& property, primtype value, unsigned int len)\
   {\
-      set ##primval (getPropertyIndex(property),value, len);\
+      set ##primval (getPropertyIndexInternal(property),value, len);\
   }
 
 
@@ -1283,7 +1283,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     void DataObjectImpl::setCString(const Property& property, const SDOString& value)
     {
-        setCString(getPropertyIndex(property), value);
+        setCString(getPropertyIndexInternal(property), value);
     }
 
     // null support
@@ -1378,7 +1378,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
     }
     void DataObjectImpl::setNull(const Property& property)
     {
-        setNull(getPropertyIndex(property));
+        setNull(getPropertyIndexInternal(property));
     }
 
     void DataObjectImpl::setNull(const char* path)
@@ -1607,6 +1607,46 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         SDO_THROW_EXCEPTION("getPropertyIndex", SDOPropertyNotFoundException,
             msg.c_str());
     }
+
+   /**
+	 * This method is used internally to find the index of a 
+	 * property. If differs from the public getPropertyIndex method
+	 * in that if the type of the containing object is open a new
+	 * index is created. In the public version and error is thrown
+	 */
+    unsigned int DataObjectImpl::getPropertyIndexInternal(const Property& p)
+    {
+		unsigned int index;
+
+		try 
+		{
+            index = getPropertyIndex(p);
+		}
+		catch ( SDOPropertyNotFoundException e )
+		{
+			// this could mean that this data object has an open 
+			// type. getPropertyIndex fails in this case because it
+			// tries to access the index of the property 
+			// and it doesn't exist because it hasn't been created yet. 
+			// This new method is used where properties are being set
+			// based on existing property objects. This is like to 
+			// occur when a data object is being copied. In this case
+			// we want properties that are open to be copied also 
+			// so we need to create the property and provide the index
+			if ( this->getType().isOpenType() )
+			{
+			    const Property *prop = defineProperty(p.getName(), p.getType());
+			    index = getPropertyIndex(p);
+			}
+			else
+			{
+				throw e;
+			}
+		}
+
+		return index;
+	}
+
 
     const Property& DataObjectImpl::getProperty(unsigned int index)
     {
@@ -2451,7 +2491,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     void DataObjectImpl::setDataObject(const Property& prop, DataObjectPtr value)
     {
-        unsigned int propertyIndex = getPropertyIndex(prop);
+        unsigned int propertyIndex = getPropertyIndexInternal(prop);
 
        
         if (value != 0)
