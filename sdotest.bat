@@ -36,8 +36,7 @@ echo using TUSCANY_SDOCPP: %TUSCANY_SDOCPP%
 
 set PATH=%TUSCANY_SDOCPP%\bin;%AXIS2C_HOME%\lib;%PATH%
 
-
-set SCATESTPATH=%cd%\projects\tuscany_sdo\sdo_test\Release
+set SCATESTPATH=%cd%\vsexpress\tuscany_sdo\sdo_test\Debug
 cd runtime\core\test
 %SCATESTPATH%\sdo_test
 

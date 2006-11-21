@@ -38,7 +38,7 @@ goto end
 echo using AXIS2C: %AXIS2C_HOME%
 
 call vcvars32
-cd projects\tuscany_sdo
-build.cmd
+cd vsexpress\tuscany_sdo
+call vcbuild
 
 @endlocal
