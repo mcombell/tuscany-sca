@@ -572,14 +572,17 @@ namespace commonj
         {
             std::map<SDOXMLString,SDOXMLString>::iterator it;
             SDOXMLString uri = dob->getType().getURI();
-    
-            it = namespaceMap.find(uri);
-            if (it == namespaceMap.end())
+            SDOXMLString typeName = dob->getType().getName();
+            if (!(uri.equals("commonj.sdo") && typeName.equals("OpenDataObject")))
             {
-                char buf[20];
-                sprintf(buf,"%d",++spacescount);
-                SDOXMLString s = SDOXMLString("tns") + buf;
-                namespaceMap.insert(make_pair(uri,s));
+                it = namespaceMap.find(uri);
+                if (it == namespaceMap.end())
+                {
+                    char buf[20];
+                    sprintf(buf,"%d",++spacescount);
+                    SDOXMLString s = SDOXMLString("tns") + buf;
+                    namespaceMap.insert(make_pair(uri,s));
+                }
             }
 
             PropertyList pl = dob->getInstanceProperties();
@@ -639,14 +642,18 @@ namespace commonj
         //////////////////////////////////////////////////////////////////////////
         void SDOXMLWriter::writeXmlnsXsi()
         {
+			return;
             SDOXMLString xsins("http://www.w3.org/2001/XMLSchema-instance");
 
             std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(xsins);
             if (it == namespaceMap.end())
             {               
-                SDOXMLString prefix("xmlns:xsi");
-                xmlTextWriterWriteAttribute(writer,
-                prefix, xsins);
+                namespaceMap.insert(make_pair(
+                    SDOXMLString("http://www.w3.org/2001/XMLSchema-instance"),
+                    SDOXMLString("xsi")));
+//                SDOXMLString prefix("xmlns:xsi");
+//                xmlTextWriterWriteAttribute(writer,
+//                prefix, xsins);
             }
         }
         
@@ -667,7 +674,26 @@ namespace commonj
             if (dataObject == 0)
                 return 0;
 
-
+            // Don't write the element URI if the element is a child of an open type
+            // and not one of the declared properties
+            SDOXMLString uri = elementURI;
+            if (!isRoot && !writeXSIType)
+            {
+                DataObject* dob = dataObject;
+                DataObjectImpl* cont = 
+                         ((DataObjectImpl*)dob)->getContainerImpl();
+                if (cont != 0)
+                {
+                    if (cont->getType().isOpenType())
+                    {
+                        if (cont->getTypeImpl().getPropertyImpl(elementName) == 0)
+                        {
+                            uri = "";
+                        }
+                    }
+                }
+            }
+            
             //SDOXMLString uri;
             //if (!elementURI.equals(namespaceUriStack.top()))
             //{
@@ -685,7 +711,7 @@ namespace commonj
                 if (dataObject->isNull(""))
                 {
                     rc = xmlTextWriterStartElementNS(writer, 
-                        NULL, elementName, elementURI);
+                        NULL, elementName, uri);
                     if (rc < 0) 
                     {
                         SDO_THROW_EXCEPTION("writeDO", 
@@ -721,13 +747,13 @@ namespace commonj
 
             if (isRoot)
             {
-                tnsURI=elementURI;
-                if (elementURI.equals("")) {
+                tnsURI=uri;
+                if (uri.equals("")) {
                     rc = xmlTextWriterStartElementNS(writer, NULL, elementName, NULL);
                 }
                 else
                 {
-                    rc = xmlTextWriterStartElementNS(writer, NULL, elementName, elementURI);
+                    rc = xmlTextWriterStartElementNS(writer, NULL, elementName, uri);
                 }
                 if (rc < 0) {
                     SDO_THROW_EXCEPTION("writeDO", SDOXMLParserException, "xmlTextWriterStartElementNS failed");
@@ -739,9 +765,9 @@ namespace commonj
 
                 SDOXMLString theName=elementName;
 
-                if (!elementURI.isNull() && !elementURI.equals(tnsURI) && !elementURI.equals(""))
+                if (!uri.isNull() && !uri.equals(tnsURI) && !uri.equals(""))
                 {
-                    std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
+                    std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(uri);
                     if (it != namespaceMap.end())
                     {
                         theName = (*it).second;
@@ -780,11 +806,18 @@ namespace commonj
 
             if (isRoot)
             {
-                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
+                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(uri);
                 if (it == namespaceMap.end())
                 {
                     SDOXMLString s = SDOXMLString("tns");
                     namespaceMap.insert(make_pair(elementURI,s));
+                }
+                it = namespaceMap.find(SDOXMLString("http://www.w3.org/2001/XMLSchema-instance"));
+                if (it == namespaceMap.end())
+                {
+                    namespaceMap.insert(make_pair(
+                        SDOXMLString("http://www.w3.org/2001/XMLSchema-instance"),
+                        SDOXMLString("xsi")));
                 }
                 DataObjectImpl* d = (DataObjectImpl*)(DataObject*)dataObject;
                 spacescount = 1;
@@ -837,7 +870,7 @@ namespace commonj
 
 
             //////////////////////////////////////////////////////////////////////////
-            // write out the type if the xsi:type if the containing type is open
+            // write out the type if the xsi:type of the containing type is open
             // and the property is not one of the declared properties
              //////////////////////////////////////////////////////////////////////////
             if (!writeXSIType)
@@ -863,9 +896,25 @@ namespace commonj
                         //{
                         if (cont->getTypeImpl().getPropertyImpl(elementName) == 0)
                         {
+                            const SDOXMLString& typeURI = dataObject->getType().getURI(); 
+                            const SDOXMLString& typeName = dataObject->getType().getName();
+                            
+                            SDOXMLString theName=typeName;
+            
+                            if (!typeURI.isNull() && !typeURI.equals(tnsURI) && !typeURI.equals(""))
+                            {
+                                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(typeURI);
+                                if (it != namespaceMap.end())
+                                {
+                                    theName = (*it).second;
+                                    theName += ":";
+                                    theName += typeName;
+                                }
+                            }
+                            
                             rc = xmlTextWriterWriteAttribute(writer, 
                             (const unsigned char*)"xsi:type", 
-                            (const unsigned char*)dataObject->getType().getName());
+                            (const unsigned char*)theName);
 
                             writeXmlnsXsi();
                         }
@@ -1155,6 +1204,7 @@ namespace commonj
                     }
                 }
             }
+            
             rc = xmlTextWriterEndElement(writer);
             return rc;
 
