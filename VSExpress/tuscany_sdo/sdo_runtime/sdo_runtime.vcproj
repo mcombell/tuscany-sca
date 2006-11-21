@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="sdo_runtime"
 	ProjectGUID="{964F3F93-8D1C-46BE-9724-2313CE7380AA}"
+	RootNamespace="sdo_runtime"
 	>
 	<Platforms>
 		<Platform
@@ -73,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib libxml2.lib"
+				AdditionalDependencies="libxml2.lib $(NOINHERIT)"
 				OutputFile="Release\tuscany_sdo.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -171,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib libxml2.lib"
+				AdditionalDependencies="libxml2.lib $(NOINHERIT)"
 				OutputFile="Debug\tuscany_sdo.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"

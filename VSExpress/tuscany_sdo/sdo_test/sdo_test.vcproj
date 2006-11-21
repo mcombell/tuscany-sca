@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tuscany_sdo.lib "
+				AdditionalDependencies="tuscany_sdo.lib $(NOINHERIT)"
 				OutputFile=".\Debug/sdo_test.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib tuscany_sdo.lib"
+				AdditionalDependencies="tuscany_sdo.lib $(NOINHERIT)"
 				OutputFile=".\Release/sdo_test.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

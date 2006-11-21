@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="axis2_parser.lib axis2_util.lib axiom.lib tuscany_sdo.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="axis2_parser.lib axis2_util.lib axiom.lib tuscany_sdo.lib $(NOINHERIT)"
 				OutputFile="Release/tuscany_sdo_axiom.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="axis2_parser.lib axis2_util.lib axiom.lib tuscany_sdo.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="axis2_parser.lib axis2_util.lib axiom.lib tuscany_sdo.lib $(NOINHERIT)"
 				OutputFile="Debug/tuscany_sdo_axiom.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
