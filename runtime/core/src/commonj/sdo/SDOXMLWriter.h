@@ -92,6 +92,14 @@ namespace commonj
                 bool writeXSIType = false,
                 bool isRoot = false);
 
+            /**
+             * A wrapper for the libxml2 function xmlTextWriterWriteElement
+             * it detects CDATA sections before wrting out element contents
+             */
+            int writeXMLElement(xmlTextWriterPtr writer, 
+                                const xmlChar *name, 
+                                const char *content);
+
             SchemaInfo* schemaInfo;
             DataFactoryPtr    dataFactory;
 

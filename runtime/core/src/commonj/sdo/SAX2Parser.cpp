@@ -22,6 +22,7 @@
 #include "commonj/sdo/SAX2Parser.h"
 #include "libxml/SAX2.h"
 #include "commonj/sdo/SDORuntimeException.h"
+#include "commonj/sdo/PropertySetting.h"
 using namespace commonj::sdo;
 
 /**
@@ -167,6 +168,16 @@ void sdo_processingInstruction(void *ctx, const xmlChar *target,
 
 void sdo_cdataBlock(void *ctx, const xmlChar *value, int len)
 {
+   if (!((SAX2Parser*)ctx)->parserError) 
+   {
+      SDOXMLString valueAsString(value, 0, len);
+
+      SDOXMLString cdata(PropertySetting::CDataStartMarker);
+      cdata = cdata + valueAsString;
+      cdata = cdata + PropertySetting::CDataEndMarker;
+
+      ((SAX2Parser*)ctx)->characters(cdata);
+   }
 }
 
 void sdo_comment(void *ctx, const xmlChar *value)
@@ -515,4 +526,5 @@ namespace commonj
         
     } // End - namespace sdo
 } // End - namespace commonj
+
 

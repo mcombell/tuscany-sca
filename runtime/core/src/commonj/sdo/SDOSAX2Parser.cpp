@@ -1179,13 +1179,13 @@ namespace commonj
                                 if (currentPropertySetting.dataObject->getType().isSequencedType())
                                 {
                                     SequencePtr seq = currentPropertySetting.dataObject->getSequence();
-                                    seq->addCString("value", currentPropertySetting.value);
+                                    seq->addCString("value", currentPropertySetting.getStringWithCDataMarkers().c_str());
                                 }
                                 else
                                 {
                                     DataObjectList& dl = currentPropertySetting.dataObject->
                                     getList((const char*)"value");
-                                    dl.append((const char*)currentPropertySetting.value);
+                                    dl.append((const char*)currentPropertySetting.getStringWithCDataMarkers().c_str());
                                 }
 
                             }
@@ -1195,12 +1195,13 @@ namespace commonj
                                 if (currentPropertySetting.dataObject->getType().isSequencedType())
                                 {
                                     SequencePtr seq = currentPropertySetting.dataObject->getSequence();
-                                    seq->addCString("value", currentPropertySetting.value);
+                                    seq->addCString("value", currentPropertySetting.getStringWithCDataMarkers().c_str());
                                 }
                                 else
                                 {
                                     currentPropertySetting.dataObject->
-                                    setCString((const char*)"value", currentPropertySetting.value );
+//                                    setCString((const char*)"value", currentPropertySetting.value );
+                                    setCString((const char*)"value", currentPropertySetting.getStringWithCDataMarkers().c_str() );
                                 }
                             }
                             if (dataObjectStack.size() == 0 || rootDataObject == dataObjectStack.top())
@@ -1231,7 +1232,7 @@ namespace commonj
                                 if (currentPropertySetting.dataObject->getType().isSequencedType())
                                 {
                                     SequencePtr seq = currentPropertySetting.dataObject->getSequence();
-                                    seq->addCString(currentPropertySetting.name, currentPropertySetting.value);
+                                    seq->addCString(currentPropertySetting.name, currentPropertySetting.getStringWithCDataMarkers().c_str());
                                 }
                                 // Always set the property as a String. SDO will do the conversion
 
@@ -1244,12 +1245,13 @@ namespace commonj
                                     {
                                         DataObjectList& dl = currentPropertySetting.dataObject->
                                         getList((const char*)currentPropertySetting.name);
-                                        dl.append((const char*)currentPropertySetting.value);
+                                        dl.append((const char*)currentPropertySetting.getStringWithCDataMarkers().c_str());
                                     }
                                     else
                                     {
                                         currentPropertySetting.dataObject->
-                                        setCString((const char*)currentPropertySetting.name, currentPropertySetting.value );
+//                                        setCString((const char*)currentPropertySetting.name, currentPropertySetting.value );
+                                        setCString((const char*)currentPropertySetting.name, currentPropertySetting.getStringWithCDataMarkers().c_str() );
                                     }
                                 }
                             }

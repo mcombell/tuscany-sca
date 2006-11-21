@@ -174,7 +174,9 @@ int main (int argc, char** argv)
     TEST (  sdotest::jira546() );
     TEST (  sdotest::testXPath() );
 
+    TEST (  sdotest::cdatatest() );
+
     cout << "Total tests:" << totaltests << " Tests passed:" << testspassed << endl;
-	return testspassed - totaltests;
+    return testspassed - totaltests;
 }
 }

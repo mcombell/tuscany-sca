@@ -32,6 +32,7 @@ using namespace::std;
 #include "commonj/sdo/SDORuntimeException.h"
 #include "commonj/sdo/XMLQName.h"
 #include "commonj/sdo/DataObjectImpl.h"
+#include "commonj/sdo/PropertySetting.h"
 
 namespace commonj
 {
@@ -725,12 +726,16 @@ namespace commonj
                     rc = xmlTextWriterEndElement(writer);
                 }
                 else
-                {
-                    xmlTextWriterWriteElement(
-                    writer,
-                    elementName,
-                    SDOXMLString(dataObject->getCString("")));
-                }
+                  {
+                    writeXMLElement(writer,
+                                    elementName,
+                                    dataObject->getCString(""));
+                    /*                                      
+                       xmlTextWriterWriteElement(writer,
+                                                 elementName,
+                                                 SDOXMLString(dataObject->getCString("")));
+                    */
+                  }
 
                 // need to pop stacks before returning
                 //if (!uri.isNull())
@@ -742,7 +747,7 @@ namespace commonj
             }
             
 
-			//namespaceStack.push(namespaces);
+            //namespaceStack.push(namespaces);
 
 
             if (isRoot)
@@ -987,13 +992,13 @@ namespace commonj
                             //    prefix = namespaces.findPrefix(qname.getURI());
                             //}
 
-							//if (prefix != 0 && !(*prefix).equals(""))
+                            //if (prefix != 0 && !(*prefix).equals(""))
 
                             std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(qname.getURI());
                             if (it != namespaceMap.end())
                             {
-								propertyValue = (*it).second + ":" + qname.getLocalName();
-							}
+                              propertyValue = (*it).second + ":" + qname.getLocalName();
+                            }
                             else 
                             {
                                 char buffer[20];
@@ -1001,7 +1006,7 @@ namespace commonj
                                 sprintf(buffer, "%d", j++);
                                 pref += buffer;
                                 rc = xmlTextWriterWriteAttributeNS(writer, 
-									SDOXMLString("xmlns"), pref, NULL, qname.getURI());
+                                                                   SDOXMLString("xmlns"), pref, NULL, qname.getURI());
                                 propertyValue = pref + ":" + qname.getLocalName();
                             }
                             
@@ -1193,10 +1198,16 @@ namespace commonj
                                     }
                                     else
                                     {
-                                        xmlTextWriterWriteElement(
-                                        writer,
-                                        propertyName,
-                                        SDOXMLString(dataObject->getCString(pl[i])));
+                                      writeXMLElement(writer,
+                                                      propertyName,
+                                                      dataObject->getCString(pl[i]));
+
+
+                                      /*
+                                        xmlTextWriterWriteElement(writer,
+                                                                  propertyName,
+                                                                  SDOXMLString(dataObject->getCString(pl[i])));
+                                      */
                                     }
                                 }
                             }
@@ -1208,8 +1219,8 @@ namespace commonj
             rc = xmlTextWriterEndElement(writer);
             return rc;
 
-			//namespaces = namespaceStack.top();
-			//namespaceStack.pop();
+            //namespaces = namespaceStack.top();
+            //namespaceStack.pop();
             //if (!uri.isNull())
             //{
             //    namespaceUriStack.pop();
@@ -1276,7 +1287,74 @@ namespace commonj
                 }
             }
         }    
+
+      /**
+       * A wrapper for the libxml2 function xmlTextWriterWriteElement
+       * it detects CDATA sections before wrting out element contents
+       */
+      int SDOXMLWriter::writeXMLElement(xmlTextWriterPtr writer, 
+                                        const xmlChar *name, 
+                                        const char *content)
+      {
+        int rc = 0;
+        rc = xmlTextWriterStartElement(writer, name);
+        rc = xmlTextWriterWriteRaw(writer, SDOXMLString(content));
+        rc = xmlTextWriterEndElement(writer);
+        /* A more complex version that doesn't work!
+           SDOString contentString(content);
+
+           // write the start of the element. we could write a mixture of
+           // text and CDATA before writing the end element
+           rc = xmlTextWriterStartElement(writer, name);
+
+           // Iterate along the string writing out text and CDATA sections 
+           // separately using the appropriate libxml2 calls
+           std::string::size_type start  = 0;
+           std::string::size_type end    = contentString.find(PropertySetting::XMLCDataStartMarker, 0);
+           std::string::size_type length = 0;
+                        
+           // loop while we still find a CDATA section that needs writing
+           while ( end != std::string::npos )
+           {
+           // write out text from current pos to start of CDATA section
+           length = end - start;
+           rc = xmlTextWriterWriteString(writer,
+           SDOXMLString(contentString.substr(start, length).c_str()));
+
+           // find the end of the CDATA section
+           start = end;
+           end   = contentString.find(PropertySetting::XMLCDataEndMarker, start);
+           
+           if ( end != std::string::npos )
+           {
+           // we only nudge the start marker on to the end of the CDATA marker here
+           // so that if we fail to find the end CDATA marker the whole string gets 
+           // printed out by virtue of the line that follows the while loop
+           start = start + strlen(PropertySetting::XMLCDataStartMarker);
+           
+           // write our the text from the CDATA section
+           length = end - start;
+           rc = xmlTextWriterWriteCDATA(writer, 
+           SDOXMLString(contentString.substr(start, length).c_str()));
+
+           // set current pos to end of CDATA section and 
+           // start looking for the start marker again
+           start = end + strlen(PropertySetting::XMLCDataEndMarker);
+           end   = contentString.find(PropertySetting::XMLCDataStartMarker, start);
+           }
+           } 
+
+           // write out text following the last CDATA section
+           rc = xmlTextWriterWriteString(writer,
+           SDOXMLString(contentString.substr(start).c_str()));
+
+           // close off the element
+           rc = xmlTextWriterEndElement(writer);
+        */
+        return rc;
+      }
         
     } // End - namespace sdo
 } // End - namespace commonj
+
 

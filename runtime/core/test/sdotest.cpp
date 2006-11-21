@@ -9053,3 +9053,74 @@ int sdotest::simple()
         return 0;
     }
 }
+
+int sdotest::cdatatest()
+{
+   try 
+   {
+      DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+      /**
+       * Get an XSD helper to load XSD information into the
+       * data factory
+       */
+      XSDHelperPtr myXSDHelper = HelperProvider::getXSDHelper(mdg);
+      myXSDHelper->defineFile("cdata.xsd");
+
+      /**
+       * Check if there were any errors. The parse may still
+       * succeed, but errors indicate some elements were not
+       * understood 
+       */
+      int i = 0;
+      int j = 0;
+      if ((i = myXSDHelper->getErrorCount()) > 0)
+      {
+	 cout << "XSD Loading reported some errors:" << endl;
+	 for (j=0;j<i;j++)
+	 {
+	    const char *m = myXSDHelper->getErrorMessage(j);
+	    if (m != 0) cout << m;
+	    cout << endl;
+	    return 0;
+	 }
+      }
+
+      /** 
+       * Use the same data factory to load XML corresponding to
+       * data objects adhering to the previously loaded schema
+       */
+      XMLHelperPtr myXMLHelper = HelperProvider::getXMLHelper(mdg);
+      XMLDocumentPtr myXMLDocument = myXMLHelper->loadFile("cdata-in.xml", "http://www.example.org/test");
+    
+      /**
+       * Check if there were any errors. The parse may still
+       * succeed, but errors indicate some elements did not match
+       * the schema, or were malformed.
+       * 
+       */
+      if ((i = myXMLHelper->getErrorCount()) > 0)
+      {
+	 cout << "XML Loading reported some errors:" << endl;
+	 for (j=0;j<i;j++)
+	 {
+	    const char *m = myXMLHelper->getErrorMessage(j);
+	    if (m != 0) cout << m;
+	    cout << endl;
+	    return 0;
+	 }
+      }
+
+      // write the XML element back out to a file
+      myXMLHelper->save(myXMLDocument, "cdata-testout.xml");
+
+      return comparefiles("cdata-out.xml","cdata-testout.xml");
+
+   }
+   catch (SDORuntimeException e)
+   {
+      cout << "Exception in interop test" <<  endl;
+      cout << e.getMessageText();
+      return 0;
+   }
+}
