@@ -632,6 +632,10 @@ namespace commonj
                 documentNamespaces = namespaces;
                 setNamespaces = false;
             }
+            else
+            {
+                documentNamespaces.merge(namespaces);
+            }
             
             if (ignoreEvents)
             {
