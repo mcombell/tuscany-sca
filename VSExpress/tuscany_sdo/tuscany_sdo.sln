@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Build", "Build\Build.vcproj", "{9540B934-24BA-45F0-965B-8231E256DF03}"
+	ProjectSection(ProjectDependencies) = postProject
+		{42A8E4D8-B25A-4737-A747-9804170FDAFF} = {42A8E4D8-B25A-4737-A747-9804170FDAFF}
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA} = {964F3F93-8D1C-46BE-9724-2313CE7380AA}
+		{606A0280-529A-40A1-9B3C-80111D3AE920} = {606A0280-529A-40A1-9B3C-80111D3AE920}
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2} = {E95539B9-8E1A-4F4C-8565-ECCF510F26F2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdo_axiom", "sdo_axiom\sdo_axiom.vcproj", "{E95539B9-8E1A-4F4C-8565-ECCF510F26F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA} = {964F3F93-8D1C-46BE-9724-2313CE7380AA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdo_axiom_test", "sdo_axiom_test\sdo_axiom_test.vcproj", "{606A0280-529A-40A1-9B3C-80111D3AE920}"
+	ProjectSection(ProjectDependencies) = postProject
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA} = {964F3F93-8D1C-46BE-9724-2313CE7380AA}
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2} = {E95539B9-8E1A-4F4C-8565-ECCF510F26F2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdo_runtime", "sdo_runtime\sdo_runtime.vcproj", "{964F3F93-8D1C-46BE-9724-2313CE7380AA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdo_test", "sdo_test\sdo_test.vcproj", "{42A8E4D8-B25A-4737-A747-9804170FDAFF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA} = {964F3F93-8D1C-46BE-9724-2313CE7380AA}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9540B934-24BA-45F0-965B-8231E256DF03}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9540B934-24BA-45F0-965B-8231E256DF03}.Debug|Win32.Build.0 = Debug|Win32
+		{9540B934-24BA-45F0-965B-8231E256DF03}.Release|Win32.ActiveCfg = Release|Win32
+		{9540B934-24BA-45F0-965B-8231E256DF03}.Release|Win32.Build.0 = Release|Win32
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2}.Debug|Win32.Build.0 = Debug|Win32
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2}.Release|Win32.ActiveCfg = Release|Win32
+		{E95539B9-8E1A-4F4C-8565-ECCF510F26F2}.Release|Win32.Build.0 = Release|Win32
+		{606A0280-529A-40A1-9B3C-80111D3AE920}.Debug|Win32.ActiveCfg = Debug|Win32
+		{606A0280-529A-40A1-9B3C-80111D3AE920}.Debug|Win32.Build.0 = Debug|Win32
+		{606A0280-529A-40A1-9B3C-80111D3AE920}.Release|Win32.ActiveCfg = Release|Win32
+		{606A0280-529A-40A1-9B3C-80111D3AE920}.Release|Win32.Build.0 = Release|Win32
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA}.Debug|Win32.Build.0 = Debug|Win32
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA}.Release|Win32.ActiveCfg = Release|Win32
+		{964F3F93-8D1C-46BE-9724-2313CE7380AA}.Release|Win32.Build.0 = Release|Win32
+		{42A8E4D8-B25A-4737-A747-9804170FDAFF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{42A8E4D8-B25A-4737-A747-9804170FDAFF}.Debug|Win32.Build.0 = Debug|Win32
+		{42A8E4D8-B25A-4737-A747-9804170FDAFF}.Release|Win32.ActiveCfg = Release|Win32
+		{42A8E4D8-B25A-4737-A747-9804170FDAFF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
