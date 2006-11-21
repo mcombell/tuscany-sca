@@ -39,6 +39,6 @@ echo using AXIS2C: %AXIS2C_HOME%
 
 call vcvars32
 cd vsexpress\tuscany_sdo
-call vcbuild
+call vcbuild tuscany_sdo.sln "Release|Win32"
 
 @endlocal

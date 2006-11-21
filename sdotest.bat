@@ -24,8 +24,9 @@ goto end
 )
 echo using Axis2C: %AXIS2C_HOME%"
 
-if not .%1 == . (
-cd %1
+set buildtype=Release
+if .%1 == .Debug (
+   set buildtype=Debug
 )
 
 if "%TUSCANY_SDOCPP%" == "" (
@@ -36,7 +37,7 @@ echo using TUSCANY_SDOCPP: %TUSCANY_SDOCPP%
 
 set PATH=%TUSCANY_SDOCPP%\bin;%AXIS2C_HOME%\lib;%PATH%
 
-set SCATESTPATH=%cd%\vsexpress\tuscany_sdo\sdo_test\Debug
+set SCATESTPATH=%cd%\vsexpress\tuscany_sdo\sdo_test\%buildtype%
 cd runtime\core\test
 %SCATESTPATH%\sdo_test
 
