@@ -540,59 +540,29 @@ namespace commonj
                                 SDOSchemaSAX2Parser& schemaParser,
                                 SDOXMLString& schemaLocation)
         {
-            int i,j,k;
-            SDOXMLString sl = getCurrentFile();
-          
-            i = sl.lastIndexOf('/');
-            j = sl.lastIndexOf('\\');
-            if ((j > i) || (i < 0))i=j;
-            if (i>=0)
-            {
-                sl = sl.substring(0,i+1) + schemaLocation;
-                try {
-                     if (-1 != schemaParser.parse((const char *)sl))
-                         return 1;
-                }
-                catch (SDORuntimeException e)
-                {
-                }
-                k = schemaLocation.lastIndexOf('/');
-                j = schemaLocation.lastIndexOf('\\');
-                if ((j > k) || (k < 0))k=j;
-                if (k>=0)
-                {
-                    sl = sl.substring(0,i+1) + schemaLocation.substring(0,k+1);
-                    try {
-                        if (-1 != schemaParser.parse((const char *)sl))
-                             return 1;
-                    }
-                    catch (SDORuntimeException e)
-                    {
-                    }
-                }
-            }
-            try {
-                if (-1 != schemaParser.parse((const char *)schemaLocation))
-                    return 1;
-            }
-            catch (SDORuntimeException e)
-            {
-            }
-            k = schemaLocation.lastIndexOf('/');
-            j = schemaLocation.lastIndexOf('\\');
-            if ((j > k) || (k < 0))k=j;
-            if (k>=0)
-            {
-                sl = schemaLocation.substring(0,k+1);
-                try {
-                    if (-1 != schemaParser.parse((const char *)sl))
-                        return 1;
-                }
-                catch (SDORuntimeException e)
-                {
-                }
-            }
-            return 0;
+            int i,j;
+			xmlChar *absoluteUri;
+
+			SDOXMLString sl = getCurrentFile();
+
+			/*
+			* Build an absolute URL using the current file as the base and
+			* the schemaLocation as the relative part, using the rules in
+			* RFC 2396 5.2. Resolving Relative References to Absolute Form
+			*/
+			try {
+				absoluteUri = xmlBuildURI((const xmlChar *)schemaLocation, (const xmlChar *)sl);
+				if (-1 != schemaParser.parse((const char *)absoluteUri)) {
+					xmlFree(absoluteUri);
+					return 1;
+				}
+			}
+			catch (SDORuntimeException e)
+			{
+			}
+			if (absoluteUri) xmlFree(absoluteUri);
+			
+			return 0;
         }
 
 
