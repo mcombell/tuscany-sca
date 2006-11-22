@@ -1493,25 +1493,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     DataObjectList& DataObjectImpl::getList(unsigned int propIndex)
     {
-        if (!(getProperty(propIndex).isMany()))
-        {
-            if (!getPropertyImpl(propIndex)->getTypeImpl()->isFromList())
-            {
-                string msg("Get list not available on single valued property:");
-                msg += getProperty(propIndex).getName();
-                SDO_THROW_EXCEPTION("getList", SDOUnsupportedOperationException,
-                    msg.c_str());
-            }
-        }
-        DataObjectImpl* d = getDataObjectImpl(propIndex);
-        if (d == 0)
-        {
-            string msg("Property Not Found:");
-            msg += getType().getProperty(propIndex).getName();
-            SDO_THROW_EXCEPTION("getList", SDOPropertyNotFoundException,
-            msg.c_str());
-        }
-        return d->getList();
+        return getList(getProperty(propIndex));
     }
 
     DataObjectList& DataObjectImpl::getList(const Property& p)

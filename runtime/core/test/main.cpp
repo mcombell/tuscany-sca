@@ -172,6 +172,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::jira490() );
     TEST (  sdotest::jira705() );
     TEST (  sdotest::jira546() );
+    TEST (  sdotest::jira945() );
     TEST (  sdotest::testXPath() );
 
     TEST (  sdotest::cdatatest() );

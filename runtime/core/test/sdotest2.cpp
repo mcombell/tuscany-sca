@@ -1443,3 +1443,45 @@ int sdotest::testXPath()
         return 0;
     }
 }
+
+int sdotest::jira945()
+{
+    try {
+        DataFactoryPtr mdg  = DataFactory::getDataFactory(); 
+
+        mdg->addType("myspace","Company");
+        mdg->addType("myspace","Employee");
+        mdg->addPropertyToType("myspace","Employee","name",
+                           "commonj.sdo","String", false, false, false);
+
+        mdg->addPropertyToType("myspace","Company","name",
+                           "commonj.sdo","String", false, false, false);    
+
+        mdg->addPropertyToType("myspace","Company","employees",
+                           "myspace","Employee", true, false, true);
+
+        const Type& tc = mdg->getType("myspace","Company");
+
+        DataObjectPtr com = mdg->create((Type&)tc);
+        com->setCString("name","acme");
+
+        const Type& te = mdg->getType("myspace","Employee");
+        DataObjectPtr emp = mdg->create(te);
+        emp->setCString("name", "Mr Expendible");
+
+        const int propIndex = tc.getPropertyIndex("employees");
+
+        // This fails with Jira945
+        DataObjectList& emps = com->getList(propIndex);
+
+        emps.append(emp);
+
+        return 1;
+        
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in test jira945" << e << endl;
+        return 0;
+    }
+}
