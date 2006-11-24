@@ -19,6 +19,12 @@
 
 @setlocal
 
+set config=Release
+if .Debug == .%1 (
+echo Building Debug version
+set config=Debug
+)
+
 if "%LIBXML2_HOME%" == "" (
 echo "LIBXML2_HOME not set"
 goto end
@@ -39,6 +45,6 @@ echo using AXIS2C: %AXIS2C_HOME%
 
 call vcvars32
 cd vsexpress\tuscany_sdo
-call vcbuild tuscany_sdo.sln "Release|Win32"
+call vcbuild tuscany_sdo.sln "%config%|Win32"
 
 @endlocal

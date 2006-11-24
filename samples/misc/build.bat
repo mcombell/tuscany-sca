@@ -18,6 +18,12 @@
 
 setlocal
 
+set config=Release
+if .Debug == .%1 (
+echo Building Debug version
+set config=Debug
+)
+
 if "%TUSCANY_SDOCPP%" == "" (
 echo "TUSCANY_SDOCPP not set"
 goto end
@@ -27,7 +33,7 @@ echo using Tuscany SDOCPP: %TUSCANY_SDOCPP%
 
 call vcvars32
 
-call vcbuild VSExpress\misc.sln "Release|Win32"
+call vcbuild VSExpress\misc.sln "%config%|Win32"
 
 
 :end
