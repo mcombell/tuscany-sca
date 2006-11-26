@@ -619,7 +619,7 @@ void DataObjectListImpl::insert (unsigned int index, const char* d)
 {
     if (theFactory == 0) return;
 
-    if (typeUnset)setType(Type::SDOTypeNamespaceURI, BytesLiteral);
+    if (typeUnset)setType(Type::SDOTypeNamespaceURI, StringLiteral);
 
     RefCountingPointer<DataObject> dol = theFactory->create(typeURI, typeName);
     DataObject* dob = dol;
@@ -630,7 +630,7 @@ void DataObjectListImpl::insert (unsigned int index, const SDOString& d)
 {
     if (theFactory == 0) return;
 
-    if (typeUnset)setType(Type::SDOTypeNamespaceURI, BytesLiteral);
+    if (typeUnset)setType(Type::SDOTypeNamespaceURI, StringLiteral);
 
     RefCountingPointer<DataObject> dol = theFactory->create(typeURI, typeName);
     DataObject* dob = dol;
@@ -642,7 +642,7 @@ void DataObjectListImpl::append (const char* d)
 {
     if (theFactory == 0) return;
 
-    if (typeUnset)setType(Type::SDOTypeNamespaceURI, BytesLiteral);
+    if (typeUnset)setType(Type::SDOTypeNamespaceURI, StringLiteral);
 
     RefCountingPointer<DataObject> dol = theFactory->create(typeURI, typeName);
     DataObject* dob = dol;
@@ -654,7 +654,7 @@ void DataObjectListImpl::append (const SDOString& d)
 {
     if (theFactory == 0) return;
 
-    if (typeUnset)setType(Type::SDOTypeNamespaceURI, BytesLiteral);
+    if (typeUnset)setType(Type::SDOTypeNamespaceURI, StringLiteral);
 
     RefCountingPointer<DataObject> dol = theFactory->create(typeURI, typeName);
     DataObject* dob = dol;
