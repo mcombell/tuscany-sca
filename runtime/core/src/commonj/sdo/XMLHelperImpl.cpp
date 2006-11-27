@@ -134,7 +134,7 @@ namespace commonj
         }
 
         const TypeList& tl = df->getTypes();
-        for (int i = 0; i < tl.size(); i++)
+        for (unsigned int i = 0; i < tl.size(); i++)
         {
            if (!strcmp("RootType", tl[i].getName()))
            {
@@ -448,13 +448,13 @@ namespace commonj
                 indent);
         }
 
-        int XMLHelperImpl::getErrorCount() const
+        unsigned int XMLHelperImpl::getErrorCount() const
         {
             return parseErrors.size();
         }
 
 
-        const char* XMLHelperImpl::getErrorMessage(int errnum) const
+        const char* XMLHelperImpl::getErrorMessage(unsigned int errnum) const
         {
             if (errnum >= 0 && errnum < parseErrors.size())
             {

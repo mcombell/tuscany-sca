@@ -105,7 +105,7 @@ namespace commonj
              return propertydefinition->substituteNames.size();
          }
 
-         const char* PropertyDefinition::getSubstituteNames(int index) const
+         const char* PropertyDefinition::getSubstituteNames(unsigned int index) const
          {
              if (index >= 0 && index < propertydefinition->substituteNames.size())
              {
@@ -114,7 +114,7 @@ namespace commonj
              return 0;
          }
 
-         const char* PropertyDefinition::getSubstituteLocalNames(int index) const
+         const char* PropertyDefinition::getSubstituteLocalNames(unsigned int index) const
          {
              if (index >= 0 && index < propertydefinition->substituteLocalNames.size())
              {

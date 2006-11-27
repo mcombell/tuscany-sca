@@ -266,7 +266,7 @@ namespace commonj{
        ///////////////////////////////////////////////////////////////////////////
     const Type* PropertyImpl::getSubstitutionType(const char* inname) const 
     {
-        for (int i=0;i<substitutions.size();i++)
+        for (unsigned int i=0;i<substitutions.size();i++)
         {
             if (!strcmp(inname, substitutions[i].name.c_str()))
             {

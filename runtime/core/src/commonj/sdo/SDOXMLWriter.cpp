@@ -497,7 +497,7 @@ namespace commonj
             const SDOXMLString& elementName,
             ChangeSummaryPtr cs)
         {
-            int i;
+            unsigned int i;
             int rc; 
 
             ChangedDataObjectList& changedDOs =  cs->getChangedDataObjects();
@@ -587,7 +587,7 @@ namespace commonj
             }
 
             PropertyList pl = dob->getInstanceProperties();
-            for (int i = 0; i < pl.size(); i++)
+            for (unsigned int i = 0; i < pl.size(); i++)
             {
                 if (!dob->isSet(pl[i]))continue;
 
@@ -596,7 +596,7 @@ namespace commonj
                     if (!pl[i].getType().isDataType())
                     {
                         DataObjectList& dl = dob->getList(pl[i]);
-                        for (int k=0;k< dl.size() ;k++)
+                        for (unsigned int k=0;k< dl.size() ;k++)
                         {
                             DataObjectImpl* d = (DataObjectImpl*)(DataObject*)dl[k];
                             if (d != 0)addToNamespaces(d);
@@ -941,8 +941,8 @@ namespace commonj
             //////////////////////////////////////////////////////////////////////////
             // Iterate over all the properties to find attributes
             //////////////////////////////////////////////////////////////////////////
-            int i;
-            int j = 1;
+            unsigned int i;
+            unsigned int j = 1;
             PropertyList pl = dataObject->getInstanceProperties();
             for (i = 0; i < pl.size(); i++)
             {
@@ -1128,7 +1128,7 @@ namespace commonj
                         if (pl[i].isMany())
                         {
                             DataObjectList& dol = dataObject->getList(pl[i]);
-                            for (int j = 0; j <dol.size(); j++)
+                            for (unsigned int j = 0; j <dol.size(); j++)
                             {
                                 // Handle non-containment reference to DataObject
                                 if (pl[i].isReference() )

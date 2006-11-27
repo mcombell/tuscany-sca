@@ -94,7 +94,7 @@ namespace commonj
             bool isGroup,
             const SAX2Attributes& groupAttributes)
         {
-            for (int i=0;i< groupList.size(); i++)
+            for (unsigned int i=0;i< groupList.size(); i++)
             {
                 if (groupList[i].isAttributeGroup != isGroup)
                 {
@@ -117,7 +117,7 @@ namespace commonj
 
                         int level = 0;
 
-                        for (int j=0;j< groupList[i].events.size();j++)
+                        for (unsigned int j=0;j< groupList[i].events.size();j++)
                         {
                             if (groupList[i].events[j].isStartEvent)
                             {

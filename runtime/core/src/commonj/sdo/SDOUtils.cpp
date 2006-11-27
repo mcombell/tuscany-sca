@@ -118,7 +118,7 @@ namespace commonj {
 
         void SDOUtils::printTabs(ostream& out, unsigned int incr)
         {
-            for (int ind=0; ind < incr; ind++)
+            for (unsigned int ind=0; ind < incr; ind++)
             {
                 out << "  ";
             }
@@ -155,7 +155,7 @@ namespace commonj {
             // Iterate over all the properties
             //////////////////////////////////////////////////////////////
             PropertyList pl = dataObject->getInstanceProperties();
-            for (int i = 0; i < pl.size(); i++)
+            for (unsigned int i = 0; i < pl.size(); i++)
             {
                 printTabs(out, incr);
                 out << "Property: " << pl[i].getName() << endl;
@@ -179,7 +179,7 @@ namespace commonj {
                         incr++;
                         DataObjectList& dol = dataObject->getList(pl[i]);
                         char cc[20];
-                        for (int j = 0; j <dol.size(); j++)
+                        for (unsigned int j = 0; j <dol.size(); j++)
                         {
                             printTabs(out, incr);
                             // seems to be a bug in ostream? Will not print j 
@@ -231,13 +231,13 @@ namespace commonj {
         void SDOUtils::printTypes(std::ostream& out, DataFactoryPtr df) 
         {
             TypeList tl = df->getTypes();
-            for (int i = 0; i < tl.size(); i++)
+            for (unsigned int i = 0; i < tl.size(); i++)
             {
                 out << "Type: " << tl[i].getURI()<< "#" << tl[i].getName() <<
                     " isOpen: " << tl[i].isOpenType()
                     << " isSequenced: " << tl[i].isSequencedType() << endl;
                 PropertyList pl = tl[i].getProperties();
-                for (int j = 0; j < pl.size(); j++)
+                for (unsigned int j = 0; j < pl.size(); j++)
                 {
                     out << "\tProperty: " << pl[j].getName()
                         << " type: " <<pl[j].getType().getURI()<<"#"<<pl[j].getType().getName()<<

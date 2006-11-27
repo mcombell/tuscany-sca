@@ -166,7 +166,7 @@ void DataFactoryImpl::copyTypes(const DataFactoryImpl& inmdg)
 
         if ((typeIter->second)->getAliasCount() > 0)
         {
-            for (int j=0;j<(typeIter->second)->getAliasCount();j++)
+            for (unsigned int j=0;j<(typeIter->second)->getAliasCount();j++)
             {
                 (typeIter2->second)->setAlias(
                     (typeIter->second)->getAlias());
@@ -176,7 +176,7 @@ void DataFactoryImpl::copyTypes(const DataFactoryImpl& inmdg)
         
         // Now add all the properties
         PropertyList props = typeIter->second->getProperties();
-        for (int i=0; i < props.size(); i++)
+        for (unsigned int i=0; i < props.size(); i++)
         {
             // Ensure the properties type is added
             const Type& propType = props[i].getType();
@@ -200,7 +200,7 @@ void DataFactoryImpl::copyTypes(const DataFactoryImpl& inmdg)
                     getPropertyImpl(props[i].getName());
                 if (p != 0)
                 {
-                    for (int j=0;j<p->getAliasCount();j++)
+                    for (unsigned int j=0;j<p->getAliasCount();j++)
                     {
                         p->setAlias(props[i].getAlias(j));
                     }
@@ -286,7 +286,7 @@ bool DataFactoryImpl::recursiveCheck(TypeImpl* cs, TypeImpl* t)
 
     PropertyList pl = cs->getProperties();
     
-    for (int i=0 ; i < pl.size() ; i++ )
+    for (unsigned int i=0 ; i < pl.size() ; i++ )
     {
         if (recursiveCheck((TypeImpl*)&(pl[i].getType()), t)) return true;
     }
@@ -309,7 +309,7 @@ bool DataFactoryImpl::checkForValidChangeSummary(TypeImpl* t)
     }
 
     if (cstypes.size() > 0) {
-        for (int i = 0 ;i < cstypes.size(); i++) 
+        for (unsigned int i = 0 ;i < cstypes.size(); i++) 
         {
             if (recursiveCheck(cstypes[i], t)) 
             {
@@ -1654,7 +1654,7 @@ DASValue* DataFactoryImpl::getDASValue(
 bool DataFactoryImpl::compareTypes(const TypeImpl* t1, const Type& t2)
 {
     PropertyList pl = t2.getProperties();
-    for (int i=0;i<pl.size();i++)
+    for (unsigned int i=0;i<pl.size();i++)
     {
         PropertyImpl* p = t1->getPropertyImpl(i);
         if (p == 0) return false;
@@ -1678,7 +1678,7 @@ bool DataFactoryImpl::checkType(const Type& t)
     if (!compareTypes(t2,t)) return false;
 
     PropertyList pl = t.getProperties();
-    for (int i=0;i<pl.size();i++)
+    for (unsigned int i=0;i<pl.size();i++)
     {
         if (pl[i].getType().isDataObjectType())
         {
@@ -1697,7 +1697,7 @@ bool DataFactoryImpl::isCompatible(DataFactory* df, DataObject* d)
     if (d == 0)
     {
         TypeList tl = df->getTypes();
-        for (int j=0;j<tl.size();j++)
+        for (unsigned int j=0;j<tl.size();j++)
         {
             const TypeImpl* t = findTypeImpl(tl[j].getURI(),
                                         tl[j].getName());
@@ -1776,8 +1776,8 @@ bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factor
         fprintf(header," * Forward declarations and smart pointers *\n");
         fprintf(header," *******************************************/\n\n\n");
 
-        int i;
-        for (i=0;i<tl.size();i++)
+        unsigned int i;
+        for (unsigned i=0;i<tl.size();i++)
         {
             nscount = 0;
 
@@ -1846,7 +1846,7 @@ bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factor
             {
                 the_uri = new char[2 * strlen(uri) + 1];
                 int jj=0;
-                for (int ii=0;ii<strlen(uri);ii++)
+                for (unsigned int ii=0;ii<strlen(uri);ii++)
                 {
                     if (uri[ii] == '.')
                     {
@@ -1949,7 +1949,7 @@ bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factor
 
 
             PropertyList pl = tl[i].getProperties();
-            for (int j=0;j<pl.size();j++)
+            for (unsigned int j=0;j<pl.size();j++)
             {
                 const char* pname = pl[j].getName();
 

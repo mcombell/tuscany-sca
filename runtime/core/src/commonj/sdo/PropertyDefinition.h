@@ -73,8 +73,8 @@ namespace commonj
             /*SDO_API*/ void addSubstitute(const SDOString& name,
                 const SDOString& localname);
             /*SDO_API*/ int getSubstituteCount() const;
-            /*SDO_API*/ const char* getSubstituteNames(int index) const;
-            /*SDO_API*/ const char* getSubstituteLocalNames(int index) const;
+            /*SDO_API*/ const char* getSubstituteNames(unsigned int index) const;
+            /*SDO_API*/ const char* getSubstituteLocalNames(unsigned int index) const;
 
             
             /*SDO_API*/ void setAliases(const char* aliases);

@@ -140,13 +140,13 @@ DataObjectListImpl::~DataObjectListImpl()
     }
 }
 
-RefCountingPointer<DataObject> DataObjectListImpl::operator[] (int pos)
+RefCountingPointer<DataObject> DataObjectListImpl::operator[] (unsigned int pos)
 {
     validateIndex(pos);
     return plist[pos];
 }
 
-const RefCountingPointer<DataObject> DataObjectListImpl::operator[] (int pos) const
+const RefCountingPointer<DataObject> DataObjectListImpl::operator[] (unsigned int pos) const
 {
     validateIndex(pos);
     RefCountingPointer<DataObjectImpl> d = plist[pos];
@@ -155,7 +155,7 @@ const RefCountingPointer<DataObject> DataObjectListImpl::operator[] (int pos) co
 }
 
 
-int DataObjectListImpl::size () const
+unsigned int DataObjectListImpl::size () const
 {
     return plist.size();
 }
@@ -203,7 +203,7 @@ void DataObjectListImpl::insert (unsigned int index, DataObjectPtr d)
     {
         container->logChange(pindex);
     }
-    for (int i=0;i < plist.size(); i++)
+    for (unsigned int i=0;i < plist.size(); i++)
     {
         if (plist[i] == d)
         {
@@ -355,7 +355,7 @@ void DataObjectListImpl::checkType(const Type& listType, const Type& objectType)
                 if (pi != 0)
                 {
                     unsigned int subcount = pi->getSubstitutionCount();
-                    for (int i=0;i<subcount;i++)
+                    for (unsigned int i=0;i<subcount;i++)
                     {
                         const Type* tsub = pi->getSubstitutionType(i);
                         if (tsub != 0 && tsub->equals(objectType)) return;
@@ -438,7 +438,7 @@ void DataObjectListImpl::append (DataObjectPtr d)
         container->logChange(pindex);
     }
 
-    for (int i=0;i < plist.size(); i++)
+    for (unsigned int i=0;i < plist.size(); i++)
     {
         if (plist[i] == d)
         {
@@ -841,7 +841,7 @@ RefCountingPointer<DataObject> DataObjectListImpl::remove(unsigned int index)
     return d;
 }
 
-void DataObjectListImpl::validateIndex(int index) const
+void DataObjectListImpl::validateIndex(unsigned int index) const
 {
     if ((index < 0) || (index >= size()))
     {

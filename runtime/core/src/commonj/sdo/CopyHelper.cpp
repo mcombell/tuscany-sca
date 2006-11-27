@@ -105,7 +105,7 @@ namespace sdo{
 
     void CopyHelper::transferlist(DataObjectList& to, DataObjectList& from, Type::Types t)
     {
-        for (int i=0;i< from.size(); i++)
+        for (unsigned int i=0;i< from.size(); i++)
         {
             switch (t)
             {
@@ -213,7 +213,7 @@ namespace sdo{
         if (!newob) return 0;
 
         PropertyList pl = dataObject->getInstanceProperties();
-        for (int i=0;i < pl.size(); i++)
+        for (unsigned int i=0;i < pl.size(); i++)
         {
             if (dataObject->isSet(pl[i]))
             {
@@ -230,7 +230,7 @@ namespace sdo{
                         {
                             DataObjectList& dolold = dataObject->getList(pl[i]);
                             DataObjectList& dolnew = newob->getList(pl[i]);
-                            for (int i=0;i< dolold.size(); i++)
+                            for (unsigned int i=0;i< dolold.size(); i++)
                             {
                                 dolnew.append(internalCopy(dolold[i],true));
                             }

@@ -1451,7 +1451,7 @@ namespace commonj
             */
 
             PropertyList pl = type.getProperties();
-            for (int i = 0; i < pl.size(); i++)
+            for (unsigned int i = 0; i < pl.size(); i++)
             {
                 XSDPropertyInfo* pi = (XSDPropertyInfo*)((DASProperty*)&pl[i])->getDASValue("XMLDAS::PropertyInfo");
                 if (pi)
@@ -1460,7 +1460,7 @@ namespace commonj
                     if (localName .equals(propdef.localname))
                         return propdef.name;
 
-                    for (int j=0;j< propdef.substituteNames.size();j++)
+                    for (unsigned int j=0;j< propdef.substituteNames.size();j++)
                     {
                         if (propdef.substituteLocalNames[j].equals(localName))
                         {

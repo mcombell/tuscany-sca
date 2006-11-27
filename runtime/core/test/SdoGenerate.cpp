@@ -67,7 +67,7 @@ void sdotest::generate(DataFactoryPtr fac)
        
         cout << "// Generated structures " << endl;
 
-        for (int i=0;i<tl.size();i++)
+        for (unsigned int i=0;i<tl.size();i++)
         {
 
             if (!strcmp(tl[i].getURI(),"commonj.sdo")) continue;
@@ -82,7 +82,7 @@ void sdotest::generate(DataFactoryPtr fac)
 
 
             PropertyList pl = tl[i].getProperties();
-            for (int j=0;j<pl.size();j++)
+            for (unsigned int j=0;j<pl.size();j++)
             {
                 if (pl[j].isMany())
                 {

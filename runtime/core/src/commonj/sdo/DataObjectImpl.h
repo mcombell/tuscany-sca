@@ -662,7 +662,7 @@ private:
 
  
     // Support for open types
-    int openBase;
+    unsigned int openBase;
     std::list<PropertyImpl> openProperties;
 
     static const char* emptyString;

@@ -500,7 +500,7 @@ namespace commonj
             ctxt = xmlCreatePushParserCtxt(handler, this,
                 bctx, bcount, NULL);
             
-            for (int i=0;i<buffer_vec.size();i++)
+            for (unsigned int i=0;i<buffer_vec.size();i++)
             {
                 if (buffer_vec[i].len > 0)
                 {

@@ -525,7 +525,8 @@ int sdotest::testany(const char* xsd,
 {
 
 
-    int i,j,rc;
+    unsigned int i,j;
+	int rc;
 
     try {
 
@@ -599,7 +600,7 @@ int sdotest::testany(const char* xsd,
             {
                 fprintf(f1,"Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
                 PropertyList pl = tl[i].getProperties();
-                for (int j=0;j<pl.size();j++)
+                for (unsigned int j=0;j<pl.size();j++)
                 {
                     fprintf(f1,"Property:%s ",pl[j].getName());
                     if (pl[j].isMany())
@@ -686,7 +687,7 @@ int sdotest::testany(const char* xsd,
             {
                 fprintf(f2,"Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
                 PropertyList pl = tl[i].getProperties();
-                for (int j=0;j<pl.size();j++)
+                for (unsigned int j=0;j<pl.size();j++)
                 {
                     fprintf(f2, "Property:%s ",pl[j].getName());
                     if (pl[j].isMany())
@@ -726,7 +727,7 @@ int sdotest::testanytwo(const char* xsd, const char* xsd2,
 {
 
 
-    int i,j;
+    unsigned int i,j;
 
     try {
 
@@ -811,7 +812,7 @@ int sdotest::testanytwo(const char* xsd, const char* xsd2,
         {
             fprintf(f1,"Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
             PropertyList pl = tl[i].getProperties();
-            for (int j=0;j<pl.size();j++)
+            for (unsigned int j=0;j<pl.size();j++)
             {
                 fprintf(f1,"Property:%s ",pl[j].getName());
                 if (pl[j].isMany())
@@ -1282,7 +1283,7 @@ int sdotest::pete()
 {
 
 
-    int i,j;
+    unsigned int i,j;
 
     try {
 
@@ -1329,7 +1330,7 @@ int sdotest::pete()
         {
             //printf("Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
             PropertyList pl = tl[i].getProperties();
-            for (int j=0;j<pl.size();j++)
+            for (unsigned int j=0;j<pl.size();j++)
             {
                 //printf("Property:%s ",pl[j].getName());
                 //if (pl[j].isMany())

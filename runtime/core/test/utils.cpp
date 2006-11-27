@@ -141,11 +141,11 @@ void sdotest::printDataStructure(FILE *f , DataFactory* dd)
 {
     TypeList tt = dd->getTypes();
     fprintf(f,"Printing Types\n");
-    for (int i = 0; i < tt.size(); ++i)
+    for (unsigned int i = 0; i < tt.size(); ++i)
     {
         fprintf(f,"Type %s\n",tt[i].getName());
         PropertyList pl = tt[i].getProperties();
-        for (int j = 0; j < pl.size() ; j++)
+        for (unsigned int j = 0; j < pl.size() ; j++)
         {
             fprintf(f,"Has Property %s of type %s\n",
                 pl[j].getName(),pl[j].getType().getName());
@@ -230,7 +230,7 @@ void sdotest::printList(FILE *f, DataObjectPtr dp, const Property& p)
         return;
     }
 
-    for (int i=0;i<dobl.size();i++) {
+    for (unsigned int i=0;i<dobl.size();i++) {
 
     switch (p.getTypeEnum())
     {
@@ -356,7 +356,7 @@ void sdotest::printDataObject(FILE *f, DataObjectPtr dol)
         fprintf(f,"===== DataObject contents =====\n");
         PropertyList pl = dol->getInstanceProperties();
 
-        for (int j=0;j< pl.size(); j++)
+        for (unsigned int j=0;j< pl.size(); j++)
         {
             fprintf(f,"%s:",pl[j].getName());
             // this could be a many-valued property, and could be one which is
@@ -385,7 +385,7 @@ void sdotest::dumpchangesummary(FILE *f, ChangeSummaryPtr cs)
     // a changed and subsequently deleted object will not appear, but necessarily its
     // container will appear, so we can rebuild it.
 
-    for (int i=0;i< cdol.size();i++)
+    for (unsigned int i=0;i< cdol.size();i++)
     {
         if (cs->isCreated(cdol[i]))
         {
@@ -494,7 +494,7 @@ int sdotest::comparefiles(char* fn1, char*fn2)
 int sdotest::printseq(FILE *f, SequencePtr sptr)
 {
     fprintf(f, "======================================\n");
-    for (int i=0;i< sptr->size();i++)
+    for (unsigned int i=0;i< sptr->size();i++)
     {
         try {
             if (!sptr->isText(i)) 

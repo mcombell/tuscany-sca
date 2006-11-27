@@ -54,8 +54,8 @@ namespace commonj
             // Destructor
             virtual ~XMLHelperImpl();
             
-            virtual int  getErrorCount() const;
-            virtual const char*  getErrorMessage(int errnum) const;
+            virtual unsigned int  getErrorCount() const;
+            virtual const char*  getErrorMessage(unsigned int errnum) const;
             virtual void setError(const char* error);
 
 

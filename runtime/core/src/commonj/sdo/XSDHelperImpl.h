@@ -77,7 +77,7 @@ namespace commonj
              * may be errors to report or handle.
              */
 
-            virtual int  getErrorCount() const;
+            virtual unsigned int  getErrorCount() const;
 
             /** getErrorMessage gets the nth error message
              *
@@ -85,7 +85,7 @@ namespace commonj
              * in which the parser error occurred.
              */
 
-            virtual const char* getErrorMessage(int errnum) const;
+            virtual const char* getErrorMessage(unsigned int errnum) const;
             virtual void setError(const char* error);
             
             /**  generate buildsXSD from types/properties

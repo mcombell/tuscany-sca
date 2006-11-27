@@ -61,12 +61,12 @@ SDO_API TypeList::~TypeList()
 }
 
 
-SDO_API const Type& TypeList::operator[] (int pos) const
+SDO_API const Type& TypeList::operator[] (unsigned int pos) const
 {
     return *plist[pos];
 }
 
-SDO_API int TypeList::size () const
+SDO_API unsigned int TypeList::size () const
 {
     return plist.size();
 }

@@ -55,15 +55,15 @@ public:
      * with their correct type using the list getInteger(index) api.
      */
 
-    virtual SDO_API DataObjectPtr operator[] (int pos) = 0;
-    virtual SDO_API const DataObjectPtr operator[] (int pos) const = 0;
+    virtual SDO_API DataObjectPtr operator[] (unsigned int pos) = 0;
+    virtual SDO_API const DataObjectPtr operator[] (unsigned int pos) const = 0;
 
     /**  size returns the number of elements.
      *
      * The size method returns the number of elements in the list
      */
 
-    virtual SDO_API int size () const = 0;
+    virtual SDO_API unsigned int size () const = 0;
 
     /**  getBoolean returns a boolean at an index
      *

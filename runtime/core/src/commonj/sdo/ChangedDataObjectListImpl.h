@@ -71,13 +71,13 @@ public:
     ChangedDataObjectListImpl();
 
     virtual ~ChangedDataObjectListImpl();
-    virtual DataObjectPtr operator[] (int pos);
-    virtual const DataObjectPtr operator[] (int pos) const;
+    virtual DataObjectPtr operator[] (unsigned int pos);
+    virtual const DataObjectPtr operator[] (unsigned int pos) const;
     virtual DataObject* get(unsigned int pos);
     virtual ChangedDataObjectList::ChangeType getType(unsigned int pos);
 
 
-    virtual int size () const;
+    virtual unsigned int size () const;
 
     virtual void insert (unsigned int index, DataObject *d, ChangedDataObjectList::ChangeType type);
 
@@ -92,7 +92,7 @@ private:
     CHANGEDDATAOBJECT_VECTOR plist;
     CHANGEDDATAOBJECT_VECTOR getVec() const;
 
-    void validateIndex(int index) const;
+    void validateIndex(unsigned int index) const;
 };
 };
 };

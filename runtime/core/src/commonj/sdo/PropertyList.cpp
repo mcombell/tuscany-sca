@@ -74,7 +74,7 @@ SDO_API const Property& PropertyList::operator[] (int pos) const
     return *(plist[pos]);
 }
 
-SDO_API int PropertyList::size () 
+SDO_API unsigned int PropertyList::size () 
 {
     return plist.size();
 }

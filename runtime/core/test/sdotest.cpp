@@ -1553,7 +1553,7 @@ int sdotest::defaulttest()
     if (lenw > 0) {
         char* tw = new char[lenw];
         test->getBytes("string",tw,lenw);
-        for (int i=0;i<lenw;i++)
+        for (unsigned int i=0;i<lenw;i++)
         {
             fprintf(f,"%c",tw[i]);
         }
@@ -1565,7 +1565,7 @@ int sdotest::defaulttest()
     if (len > 0) {
         char* tc = new char[len];
         test->getBytes("bytes",tc,len);
-        for (int i=0;i<len;i++)
+        for (unsigned int i=0;i<len;i++)
         {
             fprintf(f,"%c", tc[i]);
         }
@@ -1708,7 +1708,7 @@ int sdotest::defaulttest_strobj()
     if (lenw > 0) {
         char* tw = new char[lenw];
         test->getBytes("string",tw,lenw);
-        for (int i=0;i<lenw;i++)
+        for (unsigned int i=0;i<lenw;i++)
         {
             fprintf(f,"%c",tw[i]);
         }
@@ -1720,7 +1720,7 @@ int sdotest::defaulttest_strobj()
     if (len > 0) {
         char* tc = new char[len];
         test->getBytes("bytes",tc,len);
-        for (int i=0;i<len;i++)
+        for (unsigned int i=0;i<len;i++)
         {
             fprintf(f,"%c", tc[i]);
         }
@@ -1802,7 +1802,7 @@ int sdotest::showdefault(FILE *f, const Type& tm)
         wchar_t * buf = new wchar_t[l+1];
         l = pstring.getStringDefault(buf,l);
         fprintf(f, "String default length is %d\n", l);
-        for (int i=0;i<l;i++)
+        for (unsigned int i=0;i<l;i++)
         {
             fprintf(f, "%c",buf[i]);
         }
@@ -1823,7 +1823,7 @@ int sdotest::showdefault(FILE *f, const Type& tm)
         char * buf = new char[l+1];
         l = pbytes.getBytesDefault(buf,l);
         fprintf(f, "Bytes default length is %d\n",l);
-        for (int i=0;i<l;i++)
+        for (unsigned int i=0;i<l;i++)
         {
             fprintf(f, "%c", buf[i]);
         }
@@ -1954,7 +1954,7 @@ int sdotest::nulltest()
      
     try {
 
-    int i;
+    unsigned int i;
     DataFactoryPtr mdg  = DataFactory::getDataFactory();
  
     mdg->addType("myspace","NullTest",true, false); // sequenced
@@ -2305,7 +2305,7 @@ int sdotest::nulltest()
 int sdotest::maintest()
 {
 
-    int i;
+    unsigned int i;
 
     FILE *f;
 
@@ -2495,7 +2495,7 @@ int sdotest::maintest()
 
         fprintf(f, "Should be 3: %d\n", tlf.getAliasCount());
 
-        for (int ai = 0; ai < tlf.getAliasCount(); ai++)
+        for (unsigned int ai = 0; ai < tlf.getAliasCount(); ai++)
         {
             fprintf(f, "Alias: %s\n",tlf.getAlias(ai));
         }
@@ -2666,7 +2666,7 @@ int sdotest::maintest()
 
         sq->addText(" - should say now able to set\n");
 
-        for (int ii=0;ii<sq->size();ii++)
+        for (unsigned int ii=0;ii<sq->size();ii++)
         {
             fprintf(f, "%s\n", sq->getCStringValue(ii));
         }
@@ -2947,7 +2947,7 @@ int sdotest::maintest()
 
         fprintf(f, "%s\n", snew2.c_str());
 
-        for (int lx = 0; lx < deps.size(); lx++)
+        for (unsigned int lx = 0; lx < deps.size(); lx++)
         {
             fprintf(f, "Department: %s\n",deps[lx]->getCString("name"));
         }
@@ -3862,7 +3862,7 @@ int sdotest::bug2()
 int sdotest::dumpproperties(FILE *f, DataObjectPtr root)
 {
     PropertyList pl = root->getInstanceProperties();
-    for (int i=0;i<pl.size();i++)
+    for (unsigned int i=0;i<pl.size();i++)
     {
         if (pl[i].isMany())
         {
@@ -3870,7 +3870,7 @@ int sdotest::dumpproperties(FILE *f, DataObjectPtr root)
             if (pl[i].getType().isDataType())
             {
                 char buf[10];
-                for (int j=0;j<dl.size();j++)
+                for (unsigned int j=0;j<dl.size();j++)
                 {
 
                     sprintf(buf,"%02d",j);
@@ -3881,7 +3881,7 @@ int sdotest::dumpproperties(FILE *f, DataObjectPtr root)
             else
             {
                 fprintf(f,"MObject Property %s\n",pl[i].getName());
-                for (int j=0;j<dl.size();j++)
+                for (unsigned int j=0;j<dl.size();j++)
                 {
                     if (dl[j] != 0)
                     {
@@ -3977,7 +3977,7 @@ int sdotest::datetest()
     dol.append(SDODate(2000));
     dol.append(SDODate(4000));
 
-    for (int i=0;i < dol.size(); i++)
+    for (unsigned int i=0;i < dol.size(); i++)
     {
         fprintf(f,"Review number:%d was:%d\n", i,dol.getDate(i).getTime());
 
@@ -5410,7 +5410,7 @@ int sdotest::testOpen()
     // unknown list type at present..
     DataObjectList& dl = emp1->getList("opentypelist");
     
-    int i = 45;
+    unsigned int i = 45;
     dl.append((short)i); // now the list must be primitive
 
     // we should now have instance properties 
@@ -6460,7 +6460,7 @@ int sdotest::merle1()
 
         XMLHelperPtr myXMLHelper = HelperProvider::getXMLHelper(mdg);
 
-        for (int i=0;i<properties.size();i++)
+        for (unsigned int i=0;i<properties.size();i++)
         {
             Property& prop = properties[i];
             switch (prop.getTypeEnum())
@@ -6476,7 +6476,7 @@ int sdotest::merle1()
                     {
                         // many valued property, such as Requests , so get the list
                         DataObjectList& rq = search->getList(prop);
-                        for (int j=0;j<rq.size();j++)
+                        for (unsigned int j=0;j<rq.size();j++)
                         {
                             DataObjectPtr dob = rq[j];
                             if (dob != 0)
@@ -6677,7 +6677,7 @@ int sdotest::testErrors()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         FILE *f = fopen("testerrors.dat","w+");
         if (f == 0)
@@ -6729,7 +6729,7 @@ int sdotest::b46734()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
@@ -6813,7 +6813,7 @@ int sdotest::b46693()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
@@ -7070,7 +7070,7 @@ int sdotest::printset(FILE *f, ChangeSummaryPtr cs)
     // bool previously unset, and a int list previuously unset and an employees list
     // previously unset
     
-    for (int i=0;i< cdl.size();i++)
+    for (unsigned int i=0;i< cdl.size();i++)
     {
         if (cs->isModified(cdl[i]))
         {
@@ -7234,7 +7234,7 @@ int sdotest::testLoad()
 {
     try 
     {
-        int i,j;
+        unsigned int i,j;
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
         FILE* f = fopen("company_with_nillable_SN.xsd","r+");
         char* buffer = new char[4000];
@@ -7285,7 +7285,7 @@ int sdotest::includetest()
 {
     try 
     {
-        int i,j;
+        unsigned int i,j;
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
@@ -7620,7 +7620,7 @@ int sdotest::graham5()
 {
     try 
     {
-        int i,j;
+        unsigned int i,j;
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
@@ -7653,7 +7653,7 @@ int sdotest::graham6()
 {
     try 
     {
-        int i,j;
+        unsigned int i,j;
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
@@ -7735,7 +7735,7 @@ int sdotest::b47137()
 
         PropertyList pl = t.getProperties();
 
-        for (int i=0;i<pl.size();i++)
+        for (unsigned int i=0;i<pl.size();i++)
         {
             fprintf(f,"Property:%s\n", pl[i].getName());
         }
@@ -7757,7 +7757,7 @@ int sdotest::b47137()
 
         PropertyList pl2 = t2.getProperties();
 
-        for (int j=0;j<pl2.size();j++)
+        for (unsigned int j=0;j<pl2.size();j++)
         {
             fprintf(f,"Property:%s\n",pl2[j].getName());
             fprintf(f, "Value:%s\n", dob2->getCString(pl2[j]));
@@ -7775,7 +7775,7 @@ int sdotest::b47137()
 
 int sdotest::b47137b()
 {
-    int i,j;
+    unsigned int i,j;
     try 
     {
 
@@ -7808,7 +7808,7 @@ int sdotest::b47137b()
         }
 
         TypeList tl = mdg->getTypes();
-        for (int k=0;k<tl.size();k++)
+        for (unsigned int k=0;k<tl.size();k++)
         {
             fprintf(f,"Type:%s#%s\n",tl[k].getURI(),tl[k].getName());
         }
@@ -7819,7 +7819,7 @@ int sdotest::b47137b()
 
         PropertyList pl = t.getProperties();
 
-        for (int i=0;i<pl.size();i++)
+        for (unsigned int i=0;i<pl.size();i++)
         {
             fprintf(f, "Property:%s\n",pl[i].getName());
         }
@@ -7843,7 +7843,7 @@ int sdotest::b47137b()
 
         PropertyList pl2 = t2.getProperties();
 
-        for (int j=0;j<pl2.size();j++)
+        for (unsigned int j=0;j<pl2.size();j++)
         {
 
             fprintf(f,"Property:%s\n",pl2[j].getName());
@@ -7874,7 +7874,7 @@ int sdotest::b47137b()
 
 int sdotest::b47293()
 {
-    int i,j,k;
+    unsigned int i,j,k;
     try 
     {
         FILE *f = fopen("b47293.dat","w+");
@@ -8259,7 +8259,7 @@ int sdotest::buniqueread()
 {
     try {
 
-        int i,j,k;
+        unsigned int i,j,k;
 
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
     
@@ -8314,7 +8314,7 @@ int sdotest::testwsdl()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
@@ -8420,7 +8420,7 @@ int sdotest::travel()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         FILE *f = fopen("travel.dat","w+");
         if (f == 0)
@@ -8488,7 +8488,7 @@ int sdotest::oddchars()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
 
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
@@ -8649,7 +8649,7 @@ int sdotest::badelement()
 {
     try {
 
-        int i,j;
+        unsigned int i,j;
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
@@ -8710,7 +8710,7 @@ int sdotest::badelement()
 int sdotest::testastyle(FILE *f, const char* style)
 {
 
-    int i,j;
+    unsigned int i,j;
 
 
     DataFactoryPtr mdg  = DataFactory::getDataFactory();
@@ -8744,7 +8744,7 @@ int sdotest::testastyle(FILE *f, const char* style)
         if (!strcmp(tl[i].getName(),"library"))
         {
             PropertyList pl = tl[i].getProperties();
-            for (int j=0;j<pl.size();j++)
+            for (unsigned int j=0;j<pl.size();j++)
             {
                 fprintf(f,"Property:%s\n",pl[j].getName());
             }
@@ -8814,7 +8814,7 @@ int sdotest::testinc2(const char* inc, const char* name1, const char* name2)
 {
 
 
-    int i,j;
+    unsigned int i,j;
 
     try {
 
@@ -8854,7 +8854,7 @@ int sdotest::testinc2(const char* inc, const char* name1, const char* name2)
     {
         fprintf(f, "Type:%s#%s\n", tl[i].getURI(),tl[i].getName());
         PropertyList pl = tl[i].getProperties();
-        for (int j=0;j<pl.size();j++)
+        for (unsigned int j=0;j<pl.size();j++)
         {
             fprintf(f,"Property:%s\n",pl[j].getName());
         }
@@ -8885,7 +8885,7 @@ int sdotest::testOrder(const char* x1, const char* x2, const char* name1,
                        const char* name2)
 {
 
-    int i,j;
+    unsigned int i,j;
 
     try {
 
@@ -8945,7 +8945,7 @@ int sdotest::testOrder(const char* x1, const char* x2, const char* name1,
         if (!strcmp(tl[i].getURI(),"commonj.sdo")) continue;
         fprintf(f,"Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
         PropertyList pl = tl[i].getProperties();
-        for (int j=0;j<pl.size();j++)
+        for (unsigned int j=0;j<pl.size();j++)
         {
             fprintf(f,"Property:%s\n", pl[j].getName());
         }
@@ -8968,7 +8968,7 @@ int sdotest::simple()
 {
 
 
-    int i,j;
+    unsigned int i,j;
 
     try {
 
@@ -9010,7 +9010,7 @@ int sdotest::simple()
         if (!strcmp(tl[i].getURI(),"commonj.sdo")) continue;
         fprintf(f, "Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
         PropertyList pl = tl[i].getProperties();
-        for (int j=0;j<pl.size();j++)
+        for (unsigned int j=0;j<pl.size();j++)
         {
             fprintf(f,"Property:%s\n",pl[j].getName());
             fprintf(f, "Type of property:%s\n",pl[j].getType().getName());
@@ -9072,8 +9072,8 @@ int sdotest::cdatatest()
        * succeed, but errors indicate some elements were not
        * understood 
        */
-      int i = 0;
-      int j = 0;
+      unsigned int i = 0;
+      unsigned int j = 0;
       if ((i = myXSDHelper->getErrorCount()) > 0)
       {
 	 cout << "XSD Loading reported some errors:" << endl;
