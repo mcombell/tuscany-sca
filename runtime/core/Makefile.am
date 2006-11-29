@@ -15,4 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-SUBDIRS = src test sdo_axiom sdo_axiom_test
+if WITH_AXIS2C
+  AXIOM_UTILS = sdo_axiom sdo_axiom_test
+endif
+
+SUBDIRS = src test ${AXIOM_UTILS}

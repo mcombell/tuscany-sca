@@ -20,7 +20,7 @@ dnl run autogen.sh to generate the configure script.
 AC_PREREQ(2.59)
 AC_INIT(tuscany_sdo_cpp, 1.0-incubator-M2)
 AC_CANONICAL_SYSTEM
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(tuscany_sdo_config.h)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AC_PREFIX_DEFAULT(/usr/local/tuscany/sdo)
 
@@ -33,6 +33,15 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
+# Check for running on Darwin
+AC_MSG_CHECKING([Checking if running on Darwin])
+UNAME=`uname -s`
+if test "x$UNAME" = "xDarwin"; then
+  AC_DEFINE([IS_DARWIN], [1], [Set to 1 when running on Darwin - Mac OSX])
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
 # Check for dynamic library suffixes
 AC_MSG_CHECKING([checking for dynamic library suffix])
 AC_CHECK_HEADER([sys/appleapiopts.h],
@@ -55,6 +64,23 @@ AC_STRUCT_TM
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([strchr strrchr])
+
+AC_MSG_CHECKING(whether to build SDO Axiom utility)
+AC_ARG_WITH(axis2c, [AS_HELP_STRING([--with-axis2c],[build SDO Axiom utility [default=no]])],
+[ case "${withval}" in
+  yes)
+    AC_MSG_RESULT(yes)
+    with_axis2c=true
+    ;;
+  *)
+    AC_MSG_RESULT(no)
+    with_axis2c=false
+    ;;
+  esac ],
+[ AC_MSG_RESULT(no)
+    with_axis2c=false ]
+)
+AM_CONDITIONAL([WITH_AXIS2C], [test x$with_axis2c = xtrue])
 
 AC_CONFIG_FILES([Makefile
                  runtime/Makefile
