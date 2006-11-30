@@ -33,12 +33,20 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
-# Check for dynamic library suffixes
-AC_MSG_CHECKING([checking for dynamic library suffix])
-AC_CHECK_HEADER([sys/appleapiopts.h],
-  [AC_SUBST([libsuffix],[".dylib"]) AC_MSG_RESULT([using .dylib])],
-  [AC_SUBST([libsuffix],[".so"]) AC_MSG_RESULT([using .so])]
-)
+# Check for running on Darwin
+AC_MSG_CHECKING([Checking if running on Darwin])
+UNAME=`uname -s`
+if test "x$UNAME" = "xDarwin"; then
+  AC_DEFINE([IS_DARWIN], [1], [Set to 1 when running on Darwin - Mac OSX])
+  AC_MSG_RESULT(yes)
+  AC_SUBST([libsuffix],[".dylib"])
+  is_darwin=true
+else
+  AC_MSG_RESULT(no)
+  AC_SUBST([libsuffix],[".so"])
+  is_darwin=false
+fi
+AM_CONDITIONAL([DARWIN], [test x$is_darmin = xtrue])
 
 AC_CONFIG_FILES([Makefile
                  misc/Makefile

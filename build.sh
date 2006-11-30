@@ -35,6 +35,11 @@ echo "Using Axis2C installed at $AXIS2C_HOME"
 WITH_AXIS2C=--with-axis2c=true
 fi
 
+TUSCANY_SDOCPP_HOME=`pwd`
+cd ${TUSCANY_SDOCPP_HOME}/samples
+./autogen.sh
+
+cd $TUSCANY_SDOCPP_HOME
 ./autogen.sh
 
 if [ x$TUSCANY_SDOCPP = x ]; then
