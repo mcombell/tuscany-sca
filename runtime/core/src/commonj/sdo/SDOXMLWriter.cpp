@@ -678,7 +678,7 @@ namespace commonj
             // Don't write the element URI if the element is a child of an open type
             // and not one of the declared properties
             SDOXMLString uri = elementURI;
-            if (!isRoot && !writeXSIType)
+/*            if (!isRoot && !writeXSIType)
             {
                 DataObject* dob = dataObject;
                 DataObjectImpl* cont = 
@@ -693,7 +693,7 @@ namespace commonj
                         }
                     }
                 }
-            }
+            } */
             
             //SDOXMLString uri;
             //if (!elementURI.equals(namespaceUriStack.top()))
@@ -906,7 +906,7 @@ namespace commonj
                             
                             SDOXMLString theName=typeName;
             
-                            if (!typeURI.isNull() && !typeURI.equals(tnsURI) && !typeURI.equals(""))
+                            if (!typeURI.isNull() && !typeURI.equals(uri) && !typeURI.equals(""))
                             {
                                 std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(typeURI);
                                 if (it != namespaceMap.end())
