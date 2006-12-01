@@ -1057,6 +1057,14 @@ namespace commonj
                         SDOXMLString seqPropName = seqProp.getName();
                         const Type& seqPropType = seqProp.getType();
 
+						// Do not write attributes as members of the sequence
+						XSDPropertyInfo* pi = getPropertyInfo(seqPropType, seqProp);
+						PropertyDefinitionImpl propdef;
+						if (!pi || (pi->getPropertyDefinition().isElement))
+						{
+							continue;
+						}
+
                         if (seqPropType.isDataObjectType())
                         {                                
                             DataObjectPtr doValue;

@@ -1486,3 +1486,27 @@ int sdotest::jira945()
         return 0;
     }
 }
+int sdotest::tuscany963()
+{
+
+
+    try {
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+        
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+        xsh->defineFile("tuscany963.xsd");
+        XMLHelperPtr myXMLHelper = HelperProvider::getXMLHelper(mdg);
+        XMLDocumentPtr myXMLDocument = myXMLHelper->loadFile("tuscany963.xml");
+		myXMLHelper->save(myXMLDocument, "tuscany963.out.xml");
+        
+
+        return comparefiles("tuscany963.out.xml" ,"tuscany963.out.xml.txt");
+
+        
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in tuscany963" << e << endl;
+        return 0;
+    }
+}
