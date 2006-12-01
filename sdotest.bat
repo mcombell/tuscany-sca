@@ -39,7 +39,7 @@ set PATH=%TUSCANY_SDOCPP%\bin;%AXIS2C_HOME%\lib;%PATH%
 
 set SCATESTPATH=%cd%\vsexpress\tuscany_sdo\sdo_test\%buildtype%
 cd runtime\core\test
-%SCATESTPATH%\sdo_test
+"%SCATESTPATH%\sdo_test"
 
 :end
 @endlocal
