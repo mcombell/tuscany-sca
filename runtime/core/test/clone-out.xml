@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Clone xmlns="http://www.example.org/test" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:schemaLocation="http://www.example.org/test clone.xsd ">
+  abc
+  <test>test</test>
+  def
+  <tests>test</tests>
+  ghi
+</Clone>
