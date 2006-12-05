@@ -349,21 +349,11 @@ namespace sdo{
                     else
                     {
                         // Sequence member is a primitive
-                        if (seqProperty.isMany())
-                        {
-                            int index = fromSequence->getListIndex(i);
-                            transfersequenceitem(toSequence,
-                                                 fromSequence,
-                                                 seqProperty,
-                                                 index);
-                        }
-                        else
-                        {
-                            transfersequenceitem(toSequence,
-                                                 fromSequence,
-                                                 seqProperty,
-                                                 i);
-                        }                           
+                        transfersequenceitem(toSequence,
+                                             fromSequence,
+                                             seqProperty,
+                                             i);
+                                                
                     } 
                 } // is it a text element
             } // for all elements in sequence
