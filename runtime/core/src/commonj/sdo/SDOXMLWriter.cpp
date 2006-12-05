@@ -1065,6 +1065,14 @@ namespace commonj
                         SDOXMLString seqPropName = seqProp.getName();
                         const Type& seqPropType = seqProp.getType();
 
+						// Do not write attributes as members of the sequence
+						XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, seqProp);
+						PropertyDefinitionImpl propdef;
+						if (pi && !(pi->getPropertyDefinition().isElement))
+						{
+							continue;
+						}
+
                         if (seqPropType.isDataObjectType())
                         {                                
                             DataObjectPtr doValue;
@@ -1096,6 +1104,10 @@ namespace commonj
                         else
                         {
                             // Sequence member is a primitive
+							// Only write a primitive as an element if defined by the schema or if it's
+							// many-valued.
+							if (!pi && !seqProp.isMany()) continue;
+
                             /* Use our wrapper function just in case the element has CDATA in it */
                             writeXMLElement(writer,
                                     seqPropName,
