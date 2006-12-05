@@ -1777,7 +1777,7 @@ bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factor
         fprintf(header," *******************************************/\n\n\n");
 
         unsigned int i;
-        for (unsigned i=0;i<tl.size();i++)
+        for (i=0;i<tl.size();i++)
         {
             nscount = 0;
 
