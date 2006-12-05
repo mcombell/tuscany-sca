@@ -177,6 +177,71 @@ namespace sdo{
         } // for
     } // method
 
+
+
+    void CopyHelper::transfersequenceitem(Sequence *to, Sequence *from, const Property& p, int index)
+    {
+        switch (p.getTypeEnum())
+        {
+        case Type::BooleanType:
+            to->addBoolean(    p, from->getBooleanValue(index));
+            break;
+        case Type::ByteType:
+            to->addByte( p, from->getByteValue(index));
+            break;
+        case Type::CharacterType:
+            to->addCharacter( p, from->getCharacterValue(index));
+            break;
+        case Type::IntegerType: 
+            to->addInteger( p, from->getIntegerValue(index));
+            break;
+        case Type::ShortType:
+            to->addShort( p,from->getShortValue(index));
+            break;
+        case Type::DoubleType:
+            to->addDouble( p, from->getDoubleValue(index));
+            break;
+        case Type::FloatType:
+            to->addFloat( p, from->getFloatValue(index));
+            break;
+        case Type::LongType:
+            to->addLong( p, from->getLongValue(index));
+            break;
+        case Type::DateType:
+            to->addDate( p, from->getDateValue(index));
+            break;
+        case Type::BigDecimalType: 
+        case Type::BigIntegerType: 
+        case Type::UriType:
+        case Type::StringType:
+            {
+                unsigned int siz =     from->getLength(index);
+                if (siz > 0)
+                {
+                    wchar_t * buf = new wchar_t[siz];
+                    from->getStringValue(index, buf, siz);
+                    to->addString(p, buf, siz);
+                    delete buf;
+                }
+            }
+            break;
+        case Type::BytesType:
+            {
+                unsigned int siz = from->getLength(index);
+                if (siz > 0)
+                {
+                    char * buf = new char[siz];
+                    from->getBytesValue(index, buf, siz);
+                    to->addBytes(p, buf, siz);
+                    delete buf;
+                }
+            }
+            break;
+        default:
+            break;
+        }  // switch
+    }
+
     /** CopyHelper provides static copying helper functions.
      *
      * copyShallow() copies the DataType members of the data object.
@@ -212,55 +277,148 @@ namespace sdo{
         DataObjectPtr newob = fac->create(t);
         if (!newob) return 0;
 
-        PropertyList pl = dataObject->getInstanceProperties();
-        for (unsigned int i=0;i < pl.size(); i++)
+        if ( dataObject->getType().isSequencedType() )
         {
-            if (dataObject->isSet(pl[i]))
+            Sequence* fromSequence = dataObject->getSequence();
+            int sequence_length = fromSequence->size();
+            
+            Sequence* toSequence = newob->getSequence();
+            
+            for (int i=0;i < sequence_length; i++)
             {
-                // data objects are only copied in the deep copy case
-                if (pl[i].getType().isDataObjectType()) 
+                if ( fromSequence->isText(i) )
                 {
-                    if (!fullCopy) 
-                    {
-                        continue;
-                    }
+                    const char *text = fromSequence->getCStringValue(i);
+                    toSequence->addText(i, text);
+                } 
+                else 
+                {
+                    const Property& seqProperty = fromSequence->getProperty(i); 
+                    SDOXMLString seqPropertyName = seqProperty.getName();
+                    const Type& seqPropertyType = seqProperty.getType();
+
+                    if (seqPropertyType.isDataObjectType())
+                    {                                
+                        if (!fullCopy) 
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            DataObjectPtr dob;
+
+                            // retrieve the data object to be copied
+                            if (seqProperty.isMany())
+                            {
+                                int index = fromSequence->getListIndex(i);
+                                dob = dataObject->getList(seqProperty)[index];
+                            }
+                            else
+                            {
+                                dob = dataObject->getDataObject(seqProperty);
+                            }
+                              
+                            // do the copying of referencing
+                            if (dob)
+                            {
+                                // Handle non-containment reference to DataObject
+                                if (seqProperty.isReference())
+                                {
+                                    // add just the reference into the sequence
+                                    // doesn't seem to bother in the non sequenced
+                                    // code so need to check with SDO people 
+                                    // In the mean time I'll thrown and exception
+                                    // just in case we get here
+                                    std::string msg("Attempt to close sequenced data object which has non containment reference ");
+                                    msg += (const char *)seqPropertyName;
+                                    SDO_THROW_EXCEPTION("internalCopy", 
+                                                        SDOUnsupportedOperationException,
+                                                        msg.c_str());
+                                }
+                                else
+                                {
+                                    // make a copy of the data object itself
+                                    // and add it to the sequence
+                                    toSequence->addDataObject(seqProperty,
+                                                              internalCopy(dob,
+                                                                           true));
+                                }
+                            }
+                        }
+                    } 
                     else
+                    {
+                        // Sequence member is a primitive
+                        if (seqProperty.isMany())
+                        {
+                            int index = fromSequence->getListIndex(i);
+                            transfersequenceitem(toSequence,
+                                                 fromSequence,
+                                                 seqProperty,
+                                                 index);
+                        }
+                        else
+                        {
+                            transfersequenceitem(toSequence,
+                                                 fromSequence,
+                                                 seqProperty,
+                                                 i);
+                        }                           
+                    } 
+                } // is it a text element
+            } // for all elements in sequence
+        }
+        else
+        {
+            PropertyList pl = dataObject->getInstanceProperties();
+            for (unsigned int i=0;i < pl.size(); i++)
+            {
+                if (dataObject->isSet(pl[i]))
+                {
+                    // data objects are only copied in the deep copy case
+                    if (pl[i].getType().isDataObjectType()) 
+                    {
+                        if (!fullCopy) 
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (pl[i].isMany())
+                            {
+                                DataObjectList& dolold = dataObject->getList(pl[i]);
+                                DataObjectList& dolnew = newob->getList(pl[i]);
+                                for (unsigned int i=0;i< dolold.size(); i++)
+                                {
+                                    dolnew.append(internalCopy(dolold[i],true));
+                                }
+                            }
+                            else 
+                            {
+                                DataObjectPtr dob = dataObject->getDataObject(pl[i]);
+                                newob->setDataObject(pl[i],internalCopy(dob,true));
+                            }
+                        }
+                    }
+                    else 
                     {
                         if (pl[i].isMany())
                         {
                             DataObjectList& dolold = dataObject->getList(pl[i]);
                             DataObjectList& dolnew = newob->getList(pl[i]);
-                            for (unsigned int i=0;i< dolold.size(); i++)
-                            {
-                                dolnew.append(internalCopy(dolold[i],true));
-                            }
+                            transferlist(dolnew,dolold, pl[i].getTypeEnum());
                         }
                         else 
                         {
-                            DataObjectPtr dob = dataObject->getDataObject(pl[i]);
-                            newob->setDataObject(pl[i],internalCopy(dob,true));
+                            transferitem(newob,dataObject, pl[i]);
                         }
-                    }
-                }
-                else 
-                {
-                    if (pl[i].isMany())
-                    {
-                        DataObjectList& dolold = dataObject->getList(pl[i]);
-                        DataObjectList& dolnew = newob->getList(pl[i]);
-                        transferlist(dolnew,dolold, pl[i].getTypeEnum());
-                    }
-                    else 
-                    {
-                        transferitem(newob,dataObject, pl[i]);
-                    }
-                } // else
+                    } // else
+                } 
             } 
-        } 
+        }
+
         return newob;
     }
-    
-
 }
 };
 

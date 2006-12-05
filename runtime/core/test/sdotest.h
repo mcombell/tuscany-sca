@@ -199,5 +199,6 @@ class sdotest {
         static int b45933();
         static int testXPath();
         static int cdatatest();
+        static int cloneopentest();
         static int tuscany963();
 };

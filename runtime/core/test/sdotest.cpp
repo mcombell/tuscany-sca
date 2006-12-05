@@ -9119,8 +9119,89 @@ int sdotest::cdatatest()
     }
     catch (SDORuntimeException e)
     {
-        cout << "Exception in interop test" <<  endl;
+        cout << "Exception in cdata test" <<  endl;
         cout << e.getMessageText();
         return 0;
     }
+}
+
+int sdotest::cloneopentest()
+{
+   try 
+   {
+      DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+      /**
+       * Get an XSD helper to load XSD information into the
+       * data factory
+       */
+      XSDHelperPtr myXSDHelper = HelperProvider::getXSDHelper(mdg);
+      myXSDHelper->defineFile("clone.xsd");
+
+      /**
+       * Check if there were any errors. The parse may still
+       * succeed, but errors indicate some elements were not
+       * understood 
+       */
+      unsigned int i = 0;
+      unsigned int j = 0;
+      if ((i = myXSDHelper->getErrorCount()) > 0)
+      {
+	 cout << "XSD Loading reported some errors:" << endl;
+	 for (j=0;j<i;j++)
+	 {
+	    const char *m = myXSDHelper->getErrorMessage(j);
+	    if (m != 0) cout << m;
+	    cout << endl;
+	    return 0;
+	 }
+      }
+
+      /** 
+       * Use the same data factory to load XML corresponding to
+       * data objects adhering to the previously loaded schema
+       */
+      XMLHelperPtr myXMLHelper = HelperProvider::getXMLHelper(mdg);
+      XMLDocumentPtr myXMLDocument = myXMLHelper->loadFile("clone-in.xml", "http://www.example.org/test");
+    
+      /**
+       * Check if there were any errors. The parse may still
+       * succeed, but errors indicate some elements did not match
+       * the schema, or were malformed.
+       * 
+       */
+      if ((i = myXMLHelper->getErrorCount()) > 0)
+      {
+	 cout << "XML Loading reported some errors:" << endl;
+	 for (j=0;j<i;j++)
+	 {
+	    const char *m = myXMLHelper->getErrorMessage(j);
+	    if (m != 0) cout << m;
+	    cout << endl;
+	    return 0;
+	 }
+      }
+
+      DataObjectPtr original = myXMLDocument->getRootDataObject();
+
+      // copy the data object we just read in
+      DataObjectPtr clone = CopyHelper::copy(original);
+
+      // create a new document based on this cloned data object
+      XMLDocumentPtr myNewXMLDocument = myXMLHelper->createDocument(clone,
+                                                                    "http://www.example.org/test",
+                                                                    "Clone");
+
+      // write the cloned document out to a file
+      myXMLHelper->save(myNewXMLDocument, "clone-testout.xml");
+
+      return comparefiles("clone-out.xml","clone-testout.xml");
+
+   }
+   catch (SDORuntimeException e)
+   {
+      cout << "Exception in clone test" <<  endl;
+      cout << e.getMessageText();
+      return 0;
+   }
 }

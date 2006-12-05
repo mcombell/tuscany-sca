@@ -62,6 +62,8 @@ class CopyHelper
     private:
     static void transferlist(DataObjectList& to, DataObjectList& from, Type::Types t);
     static void transferitem(DataObjectPtr   to, DataObjectPtr   from, const Property& p);
+    static void transfersequenceitem(Sequence *to, Sequence *from, const Property& p, int index);
+
     static DataObjectPtr internalCopy(DataObjectPtr dataObject, bool fullCopy);
 
 };

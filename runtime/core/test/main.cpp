@@ -176,6 +176,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::testXPath() );
 
     TEST (  sdotest::cdatatest() );
+	TEST (  sdotest::cloneopentest() );
 	TEST (  sdotest::tuscany963() );
 
     cout << "Total tests:" << totaltests << " Tests passed:" << testspassed << endl;

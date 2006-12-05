@@ -1511,7 +1511,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
             }
         }
 
-        int propIndex = getPropertyIndex(p);
+        int propIndex = getPropertyIndexInternal(p);
         DataObjectImpl* d = getDataObjectImpl(propIndex);
         if (d == 0) {
             // There is no list yet, so we need to create an 
@@ -1612,14 +1612,27 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 			// tries to access the index of the property 
 			// and it doesn't exist because it hasn't been created yet. 
 			// This new method is used where properties are being set
-			// based on existing property objects. This is like to 
+			// based on existing property objects. This is likely to 
 			// occur when a data object is being copied. In this case
 			// we want properties that are open to be copied also 
 			// so we need to create the property and provide the index
 			if ( this->getType().isOpenType() )
 			{
-			    const Property *prop = defineProperty(p.getName(), p.getType());
-			    index = getPropertyIndex(p);
+                const Property *prop = NULL;
+                
+                // need to treat many valued properties specially
+                // because the property is a list rather than 
+                // a single value
+                if ( p.isMany() )
+                {
+                    prop = defineList(p.getName());                   
+                }
+                else
+                {
+			        prop = defineProperty(p.getName(), p.getType());
+                }
+                
+                index = getPropertyIndex(p);
 			}
 			else
 			{
