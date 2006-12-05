@@ -46,6 +46,17 @@ namespace commonj
             static SDO_API const char* SDOToXSD(const char* sdoname);
             static SDO_API const char*  XSDToSDO(const char* xsdname);
             static void printTypes(std::ostream& out, DataFactoryPtr df);
+            static SDOString replace(SDOString hostString, const char *fromString, const char *toString);
+            
+           /*
+            * Markers used to represent the start and end of CDATA sections in the 
+            * settings value. The noew XML CDATA markers are not used here because the 
+            * XML string processing URL encodes parts of the markers
+            */
+           static SDO_API const char *CDataStartMarker;
+           static SDO_API const char *XMLCDataStartMarker;
+           static SDO_API const char *CDataEndMarker;
+           static SDO_API const char *XMLCDataEndMarker;            
                         
         private:
 

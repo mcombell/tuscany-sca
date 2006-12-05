@@ -29,6 +29,11 @@ using namespace std;
 
 namespace commonj {
     namespace sdo {
+        
+        const char *SDOUtils::CDataStartMarker    = "XXXCDATA@STARTXXX";
+        const char *SDOUtils::XMLCDataStartMarker = "<![CDATA[";
+        const char *SDOUtils::CDataEndMarker      = "XXXCDATA@ENDX";
+        const char *SDOUtils::XMLCDataEndMarker   = "]]>";        
 
 //////////////////////////////////////////////////////////////////////////
 // Conversions
@@ -247,6 +252,44 @@ namespace commonj {
             }
             
         }
+        
+        /*
+         * A local utility function that replaces one string with and another within a
+         * host string and adjusts the lenght of the host string accordingly.
+         */ 
+        SDOString SDOUtils::replace(SDOString hostString, const char *fromString, const char *toString)
+        {
+            SDOString returnString("");
+
+            // find and replace all occurances of fromString with toString. The start, end
+            // and length variables are used to indicate the start, end and length
+            // of the text sections to be copied from the host string to the return
+            // string. toString is appended in between these copied sections because the
+            // string is broken whenever fromString is found
+            std::string::size_type start  = 0;
+            std::string::size_type end    = hostString.find(fromString, 0);
+            std::string::size_type length = 0;
+
+            while ( end != std::string::npos )
+            {
+                // copy all the text up to the fromString
+                length = end - start;
+                returnString.append(hostString.substr(start, length));
+
+                // add in the toString
+                returnString.append(toString);
+
+                // find the next fromString
+                start = end + strlen(fromString);
+                end = hostString.find(fromString, start);
+            }
+
+            // copy any text left at the end of the host string
+            returnString.append(hostString.substr(start));
+
+            return returnString;
+        }
+        
 
     };
 };

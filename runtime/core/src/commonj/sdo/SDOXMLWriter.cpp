@@ -727,6 +727,7 @@ namespace commonj
                 }
                 else
                   {
+                    /* Use our wrapper function just in case the element has CDATA in it */
                     writeXMLElement(writer,
                                     elementName,
                                     dataObject->getCString(""));
@@ -1047,7 +1048,9 @@ namespace commonj
                         
                         if (sequence->isText(i))
                         {
-                            rc = xmlTextWriterWriteString(
+                            // This is a raw write rather than xmlTextWriterWriteString
+                            // just in case the text has a CDATA section in it 
+                            rc = xmlTextWriterWriteRaw(
                                 writer,
                                 SDOXMLString(sequence->getCStringValue(i)));
                             continue;
@@ -1088,10 +1091,16 @@ namespace commonj
                         else
                         {
                             // Sequence member is a primitive
+                            /* Use our wrapper function just in case the element has CDATA in it */
+                            writeXMLElement(writer,
+                                    seqPropName,
+                                    sequence->getCStringValue(i));
+                            /*
                             xmlTextWriterWriteElement(
                                 writer,
                                 seqPropName,
                                 SDOXMLString(sequence->getCStringValue(i)));
+                            */
                             
                         } // end DataType
                     } // end - iterate over sequence
@@ -1290,7 +1299,7 @@ namespace commonj
 
       /**
        * A wrapper for the libxml2 function xmlTextWriterWriteElement
-       * it detects CDATA sections before wrting out element contents
+       * it detects CDATA sections before writing out element contents
        */
       int SDOXMLWriter::writeXMLElement(xmlTextWriterPtr writer, 
                                         const xmlChar *name, 
@@ -1301,6 +1310,8 @@ namespace commonj
         rc = xmlTextWriterWriteRaw(writer, SDOXMLString(content));
         rc = xmlTextWriterEndElement(writer);
         /* A more complex version that doesn't work!
+         * I've left it here just in case we need to go back and separate out
+         * CDATA from text. This might provide a starting point
            SDOString contentString(content);
 
            // write the start of the element. we could write a mixture of

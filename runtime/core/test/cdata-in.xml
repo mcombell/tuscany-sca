@@ -24,5 +24,6 @@
     <fred>abcdefg</fred>
     <fred><![CDATA[>>>>>>>>>]]></fred>
     <fred>xxx<![CDATA[<?xml version="1.0"encoding="UTF-8"?><MOREXML>....</MOREXML>]]>aaaa<![CDATA[>>>>>>>>>]]></fred>
+    <jim>xxx<![CDATA[<?xml version="1.0"encoding="UTF-8"?><MOREXML>....</MOREXML>]]>aaaa<![CDATA[>>>>>>>>>]]></jim>  
   </entry1>
 </tns:test>

@@ -28,6 +28,7 @@
                     <sequence>
                         <element name="data" type="string"/>
                         <element name="fred" type="string" maxOccurs="unbounded"/>
+                        <any namespace="##any" processContents="lax"/>
                     </sequence>
                 </complexType>
             </element>
