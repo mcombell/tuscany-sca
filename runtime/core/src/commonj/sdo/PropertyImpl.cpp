@@ -19,13 +19,10 @@
 
 /* $Rev$ $Date$ */
 
+#include "commonj/sdo/export.h"
+
 #include <iostream>
 using namespace std;
-
-#ifndef SDO_EXPORTS 
-#define SDO_EXPORTS
-#endif
-#include "commonj/sdo/export.h"
 
 
 #include "commonj/sdo/Sequence.h"
