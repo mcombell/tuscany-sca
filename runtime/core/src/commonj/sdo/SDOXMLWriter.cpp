@@ -899,30 +899,35 @@ namespace commonj
                         //        (const unsigned char*)value.c_str());
                         //}
                         //else
-                        //{
+						//{
                         if (cont->getTypeImpl().getPropertyImpl(elementName) == 0)
                         {
                             const SDOXMLString& typeURI = dataObject->getType().getURI(); 
                             const SDOXMLString& typeName = dataObject->getType().getName();
-                            
-                            SDOXMLString theName=typeName;
-            
-                            if (!typeURI.isNull() && !typeURI.equals(uri) && !typeURI.equals(""))
-                            {
-                                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(typeURI);
-                                if (it != namespaceMap.end())
-                                {
-                                    theName = (*it).second;
-                                    theName += ":";
-                                    theName += typeName;
-                                }
-                            }
-                            
-                            rc = xmlTextWriterWriteAttribute(writer, 
-                            (const unsigned char*)"xsi:type", 
-                            (const unsigned char*)theName);
 
-                            writeXmlnsXsi();
+                            // Supress the writing of xsi:type as well for DataObjects of type
+                            // commonj.sdo#OpenDataObject
+                            if (!(typeURI.equals("commonj.sdo") && typeName.equals("OpenDataObject")))
+                            {
+                                SDOXMLString theName=typeName;
+
+                                if (!typeURI.isNull() && !typeURI.equals(uri) && !typeURI.equals(""))
+                                {
+                                    std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(typeURI);
+                                    if (it != namespaceMap.end())
+                                    {
+                                        theName = (*it).second;
+                                        theName += ":";
+                                        theName += typeName;
+                                    }
+                                }
+
+                                rc = xmlTextWriterWriteAttribute(writer, 
+                                    (const unsigned char*)"xsi:type", 
+                                    (const unsigned char*)theName);
+
+                                writeXmlnsXsi();
+                            }
                         }
                     }
                 }

@@ -32,11 +32,11 @@ extern "C"{
 
 #define TEST(testname)\
     value = testname;\
+    totaltests++;\
     if (value == 0) {\
         cout << "Test Failed: " << totaltests  << " " << #testname << endl;\
     }\
-    testspassed += value;\
-    totaltests++;
+    testspassed += value;
 
 int main (int argc, char** argv)
 {
