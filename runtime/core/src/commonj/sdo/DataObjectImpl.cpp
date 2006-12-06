@@ -944,7 +944,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     void DataObjectImpl::undefineProperty(unsigned int index)
     {
-		if (index < openBase) return;
+        if (index < openBase) return;
         unsigned int point = index - openBase;
         if (point >= openProperties.size()) return;
 
@@ -1592,32 +1592,32 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
     }
 
    /**
-	 * This method is used internally to find the index of a 
-	 * property. If differs from the public getPropertyIndex method
-	 * in that if the type of the containing object is open a new
-	 * index is created. In the public version and error is thrown
-	 */
+     * This method is used internally to find the index of a 
+     * property. If differs from the public getPropertyIndex method
+     * in that if the type of the containing object is open a new
+     * index is created. In the public version and error is thrown
+     */
     unsigned int DataObjectImpl::getPropertyIndexInternal(const Property& p)
     {
-		unsigned int index;
+        unsigned int index;
 
-		try 
-		{
+        try 
+        {
             index = getPropertyIndex(p);
-		}
-		catch ( SDOPropertyNotFoundException e )
-		{
-			// this could mean that this data object has an open 
-			// type. getPropertyIndex fails in this case because it
-			// tries to access the index of the property 
-			// and it doesn't exist because it hasn't been created yet. 
-			// This new method is used where properties are being set
-			// based on existing property objects. This is likely to 
-			// occur when a data object is being copied. In this case
-			// we want properties that are open to be copied also 
-			// so we need to create the property and provide the index
-			if ( this->getType().isOpenType() )
-			{
+        }
+        catch ( SDOPropertyNotFoundException e )
+        {
+            // this could mean that this data object has an open 
+            // type. getPropertyIndex fails in this case because it
+            // tries to access the index of the property 
+            // and it doesn't exist because it hasn't been created yet. 
+            // This new method is used where properties are being set
+            // based on existing property objects. This is likely to 
+            // occur when a data object is being copied. In this case
+            // we want properties that are open to be copied also 
+            // so we need to create the property and provide the index
+            if ( this->getType().isOpenType() )
+            {
                 const Property *prop = NULL;
                 
                 // need to treat many valued properties specially
@@ -1629,19 +1629,19 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
                 }
                 else
                 {
-			        prop = defineProperty(p.getName(), p.getType());
+                    prop = defineProperty(p.getName(), p.getType());
                 }
                 
                 index = getPropertyIndex(p);
-			}
-			else
-			{
-				throw e;
-			}
-		}
+            }
+            else
+            {
+                throw e;
+            }
+        }
 
-		return index;
-	}
+        return index;
+    }
 
 
     const Property& DataObjectImpl::getProperty(unsigned int index)
@@ -2279,9 +2279,9 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
                         DataObjectList& dol = d->getList((Property&)*p);
                         long idx;
                         DataObjectImpl* dx = d->findDataObject(prop,&idx);
-						// fix this. This is the only place the 2nd parm to findDataObject
-						// is used. Need a better way to do this
-						unsigned int index = (unsigned int)idx;
+                        // fix this. This is the only place the 2nd parm to findDataObject
+                        // is used. Need a better way to do this
+                        unsigned int index = (unsigned int)idx;
                         if (index >= 0)
                         {
                             if(index < dol.size())
@@ -2347,6 +2347,9 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
             {
                  isData = true;
             }
+
+            if (pl[i].isReference())
+                continue;
 
             if (!d->isSet(pl[i]) || d->isNull(pl[i]))
             {

@@ -65,6 +65,9 @@ class CopyHelper
     static void transfersequenceitem(Sequence *to, Sequence *from, const Property& p, int index);
 
     static DataObjectPtr internalCopy(DataObjectPtr dataObject, bool fullCopy);
+    static void resolveReferences(DataObjectPtr oldDO, DataObjectPtr newDO);
+    static void findReferences(DataObjectPtr oldDO, DataObjectPtr newDO, DataObjectPtr obj, DataObjectPtr newObj);
+    static DataObjectPtr findReference(DataObjectPtr oldDO, DataObjectPtr newDO, DataObjectPtr ref);
 
 };
 };

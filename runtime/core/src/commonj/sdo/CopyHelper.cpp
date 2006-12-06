@@ -29,6 +29,8 @@
 
 #include "commonj/sdo/CopyHelper.h"
 
+#include <iostream>
+using namespace std;
 namespace commonj{
 namespace sdo{
 
@@ -262,7 +264,9 @@ namespace sdo{
      */
     DataObjectPtr CopyHelper::copy(DataObjectPtr dataObject)
     {
-        return internalCopy(dataObject, true);
+        DataObjectPtr newob = internalCopy(dataObject, true);
+        resolveReferences(dataObject, newob);
+        return newob;
     }
 
     DataObjectPtr CopyHelper::internalCopy(DataObjectPtr dataObject,
@@ -325,15 +329,10 @@ namespace sdo{
                                 if (seqProperty.isReference())
                                 {
                                     // add just the reference into the sequence
-                                    // doesn't seem to bother in the non sequenced
-                                    // code so need to check with SDO people 
-                                    // In the mean time I'll thrown and exception
-                                    // just in case we get here
-                                    std::string msg("Attempt to close sequenced data object which has non containment reference ");
-                                    msg += (const char *)seqPropertyName;
-                                    SDO_THROW_EXCEPTION("internalCopy", 
-                                                        SDOUnsupportedOperationException,
-                                                        msg.c_str());
+                                    // This will be resolved to a new reference later
+                                    // This is really bad but we need to add something to the
+                                    // sequence here to maintain the ordering
+                                    toSequence->addDataObject(seqProperty, 0);
                                 }
                                 else
                                 {
@@ -378,15 +377,31 @@ namespace sdo{
                             {
                                 DataObjectList& dolold = dataObject->getList(pl[i]);
                                 DataObjectList& dolnew = newob->getList(pl[i]);
-                                for (unsigned int i=0;i< dolold.size(); i++)
-                                {
-                                    dolnew.append(internalCopy(dolold[i],true));
+                                for (unsigned int li=0;li< dolold.size(); li++)
+                                {    
+                                    // references are maintained to the old object if it
+                                    // is outside of the copy tree
+                                    if (pl[i].isReference()) 
+                                    {
+                                        // have to resolve references in a 2nd pass
+                                    }
+                                    else
+                                    {
+                                        dolnew.append(internalCopy(dolold[li],true));
+                                    }
                                 }
                             }
                             else 
                             {
                                 DataObjectPtr dob = dataObject->getDataObject(pl[i]);
-                                newob->setDataObject(pl[i],internalCopy(dob,true));
+                                if (pl[i].isReference()) 
+                                {
+                                    // have to resolve references in a 2nd pass
+                                }
+                                else
+                                {
+                                    newob->setDataObject(pl[i],internalCopy(dob,true));
+                                }
                             }
                         }
                     }
@@ -409,6 +424,131 @@ namespace sdo{
 
         return newob;
     }
+
+    void CopyHelper::resolveReferences(DataObjectPtr oldDO, DataObjectPtr newDO)
+    {
+        // Iterate through the properties to find references.
+        // If the reference is to a DataObject with the copied tree then we can
+        // set it to reference the DO in the new tree, otherwise it is left unset.
+
+        findReferences(oldDO, newDO, oldDO, newDO);
+
+    }
+
+    void CopyHelper::findReferences(DataObjectPtr oldDO, DataObjectPtr newDO,
+        DataObjectPtr obj, DataObjectPtr newObj)
+    {
+        if ( obj->getType().isSequencedType() )
+        {
+            Sequence* fromSequence = obj->getSequence();
+            int sequence_length = fromSequence->size();
+            
+            Sequence* toSequence = newObj->getSequence();
+            
+            for (int i=0;i < sequence_length; i++)
+            {
+                if (!fromSequence->isText(i) )
+                {
+                    const Property& seqProperty = fromSequence->getProperty(i); 
+                    SDOXMLString seqPropertyName = seqProperty.getName();
+                    const Type& seqPropertyType = seqProperty.getType();
+
+                    if (seqProperty.isReference())
+                    {  
+                        DataObjectPtr ref = findReference(oldDO, newDO, fromSequence->getDataObjectValue(i));
+                        if (ref)
+                        {
+                            if (seqProperty.isMany())
+                            {
+                                int index = fromSequence->getListIndex(i);
+                                newObj->getList(seqProperty).setDataObject(index, ref);
+                            }
+                            else
+                            {
+                                toSequence->setDataObjectValue(i, ref);
+                            }
+
+                        }
+                    }
+                    else if (seqPropertyType.isDataObjectType())
+                    {
+                        findReferences(oldDO, newDO, fromSequence->getDataObjectValue(i), toSequence->getDataObjectValue(i));
+                    }
+                }
+ 
+             } // for all elements in sequence
+ 
+        }       
+        else
+        {
+            PropertyList pl = obj->getInstanceProperties();
+            for (unsigned int i=0;i < pl.size(); i++)
+            {
+                if (!obj->isSet(pl[i]))
+                    continue;
+
+                if (!pl[i].getType().isDataObjectType())
+                    continue;
+
+                if (pl[i].isMany())
+                {
+                    DataObjectList& dolold = obj->getList(pl[i]);
+                    DataObjectList& dolnew = newObj->getList(pl[i]);
+                    for (unsigned int li=0;li< dolold.size(); li++)
+                    {
+                        if (pl[i].isReference())
+                        {
+                            DataObjectPtr ref = findReference(oldDO, newDO, dolold[li]);
+                            if (ref)
+                            {
+                                dolnew.setDataObject(li, ref);
+                            }
+                        }
+                        else
+                        {
+                            findReferences(oldDO, newDO, dolold[li], dolnew[li]);
+                        }
+                    }
+                }
+                else 
+                {
+                    if (pl[i].isReference())
+                    {
+                        DataObjectPtr ref = findReference(oldDO, newDO,  obj->getDataObject(pl[i]));
+                        if (ref)
+                        {
+                            newObj->setDataObject(pl[i], ref);
+                        }
+                    }
+                    else
+                    {
+                        findReferences(oldDO, newDO, obj->getDataObject(pl[i]), newObj->getDataObject(pl[i]));
+                    }
+                }
+            }
+        }
+    }
+
+    DataObjectPtr CopyHelper::findReference(DataObjectPtr oldDO, DataObjectPtr newDO, DataObjectPtr ref)
+    {
+        SDOString rootXPath = oldDO->objectToXPath();
+        SDOString refXPath = ref->objectToXPath();
+
+        DataObjectPtr newRef;
+        if (refXPath.find(refXPath) == 0)
+        {
+            SDOString relXPath = refXPath.substr(rootXPath.length());
+            if (relXPath == "")
+                newRef = newDO;
+            if (relXPath.find("/") == 0)
+                relXPath = relXPath.substr(1);
+            newRef = newDO->getDataObject(relXPath);
+        }
+
+        return newRef;
+    }
+
+
 }
 };
 

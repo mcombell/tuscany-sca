@@ -194,7 +194,15 @@ namespace commonj {
                             out << cc;
                             out << endl;
                             incr++;
-                            printDataObject(out, dol[j],incr);
+                            if (pl[i].isReference())
+                            {
+                                printTabs(out, incr);
+                                out << "Reference Value: " << dol[j]->objectToXPath() <<endl;
+                            }
+                            else
+                            {
+                                printDataObject(out, dol[j],incr);
+                            }
                             incr--;
                             out << endl;
                         }
@@ -217,7 +225,15 @@ namespace commonj {
                     else
                     {
                         incr++;
-                        printDataObject(out, dataObject->getDataObject(pl[i]),incr);
+                        if (pl[i].isReference())
+                        {
+                            printTabs(out, incr);
+                            out  << "Reference Value: " << dataObject->getDataObject(pl[i])->objectToXPath() <<endl;
+                        }
+                        else
+                        {
+                            printDataObject(out, dataObject->getDataObject(pl[i]),incr);
+                        }
                         incr--;
                     }
                 }

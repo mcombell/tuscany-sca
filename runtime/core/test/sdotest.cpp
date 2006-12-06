@@ -188,11 +188,13 @@ int  sdotest::jira546()
        DataObjectPtr project = root->createDataObject("project");
        project->setCString("id", "The TTP Project");
        DataObjectPtr str = project->createDataObject("string");
+       str->setDataObject("proj", project);
        str->setCString("value", "The Recursive Acronym Project");
        DataObjectPtr wp1 = project->createDataObject("packages");
        DataObjectPtr wp2 = project->createDataObject("packages");
        wp1->setCString("name", "Work Package 1");
        wp2->setCString("name", "Work Package 2");
+       project->setDataObject("wp", wp2);
        DataObjectPtr li1 = wp1->createDataObject("lineitems");
        DataObjectPtr li2 = wp1->createDataObject("lineitems");
        DataObjectPtr li3 = wp2->createDataObject("lineitems");
@@ -211,7 +213,6 @@ int  sdotest::jira546()
        str4->setCString("value", "String4");
 
        if (!transferto(root, dfp_right, false)) return 0;
-
        return 1;
     }
     catch (SDORuntimeException e)
@@ -9147,14 +9148,14 @@ int sdotest::cloneopentest()
       unsigned int j = 0;
       if ((i = myXSDHelper->getErrorCount()) > 0)
       {
-	 cout << "XSD Loading reported some errors:" << endl;
-	 for (j=0;j<i;j++)
-	 {
-	    const char *m = myXSDHelper->getErrorMessage(j);
-	    if (m != 0) cout << m;
-	    cout << endl;
-	    return 0;
-	 }
+     cout << "XSD Loading reported some errors:" << endl;
+     for (j=0;j<i;j++)
+     {
+        const char *m = myXSDHelper->getErrorMessage(j);
+        if (m != 0) cout << m;
+        cout << endl;
+        return 0;
+     }
       }
 
       /** 
@@ -9172,14 +9173,14 @@ int sdotest::cloneopentest()
        */
       if ((i = myXMLHelper->getErrorCount()) > 0)
       {
-	 cout << "XML Loading reported some errors:" << endl;
-	 for (j=0;j<i;j++)
-	 {
-	    const char *m = myXMLHelper->getErrorMessage(j);
-	    if (m != 0) cout << m;
-	    cout << endl;
-	    return 0;
-	 }
+     cout << "XML Loading reported some errors:" << endl;
+     for (j=0;j<i;j++)
+     {
+        const char *m = myXMLHelper->getErrorMessage(j);
+        if (m != 0) cout << m;
+        cout << endl;
+        return 0;
+     }
       }
 
       DataObjectPtr original = myXMLDocument->getRootDataObject();

@@ -134,10 +134,15 @@ void sdotest::populateFactory(DataFactoryPtr dfp)
    dfp->addType("Namespace", "Root");
    dfp->addPropertyToType("Namespace","Root","project",
                          "Namespace","Project", false, false, true);
+ dfp->addPropertyToType("Namespace","Project","wp",
+                         "Namespace","WorkPackage", false, false, false);
 
    dfp->addPropertyToType("Namespace","StringHolder","value",
                          "commonj.sdo","String", false, false, false);
    
+   dfp->addPropertyToType("Namespace","StringHolder","proj",
+                         "Namespace","Project", false, false, false);
+
    dfp->addPropertyToType("Namespace","Project","id",
                          "commonj.sdo","String", false, false, false);
     
@@ -526,7 +531,7 @@ int sdotest::testany(const char* xsd,
 
 
     unsigned int i,j;
-	int rc;
+    int rc;
 
     try {
 
@@ -1497,7 +1502,7 @@ int sdotest::tuscany963()
         xsh->defineFile("tuscany963.xsd");
         XMLHelperPtr myXMLHelper = HelperProvider::getXMLHelper(mdg);
         XMLDocumentPtr myXMLDocument = myXMLHelper->loadFile("tuscany963.xml");
-		myXMLHelper->save(myXMLDocument, "tuscany963.out.xml");
+        myXMLHelper->save(myXMLDocument, "tuscany963.out.xml");
         
 
         return comparefiles("tuscany963.out.xml" ,"tuscany963.out.xml.txt");

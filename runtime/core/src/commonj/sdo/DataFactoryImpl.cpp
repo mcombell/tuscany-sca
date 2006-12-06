@@ -98,7 +98,7 @@ DataFactoryImpl::~DataFactoryImpl()
         }
     }
 
-	rootElementName.erase();
+    rootElementName.erase();
 
 }
 
@@ -267,7 +267,7 @@ void DataFactoryImpl::addType(const SDOString& uri, const SDOString& inTypeName,
                                 bool isData,
                                 bool isFromList)
 {
-	addType(uri.c_str(), inTypeName.c_str(), isSeq, isOp, isAbs, isData, isFromList);
+    addType(uri.c_str(), inTypeName.c_str(), isSeq, isOp, isAbs, isData, isFromList);
 }
 
 // ===================================================================
@@ -724,7 +724,7 @@ const Type& DataFactoryImpl::getType(const char* uri, const char* inTypeName) co
 
 const Type& DataFactoryImpl::getType(const SDOString& uri, const SDOString& inTypeName) const
 {
-	return getType(uri.c_str(), inTypeName.c_str());
+    return getType(uri.c_str(), inTypeName.c_str());
 }
 
 // ===================================================================
@@ -778,16 +778,16 @@ void DataFactoryImpl::setBaseType( const char* typeuri,
 }
 
 void DataFactoryImpl::setBaseType(const SDOString& typeuri,
-								  const SDOString& typenam,
-								  const SDOString& baseuri,
-								  const SDOString& basename,
-								  bool isRestriction)
+                                  const SDOString& typenam,
+                                  const SDOString& baseuri,
+                                  const SDOString& basename,
+                                  bool isRestriction)
 {
-	setBaseType(typeuri.c_str(),
-		typenam.c_str(),
-		baseuri.c_str(),
-		basename.c_str(),
-		isRestriction);
+    setBaseType(typeuri.c_str(),
+        typenam.c_str(),
+        baseuri.c_str(),
+        basename.c_str(),
+        isRestriction);
 }
 
 
@@ -1302,7 +1302,7 @@ void DataFactoryImpl::setAlias(const SDOString& typeuri,
                               const SDOString& typenam,
                               const SDOString& alias)
 {
-	setAlias(typeuri.c_str(), typenam.c_str(), alias.c_str());
+    setAlias(typeuri.c_str(), typenam.c_str(), alias.c_str());
 }
 
 // ===================================================================
@@ -1325,7 +1325,7 @@ void DataFactoryImpl::setAlias(const SDOString& typeuri,
                               const SDOString& propname,
                               const SDOString& alias)
 {
-	setAlias(typeuri.c_str(), typenam.c_str(), propname.c_str(), alias.c_str());
+    setAlias(typeuri.c_str(), typenam.c_str(), propname.c_str(), alias.c_str());
 }
 
 // ===================================================================
@@ -1682,6 +1682,8 @@ bool DataFactoryImpl::checkType(const Type& t)
     {
         if (pl[i].getType().isDataObjectType())
         {
+            if (pl[i].isReference())
+                continue;
             if (!checkType(pl[i].getType())) return false;
         }
     }
@@ -2176,7 +2178,7 @@ bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factor
 
 bool DataFactoryImpl::generateInterface(const SDOString& fileroot, const SDOString& factoryname)
 {
-	return generateInterface(fileroot.c_str(), factoryname.c_str());
+    return generateInterface(fileroot.c_str(), factoryname.c_str());
 }
     
     std::ostream& DataFactoryImpl::printSelf(std::ostream &os)
