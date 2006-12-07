@@ -209,4 +209,13 @@ private:
 };
 };
 };
+
+#define ASSERT_WRITABLE(property,method)\
+      if ((property).isReadOnly())\
+      {\
+          SDOString stringBuffer = (property).getName();\
+          stringBuffer += "is read-only.";\
+          SDO_THROW_EXCEPTION(method, SDOUnsupportedOperationException, stringBuffer.c_str())\
+      }
+
 #endif
