@@ -233,6 +233,19 @@ void DataFactoryImpl::addType(const SDOString& uri, const SDOString& inTypeName,
     addType(uri.c_str(),inTypeName.c_str(),isSeq,isOp,isAbs,isData,false);
 }
 
+bool empty(const char* inTypeName)
+{
+    return inTypeName == 0 || strlen(inTypeName) == 0;
+}
+void assertTypeName(const char* inTypeName, const char* function)
+{
+    if (empty(inTypeName))
+    {
+        SDO_THROW_EXCEPTION(function,
+            SDOIllegalArgumentException, " Type has empty name");
+    }
+}
+
 void DataFactoryImpl::addType(const char* uri, const char* inTypeName, 
                                 bool isSeq,
                                 bool isOp,
@@ -240,13 +253,7 @@ void DataFactoryImpl::addType(const char* uri, const char* inTypeName,
                                 bool isData,
                                 bool isFromList)
 {
-
-
-    if (inTypeName == 0 || strlen(inTypeName) == 0)
-    {
-    SDO_THROW_EXCEPTION("DataFactory::addType",
-        SDOIllegalArgumentException, " Type has empty name");
-    }
+    assertTypeName(inTypeName, "DataFactory::addType");
 
     SDOString typeUri;
 
@@ -322,6 +329,17 @@ bool DataFactoryImpl::checkForValidChangeSummary(TypeImpl* t)
     return true;
 }
 
+const char*const addPropertyToType = "DataFactory::addPropertyToType";
+void assertNames(const char* inTypeName, const char* propname)
+{
+    assertTypeName(inTypeName, addPropertyToType);
+    if (empty(propname))
+    {
+        SDO_THROW_EXCEPTION(addPropertyToType,
+            SDOIllegalArgumentException, " Property has an empty name");
+    }
+}
+
 // ===================================================================
 // addPropertyToType - adds a Property to an existing Type
 // ===================================================================
@@ -332,6 +350,7 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
                                       const char* propTypeName,
                                       bool    many)
 {
+    assertNames(inTypeName, propname);
     SDOString fullPropTypeName = getFullTypeName(propTypeUri, propTypeName);
     TYPES_MAP::iterator typeIter;
     typeIter = types.find(fullPropTypeName);
@@ -366,7 +385,7 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
                                       bool    rdonly,
                                       bool cont)
 {
-
+    assertNames(inTypeName, propname);
 
     TYPES_MAP::iterator typeIter, typeIter2;
     
