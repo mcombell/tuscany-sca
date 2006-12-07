@@ -1255,15 +1255,7 @@ namespace commonj
         
         XSDPropertyInfo* SDOXMLWriter::getPropertyInfo(const Type& type, const Property& property)
         {
-            if (dataFactory)
-            {
-                return (XSDPropertyInfo*)dataFactory->getDASValue(type, property.getName(), "XMLDAS::PropertyInfo");
-            }
-            else
-            {
-                return (XSDPropertyInfo*)((DASProperty*)&property)->getDASValue("XMLDAS::PropertyInfo");
-            }
-            
+            return (XSDPropertyInfo*)((DASProperty*)&property)->getDASValue("XMLDAS::PropertyInfo");       
         }
 
         void SDOXMLWriter::writeReference(
