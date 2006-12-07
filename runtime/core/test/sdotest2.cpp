@@ -418,10 +418,11 @@ int sdotest::compatiblefactory()
 
     if (!transferto(root,f2, false)) return 0;
     if (!transferto(root,f3, true)) return 0;
-    if (!transferto(root,f4, true)) return 0;
-    if (!transferto(root,f5, true)) return 0;
-    if (!transferto(root,f6, true)) return 0;
-    if (!transferto(root,f7, true)) return 0;
+    // Following 4 tests do not now cause an error
+    if (!transferto(root,f4, false)) return 0; 
+    if (!transferto(root,f5, false)) return 0;
+    if (!transferto(root,f6, false)) return 0;
+    if (!transferto(root,f7, false)) return 0;
 
     // finally, lets move one which has a parent and cant be moved.
 
@@ -1512,6 +1513,34 @@ int sdotest::tuscany963()
     catch (SDORuntimeException e)
     {
         cout << "Exception in tuscany963" << e << endl;
+        return 0;
+    }
+}
+
+int sdotest::upandatom()
+{
+
+
+    try {
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+        DataFactoryPtr df  = DataFactory::getDataFactory();
+        
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+        xsh->defineFile("Atom/Atom1.0.xsd");
+
+        XSDHelperPtr xh = HelperProvider::getXSDHelper(df); 
+        xh->defineFile("Atom/Atom1.0.xsd");
+
+        DataObjectPtr block = mdg->create("http://www.w3.org/1999/xhtml", "Block");
+        DataObjectPtr div = df->create("http://www.w3.org/1999/xhtml", "div");
+
+        block->setDataObject("div", div);
+        return 1;
+        
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in upandatom" << e << endl;
         return 0;
     }
 }

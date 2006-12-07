@@ -280,13 +280,6 @@ void DataObjectListImpl::insert (unsigned int index, DataObjectPtr d)
 
         if (d->getDataFactory() == theFactory) return;
 
-        // temporary experiment with allowing data objects
-        // to move from factory to factory if the type is 
-        // nominally present, and the type systems match
-
-        DataFactoryImpl* f = (DataFactoryImpl*)theFactory;
-
-
         if (d->getContainer() != 0)
         {
             std::string msg("Insertion of object into list from another factory is only allowed if the parent is null: ");
@@ -304,31 +297,6 @@ void DataObjectListImpl::insert (unsigned int index, DataObjectPtr d)
             SDO_THROW_EXCEPTION("checkFactory", SDOInvalidConversionException,
             msg.c_str());
         }
-
-        if (f->isCompatible(d->getDataFactory(),d))
-        {
-            d->setDataFactory(theFactory);
-            // we will also need to transfer any children - assuming they
-            // are ok in the new factory!!
-            d->transferChildren(d,theFactory);
-            return;
-        }
-
-        std::string msg("Insertion into list from incompatible factory:");
-        
-        const Type& t = d->getType();
-        msg += t.getURI();
-        msg += "#";
-        msg += t.getName();
-        msg += " into property  ";
-        msg += container->getProperty(pindex).getName();
-        msg += " of type ";
-        msg += typeURI;
-        msg += "#";
-        msg += typeName;
-        SDO_THROW_EXCEPTION("checkFactory", SDOInvalidConversionException,
-            msg.c_str());
-
     }
 
 

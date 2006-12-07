@@ -1651,69 +1651,6 @@ DASValue* DataFactoryImpl::getDASValue(
     return getDASValue(typeuri.c_str(), typenam.c_str(), propertyName.c_str(), name.c_str());
 }
 
-bool DataFactoryImpl::compareTypes(const TypeImpl* t1, const Type& t2)
-{
-    PropertyList pl = t2.getProperties();
-    for (unsigned int i=0;i<pl.size();i++)
-    {
-        PropertyImpl* p = t1->getPropertyImpl(i);
-        if (p == 0) return false;
-        if (p->isMany() != pl[i].isMany()) return false;
-        if (p->isContainment() != pl[i].isContainment()) return false;
-        if (strcmp(   p->getType().getURI(),
-                   pl[i].getType().getURI())) return false;
-        if (strcmp(   p->getType().getName(),
-                   pl[i].getType().getName())) return false;
-    }
-    return true;
-
-}
-bool DataFactoryImpl::checkType(const Type& t)
-{
-    const TypeImpl* t2 = findTypeImpl(t.getURI(),
-                                     t.getName());
- 
-    if (t2 == 0) return false;
- 
-    if (!compareTypes(t2,t)) return false;
-
-    PropertyList pl = t.getProperties();
-    for (unsigned int i=0;i<pl.size();i++)
-    {
-        if (pl[i].getType().isDataObjectType())
-        {
-            if (pl[i].isReference())
-                continue;
-            if (!checkType(pl[i].getType())) return false;
-        }
-    }
-    return true;
-}
- 
-
-// only checks the tree dirctly descended from this object if the
-// object is specified, otherwise validates the whole factory
-
-bool DataFactoryImpl::isCompatible(DataFactory* df, DataObject* d)
-{
-    if (d == 0)
-    {
-        TypeList tl = df->getTypes();
-        for (unsigned int j=0;j<tl.size();j++)
-        {
-            const TypeImpl* t = findTypeImpl(tl[j].getURI(),
-                                        tl[j].getName());
- 
-            if (t == 0) return false;
-            if (!compareTypes(t,tl[j]))return false;
-        }
-        return true;
-    }
-    else
-    {
-        return checkType(d->getType());
-    }
-}
 
 bool DataFactoryImpl::generateInterface(const char* fileroot, const char* factoryname)
 {

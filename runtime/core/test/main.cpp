@@ -46,6 +46,8 @@ int main (int argc, char** argv)
     int totaltests=0;
     int value = 0;
 
+    // TEST ( sdotest::upandatom() );
+
     /* TEST ( sdotest::xhtml1() ); */
     TEST ( sdotest::scopetest() );
     TEST ( sdotest::xsdtosdo() );

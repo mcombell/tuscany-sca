@@ -591,7 +591,6 @@ class DataObjectImpl : public DataObject
     virtual const PropertyImpl* defineList(const char* propname);
     virtual void  undefineProperty(unsigned int index);
     virtual const TypeImpl& getTypeImpl();
-    virtual void transferChildren(DataObject* d, DataFactory* f);
     virtual void setDataFactory(DataFactory *df);
 
     virtual std::ostream& printSelf(std::ostream &os);
