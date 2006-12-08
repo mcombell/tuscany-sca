@@ -691,8 +691,8 @@ private:
     typedef std::vector<TypeImpl*> TYPES_VECTOR;
     TYPES_VECTOR cstypes;
     
-    SDOString getFullTypeName(const SDOString& uri, const SDOString& inTypeName) const;
-    SDOString getAliasTypeName(const SDOString& uri, const SDOString& inTypeName) const;
+    static SDOString& getFullTypeName(SDOString& stringBuffer, const SDOString& uri, const SDOString& inTypeName);
+    static SDOString& getAliasTypeName(SDOString& stringBuffer, const SDOString& uri, const SDOString& inTypeName);
 
     void        copyTypes(const DataFactoryImpl& inmdg);
 };

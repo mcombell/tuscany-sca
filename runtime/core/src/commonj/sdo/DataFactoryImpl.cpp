@@ -157,7 +157,7 @@ void DataFactoryImpl::copyTypes(const DataFactoryImpl& inmdg)
         addType((typeIter->second)->getURI(), (typeIter->second)->getName());
 
         // re-find the type we just added.
-        fullTypeName = getFullTypeName(
+        getFullTypeName(fullTypeName,
                 (typeIter->second)->getURI(), 
                 (typeIter->second)->getName());
         typeIter2 = types.find(fullTypeName);
@@ -261,7 +261,8 @@ void DataFactoryImpl::addType(const char* uri, const char* inTypeName,
         typeUri = uri;
     if (findType(typeUri, inTypeName) == 0) 
     {
-        SDOString fullTypeName = getFullTypeName(uri, inTypeName);
+        SDOString fullTypeName;
+		getFullTypeName(fullTypeName, uri, inTypeName);
         types[fullTypeName] = new TypeImpl(uri, inTypeName, isSeq, isOp, isAbs, isData, isFromList);
         resolvePending[fullTypeName] = types[fullTypeName];
     }
@@ -351,7 +352,9 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
                                       bool    many)
 {
     assertNames(inTypeName, propname);
-    SDOString fullPropTypeName = getFullTypeName(propTypeUri, propTypeName);
+    SDOString fullPropTypeName;
+    getFullTypeName(fullPropTypeName, propTypeUri, propTypeName);
+
     TYPES_MAP::iterator typeIter;
     typeIter = types.find(fullPropTypeName);
     if (typeIter != types.end())
@@ -393,7 +396,8 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
     //    << ") to type " << uri << "#" << inTypeName << endl;
 
 
-    SDOString fullTypeName = getFullTypeName(uri, inTypeName);
+    SDOString fullTypeName;
+	getFullTypeName(fullTypeName, uri, inTypeName);
     typeIter = types.find(fullTypeName);
 
     if(typeIter == types.end())
@@ -423,7 +427,7 @@ void DataFactoryImpl::addPropertyToType(const char* uri,
         SDOIllegalArgumentException, msg.c_str());
     }
 
-    fullTypeName = getFullTypeName(propTypeUri, propTypeName);
+    getFullTypeName(fullTypeName, propTypeUri, propTypeName);
     typeIter2 = types.find(fullTypeName);
     
     if (typeIter2 == types.end())
@@ -707,17 +711,22 @@ void DataFactoryImpl::addPropertyToType(const Type& tp,
 // ===================================================================
 // getFullTypeName - return the name used as a key in the types map
 // ===================================================================
-SDOString DataFactoryImpl::getFullTypeName(const SDOString& uri, const SDOString& inTypeName) const
+SDOString& DataFactoryImpl::getFullTypeName(SDOString& stringBuffer, const SDOString& uri, const SDOString& inTypeName)
 {
-  return uri + "#" + inTypeName;
+   stringBuffer = uri;
+   stringBuffer += "#";
+   stringBuffer += inTypeName;
+   return stringBuffer;
 }
 
 // ===================================================================
 // getAliasTypeName - return the name used as a key in the types map
 // ===================================================================
-SDOString DataFactoryImpl::getAliasTypeName(const SDOString& uri, const SDOString& inTypeName) const
+SDOString& DataFactoryImpl::getAliasTypeName(SDOString& stringBuffer, const SDOString& uri, const SDOString& inTypeName)
 {
-  return "ALIAS::" + getFullTypeName(uri, inTypeName);
+  getFullTypeName(stringBuffer, uri, inTypeName);
+  stringBuffer.insert(0, "ALIAS::");
+  return stringBuffer;
 }
 
 // ===================================================================
@@ -780,7 +789,8 @@ void DataFactoryImpl::setBaseType( const char* typeuri,
 
     TYPES_MAP::const_iterator typeIter;
 
-    SDOString fullTypeName = getFullTypeName(typeuri, typenam);
+    SDOString fullTypeName;
+	getFullTypeName(fullTypeName, typeuri, typenam);
     typeIter = types.find(fullTypeName);
     
     if(typeIter == types.end())
@@ -1276,7 +1286,8 @@ const Type* DataFactoryImpl::findType(const SDOString uri, const SDOString inTyp
 
 const TypeImpl* DataFactoryImpl::findTypeImpl(const SDOString& uri, const SDOString& inTypeName) const
 {
-    SDOString fullTypeName = getFullTypeName(uri, inTypeName);
+    SDOString fullTypeName;
+	getFullTypeName(fullTypeName, uri, inTypeName);
     TYPES_MAP::const_iterator typeIter;
     typeIter = types.find(fullTypeName);
     if(typeIter != types.end())
@@ -1286,7 +1297,7 @@ const TypeImpl* DataFactoryImpl::findTypeImpl(const SDOString& uri, const SDOStr
     else
     {
         // try alias names
-        fullTypeName = getAliasTypeName(uri, inTypeName);
+        getAliasTypeName(fullTypeName, uri, inTypeName);
         typeIter = types.find(fullTypeName);
         if(typeIter != types.end())
         {
@@ -1305,13 +1316,14 @@ void DataFactoryImpl::setAlias(const char* typeuri,
                               const char* alias)
 {
 
-    SDOString fullTypeName = getFullTypeName(typeuri, typenam);
+    SDOString fullTypeName;
+	getFullTypeName(fullTypeName, typeuri, typenam);
     TYPES_MAP::iterator typeIter;
     typeIter = types.find(fullTypeName);
     if(typeIter != types.end())
     {
         (typeIter->second)->setAlias(alias);
-        fullTypeName = getAliasTypeName(typeuri, alias);
+        getAliasTypeName(fullTypeName, typeuri, alias);
         types[fullTypeName] = typeIter->second;
     }
 
