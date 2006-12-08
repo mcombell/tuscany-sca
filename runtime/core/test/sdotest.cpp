@@ -2392,7 +2392,7 @@ int sdotest::maintest()
 
         mdg->addPropertyToType(td,"name", ts);
         
-        mdg->addPropertyToType(td,"id", ti);
+        mdg->addPropertyToType(td,"id", ti, false, true, false);
 
         mdg->addPropertyToType(td,"manager", tm);
     
@@ -2542,6 +2542,16 @@ int sdotest::maintest()
 
         DataObjectPtr dep1 = dor->createDataObject("departments");
         dep1->setCString("name","Developement");
+
+        try
+        {
+            dep1->setInteger("id", 1);
+            if (!silent)cout << "WRONG read-only Property shouldn't have allowed setting" << endl;
+            fclose(f);
+            return 0;
+        }
+        catch (SDOUnsupportedOperationException e)
+        {}
 
         DataObjectPtr dep2= dor->createDataObject("departments");
         dep2->setCString("name","Marketing");
