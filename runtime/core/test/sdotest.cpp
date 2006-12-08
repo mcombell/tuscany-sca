@@ -1960,6 +1960,15 @@ int sdotest::nulltest()
  
     mdg->addType("myspace","NullTest",true, false); // sequenced
     mdg->addType("myspace","AnObject");
+
+    try
+    {
+        mdg->addType("myspace", 0);
+        if (!silent) cout << "WRONG  - SDOIllegalArgumentException should have been thrown for null Type name" << endl;
+        return 0;
+    }
+    catch (SDOIllegalArgumentException e)
+    {}
     
     const Type& tm = mdg->getType("myspace", "NullTest");
     const Type& to = mdg->getType("myspace", "AnObject");
@@ -1977,6 +1986,15 @@ int sdotest::nulltest()
     mdg->addPropertyToType(tm,"bytes",       "commonj.sdo","Bytes");
     mdg->addPropertyToType(tm,"object",       "myspace","AnObject");
 
+    try
+    {
+        mdg->addPropertyToType(tm, 0, "myspace", "AnObject");
+        if (!silent) cout << "WRONG  - SDOIllegalArgumentException should have been thrown for null Property name" << endl;
+        return 0;
+    }
+    catch (SDOIllegalArgumentException e)
+    {}
+    
 
     mdg->addPropertyToType(tm,"cs",       "commonj.sdo","ChangeSummary");
 
