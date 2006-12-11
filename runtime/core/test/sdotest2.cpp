@@ -1517,6 +1517,33 @@ int sdotest::tuscany963()
     }
 }
 
+int sdotest::tuscany562()
+{
+    DataFactoryPtr mdg  = DataFactory::getDataFactory();
+    mdg->addType("myspace", "Base");
+    mdg->addType("myspace", "Extended");
+    const Type &base = mdg->getType("myspace", "Base"),
+               &extended = mdg->getType("myspace", "Extended");
+    mdg->setBaseType(extended, base);
+    try
+    {
+        mdg->setBaseType(extended, extended);
+        cout << "Exception should have been thrown in tuscany562 (1)" << endl;
+        return 0;
+    }
+    catch (SDOIllegalArgumentException e)
+    {}
+    try
+    {
+        mdg->setBaseType(base, extended);
+        cout << "Exception should have been thrown in tuscany562 (2)" << endl;
+        return 0;
+    }
+    catch (SDOIllegalArgumentException e)
+    {}
+    return 1;
+}
+
 int sdotest::upandatom()
 {
 

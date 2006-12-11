@@ -284,6 +284,7 @@ private:
     TypeImpl();
     TypeImpl(const TypeImpl& t);
 
+    bool isBaseTypeOf(const Type* type)const;
 
     char* name;
     char* typeURI;

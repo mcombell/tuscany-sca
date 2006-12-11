@@ -201,5 +201,6 @@ class sdotest {
         static int cdatatest();
         static int cloneopentest();
         static int tuscany963();
+        static int tuscany562();
         static int upandatom();
 };

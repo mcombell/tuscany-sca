@@ -180,6 +180,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::cdatatest() );
 	TEST (  sdotest::cloneopentest() );
 	TEST (  sdotest::tuscany963() );
+	TEST (  sdotest::tuscany562() );
 
     cout << "Total tests:" << totaltests << " Tests passed:" << testspassed << endl;
     return testspassed - totaltests;

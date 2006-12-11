@@ -233,12 +233,26 @@ namespace sdo{
           isOpen = set;
     }
 
+    bool TypeImpl::isBaseTypeOf(const Type* type) const
+    { 
+        return type 
+            && (this == type || isBaseTypeOf(type->getBaseType())); 
+    } 
+
     ///////////////////////////////////////////////////////////////////////////
     // Sets a data type as open.
     ///////////////////////////////////////////////////////////////////////////
 
     void TypeImpl::setBaseType(const Type* bt, bool isRestriction) 
     {
+        if (isBaseTypeOf(bt))
+        {
+            SDOString stringBuffer = getName();
+            stringBuffer += "\tis base type of\t";
+            stringBuffer += bt->getName();
+            SDO_THROW_EXCEPTION(setBaseType, SDOIllegalArgumentException, stringBuffer.c_str())
+        }
+
         baseType = (TypeImpl*)bt;
         brestriction = isRestriction;
         
