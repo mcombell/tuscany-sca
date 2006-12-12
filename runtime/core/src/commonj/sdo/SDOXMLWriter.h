@@ -97,17 +97,14 @@ namespace commonj
              * it detects CDATA sections before wrting out element contents
              */
             int writeXMLElement(xmlTextWriterPtr writer, 
-                                const xmlChar *name, 
-                                const char *content);
+                                const SDOXMLString& name, 
+                                const SDOXMLString& content);
 
             SchemaInfo* schemaInfo;
             DataFactoryPtr    dataFactory;
 
             XSDPropertyInfo* getPropertyInfo(const Type& type, const Property& property);
             
-            //std::stack<SDOXMLString>    namespaceUriStack;
-            //SAX2Namespaces namespaces;
-            //std::stack<SAX2Namespaces>    namespaceStack;
             int spacescount;
             std::map<SDOXMLString,SDOXMLString> namespaceMap;
             SDOXMLString tnsURI;
@@ -118,8 +115,6 @@ namespace commonj
                 const Property& property,
                 bool isElement,
                 DataObjectPtr refferedToObject = 0);
-
-            void writeXmlnsXsi();
 
         };
     } // End - namespace sdo
