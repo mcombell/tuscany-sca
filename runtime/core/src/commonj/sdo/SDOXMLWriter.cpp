@@ -950,7 +950,7 @@ namespace commonj
                                         if (typeImpl.getPropertyImpl(seqPropName) == 0)
                                         {
                                             xsiTypeNeeded = true;
-                                            seqPropTypeUri = "";
+                                  //          seqPropTypeUri = "";
                                         }
                                     }
                                     writeDO(doValue, seqPropTypeUri, seqPropName, xsiTypeNeeded);
@@ -1012,7 +1012,7 @@ namespace commonj
                             if (typeImpl.getPropertyImpl(pl[i].getName()) == 0)
                             {
                                 xsiTypeNeeded = true;
-                                propertyTypeURI = "";
+                                //propertyTypeURI = "";
                             }
                         }
 
