@@ -111,6 +111,7 @@ namespace commonj
            
 
             void writeReference(
+                const SDOXMLString& propertyName,
                 DataObjectPtr dataObject, 
                 const Property& property,
                 bool isElement,

@@ -865,7 +865,7 @@ namespace commonj
                         // Handle non-containment reference to DataObject
                         if (pl[i].isReference())
                         {
-                            writeReference(dataObject, pl[i], false);
+                            writeReference(propertyName, dataObject, pl[i], false);
                         }
                     }
                 }
@@ -946,7 +946,7 @@ namespace commonj
                                 // Handle non-containment reference to DataObject
                                 if (seqProp.isReference())
                                 {
-                                    writeReference(dataObject, seqProp, true, doValue);
+                                    writeReference(seqPropName, dataObject, seqProp, true, doValue);
                                 }
                                 else
                                 {
@@ -1036,7 +1036,7 @@ namespace commonj
                                 // Handle non-containment reference to DataObject
                                 if (pl[i].isReference() )
                                 {
-                                    writeReference(dataObject, pl[i], true, dol[j]);
+                                    writeReference(propertyName, dataObject, pl[i], true, dol[j]);
                                 }
                                 else
                                 {    
@@ -1056,7 +1056,7 @@ namespace commonj
                             if (pl[i].isReference())
                             {
                                 if (pi)
-                                    writeReference(dataObject, pl[i], true);
+                                    writeReference(propertyName, dataObject, pl[i], true);
                             }
                             else
                             {
@@ -1125,7 +1125,9 @@ namespace commonj
             return (XSDPropertyInfo*)((DASProperty*)&property)->getDASValue("XMLDAS::PropertyInfo");       
         }
 
+
         void SDOXMLWriter::writeReference(
+            const SDOXMLString& propertyName,
             DataObjectPtr dataObject, 
             const Property& property,
             bool isElement,
@@ -1162,13 +1164,13 @@ namespace commonj
                 {
                     // Set the IDREF value
                     xmlTextWriterWriteElement(writer, 
-                        SDOXMLString(property.getName()), refValue);
+                        propertyName, refValue);
                 }
                 else
                 {
                     // Set the IDREF value
                     xmlTextWriterWriteAttribute(writer, 
-                        SDOXMLString(property.getName()), refValue);
+                        propertyName, refValue);
                 }
             }
         }    
