@@ -779,6 +779,7 @@ namespace commonj
                 thisProperty.name,
                 thisProperty.localname);
 
+            thisProperty.namespaceURI = schemaInfo.getTargetNamespaceURI();
             
             setType(thisProperty, attributes, namespaces);
 
@@ -850,7 +851,9 @@ namespace commonj
             setName(attributes,
                 thisProperty.name,
                 thisProperty.localname);
-            
+
+            thisProperty.namespaceURI = schemaInfo.getTargetNamespaceURI();
+
             setType(thisProperty, attributes, namespaces);
             
             setCurrentProperty(thisProperty);                    

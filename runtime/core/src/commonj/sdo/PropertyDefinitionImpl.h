@@ -60,6 +60,7 @@ namespace commonj
 
             SDOXMLString name;
             SDOXMLString localname;
+            SDOXMLString namespaceURI;
             
             SDOXMLString typeUri;
             SDOXMLString typeName;

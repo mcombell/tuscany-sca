@@ -910,15 +910,24 @@ namespace commonj
                         const Property& seqProp = sequence->getProperty(i);
                         SDOXMLString seqPropName = seqProp.getName();
                         const Type& seqPropType = seqProp.getType();
+                        SDOXMLString seqPropURI;
 
-						// Do not write attributes as members of the sequence
+                        // Do not write attributes as members of the sequence
 						XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, seqProp);
-						PropertyDefinitionImpl propdef;
-						if (pi && !(pi->getPropertyDefinition().isElement))
-						{
-							continue;
-						}
+                        PropertyDefinitionImpl propdef;
+                        if (pi)
+                        {
+                            propdef = pi->getPropertyDefinition();
+                            if (!(propdef.isElement))
+                            {
+                                continue;
+                            }
 
+                            seqPropName = propdef.localname;
+                            seqPropURI = propdef.namespaceURI;
+                        }
+
+	
                         if (seqPropType.isDataObjectType())
                         {                                
                             DataObjectPtr doValue;
@@ -942,18 +951,18 @@ namespace commonj
                                 else
                                 {
                                     // If property is an undeclared propery of an open type
-                                    // we write xsi:type information but not the element uri
+                                    // we write xsi:type
                                     bool xsiTypeNeeded = false;
-                                    SDOXMLString seqPropTypeUri = seqPropType.getURI();
                                     if (isOpen)
                                     {
                                         if (typeImpl.getPropertyImpl(seqPropName) == 0)
                                         {
                                             xsiTypeNeeded = true;
-                                  //          seqPropTypeUri = "";
                                         }
                                     }
-                                    writeDO(doValue, seqPropTypeUri, seqPropName, xsiTypeNeeded);
+                                    if (pi && !(pi->getPropertyDefinition().isElement))
+	
+                                    writeDO(doValue, seqPropURI, seqPropName, xsiTypeNeeded);
                                 }
                             }
                         } // end DataObject
@@ -992,6 +1001,7 @@ namespace commonj
                     if (dataObject->isSet(pl[i]))
                     {
                         SDOXMLString propertyName(pl[i].getName());
+                        SDOXMLString propertyTypeURI;
 
                         XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, pl[i]);
                         if (pi)
@@ -999,10 +1009,10 @@ namespace commonj
                             if (!pi->getPropertyDefinition().isElement)
                                 continue;
                             propertyName = pi->getPropertyDefinition().localname;
+                            propertyTypeURI = pi->getPropertyDefinition().namespaceURI;
                         }
                         
                         const Type& propertyType = pl[i].getType();
-                        SDOXMLString propertyTypeURI = propertyType.getURI();
                         bool xsiTypeNeeded = false;
 
                         // If property is an undeclared propery of an open type
