@@ -45,7 +45,14 @@ namespace sdo{
 
     const char* SDODate::ascTime(void) const
     {
-        return asctime(localtime(&value));
+		struct tm tmp_tm;
+
+#if defined(WIN32)  || defined (_WINDOWS)
+		localtime_s(&tmp_tm, &value);
+#else
+		localtime_r(&value, &tmp_tm);
+#endif
+        return asctime(&tmp_tm);
     }
 
 };
