@@ -653,6 +653,7 @@ namespace commonj
             SDOXMLString s_true("true");
             SDOXMLString s_xsiNS("http://www.w3.org/2001/XMLSchema-instance");
             SDOXMLString s_xmlns("xmlns");
+            SDOXMLString s_commonjsdo("commonj.sdo");
 
             int rc;
 
@@ -671,9 +672,16 @@ namespace commonj
             // First we need to write the startElement                      
             if (isRoot)
             {
-                tnsURI = elementURI;
+                if (elementURI.equals(s_commonjsdo))
+                {
+                    tnsURI = "";
+                }
+                else
+                {
+                    tnsURI = elementURI;
+                }
 
-                if (elementURI.equals("")) {
+                if (tnsURI.equals("")) {
                     rc = xmlTextWriterStartElementNS(writer, NULL, elementName, NULL);
                 }
                 else
@@ -699,7 +707,10 @@ namespace commonj
                 // Write the startElement for non-root object
                 SDOXMLString theName=elementName;
 
-                if (!elementURI.isNull() && !elementURI.equals(tnsURI) && !elementURI.equals(""))
+                if (!elementURI.isNull() 
+                    && !elementURI.equals("")
+                    && !elementURI.equals(s_commonjsdo)
+                    && !elementURI.equals(tnsURI))
                 {
                     // Locate the namespace prefix
                     std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
