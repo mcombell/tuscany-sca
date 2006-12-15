@@ -971,7 +971,6 @@ namespace commonj
                                             xsiTypeNeeded = true;
                                         }
                                     }
-                                    if (pi && !(pi->getPropertyDefinition().isElement))
 	
                                     writeDO(doValue, seqPropURI, seqPropName, xsiTypeNeeded);
                                 }
