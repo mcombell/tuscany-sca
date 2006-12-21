@@ -32,6 +32,7 @@ using namespace::std;
 #include "commonj/sdo/SDORuntimeException.h"
 #include "commonj/sdo/XMLQName.h"
 #include "commonj/sdo/DataObjectImpl.h"
+#include "commonj/sdo/DataFactoryImpl.h"
 #include "commonj/sdo/PropertySetting.h"
 
 namespace commonj
@@ -39,7 +40,14 @@ namespace commonj
     namespace sdo
     {
         
-        
+        const SDOXMLString SDOXMLWriter::s_xsi("xsi");
+        const SDOXMLString SDOXMLWriter::s_type("type");
+        const SDOXMLString SDOXMLWriter::s_nil("nil");
+        const SDOXMLString SDOXMLWriter::s_true("true");
+        const SDOXMLString SDOXMLWriter::s_xsiNS("http://www.w3.org/2001/XMLSchema-instance");
+        const SDOXMLString SDOXMLWriter::s_xmlns("xmlns");
+        const SDOXMLString SDOXMLWriter::s_commonjsdo("commonj.sdo");
+
         
         
         SDOXMLWriter::SDOXMLWriter(
@@ -607,7 +615,7 @@ namespace commonj
                     }
                     else
                     {                    
-                        XSDPropertyInfo* pi = getPropertyInfo(dob->getType(), pl[i]);
+                        XSDPropertyInfo* pi = getPropertyInfo(pl[i]);
                         if (pi)
                         {
                             PropertyDefinitionImpl propdef;
@@ -618,13 +626,19 @@ namespace commonj
                             SDOXMLString propertyValue = (dob->getCString(pl[i]));
                             XMLQName qname(propertyValue);
                             
-                            it = namespaceMap.find(qname.getURI());
+                            SDOXMLString qnameuri = qname.getURI(); 
+                            if (qnameuri.equals("") || qnameuri.isNull() )
+                            {
+                                continue;
+                            }
+
+                            it = namespaceMap.find(qnameuri);
                             if (it == namespaceMap.end())
                             {
                                 char buf[20];
                                 sprintf(buf,"%d",++spacescount);
                                 SDOXMLString s = SDOXMLString("tns") + buf;
-                                namespaceMap.insert(make_pair(qname.getURI(),s));
+                                namespaceMap.insert(make_pair(qnameuri,s));
                             }
                         }
                     }
@@ -646,14 +660,6 @@ namespace commonj
             bool writeXSIType,
             bool isRoot)
         {
-
-            SDOXMLString s_xsi("xsi");
-            SDOXMLString s_type("type");
-            SDOXMLString s_nil("nil");
-            SDOXMLString s_true("true");
-            SDOXMLString s_xsiNS("http://www.w3.org/2001/XMLSchema-instance");
-            SDOXMLString s_xmlns("xmlns");
-            SDOXMLString s_commonjsdo("commonj.sdo");
 
             int rc;
 
@@ -692,7 +698,7 @@ namespace commonj
                     SDO_THROW_EXCEPTION("writeDO", SDOXMLParserException, "xmlTextWriterStartElementNS failed");
                 }
 
-                // For the root element we wil now gather all the namespace information
+                // For the root element we will now gather all the namespace information
                 namespaceMap[elementURI] = SDOXMLString("tns");
 
                 // We always add the xsi namespace. TODO we should omit if we can
@@ -825,7 +831,7 @@ namespace commonj
                 if (dataObject->isSet(pl[i]))
                 {                    
                     SDOXMLString propertyName(pl[i].getName());
-                    XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, pl[i]);
+                    XSDPropertyInfo* pi = getPropertyInfo(pl[i]);
                     PropertyDefinitionImpl propdef;
                     if (pi)
                     {
@@ -919,12 +925,15 @@ namespace commonj
                         } // end TextType
 
                         const Property& seqProp = sequence->getProperty(i);
-                        SDOXMLString seqPropName = seqProp.getName();
                         const Type& seqPropType = seqProp.getType();
+                        SDOXMLString seqPropName;
                         SDOXMLString seqPropURI;
 
+                        // This call sets the property name and type URI and returns if xsi:type= is required
+                        bool xsiTypeNeeded = determineNamespace(dataObject, seqProp, seqPropURI, seqPropName);
+
                         // Do not write attributes as members of the sequence
-						XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, seqProp);
+						XSDPropertyInfo* pi = getPropertyInfo(seqProp);
                         PropertyDefinitionImpl propdef;
                         if (pi)
                         {
@@ -933,24 +942,12 @@ namespace commonj
                             {
                                 continue;
                             }
-
-                            seqPropName = propdef.localname;
-                            seqPropURI = propdef.namespaceURI;
                         }
 
 	
                         if (seqPropType.isDataObjectType())
                         {                                
-                            DataObjectPtr doValue;
-                            if (seqProp.isMany())
-                            {
-                                int index = sequence->getListIndex(i);
-                                doValue = dataObject->getList(seqProp)[index];
-                            }
-                            else
-                            {
-                                doValue = dataObject->getDataObject(seqProp);
-                            }
+                            DataObjectPtr doValue = sequence->getDataObjectValue(i);
 
                             if (doValue)
                             {
@@ -1010,29 +1007,21 @@ namespace commonj
                 {
                     if (dataObject->isSet(pl[i]))
                     {
-                        SDOXMLString propertyName(pl[i].getName());
+                        SDOXMLString propertyName;
                         SDOXMLString propertyTypeURI;
 
-                        XSDPropertyInfo* pi = getPropertyInfo(dataObjectType, pl[i]);
+                        // This call sets the property name and type URI and returns if xsi:type= is required
+                        bool xsiTypeNeeded = determineNamespace(dataObject, pl[i], propertyTypeURI, propertyName);
+                       
+                        const Type& propertyType = pl[i].getType();
+						XSDPropertyInfo* pi = getPropertyInfo(pl[i]);
+                        PropertyDefinitionImpl propdef;
                         if (pi)
                         {
-                            if (!pi->getPropertyDefinition().isElement)
-                                continue;
-                            propertyName = pi->getPropertyDefinition().localname;
-                            propertyTypeURI = pi->getPropertyDefinition().namespaceURI;
-                        }
-                        
-                        const Type& propertyType = pl[i].getType();
-                        bool xsiTypeNeeded = false;
-
-                        // If property is an undeclared propery of an open type
-                        // we write xsi:type information but not the element uri
-                        if (isOpen)
-                        {
-                            if (typeImpl.getPropertyImpl(pl[i].getName()) == 0)
+                            propdef = pi->getPropertyDefinition();
+                            if (!(propdef.isElement))
                             {
-                                xsiTypeNeeded = true;
-                                //propertyTypeURI = "";
+                                continue;
                             }
                         }
 
@@ -1130,7 +1119,7 @@ namespace commonj
 
 
         
-        XSDPropertyInfo* SDOXMLWriter::getPropertyInfo(const Type& type, const Property& property)
+        XSDPropertyInfo* SDOXMLWriter::getPropertyInfo(const Property& property)
         {
             return (XSDPropertyInfo*)((DASProperty*)&property)->getDASValue("XMLDAS::PropertyInfo");       
         }
@@ -1252,6 +1241,86 @@ namespace commonj
            rc = xmlTextWriterEndElement(writer);
         */
         return rc;
+      }
+
+      bool SDOXMLWriter::determineNamespace(DataObjectPtr dataObject, const Property& prop,
+          SDOXMLString& elementURI, SDOXMLString& elementName)
+      {
+          bool xsiTypeNeeded = false;
+
+          // If this is a defined property with property information
+          // we use the uri and name from the definition
+          XSDPropertyInfo* pi = getPropertyInfo(prop);
+          PropertyDefinitionImpl propdef;
+          if (pi)
+          {
+              propdef = pi->getPropertyDefinition();
+              elementName = propdef.localname;
+              elementURI = propdef.namespaceURI;
+          }
+          else
+          {
+              elementName = prop.getName();
+
+              const Type& propertyType = prop.getType();
+              SDOXMLString propTypeName = propertyType.getName();
+              SDOXMLString propTypeURI = propertyType.getURI();
+              DataObjectImpl* dataObjectImpl = (DataObjectImpl*)(DataObject*)dataObject;
+              const TypeImpl& typeImpl = dataObjectImpl->getTypeImpl();
+              
+
+              // If property is an undeclared propery of an open type
+              if (typeImpl.getPropertyImpl(prop.getName()) == 0)
+              {
+                  // we need to write xsi:type information
+                  xsiTypeNeeded = true;
+
+                  // Determine the namespace of the property
+                  // First see if there is a matching property in the namespace
+                  // of the Type of this property. 
+                  DataFactoryImpl* df = (DataFactoryImpl*)dataObject->getDataFactory();
+                  const TypeImpl* ti = df->findTypeImpl(propertyType.getURI(), "RootType");
+                  if (ti)
+                  {
+                      PropertyImpl* propi = ti->getPropertyImpl(elementName);
+                      if (propi)
+                      {
+                          SDOXMLString propiTypeName = propi->getType().getName();
+                          SDOXMLString propiTypeURI = propi->getType().getURI();
+                          if (propiTypeName.equals(propTypeName)
+                              && propiTypeURI.equals(propTypeURI) )
+                          {
+                              // We have a match
+                              XSDPropertyInfo* ppi = getPropertyInfo(*propi);
+                              PropertyDefinitionImpl propdef;
+                              if (ppi)
+                              {
+                                  propdef = ppi->getPropertyDefinition();
+                                  elementName = propdef.localname;
+                                  elementURI = propdef.namespaceURI;
+                              }
+                          }
+                      }
+                  }
+                  else
+                  {
+                      // For now we will just set the elementURI to ""
+                      // We need to check further here for the element defined in
+                      // the namespace of the parent object etc. etc.
+                      elementURI = "";
+                  }
+              }
+              else
+              {
+                  // The property has been defined programatically so we will
+                  // assume it is the namespace fo the parent DataObject
+                  elementURI = typeImpl.getURI();
+              }
+
+          }
+
+          return xsiTypeNeeded;
+
       }
         
     } // End - namespace sdo

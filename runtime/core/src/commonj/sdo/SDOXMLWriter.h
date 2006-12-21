@@ -103,12 +103,14 @@ namespace commonj
             SchemaInfo* schemaInfo;
             DataFactoryPtr    dataFactory;
 
-            XSDPropertyInfo* getPropertyInfo(const Type& type, const Property& property);
+            XSDPropertyInfo* getPropertyInfo(const Property& property);
             
             int spacescount;
             std::map<SDOXMLString,SDOXMLString> namespaceMap;
             SDOXMLString tnsURI;
            
+            bool determineNamespace(DataObjectPtr dataObject, const Property& prop,
+                SDOXMLString& elementURI, SDOXMLString& elementName);
 
             void writeReference(
                 const SDOXMLString& propertyName,
@@ -116,6 +118,14 @@ namespace commonj
                 const Property& property,
                 bool isElement,
                 DataObjectPtr refferedToObject = 0);
+
+            static const SDOXMLString s_xsi;
+            static const SDOXMLString s_type;
+            static const SDOXMLString s_nil;
+            static const SDOXMLString s_true;
+            static const SDOXMLString s_xsiNS;
+            static const SDOXMLString s_xmlns;
+            static const SDOXMLString s_commonjsdo;
 
         };
     } // End - namespace sdo
