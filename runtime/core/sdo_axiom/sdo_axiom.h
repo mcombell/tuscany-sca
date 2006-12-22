@@ -35,7 +35,6 @@
 
 namespace commonj
 {
-    using namespace sdo;
     namespace sdo_axiom
     {
             
@@ -55,13 +54,13 @@ namespace commonj
 
             SDO_AXIOM_API static void releaseHelper(AxiomHelper* ax);
 
-            SDO_AXIOM_API axiom_document_t*  toAxiomDoc(DataObjectPtr dob,
+            SDO_AXIOM_API axiom_document_t*  toAxiomDoc(commonj::sdo::DataObjectPtr dob,
                 const char* targetNamespaceURI = "", const char* elementName = "");
-            SDO_AXIOM_API axiom_node_t*      toAxiomNode(DataObjectPtr dob,
+            SDO_AXIOM_API axiom_node_t*      toAxiomNode(commonj::sdo::DataObjectPtr dob,
                 const char* targetNamespaceURI = "", const char* elementName = "");
 
-            SDO_AXIOM_API DataObjectPtr  toSdo(axiom_document_t* doc, DataFactoryPtr factory, const char* targetNamespaceURI=0);
-            SDO_AXIOM_API DataObjectPtr  toSdo(axiom_node_t* root_node, DataFactoryPtr factory, const char* targetNamespaceURI=0);
+            SDO_AXIOM_API commonj::sdo::DataObjectPtr  toSdo(axiom_document_t* doc, commonj::sdo::DataFactoryPtr factory, const char* targetNamespaceURI=0);
+            SDO_AXIOM_API commonj::sdo::DataObjectPtr  toSdo(axiom_node_t* root_node, commonj::sdo::DataFactoryPtr factory, const char* targetNamespaceURI=0);
 
             SDO_AXIOM_API axis2_env_t* getEnv();
 

@@ -25,8 +25,6 @@
 
 #include "commonj/sdo/export.h"
 #include "commonj/sdo/SDO.h"
-using commonj::sdo::DataObjectPtr;
-using commonj::sdo::DataObject;
 
 
 namespace commonj
