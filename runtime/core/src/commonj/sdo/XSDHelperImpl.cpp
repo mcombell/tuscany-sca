@@ -79,27 +79,18 @@ namespace commonj
 
         const char* XSDHelperImpl::defineFile(const char* schema, bool loadImportNamespace)
         {
-
-            SDOSchemaSAX2Parser schemaParser(schemaInfo, this, loadImportNamespace);
             clearErrors();
-            if (schemaParser.parse(schema) == 0)
+            SDOSchemaSAX2Parser*const schemaParser = parseIfNot(schema, loadImportNamespace);
+            if (schemaParser)
             {
-                defineTypes(schemaParser.getTypeDefinitions());
-                return schemaInfo.getTargetNamespaceURI();
+                defineTypes(schemaParser->getTypeDefinitions());
+                return schemaParser->getTargetNamespaceURI();
             }
             return 0;
         }
         const char* XSDHelperImpl::defineFile(const SDOString& schema, bool loadImportNamespace)
         {
-
-            SDOSchemaSAX2Parser schemaParser(schemaInfo, this, loadImportNamespace);
-            clearErrors();
-            if (schemaParser.parse(schema.c_str()) == 0)
-            {
-                defineTypes(schemaParser.getTypeDefinitions());
-                return schemaInfo.getTargetNamespaceURI();
-            }
-            return 0;
+            return defineFile(schema.c_str(), loadImportNamespace);
         }
         
         const char*  XSDHelperImpl::define(std::istream& schema, bool loadImportNamespace)
