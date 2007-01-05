@@ -546,6 +546,8 @@ namespace commonj
         SDOSchemaSAX2Parser* ParserErrorSetter::parseIfNot(const void* location, bool loadImportNamespace, const void* base)
         {
             xmlChar*const absoluteUri = xmlBuildURI((xmlChar*)location, (xmlChar*)base);
+            if (! absoluteUri)
+                SDO_THROW_EXCEPTION("parseIfNot", SDOFileNotFoundException, (char*)location);
             LocationParserMap::iterator iter = parsedLocations.find(absoluteUri);
             if (parsedLocations.end() == iter)
             {

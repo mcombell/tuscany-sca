@@ -30,6 +30,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <libxml/uri.h>
 #include "commonj/sdo/SDOSchemaSAX2Parser.h"
 #include "commonj/sdo/SDOSAX2Parser.h"
 #include "commonj/sdo/XSDPropertyInfo.h"
@@ -80,7 +81,22 @@ namespace commonj
         const char* XSDHelperImpl::defineFile(const char* schema, bool loadImportNamespace)
         {
             clearErrors();
-            SDOSchemaSAX2Parser*const schemaParser = parseIfNot(schema, loadImportNamespace);
+            SDOSchemaSAX2Parser* schemaParser;
+
+        /*  Build URI allowing for Windows path
+        */
+            xmlChar*const uri = xmlCanonicPath((xmlChar*)schema);
+            try
+            {
+                schemaParser = parseIfNot(uri, loadImportNamespace);
+            }
+            catch(...)
+            {
+                xmlFree(uri);
+                throw;
+            }
+            xmlFree(uri);
+
             if (schemaParser)
             {
                 defineTypes(schemaParser->getTypeDefinitions());
