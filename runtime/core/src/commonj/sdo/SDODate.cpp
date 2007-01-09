@@ -21,6 +21,21 @@
 
 #include "commonj/sdo/SDODate.h"
 
+// According to Linux, localtime_r is defined as
+// struct tm *localtime_r(const time_t *timep, struct tm *result);
+// However, Windows doesn't have localtime_r, and actually varies what it does
+// have across dfferent versions. To accommodate this we use a macro that
+// resolves to the correct settings on linux and MS VC8. For other platforms
+// it will be necessary to modify this file or override the macro with a -D
+// option on the compile line.
+#ifndef tuscany_localtime_r
+#if defined(WIN32)  || defined (_WINDOWS)
+  #define tuscany_localtime_r(value, tmp_tm) localtime_s(&tmp_tm, &value);
+#else
+  #define tuscany_localtime_r(value, tmp_tm) localtime_r(&value, &tmp_tm);
+#endif
+#endif
+
 namespace commonj{
 namespace sdo{
 
@@ -47,11 +62,8 @@ namespace sdo{
     {
 		struct tm tmp_tm;
 
-#if defined(WIN32)  || defined (_WINDOWS)
-		localtime_s(&tmp_tm, &value);
-#else
-		localtime_r(&value, &tmp_tm);
-#endif
+		tuscany_localtime_r(value, tmp_tm);
+
         return asctime(&tmp_tm);
     }
 
