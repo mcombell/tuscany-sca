@@ -27,14 +27,19 @@
 // have across dfferent versions. To accommodate this we use a macro that
 // resolves to the correct settings on linux and MS VC8. For other platforms
 // it will be necessary to modify this file or override the macro with a -D
-// option on the compile line.
+// option on the compile line. Furthermore, if the definition supplied in that
+// way requires that other header files be included as well then those can be
+// supplied through the SDOUserMacros.h file
+
 #ifndef tuscany_localtime_r
 #if defined(WIN32)  || defined (_WINDOWS)
   #define tuscany_localtime_r(value, tmp_tm) localtime_s(&tmp_tm, &value);
 #else
   #define tuscany_localtime_r(value, tmp_tm) localtime_r(&value, &tmp_tm);
 #endif
-#endif
+#else
+  #include "commonj/sdo/SDOUserMacros.h"
+#endif // tuscany_localtime_r
 
 namespace commonj{
 namespace sdo{

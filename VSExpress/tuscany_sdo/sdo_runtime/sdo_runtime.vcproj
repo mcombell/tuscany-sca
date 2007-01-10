@@ -2105,6 +2105,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOUserMacros.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOUtils.h"
 				>
 			</File>
