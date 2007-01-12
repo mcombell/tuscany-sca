@@ -17,7 +17,7 @@
  * under the License.
  */
 
-/* $Rev: 452786 $ $Date: 2006-10-04 08:57:36 +0100 (Wed, 04 Oct 2006) $ */
+/* $Rev$ $Date$ */
 
 #ifndef _SDO_SDOUSERMACROS_H_
 #define _SDO_SDOUSERMACROS_H_
