@@ -52,12 +52,8 @@ namespace commonj
         }
 
         void AxiomHelper::createEnv()
-        {
-    
-            the_allocator = axis2_allocator_init (NULL);
-            if (the_allocator == NULL) return;
-
-            the_env = axis2_env_create(the_allocator); 
+        {    
+            the_env = axis2_env_create_all("tuscany_sdo_axiom.log",AXIS2_LOG_LEVEL_WARNING);
 
             if (the_env == 0) return;
 

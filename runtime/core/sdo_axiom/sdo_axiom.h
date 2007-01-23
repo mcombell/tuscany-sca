@@ -76,10 +76,7 @@ namespace commonj
 
             static int axiswritercount;
 
-            axis2_env_t *the_env;
-            axis2_allocator_t *the_allocator;
-
-            
+            axis2_env_t *the_env;            
 
         };
     } // End - namespace sdo_axiom
