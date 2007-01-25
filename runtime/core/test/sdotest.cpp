@@ -5683,7 +5683,7 @@ int sdotest::loadOpen()
         
 
         // so, we now expect that the openboolean and openstring props will
-        // be of type boolean and Bytes, and the openlist will be a list of integers.
+        // be of type boolean and String, and the openlist will be a list of integers.
         // The dataobjectlist an dataobject will be of the correct OpenType
 
         // we need a test for data objects, and that we are writing out xsi:type
@@ -5708,9 +5708,9 @@ int sdotest::loadOpen()
         }
 
         if (strcmp(emp->getProperty("openstring").getType().getName(),
-            "Bytes"))
+            "String"))
         {
-            if (!silent)cout << "OpenLoad failure - bytes property not bytes" << endl;
+            if (!silent)cout << "OpenLoad failure - bytes property not String" << endl;
             return 0;
 
         }
@@ -5883,7 +5883,7 @@ int sdotest::loadOpenNS()
         
 
         // so, we now expect that the openboolean and openstring props will
-        // be of type boolean and Bytes, and the openlist will be a list of integers.
+        // be of type boolean and String, and the openlist will be a list of integers.
         // The dataobjectlist an dataobject will be of the correct OpenType
 
         // we need a test for data objects, and that we are writing out xsi:type
@@ -5895,9 +5895,9 @@ int sdotest::loadOpenNS()
         DataObjectPtr emp2 = dl22[0];
 
         if (strcmp(emp2->getProperty("openboolean").getType().getName(),
-            "Bytes"))
+            "String"))
         {
-            if (!silent)cout << "OpenLoadNS2 failure - bool property not bytes" << endl;
+            if (!silent)cout << "OpenLoadNS2 failure - bool property not String" << endl;
             return 0;
 
         }
@@ -5908,9 +5908,9 @@ int sdotest::loadOpenNS()
         }
 
         if (strcmp(emp2->getProperty("openstring").getType().getName(),
-            "Bytes"))
+            "String"))
         {
-            if (!silent)cout << "OpenLoadNS2 failure - bytes property not bytes" << endl;
+            if (!silent)cout << "OpenLoadNS2 failure - bytes property not String" << endl;
             return 0;
 
         }

@@ -1064,7 +1064,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
     
     const PropertyImpl* DataObjectImpl::defineCString(const SDOString& propname)
     {
-        const Type& t = factory->getType(Type::SDOTypeNamespaceURI, "Bytes");
+        const Type& t = factory->getType(Type::SDOTypeNamespaceURI, "String");
         return defineProperty(propname,t);
     }
     
@@ -1247,7 +1247,7 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
                const PropertyImpl* p = d->getPropertyImpl(prop);
                if (p == 0 && d->getType().isOpenType())
                {
-                  p = d->defineBytes(prop);
+                  p = d->defineString(prop);
                }
                if (p != 0)
                {

@@ -35,7 +35,7 @@ DataObject type: companyNS#CompanyType
               Property Type: commonj.sdo#Boolean
               Property Value: not set
               Property: openstring
-              Property Type: commonj.sdo#Bytes
+              Property Type: commonj.sdo#String
               Property Value: Value Of Open String
               Property: openboolean
               Property Type: commonj.sdo#Boolean
