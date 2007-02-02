@@ -183,6 +183,6 @@ Department: Marketing
 Department: Architecture
 Department: Pyrotechnics
 Department: Accounts
-Normal expected exception
+String in list type:department label
 Normal Invalid path exception
 Normal SDOPropertyNotFound exception

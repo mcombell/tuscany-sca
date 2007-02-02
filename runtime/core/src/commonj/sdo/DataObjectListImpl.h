@@ -24,6 +24,7 @@
 
 #include "commonj/sdo/DataObjectList.h"
 #include "commonj/sdo/SDODate.h"
+#include "commonj/sdo/SDOValue.h"
 
 #include "commonj/sdo/disable_warn.h"
 
@@ -123,6 +124,8 @@ public:
     virtual  void insert (unsigned int index, const SDOString& d) ;
     virtual  void append (const char* d) ;
     virtual  void append (const SDOString& d) ;
+
+    virtual  void append (const SDOValue& sval);
 
     virtual  void insert (unsigned int index, short d) ;
     virtual  void append (short d) ;

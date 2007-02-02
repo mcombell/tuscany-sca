@@ -636,6 +636,18 @@ void DataObjectListImpl::append (const SDOString& d)
     append( dol);
 }
 
+void DataObjectListImpl::append (const SDOValue& sval)
+{
+    if (theFactory == 0) return;
+
+    if (typeUnset)setType(Type::SDOTypeNamespaceURI, StringLiteral);
+
+    RefCountingPointer<DataObject> dol = theFactory->create(typeURI, typeName);
+    DataObject* dob = dol;
+    ((DataObjectImpl*)dob)->setSDOValue(sval);
+    append(dol);
+}
+
 void DataObjectListImpl::insert (unsigned int index, short d)
 {
     if (theFactory == 0) return;

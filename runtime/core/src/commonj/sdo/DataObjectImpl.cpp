@@ -22,8 +22,6 @@
 #include "commonj/sdo/disable_warn.h"
 #include "commonj/sdo/DataObjectImpl.h"
 
-
- 
 #include "commonj/sdo/SDORuntimeException.h"
 
 #include "commonj/sdo/Property.h"
@@ -78,442 +76,7 @@ namespace sdo {
     {
     }
 
-
-/** @def getPrimitive
- *
- * A macro for the getting of primitive values from a data object
- */
-
-#define getPrimitive(primval,retval,defval)\
-    retval DataObjectImpl::get ##primval (unsigned int propertyIndex)\
-    {\
-        validateIndex(propertyIndex);\
-        PropertyImpl* p = getPropertyImpl(propertyIndex);\
-        if (p != 0 ) \
-        {\
-            if (p->isMany() || p->getTypeImpl()->isFromList())\
-            {\
-                string msg("Get value not available on many valued property:");\
-                msg += p->getName();\
-                SDO_THROW_EXCEPTION("get value", SDOUnsupportedOperationException,\
-                    msg.c_str());\
-            }\
-             DataObjectImpl* d = getDataObjectImpl(propertyIndex);\
-            if (d != 0) \
-            {\
-                if (d->isNull())return (retval)0;\
-                return d->get ##primval ();\
-            }\
-            if (isSet(propertyIndex)) return (retval)0;\
-            return p->get ##primval ##Default();\
-        }\
-        return (retval)0;\
-    }
-
-/** @def getCharsBasic
- *
- * A macro for the getting of primitive characters from a data object
- */
-
-#define getCharsBasic(primval,retval,defval)\
-    unsigned int DataObjectImpl::get ##primval (unsigned int propertyIndex, retval valptr , unsigned int max)\
-    {\
-        validateIndex(propertyIndex);\
-          PropertyImpl* p = getPropertyImpl(propertyIndex);\
-        if (p != 0) \
-        {\
-            if (p->isMany()|| p->getTypeImpl()->isFromList())\
-            {\
-                string msg("Get value not available on many valued property:");\
-                msg += p->getName();\
-                SDO_THROW_EXCEPTION("character getter", SDOUnsupportedOperationException,\
-                    msg.c_str());\
-            }\
-             DataObjectImpl* d = getDataObjectImpl(propertyIndex);\
-            if (d != 0) \
-            { \
-                if (d->isNull()) return 0;\
-                return d->get ##primval ( valptr , max);\
-            }\
-            if (isSet(propertyIndex))return 0;\
-            return p->get ##primval ##Default( valptr , max);\
-        }\
-        return 0;\
-    }
-
 #define ASSERT_SETTABLE(property,primval) ASSERT_WRITABLE(*property, set##primval)
-
-/** @def setPrimitive
- *
- * A macro for the setting of primitive values in a data object
- */
-
-#define setPrimitive(primval,primtype,primnam)\
-    void DataObjectImpl::set ##primval (unsigned int propertyIndex, primtype value)\
-    {\
-        validateIndex(propertyIndex);\
-        PropertyImpl* pl = getPropertyImpl(propertyIndex);\
-        if (pl != 0) \
-        {\
-            if (pl->isMany()|| pl->getTypeImpl()->isFromList())\
-            {\
-                string msg("Set value not available on many valued property:");\
-                msg += pl->getName();\
-                SDO_THROW_EXCEPTION("set value",SDOUnsupportedOperationException,\
-                msg.c_str());\
-            }\
-            ASSERT_SETTABLE(pl, primval)\
-            PropertyValueMap::iterator i;\
-            for (i = PropertyValues.begin(); i != PropertyValues.end();++i)\
-            {\
-                if ((*i).first == propertyIndex)\
-                {\
-                    logChange(propertyIndex);\
-                    (*i).second->unsetNull();\
-                    (*i).second->set ##primval (value);\
-                    return;\
-                }\
-            }\
-            DataFactory* df = getDataFactory();\
-            DataObjectImpl* b = new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI, primnam));\
-            b->setContainer(this);\
-            b->setApplicableChangeSummary();\
-            logChange(propertyIndex);\
-            PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex,b));\
-             b->set ##primval (value);\
-        }\
-        return;\
-    }
-
-
-/** @def setCharsBasic
- *
- * A macro for the setting of primitive characters in a data object
- */
-
-#define setCharsBasic(primval,primtype,primnam)\
-    void DataObjectImpl::set ##primval (unsigned int propertyIndex, primtype value, unsigned int len)\
-    {\
-        validateIndex(propertyIndex);\
-        PropertyImpl* pl = getPropertyImpl(propertyIndex);\
-        if (pl != 0) \
-        {\
-            if (pl->isMany()|| pl->getTypeImpl()->isFromList())\
-            {\
-                string msg("Set value not available on many valued property:");\
-                msg += pl->getName();\
-                SDO_THROW_EXCEPTION("setter",SDOUnsupportedOperationException,\
-                msg.c_str());\
-            }\
-            ASSERT_SETTABLE(pl, primval)\
-            PropertyValueMap::iterator i;\
-            for (i = PropertyValues.begin(); i != PropertyValues.end();++i)\
-            {\
-                if ((*i).first == propertyIndex)\
-                {\
-                    logChange(propertyIndex);\
-                    (*i).second->unsetNull();\
-                    (*i).second->set ##primval (value, len);\
-                    return;\
-                }\
-            }\
-            DataFactory* df = getDataFactory();\
-            DataObjectImpl* b = new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI, primnam));\
-            b->setContainer(this);\
-            b->setApplicableChangeSummary();\
-            logChange(propertyIndex);\
-            PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,b));\
-             b->set ##primval (value, len);\
-        }\
-        return;\
-    }
-
-
-/** @def getPrimitiveFromPath
- *
- * A macro for the getting of primitive values from a data object by path
- */
-
-#define getPrimitiveFromPath(primval, retval, defval)\
-    retval DataObjectImpl::get ##primval (const char* path)\
-    {\
-        return get ##primval(SDOString(path));\
-    }
-
-#define setPrimitiveFromPathUsingSDOString(primval,setval,platval)\
-    void DataObjectImpl::set ##primval (const SDOString& path, setval value)\
-    {\
-        DataObjectImpl *d;\
-        SDOString spath;\
-        SDOString prop;\
-        try {\
-            DataObjectImpl::stripPath(path, spath);\
-            prop = findPropertyContainer(spath,&d);\
-            if (d != 0)\
-            {\
-                if (prop.empty()) {\
-                    d->set ##primval (value);\
-                }\
-                else {\
-                    const PropertyImpl* p = d->getPropertyImpl(prop);\
-                    if (p == 0 && d->getType().isOpenType()) \
-                    {\
-                        p = d->define ##primval (prop);\
-                    }\
-                    if (p == 0)\
-                    {\
-                         string msg("Set value  - path not found");\
-                         SDO_THROW_EXCEPTION("setter", SDOPathNotFoundException,\
-                         msg.c_str());\
-                    }\
-                    ASSERT_SETTABLE(p, primval)\
-                    if (p->isMany()|| p->getTypeImpl()->isFromList())\
-                    {\
-                        long l;\
-                        DataObjectList& dol = d->getList((Property&)*p);\
-                        DataObjectImpl* doi = d->findDataObject(prop,&l);\
-                        if (doi != 0)    {\
-                             doi->set ## primval (value);\
-                        }\
-                        else {\
-                            dol.append(( platval) value);\
-                        }\
-                    }\
-                    else {\
-                        d->set ##primval ((Property&)*p,value);\
-                    }\
-                }\
-            }\
-        }\
-        catch (SDORuntimeException e) {\
-            SDO_RETHROW_EXCEPTION("setter",e);\
-        }\
-    }
-
-#define getPrimitiveFromPathUsingSDOString(primval, retval, defval)\
-    retval DataObjectImpl::get ##primval (const SDOString& path)\
-    {\
-        DataObjectImpl* d;\
-        SDOString spath;\
-        SDOString prop;\
-         try {\
-            DataObjectImpl::stripPath(path, spath);\
-            prop = findPropertyContainer(spath, &d);\
-            if (d != 0) {\
-                if (prop.empty()) {\
-                    return d->get ##primval ();\
-                }\
-                else {\
-                    PropertyImpl* p = d->getPropertyImpl(prop);\
-                    if (p != 0) \
-                    {\
-                        if (p->isMany()|| p->getTypeImpl()->isFromList())\
-                        {\
-                            long l;\
-                            DataObjectImpl* doi = d->findDataObject(prop,&l);\
-                            if (doi != 0)    {\
-                                return doi->get ## primval();\
-                            }\
-                            string msg("Get value - index out of range:");\
-                            msg += path;\
-                            SDO_THROW_EXCEPTION("getter", SDOIndexOutOfRangeException,\
-                            msg.c_str());\
-                        }\
-                        else\
-                        {\
-                            if (!d->isSet(*p)) {\
-                                    return p->get ##primval ##Default();\
-                            }\
-                            return d->get ##primval (*p);\
-                        }\
-                    }\
-                }\
-            }\
-            string msg("Get value  - path not found");\
-            SDO_THROW_EXCEPTION("getter", SDOPathNotFoundException,\
-            msg.c_str());\
-        }\
-        catch (SDORuntimeException e) {\
-           SDO_RETHROW_EXCEPTION("getter", e);\
-        }\
-    }
-
-/** @def getCharsFromPath
- *
- * A macro for the getting of primitive characters from a data object by path
- */
-
-#define getCharsFromPath(primval, retval, defval)\
-    unsigned int DataObjectImpl::get ##primval (const char* path, retval valptr , unsigned int max)\
-    {\
-        return get ##primval(SDOString(path), valptr, max);\
-    }
-
-#define getCharsFromPathUsingSDOString(primval, retval, defval)\
-    unsigned int DataObjectImpl::get ##primval (const SDOString& path, retval valptr , unsigned int max)\
-    {\
-        DataObjectImpl* d;\
-        SDOString spath;\
-        SDOString prop;\
-         try {\
-            DataObjectImpl::stripPath(path, spath);\
-            prop = findPropertyContainer(spath, &d);\
-            if (d != 0) {\
-                if (prop.length() == 0) {\
-                    return d->get ##primval ( valptr , max);\
-                }\
-                else {\
-                    PropertyImpl* p = d->getPropertyImpl(prop);\
-                    if (p != 0)\
-                    {\
-                        if (p->isMany() || p->getTypeImpl()->isFromList())\
-                        {\
-                            long l;\
-                            DataObjectImpl* doi = d->findDataObject(prop,&l);\
-                            if (doi != 0)    {\
-                                return doi->get ## primval (valptr, max);\
-                            }\
-                            string msg("Get value - index out of range");\
-                            msg += path;\
-                            SDO_THROW_EXCEPTION("getChars", SDOIndexOutOfRangeException,\
-                            msg.c_str());\
-                        }\
-                        else { \
-                            if (!d->isSet(*p)) {\
-                                return p->get ##primval ##Default( valptr , max );\
-                            }\
-                            return d->get ##primval (*p, valptr , max);\
-                        }\
-                    }\
-                }\
-            }\
-            string msg("Get value  - path not found");\
-            SDO_THROW_EXCEPTION("getCString", SDOPathNotFoundException,\
-            msg.c_str());\
-        }\
-        catch (SDORuntimeException e) {\
-           SDO_RETHROW_EXCEPTION("character getter", e);\
-        }\
-    }
-
-/** @def setPrimitiveFromPath
- *
- * A macro for the setting of primitive values in a data object by path
- */
-
-#define setPrimitiveFromPath(primval,setval,platval)\
-    void DataObjectImpl::set ##primval (const char* path, setval value)\
-    {\
-        set ##primval(SDOString(path), value);\
-    }
-
-/** @def setCharsFromPath
- *
- * A macro for the setting of primitive characters in a data object by path
- */
-
-#define setCharsFromPath(primval,setval)\
-    void DataObjectImpl::set ##primval (const char* path, setval value, unsigned int len)\
-    {\
-        set ##primval(SDOString(path), value, len);\
-    }
-
-#define setCharsFromPathUsingSDOString(primval,setval)\
-    void DataObjectImpl::set ##primval (const SDOString& path, setval value, unsigned int len)\
-    {\
-        DataObjectImpl *d;\
-        SDOString spath;\
-        SDOString prop;\
-        try {\
-            DataObjectImpl::stripPath(path, spath);\
-            prop = findPropertyContainer(spath, &d);\
-            if (d != 0)\
-            {\
-                if (prop.length() == 0) {\
-                    d->set ##primval (value, len);\
-                }\
-                else {\
-                    const PropertyImpl* p = d->getPropertyImpl(prop);\
-                    if (p == 0 && d->getType().isOpenType())\
-                    {\
-                        p = d->define ##primval (prop);\
-                    }\
-                    if (p == 0)\
-                    {\
-                         string msg("Set value  - path not found");\
-                         SDO_THROW_EXCEPTION("setter", SDOPathNotFoundException,\
-                         msg.c_str());\
-                    }\
-                    ASSERT_SETTABLE(p, primval)\
-                    if (p->isMany()|| p->getTypeImpl()->isFromList())\
-                    {\
-                        long l;\
-                        DataObjectList& dol = d->getList((Property&)*p);\
-                        DataObjectImpl* doi = d->findDataObject(prop,&l);\
-                        if (doi != 0)    {\
-                            doi->set ## primval (value, len);\
-                        }\
-                        else {\
-                            dol.append(value,len);\
-                        }\
-                    }\
-                    else { \
-                        d->set ##primval ((Property&)*p,value, len);\
-                    }\
-                }\
-            }\
-        }\
-        catch (SDORuntimeException e) {\
-            SDO_RETHROW_EXCEPTION("setter",e);\
-        }\
-    }
-
-/** @def getPrimitiveFromProperty
- *
- * A macro for the getting of primitive values in a data object by property
- */
-
-#define getPrimitiveFromProperty(primval,retval)\
-    retval DataObjectImpl::get ##primval (const Property& property)\
-    {\
-        return get ##primval (getPropertyIndex(property));\
-    }
-
-
-/** @def getCharsFromProperty
- *
- * A macro for the getting of primitive characters in a data object by property
- */
-
-#define getCharsFromProperty(primval,retval)\
-    unsigned int DataObjectImpl::get ##primval (const Property& property, retval val, unsigned int max)\
-    {\
-        return get ##primval (getPropertyIndex(property), val, max);\
-    }
-
-/** @def setPrimitiveFromProperty
- *
- * A macro for the setting of primitive values in a data object by property
- */
-
-#define setPrimitiveFromProperty(primval,primtype)\
-  void DataObjectImpl::set ##primval (const Property& property, primtype value)\
-  {\
-      set ##primval (getPropertyIndexInternal(property),value);\
-  }
-
-/** @def setCharsFromProperty
- *
- * A macro for the setting of primitive characters in a data object by property
- */
-
-#define setCharsFromProperty(primval,primtype)\
-  void DataObjectImpl::set ##primval (const Property& property, primtype value, unsigned int len)\
-  {\
-      set ##primval (getPropertyIndexInternal(property),value, len);\
-  }
-
-
 
  /**  DataObject
   *  DataObjects are the non-primitive members of a Data graph.
@@ -544,36 +107,6 @@ namespace sdo {
   * data types like String.
   */
 
-
-void DataObjectImpl::handlePropertyNotSet(const char* name)
-{
-    // change of behaviour - no longer throw for this.
-
-//    string msg("Get value on unset and undefaulted property:");
-//    msg += name;
-//    SDO_THROW_EXCEPTION("get value", SDOPropertyNotSetException,
-//        msg.c_str());
-}
-
-
-
-    // setters and getters from a path specification 
-
-    getCharsFromPathUsingSDOString(String, wchar_t* , 0);
-    getCharsFromPathUsingSDOString(Bytes, char* , 0);
-    setCharsFromPath(String, const wchar_t*);
-    setCharsFromPathUsingSDOString(String, const wchar_t*);
-    setCharsFromPath(Bytes, const char*);
-    setCharsFromPathUsingSDOString(Bytes, const char*);
-    getCharsFromProperty(String,wchar_t*);
-    getCharsFromProperty(Bytes,char*);
-    setCharsFromProperty(String,const wchar_t*);
-    setCharsFromProperty(Bytes,const char*);
-    getCharsBasic(String,wchar_t*,0);
-    getCharsBasic(Bytes,char*,0);
-    setCharsBasic(String,const wchar_t*,"String");
-    setCharsBasic(Bytes,const char*,"Bytes");
-
   unsigned int DataObjectImpl::getBytes(const char* path, char* valptr , unsigned int max)
   {
     const SDOString pathObject(path);
@@ -585,9 +118,6 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
   {
     return getString(SDOString(path), buf, max);
   }
-
-
-
 
     // Convenience methods for string/bytes length
 
@@ -751,84 +281,45 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
 
    // +++
-   // Provide implementations for the getXXX(const SDOString& path) methods.
-   // These are implemented by macro expansion. The comment before each one
-   // shows the signature of the method being defined.
-
-   // DataObjectImpl::getBoolean(const SDOString&)
-   getPrimitiveFromPathUsingSDOString(Boolean, bool, false);
-
-   // DataObjectImpl::getByte(const SDOString&)
-   getPrimitiveFromPathUsingSDOString(Byte, char, 0);
-
-   // DataObjectImpl::getCharacter(const SDOString&)
-   getPrimitiveFromPathUsingSDOString(Character, wchar_t, 0);
-
-   // DataObjectImpl::getShort(const SDOString&)
-   getPrimitiveFromPathUsingSDOString(Short,short,0);
-
-   getPrimitiveFromPathUsingSDOString(Integer,long,0);
-
-   getPrimitiveFromPathUsingSDOString(Long,int64_t,0L);
-
-   getPrimitiveFromPathUsingSDOString(Double,long double,0.0);
-
-   getPrimitiveFromPathUsingSDOString(Float,float,0.0);
-
-   getPrimitiveFromPathUsingSDOString(Date,const SDODate,0);
-
-   // End of implementations for the getXXX(const SDOString& path) methods.
-   // ---
-
-
-   // +++
    // Provide implementations for the setXXX(const char* path, XXX) methods.
    // These are implemented by delegating the call
    // to the corresponding setXXX(const SDOString& path, XXX) method.
 
-   // setPrimitiveFromPath(Boolean,bool, bool);
    void DataObjectImpl::setBoolean(const char* path, bool b)
    {
       setBoolean(SDOString(path), b);
    }
 
-   // setPrimitiveFromPath(Short,short, short);
    void DataObjectImpl::setShort(const char* path, short s)
    {
       setShort(SDOString(path), s);
    }
 
-   // setPrimitiveFromPath(Byte,char, char);
    void DataObjectImpl::setByte(const char* path, char c)
    {
       setByte(SDOString(path), c);
    }
 
-   // setPrimitiveFromPath(Character,wchar_t, wchar_t);
    void DataObjectImpl::setCharacter(const char* path, wchar_t c)
    {
       setCharacter(SDOString(path), c);
    }
 
-   // setPrimitiveFromPath(Date,const SDODate, const SDODate);
    void DataObjectImpl::setDate(const char* path, const SDODate d)
    {
       setDate(SDOString(path), d);
    }
 
-   // setPrimitiveFromPath(Double,long double, long double);
    void DataObjectImpl::setDouble(const char* path, long double d)
    {
       setDouble(SDOString(path), d);
    }
 
-   // setPrimitiveFromPath(Float,float, float);
    void DataObjectImpl::setFloat(const char* path, float f)
    {
       setFloat(SDOString(path), f);
    }
 
-   // setPrimitiveFromPath(Integer,long, int64_t);
    void DataObjectImpl::setInteger(const char* path, long i)
    {
       setInteger(SDOString(path), i);
@@ -844,83 +335,6 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
    // End of implementations for the setXXX(const char* path, XXX) methods.
    // ---
-
-
-   // +++
-   // Provide implementations for the setXXX(const SDOString& path, XXX) methods.
-   // These are implemented by macro expansion. The comment before each one
-   // shows the signature of the method being defined.
-
-   // void DataObjectImpl::setBoolean(const SDOString& path, bool b);
-   setPrimitiveFromPathUsingSDOString(Boolean, bool, bool);
-
-   // void DataObjectImpl::setByte(const SDOString& path, char c);
-   setPrimitiveFromPathUsingSDOString(Byte, char, char);
-
-   // void DataObjectImpl::setCharacter(const SDOString& path, wchar_t c);
-   setPrimitiveFromPathUsingSDOString(Character, wchar_t, wchar_t);
-
-   // void DataObjectImpl::setShort(const SDOString& path, short s);
-   setPrimitiveFromPathUsingSDOString(Short,short, short);
-
-#if __WORDSIZE ==64
-    setPrimitiveFromPathUsingSDOString(Integer,long, int64_t);
-#else
-    setPrimitiveFromPathUsingSDOString(Integer,long, long);
-#endif
-
-   setPrimitiveFromPathUsingSDOString(Long,int64_t, int64_t);
-
-   setPrimitiveFromPathUsingSDOString(Float,float, float);
-
-   setPrimitiveFromPathUsingSDOString(Double,long double, long double);
-
-   setPrimitiveFromPathUsingSDOString(Date,const SDODate, const SDODate);
-
-   // ---
-   // End of implementations for the setXXX(const SDOString& path, XXX) methods.
-
-
-    getPrimitiveFromProperty(Boolean,bool);
-    getPrimitiveFromProperty(Byte,char);
-    getPrimitiveFromProperty(Character,wchar_t);
-    getPrimitiveFromProperty(Short,short);
-    getPrimitiveFromProperty(Integer,long);
-    getPrimitiveFromProperty(Long,int64_t);
-    getPrimitiveFromProperty(Double,long double);
-    getPrimitiveFromProperty(Float,float);
-    getPrimitiveFromProperty(Date,const SDODate);
-
-    setPrimitiveFromProperty(Boolean,bool);
-    setPrimitiveFromProperty(Byte,char);
-    setPrimitiveFromProperty(Character,wchar_t);
-    setPrimitiveFromProperty(Short,short);
-    setPrimitiveFromProperty(Integer,long);
-    setPrimitiveFromProperty(Long,int64_t);
-    setPrimitiveFromProperty(Float,float);
-    setPrimitiveFromProperty(Double,long double);
-    setPrimitiveFromProperty(Date,const SDODate);
-
-    getPrimitive(Boolean,bool,false);
-    getPrimitive(Byte,char,0);
-    getPrimitive(Character,wchar_t,0);
-    getPrimitive(Short,short,0);
-    getPrimitive(Integer,long,0);
-    getPrimitive(Long,int64_t,0L);
-    getPrimitive(Double,long double,0.0);
-    getPrimitive(Float,float,0.0);
-    getPrimitive(Date,const SDODate,0);
-
-    setPrimitive(Boolean,bool,"Boolean");
-    setPrimitive(Byte,char, "Byte");
-    setPrimitive(Character,wchar_t,"Character");
-    setPrimitive(Short,short,"Short");
-    setPrimitive(Integer,long,"Integer");
-    setPrimitive(Long,int64_t,"Long");
-    setPrimitive(Float,float,"Float");
-    setPrimitive(Double,long double,"Double");
-    setPrimitive(Date,const SDODate,"Date");
-
 
 
     // open type support
@@ -996,6 +410,14 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         return getPropertyImpl(propname);
     }
 
+    const PropertyImpl* DataObjectImpl::defineSDOValue(const SDOString& propname,
+                                                       const SDOValue& sval)
+    {
+        const Type& t = factory->getType(Type::SDOTypeNamespaceURI,
+                                         sval.convertTypeEnumToString());
+        return defineProperty(propname, t);
+    }
+    
     const PropertyImpl* DataObjectImpl::defineBoolean(const SDOString& propname)
     {
         const Type& t = factory->getType(Type::SDOTypeNamespaceURI, "Boolean");
@@ -1081,217 +503,24 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         return defineProperty(propname,t);
     }
 
-    // Used to return empty values - remove when defaults are there.
-    const char* DataObjectImpl::emptyString = "";
-
-    // Useful for debug, so not included in the macros above - but
-    // could be.
-    // getters and setters for strings 
-
-    const char* DataObjectImpl::getCString(unsigned int propertyIndex)
-    {
-        validateIndex(propertyIndex);
-        if ((getProperty(propertyIndex).isMany())
-            || getPropertyImpl(propertyIndex)->getTypeImpl()->isFromList())
-        {
-
-            string msg("Get value not available on many valued property:");
-            msg += getProperty(propertyIndex).getName();
-            SDO_THROW_EXCEPTION("getCString", SDOUnsupportedOperationException,
-                msg.c_str());
-        }
-          DataObjectImpl* d = getDataObjectImpl(propertyIndex);
-        if (d != 0) {
-            if (!d->isNull()) return d->getCString ();
-            return 0;
-        }
-        PropertyImpl* p = (PropertyImpl*)getPropertyImpl(propertyIndex);
-        if (p != 0) 
-        {
-            if (isSet(propertyIndex)) return 0;
-            //if (p->isDefaulted())
-            //{
-                return p->getCStringDefault();
-            //}
-            //else
-            //{
-            //    handlePropertyNotSet(p->getName());
-            //}
-        }
-        return 0;
-    }
-
-
     void DataObjectImpl::setCString (unsigned int propertyIndex, const char* value)
     {
         setCString(propertyIndex, SDOString(value));
     }
-
-   void DataObjectImpl::setCString (unsigned int propertyIndex, const SDOString& value)
-   {
-      validateIndex(propertyIndex);
-      PropertyValueMap::iterator i;
-      PropertyImpl*const p = getPropertyImpl(propertyIndex);
-      if ((p->isMany())
-          || p->getTypeImpl()->isFromList())
-      {
-         string msg("Set value not available on many valued property:");
-         msg += p->getName();
-         SDO_THROW_EXCEPTION("setString", SDOUnsupportedOperationException,
-                             msg.c_str());
-      }
-      ASSERT_SETTABLE(p, CString)
-      for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
-      {
-         if ((*i).first == propertyIndex)
-         {
-            logChange(propertyIndex);
-            (*i).second->unsetNull();
-            (*i).second->setCString(value);
-            return;
-         }
-      }
-      DataFactory* df = getDataFactory();
-      DataObjectImpl* b = new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI,"String"));
-      b->setContainer(this);
-      b->setApplicableChangeSummary();
-      logChange(propertyIndex);
-      PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,b));
-      b->setCString(value);
-      return;
-   }
-
 
     const char* DataObjectImpl::getCString (const char* path)
     {
        return getCString(SDOString(path));
     }
 
-   const char* DataObjectImpl::getCString (const SDOString& path)
-   {
-      DataObjectImpl* d = 0;
-      SDOString spath;
-      SDOString prop;
-      try {
-         DataObjectImpl::stripPath(path, spath);
-         // It is possible for findPropertyContainer to return a 0 which caues an accvio.
-         prop = findPropertyContainer(spath, &d);
-         if (d != 0) {
-            if (prop.length() == 0) {
-               return d->getCString();
-            }
-            else {
-               PropertyImpl* p  = d->getPropertyImpl(prop);
-               if (p != 0) 
-               {
-                  if (p->isMany()|| p->getTypeImpl()->isFromList())
-                  {
-                     long l;
-                     DataObjectImpl* doi = d->findDataObject(prop,&l);
-                     if (doi != 0)    {
-                        return doi->getCString();
-                     }
-                     string msg("Get CString - index out of range");
-                     msg += path;
-                     SDO_THROW_EXCEPTION("getter", SDOIndexOutOfRangeException,
-                                         msg.c_str());
-                  }
-                  else {
-                     if (!d->isSet(*p)) {
-                        //if (p->isDefaulted())
-                        //{
-                        return p->getCStringDefault();
-                        //}
-                        //else
-                        //{
-                        //    handlePropertyNotSet(p->getName());
-                        //}
-                     }
-                     return d->getCString(*p);
-                  }
-               }
-            }
-         }
-         string msg("Get CString  - object not found");
-         SDO_THROW_EXCEPTION("getCString", SDOPathNotFoundException,
-                             msg.c_str());
-      }
-      catch (SDORuntimeException e) {
-         SDO_RETHROW_EXCEPTION("getCString",e);
-      }
-   }
-    
-
-
     void DataObjectImpl::setCString(const char* path, const char* value)
     {
         setCString(SDOString(path), SDOString(value));
     }
 
-
-   void DataObjectImpl::setCString(const SDOString& path, const SDOString& value)
-   {
-      DataObjectImpl *d = 0;
-
-      SDOString spath;
-      SDOString prop;
-      try {
-         DataObjectImpl::stripPath(path, spath);
-         prop = findPropertyContainer(spath, &d);
-
-         if (d != 0) {
-            if (prop.length() == 0) {
-               d->setCString(value);
-            }
-            else { 
-               const PropertyImpl* p = d->getPropertyImpl(prop);
-               if (p == 0 && d->getType().isOpenType())
-               {
-                  p = d->defineString(prop);
-               }
-               if (p != 0)
-               {
-                  ASSERT_SETTABLE(p, CString)
-                  if (p->isMany()|| p->getTypeImpl()->isFromList()) {
-                     long l;
-                     DataObjectList& dol = d->getList((Property&)*p);
-                     DataObjectImpl* doi = d->findDataObject(prop,&l);
-                     if (doi != 0)
-                     {
-                        doi->setCString(value);
-                     }
-                     else 
-                     {
-                        dol.append(value);
-                     }
-                  }
-                  else {
-                     d->setCString((Property&)*p,value);
-                  }
-               }
-            }
-         }
-      }
-      catch (SDORuntimeException e) {
-         SDO_RETHROW_EXCEPTION("setCString",e);
-      }
-   }
-
-
-    const char* DataObjectImpl::getCString (const Property& property)
-    {
-        return getCString(getPropertyIndex(property));
-    }
-
-
     void DataObjectImpl::setCString(const Property& property, const char* value)
     {
         setCString(property, SDOString(value));
-    }
-
-    void DataObjectImpl::setCString(const Property& property, const SDOString& value)
-    {
-        setCString(getPropertyIndexInternal(property), value);
     }
 
     // null support
@@ -2269,63 +1498,66 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         setDataObject(SDOString(path), value);
     }
     
-    void DataObjectImpl::setDataObject(const SDOString& path, DataObjectPtr value)
-    {
-        DataObjectImpl* d;
-        SDOString prop = findPropertyContainer(path, &d);
-        if (d != 0)
-        {
-            if (!prop.empty()) {
-                const PropertyImpl* p = d->getPropertyImpl(prop);
-                if (p == 0 && d->getType().isOpenType())
-                {
-                    if (value != 0)
-                    {
-                        p = d->defineDataObject(prop, value->getType());
-                    }
-                }
-                if (p != 0)
-                {
-                    ASSERT_SETTABLE(p, DataObject)
-                    if (p->isMany())
-                    {
-                        DataObjectList& dol = d->getList((Property&)*p);
-                        long idx;
-                        DataObjectImpl* dx = d->findDataObject(prop,&idx);
-                        // fix this. This is the only place the 2nd parm to findDataObject
-                        // is used. Need a better way to do this
-                        unsigned int index = (unsigned int)idx;
-                        if (index >= 0)
-                        {
-                            if(index < dol.size())
-                            {
-                                dol.setDataObject(index,value);
-                            }
-                            else 
-                            {
-                                dol.append(value);
-                            }
-                            return;
-                        }
-                        string msg("Set of data object on many valued item");
-                        msg += path;
-                        SDO_THROW_EXCEPTION("setDataObject", SDOUnsupportedOperationException,
-                            msg.c_str());
-                    }
-                    else 
-                    {
-                        d->setDataObject((Property&)*p,value);
-                        return;
-                    }
-                }
+   void DataObjectImpl::setDataObject(const SDOString& path,
+                                      DataObjectPtr value)
+   {
+      DataObjectImpl* d;
+
+      SDOString prop = findPropertyContainer(path, &d);
+      if (d != 0)
+      {
+         if (!prop.empty()) {
+            const PropertyImpl* p = d->getPropertyImpl(prop);
+            if ((p == 0) && (d->getType().isOpenType()))
+            {
+               if (value != 0)
+               {
+                  p = d->defineDataObject(prop, value->getType());
+               }
             }
-        }
+            if (p != 0)
+            {
+               ASSERT_SETTABLE(p, DataObject);
+               if (p->isMany())
+               {
+                  DataObjectList& dol = d->getList((Property&)*p);
+                  long idx;
+                  DataObjectImpl* dx = d->findDataObject(prop,&idx);
+                  // fix this. This is the only place the 2nd parm to findDataObject
+                  // is used. Need a better way to do this
+                  unsigned int index = (unsigned int) idx;
+                  if (index >= 0)
+                  {
+                     if(index < dol.size())
+                     {
+                        dol.setDataObject(index, value);
+                     }
+                     else 
+                     {
+                        dol.append(value);
+                     }
+                     return;
+                  }
+                  string msg("Set of data object on many valued item");
+                  msg += path;
+                  SDO_THROW_EXCEPTION("setDataObject",
+                                      SDOUnsupportedOperationException,
+                                      msg.c_str());
+               }
+               else 
+               {
+                  d->setDataObject((Property&)*p,value);
+                  return;
+               }
+            }
+         }
+      }
         
-        string msg("Path not valid:");
-        msg += path;
-        SDO_THROW_EXCEPTION("setDataObject", SDOPathNotFoundException,
-            msg.c_str());
-    }
+      string msg("Path not valid:");
+      msg += path;
+      SDO_THROW_EXCEPTION("setDataObject", SDOPathNotFoundException,
+                          msg.c_str());
+   }
 
     void DataObjectImpl::validateIndex(unsigned int index)
     {
@@ -2431,125 +1663,124 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     void DataObjectImpl::setDataObject(const Property& prop, DataObjectPtr value)
     {
-        unsigned int propertyIndex = getPropertyIndexInternal(prop);
+       unsigned int propertyIndex = getPropertyIndexInternal(prop);
 
-       
-        if (value != 0)
-        {
-            checkFactory(value, propertyIndex);
-            checkType(prop,value->getType());
-        }
+       if (value != 0)
+       {
+          checkFactory(value, propertyIndex);
+          checkType(prop, value->getType());
+       }
 
-        validateIndex(propertyIndex);
+       validateIndex(propertyIndex);
 
-        if (prop.isReference() && value != 0)
-        {
-            // just need to make sure that the object is already part of our
-            // tree.
-            DataObjectImpl* r1 = this;
-            while (r1->getContainerImpl() != 0)
-            {
-                r1 = r1->getContainerImpl();
-            }
-            DataObjectImpl* r2 = (DataObjectImpl*)(DataObject*)value;
-            while (r2->getContainerImpl() != 0)
-            {
-                r2 = r2->getContainerImpl();
-            }
-            if (r1 != r2)
-            {
-                string msg("Set of a reference to an object outside the graph");
-                SDO_THROW_EXCEPTION("setDataObject", SDOUnsupportedOperationException,
-                msg.c_str());
-            }
-        }
+       if (prop.isReference() && (value != 0))
+       {
+          // just need to make sure that the object is already part of our tree.
+          DataObjectImpl* r1 = this;
+          while (r1->getContainerImpl() != 0)
+          {
+             r1 = r1->getContainerImpl();
+          }
+          DataObjectImpl* r2 = (DataObjectImpl*) (DataObject*) value;
+          while (r2->getContainerImpl() != 0)
+          {
+             r2 = r2->getContainerImpl();
+          }
+          if (r1 != r2)
+          {
+             string msg("Set of a reference to an object outside the graph");
+             SDO_THROW_EXCEPTION("setDataObject",
+                                 SDOUnsupportedOperationException,
+                                 msg.c_str());
+          }
+       }
 
-        if ((prop.isMany()))
-        {
-            string msg("Set operation on a many valued property:");
-            msg += prop.getName();
-            SDO_THROW_EXCEPTION("setDataObject", SDOUnsupportedOperationException,
-                msg.c_str());
-        }
+       if ((prop.isMany()))
+       {
+          string msg("Set operation on a many valued property:");
+          msg += prop.getName();
+          SDO_THROW_EXCEPTION("setDataObject",
+                              SDOUnsupportedOperationException,
+                              msg.c_str());
+       }
 
-        ASSERT_WRITABLE(prop, setDataObject)
+       ASSERT_WRITABLE(prop, setDataObject);
 
-        if (value == 0) 
-        {
-            PropertyValueMap::iterator j;
-            for (j = PropertyValues.begin(); j != PropertyValues.end(); ++j)
-            {
-                if ((*j).first == propertyIndex) {
-                    if (prop.isReference())
-                    {
-                        ((*j).second)->unsetReference(this, prop);
-                    }
-                    else
-                    {
-                        // log both deletion and change - change is not 
-                        // automatically recorded by deletion.
-                        ((*j).second)->logDeletion();
-                    }
-                    logChange(prop);
-                    (*j).second = RefCountingPointer<DataObjectImpl>(0);
-            
-                    return;
-                }
-            }
-            logChange(prop);
-            PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,(DataObjectImpl*)0));
-            return;
-        }
-
-        DataObject* dob = value;
-        PropertyValueMap::iterator i;
-        for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
-        {
-            if ((*i).first == propertyIndex) {
-
+       if (value == 0) 
+       {
+          PropertyValueMap::iterator j;
+          for (j = PropertyValues.begin(); j != PropertyValues.end(); ++j)
+          {
+             if ((*j).first == propertyIndex)
+             {
                 if (prop.isReference())
                 {
-                    ((*i).second)->unsetReference(this, prop);
+                   ((*j).second)->unsetReference(this, prop);
                 }
                 else
                 {
-                    // log both deletion and change - change is not 
-                    // automatically recorded by deletion.
-                    ((*i).second)->logDeletion();
+                   // log both deletion and change - change is not 
+                   // automatically recorded by deletion.
+                   ((*j).second)->logDeletion();
                 }
                 logChange(prop);
-
-                (*i).second = RefCountingPointer<DataObjectImpl>((DataObjectImpl*)dob);
-
-            
-                if (prop.isReference())
-                {
-                    ((DataObjectImpl*)dob)->setReference(this, prop);
-                }
-                else
-                {
-                    logCreation((*i).second, this, prop);
-                }
+                (*j).second = RefCountingPointer<DataObjectImpl>(0);
                 return;
-            }
-        }
-        if (prop.isReference())
-        {
-            ((DataObjectImpl*)dob)->setReference(this, prop);
-        }
-        else
-        {
-            ((DataObjectImpl*)dob)->setContainer(this);
-            ((DataObjectImpl*)dob)->setApplicableChangeSummary();
-            // log creation before putting into property values.
-            // also log change - not done by logCreation
-            logCreation((DataObjectImpl*)dob, this, prop);
-        }
+             }
+          }
+          logChange(prop);
+          PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) 0));
+          return;
+       }
 
-        logChange(prop);
+       DataObject* dob = value;
+       PropertyValueMap::iterator i;
+       for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
+       {
+          if ((*i).first == propertyIndex)
+          {
+             if (prop.isReference())
+             {
+                ((*i).second)->unsetReference(this, prop);
+             }
+             else
+             {
+                // log both deletion and change - change is not 
+                // automatically recorded by deletion.
+                ((*i).second)->logDeletion();
+             }
+             logChange(prop);
 
-        PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,(DataObjectImpl*)dob));
-        return;
+             (*i).second = RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob);
+
+             if (prop.isReference())
+             {
+                ((DataObjectImpl*) dob)->setReference(this, prop);
+             }
+             else
+             {
+                logCreation((*i).second, this, prop);
+             }
+             return;
+          }
+       }
+       if (prop.isReference())
+       {
+          ((DataObjectImpl*)dob)->setReference(this, prop);
+       }
+       else
+       {
+          ((DataObjectImpl*)dob)->setContainer(this);
+          ((DataObjectImpl*)dob)->setApplicableChangeSummary();
+          // log creation before putting into property values.
+          // also log change - not done by logCreation
+          logCreation((DataObjectImpl*)dob, this, prop);
+       }
+
+       logChange(prop);
+
+       PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) dob));
+       return;
     }
 
     bool DataObjectImpl::isValid(const char* path)
@@ -2836,86 +2067,95 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
 
     DataObjectImpl* DataObjectImpl::getDataObjectImpl(const SDOString& path)
     {
-        
-        DataObjectImpl* d = 0;
-        SDOString prop = findPropertyContainer(path,&d);
-        // char* prop = findPropertyContainer(path,&d);
-        if (d != 0) {
-            if (!prop.empty()) {
-                if (prop.find_first_of("[.") != string::npos) {
-                    /* Its a multlvalued property */
-                    long l;
-                    DataObjectImpl* theob = d->findDataObject(prop,&l);
-                    if (theob == 0) {
-                        string msg("Get DataObject - index out of range:");
-                        msg += path;
-                        SDO_THROW_EXCEPTION("getDataObject" ,SDOIndexOutOfRangeException,
-                            msg.c_str());
-                    }
-                    return theob;
-                }
-                else 
+
+       DataObjectImpl* d = 0;
+       SDOString prop = findPropertyContainer(path, &d);
+       if (d != 0)
+       {
+          if (!prop.empty())
+          {
+             if (prop.find_first_of("[.") != string::npos)
+             {
+                /* Its a multi-valued property */
+                long l;
+                DataObjectImpl* theob = d->findDataObject(prop, &l);
+                if (theob == 0)
                 {
-                    if (prop.length() == 0) 
-                    {
-                        return d;
-                    }
-                    const Property& p = d->getProperty(prop);
-                    return d->getDataObjectImpl(p);
+                   string msg("Get DataObject - index out of range:");
+                   msg += path;
+                   SDO_THROW_EXCEPTION("getDataObject",
+                                       SDOIndexOutOfRangeException,
+                                       msg.c_str());
                 }
-            }
-            else {
-                return d;
-            }
-        }
-        
-        string msg("Invalid path:");
-        msg += path;
-        SDO_THROW_EXCEPTION("getDataObject" ,SDOPathNotFoundException,
-            msg.c_str());
-    }
-    
+                return theob;
+             }
+             else 
+             {
+                if (prop.length() == 0) 
+                {
+                   return d;
+                }
+                const Property& p = d->getProperty(prop);
+                return d->getDataObjectImpl(p);
+             }
+          }
+          else
+          {
+             return d;
+          }
+       }
 
-    RefCountingPointer<DataObject> DataObjectImpl::getDataObject(unsigned int propertyIndex)
-    {
-        if ((getProperty(propertyIndex).isMany()))
-        {
-            string msg("get operation on a many valued property:");
-            msg += getProperty(propertyIndex).getName();
-            SDO_THROW_EXCEPTION("getDataObject", SDOUnsupportedOperationException,
-                msg.c_str());
-        }
-        DataObjectImpl* ptr = getDataObjectImpl(propertyIndex);;
-        return RefCountingPointer<DataObject>((DataObject*)ptr);
+       string msg("Invalid path:");
+       msg += path;
+       SDO_THROW_EXCEPTION("getDataObject",
+                           SDOPathNotFoundException,
+                           msg.c_str());
     }
 
-    DataObjectImpl* DataObjectImpl::getDataObjectImpl(unsigned int propertyIndex)
-    {
-        PropertyValueMap::iterator i;
-        for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
-        {
-            if ((*i).first == propertyIndex)
+   RefCountingPointer<DataObject> DataObjectImpl::getDataObject(unsigned int propertyIndex)
+   {
+      if ((getProperty(propertyIndex).isMany()))
+      {
+         string msg("get operation on a many valued property:");
+         msg += getProperty(propertyIndex).getName();
+         SDO_THROW_EXCEPTION("getDataObject",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
+      DataObjectImpl* ptr = getDataObjectImpl(propertyIndex);
+
+      return RefCountingPointer<DataObject>((DataObject*)ptr);
+   }
+
+   DataObjectImpl* DataObjectImpl::getDataObjectImpl(unsigned int propertyIndex)
+   {
+      PropertyValueMap::iterator i;
+      for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
+      {
+         if ((*i).first == propertyIndex)
+         {
+            DataObject* dob = (*i).second;
+            if ((dob == 0) || ((DataObjectImpl*) dob)->isNull())
             {
-                DataObject* dob = (*i).second;
-                if (dob == 0 || ((DataObjectImpl*)dob)->isNull())return 0;
-                return (DataObjectImpl*)dob;
+               return 0;
             }
-        }
-        return 0;
-    }
+            return (DataObjectImpl*) dob;
+         }
+      }
+      return 0;
+   }
 
-  
-    RefCountingPointer<DataObject> DataObjectImpl::getDataObject(const Property& property)
-    {
-        DataObjectImpl* ptr = getDataObjectImpl(property);
-        return RefCountingPointer<DataObject>((DataObject*)ptr);
-    }
 
-    DataObjectImpl* DataObjectImpl::getDataObjectImpl(const Property& property)
-    {
-        return getDataObjectImpl(getPropertyIndex(property));
-    }
+   RefCountingPointer<DataObject> DataObjectImpl::getDataObject(const Property& property)
+   {
+      DataObjectImpl* ptr = getDataObjectImpl(property);
+      return RefCountingPointer<DataObject>((DataObject*) ptr);
+   }
 
+   DataObjectImpl* DataObjectImpl::getDataObjectImpl(const Property& property)
+   {
+      return getDataObjectImpl(getPropertyIndex(property));
+   }
 
 
 
@@ -3269,185 +2509,596 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
     ///////////////////////////////////////////////////////////////////////////
     
 
-    bool DataObjectImpl::getBoolean()
-    {
-        return getTypeImpl().convertToBoolean(value, valuelength);
-    }
+   bool DataObjectImpl::getBoolean()
+   {
+      return getTypeImpl().convertToBoolean(sdoValue);
+   }
 
-
-    char DataObjectImpl::getByte()
-    {
-        return getTypeImpl().convertToByte(value,valuelength);
-
-    }
-
+   char DataObjectImpl::getByte()
+   {
+      return getTypeImpl().convertToByte(sdoValue);
+   }
 
     wchar_t DataObjectImpl::getCharacter()
     {
-        return getTypeImpl().convertToCharacter(value,valuelength);
-
+       return getTypeImpl().convertToCharacter(sdoValue);
     }
 
     long DataObjectImpl::getInteger() 
     {
-        return getTypeImpl().convertToInteger(value,valuelength);
-
+       return getTypeImpl().convertToInteger(sdoValue);
     }
-
 
     long double DataObjectImpl::getDouble()
     {
-        return getTypeImpl().convertToDouble(value,valuelength);
+       return getTypeImpl().convertToDouble(sdoValue);
     }
-
 
     float DataObjectImpl::getFloat()
     {
-        return getTypeImpl().convertToFloat(value,valuelength);
-
+       return getTypeImpl().convertToFloat(sdoValue);
     }
-
-
 
     int64_t DataObjectImpl::getLong()
     {
-        return getTypeImpl().convertToLong(value,valuelength);
-
+       return getTypeImpl().convertToLong(sdoValue);
     }
-
 
     short DataObjectImpl::getShort()
     {
-        return getTypeImpl().convertToShort(value,valuelength);
-
+       return getTypeImpl().convertToShort(sdoValue);
     }
 
-    unsigned int DataObjectImpl::getString( wchar_t* outptr, unsigned int max)
-    {
-        if (outptr == 0 || max == 0) return valuelength;
-        return getTypeImpl().convertToString(value, outptr, valuelength, max);
+   unsigned int DataObjectImpl::getString(wchar_t* outptr, unsigned int max)
+   {
+      return getTypeImpl().convertToString(sdoValue, outptr, max);
+   }
 
-    }
     unsigned int DataObjectImpl::getBytes( char* outptr, unsigned int max)
     {
-        if (outptr == 0 || max == 0) return valuelength;
-        return getTypeImpl().convertToBytes(value, outptr, valuelength, max);
-
+       return getTypeImpl().convertToBytes(sdoValue, outptr, max);
     }
 
     const char* DataObjectImpl::getCString()
     {
-        return getTypeImpl().convertToCString(value, &asStringBuffer, valuelength);
-
+       return getTypeImpl().convertToCString(sdoValue);
     }
 
     const SDODate DataObjectImpl::getDate()
     {
-        return getTypeImpl().convertToDate(value, valuelength); /* time_t == long*/
-
+       return getTypeImpl().convertToDate(sdoValue);
     }
 
     DataObjectImpl* DataObjectImpl::getDataObject()
     {
-        return (DataObjectImpl*)getTypeImpl().convertToDataObject(value, valuelength);
+       // If the sdoValue is unset, then there is no primitive value.
+       // If doValue is non-null then that is the data object value.
+       switch (getTypeImpl().getTypeEnum())
+       {
+          case Type::OtherTypes:
+          case Type::DataObjectType:
+             return doValue;
 
+          case Type::BooleanType:
+          case Type::ByteType:
+          case Type::CharacterType:
+          case Type::IntegerType: 
+          case Type::ShortType:
+          case Type::DoubleType:
+          case Type::FloatType:
+          case Type::LongType:
+          case Type::DateType:
+          case Type::BigDecimalType: 
+          case Type::BigIntegerType: 
+          case Type::StringType:    
+          case Type::BytesType:
+          case Type::UriType:
+          default:
+          {
+             string msg("Cannot get Data Object from object of type:");
+             msg += getTypeImpl().getName();
+             SDO_THROW_EXCEPTION("DataObjectImpl::getDataObject",
+                                 SDOInvalidConversionException,
+                                 msg.c_str());
+             break;
+          }   
+       }
+       return 0;
     }
 
+   void DataObjectImpl::setBoolean(bool invalue)
+   {
+      switch(getTypeEnum())
+      {
 
-    void DataObjectImpl::setBoolean(bool invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
-    }
+         case Type::BooleanType: 
+         case Type::ByteType:
+         case Type::CharacterType:
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::LongType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
+
+         case Type::DoubleType:    
+         case Type::FloatType:    
+         case Type::DateType:
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Boolean on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("setBoolean" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
 
-    void DataObjectImpl::setByte(char invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
+   void DataObjectImpl::setByte(char invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
 
-    }
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Byte on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setByte" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
 
-    void DataObjectImpl::setCharacter(wchar_t invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
-    }
+   void DataObjectImpl::setCharacter(wchar_t invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
+
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Character on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setCharacter" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
     void DataObjectImpl::setString(const wchar_t* invalue, unsigned int len)
     {
-        valuelength = getTypeImpl().convert(&value,invalue, len);
-        return;
+       switch (getTypeEnum())
+       {
+          case Type::BigDecimalType:
+          case Type::BigIntegerType:
+          case Type::UriType:
+          case Type::StringType:
+          case Type::BytesType:
+          case Type::BooleanType:    
+          case Type::CharacterType: 
+          case Type::ByteType:
+          case Type::ShortType:
+          case Type::IntegerType:
+          case Type::LongType:
+             sdoValue = SDOValue(invalue, len);
+             break;
+
+          case Type::DoubleType:    
+          case Type::FloatType:    
+          case Type::DateType:
+          case Type::OtherTypes:
+          case Type::DataObjectType: 
+          case Type::ChangeSummaryType:
+          default:
+          {
+             string msg("Cannot set String on object of type:");
+             msg += getTypeImpl().getName();
+             SDO_THROW_EXCEPTION("DataObjectImpl::setString" ,
+                                 SDOInvalidConversionException,
+                                 msg.c_str());
+             break;
+          }
+       }
+       return;
     }
 
-    void DataObjectImpl::setBytes(const char* invalue, unsigned int len)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue, len);
-        return;
+   void DataObjectImpl::setBytes(const char* invalue, unsigned int len)
+   {
+      switch (getTypeEnum())
+      {
+          case Type::BytesType:
+          case Type::BigDecimalType: 
+          case Type::BigIntegerType: 
+          case Type::UriType:
+          case Type::StringType:
+          case Type::BooleanType:    
+          case Type::ByteType:
+          case Type::CharacterType: 
+          case Type::IntegerType: 
+          case Type::ShortType:
+          case Type::LongType:
+             sdoValue = SDOValue(invalue, len);
+             break;
+
+          case Type::DoubleType:
+          case Type::FloatType:    
+          case Type::DateType:
+          case Type::OtherTypes:
+          case Type::DataObjectType: 
+          case Type::ChangeSummaryType:
+          default:
+          {
+             string msg("Cannot set Bytes on object of type:");
+             msg += getTypeImpl().getName();
+             SDO_THROW_EXCEPTION("DataObjectImpl::setBytes" ,
+                                 SDOInvalidConversionException,
+                                 msg.c_str());
+             return;
+          }
+       }
+       return;
     }
 
    void DataObjectImpl::setInteger(long invalue) 
-    {
-#if __WORDSIZE ==64
-        valuelength = getTypeImpl().convert(&value,(int64_t)invalue);
-#else
-        valuelength = getTypeImpl().convert(&value,invalue);
-#endif
-        return;
-    }
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
+        
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set LongLong on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setInteger" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
 
-    void DataObjectImpl::setDouble(long double invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
-    }
+   void DataObjectImpl::setDouble(long double invalue)
+   {
+      switch (getTypeEnum()) 
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+            sdoValue = SDOValue(invalue);
+            break;
 
-    void DataObjectImpl::setFloat(float invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Long Double on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("setDouble" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
-    }
+   void DataObjectImpl::setFloat(float invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+            sdoValue = SDOValue(invalue);
+            break;
+
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Float on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("setFloat" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+         break;
+      }
+      return;
+   }
 
 
-    void DataObjectImpl::setLong(int64_t invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
-    }
+   void DataObjectImpl::setLong(int64_t invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
+
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set Long on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setLong" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
 
-    void DataObjectImpl::setShort(short invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
+   void DataObjectImpl::setShort(short invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:    
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
 
-    }
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set short on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setShort" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
     void DataObjectImpl::setCString(const char* invalue)
     {
         setCString(SDOString(invalue));
     }
 
-    void DataObjectImpl::setCString(const SDOString& invalue)
-    {
-        valuelength = getTypeImpl().convert(&value, invalue);
-        return;
-    }
+   void DataObjectImpl::setCString(const SDOString& invalue)
+   {
+      switch (getTypeEnum())
+      {
+         case Type::BooleanType:
+         case Type::ByteType:
+         case Type::CharacterType:
+         case Type::IntegerType:
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:   
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
+       
+         case Type::OtherTypes:
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set CString on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setCString" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
     void DataObjectImpl::setDate(const SDODate invalue)
-    {
-        valuelength = getTypeImpl().convertDate(&value,invalue); /* time_t == long*/
-        return;
-    }
+   {
+      switch (getTypeEnum())
+      {
+         case Type::ByteType:
+         case Type::CharacterType: 
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:    
+         case Type::LongType:      
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::UriType:
+         case Type::BytesType:
+            sdoValue = SDOValue(invalue);
+            break;
 
-    void DataObjectImpl::setDataObject(DataObject* invalue)
-    {
-        valuelength = getTypeImpl().convert(&value,invalue);
-        return;
-    }
+         case Type::OtherTypes:
+         case Type::BooleanType:    
+         case Type::DataObjectType: 
+         case Type::ChangeSummaryType:
+         default:
+         {
+            string msg("Cannot set LongLong on object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setDate" ,
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
+
+   void DataObjectImpl::setDataObject(DataObject* inValue)
+   {
+      // If the sdoValue is unset, then there is no primitive value.
+      // If doValue is non-null then that is the data object value.
+      switch (getTypeImpl().getTypeEnum())
+      {
+         case Type::OtherTypes:
+         case Type::DataObjectType:
+            doValue = (DataObjectImpl*) inValue;
+            break;
+
+         case Type::BooleanType:
+         case Type::ByteType:
+         case Type::CharacterType:
+         case Type::IntegerType: 
+         case Type::ShortType:
+         case Type::DoubleType:
+         case Type::FloatType:
+         case Type::LongType:
+         case Type::DateType:
+         case Type::BigDecimalType: 
+         case Type::BigIntegerType: 
+         case Type::StringType:    
+         case Type::BytesType:
+         case Type::UriType:
+         default:
+         {
+            string msg("Cannot set Data Object for object of type:");
+            msg += getTypeImpl().getName();
+            SDO_THROW_EXCEPTION("DataObjectImpl::setDataObject",
+                                SDOInvalidConversionException,
+                                msg.c_str());
+            break;
+         }
+      }
+      return;
+   }
 
     void DataObjectImpl::setNull()
     {
@@ -3465,105 +3116,68 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
     }
 
 
-    DataObjectImpl::DataObjectImpl(const TypeImpl& t) 
-    {
-        ObjectType = (TypeImpl*)&t;
-        container = 0;
-        value = 0; /* Will be initialized when used */
-        valuelength = 0;
-        asStringBuffer = 0;
-//        asXPathBuffer = 0;
-        isnull = false;
-        
-        // open type support
-        openBase = t.getPropertiesSize() ;
+   DataObjectImpl::DataObjectImpl(const TypeImpl& t) :
+      ObjectType((TypeImpl*) &t),
+      container(0),
+      doValue(0),
+      isnull(false),
+      userdata((void*) 0xFFFFFFFF),
+      changesummaryobject(0)
+   {
+      // open type support
+      openBase = t.getPropertiesSize() ;
 
-        userdata = (void*)0xFFFFFFFF;
+      if (t.isChangeSummaryType())
+      {
+         localCS = new ChangeSummaryImpl();
+      }
+      else 
+      {
+         localCS = 0;
+      }
 
-        if (t.isChangeSummaryType())
-        {
-            changesummaryobject = 0;
-            localCS = new ChangeSummaryImpl();
-        }
-        else 
-        {
-            changesummaryobject = 0;
-            localCS = 0;
-        }
-
-        if (getType().isSequencedType()) sequence = new SequenceImpl(this);
-        else sequence = 0;
-    }
+      if (getType().isSequencedType()) 
+      {
+         sequence = new SequenceImpl(this);
+      }
+      else
+      {
+         sequence = 0;
+      }
+   }
 
 
+   DataObjectImpl::DataObjectImpl(DataFactory* df, const Type& t) :
+      ObjectType((TypeImpl*) &t),
+      factory(df),
+      container(0),
+      isnull(false),
+      userdata((void*) 0xFFFFFFFF),
+      changesummaryobject(0)
+   {
+      // open type support
+      openBase = ObjectType->getPropertiesSize() ;
 
-    DataObjectImpl::DataObjectImpl(DataFactory* df, const Type& t) : ObjectType((TypeImpl*)&t),
-        factory(df)
-    {
-        container = 0;
-        value = 0;
-        valuelength = 0;
-        asStringBuffer = 0;
-//        asXPathBuffer = 0;
-        isnull = false;
 
-        // open type support
-        openBase = ObjectType->getPropertiesSize() ;
+      if (ObjectType->isChangeSummaryType())
+      {
+         localCS = new ChangeSummaryImpl();
+      }
+      else 
+      {
+         localCS = 0;
+      }
 
-        userdata = (void*)0xFFFFFFFF;
+      if (getType().isSequencedType()) 
+      {
+         sequence = new SequenceImpl(this);
+      }
+      else 
+      {
+         sequence = 0;
+      }
+   }
 
-        if (ObjectType->isChangeSummaryType())
-        {
-            changesummaryobject = 0;
-            localCS = new ChangeSummaryImpl();
-        }
-        else 
-        {
-            changesummaryobject = 0;
-            localCS = 0;
-        }
-
-        if (getType().isSequencedType()) 
-        {
-            sequence = new SequenceImpl(this);
-        }
-        else 
-        {
-            sequence = 0;
-        }
-    }
-
-    void DataObjectImpl::deleteValue()
-    {
-        switch (getTypeEnum())
-        {
-        case  Type::BooleanType:
-        case  Type::ByteType:
-        case  Type::CharacterType:
-        case  Type::IntegerType: 
-        case  Type::DateType:   
-        case  Type::DoubleType:
-        case  Type::FloatType:
-        case  Type::LongType:
-        case  Type::ShortType:
-        case  Type::BytesType:
-            delete (char*)value;
-            return;
-
-        case  Type::BigDecimalType:
-        case  Type::BigIntegerType:
-        case  Type::StringType:
-        case  Type::UriType:
-            delete (wchar_t*)value;
-            return;
-
-        case Type::DataObjectType:
-            return;
-
-        default:
-            return;
-        }
-    }
 
     DataObjectImpl::~DataObjectImpl()
     {
@@ -3603,17 +3217,11 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         //so we dont need to detach....
         //detach();
 
-        
-        if (asStringBuffer != 0) delete asStringBuffer;
-//        if (asXPathBuffer != 0) delete asXPathBuffer;
-
-        if (value != 0) 
+        if (sdoValue.isSet())
         {
-            if (getType().isDataType())deleteValue();
+           sdoValue = SDOValue::unsetSDOValue;
         }
         
-        
-
         if (getType().isSequencedType()) 
         {
             if (sequence != 0) delete sequence;
@@ -3993,6 +3601,1219 @@ void DataObjectImpl::handlePropertyNotSet(const char* name)
         SDOUtils::printDataObject(os, this);
         return os;
     }
+
+   // +++
+   // Extra methods to support SDOValue as an internal mechanism that
+   // simplifies dealing with the many interchangeable primitive data types.
+
+   // set methods.
+
+   void DataObjectImpl::setSDOValue(const SDOString& path,
+                                    const SDOValue& sval,
+                                    const SDOString& dataType)
+   {
+      DataObjectImpl *d = 0;
+
+      SDOString spath;
+      SDOString prop;
+      try
+      {
+         DataObjectImpl::stripPath(path, spath);
+         prop = findPropertyContainer(spath, &d);
+
+         if (d != 0)
+         {
+            if (prop.length() == 0)
+            {
+               d->setSDOValue(sval);
+            }
+            else
+            {
+               const PropertyImpl* p = d->getPropertyImpl(prop);
+               if ((p == 0) && (d->getType().isOpenType()))
+               {
+                  // p = d->defineBytes(prop);
+                  p = d->defineSDOValue(prop, sval);
+               }
+
+               if (p == 0)
+               {
+                  string msg("DataObjectImpl::setSDOValue - path not found: ");
+                  SDO_THROW_EXCEPTION("setter",
+                                      SDOPathNotFoundException,
+                                      msg.c_str());
+               }
+
+               if (p->isReadOnly())
+               {
+                  SDOString stringBuffer = p->getName();
+                  stringBuffer += " is read-only.";
+                  SDO_THROW_EXCEPTION("DataObjectImpl::setSDOValue",
+                                      SDOUnsupportedOperationException,
+                                      stringBuffer.c_str());
+               }
+
+               if ((p->isMany()) || (p->getTypeImpl()->isFromList()))
+               {
+                  long l;
+                  DataObjectList& dol = d->getList((Property&) *p);
+                  DataObjectImpl* doi = d->findDataObject(prop, &l);
+                  if (doi != 0)
+                  {
+                     doi->setSDOValue(sval);
+                  }
+                  else 
+                  {
+                     dol.append(sval);
+                  }
+               }
+               else
+               {
+                  d->setSDOValue((Property&)*p, sval, dataType);
+               }
+            }
+         }
+      }
+      catch (SDORuntimeException e)
+      {
+         SDO_RETHROW_EXCEPTION("setSDOValue", e);
+      }
+   }
+
+   void DataObjectImpl::setSDOValue(unsigned int propertyIndex,
+                                    const SDOValue& sval,
+                                    const SDOString& dataType)
+   {
+      validateIndex(propertyIndex);
+
+      PropertyImpl *const p = getPropertyImpl(propertyIndex);
+
+      if ((p->isMany()) || (p->getTypeImpl()->isFromList()))
+      {
+         string msg("Set value not available on many valued property: ");
+         msg += p->getName();
+         SDO_THROW_EXCEPTION("DataObjectImpl::setSDOValue",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
+
+      if (p->isReadOnly())
+      {
+          SDOString stringBuffer = p->getName();
+          stringBuffer += "is read-only.";
+          SDO_THROW_EXCEPTION("DataObjectImpl::setSDOValue",
+                              SDOUnsupportedOperationException,
+                              stringBuffer.c_str());
+      }
+
+      // PropertyValues is a std::list of rdo objects.
+      PropertyValueMap::iterator i;
+      for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
+      {
+         if ((*i).first == propertyIndex)
+         {
+            logChange(propertyIndex);
+            (*i).second->unsetNull();
+            (*i).second->setSDOValue(sval);
+            return;
+         }
+      }
+      // No existing property has the given index.
+
+      DataFactory* df = getDataFactory();
+      // It is tempting to use the raw data type from the SDOValue object to
+      // set the type of the created DataObjectImpl but we can't because the
+      // SDOValue specifies a C++ type while we need an SDO type.
+      DataObjectImpl* b =
+         new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI, dataType.c_str()));
+      b->setContainer(this);
+      b->setApplicableChangeSummary();
+      logChange(propertyIndex);
+      PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, b));
+      b->setSDOValue(sval);
+      return;
+   }
+
+   void DataObjectImpl::setSDOValue(const Property& property,
+                                    const SDOValue& sval,
+                                    const SDOString& dataType)
+   {
+      setSDOValue(getPropertyIndexInternal(property), sval, dataType);
+   }
+
+   void DataObjectImpl::setSDOValue(const SDOValue& invalue)
+   {
+      sdoValue = invalue;
+      return;
+   }
+
+   // get methods
+
+   const SDOValue& DataObjectImpl::getSDOValue(const SDOString& path,
+                                               PropertyImpl** propertyForDefault)
+   {
+      *propertyForDefault = 0;
+      
+      DataObjectImpl* d = 0;
+      SDOString spath;
+      SDOString prop;
+      try
+      {
+         DataObjectImpl::stripPath(path, spath);
+         // It is possible for findPropertyContainer to return a 0 which caues an accvio.
+         prop = findPropertyContainer(spath, &d);
+         if (d != 0)
+         {
+            if (prop.length() == 0)
+            {
+               return d->getSDOValue(propertyForDefault);
+            }
+            else
+            {
+               PropertyImpl* p  = d->getPropertyImpl(prop);
+               if (p != 0)
+               {
+                  if ((p->isMany()) || p->getTypeImpl()->isFromList())
+                  {
+                     long l;
+                     DataObjectImpl* doi = d->findDataObject(prop, &l);
+                     if (doi != 0)
+                     {
+                        return doi->getSDOValue(propertyForDefault);
+                     }
+                     string msg("DataObjectImpl::getSDOValue - index out of range");
+                     msg += path;
+                     SDO_THROW_EXCEPTION("getter",
+                                         SDOIndexOutOfRangeException,
+                                         msg.c_str());
+                  }
+                  else
+                  {
+                     if (!d->isSet(*p))
+                     {
+                        *propertyForDefault = p;
+                        return SDOValue::unsetSDOValue;
+                     }
+                     return d->getSDOValue(*p, propertyForDefault);
+                  }
+               }
+            }
+         }
+         string msg("Object not found");
+         SDO_THROW_EXCEPTION("DataObjectImpl::getSDOValue",
+                             SDOPathNotFoundException,
+                             msg.c_str());
+      }
+      catch (SDORuntimeException e) {
+         SDO_RETHROW_EXCEPTION("getSDOValue", e);
+      }
+   }
+
+   const SDOValue& DataObjectImpl::getSDOValue(const unsigned int propertyIndex,
+                                               PropertyImpl** propertyForDefault)
+   {
+      *propertyForDefault = 0;
+
+      validateIndex(propertyIndex);
+
+      // Since validateIndex didn't throw an exception, the following call
+      // will not return a null pointer.
+      PropertyImpl* targetProperty = getPropertyImpl(propertyIndex);
+      if ((targetProperty->isMany()) ||
+          targetProperty->getTypeImpl()->isFromList())
+      {
+         string msg("Get value not available on many valued property:");
+         msg += targetProperty->getName();
+         SDO_THROW_EXCEPTION("DataObjectImpl::getSDOValue",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
+
+      DataObjectImpl* d = getDataObjectImpl(propertyIndex);
+      if (d != 0)
+      {
+         if (!d->isNull())
+         {
+            return d->getSDOValue(propertyForDefault);
+         }
+         else
+         {
+            return SDOValue::nullSDOValue;
+         }
+      }
+
+      // To get here, the property does not have a value, but there are still 2
+      // cases to consider:
+      // 1. The property has never had a value. In this case, we return
+      // "unset" for the value of the property.
+      // 2. The property did have a value at one time but since then has
+      // been explicitly set to null, causing the value to be discarded. In
+      // that case return an explicit null.
+
+      if (isSet(propertyIndex))
+      {
+         return SDOValue::nullSDOValue;
+      }
+
+      *propertyForDefault = targetProperty;
+      return SDOValue::unsetSDOValue;
+
+   }
+
+   const SDOValue& DataObjectImpl::getSDOValue(const Property& property,
+                                               PropertyImpl** propertyForDefault)
+   {
+      return getSDOValue(getPropertyIndex(property), propertyForDefault);
+   }
+
+   const SDOValue& DataObjectImpl::getSDOValue(PropertyImpl** propertyForDefault)
+   {
+      if (sdoValue.isSet())
+      {
+         *propertyForDefault = 0;
+      }
+      else
+      {
+         *propertyForDefault = (PropertyImpl*) &(getContainmentProperty());
+      }
+      return sdoValue;
+   }
+
+   // End of SDOValue methods
+   // ---
+
+   // +++
+   // setBoolean using SDOValue methods
+
+   void DataObjectImpl::setBoolean(unsigned int propertyIndex,
+                                   bool value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Boolean");
+   }
+
+   void DataObjectImpl::setBoolean(const Property& property, bool value)
+   {
+      setBoolean(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setBoolean(const SDOString& path,
+                                   bool value)
+   {
+      setSDOValue(path, SDOValue(value), "Boolean");
+   }
+
+   // End of setBoolean using SDOValue methods
+   // ---
+
+   // +++
+   // getBoolean using SDOValue methods
+
+   bool DataObjectImpl::getBoolean(const Property& property)
+   {
+      return getBoolean(getPropertyIndex(property));
+   }
+
+   bool DataObjectImpl::getBoolean(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getBooleanDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return false;
+         }
+         else
+         {
+            return result.getBoolean();
+         }
+      }
+   }
+
+   bool DataObjectImpl::getBoolean(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getBooleanDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return false;
+         }
+         else
+         {
+            return result.getBoolean();
+         }
+      }
+   }
+
+   // End of getBoolean using SDOValue methods
+   // ---
+
+   // +++
+   // setFloat using SDOValue methods
+
+   void DataObjectImpl::setFloat(unsigned int propertyIndex,
+                                 float value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Float");
+   }
+
+   void DataObjectImpl::setFloat(const Property& property, float value)
+   {
+      setFloat(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setFloat(const SDOString& path,
+                                 float value)
+   {
+      setSDOValue(path, SDOValue(value), "Float");
+   }
+
+   // End of setFloat using SDOValue methods
+   // ---
+
+   // +++
+   // getFloat using SDOValue methods
+
+   float DataObjectImpl::getFloat(const Property& property)
+   {
+      return getFloat(getPropertyIndex(property));
+   }
+
+   float DataObjectImpl::getFloat(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getFloatDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0.0F;       // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getFloat();
+         }
+      }
+   }
+
+   float DataObjectImpl::getFloat(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getFloatDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0.0F;       // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getFloat();
+         }
+      }
+   }
+
+   // End of getFloat using SDOValue methods
+   // ---
+
+   // +++
+   // setDouble using SDOValue methods
+
+   void DataObjectImpl::setDouble(unsigned int propertyIndex,
+                                  long double value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Double");
+   }
+
+   void DataObjectImpl::setDouble(const Property& property, long double value)
+   {
+      setDouble(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setDouble(const SDOString& path,
+                                  long double value)
+   {
+      setSDOValue(path, SDOValue(value), "Double");
+   }
+
+   // End of setDouble using SDOValue methods
+   // ---
+
+   // +++
+   // getDouble using SDOValue methods
+
+   long double DataObjectImpl::getDouble(const Property& property)
+   {
+      return getDouble(getPropertyIndex(property));
+   }
+
+   long double DataObjectImpl::getDouble(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getDoubleDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0.0;         // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getDouble();
+         }
+      }
+   }
+
+   long double DataObjectImpl::getDouble(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getDoubleDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0.0;         // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getDouble();
+         }
+      }
+   }
+
+   // End of getDouble using SDOValue methods
+   // ---
+
+   // +++
+   // setShort using SDOValue methods
+
+   void DataObjectImpl::setShort(unsigned int propertyIndex,
+                                 short value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Short");
+   }
+
+   void DataObjectImpl::setShort(const Property& property, short value)
+   {
+      setShort(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setShort(const SDOString& path,
+                                 short value)
+   {
+      setSDOValue(path, SDOValue(value), "Short");
+   }
+
+   // End of setShort using SDOValue methods
+   // ---
+
+   // +++
+   // getShort using SDOValue methods
+
+   short DataObjectImpl::getShort(const Property& property)
+   {
+      return getShort(getPropertyIndex(property));
+   }
+
+   short DataObjectImpl::getShort(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getShortDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getShort();
+         }
+      }
+   }
+
+   short DataObjectImpl::getShort(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getShortDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getShort();
+         }
+      }
+   }
+
+   // End of getShort using SDOValue methods
+   // ---
+
+   // +++
+   // setByte using SDOValue methods
+
+   void DataObjectImpl::setByte(unsigned int propertyIndex,
+                                char value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Byte");
+   }
+
+   void DataObjectImpl::setByte(const Property& property, char value)
+   {
+      setByte(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setByte(const SDOString& path,
+                                 char value)
+   {
+      setSDOValue(path, SDOValue(value), "Byte");
+   }
+
+   // End of setByte using SDOValue methods
+   // ---
+
+   // +++
+   // getByte using SDOValue methods
+
+   char DataObjectImpl::getByte(const Property& property)
+   {
+      return getByte(getPropertyIndex(property));
+   }
+
+   char DataObjectImpl::getByte(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getByteDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getByte();
+         }
+      }
+   }
+
+   char DataObjectImpl::getByte(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getByteDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getByte();
+         }
+      }
+   }
+
+   // End of getByte using SDOValue methods
+   // ---
+
+   // +++
+   // setDate using SDOValue methods
+
+   void DataObjectImpl::setDate(unsigned int propertyIndex,
+                                const SDODate value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Date");
+   }
+
+   void DataObjectImpl::setDate(const Property& property, const SDODate value)
+   {
+      setDate(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setDate(const SDOString& path,
+                                const SDODate value)
+   {
+      setSDOValue(path, SDOValue(value), "Date");
+   }
+
+   // End of setDouble using SDOValue methods
+   // ---
+
+   // +++
+   // getDate using SDOValue methods
+
+   const SDODate DataObjectImpl::getDate(const Property& property)
+   {
+      return getDate(getPropertyIndex(property));
+   }
+
+   const SDODate DataObjectImpl::getDate(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getDateDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return SDODate(0);         // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getDate();
+         }
+      }
+   }
+
+   const SDODate DataObjectImpl::getDate(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getDateDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return SDODate(0);         // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getDate();
+         }
+      }
+   }
+
+   // End of getDouble using SDOValue methods
+   // ---
+
+   // +++
+   // setInteger using SDOValue methods
+
+   void DataObjectImpl::setInteger(unsigned int propertyIndex,
+                                 long value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Integer");
+   }
+
+   void DataObjectImpl::setInteger(const Property& property, long value)
+   {
+      setInteger(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setInteger(const SDOString& path,
+                                 long value)
+   {
+      setSDOValue(path, SDOValue(value), "Integer");
+   }
+
+   // End of setInteger using SDOValue methods
+   // ---
+
+   // +++
+   // getInteger using SDOValue methods
+
+   long DataObjectImpl::getInteger(const Property& property)
+   {
+      return getInteger(getPropertyIndex(property));
+   }
+
+   long DataObjectImpl::getInteger(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getIntegerDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getInteger();
+         }
+      }
+   }
+
+   long DataObjectImpl::getInteger(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getIntegerDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getInteger();
+         }
+      }
+   }
+
+   // End of getInteger using SDOValue methods
+   // ---
+
+   // +++
+   // setCString using SDOValue methods
+
+   void DataObjectImpl::setCString(unsigned int propertyIndex,
+                                   const SDOString& value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "String");
+   }
+
+   void DataObjectImpl::setCString(const Property& property, const SDOString& value)
+   {
+      setCString(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setCString(const SDOString& path,
+                                   const SDOString& value)
+   {
+      setSDOValue(path, SDOValue(value), "String");
+   }
+
+   // End of setCString using SDOValue methods
+   // ---
+
+   // +++
+   // getCString using SDOValue methods
+
+   const char* DataObjectImpl::getCString(const Property& property)
+   {
+      return getCString(getPropertyIndex(property));
+   }
+
+   const char* DataObjectImpl::getCString(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getCStringDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getCString();
+         }
+      }
+   }
+
+   const char* DataObjectImpl::getCString(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getCStringDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getCString();
+         }
+      }
+   }
+
+   // End of getCString using SDOValue methods
+   // ---
+
+   // +++
+   // setCharacter using SDOValue methods
+
+   void DataObjectImpl::setCharacter(unsigned int propertyIndex,
+                                     wchar_t value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Character");
+   }
+
+   void DataObjectImpl::setCharacter(const Property& property, wchar_t value)
+   {
+      setCharacter(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setCharacter(const SDOString& path,
+                                     wchar_t value)
+   {
+      setSDOValue(path, SDOValue(value), "Character");
+   }
+
+   // End of setByte using SDOValue methods
+   // ---
+
+   // +++
+   // getByte using SDOValue methods
+
+   wchar_t DataObjectImpl::getCharacter(const Property& property)
+   {
+      return getCharacter(getPropertyIndex(property));
+   }
+
+   wchar_t DataObjectImpl::getCharacter(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getCharacterDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return (wchar_t) 0;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getCharacter();
+         }
+      }
+   }
+
+   wchar_t DataObjectImpl::getCharacter(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getCharacterDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return (wchar_t) 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getCharacter();
+         }
+      }
+   }
+
+   // End of getCharacter using SDOValue methods
+   // ---
+
+   // +++
+   // setLong using SDOValue methods
+
+   void DataObjectImpl::setLong(unsigned int propertyIndex,
+                                int64_t value)
+   {
+      setSDOValue(propertyIndex, SDOValue(value), "Long");
+   }
+
+   void DataObjectImpl::setLong(const Property& property, int64_t value)
+   {
+      setLong(getPropertyIndexInternal(property), value);
+   }
+
+   void DataObjectImpl::setLong(const SDOString& path,
+                                int64_t value)
+   {
+      setSDOValue(path, SDOValue(value), "Long");
+   }
+
+   // End of setLong using SDOValue methods
+   // ---
+
+   // +++
+   // getLong using SDOValue methods
+
+   int64_t DataObjectImpl::getLong(const Property& property)
+   {
+      return getLong(getPropertyIndex(property));
+   }
+
+   int64_t DataObjectImpl::getLong(unsigned int propertyIndex)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getLongDefault();
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0L;           // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getLong();
+         }
+      }
+   }
+
+   int64_t DataObjectImpl::getLong(const SDOString& path)
+   {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getLongDefault();         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getLong();
+         }
+      }
+   }
+
+   // End of getLong using SDOValue methods
+   // ---
+
+   // The input value is a non-null terminated sequence of bytes.
+   void DataObjectImpl::setBytes(unsigned int propertyIndex, const char* value, unsigned int len)
+   {
+      setSDOValue(propertyIndex, SDOValue(value, len), "Bytes");      
+   }
+
+   void DataObjectImpl::setString(unsigned int propertyIndex, const wchar_t* value, unsigned int len)
+   {
+      setSDOValue(propertyIndex, SDOValue(value, len), "String");
+   }
+
+   unsigned int DataObjectImpl::getBytes(unsigned int propertyIndex, char* valptr , unsigned int max)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getBytesDefault(valptr, max);
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;
+         }
+         else
+         {
+            return result.getBytes(valptr, max);
+         }
+      }
+   }
+
+   unsigned int DataObjectImpl::getString(unsigned int propertyIndex, wchar_t* valptr , unsigned int max)
+   {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(propertyIndex, &propertyForDefault);
+      
+      if (!result.isSet())
+      {
+         return propertyForDefault->getStringDefault(valptr, max);
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;
+         }
+         else
+         {
+            return result.getString(valptr, max);
+         }
+      }
+   }
+
+    unsigned int DataObjectImpl::getString(const SDOString& path, wchar_t* valptr , unsigned int max)
+    {
+
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getStringDefault(valptr, max);
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;
+         }
+         else
+         {
+            return result.getString(valptr, max);
+         }
+      }
+    }
+
+    unsigned int DataObjectImpl::getBytes(const SDOString& path, char* valptr , unsigned int max)
+    {
+      PropertyImpl* propertyForDefault = 0;
+      const SDOValue& result = getSDOValue(path, &propertyForDefault);
+
+      if (!result.isSet())
+      {
+         return propertyForDefault->getBytesDefault(valptr, max);         
+      }
+      else
+      {
+         if (result.isNull())
+         {
+            return 0;        // Default is 0 cast to return type
+         }
+         else
+         {
+            return result.getBytes(valptr, max);
+         }
+      }
+    }
+
+   void DataObjectImpl::setString(const char* path, const wchar_t* value, unsigned int len)
+   {
+      setString(SDOString(path), value, len);
+   }
+
+    void DataObjectImpl::setBytes(const char* path, const char* value, unsigned int len)
+    {
+        setBytes(SDOString(path), value, len);
+    }
+
+    void DataObjectImpl::setString(const SDOString& path, const wchar_t* value, unsigned int len)
+    {
+      setSDOValue(path, SDOValue(value, len), "String");
+    }
+
+
+    void DataObjectImpl::setBytes(const SDOString& path, const char* value, unsigned int len)
+    {
+      setSDOValue(path, SDOValue(value, len), "Bytes");
+    }
+
+    unsigned int DataObjectImpl::getString(const Property& property, wchar_t* val, unsigned int max)
+    {
+       return getString(getPropertyIndex(property), val, max);
+    }
+
+    unsigned int DataObjectImpl::getBytes(const Property& property, char* val, unsigned int max)
+    {
+       return getBytes(getPropertyIndex(property), val, max);
+    }
+
+  void DataObjectImpl::setString(const Property& property, const wchar_t* value, unsigned int len)
+  {
+      setString(getPropertyIndexInternal(property),value, len);
+  }
+
+  void DataObjectImpl::setBytes(const Property& property, const char* value, unsigned int len)
+  {
+      setBytes(getPropertyIndexInternal(property),value, len);
+  }
 
 };
 };

@@ -616,6 +616,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\DataTypeInfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\DefaultLogWriter.cpp"
 				>
 				<FileConfiguration
@@ -1100,6 +1104,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDODataConverter.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDODate.cpp"
 				>
 				<FileConfiguration
@@ -1230,6 +1238,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOValue.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOXMLBufferWriter.cpp"
@@ -1973,6 +1985,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\DataTypeInfo.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\DefaultLogWriter.h"
 				>
 			</File>
@@ -2077,6 +2093,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDODataConverter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDODate.h"
 				>
 			</File>
@@ -2110,6 +2130,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOUtils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\runtime\core\src\commonj\sdo\SDOValue.h"
 				>
 			</File>
 			<File

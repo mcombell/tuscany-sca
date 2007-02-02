@@ -37,6 +37,7 @@ libtuscany_sdo_la_SOURCES = \
 	DataObjectInstance.cpp \
 	DataObjectList.cpp \
 	DataObjectListImpl.cpp \
+	DataTypeInfo.cpp \
 	DefaultLogWriter.cpp \
 	EqualityHelper.cpp \
 	GroupDefinition.cpp \
@@ -59,12 +60,14 @@ libtuscany_sdo_la_SOURCES = \
 	SAX2Parser.cpp \
 	SchemaInfo.cpp \
 	SdoCheck.cpp \
+	SDODataConverter.cpp \
 	SDODate.cpp \
 	SdoRuntime.cpp \
 	SDORuntimeException.cpp \
 	SDOSAX2Parser.cpp \
 	SDOSchemaSAX2Parser.cpp \
 	SDOUtils.cpp \
+	SDOValue.cpp \
 	SDOXMLBufferWriter.cpp \
 	SDOXMLFileWriter.cpp \
 	SDOXMLStreamWriter.cpp \

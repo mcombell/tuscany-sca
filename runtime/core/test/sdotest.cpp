@@ -908,389 +908,422 @@ int sdotest::testGetters(DataObjectPtr dor)
 
 int sdotest::testGetter(DataObjectPtr dor, char* str)
 {
+   try
+   {
+      bool b = dor->getBoolean(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) 
+      {
+         cout << "WRONG unset and undefaulted" << endl;
+      }
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
+      if (!strcmp(str,"dataobject"))
+      {
+         return 1;
+      }
+      return 0;
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        bool b = dor->getBoolean(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      char by = dor->getByte(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        char by = dor->getByte(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      wchar_t cy = dor->getCharacter(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
-
-    try {
-        wchar_t cy = dor->getCharacter(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
-      if (!strcmp(str,"dataobject")) return 1;
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
       return 0;
+   }
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
-
-    try {
-        short s = dor->getShort(str);
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      short s = dor->getShort(str);
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       if (!strcmp(str,"bytes")) return 1;
       return 0;
 
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        int i = dor->getInteger(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      int i = dor->getInteger(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        long l = dor->getLong(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      long l = dor->getLong(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        int64_t ll = dor->getLong(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      int64_t ll = dor->getLong(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        float f = dor->getFloat(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      float f = dor->getFloat(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        long double d = dor->getDouble(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      long double d = dor->getDouble(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    unsigned int len;
+   unsigned int len;
 
-    try {
-        len = dor->getLength(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      len = dor->getLength(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent)
+      {
+         cout << "WRONG  unset and undefaulted" << endl; 
+      }
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
+      if (!strcmp(str,"dataobject"))
+      {
+         return 1;
+      }
+      return 0;
+
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
+
+   if (len > 0) {
+      try  {
+         wchar_t * buf = new wchar_t[len];
+         unsigned int gotlen = dor->getString(str,buf,len);
+      }
+      catch (SDOPropertyNotSetException pe)
+      {
+         if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+         return 0;
+      }
+      catch (SDOInvalidConversionException ec)
+      {
+         if (!strcmp(str,"dataobject")) return 1;
+         return 0;
+
+      }
+      catch (SDORuntimeException e)
+      {
+         if (!silent) cout << e.getEClassName() << endl; 
+         return 0;
+      }
+      try {
+         char * cbuf = new char[len];
+         unsigned int gotlen = dor->getBytes(str,cbuf,len);
+      }
+      catch (SDOPropertyNotSetException pe)
+      {
+         if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+         return 0;
+      }
+      catch (SDOInvalidConversionException ec)
+      {
+         if (!strcmp(str,"dataobject")) return 1;
+         return 0;
+
+      }
+      catch (SDORuntimeException e)
+      {
+         if (!silent) cout << e.getEClassName() << endl; 
+         return 0;
+      }
+   }
+
+   try {
+      SDODate t = dor->getDate(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << " WRONG unset and undefaulted" << endl; 
+      return 0;
+   }
+
+   // The following catch block returns to the caller, regardless of whether
+   // the getDate call succeeded or failed. This has the effect of aborting
+   // further tests in this method. Similar remarks apply to many of the catch
+   // blocks here. They should be cleaned up so that as many tests as possible
+   // are run, certainly when predecessors succeed and preferably even if they fail.
+   catch (SDOInvalidConversionException ec)
+   {
+      if (!strcmp(str,"bytes")) return 1;
+      if (!strcmp(str,"boolean")) return 1;
+      if (!strcmp(str,"string")) return 1;
       if (!strcmp(str,"dataobject")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
-
-    if (len > 0) {
-        try  {
-            wchar_t * buf = new wchar_t[len];
-            unsigned int gotlen = dor->getString(str,buf,len);
-        }
-        catch (SDOPropertyNotSetException pe)
-        {
-            if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-            return 0;
-        }
-        catch (SDOInvalidConversionException ec)
-        {
-            if (!strcmp(str,"dataobject")) return 1;
-             return 0;
-
-        }
-        catch (SDORuntimeException e)
-        {
-            if (!silent) cout << e.getEClassName() << endl; 
-            return 0;
-        }
-        try {
-            char * cbuf = new char[len];
-            unsigned int gotlen = dor->getBytes(str,cbuf,len);
-        }
-        catch (SDOPropertyNotSetException pe)
-        {
-            if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-            return 0;
-        }
-        catch (SDOInvalidConversionException ec)
-        {
-            if (!strcmp(str,"dataobject")) return 1;
-            return 0;
-
-        }
-        catch (SDORuntimeException e)
-        {
-            if (!silent) cout << e.getEClassName() << endl; 
-            return 0;
-        }
-    }
-
-    try {
-        SDODate t = dor->getDate(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << " WRONG unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
-       if (!strcmp(str,"boolean")) return 1;
-       if (!strcmp(str,"boolean")) return 1;
-       if (!strcmp(str,"string")) return 1;
-       if (!strcmp(str,"dataobject")) return 1;
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
       return 0;
+   }
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
-
-    try {
-        const char * string = dor->getCString(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG -  unset and undefaulted" << endl; 
-        return 0;
-    }
-    catch (SDOInvalidConversionException ec)
-    {
+   try {
+      const char * string = dor->getCString(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG -  unset and undefaulted" << endl; 
+      return 0;
+   }
+   catch (SDOInvalidConversionException ec)
+   {
       if (!strcmp(str,"dataobject")) return 1;
       if (!strcmp(str,"date")) return 1;
       return 0;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
 
-    try {
-        DataObjectPtr dob = dor->getDataObject(str);
-    }
-    catch (SDOPropertyNotSetException pe)
-    {
-        if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
-        return 0;
-    }
+   try {
+      DataObjectPtr dob = dor->getDataObject(str);
+   }
+   catch (SDOPropertyNotSetException pe)
+   {
+      if (!silent) cout << "WRONG  unset and undefaulted" << endl; 
+      return 0;
+   }
 
-    catch (SDOInvalidConversionException ec)
-    {
-        if (!strcmp(str,"dataobject")) return 0;
-        return 1;
+   catch (SDOInvalidConversionException ec)
+   {
+      if (!strcmp(str,"dataobject")) return 0;
+      return 1;
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent) cout << e.getEClassName() << endl; 
-        return 0;
-    }
-    return 1;
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << e.getEClassName() << endl; 
+      return 0;
+   }
+   return 1;
 
 }
 
 int sdotest::conversiontest()
 {
-    //cout << "Conversion tests" << endl;
 
-    DataFactoryPtr mdg  = DataFactory::getDataFactory();
-    mdg->addType("myspace","Container");
-    mdg->addType("myspace","Contained");
-    mdg->addPropertyToType("myspace","Container","boolean","commonj.sdo","Boolean");
-    mdg->addPropertyToType("myspace","Container","byte","commonj.sdo","Byte");
-    mdg->addPropertyToType("myspace","Container","character","commonj.sdo","Character");
-    mdg->addPropertyToType("myspace","Container","short","commonj.sdo","Short");
-    mdg->addPropertyToType("myspace","Container","integer","commonj.sdo","Integer");
-    mdg->addPropertyToType("myspace","Container","long","commonj.sdo","Long");
-    mdg->addPropertyToType("myspace","Container","float","commonj.sdo","Float");
-    mdg->addPropertyToType("myspace","Container","double","commonj.sdo","Double");
-    mdg->addPropertyToType("myspace","Container","string","commonj.sdo","String");
-    mdg->addPropertyToType("myspace","Container","bytes","commonj.sdo","Bytes");
-    mdg->addPropertyToType("myspace","Container","dataobject","myspace","Contained");
-    mdg->addPropertyToType("myspace","Container","date","commonj.sdo","Date");
-    mdg->addPropertyToType("myspace","Container","bigint","commonj.sdo","BigInteger");
-    mdg->addPropertyToType("myspace","Container","bigdec","commonj.sdo","BigDecimal");
+   if (!silent)
+   {
+      cout << "Conversion tests" << endl;
+   }
 
+   DataFactoryPtr mdg  = DataFactory::getDataFactory();
+   mdg->addType("myspace","Container");
+   mdg->addType("myspace","Contained");
+   mdg->addPropertyToType("myspace","Container","boolean","commonj.sdo","Boolean");
+   mdg->addPropertyToType("myspace","Container","byte","commonj.sdo","Byte");
+   mdg->addPropertyToType("myspace","Container","character","commonj.sdo","Character");
+   mdg->addPropertyToType("myspace","Container","short","commonj.sdo","Short");
+   mdg->addPropertyToType("myspace","Container","integer","commonj.sdo","Integer");
+   mdg->addPropertyToType("myspace","Container","long","commonj.sdo","Long");
+   mdg->addPropertyToType("myspace","Container","float","commonj.sdo","Float");
+   mdg->addPropertyToType("myspace","Container","double","commonj.sdo","Double");
+   mdg->addPropertyToType("myspace","Container","string","commonj.sdo","String");
+   mdg->addPropertyToType("myspace","Container","bytes","commonj.sdo","Bytes");
+   mdg->addPropertyToType("myspace","Container","dataobject","myspace","Contained");
+   mdg->addPropertyToType("myspace","Container","date","commonj.sdo","Date");
+   mdg->addPropertyToType("myspace","Container","bigint","commonj.sdo","BigInteger");
+   mdg->addPropertyToType("myspace","Container","bigdec","commonj.sdo","BigDecimal");
 
-    const Type& tcc = mdg->getType("myspace","Container");
-    DataObjectPtr dor = mdg->create((Type&)tcc);
+   const Type& tcc = mdg->getType("myspace","Container");
+   DataObjectPtr dor = mdg->create((Type&)tcc);
 
-    // phase 1 - all unset.......
+   if (!silent)
+   {
+      cout << "+++++++++++++++PROPERTY VALUES UNSET ++++++++++++++++++" << endl;
+   }
+   
+   if (!testGetters(dor))
+   {
+      return 0;
+   }
+   
+   if (!silent)
+   {
+      cout << "+++++++++++++++PROPERTY VALUES SET ++++++++++++++++++++" << endl;
+   }
 
-    // cout << "+++++++++++++++PROPERTY VALUES UNSET ++++++++++++++++++" << endl;
+   // RHEL 4 has problems processing 64 bit integer constants, so we'll do it
+   // the hard way. This is overkill but gives the option to vary the value a
+   // bit.
 
-    if (!testGetters(dor)) return 0;
+   int64_t largeInt = 0xFFFF;
+   for (int j = 0; j < 2; j++)
+   {
+      largeInt <<= 16;
+      largeInt += 0xFFFF;
+   }
 
-    // cout << "+++++++++++++++PROPERTY VALUES SET ++++++++++++++++++++" << endl;
+   DataObjectPtr sub = dor->createDataObject("dataobject");
+   dor->setBoolean("boolean", true);
+   dor->setByte("byte",20);
+   dor->setCharacter("character", 1000);
+   dor->setShort("short", (short)12345678);
+   dor->setInteger("integer", 87654321);
+   dor->setLong("long", largeInt);
+   dor->setFloat("float", (float)12345.678);
+   dor->setDouble("double", 1234567.891);
+   dor->setDate("date", 37575);
+   wchar_t* chars = new wchar_t[50];
+   for (int i=0;i<50;i++) {chars[i] = 0x7F20 + i ;}
+   dor->setString("string",chars, 50);
 
-    // RHEL 4 has problems processing 64 bit integer constants, so we'll do it the hard way
-    // This is overkill but gives the option to vary the value a bit.
+   char* tchars = new char[50];
+   for (int ii=0;ii<50;ii++) {tchars[ii] = ii + 32;}
+   dor->setBytes("bytes",tchars, 50);
 
-    int64_t largeInt = 0xFFFF;
-    for (int j = 0; j < 2; j++)
-    {
-        largeInt <<= 16;
-        largeInt += 0xFFFF;
-    }
+   if (!testGetters(dor))
+   {
+      return 0;
+   }
 
-    DataObjectPtr sub = dor->createDataObject("dataobject");
-    dor->setBoolean("boolean", true);
-    dor->setByte("byte",20);
-    dor->setCharacter("character", 1000);
-    dor->setShort("short", (short)12345678);
-    dor->setInteger("integer", 87654321);
-    dor->setLong("long", largeInt);
-    dor->setFloat("float", (float)12345.678);
-    dor->setDouble("double", 1234567.891);
-    dor->setDate("date", 37575);
-    wchar_t* chars = new wchar_t[50];
-    for (int i=0;i<50;i++) {chars[i] = 0x7F20 + i ;}
-    dor->setString("string",chars, 50);
-
-    char* tchars = new char[50];
-    for (int ii=0;ii<50;ii++) {tchars[ii] = ii + 32;}
-    dor->setBytes("bytes",tchars, 50);
-
-
-    if (!testGetters(dor)) return 0;
-
-    // cout << "+++++++++++++++END OF TEST ++++++++++++++++++++++++++++" << endl;
-
-    return 1;
+   if (!silent)
+   {
+      cout << "+++++++++++++++END OF TEST ++++++++++++++++++++++++++++" << endl;
+   }
+   
+   return 1;
 }
 
 
@@ -2989,7 +3022,9 @@ int sdotest::maintest()
             dor->setCString("departments","department label");
             const char* slabel = dor->getCString("departments");
             fprintf(f, "String in list type:%s\n", slabel);
-            return 0;
+            // SDOValue change. Setting values usually works now, so no
+            //exception expected (the error is thrown on the get)
+            //return 0;
         }
         catch (SDORuntimeException e)
         {
