@@ -34,6 +34,8 @@ namespace commonj
    namespace sdo
    {
 
+      const int SDODataConverter::MAX_TRANSIENT_SIZE = 48;
+
       const bool SDODataConverter::convertToBoolean(const DataTypeInfo::SDODataTypeUnion& sourceValue,
                                                     const DataTypeInfo::TrueDataType& dataType)
       {
@@ -137,7 +139,7 @@ namespace commonj
 
             case DataTypeInfo::TDTWideString:
             {
-               // char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               // char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                char* tmpstr = new char[sourceValue.WideString.length + 1];
                for (unsigned int j = 0; j < sourceValue.WideString.length; j++)
                {
@@ -601,7 +603,7 @@ namespace commonj
       SDOString* SDODataConverter::convertToSDOString(const DataTypeInfo::SDODataTypeUnion& sourceValue,
                                                       const DataTypeInfo::TrueDataType& dataType)
       {
-         char buffer[DataTypeInfo::MAX_TRANSIENT_SIZE];
+         char buffer[SDODataConverter::MAX_TRANSIENT_SIZE];
          buffer[0] = 0;
 
          switch (dataType)
@@ -752,7 +754,7 @@ namespace commonj
 
             case DataTypeInfo::TDTshort:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
 
                sprintf(tmpstr, "%ld", sourceValue.Short);
@@ -770,7 +772,7 @@ namespace commonj
             }
             case DataTypeInfo::TDTlong:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%ld", sourceValue.Integer);
@@ -788,7 +790,7 @@ namespace commonj
             }
             case DataTypeInfo::TDTint64_t:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%lld", sourceValue.Int64);
@@ -806,7 +808,7 @@ namespace commonj
             }
             case DataTypeInfo::TDTfloat:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%.3e", sourceValue.Float);
@@ -824,7 +826,7 @@ namespace commonj
             }
             case DataTypeInfo::TDTdouble:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%.3Le", sourceValue.Double);
@@ -973,7 +975,7 @@ namespace commonj
 
             case DataTypeInfo::TDTshort:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%ld", sourceValue.Short);
@@ -991,7 +993,7 @@ namespace commonj
 
             case DataTypeInfo::TDTlong:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%ld", sourceValue.Integer);
@@ -1009,7 +1011,7 @@ namespace commonj
 
             case DataTypeInfo::TDTint64_t:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%lld", sourceValue.Integer);
@@ -1027,7 +1029,7 @@ namespace commonj
 
             case DataTypeInfo::TDTfloat:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%.3e", sourceValue.Float);
@@ -1045,7 +1047,7 @@ namespace commonj
 
             case DataTypeInfo::TDTdouble:
             {
-               char tmpstr[DataTypeInfo::MAX_TRANSIENT_SIZE];
+               char tmpstr[SDODataConverter::MAX_TRANSIENT_SIZE];
                unsigned int j = 0;
                
                sprintf(tmpstr, "%.3Le", sourceValue.Double);

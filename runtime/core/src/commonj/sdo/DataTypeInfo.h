@@ -126,13 +126,6 @@ namespace commonj
 
             static const SDOString& convertTypeEnumToString(TrueDataType dataType);
 
-            // We sometimes need to convert primitive data types into an
-            // equivalent string representation and for that we need a
-            // temporary buffer. Rather than fret too much about how big each
-            // one can be we choose a size that should be adequate for any of them
-
-            static const int MAX_TRANSIENT_SIZE = 48;
-
          private:
             // Array of text strings that correspond to TrueDataType enumeration values
             static SDO_API const SDOString rawTypeNames[];

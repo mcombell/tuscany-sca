@@ -69,6 +69,13 @@ namespace commonj
                                                 const DataTypeInfo::TrueDataType& dataType,
                                                 wchar_t* outptr,
                                                 unsigned int max_length);
+         private:
+            // We sometimes need to convert primitive data types into an
+            // equivalent string representation and for that we need a
+            // temporary buffer. Rather than fret too much about how big each
+            // one can be we choose a size that should be adequate for any of them
+
+            static const int MAX_TRANSIENT_SIZE;
       };
    }
 }
