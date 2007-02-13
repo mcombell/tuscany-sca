@@ -215,9 +215,13 @@ class DataObjectImpl : public DataObject
      */
     
     virtual void setDataObject(const char* path, DataObjectPtr value); 
+    virtual void setDataObject(const char* path, DataObjectPtr value, bool updateSequence); 
     virtual void setDataObject(const SDOString& path, DataObjectPtr value); 
+    virtual void setDataObject(const SDOString& path, DataObjectPtr value, bool updateSequence); 
     virtual void setDataObject(unsigned int propertyIndex, DataObjectPtr value); 
+    virtual void setDataObject(unsigned int propertyIndex, DataObjectPtr value, bool updateSequence); 
     virtual void setDataObject(const Property& property, DataObjectPtr value); 
+    virtual void setDataObject(const Property& property, DataObjectPtr value, bool updateSequence);
 
     /**  getBoolean returns a boolean by path, index or property
      *
@@ -596,6 +600,21 @@ class DataObjectImpl : public DataObject
 
     virtual std::ostream& printSelf(std::ostream &os);
 
+    virtual const SDOValue& getSDOValue(PropertyImpl** propertyForDefault);
+    virtual const SDOValue& getSDOValue(const unsigned int propertyIndex,
+                                        PropertyImpl** propertyForDefault);
+    virtual const SDOValue& getSDOValue(const Property& property,
+                                        PropertyImpl** propertyForDefault);
+    virtual const SDOValue& getSDOValue(const SDOString& path,
+                                        PropertyImpl** propertyForDefault);
+    virtual void setSDOValue(const SDOString& path, const SDOValue& sval, const SDOString& dataType);
+    virtual void setSDOValue(unsigned int propindex, const SDOValue& sval, const SDOString& dataType);
+    virtual void setSDOValue(unsigned int propindex, const SDOValue& sval, const SDOString& dataType, bool updateSequence);
+    virtual void setSDOValue(const Property& p, const SDOValue& sval, const SDOString& dataType);
+    virtual void setSDOValue(const Property& p, const SDOValue& sval, const SDOString& dataType, bool updateSequence);
+
+
+
 private:
 	/**
 	 * This method is used internally to find the index of a 
@@ -634,18 +653,6 @@ private:
 
     // Does not keep a reference counted pointer to the container.
     DataObjectImpl* container;
-
-    virtual void setSDOValue(const SDOString& path, const SDOValue& sval, const SDOString& dataType);
-    virtual void setSDOValue(unsigned int propindex, const SDOValue& sval, const SDOString& dataType);
-    virtual void setSDOValue(const Property& p, const SDOValue& sval, const SDOString& dataType);
-
-    virtual const SDOValue& getSDOValue(PropertyImpl** propertyForDefault);
-    virtual const SDOValue& getSDOValue(const unsigned int propertyIndex,
-                                        PropertyImpl** propertyForDefault);
-    virtual const SDOValue& getSDOValue(const Property& property,
-                                        PropertyImpl** propertyForDefault);
-    virtual const SDOValue& getSDOValue(const SDOString& path,
-                                        PropertyImpl** propertyForDefault);
 
     PropertyValueMap PropertyValues;
     

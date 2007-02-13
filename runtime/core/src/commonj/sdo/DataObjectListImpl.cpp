@@ -402,73 +402,80 @@ void DataObjectListImpl::setType(const SDOString& uri, const SDOString& name)
 void DataObjectListImpl::append (DataObjectPtr d)
 {
 
-    if (typeUnset)setType(d->getType().getURI(),d->getType().getName());
+   if (typeUnset)
+   {
+      setType(d->getType().getURI(), d->getType().getName());
+   }
+   if (container != 0)
+   {
+      container->logChange(pindex);
+   }
 
-    if (container != 0)
-    {
-        container->logChange(pindex);
-    }
+   for (unsigned int i = 0; i < plist.size(); i++)
+   {
+      if (plist[i] == d)
+      {
+         std::string msg("Append of object which already exists in the list:");
+         msg += typeURI;
+         msg += " ";
+         msg += typeName;
+         SDO_THROW_EXCEPTION("List append",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
+   }
 
-    for (unsigned int i=0;i < plist.size(); i++)
-    {
-        if (plist[i] == d)
-        {
-        std::string msg("Append of object which already exists in the list:");
-        msg += typeURI;
-        msg += " ";
-        msg += typeName;
-        SDO_THROW_EXCEPTION("List append", SDOUnsupportedOperationException,
-            msg.c_str());
-        }
-    }
+   checkFactory(d);
 
-    checkFactory(d);
+   checkType(theFactory->getType(typeURI, typeName),
+             d->getType());
 
-    checkType(theFactory->getType(typeURI,typeName),
-                d->getType());
+   const Property& property = container->getProperty(pindex);
+   ASSERT_WRITABLE(property, append);
 
-    const Property& property = container->getProperty(pindex);
-    ASSERT_WRITABLE(property,append)
+   DataObject* dob = d; // unwrap the data object ready for a downcasting hack.
+   DataObjectImpl* con  = ((DataObjectImpl*) dob)->getContainerImpl();
 
-    DataObject* dob = d; // unwrap the data object ready for a downcasting hack.
-    DataObjectImpl* con  = ((DataObjectImpl*)dob)->getContainerImpl();  
-    
-    if (!isReference)
-    {
-        if (con != 0)
-        {
-            if (con != container)
-            {
-                /* this data object is already contained somewhere else */
-                std::string msg("Append of object to list, object is already contained:");
-                msg += d->getType().getURI();
-                msg += " ";
-                msg += d->getType().getName();
-                SDO_THROW_EXCEPTION("List append", SDOInvalidConversionException,
-                    msg.c_str());
-            }
-        }
-        else 
-        {
-            ((DataObjectImpl*)dob)->setContainer(container);
-            ((DataObjectImpl*)dob)->setApplicableChangeSummary();
-            if (!container->getProperty(pindex).getType().isDataType())
-            {
-                ((DataObjectImpl*)dob)->logCreation((DataObjectImpl*)dob,
-                    container,property);
-            }
+   if (!isReference)
+   {
+      if (con != 0)
+      {
+         if (con != container)
+         {
+            /* this data object is already contained somewhere else */
+            std::string msg("Append of object to list, object is already contained:");
+            msg += d->getType().getURI();
+            msg += " ";
+            msg += d->getType().getName();
+            SDO_THROW_EXCEPTION("List append",
+                                SDOInvalidConversionException,
+                                msg.c_str());
+         }
+      }
+      else 
+      {
+         ((DataObjectImpl*) dob)->setContainer(container);
+         ((DataObjectImpl*) dob)->setApplicableChangeSummary();
+         if (!container->getProperty(pindex).getType().isDataType())
+         {
+            ((DataObjectImpl*) dob)->logCreation((DataObjectImpl*)dob,
+                                                 container,
+                                                 property);
+         }
+      }
+   }
+   plist.insert(plist.end(), RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob));
 
-        }
-    }
-    plist.insert(plist.end(),RefCountingPointer<DataObjectImpl>((DataObjectImpl*)dob));
-
-    if (container != 0) {
-        if (container->getType().isSequencedType())
-        {
-            SequenceImpl* sq = container->getSequenceImpl();
-            if (sq)sq->push(property,plist.size()-1);
-        }
-    }
+   if (container != 0) {
+      if (container->getType().isSequencedType())
+      {
+         SequenceImpl* sq = container->getSequenceImpl();
+         if (sq)
+         {
+            sq->push(property, (plist.size() - 1));
+         }
+      }
+   }
 }
 
 void DataObjectListImpl::insert (unsigned int index, bool d)

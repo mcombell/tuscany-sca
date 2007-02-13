@@ -51,6 +51,7 @@ int main (int argc, char** argv)
     /* TEST ( sdotest::xhtml1() ); */
     TEST ( sdotest::scopetest() );
     TEST ( sdotest::xsdtosdo() );
+    TEST (  sdotest::jira980() );
 
     /* groups now supported*/
     TEST ( sdotest::testany("list1.xsd",0,"list1.xml", 0) );

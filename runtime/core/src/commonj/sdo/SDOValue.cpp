@@ -93,6 +93,7 @@ namespace commonj
            case DataTypeInfo::SDOCString:
            case DataTypeInfo::SDOByteArray:
               value.TextString = new SDOString(*(inValue.value.TextString));
+			  break;
            case DataTypeInfo::SDOWideString:
               value.WideString.data = new wchar_t[inValue.value.WideString.length + 1];
               // The loop copies the null terminator that was added to the end

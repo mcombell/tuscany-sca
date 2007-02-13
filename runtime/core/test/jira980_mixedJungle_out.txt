@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mixedJungle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><bear xsi:type="bearType"><name>Mummy bear</name><weight>700</weight></bear><panther xsi:type="pantherType"><name>Bagheera</name><colour>inky black</colour></panther><snake xsi:type="snakeType"><name>Kaa</name><length>25</length></snake></mixedJungle>

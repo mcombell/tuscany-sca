@@ -640,12 +640,12 @@ namespace commonj
 
             case DataTypeInfo::TDTfloat:
             {
-               sprintf(buffer , "%ld", sourceValue.Float);
+               sprintf(buffer , "%.3e", sourceValue.Float);
                break;
             }
             case DataTypeInfo::TDTdouble:
             {
-               sprintf(buffer , "%ld", sourceValue.Double);
+               sprintf(buffer , "%.3Le", sourceValue.Double);
                break;
             }
             case DataTypeInfo::TDTSDODate:

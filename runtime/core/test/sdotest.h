@@ -177,6 +177,8 @@ class sdotest {
         static int jira705();
         static int jira546();
         static int jira945();
+        static int jira980();
+      
         
         static int b48602();
         static int b48736();

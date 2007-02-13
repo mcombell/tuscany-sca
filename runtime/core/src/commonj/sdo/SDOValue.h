@@ -111,6 +111,12 @@ namespace commonj
                value.TextString = new SDOString(inValue);
             }
 
+            SDO_API SDOValue(const char* inValue) : 
+               typeOfValue(DataTypeInfo::SDOCString), transient_buffer(0)
+            {
+               value.TextString = new SDOString(inValue);
+            }
+
             SDO_API SDOValue(const char* inValue, unsigned int len);
 
             SDO_API SDOValue(const wchar_t* inValue, unsigned int len);

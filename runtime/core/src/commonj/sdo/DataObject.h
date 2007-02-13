@@ -190,8 +190,11 @@ class DataObject : public RefCountingObject
 
     
     virtual SDO_API void setDataObject(const char* path, DataObjectPtr value) = 0; 
+    virtual SDO_API void setDataObject(const char* path, DataObjectPtr value, bool updateSequence) = 0; 
     virtual SDO_API void setDataObject(const SDOString& path, DataObjectPtr value) = 0; 
+    virtual SDO_API void setDataObject(const SDOString& path, DataObjectPtr value, bool updateSequence) = 0; 
     virtual SDO_API void setDataObject(unsigned int propertyIndex, DataObjectPtr value) = 0; 
+    virtual SDO_API void setDataObject(unsigned int propertyIndex, DataObjectPtr value, bool updateSequence) = 0; 
     virtual SDO_API void setDataObject(const Property& property, DataObjectPtr value) = 0; 
 
     /**  getBoolean returns a boolean by path, index or property

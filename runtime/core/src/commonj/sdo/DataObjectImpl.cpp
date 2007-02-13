@@ -580,42 +580,42 @@ namespace sdo {
       }
    }
 
-    void DataObjectImpl::setNull(const unsigned int propertyIndex)
-    {
-        validateIndex(propertyIndex);
-        const Property& property = getProperty(propertyIndex);
-        if ((property.isMany()))
-        {
-            string msg("Setting a list to null is not supported:");
-            msg += property.getName();
-            SDO_THROW_EXCEPTION("setNull", SDOUnsupportedOperationException,
-                msg.c_str());
-        }
+   void DataObjectImpl::setNull(const unsigned int propertyIndex)
+   {
+      validateIndex(propertyIndex);
+      const Property& property = getProperty(propertyIndex);
+      if (property.isMany())
+      {
+         string msg("Setting a list to null is not supported:");
+         msg += property.getName();
+         SDO_THROW_EXCEPTION("setNull",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
 
-        ASSERT_WRITABLE(property, setNull)
+      ASSERT_WRITABLE(property, setNull);
 
-        PropertyValueMap::iterator i;
-        for (i = PropertyValues.begin(); i != PropertyValues.end();++i)
-            {
-            if ((*i).first == propertyIndex)
-            {
-                logChange(propertyIndex);
-                (*i).second->setNull();
-                return;
-            }
-        }
-        // The property was not set yet...
-        logChange(propertyIndex);
-        DataFactory* df = getDataFactory();
-        DataObjectImpl* b = new DataObjectImpl(df, 
-            getProperty(propertyIndex).getType());
-        b->setContainer(this);
-        b->setApplicableChangeSummary();
-        PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,b));
-        b->setNull();
+      PropertyValueMap::iterator i;
+      for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
+      {
+         if ((*i).first == propertyIndex)
+         {
+            logChange(propertyIndex);
+            (*i).second->setNull();
+            return;
+         }
+      }
+      // The property was not set yet...
+      logChange(propertyIndex);
+      DataFactory* df = getDataFactory();
+      DataObjectImpl* b =
+         new DataObjectImpl(df, getProperty(propertyIndex).getType());
+      b->setContainer(this);
+      b->setApplicableChangeSummary();
+      PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,b));
+      b->setNull();
+   }
 
-
-    }
     void DataObjectImpl::setNull(const Property& property)
     {
         setNull(getPropertyIndexInternal(property));
@@ -1495,11 +1495,23 @@ namespace sdo {
 
     void DataObjectImpl::setDataObject(const char* path, DataObjectPtr value)
     {
-        setDataObject(SDOString(path), value);
+        setDataObject(SDOString(path), value, true);
     }
     
+    void DataObjectImpl::setDataObject(const char* path, DataObjectPtr value, bool updateSequence)
+    {
+        setDataObject(SDOString(path), value, updateSequence);
+    }
+
    void DataObjectImpl::setDataObject(const SDOString& path,
                                       DataObjectPtr value)
+   {
+      setDataObject(path, value, false);
+   }
+   
+   void DataObjectImpl::setDataObject(const SDOString& path,
+                                      DataObjectPtr value,
+                                      bool updateSequence)
    {
       DataObjectImpl* d;
 
@@ -1546,7 +1558,7 @@ namespace sdo {
                }
                else 
                {
-                  d->setDataObject((Property&)*p,value);
+                  d->setDataObject((Property&) *p, value, updateSequence);
                   return;
                }
             }
@@ -1658,130 +1670,173 @@ namespace sdo {
 
     void DataObjectImpl::setDataObject(unsigned int propertyIndex, DataObjectPtr value)
     {
-        setDataObject(getProperty(propertyIndex), value);
+        setDataObject(getProperty(propertyIndex), value, true);
     }
 
-    void DataObjectImpl::setDataObject(const Property& prop, DataObjectPtr value)
+    void DataObjectImpl::setDataObject(unsigned int propertyIndex, DataObjectPtr value, bool updateSequence)
     {
-       unsigned int propertyIndex = getPropertyIndexInternal(prop);
-
-       if (value != 0)
-       {
-          checkFactory(value, propertyIndex);
-          checkType(prop, value->getType());
-       }
-
-       validateIndex(propertyIndex);
-
-       if (prop.isReference() && (value != 0))
-       {
-          // just need to make sure that the object is already part of our tree.
-          DataObjectImpl* r1 = this;
-          while (r1->getContainerImpl() != 0)
-          {
-             r1 = r1->getContainerImpl();
-          }
-          DataObjectImpl* r2 = (DataObjectImpl*) (DataObject*) value;
-          while (r2->getContainerImpl() != 0)
-          {
-             r2 = r2->getContainerImpl();
-          }
-          if (r1 != r2)
-          {
-             string msg("Set of a reference to an object outside the graph");
-             SDO_THROW_EXCEPTION("setDataObject",
-                                 SDOUnsupportedOperationException,
-                                 msg.c_str());
-          }
-       }
-
-       if ((prop.isMany()))
-       {
-          string msg("Set operation on a many valued property:");
-          msg += prop.getName();
-          SDO_THROW_EXCEPTION("setDataObject",
-                              SDOUnsupportedOperationException,
-                              msg.c_str());
-       }
-
-       ASSERT_WRITABLE(prop, setDataObject);
-
-       if (value == 0) 
-       {
-          PropertyValueMap::iterator j;
-          for (j = PropertyValues.begin(); j != PropertyValues.end(); ++j)
-          {
-             if ((*j).first == propertyIndex)
-             {
-                if (prop.isReference())
-                {
-                   ((*j).second)->unsetReference(this, prop);
-                }
-                else
-                {
-                   // log both deletion and change - change is not 
-                   // automatically recorded by deletion.
-                   ((*j).second)->logDeletion();
-                }
-                logChange(prop);
-                (*j).second = RefCountingPointer<DataObjectImpl>(0);
-                return;
-             }
-          }
-          logChange(prop);
-          PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) 0));
-          return;
-       }
-
-       DataObject* dob = value;
-       PropertyValueMap::iterator i;
-       for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
-       {
-          if ((*i).first == propertyIndex)
-          {
-             if (prop.isReference())
-             {
-                ((*i).second)->unsetReference(this, prop);
-             }
-             else
-             {
-                // log both deletion and change - change is not 
-                // automatically recorded by deletion.
-                ((*i).second)->logDeletion();
-             }
-             logChange(prop);
-
-             (*i).second = RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob);
-
-             if (prop.isReference())
-             {
-                ((DataObjectImpl*) dob)->setReference(this, prop);
-             }
-             else
-             {
-                logCreation((*i).second, this, prop);
-             }
-             return;
-          }
-       }
-       if (prop.isReference())
-       {
-          ((DataObjectImpl*)dob)->setReference(this, prop);
-       }
-       else
-       {
-          ((DataObjectImpl*)dob)->setContainer(this);
-          ((DataObjectImpl*)dob)->setApplicableChangeSummary();
-          // log creation before putting into property values.
-          // also log change - not done by logCreation
-          logCreation((DataObjectImpl*)dob, this, prop);
-       }
-
-       logChange(prop);
-
-       PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) dob));
-       return;
+        setDataObject(getProperty(propertyIndex), value, updateSequence);
     }
+
+   void DataObjectImpl::setDataObject(const Property& prop, DataObjectPtr value)
+   {
+      setDataObject(prop, value, false);
+   }
+
+void DataObjectImpl::setDataObject(const Property& prop,
+                                   DataObjectPtr value,
+                                   bool updateSequence)
+{
+   unsigned int propertyIndex = getPropertyIndexInternal(prop);
+
+   if (value != 0)
+   {
+      checkFactory(value, propertyIndex);
+      checkType(prop, value->getType());
+   }
+
+   validateIndex(propertyIndex);
+
+   if (prop.isReference() && (value != 0))
+   {
+      // just need to make sure that the object is already part of our tree.
+      DataObjectImpl* r1 = this;
+      while (r1->getContainerImpl() != 0)
+      {
+         r1 = r1->getContainerImpl();
+      }
+      DataObjectImpl* r2 = (DataObjectImpl*) (DataObject*) value;
+      while (r2->getContainerImpl() != 0)
+      {
+         r2 = r2->getContainerImpl();
+      }
+      if (r1 != r2)
+      {
+         string msg("Set of a reference to an object outside the graph");
+         SDO_THROW_EXCEPTION("setDataObject",
+                             SDOUnsupportedOperationException,
+                             msg.c_str());
+      }
+   }
+
+   if ((prop.isMany()))
+   {
+      string msg("Set operation on a many valued property:");
+      msg += prop.getName();
+      SDO_THROW_EXCEPTION("setDataObject",
+                          SDOUnsupportedOperationException,
+                          msg.c_str());
+   }
+
+   ASSERT_WRITABLE(prop, setDataObject);
+
+   if (value == 0) 
+   {
+      // The new data object value is actually a null pointer.
+      PropertyValueMap::iterator j;
+      // Scan the property value map looking for this property.
+      for (j = PropertyValues.begin(); j != PropertyValues.end(); ++j)
+      {
+         if ((*j).first == propertyIndex)
+         {
+            if (prop.isReference())
+            {
+               ((*j).second)->unsetReference(this, prop);
+            }
+            else
+            {
+               // log both deletion and change - change is not 
+               // automatically recorded by deletion.
+               ((*j).second)->logDeletion();
+            }
+            logChange(prop);
+            (*j).second = RefCountingPointer<DataObjectImpl>(0);
+            // We have just changed the value of this property, therefore
+            // if this is a sequenced data object, then we must update the
+            // sequence so that the new setting appears at the end (and
+            // the existing entry is removed).
+            if ((getType().isSequencedType()) && updateSequence)
+            {
+               SequenceImpl* mySequence = getSequenceImpl();
+               mySequence->removeAll(prop);
+               mySequence->push(prop, 0);
+            }
+
+            return;
+         }
+      }
+      // The property does not currently have a value.
+      logChange(prop);
+      PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) 0));
+      // If this is a sequenced data object then update the
+      // sequence. We already know that a) the property was not previously
+      // set so it can't be in the sequence currently and b) it is not a
+      // multi-valued property.
+      if ((getType().isSequencedType()) && updateSequence)
+      {
+         getSequenceImpl()->push(prop, 0);
+      }
+      return;
+   }
+
+   DataObject* dob = value;
+   PropertyValueMap::iterator i;
+   for (i = PropertyValues.begin(); i != PropertyValues.end(); ++i)
+   {
+      if ((*i).first == propertyIndex)
+      {
+         if (prop.isReference())
+         {
+            ((*i).second)->unsetReference(this, prop);
+         }
+         else
+         {
+            // log both deletion and change - change is not 
+            // automatically recorded by deletion.
+            ((*i).second)->logDeletion();
+         }
+         logChange(prop);
+
+         (*i).second = RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob);
+
+         if (prop.isReference())
+         {
+            ((DataObjectImpl*) dob)->setReference(this, prop);
+         }
+         else
+         {
+            logCreation((*i).second, this, prop);
+         }
+         return;
+      }
+   }
+   if (prop.isReference())
+   {
+      ((DataObjectImpl*)dob)->setReference(this, prop);
+   }
+   else
+   {
+      ((DataObjectImpl*)dob)->setContainer(this);
+      ((DataObjectImpl*)dob)->setApplicableChangeSummary();
+      // log creation before putting into property values.
+      // also log change - not done by logCreation
+      logCreation((DataObjectImpl*)dob, this, prop);
+   }
+
+   logChange(prop);
+
+   PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) dob));
+   // If this is a sequenced data object then update the
+   // sequence. We already know that a) the property is not
+   // in the sequence currently and b) it is not a
+   // multi-valued property.
+   if ((getType().isSequencedType()) && updateSequence)
+   {
+      getSequenceImpl()->push(prop, 0);
+   }
+
+   return;
+}
 
     bool DataObjectImpl::isValid(const char* path)
     {
@@ -1908,54 +1963,55 @@ namespace sdo {
        }
     }
     
-    void DataObjectImpl::unset(const SDOString& path)
-    {
-        DataObjectImpl* d;
-        SDOString prop = findPropertyContainer(path, &d);
-        if (d != 0)
-        {
-            if (!prop.empty())
+   void DataObjectImpl::unset(const SDOString& path)
+   {
+      DataObjectImpl* d;
+      SDOString prop = findPropertyContainer(path, &d);
+      if (d != 0)
+      {
+         if (!prop.empty())
+         {
+            const Property& p = d->getProperty(prop);
+            ASSERT_WRITABLE(p, unset);
+            if (p.isMany())
             {
-                const Property& p = d->getProperty(prop);
-                ASSERT_WRITABLE(p, unset)
-                if (p.isMany())
-                {
-                    SDOString subscript;
-                    size_t beginbrace = prop.find('[');
-                    if (beginbrace != string::npos)
-                    {
-                        size_t endbrace = prop.find(']', ++beginbrace);
-                        if (endbrace != string::npos) {
-                            subscript =
-                                prop.substr(beginbrace, (endbrace - beginbrace));
-                        }
-                        unsigned int i = atoi(subscript.c_str());
-                        if (i > 0) {
-                            i--;
-                            DataObjectList& li = d->getList(p);
-                            li.remove(i);
-                        }
-                        return;
-                    }
-                    size_t firstdot = prop.find('.');
-                    if (firstdot != string::npos) {
-                        subscript = prop.substr(++firstdot);
-                        unsigned int i = atoi(subscript.c_str());
-                        DataObjectList& li = d->getList(p);
-                        li.remove(i);
-                        return;
-                    }
-                }
-                d->unset(p);
-                return;
+               SDOString subscript;
+               size_t beginbrace = prop.find('[');
+               if (beginbrace != string::npos)
+               {
+                  size_t endbrace = prop.find(']', ++beginbrace);
+                  if (endbrace != string::npos) {
+                     subscript =
+                        prop.substr(beginbrace, (endbrace - beginbrace));
+                  }
+                  unsigned int i = atoi(subscript.c_str());
+                  if (i > 0) {
+                     i--;
+                     DataObjectList& li = d->getList(p);
+                     li.remove(i);
+                  }
+                  return;
+               }
+               size_t firstdot = prop.find('.');
+               if (firstdot != string::npos) {
+                  subscript = prop.substr(++firstdot);
+                  unsigned int i = atoi(subscript.c_str());
+                  DataObjectList& li = d->getList(p);
+                  li.remove(i);
+                  return;
+               }
             }
-        }
-        
-        string msg("Invalid path:");
-        msg += path;
-        SDO_THROW_EXCEPTION("unset", SDOPathNotFoundException,
-            msg.c_str());
-    }
+            d->unset(p);
+            return;
+         }
+      }
+
+      string msg("Invalid path:");
+      msg += path;
+      SDO_THROW_EXCEPTION("unset",
+                          SDOPathNotFoundException,
+                          msg.c_str());
+   }
 
     void DataObjectImpl::unset(unsigned int propertyIndex)
     {
@@ -3684,6 +3740,14 @@ namespace sdo {
                                     const SDOValue& sval,
                                     const SDOString& dataType)
    {
+      setSDOValue(propertyIndex, sval, dataType, false);
+   }
+   
+   void DataObjectImpl::setSDOValue(unsigned int propertyIndex,
+                                    const SDOValue& sval,
+                                    const SDOString& dataType,
+                                    bool updateSequence)
+   {
       validateIndex(propertyIndex);
 
       PropertyImpl *const p = getPropertyImpl(propertyIndex);
@@ -3715,11 +3779,21 @@ namespace sdo {
             logChange(propertyIndex);
             (*i).second->unsetNull();
             (*i).second->setSDOValue(sval);
+
+            // If this is a sequenced data object then update the sequence. We
+            // already know that a) the property is already set and b) it
+            // is not a multi-valued property.
+            if ((getType().isSequencedType()) && updateSequence)
+            {
+                   SequenceImpl* mySequence = getSequenceImpl();
+                   mySequence->removeAll(getProperty(propertyIndex));
+                   mySequence->push(getProperty(propertyIndex), 0);
+            }
             return;
          }
       }
-      // No existing property has the given index.
 
+      // No existing property has the given index.
       DataFactory* df = getDataFactory();
       // It is tempting to use the raw data type from the SDOValue object to
       // set the type of the created DataObjectImpl but we can't because the
@@ -3731,6 +3805,17 @@ namespace sdo {
       logChange(propertyIndex);
       PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, b));
       b->setSDOValue(sval);
+
+      // If this is a sequenced data object then update the sequence. We
+      // already know that a) the property is not already set and b) it
+      // is not a multi-valued property.
+      if ((getType().isSequencedType()) && updateSequence)
+      {
+         SequenceImpl* mySequence = getSequenceImpl();
+         mySequence->removeAll(getProperty(propertyIndex));
+         mySequence->push(getProperty(propertyIndex), 0);
+      }
+
       return;
    }
 
@@ -3739,6 +3824,14 @@ namespace sdo {
                                     const SDOString& dataType)
    {
       setSDOValue(getPropertyIndexInternal(property), sval, dataType);
+   }
+
+   void DataObjectImpl::setSDOValue(const Property& property,
+                                    const SDOValue& sval,
+                                    const SDOString& dataType,
+                                    bool updateSequence)
+   {
+      setSDOValue(getPropertyIndexInternal(property), sval, dataType, updateSequence);
    }
 
    void DataObjectImpl::setSDOValue(const SDOValue& invalue)
