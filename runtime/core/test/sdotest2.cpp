@@ -1575,6 +1575,8 @@ int sdotest::upandatom()
 int sdotest::jira980()
 {
 
+   // Load both schema files into a single data factory and create content
+   // within an open type root element.
    try
    {
       // Data factory to load both schema files. 
@@ -1584,9 +1586,6 @@ int sdotest::jira980()
       // Load a root element definition, then the three animal types.
       xsh_both->defineFile("jira980_jungle.xsd");
       xsh_both->defineFile("jira980_animaltypes.xsd");
-
-      // Print the metadata that we now have.
-      TypeList types_both = df_both->getTypes();
 
       // Create three animals based on the preceding types.
       DataObjectPtr baloo = df_both->create("", "bearType");
@@ -1625,11 +1624,64 @@ int sdotest::jira980()
       return 0;
    }
 
+
+   // Load the schema files into two different data factories and then create
+   // content within an open type root element.
+   try
+   {
+      // Load the schema files into two different data factories.
+      DataFactoryPtr df_1 = DataFactory::getDataFactory();
+      DataFactoryPtr df_2 = DataFactory::getDataFactory();
+
+      XSDHelperPtr xsh_1 = HelperProvider::getXSDHelper(df_1);
+      XSDHelperPtr xsh_2 = HelperProvider::getXSDHelper(df_2);
+
+      xsh_1->defineFile("jira980_jungle.xsd");
+      xsh_2->defineFile("jira980_animaltypes.xsd");
+
+      // Create three animals based on the preceding types.
+      DataObjectPtr baloo = df_2->create("", "bearType");
+      baloo->setCString("name", "Mummy bear");
+      baloo->setInteger("weight", 700);
+
+      DataObjectPtr bagheera = df_2->create("", "pantherType");
+      bagheera->setCString("name", "Bagheera");
+      bagheera->setCString("colour", "inky black");
+
+      DataObjectPtr kaa = df_2->create("", "snakeType");
+      kaa->setCString("name", "Kaa");
+      kaa->setInteger("length", 25);
+
+      // Create an output document
+      XMLHelperPtr xmh_1 = HelperProvider::getXMLHelper(df_1);
+      XMLDocumentPtr document_1 = xmh_1->createDocument();
+
+      DataObjectPtr jungle = document_1->getRootDataObject();
+
+      // Add the three animals as children of the document root. In this test
+      // that root will be a "jungle" element.
+      jungle->setDataObject("bear", baloo);
+      jungle->setDataObject("panther", bagheera);
+      jungle->setDataObject("snake", kaa);
+
+      xmh_1->save(document_1, "jira980_splitJungle_out.xml");
+      if (!comparefiles("jira980_splitJungle_out.txt" ,"jira980_splitJungle_out.xml"))
+      {
+         return 0;
+      }
+   }
+   catch (SDORuntimeException e)
+   {
+      cout << "Exception in jira980" << e << endl;
+      return 0;
+   }
+
+   // Load both schema files into a single data factory and create content
+   // within an open type root element with mixed ie sequenced) content.
    try
    {
       // Data factory to load both schema files. 
       DataFactoryPtr df_both = DataFactory::getDataFactory();
-
       XSDHelperPtr xsh_both = HelperProvider::getXSDHelper(df_both);
 
       // Load a root element definition, then the three animal types.
@@ -1665,6 +1717,7 @@ int sdotest::jira980()
       return comparefiles("jira980_mixedJungle_out.txt" ,"jira980_mixedJungle_out.xml");
 
    }
+
    catch (SDORuntimeException e)
    {
       cout << "Exception in jira980" << e << endl;
