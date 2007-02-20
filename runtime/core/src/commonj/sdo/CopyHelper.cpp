@@ -84,7 +84,7 @@ namespace sdo{
                     wchar_t * buf = new wchar_t[siz];
                     from->getString(p,buf, siz);
                     to->setString(p, buf, siz);
-                    delete buf;
+                    delete[] buf;
                 }
             }
             break;

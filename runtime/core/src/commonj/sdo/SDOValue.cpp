@@ -126,7 +126,7 @@ namespace commonj
                  value.TextString = 0;
                  break;
               case DataTypeInfo::SDOWideString:
-                 delete value.WideString.data;
+                 delete[] value.WideString.data;
                  value.WideString.data = 0;
                  value.WideString.length = 0;
                  break;
@@ -210,7 +210,7 @@ namespace commonj
               value.TextString = 0;
               break;
            case DataTypeInfo::SDOWideString:
-              delete value.WideString.data;
+              delete[] value.WideString.data;
               value.WideString.data = 0;
               value.WideString.length = 0;
               break;
