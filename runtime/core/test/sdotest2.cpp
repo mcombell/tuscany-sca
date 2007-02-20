@@ -644,8 +644,8 @@ int sdotest::testany(const char* xsd,
         if (f2 == 0)
         {
             if (!silent)cout << "Unable to open " << name2 << endl;
-            delete name2;
-            delete name4;
+            delete[] name2;
+            delete[] name4;
             return 0;
         }
 
@@ -662,8 +662,8 @@ int sdotest::testany(const char* xsd,
                     if (!strcmp(acceptedxmlerror,xmh->getErrorMessage(j)))
                     {
                         fclose(f2);
-                        delete name2;
-                        delete name4;
+                        delete[] name2;
+                        delete[] name4;
                         return 1;
                     }
                 }
@@ -679,8 +679,8 @@ int sdotest::testany(const char* xsd,
                 }
             }
             fclose(f2);
-            delete name2;
-            delete name4;
+            delete[] name2;
+            delete[] name4;
             return 0;
         }
 
@@ -712,8 +712,8 @@ int sdotest::testany(const char* xsd,
 
             rc = comparefiles(name2,name4);
 
-            delete name2;
-            delete name4;
+            delete[] name2;
+            delete[] name4;
 
             return rc;
         }

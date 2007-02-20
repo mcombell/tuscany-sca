@@ -1410,7 +1410,7 @@ namespace commonj
                                     strcpy(combi,s);
                                     strcat(combi,str);
                                     seq->setText(k,(const char*)combi);
-                                    delete combi;
+                                    delete[] combi;
                                 }
                                 else
                                 {

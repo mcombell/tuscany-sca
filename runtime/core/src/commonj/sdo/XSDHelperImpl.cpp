@@ -648,7 +648,7 @@ namespace commonj
             {
                 if (*parseErrors.begin() != 0)
                 {
-                    delete (char*)(*parseErrors.begin());
+                    delete[] (char*)(*parseErrors.begin());
                 }
                 parseErrors.erase(parseErrors.begin());
             }

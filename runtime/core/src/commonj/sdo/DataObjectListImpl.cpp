@@ -363,7 +363,7 @@ void DataObjectListImpl::setType(const char* uri, const char* name)
     delete[] typeName;
     typeName = new char[strlen(name)+1];
     strcpy(typeName, name);
-    delete typeURI;
+    delete[] typeURI;
     if (uri == 0) 
     {
         typeURI = new char[1];
