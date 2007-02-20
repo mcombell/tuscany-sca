@@ -147,7 +147,7 @@ namespace commonj
                }
                tmpstr[sourceValue.WideString.length] = 0;
                char result = (char) atoi(tmpstr);
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             default:
@@ -268,7 +268,7 @@ namespace commonj
                }
                tmpstr[sourceValue.WideString.length] = 0;
                short result = (short) atoi(tmpstr);
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             
@@ -330,7 +330,7 @@ namespace commonj
                }
                tmpstr[sourceValue.WideString.length] = 0;
                long result = (long) atoi(tmpstr);
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             
@@ -666,7 +666,7 @@ namespace commonj
 
                tmpbuf[sourceValue.WideString.length] = 0;
                SDOString* result = new SDOString(tmpbuf);
-               delete tmpbuf;
+               delete[] tmpbuf;
                return result;
             }
                

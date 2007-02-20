@@ -41,7 +41,7 @@ namespace commonj
 
         value.TextString = new SDOString(temp_buffer, len);
 
-        delete temp_buffer;
+        delete[] temp_buffer;
      }
 
      SDOValue::SDOValue(const wchar_t* inValue, unsigned int len) : 

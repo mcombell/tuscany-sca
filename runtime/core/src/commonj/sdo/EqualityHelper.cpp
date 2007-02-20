@@ -78,8 +78,8 @@ namespace sdo{
                             return false;
                         }
                     }
-                    delete buff;
-                    delete buft;
+                    delete[] buff;
+                    delete[] buft;
                 }
                 return true;
             }

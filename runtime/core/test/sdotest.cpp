@@ -1534,7 +1534,7 @@ int sdotest::defaulttest()
 
     mdg->setDefault("myspace","DefaultTest","string", help, 4);
 
-    delete help;
+    delete[] help;
 
     char* help2 = new char[4];
     help2[0] = 'H';
@@ -1546,7 +1546,7 @@ int sdotest::defaulttest()
 
     mdg->setDefault("myspace","DefaultTest","bytes", help2, 4);
 
-    delete help2;
+    delete[] help2;
 
     mdg->addPropertyToType(tm,"object",       "myspace","AnObject");
 
@@ -1689,7 +1689,7 @@ int sdotest::defaulttest_strobj()
 
     mdg->setDefault(ns1, testName, "string", help, 4);
 
-    delete help;
+    delete[] help;
 
     char* help2 = new char[4];
     help2[0] = 'H';
@@ -1701,7 +1701,7 @@ int sdotest::defaulttest_strobj()
 
     mdg->setDefault(ns1, testName, "bytes", help2, 4);
 
-    delete help2;
+    delete[] help2;
 
     mdg->addPropertyToType(tm, "object", ns1, objectName);
 
@@ -2271,7 +2271,7 @@ int sdotest::nulltest()
     chs[3] = 'l';
     chs[4] = 'o';
     s->addString(9/*"string"*/,chs,5);
-    delete chs;
+    delete[] chs;
     s->addBytes(10/*"bytes"*/,"hello",5) ;
     s->addDataObject(11/*"object"*/,ob) ;
 
@@ -3545,12 +3545,12 @@ int sdotest::querytest()
         fprintf(f, "Normal exception caught\n");
     }
 
-    delete bytes;
-    delete bytes2;
-    delete bytes3;
-    delete mbytes;
-    delete mbytes2;
-    delete mbytes3;
+    delete[] bytes;
+    delete[] bytes2;
+    delete[] bytes3;
+    delete[] mbytes;
+    delete[] mbytes2;
+    delete[] mbytes3;
 
     fclose (f);
     return comparefiles("querytest.dat","querytest.txt");
