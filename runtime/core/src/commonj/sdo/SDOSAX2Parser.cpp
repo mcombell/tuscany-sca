@@ -941,7 +941,7 @@ namespace commonj
                                         sprintf(msg,"Parser found unknown element %s",
                                             (const char*)localname);
                                         setter->setError( msg );
-                                        delete msg;
+                                        delete[] msg;
                                     }
                                 }
                              }

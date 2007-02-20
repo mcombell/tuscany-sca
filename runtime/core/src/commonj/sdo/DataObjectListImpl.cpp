@@ -131,11 +131,11 @@ DataObjectListImpl::DataObjectListImpl(DataFactory* df,
 DataObjectListImpl::~DataObjectListImpl()
 {
     if (typeURI != 0) {
-        delete typeURI;
+        delete[] typeURI;
         typeURI = 0;
     }
     if (typeName != 0) {
-        delete typeName;
+        delete[] typeName;
         typeName = 0;
     }
 }
@@ -388,11 +388,11 @@ void DataObjectListImpl::setType(const SDOString& uri, const SDOString& name)
     // need to modify the instance property of the container
     container->setInstancePropertyType(pindex,t);
 
-    delete typeName;
+    delete[] typeName;
     typeName = new char[name.length() + 1];
     strcpy(typeName, name.c_str());
 
-    delete typeURI;
+    delete[] typeURI;
     typeURI = new char[uri.length() + 1];
     strcpy(typeURI, uri.c_str());
 
