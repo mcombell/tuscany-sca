@@ -218,7 +218,7 @@ namespace sdo{
          }
          for (unsigned int j = 0; j < aliases.size();j++)
          {
-             delete aliases[j];
+             delete[] aliases[j];
          }
     }
 

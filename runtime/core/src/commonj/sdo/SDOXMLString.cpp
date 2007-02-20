@@ -179,7 +179,7 @@ namespace commonj
                 newString[i] = tolower(newString[i]);
             }
             SDOXMLString retString(newString);
-            delete newString;
+            delete[] newString;
             return retString;
         }
 

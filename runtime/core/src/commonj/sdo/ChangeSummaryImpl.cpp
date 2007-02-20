@@ -1551,7 +1551,7 @@ namespace sdo{
         if (theSequence) delete theSequence;
         if (theOldXpath != 0) 
         {
-            delete theOldXpath;
+            delete[] theOldXpath;
         }
     }
 

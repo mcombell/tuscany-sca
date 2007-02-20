@@ -1841,7 +1841,7 @@ int sdotest::showdefault(FILE *f, const Type& tm)
             fprintf(f, "%c",buf[i]);
         }
         fprintf(f, "\n");
-        delete buf;
+        delete[] buf;
         const char* wws = pstring.getCStringDefault();
         fprintf(f, "String default as a string is %s\n", wws);
 
@@ -1862,7 +1862,7 @@ int sdotest::showdefault(FILE *f, const Type& tm)
             fprintf(f, "%c", buf[i]);
         }
         fprintf(f, "\n");
-        delete buf;
+        delete[] buf;
     }
     else
     {
@@ -1938,7 +1938,7 @@ int sdotest::propdefaulttest()
 
     mdg->setDefault("myspace","DefaultTest","string", help, 4);
 
-    delete help;
+    delete[] help;
 
     char* help2 = new char[4];
     help2[0] = 'H';
@@ -1949,7 +1949,7 @@ int sdotest::propdefaulttest()
 
     mdg->setDefault("myspace","DefaultTest","bytes", help2, 4);
 
-    delete help2;
+    delete[] help2;
 
     // and have another go at getting them....
 

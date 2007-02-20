@@ -140,10 +140,10 @@ namespace sdo {
             case Type::BigIntegerType: 
             case Type::StringType: 
             case Type::UriType:
-                delete (wchar_t*)value;
+                delete[] (wchar_t*) value;
                 break;
             case Type::BytesType:
-                delete (char*)value;
+                delete[] (char*) value;
                 break;
             case Type::OtherTypes:
             case Type::DataObjectType:
@@ -151,7 +151,10 @@ namespace sdo {
             default:
                 break;
         }
-        if (strbuf != 0) delete strbuf;
+        if (strbuf != 0)
+        {
+           delete[] strbuf;
+        }
     }
 
     const Property& Setting::getProperty() const

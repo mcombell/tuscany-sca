@@ -154,11 +154,17 @@ namespace commonj{
           }
       }
 
-    PropertyImpl::~PropertyImpl()
-    {
-        if (defvalue != 0) delete (char*)defvalue;
-        if (stringdef != 0) delete stringdef;
-    }
+       PropertyImpl::~PropertyImpl()
+       {
+          if (defvalue != 0)
+          {
+             delete[] defvalue;
+          }
+          if (stringdef != 0)
+          {
+             delete[] stringdef;
+          }
+       }
 
     ///////////////////////////////////////////////////////////////////////////
     // Setting of attributes  by DAS 
