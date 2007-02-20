@@ -360,7 +360,7 @@ void DataObjectListImpl::setType(const char* uri, const char* name)
     // need to modify the instance property of the container
     container->setInstancePropertyType(pindex,t);
 
-    delete typeName;
+    delete[] typeName;
     typeName = new char[strlen(name)+1];
     strcpy(typeName, name);
     delete typeURI;

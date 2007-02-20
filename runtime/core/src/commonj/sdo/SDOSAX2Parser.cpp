@@ -1370,7 +1370,7 @@ namespace commonj
                    start_point = end_point + 1;
                 } while(1);
 
-                delete buf;
+                delete[] buf;
                 return;
             }
 

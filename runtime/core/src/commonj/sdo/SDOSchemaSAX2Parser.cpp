@@ -173,7 +173,7 @@ namespace commonj
                     sprintf(msg,"Use of undefined group %s",
                                             (const char*)name);
                     setter->setError( msg );
-                    delete msg;
+                    delete[] msg;
                 }
             }
          }

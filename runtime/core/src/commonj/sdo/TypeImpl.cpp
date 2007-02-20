@@ -207,8 +207,15 @@ namespace sdo{
              }
              count++;
          }
-         if (name != 0)delete name;
-         if (typeURI != 0) delete typeURI;
+         if (name != 0)
+         {
+            delete[] name;
+         }
+         
+         if (typeURI != 0)
+         {
+            delete[] typeURI;
+         }
          for (unsigned int j = 0; j < aliases.size();j++)
          {
              delete aliases[j];
