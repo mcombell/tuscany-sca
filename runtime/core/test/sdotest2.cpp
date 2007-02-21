@@ -729,156 +729,208 @@ int sdotest::testany(const char* xsd,
 
 
 int sdotest::testanytwo(const char* xsd, const char* xsd2,
-                         const char* xml)
+                        const char* xml)
 {
+   unsigned int i, j;
 
+   try
+   {
+      char * name1 = new char[strlen(xsd)+5];
+      char * name2 = new char[strlen(xml)+5];
+      char * name3 = new char[strlen(xsd)+5];
+      char * name4 = new char[strlen(xml)+5];
 
-    unsigned int i,j;
+      strcpy(name1,xsd);
+      strcpy(name2,xml);
 
-    try {
+      char *c;
 
-    char * name1 = new char[strlen(xsd)+5];
-    char * name2 = new char[strlen(xml)+5];
-    char * name3 = new char[strlen(xsd)+5];
-    char * name4 = new char[strlen(xml)+5];
-    strcpy(name1,xsd);
-    strcpy(name2,xml);
-    char *c;
-    while ((c = strchr(name1,'.')) != 0)*c = '_';
-    while ((c = strchr(name2,'.')) != 0)*c = '_';
-    strcpy(name3,name1);
-    strcpy(name4,name2);
+      while ((c = strchr(name1,'.')) != 0)*c = '_';
+      while ((c = strchr(name2,'.')) != 0)*c = '_';
+
+      strcpy(name3,name1);
+      strcpy(name4,name2);
     
-    strcat(name1,".dat");
-    strcat(name2,".dat");
-    strcat(name3,".txt");
-    strcat(name4,".txt");
+      strcat(name1,".dat");
+      strcat(name2,".dat");
+      strcat(name3,".txt");
+      strcat(name4,".txt");
 
-    DataFactoryPtr mdg  = DataFactory::getDataFactory();
+      DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
-    XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+      XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
     
-    if (xsd)
-    {
-        xsh->defineFile(xsd);
+      if (xsd)
+      {
+         xsh->defineFile(xsd);
 
-        if ((i = xsh->getErrorCount()) > 0)
-        {
+         if ((i = xsh->getErrorCount()) > 0)
+         {
             if (!silent)
             {
-                cout << "PROBLEM: Testany XSD reported some errors:" << endl;
-                for (j=0;j<i;j++)
-                {
-                    const char *m = xsh->getErrorMessage(j);
-                    if (m != 0) cout << m;
-                    cout << endl;
-                }
+               cout << "PROBLEM: Testany XSD reported some errors:" << endl;
+               for (j=0;j<i;j++)
+               {
+                  const char *m = xsh->getErrorMessage(j);
+                  if (m != 0) cout << m;
+                  cout << endl;
+               }
             }
+            delete[] name1;
+            delete[] name2;
+            delete[] name3;
+            delete[] name4;
+            
             return 0;
-        }
+         }
 
-    }
+      }
 
-    if (xsd2)
-    {
-        xsh->defineFile(xsd2);
+      if (xsd2)
+      {
+         xsh->defineFile(xsd2);
 
-        if ((i = xsh->getErrorCount()) > 0)
-        {
+         if ((i = xsh->getErrorCount()) > 0)
+         {
             if (!silent)
             {
-                cout << "PROBLEM: Testany XSD2 reported some errors:" << endl;
-                for (j=0;j<i;j++)
-                {
-                    const char *m = xsh->getErrorMessage(j);
-                    if (m != 0) cout << m;
-                    cout << endl;
-                }
+               cout << "PROBLEM: Testany XSD2 reported some errors:" << endl;
+               for (j=0;j<i;j++)
+               {
+                  const char *m = xsh->getErrorMessage(j);
+                  if (m != 0) cout << m;
+                  cout << endl;
+               }
             }
+
+            delete[] name1;
+            delete[] name2;
+            delete[] name3;
+            delete[] name4;
+
             return 0;
-        }
-    }
+         }
+      }
 
-    if (xsd)
-    {
+      if (xsd)
+      {
 
 
-        FILE *f1 = fopen(name1,"w+");
-        if (f1 == 0)
-        {
+         FILE *f1 = fopen(name1,"w+");
+         if (f1 == 0)
+         {
             if (!silent)cout << "Unable to open " << name1 << endl;
+
+            delete[] name1;
+            delete[] name2;
+            delete[] name3;
+            delete[] name4;
+
             return 0;
-        }
+         }
 
-        TypeList tl = mdg->getTypes();
+         TypeList tl = mdg->getTypes();
 
-        fprintf(f1,"***** TESTANY ******************************************\n");
+         fprintf(f1,"***** TESTANY ******************************************\n");
 
-        for (i=0;i<tl.size();i++)
-        {
+         for (i=0;i<tl.size();i++)
+         {
             fprintf(f1,"Type:%s#%s\n",tl[i].getURI(),tl[i].getName());
             PropertyList pl = tl[i].getProperties();
             for (unsigned int j=0;j<pl.size();j++)
             {
-                fprintf(f1,"Property:%s ",pl[j].getName());
-                if (pl[j].isMany())
-                     fprintf(f1, "(many) ");
-                fprintf(f1,  " of type %s\n",pl[j].getType().getName());
+               fprintf(f1,"Property:%s ",pl[j].getName());
+               if (pl[j].isMany())
+                  fprintf(f1, "(many) ");
+               fprintf(f1,  " of type %s\n",pl[j].getType().getName());
             }
-        }
+         }
 
-        fprintf(f1,"*******************************END TYPES******************\n");
+         fprintf(f1,"*******************************END TYPES******************\n");
     
-        fclose(f1);
+         fclose(f1);
 
-        if (!comparefiles(name1,name3)) return 0;
+         if (!comparefiles(name1,name3))
+         {
+            delete[] name1;
+            delete[] name2;
+            delete[] name3;
+            delete[] name4;
 
-    }
+            return 0;
+         }
+      }
     
 
-    if (xml == 0 || strlen(xml) == 0) return 1;
+      if (xml == 0 || strlen(xml) == 0)
+      {
+         delete[] name1;
+         delete[] name2;
+         delete[] name3;
+         delete[] name4;
 
+         return 1;
+      }
 
-    FILE *f2 = fopen(name2,"w+");
-    if (f2 == 0)
-    {
-        if (!silent)cout << "Unable to open " << name2 << endl;
-        return 0;
-    }
+      FILE *f2 = fopen(name2,"w+");
+      if (f2 == 0)
+      {
+         if (!silent)cout << "Unable to open " << name2 << endl;
+         delete[] name1;
+         delete[] name2;
+         delete[] name3;
+         delete[] name4;
 
-    XMLHelperPtr xmh = HelperProvider::getXMLHelper(mdg);
+         return 0;
+      }
+
+      XMLHelperPtr xmh = HelperProvider::getXMLHelper(mdg);
  
-    XMLDocumentPtr doc = xmh->loadFile(xml);
+      XMLDocumentPtr doc = xmh->loadFile(xml);
 
-    if ((i = xmh->getErrorCount()) > 0)
-    {
-        if (!silent)
-        {
+      if ((i = xmh->getErrorCount()) > 0)
+      {
+         if (!silent)
+         {
             cout << "TestAny XML found errors:" << endl;
             for (j=0;j<i;j++)
             {
-                const char *m = xmh->getErrorMessage(j);
-                if (m != 0) cout << m;
-                cout << endl;
+               const char *m = xmh->getErrorMessage(j);
+               if (m != 0) cout << m;
+               cout << endl;
             }
-        }
-        return 0;
-    }
-    else 
-    {
-        DataObjectPtr dob = doc->getRootDataObject();
-        printDataObject(f2, dob);
-    }
+         }
+         delete[] name1;
+         delete[] name2;
+         delete[] name3;
+         delete[] name4;
 
-    fclose(f2);
-    return comparefiles(name2,name4);
+         return 0;
+      }
+      else 
+      {
+         DataObjectPtr dob = doc->getRootDataObject();
+         printDataObject(f2, dob);
+      }
 
-    }
-    catch (SDORuntimeException e)
-    {
-        if (!silent)cout << "Exception in TestAnyTwo" << e << endl;
-        return 0;
-    }
+      fclose(f2);
+      int result = comparefiles(name2,name4);
+
+      delete[] name1;
+      delete[] name2;
+      delete[] name3;
+      delete[] name4;
+
+      return result;
+    
+
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent)cout << "Exception in TestAnyTwo" << e << endl;
+
+      return 0;
+   }
 }
 
 int sdotest::openseq()

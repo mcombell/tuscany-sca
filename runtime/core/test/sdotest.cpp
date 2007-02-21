@@ -3073,41 +3073,54 @@ int sdotest::maintest()
 int sdotest::jira705()
 {
 
-  char* retval = NULL;
+   char* retval = NULL;
 
-  try
-  {
-    DataFactoryPtr dataFactoryPtr = DataFactory::getDataFactory();
-    XSDHelperPtr xsdHelperPtr = HelperProvider::getXSDHelper((DataFactory *)dataFactoryPtr);
-    XMLHelperPtr xmlHelperPtr = HelperProvider::getXMLHelper((DataFactory *)dataFactoryPtr);
-    xsdHelperPtr->defineFile("jira705.xsd");
+   try
+   {
+      DataFactoryPtr dataFactoryPtr = DataFactory::getDataFactory();
+      XSDHelperPtr xsdHelperPtr = HelperProvider::getXSDHelper((DataFactory *)dataFactoryPtr);
+      XMLHelperPtr xmlHelperPtr = HelperProvider::getXMLHelper((DataFactory *)dataFactoryPtr);
+      xsdHelperPtr->defineFile("jira705.xsd");
 
-    DataObjectPtr dataObjectPtr = dataFactoryPtr->create("http://ConvertedStockQuote", "getQuote");
+      DataObjectPtr dataObjectPtr = dataFactoryPtr->create("http://ConvertedStockQuote",
+                                                           "getQuote");
 
-    dataObjectPtr->setCString("ticker1", "IBM");
-    dataObjectPtr->setNull("ticker2");
+      dataObjectPtr->setCString("ticker1", "IBM");
+      dataObjectPtr->setNull("ticker2");
 
-    XMLDocumentPtr xmlDocumentPtr = xmlHelperPtr->createDocument(dataObjectPtr, 0, "getQuote");
+      XMLDocumentPtr xmlDocumentPtr = xmlHelperPtr->createDocument(dataObjectPtr, 0, "getQuote");
 
-    retval = xmlHelperPtr->save(xmlDocumentPtr, 2);
+      retval = xmlHelperPtr->save(xmlDocumentPtr, 2);
+   }
+   catch (SDORuntimeException e)
+   {
+      if (!silent) cout << "jira705 test failed" << endl;
+      if (retval != NULL)
+      {
+         delete[] retval;
+      }
 
-  }
-  catch (SDORuntimeException e)
-  {
-     if (!silent) cout << "jira705 test failed" << endl;
-     return 0;
-  }
+      return 0;
+   }
 
-  FILE *outfile = fopen("jira705_out.xml","w+");
+   FILE *outfile = fopen("jira705_out.xml", "w+");
    if (outfile == 0)
    {
       if (!silent) cout << "Unable to open jira705_out.xml" << endl;
+      if (retval != NULL)
+      {
+         delete[] retval;
+      }
       return 0;
    }
 
    fprintf(outfile, "%s", retval);
 
    fclose(outfile);
+   if (retval != NULL)
+   {
+      delete[] retval;
+   }
 
    return comparefiles("jira705_out.xml", "jira705_out.txt");
 

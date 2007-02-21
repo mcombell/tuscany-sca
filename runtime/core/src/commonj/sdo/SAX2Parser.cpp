@@ -308,8 +308,10 @@ namespace commonj
         SAX2Parser::~SAX2Parser()
         {
             // xmlCleanupParser();
-            if (currentFile != 0)delete currentFile;
-            
+           if (currentFile != 0)
+           {
+              delete[] currentFile;
+           }
         }
         
         const char* SAX2Parser::getCurrentFile() const
@@ -322,7 +324,7 @@ namespace commonj
         {
             if (currentFile != 0)
             {
-                delete currentFile;
+                delete[] currentFile;
             }
             currentFile = new char[strlen(filename)+1];
             strcpy(currentFile,filename);
@@ -336,7 +338,7 @@ namespace commonj
 
             if (currentFile != 0)
             {
-                delete currentFile;
+                delete[] currentFile;
             }
             currentFile = new char[strlen(filename)+1];
             strcpy(currentFile,filename);
