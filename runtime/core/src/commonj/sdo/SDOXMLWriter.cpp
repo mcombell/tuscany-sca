@@ -101,7 +101,7 @@ namespace commonj
                     for (int i=0;i<indent;i++)chars[i] = ' ';
                     chars[indent] = 0;
                     xmlTextWriterSetIndentString(writer, SDOXMLString(chars));
-                    delete chars;
+                    delete[] chars;
                 }
                 else
                 {

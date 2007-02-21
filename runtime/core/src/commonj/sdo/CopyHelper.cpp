@@ -223,7 +223,7 @@ namespace sdo{
                     wchar_t * buf = new wchar_t[siz];
                     from->getStringValue(index, buf, siz);
                     to->addString(p, buf, siz);
-                    delete buf;
+                    delete[] buf;
                 }
             }
             break;

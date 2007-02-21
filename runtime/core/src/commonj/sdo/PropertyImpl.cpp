@@ -68,97 +68,100 @@ namespace commonj{
     // construction by DAS 
     ///////////////////////////////////////////////////////////////////////////
     
-    PropertyImpl::PropertyImpl(const Type& cont, 
-                        const char* inname, 
-                        const TypeImpl& intype, 
-                        bool many ,    
-                        bool ro ,
-                        bool contain) : containertype(cont), type (intype)
-    {
-        // name = new char[strlen(inname)+1];
-        // strcpy(name,inname);
-		if (inname != 0)
-		{
-			name = inname;
-		}
-		else
-		{
-			name.erase();
-		}
-        defvalue = 0;
-        defvaluelength = 0;
-        opposite = 0;
-        stringdef = 0;
-        bisMany = many;
-        bisReadOnly = ro;
-        bisContainer = contain;
-        bDefaulted=false;
-        if (contain == false && intype.isDataObjectType())
-        {
-            bisReference = true;
-        }
-        else 
-        {
-            bisReference = false;
-        }
-    }
-
-    PropertyImpl::PropertyImpl(const Type& cont,
-        const SDOString& inname,
-        const TypeImpl& intype,
-        bool many,
-        bool ro,
-        bool contain) :
-    containertype(cont),
-        name(inname),
-        type(intype),
-        bisMany(many),
-        bisReadOnly(ro),
-        bisContainer(contain),
-        bDefaulted(false),
-        opposite(0),
-        stringdef(0),
-        defvalue(0),
-        defvaluelength(0)
-    {
-        if (contain == false && intype.isDataObjectType())
-        {
-            bisReference = true;
-        }
-        else 
-        {
-            bisReference = false;
-        }
-    }
-
-      PropertyImpl::PropertyImpl(const PropertyImpl& p) :
-        type((*(p.getTypeImpl()))),
-        containertype(p.getContainingType()),
-        name(p.name),
-        bisMany(p.bisMany),
-        bisReadOnly(p.bisReadOnly),
-        bisContainer(p.bisContainer),
-        bDefaulted(false),
-        opposite(0),
-        defvalue(0),
-        defvaluelength(0),
-        stringdef(0)
-      {
-        if (bisContainer == false && type.isDataObjectType())
+       PropertyImpl::PropertyImpl(const Type& cont, 
+                                  const char* inname, 
+                                  const TypeImpl& intype, 
+                                  bool many ,    
+                                  bool ro ,
+                                  bool contain) :
+          containertype(cont),
+          type(intype),
+          defvalue(0),
+          defvaluelength(0),
+          opposite(0),
+          stringdef(0),
+          bisMany(many),
+          bisArray(false),
+          bisReadOnly(ro),
+          bisContainer(contain),
+          bDefaulted(false),
+          bisReference(false)
+       {
+          if (inname != 0)
           {
-            bisReference = true;
+             name = inname;
           }
-        else 
+          else
           {
-            bisReference = false;
+             name.erase();
           }
-      }
+          if (contain == false && intype.isDataObjectType())
+          {
+             bisReference = true;
+          }
+       }
+
+       PropertyImpl::PropertyImpl(const Type& cont,
+                                  const SDOString& inname,
+                                  const TypeImpl& intype,
+                                  bool many,
+                                  bool ro,
+                                  bool contain) :
+          containertype(cont),
+          name(inname),
+          type(intype),
+          bisMany(many),
+          bisArray(false),
+          bisReadOnly(ro),
+          bisContainer(contain),
+          bDefaulted(false),
+          opposite(0),
+          stringdef(0),
+          defvalue(0),
+          defvaluelength(0),
+          bisReference(false)
+       {
+          if (contain == false && intype.isDataObjectType())
+          {
+             bisReference = true;
+          }
+       }
+
+       PropertyImpl::PropertyImpl(const PropertyImpl& p) :
+          type((*(p.getTypeImpl()))),
+          containertype(p.getContainingType()),
+          name(p.name),
+          bisMany(p.bisMany),
+          bisArray(false),
+          bisReadOnly(p.bisReadOnly),
+          bisContainer(p.bisContainer),
+          bDefaulted(false),
+          opposite(0),
+          defvalue(0),
+          defvaluelength(0),
+          stringdef(0),
+          bisReference(false)
+       {
+          if (bisContainer == false && type.isDataObjectType())
+          {
+             bisReference = true;
+          }
+       }
 
        PropertyImpl::~PropertyImpl()
        {
+          // If the default value is an array type then we must use delete[]
+          // otherwise delete
           if (defvalue != 0)
           {
-             delete[] defvalue;
+             if (bisArray)
+             {
+                delete[] defvalue;
+             }
+             else
+             {
+                delete defvalue;
+             }
           }
           if (stringdef != 0)
           {
@@ -498,26 +501,31 @@ namespace commonj{
     void PropertyImpl::setDefaultCString(const char* s) 
     {
         bDefaulted=true;
+        bisArray = true;
         defvaluelength = getTypeImpl()->convert(&defvalue,s); 
     }
     void PropertyImpl::setDefaultCString(const SDOString& s) 
     {
         bDefaulted=true;
+        bisArray = true;
         defvaluelength = getTypeImpl()->convert(&defvalue, s); 
     }
     void PropertyImpl::setDefaultString(    const wchar_t* c , unsigned int len )
     {
         bDefaulted=true;
+        bisArray = true;
         defvaluelength = getTypeImpl()->convert(&defvalue,c, len); 
     }
     void PropertyImpl::setDefaultBytes(    const char* c , unsigned int len )
     {
         bDefaulted=true;
+        bisArray = true;
         defvaluelength = getTypeImpl()->convert(&defvalue,c, len); 
     }
     void PropertyImpl::setDefaultBytes(const SDOString& c , unsigned int len)
     {
         bDefaulted=true;
+        bisArray = true;
         defvaluelength = getTypeImpl()->convert(&defvalue,c, len); 
     }
     void PropertyImpl::setDefaultBoolean(    const bool b  )

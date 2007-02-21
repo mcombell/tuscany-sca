@@ -263,6 +263,7 @@ class PropertyImpl :public DASProperty
     bool bisContainer;
     bool bisReference;
     bool bisMany;
+    bool bisArray;
 
     bool bDefaulted;
       

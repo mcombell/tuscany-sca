@@ -2814,7 +2814,7 @@ int sdotest::maintest()
         wdc = pdg->getCString("string");
         fprintf(f, " Expected Wide - got : %s\n",wdc);
 
-        delete wide;
+        delete[] wide;
 
         char* thin = new char[4];
         thin[0] = 'T';
@@ -2827,7 +2827,7 @@ int sdotest::maintest()
         const char* dc = pdg->getCString("bytes");
         fprintf(f, " Expected Thin - got : %s\n",dc);
 
-        delete thin;
+        delete[] thin;
 
         const char* ps = pdg->getCString("string");
         fprintf(f, "Expecting string, got %s\n", ps);
@@ -2870,7 +2870,7 @@ int sdotest::maintest()
             {
                 fprintf(f, "Wide[%d]=%d\n",i,result[i]);
             }
-            delete result;
+            delete[] result;
         }
 
 
@@ -2884,7 +2884,7 @@ int sdotest::maintest()
             {
                 fprintf(f, "Thin[%d]=%d\n",i,thinresult[i]);
             }
-            delete thinresult;
+            delete[] thinresult;
         }
 
 

@@ -401,7 +401,7 @@ namespace commonj
 #else
                int64_t result = strtoll(tmpstr, NULL, 0);
 #endif
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             
@@ -464,7 +464,7 @@ namespace commonj
                }
                tmpstr[sourceValue.WideString.length] = 0;
                float result = (float) atof(tmpstr);
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             
@@ -527,7 +527,7 @@ namespace commonj
                }
                tmpstr[sourceValue.WideString.length] = 0;
                double result = atof(tmpstr);
-               delete tmpstr;
+               delete[] tmpstr;
                return result;
             }
             
