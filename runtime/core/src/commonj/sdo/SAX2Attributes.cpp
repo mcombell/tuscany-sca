@@ -36,7 +36,8 @@ namespace commonj
         {
             for (int i=0; i < nb_attributes*5; i+=5)
             {
-                attributes.insert(attributes.end(), SAX2Attribute(&attrs[i]));
+               // attributes.insert(attributes.end(), SAX2Attribute(&attrs[i]));
+               attributes.push_back(SAX2Attribute(&attrs[i]));
             }
         }
         
