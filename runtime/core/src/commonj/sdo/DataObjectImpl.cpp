@@ -803,11 +803,14 @@ namespace sdo {
 
     unsigned int DataObjectImpl::getPropertyIndex(const Property& p)
     {
-        PropertyList props = getType().getProperties(); 
+       const std::list<PropertyImpl*> props = getType().getPropertyListReference();
 
-        for (unsigned int i = 0; i < props.size() ; ++i)
+       unsigned int i = 0;
+       for (std::list<PropertyImpl*>::const_iterator j = props.begin();
+            j != props.end();
+            j++, i++)
         {
-            if (!strcmp(props[i].getName(),p.getName()) )
+            if (!strcmp((*j)->getName(), p.getName()))
             {
                 return i;
             }
@@ -916,6 +919,8 @@ namespace sdo {
 
     PropertyImpl* DataObjectImpl::getPropertyImpl(unsigned int index)
     {
+       // Cannot use getPropertyListReference because we will return a
+       // writeable PropertyImpl.
         PropertyList props = getType().getProperties();  
         if (index < props.size())
         {
@@ -1318,11 +1323,13 @@ namespace sdo {
     PropertyList /* Property */ DataObjectImpl::getInstanceProperties()
     {
         std::vector<PropertyImpl*> theVec;
-        PropertyList propList = getType().getProperties();
-        for (unsigned int i = 0 ; i < propList.size() ; ++i)
+        const std::list<PropertyImpl*> propList = getType().getPropertyListReference();
+
+        for (std::list<PropertyImpl*>::const_iterator i = propList.begin();
+             i != propList.end();
+             i++)
         {
-            Property& p = propList[i];
-            theVec.insert(theVec.end(),(PropertyImpl*)&p);
+            theVec.insert(theVec.end(), (*i));
         }
         std::list<PropertyImpl>::iterator j;
         for (j = openProperties.begin() ;
@@ -1573,7 +1580,7 @@ namespace sdo {
 
     void DataObjectImpl::validateIndex(unsigned int index)
     {
-        PropertyList pl = getType().getProperties();
+        const std::list<PropertyImpl*> pl = getType().getPropertyListReference();
 
         if (index >= pl.size()) {
 

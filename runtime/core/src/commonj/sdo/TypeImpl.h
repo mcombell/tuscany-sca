@@ -160,6 +160,7 @@ public:
     // Returns the list of the properties of this type.
     ///////////////////////////////////////////////////////////////////////////
     PropertyList  getProperties() const;
+    const std::list<PropertyImpl*>&  getPropertyListReference() const;
 
      ///////////////////////////////////////////////////////////////////////////
     //  add a property to a Type whilst building - this is for DAS 

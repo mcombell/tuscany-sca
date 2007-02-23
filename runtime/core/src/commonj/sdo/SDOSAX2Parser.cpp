@@ -1466,10 +1466,15 @@ namespace commonj
             }
             */
 
-            PropertyList pl = type.getProperties();
-            for (unsigned int i = 0; i < pl.size(); i++)
+            const std::list<PropertyImpl*> pl = type.getPropertyListReference();
+
+            for (std::list<PropertyImpl*>::const_iterator i = pl.begin();
+                 i != pl.end();
+                 i++)
             {
-                XSDPropertyInfo* pi = (XSDPropertyInfo*)((DASProperty*)&pl[i])->getDASValue("XMLDAS::PropertyInfo");
+                XSDPropertyInfo* pi = (XSDPropertyInfo*)
+                ((DASProperty*) (*i))->getDASValue("XMLDAS::PropertyInfo");
+
                 if (pi)
                 {
                     const PropertyDefinitionImpl&  propdef = pi->getPropertyDefinition();

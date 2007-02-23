@@ -469,6 +469,11 @@ namespace sdo{
         return props;
     }
 
+    const std::list<PropertyImpl*>& TypeImpl::getPropertyListReference() const
+    {
+        return props;
+    }
+
     unsigned int TypeImpl::getPropertiesSize() const
     {
         return props.size();

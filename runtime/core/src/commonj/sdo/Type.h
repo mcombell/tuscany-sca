@@ -134,6 +134,7 @@ public:
      */
 
     virtual SDO_API PropertyList  getProperties() const = 0;
+    virtual SDO_API const std::list<PropertyImpl*>& getPropertyListReference() const = 0;
 
  
     /**  getProperty returns a property for this type

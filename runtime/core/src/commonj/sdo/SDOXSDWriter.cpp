@@ -411,7 +411,7 @@ namespace commonj
                     // ---------------------------
                     // Iterate over the properties
                     // ---------------------------
-                    PropertyList pl = type.getProperties();
+                    const std::list<PropertyImpl*> pl = type.getPropertyListReference();
                     
                     if (pl.size() != 0)
                     {
@@ -421,10 +421,11 @@ namespace commonj
                         // Create <element> definitions 
                         // -------------------------------------------------------
                         
-                        unsigned int j;
-                        for (j = 0; j < pl.size(); j++)
+                        for (std::list<PropertyImpl*>::const_iterator j = pl.begin();
+                             j != pl.end();
+                             j++)
                         {
-                            const Property& prop = pl[j];
+                           const Property& prop = *(*j);
                             const Type& propType = prop.getType();
 
                             SDOXMLString propTypeName = resolveName(propType.getURI(), 
@@ -562,9 +563,11 @@ namespace commonj
                         // -------------------------------------------------------                            
                         // Create <element> definitions 
                         // -------------------------------------------------------
-                        for (j = 0; j < pl.size(); j++)
+                        for (std::list<PropertyImpl*>::const_iterator j = pl.begin();
+                             j != pl.end();
+                             j++)
                         {
-                            const Property& prop = pl[j];
+                           const Property& prop = *(*j);
                             const Type& propType = prop.getType();
 
 
