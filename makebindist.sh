@@ -20,13 +20,14 @@
 TUSCANY_SDOCPP_HOME=`pwd`
 
 if [ x$AXIS2C_HOME = x ]; then
-echo "AXIS2C_HOME not set"
-exit;
-fi
+echo "AXIS2C_HOME not set. not building SDO Axiom utility"
+else
 echo "Using Axis2C installed at $AXIS2C_HOME"
+WITH_AXIS2C=--with-axis2c
+fi
 
 cd ${TUSCANY_SDOCPP_HOME}
-./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy --enable-static=no
+./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy --enable-static=no ${WITH_AXIS2C} 
 make
 make install
 

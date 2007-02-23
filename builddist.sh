@@ -20,10 +20,11 @@
 TUSCANY_SDOCPP_HOME=`pwd`
 
 if [ x$AXIS2C_HOME = x ]; then
-echo "AXIS2C_HOME not set"
-exit;
-fi
+echo "AXIS2C_HOME not set. not building SDO Axiom utility"
+else
 echo "Using Axis2C installed at $AXIS2C_HOME"
+WITH_AXIS2C=--with-axis2c
+fi
 
 if [ x$LIBXML2_INCLUDE = x ]; then
 echo "LIBXML2_INCLUDE not set"
@@ -41,7 +42,7 @@ cd ${TUSCANY_SDOCPP_HOME}/samples
 
 cd $TUSCANY_SDOCPP_HOME
 ./autogen.sh
-./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy --enable-static=no
+./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy --enable-static=no ${WITH_AXIS2C} 
 
 make bindist
 
