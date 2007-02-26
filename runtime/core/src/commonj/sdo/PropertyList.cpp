@@ -42,7 +42,7 @@ SDO_API PropertyList::PropertyList(PROPERTY_LIST p)
     PROPERTY_LIST::iterator i;
     for (i = p.begin(); i != p.end(); ++i)
     {
-        plist.insert(plist.end(),(PropertyImpl*)(*i));
+        plist.push_back((PropertyImpl*) (*i));
     }
 }
 
@@ -81,8 +81,8 @@ SDO_API unsigned int PropertyList::size ()
 
 SDO_API void PropertyList::insert(const Property& p) 
 {
-    PropertyImpl* pi = (PropertyImpl*)&p;
-    plist.insert(plist.end(),new PropertyImpl(*pi));
+    PropertyImpl* pi = (PropertyImpl*) &p;
+    plist.push_back(new PropertyImpl(*pi));
 }
 
 PROPERTY_VECTOR PropertyList::getVec() const

@@ -612,7 +612,7 @@ namespace sdo {
          new DataObjectImpl(df, getProperty(propertyIndex).getType());
       b->setContainer(this);
       b->setApplicableChangeSummary();
-      PropertyValues.insert(PropertyValues.end(),rdo(propertyIndex,b));
+      PropertyValues.push_back(rdo(propertyIndex,b));
       b->setNull();
    }
 
@@ -759,7 +759,7 @@ namespace sdo {
             // empty data object to hold the list
             DataFactory* df = getDataFactory();
             d = new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI,"DataObject"));
-            PropertyValues.insert(PropertyValues.end(),rdo(propIndex,d));
+            PropertyValues.push_back(rdo(propIndex, d));
             d->setContainer(this);
             d->setApplicableChangeSummary();
             
@@ -1329,13 +1329,13 @@ namespace sdo {
              i != propList.end();
              i++)
         {
-            theVec.insert(theVec.end(), (*i));
+            theVec.push_back((*i));
         }
         std::list<PropertyImpl>::iterator j;
         for (j = openProperties.begin() ;
              j != openProperties.end() ; ++j)
         {
-            theVec.insert(theVec.end(),&(*j));
+            theVec.push_back(&(*j));
         }
         return PropertyList(theVec);
     }
@@ -1774,7 +1774,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
       }
       // The property does not currently have a value.
       logChange(prop);
-      PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) 0));
+      PropertyValues.push_back(rdo(propertyIndex, (DataObjectImpl*) 0));
       // If this is a sequenced data object then update the
       // sequence. We already know that a) the property was not previously
       // set so it can't be in the sequence currently and b) it is not a
@@ -1832,7 +1832,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
 
    logChange(prop);
 
-   PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, (DataObjectImpl*) dob));
+   PropertyValues.push_back(rdo(propertyIndex, (DataObjectImpl*) dob));
    // If this is a sequenced data object then update the
    // sequence. We already know that a) the property is not
    // in the sequence currently and b) it is not a
@@ -2307,7 +2307,9 @@ void DataObjectImpl::setDataObject(const Property& prop,
                     df->create(Type::SDOTypeNamespaceURI,"DataObject");
 
                 DataObject* doptr = listptr;
-                PropertyValues.insert(PropertyValues.end(),rdo(ind,(DataObjectImpl*)doptr));
+
+                PropertyValues.push_back(rdo(ind, (DataObjectImpl*) doptr));
+
                 ((DataObjectImpl*)doptr)->setContainer(this);
                 ((DataObjectImpl*)doptr)->setApplicableChangeSummary();
 
@@ -2354,8 +2356,8 @@ void DataObjectImpl::setDataObject(const Property& prop,
             logCreation(ditem, this, property);
             logChange(property);
 
-            PropertyValues.insert(PropertyValues.end(),
-                                  rdo(getPropertyIndex(property),ditem));
+            PropertyValues.push_back(rdo(getPropertyIndex(property), ditem));
+
             if (getType().isSequencedType())
             {
                 SequenceImpl* sq = getSequenceImpl();
@@ -3810,7 +3812,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
       b->setContainer(this);
       b->setApplicableChangeSummary();
       logChange(propertyIndex);
-      PropertyValues.insert(PropertyValues.end(), rdo(propertyIndex, b));
+      PropertyValues.push_back(rdo(propertyIndex, b));
       b->setSDOValue(sval);
 
       // If this is a sequenced data object then update the sequence. We

@@ -464,7 +464,7 @@ void DataObjectListImpl::append (DataObjectPtr d)
          }
       }
    }
-   plist.insert(plist.end(), RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob));
+   plist.push_back(RefCountingPointer<DataObjectImpl>((DataObjectImpl*) dob));
 
    if (container != 0) {
       if (container->getType().isSequencedType())

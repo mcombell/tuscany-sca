@@ -384,7 +384,7 @@ namespace commonj
                             {
                                 // remember this value to resolve later
                                 IDRef ref(currentDataObject, attributes[i].getName(), propValue);
-                                IDRefs.insert(IDRefs.end(), ref);
+                                IDRefs.push_back(ref);
                             }
                             else
                             {    
@@ -1226,7 +1226,7 @@ namespace commonj
                                 IDRef ref(currentPropertySetting.dataObject,
                                     currentPropertySetting.name,
                                     currentPropertySetting.value );
-                                IDRefs.insert(IDRefs.end(), ref);
+                                IDRefs.push_back(ref);
                             }
                             else
                             {

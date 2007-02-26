@@ -85,8 +85,8 @@ namespace commonj
                         return;
                     }
                 }
-            }           
-            attributes.insert(attributes.end(), attr);
+            }
+            attributes.push_back(attr);
         }
 
 

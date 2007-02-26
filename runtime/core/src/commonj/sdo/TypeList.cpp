@@ -78,7 +78,7 @@ std::vector<const Type*> TypeList::getVec() const
 
 SDO_API void TypeList::insert (const Type* t) 
 {
-    plist.insert(plist.end(),t);
+    plist.push_back(t);
 }
 
 };

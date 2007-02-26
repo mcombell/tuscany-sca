@@ -760,10 +760,14 @@ namespace sdo{
     {
         // do not add duplicate properties
         if (!getPropertyImplPure(propname))
-        {   
-            props.insert(props.end(),new PropertyImpl(*this, 
-                propname, t, many,rdonly, cont));
-            localPropsSize++;
+        {
+           props.push_back(new PropertyImpl(*this,
+                                            propname,
+                                            t,
+                                            many,
+                                            rdonly,
+                                            cont));
+           localPropsSize++;
         }
     }
 

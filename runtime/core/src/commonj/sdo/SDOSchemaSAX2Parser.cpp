@@ -67,9 +67,11 @@ namespace commonj
             // copy the event to as list for replay.
             if (currentGroup)
             {
-                currentGroup->events.insert( currentGroup->events.end(),
-                    GroupEvent(
-                    localname,prefix,URI,namespaces,attributes));
+                currentGroup->events.push_back(GroupEvent(localname,
+                                                          prefix,
+                                                          URI,
+                                                          namespaces,
+                                                          attributes));
             }
 
         }
@@ -82,8 +84,7 @@ namespace commonj
             // copy the event to as list for replay.
             if (currentGroup)
             {
-                 currentGroup->events.insert(currentGroup->events.end(),
-                     GroupEvent(localname,prefix,URI));
+               currentGroup->events.push_back(GroupEvent(localname, prefix, URI));
             }
 
         }
@@ -643,8 +644,7 @@ namespace commonj
                         }
                         if (!found) 
                         {
-                            currentType.properties.insert(
-                                currentType.properties.end(),*propit);
+                           currentType.properties.push_back(*propit);
                         }
                     }
                 }
@@ -1100,9 +1100,8 @@ namespace commonj
             // work when serializing a sequence containing a single-valued property and
             // then deserializing.
             // currentProperty.isMany = currentProperty.isMany || currentType.isMany;
-            
-            
-            currentType.properties.insert(currentType.properties.end(), currentProperty);
+
+            currentType.properties.push_back(currentProperty);
             if (propertyStack.size() != 0)
             {
                 currentProperty = propertyStack.top();                
