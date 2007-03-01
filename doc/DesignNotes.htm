@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta name="robots" content="noindex,nofollow"><title>Tuscany/TuscanyCpp/DesignNotes - Ws Wiki</title>
+
+
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="DesignNotes_files/common.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="DesignNotes_files/print.css">
+
+<link rel="Start" href="http://wiki.apache.org/ws/FrontPage">
+<link rel="Alternate" title="Wiki Markup" href="http://wiki.apache.org/ws/Tuscany/TuscanyCpp/DesignNotes?action=raw">
+<link rel="Alternate" media="print" title="Print View" href="http://wiki.apache.org/ws/Tuscany/TuscanyCpp/DesignNotes?action=print">
+<link rel="Up" href="http://wiki.apache.org/ws/Tuscany/TuscanyCpp">
+<link rel="Search" href="http://wiki.apache.org/ws/FindPage">
+<link rel="Index" href="http://wiki.apache.org/ws/TitleIndex">
+<link rel="Glossary" href="http://wiki.apache.org/ws/WordIndex">
+<link rel="Help" href="http://wiki.apache.org/ws/HelpOnFormatting"></head><body dir="ltr" lang="en">
+<div id="page" dir="ltr" lang="en"><!-- start page -->
+
+<h1 id="title">Tuscany/TuscanyCpp/DesignNotes</h1>
+<div id="content" dir="ltr" lang="en">
+<a id="top"></a>
+
+<h2 id="head-780571e8917285d0f0c1ebae03ade69ebb3fe51a">1. Logging</h2>
+
+<p>Logging is not mentioned in the V2.01 specification, however, a
+rudimentary logging capability is provided in the current
+implementation, using three classes. </p>
+<ul>
+<li><p> LogWriter </p>
+<ul>
+<li style="list-style-type: none;"><p>This defines an abstract class with a single <strong>log</strong> method. </p>
+</li>
+</ul>
+</li>
+<li class="gap"><p> DefaultLogWriter </p>
+<ul>
+<li style="list-style-type: none;"><p>Instantiates <strong>LogWriter</strong> implementng a <strong>log</strong> method that writes to <strong>cout</strong> </p>
+</li>
+</ul>
+</li>
+<li class="gap"><p> Logger </p>
+<ul>
+<li style="list-style-type: none;"><p>A class with a static pointer to a <strong>Logwriter</strong> object. When the class is loaded the pointer is initialized to a reference to an instance of <strong>DefaultLogWriter</strong>. <strong>Logger</strong> provides its own <strong>log</strong> and <strong>logArgs</strong> methods that use the <strong>log</strong> method of <strong>DefaultLogWriter</strong> </p>
+</li>
+</ul>
+</li>
+</ul>
+<p>In the current implementation, logging is seldom used. </p>
+
+<h2 id="head-7290fb54a6fb6ba18c63fd8a5cd6790051a515fc">2. Conversion from C style strings to C++ style strings</h2>
+
+
+<h2 id="head-507cb2b48b05cbdfcdb3d687945efc737433c25f">3. Debugging the XML parser</h2>
+
+<p>SDO uses the SAX parser provided by libxml2 (<a rel="nofollow" href="http://xmlsoft.org/index.html"><img src="DesignNotes_files/moin-www.png" alt="[WWW]" height="11" width="11"> http://xmlsoft.org/index.html</a>)
+to parse XML documents (and therefore XSD documents also). The SAX
+parser uses a callback mechanism to report XML events to its caller.
+These callback routines are supplied to the parser using a struct of
+type xmlSAXHandler, called SDOSAX2Handler that is defined in
+SAX2Parser.cpp. However, since libxml2 is written in C and operates
+with no knowledge of objects or classes, it is necessary to bridge the
+gap between libxml2's C-style call back mechanism and the objects that
+comprise SDO. This is done as follows. </p>
+<p>The file SAX2Parser.cpp defines (C style) functions for all the
+callback routines required by libxml2. Looking through that file, it is
+clear that many of those functions, such as sdo_internalSubset(), are
+empty, meaning that SDO will simply ignore that particular event if it
+is reported by libxml2. Where a callback function is not empty, the
+active contents usually take the form of a call such as </p>
+<p>(SAX2Parser*) ctx)-&gt;startDocument() </p>
+<p>This call is forwarding the event reported by libxml2 to a method within a parser object created by SDO. </p>
+<p>To understand this, we have to step back a little. A client of
+libxml2 initiates the parse of an XML instance by calling the
+xmlSAXUserParseFile() function. This function takes three parameters.
+The first is the struct containing the list of callback functions (ie
+SDOSAX2Handler) and the third is the name of the XML file to parse. The
+second parameter is of type <strong>void*</strong> and is not used by
+libxml2 directly. However, it is passed to every callback functon that
+libxml2 calls as part of this parse to supply them with whatever
+context information it represents. In Tuscany SDO that context is in
+fact a pointer to an object that implements the appropriate parsing of
+the file and these objects are instances of one of two classes, both of
+which are derived from a common base. The base class is SAX2Parser, and
+that defines virtual methods to handle events returned by libxml2. (In
+fact it defines methods for that subset of the events that SDO will
+use.) The two concrete classes are SDOSAX2Parser and
+SDOSchemaSAX2Parser. The former is used when parsing XML instance
+documents and the latter when parsing XML Schema Definitions. Both
+classes re-implement the methods that process SAX events to handle them
+in the appropriate way for either XML or XSD. </p>
+<p>Therefore, the overall process for parsing an XML or XSD input
+document and generating the corresponding data object or meta data
+structures in SDO as follows. </p>
+<p>1. Create an instance of SDOSAX2Parser for parsing XML instance
+documents or an instance of SDOSchemaSAX2Parser for parsing an XSD
+document. </p>
+<p>2. Pass the address of the SAX2Parser object just created to libxml2
+as the context parameter of the xmlSAXUserParseFile() function. </p>
+<p>3. As the parse unfolds, libxml2 will use the SDOSAX2Handler struct
+to call the callback function that is appropriate for each event that
+it is reporting. These will be C functions in SAX2Parser.cpp </p>
+<p>4. Many of those functions will simply return having done nothing
+because SDO has no interest in that particular event. However, when a
+SAX event is of interest, the C callback function will use the context
+parameter that libxml2 has supplied to it (ie the address of a
+SAX2Parser object) to call the method on that object that corresponds
+to the current SAX event. </p>
+<p>Simple. </p>
+<p>To watch the parsing of a file as it unfolds there are three broad
+options. If the file is an XSD then place breakpoints on the methods of
+SDOSchemaSAX2Parser. If it is an XML instance then set breakpoints on
+the methods of SDOSAX2Parser. If it could be either, then place
+breakpoints on the C functions that are named in SDOSAX2Handler and
+that are found in SAX2Parser.cpp </p>
+
+<h2 id="head-c0ac7aae89a380ef5b343dc5ebc99b721000ad93">4. Modifying the SDO Build to use the Apache stdcxx Standard C++ library</h2>
+
+<p>stdcxx is an implementation of the C++ Standard Library provided by Apache. The website is at <a rel="nofollow" href="http://incubator.apache.org/stdcxx/"><img src="DesignNotes_files/moin-www.png" alt="[WWW]" height="11" width="11"> http://incubator.apache.org/stdcxx/</a>.  </p>
+<p>To build SDO using stdcxx rather than the native C++ library on
+Windows, the following modifications to the Microsoft Visual Studio
+.NET 2003 build environment are necessary. We assume that a source
+extract of stdcxx is already available in a directory called
+C:\Tuscany\stdcxx-4.1.3 (based on the version number of the current
+release at the time of writing). We also assume that debug and release
+versions of this library have been built in directories called
+C:\Tuscany\stdcxx-4.1.3\Debug and C:\Tuscany\stdcxx-4.1.3\Release. The
+process for building these is described here <a href="http://wiki.apache.org/ws-data/attachments/Tuscany%282f%29TuscanyCpp%282f%29DesignNotes/attachments/HowToBuildStdcxxForTuscanySDO.txt">HowToBuildStdcxxForTuscanySDO.txt</a> </p>
+<p>1. Define an environment variable, STDCXX_HOME to identify the root of the source extract tree ie C:\Tuscany\stdcxx-4.1.3 </p>
+<p>This is not strictly necessary but is convenient given how often we will refer to that location. </p>
+<p>2. Add the stdcxx include directories to the appropriate search path. These directories are </p>
+<ul>
+<li style="list-style-type: none;"><p>$(STDCXX_HOME)\include </p>
+<p>$(STDCXX_HOME)\include\ansi </p>
+<p>and either </p>
+<p>$(STDCXX_HOME)\Debug\include\15d - for a debug build </p>
+<p>or </p>
+<p>$(STDCXX_HOME)\Release\include\12d - for a release build </p>
+</li>
+</ul>
+<p>For MSVC 7.1 these should be appended to the list found in
+Configuration Properties -&gt; C/C++ -&gt; General -&gt; Additional
+Include Directories </p>
+<p>3. Add environment variable definitions. These variables are </p>
+<ul>
+<li style="list-style-type: none;"><p>_RWSTD_USE_CONFIG </p>
+<p>_RWSHARED </p>
+<p>and _RWSTDDEBUG for a debug build </p>
+</li>
+</ul>
+<p>4. Add the stdcxx library directory to the appropriate search path. This directory is </p>
+<ul>
+<li style="list-style-type: none;"><p>$(STDCXX_HOME)\Debug\lib - for a debug build </p>
+<p>and  </p>
+<p>$(STDCXX_HOME)\Release\lib - for a release build </p>
+</li>
+</ul>
+<p>For MSVC 7.1 these should be appended to the list found in
+Configuration Properties -&gt; Linker -&gt; General -&gt; Additional
+Library Directories </p>
+<p>5. Add the stdcxx library name as a dependency. The library name is </p>
+<ul>
+<li style="list-style-type: none;"><p>stdlib15d.lib - for a debug build </p>
+<p>and </p>
+<p>stdlib12d.lib - for a release build </p>
+</li>
+</ul>
+<p>For MSVC 7.1 these should be appended to the list found in
+Configuration Properties -&gt; Linker -&gt; Input -&gt; Additional
+Dependencies </p>
+
+<h2 id="head-feededf8be9c9caa8efe879e11523875c15f44ce">5. Discriminated Types</h2>
+
+<p>Prior to the changes introduced in revision 502599, in response to
+JIRA TUSCANY-546, the C++ implementation made extensive use of C style
+macros, particularly in DataObjectImpl.cpp. This code had been
+motivated by the requirement for SDO to process a variety of different
+data types (integer, float, string etc) in very similar ways.
+Unfortunately, while macro code makes it easy to clone behaviour by
+instantiating the macro for different datatypes, it has several
+disdavantages. By far the most serious is the impossibility of
+debugging code that has been generated by the macro preprocessor,
+closely followed by the fact that most non-trivial macros are difficult
+to read and understand. These twin problems lead onto the common result
+that macro generated code is often inefficient. </p>
+<p>TUSCANY-546 remedies these problems by introducing a new class,
+SDOValue, defined in SDOValue.cpp and SDOValue.h. This class consists
+fundamentally of a union of all the possible data types that SDO must
+accommmodate, together with an enumerated type that identifies which
+particular data type is stored in the current object. The union and
+enumeration are themselves defined in DataTypeInfo.cpp and
+DataTypeInfo.h. </p>
+<p>Not surprisingly, SDOValue provides constructors to initialise an
+SDOValue object from any of the primitive data types. There are also
+retrieval methods that will extract a primitive value from an SDOValue,
+converting as necessary (and throwing an exception for those
+conversions that are impossible). For the most part these methods are
+straightforward. The only slight complications arise when dealing with
+primitives that are strings of characters. There are three such data
+types - </p>
+<p>String: This is a null terminated sequence of single byte
+characters. It corresponds to the C notion of a string, and the C++
+std::string class. </p>
+<p>WideString: This is a null terminated sequence of double byte
+characters. In C++ this might be represented by the std::wstring class,
+although in this implementation it is represented in the C fashion,
+using a pointer to a null terminated sequence of wchar_t elements. </p>
+<p>ByteArray: A sequence of bytes that is not terminated by a null character. An associated length value is therefore required. </p>
+<p>SDOValue objects represent such values with pointers to other
+objects or allocations of memory, therefore, copy operators and
+destructors must allow for the need to copy or delete the items that
+are at the far end of these pointers. </p>
+<p>From then on, the general strategy is straightforward. All methods
+that are part of the SDO external interface must be preserved. However,
+as far as possible, other methods that used to be replicated (by macro
+expansion) for each different datatype, are replaced by a single method
+that works with SDOValue objects. Where it is necessary to work with
+the actual primitive data type explicitly, this is normally done via a
+switch statement. The external methods that were previously generated
+by macro expansion are replaced by explicit code that is little more
+than a veneer that converts between the SDOValue that is used
+internally and the primitive data type that is required by the public
+interface. Numerous examples of this appear in DataObjectImpl.cpp, the
+getBoolean and setBoolean methods being typical. </p>
+<p>Code to convert between the various primitive data types is already
+available in the TypeImpl class. However, this is not ideal since a) as
+coded it is dependent on the TypeImpl class, even though that isn't
+strictly necessary and therefore b) it tends to bloat the already large
+TypeImpl class. The SDOValue code provides it's own conversion methods
+in the SDODataConverter class. The intention is to migrate all
+conversions in SDO to the methods in that class, however, that
+transition is not yet complete. </p>
+<a id="bottom"></a>
+
+</div>
+<p id="pageinfo" class="info" dir="ltr" lang="en">last edited 28.02.2007 13:24:53 by <span title="blueice2n1.uk.ibm.com">GeoffWinn</span></p>
+</div> <!-- end page -->
+
+</body></html>
