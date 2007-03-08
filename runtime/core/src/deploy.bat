@@ -34,6 +34,15 @@ goto usage
 set inpath=%2
 echo %inpath%
 
+
+if not exist %deploydir% mkdir %deploydir%
+if not exist %deploydir%\bin mkdir %deploydir%\bin
+if not exist %deploydir%\lib mkdir %deploydir%\lib
+if not exist %deploydir%\include mkdir %deploydir%\include
+if not exist %deploydir%\include\commonj mkdir %deploydir%\include\commonj
+if not exist %deploydir%\include\commonj\sdo mkdir %deploydir%\include\commonj\sdo
+
+
 copy %srcdir%\commonj\sdo\*.h %deploydir%\include\commonj\sdo
 
 copy %inpath%\tuscany_sdo.lib %deploydir%\lib

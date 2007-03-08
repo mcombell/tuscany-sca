@@ -34,6 +34,11 @@ goto usage
 set inpath=%2
 echo %inpath%
 
+if not exist %deploydir% mkdir %deploydir%
+if not exist %deploydir%\bin mkdir %deploydir%\bin
+if not exist %deploydir%\lib mkdir %deploydir%\lib
+if not exist %deploydir%\include mkdir %deploydir%\include
+
 copy %srcdir%\*.h %deploydir%\include\
 
 copy %inpath%\tuscany_sdo_axiom.lib %deploydir%\lib
