@@ -37,14 +37,27 @@ goto end
 )
 echo using ICONV: %ICONV_HOME%"
 
+
+set TUSCANY_SDOCPP=%cd%\deploy
+call vcvars32
+cd vsexpress\tuscany_sdo\sdo_runtime
+call vcbuild sdo_runtime.vcproj "%config%|Win32"
+
+cd ..\sdo_test
+call vcbuild sdo_test.vcproj "%config%|Win32"
+
 if "%AXIS2C_HOME%" == "" (
-echo "AXIS2C_HOME not set"
-goto end
+echo "AXIS2C_HOME not set: sdo_axiom will not be built"
+goto noaxis
 )
 echo using AXIS2C: %AXIS2C_HOME%
 
-call vcvars32
-cd vsexpress\tuscany_sdo
-call vcbuild tuscany_sdo.sln "%config%|Win32"
+cd ..\sdo_axiom
+call vcbuild sdo_axiom.vcproj "%config%|Win32"
+
+cd ..\sdo_axiom_test
+call vcbuild sdo_axiom_test.vcproj "%config%|Win32"
+
+:noaxis
 
 @endlocal

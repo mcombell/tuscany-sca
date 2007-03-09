@@ -23,10 +23,8 @@ if .%1 == .Debug (
    set buildtype=Debug
 )
 
-if "%TUSCANY_SDOCPP%" == "" (
-echo "TUSCANY_SDOCPP not set"
 set TUSCANY_SDOCPP=%cd%\deploy
-)
+
 echo using TUSCANY_SDOCPP: %TUSCANY_SDOCPP%
 
 set PATH=%TUSCANY_SDOCPP%\bin;%PATH%

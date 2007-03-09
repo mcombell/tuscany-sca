@@ -1,5 +1,5 @@
-Apache Tuscany C++ M2 build (October, 2006)
-===========================================
+Apache Tuscany SDO C++ M3
+=========================
 
 http://incubator.apache.org/tuscany
 
@@ -35,8 +35,7 @@ Supported SDO features
     below. See the Service Data Objects for C++ 2.01 specification.
 
 New features in this release
-  * Optional build on Windows with Apache STDCXX
-  * Improved memory management
+  * 30-40% performance improvement    
   * Multiple bug fixes and internal enhancements
 
 Known Restrictions
