@@ -18,12 +18,6 @@
 
 @setlocal
 
-if "%AXIS2C_HOME%" == "" (
-echo "AXIS2C_HOME not set"
-goto end
-)
-echo using Axis2C: %AXIS2C_HOME%"
-
 set buildtype=Release
 if .%1 == .Debug (
    set buildtype=Debug
@@ -35,7 +29,7 @@ set TUSCANY_SDOCPP=%cd%\deploy
 )
 echo using TUSCANY_SDOCPP: %TUSCANY_SDOCPP%
 
-set PATH=%TUSCANY_SDOCPP%\bin;%AXIS2C_HOME%\lib;%PATH%
+set PATH=%TUSCANY_SDOCPP%\bin;%PATH%
 
 set SCATESTPATH=%cd%\vsexpress\tuscany_sdo\sdo_test\%buildtype%
 cd runtime\core\test

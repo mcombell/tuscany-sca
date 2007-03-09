@@ -36,7 +36,7 @@
 <DIV ID="bodyColumn"> 
    <DIV ID="contentBox"> 
       <DIV CLASS="section"> 
-         <H2>Tuscany - Getting Started - SDO C++ Milestone release 2</H2> 
+         <H2>Tuscany - Getting Started - SDO C++ Milestone release 3</H2> 
 
          <P>Tuscany SDO C++ is an implementation of the 
           <A HREF="http://www.osoa.org/display/Main/SDO+-+Previously+Published+Specifications">Service Data Objects 
@@ -52,7 +52,6 @@
             <LI><A HREF="#requirements">System Requirements</A></LI>
             <LI><A HREF="#install">Installing Tuscany SDO..</A>
                 <UL>
-                    <LI><A HREF="#linuxbin">..from the binary release on Linux</A></LI>
                     <LI><A HREF="#linuxsrc">..from the source release on Linux</A></LI>
                     <!--LI><A HREF="#linuxsrcstdcxx">..from the source release on Linux with Apache STDCXX</A></LI-->
                     <LI><A HREF="#winbin">..from the binary release on Windows</A></LI>
@@ -86,7 +85,7 @@
                </TD>
             </TR>
             <TR CLASS="a">
-               <TD>Axis2C Release 0.94</TD>
+               <TD>Axis2C Release 0.96</TD>
 
                <TD> 
                   <A HREF="http://ws.apache.org/axis2/c/download.cgi"
@@ -127,11 +126,6 @@
       </DIV> 
       <DIV CLASS="section"> 
          <A NAME="install"><H2>Installing Tuscany SDO for C++</H2></A>
-         <A NAME="linuxbin"><H3>Getting Tuscany SDO for C++ working with the binary release on Linux</H3></A>
-          <OL>
-              <LI>Extract the binary tar package to a folder &lt;tuscany_sdo_install_dir&gt;</LI>
-              <LI>Add the &lt;tuscany_sdo_install_dir&gt;/lib directory to the LD_LIBRARY_PATH <!-- (Linux) or DYLD_LIBRARY_PATH (MacOS X) --> environment variable</LI>
-          </OL>
          <A NAME="linuxsrc"><H3>Getting Tuscany SDO for C++ working with the source release on Linux</H3></A>
           <OL>
               <LI>Extract the source tar package to a folder &lt;tuscany_sdo_install_dir&gt;</LI>
@@ -143,7 +137,7 @@
                    LIBXML2_LIB=/usr/lib<BR/>
                    LIBXML2_INCLUDE=/usr/include/libxml2<BR/></LI>
                                                                                                 
-                  <LI>AXIS2C_HOME=&lt;path to axis2c version 0.94&gt;</LI>
+                  <LI>AXIS2C_HOME=&lt;path to axis2c version 0.96&gt;</LI>
                 </UL></LI>
               <LI>Build the source with the following command sequence:
                   <UL>
@@ -155,9 +149,17 @@
                   /usr/local/tuscany/sdo. Use ./configure --help to see all the available options</LI>
               <LI>Run the test:
                   <UL>
-                      <LI>cd to &lt;tuscany_sdo_install_dir&gt;/runtime/core/test</LI>
-                      <LI>./tuscany_sdo_test</LI>
-                  </UL></LI>
+                      <LI>./sdotest.sh</LI>
+                  </UL>The output will indicate the number of tests passed:
+<xmp>Using SDO installed at /home/tuscany/workspace/cpp/sdo/deploy
+I/O warning : failed to load external entity "not_present.xsd"
+I/O warning : failed to load external entity "not-present.xml"
+I/O warning : failed to load external entity "sca-policy.xsd"
+I/O warning : failed to load external entity "xml.xsd"
+I/O warning : failed to load external entity "xhtml1-strict.xsd"
+Total tests:118 Tests passed:118</xmp>
+                      The I/O warning messages can be ignored.
+              </LI>
           </OL>
         <!--A NAME="linuxsrcstdcxx"><H3>Getting Tuscany SDO for C++ working with the source release and Apache STDCXX on Linux</H3></A-->
           
@@ -172,7 +174,7 @@
               <LI>The following environment variables are required:                                 
                 <UL>
                   <LI>LIBXML2_HOME=&lt;path to installed libxml2&gt;<BR/>
-                  <LI>AXIS2C_HOME=&lt;path to axis2c version 0.94&gt;</LI>
+                  <LI>AXIS2C_HOME=&lt;path to axis2c version 0.96&gt;</LI>
                 </UL></LI>
               <LI>You must have set up the environment for Microsoft Visual C++ tools. The build command 
                   will call vcvars32 to set the environment. Ensure the directory containing this is on your path.
@@ -188,21 +190,13 @@
                       <LI>sdotest.bat</LI>
                   </UL>
                   The output will indicate the number of test run and passed. For example:
-<xmp>using Axis2C: D:\axis2c-bin-0.94-win32"
-using TUSCANY_SDOCPP: d:\tuscany_sdo_cpp-1.0-incubator-M2-src\deploy
+<xmp>using TUSCANY_SDOCPP: d:\tuscany_sdo_cpp-1.0-incubator-M3-src\deploy
 I/O warning : failed to load external entity "not_present.xsd"
 I/O warning : failed to load external entity "not-present.xml"
 I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-I/O warning : failed to load external entity "sca-policy.xsd"
-Total tests:111 Tests passed:111
-</xmp>
+I/O warning : failed to load external entity "xml.xsd"
+I/O warning : failed to load external entity "xhtml1-strict.xsd"
+Total tests:118 Tests passed:118</xmp>
 The I/O warning messages can be ignored.
               </LI>
               <LI>Add the &lt;tuscany_sdo_install_dir&gt;\deploy\bin directory to the PATH environment variable</LI>
