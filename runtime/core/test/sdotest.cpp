@@ -9272,7 +9272,12 @@ int sdotest::cloneopentest()
       // write the cloned document out to a file
       myXMLHelper->save(myNewXMLDocument, "clone-testout.xml");
 
+#if defined(WIN32)  || defined (_WINDOWS)
+
+      return comparefiles("clone-out-win.xml","clone-testout.xml");
+#else
       return comparefiles("clone-out.xml","clone-testout.xml");
+#endif
 
    }
    catch (SDORuntimeException e)
