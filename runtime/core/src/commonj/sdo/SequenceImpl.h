@@ -331,17 +331,21 @@ class SequenceImpl : public Sequence
           }
 
           // Copy assignment
-          seq_item& operator=(const seq_item& sin)
-          {
-             if (freeText)
+             seq_item& operator=(const seq_item& sin)
              {
-                delete freeText;
+                 if (this != &sin)
+                 {
+                     if (freeText)
+                     {
+                         delete freeText;
+                     }
+                     if (sin.freeText != 0)
+                     {
+                         freeText = new SDOValue(*sin.freeText);
+                     }
+                 }
+                 return *this;
              }
-             if (sin.freeText != 0)
-             {
-                freeText = new SDOValue(*sin.freeText);
-             }
-          }
             
           // Destructor
           ~seq_item()
