@@ -563,11 +563,11 @@ namespace commonj
                         // -------------------------------------------------------                            
                         // Create <element> definitions 
                         // -------------------------------------------------------
-                        for (std::list<PropertyImpl*>::const_iterator j = pl.begin();
-                             j != pl.end();
-                             j++)
+                        for (std::list<PropertyImpl*>::const_iterator k = pl.begin();
+                             k != pl.end();
+                             k++)
                         {
-                           const Property& prop = *(*j);
+                            const Property& prop = *(*k);
                             const Type& propType = prop.getType();
 
 
