@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-deploydir=$(prefix)/samples/misc/deploy/
+deploydir=$(prefix)/misc/deploy/
 prgbindir=$(deploydir)/bin
 
 prgbin_PROGRAMS = sdo_misc

@@ -17,13 +17,28 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-if [ x$TUSCANY_SDOCPP = x ]; then
-echo "TUSCANY_SDOCPP not set"
+
+if [ x$LIBXML2_INCLUDE = x ]; then
+echo "LIBXML2_INCLUDE not set"
 exit;
 fi
-echo "Using SDO installed at $TUSCANY_SDOCPP"
+if [ x$LIBXML2_LIB = x ]; then
+echo "LIBXML2_LIB not set"
+exit;
+fi
 
-./configure --prefix=${TUSCANY_SDOCPP}/samples --enable-static=no
+if [ x$AXIS2C_HOME = x ]; then
+echo "AXIS2C_HOME not set. not building SDO Axiom utility"
+
+else
+echo "Using Axis2C installed at $AXIS2C_HOME"
+WITH_AXIS2C=--with-axis2c
+fi
+
+if [ x$TUSCANY_SDOCPP = x ]; then
+export TUSCANY_SDOCPP=`pwd`/deploy
+fi
+
+./configure --prefix=${TUSCANY_SDOCPP} ${WITH_AXIS2C} --enable-static=no
 make
 make install
-

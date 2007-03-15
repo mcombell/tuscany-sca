@@ -38,7 +38,7 @@ echo "Using libxml2 installed at $LIBXML2_LIB, $LIBXML2_INCLUDE"
 
 cd ${TUSCANY_SDOCPP_HOME}/samples
 ./autogen.sh
-./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy --enable-static=no
+./configure --prefix=${TUSCANY_SDOCPP_HOME}/deploy/samples --enable-static=no
 
 cd $TUSCANY_SDOCPP_HOME
 ./autogen.sh

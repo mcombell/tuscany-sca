@@ -17,4 +17,4 @@
 
 SUBDIRS = misc
 
-EXTRA_DIST = GettingStarted.html
+EXTRA_DIST = GettingStarted.html build.sh
