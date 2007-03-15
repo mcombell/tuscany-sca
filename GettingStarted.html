@@ -92,7 +92,7 @@
                   <A HREF="http://xmlsoft.org/downloads.html"
                      TARGET="_blank">http://xmlsoft.org/downloads.html</A><BR/>
                   Most Linux systems have libxml2 by default. On Windows you need to download 
-                  and install libxml2 from 
+                  and install libxml2, iconv and zlib from 
                   <A HREF="http://www.zlatkovic.com/libxml.en.html" TARGET="_blank">http://www.zlatkovic.com/libxml.en.html</A><BR/>
                   Please read the installation notes for libxml2 particularly regarding it's 
                   pre-req's iconv and zlib on Windows. <BR/>
@@ -182,7 +182,8 @@ Total tests:118 Tests passed:118</xmp>
               <LI>Unzip the supplied source zip file to a folder &lt;tuscany_sdo_install_dir&gt;</LI>
               <LI>The following environment variables are required:                                 
                 <UL>
-                  <LI>LIBXML2_HOME=&lt;path to installed libxml2&gt;<BR/>
+                  <LI>LIBXML2_HOME=&lt;path to installed libxml2&gt;</LI>
+                  <LI>ICONV_HOME=&lt;path to installed iconv&gt;</LI>
                   <LI>Optional: AXIS2C_HOME=&lt;path to axis2c version 0.96&gt;Required if building the sdo_axiom utility library.</LI>
                 </UL></LI>
               <LI>You must have set up the environment for Microsoft Visual C++ tools. The build command 
