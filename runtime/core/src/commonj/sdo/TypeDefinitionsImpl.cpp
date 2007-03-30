@@ -32,6 +32,16 @@ namespace commonj
         {
         }
 
+        void TypeDefinitionsImpl::addTypeDefinitions(const TypeDefinitionsImpl& typedefs)
+        {
+            XMLDAS_TypeDefs::const_iterator iter;
+            for (iter=typedefs.types.begin(); iter != typedefs.types.end(); iter++)
+            {
+                types.insert(*iter);
+            }
+
+        }
+
         SDOXMLString TypeDefinitionsImpl::getTypeQName(const SDOXMLString& typeUri, const SDOXMLString& typeName)
         {
             return typeUri + "#" + typeName;

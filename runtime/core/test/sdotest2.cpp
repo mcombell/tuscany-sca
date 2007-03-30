@@ -1425,8 +1425,9 @@ int sdotest::xhtml1()
         DataFactoryPtr mdg  = DataFactory::getDataFactory();
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
- 
+
         xsh->defineFile("Atom1.0.xsd");
+        // SDOUtils::printTypes(cout, xsh->getDataFactory());
 
         if ((i = xsh->getErrorCount()) > 0)
         {
@@ -1438,8 +1439,6 @@ int sdotest::xhtml1()
             }
             return 0;
         }
-
-
 
         XMLHelperPtr xmh = HelperProvider::getXMLHelper(mdg);
  
@@ -1776,4 +1775,68 @@ int sdotest::jira980()
       return 0;
    }
 
+}
+
+int sdotest::typedefinitionstest()
+{
+
+    // We re-use the  parsed types from the company schema
+
+
+    try {
+
+ 
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+ 
+        xsh->defineFile("company.xsd");
+
+        XSDHelperPtr clonedHelper = HelperProvider::getXSDHelper();
+        clonedHelper->defineTypes(xsh->getDefinedTypes());
+
+        xsh->generateFile(mdg->getTypes(),"typedefs.xsd", "companyNS", 0);
+        xsh->generateFile(clonedHelper->getDataFactory()->getTypes(),"typedefs_cloned.xsd", "companyNS", 0);
+
+        return comparefiles("typedefs_cloned.xsd" ,"typedefs.xsd");
+
+
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in typedefinitionstest" << e << endl;
+        return 0;
+    }
+}
+
+
+int sdotest::eBayTest()
+{
+
+    try {
+
+ 
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+
+        cout << "parsing" <<endl;
+        xsh->defineFile("eBaySvc.wsdl");
+        cout << "parsed" <<endl;
+
+        cout<< "number of types = " << xsh->getDefinedTypes().size() <<endl;
+        XSDHelperPtr clonedHelper = HelperProvider::getXSDHelper();
+        cout << "cloning" <<endl;
+        clonedHelper->defineTypes(xsh->getDefinedTypes());
+        cout << "cloned" <<endl;
+        cout<< "number of types = " << clonedHelper->getDefinedTypes().size() <<endl;
+
+
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in eBayTest" << e << endl;
+        return 0;
+    }
+    return 1;
 }

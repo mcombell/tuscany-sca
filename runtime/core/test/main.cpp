@@ -45,10 +45,12 @@ int main (int argc, char** argv)
     int testspassed=0;
     int totaltests=0;
     int value = 0;
+    try {
 
     // TEST ( sdotest::upandatom() );
 
-    /* TEST ( sdotest::xhtml1() ); */
+    //TEST (  sdotest::eBayTest() );
+    TEST ( sdotest::xhtml1() );
     TEST ( sdotest::scopetest() );
     TEST ( sdotest::xsdtosdo() );
     TEST (  sdotest::jira980() );
@@ -182,6 +184,11 @@ int main (int argc, char** argv)
 	TEST (  sdotest::cloneopentest() );
 	TEST (  sdotest::tuscany963() );
 	TEST (  sdotest::tuscany562() );
+	TEST (  sdotest::typedefinitionstest() );
+    } catch(...)
+    {
+        cout << "unexpected exception caught" << endl;
+    }
 
     cout << "Total tests:" << totaltests << " Tests passed:" << testspassed << endl;
     return testspassed - totaltests;

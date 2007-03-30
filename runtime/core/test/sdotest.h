@@ -205,4 +205,6 @@ class sdotest {
         static int tuscany963();
         static int tuscany562();
         static int upandatom();
+        static int typedefinitionstest();
+        static int eBayTest();
 };

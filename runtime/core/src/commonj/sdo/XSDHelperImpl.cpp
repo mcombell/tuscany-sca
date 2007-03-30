@@ -147,7 +147,7 @@ namespace commonj
                 const char* typeUri = prop.substituteUri.isNull() ? 
                             prop.typeUri : prop.substituteUri; 
                 const Type& rootType = dataFactory->getType(typeUri, entryName);
-                const std::list<PropertyImpl*> pl = rootType.getPropertyListReference();
+                const std::list<PropertyImpl*>& pl = rootType.getPropertyListReference();
 
                 for (std::list<PropertyImpl*>::const_iterator j = pl.begin();
                      j != pl.end();
@@ -196,7 +196,7 @@ namespace commonj
                 const Type* rootType = df->findType(typeUri,"RootType");
                 if (rootType == 0) return;
 
-                const std::list<PropertyImpl*> pl = rootType->getPropertyListReference();
+                const std::list<PropertyImpl*>& pl = rootType->getPropertyListReference();
 
                 for (std::list<PropertyImpl*>::const_iterator j = pl.begin();
                      j != pl.end();
@@ -251,11 +251,8 @@ namespace commonj
         {
             DataFactoryImpl* df = (DataFactoryImpl*)(DataFactory*)dataFactory;
             
-            XMLDAS_TypeDefs types = typedefs.types;
             XMLDAS_TypeDefs::iterator iter;
-
-
-            for (iter=types.begin(); iter != types.end(); iter++)
+            for (iter=typedefs.types.begin(); iter != typedefs.types.end(); iter++)
             {
                 TypeDefinitionImpl& ty = iter->second;
                 try
@@ -324,7 +321,7 @@ namespace commonj
                     SDO_RETHROW_EXCEPTION("defineTypes", e);
                 }
             }
-            for (iter=types.begin(); iter != types.end(); iter++)
+            for (iter=typedefs.types.begin(); iter != typedefs.types.end(); iter++)
             {
                 TypeDefinitionImpl& ty = iter->second;
                 if (!ty.parentTypeName.isNull())
@@ -380,11 +377,11 @@ namespace commonj
 
                         
                         XMLDAS_TypeDefs::iterator refTypeIter = 
-                            types.find(TypeDefinitionsImpl::getTypeQName(prop.typeUri, "RootType"));
-                        if(refTypeIter != types.end())
+                            typedefs.types.find(TypeDefinitionsImpl::getTypeQName(prop.typeUri, "RootType"));
+                        if(refTypeIter != typedefs.types.end())
                         {
 
-                            TypeDefinitionImpl rootTy = refTypeIter->second;
+                            TypeDefinitionImpl& rootTy = refTypeIter->second;
                             
                             // find the property on the root type
                             XmlDasPropertyDefs::iterator refPropsIter;
@@ -445,8 +442,8 @@ namespace commonj
                         continue;
                     }
                     XMLDAS_TypeDefs::iterator propTypeIter = 
-                        types.find(TypeDefinitionsImpl::getTypeQName(prop.typeUri, prop.typeName));
-                    if(propTypeIter != types.end())
+                        typedefs.types.find(TypeDefinitionsImpl::getTypeQName(prop.typeUri, prop.typeName));
+                    if(propTypeIter != typedefs.types.end())
                     {
                         prop.typeName = propTypeIter->second.name;
                     }
@@ -503,7 +500,11 @@ namespace commonj
                         }
                         else
                         {
-                            addSubstitutes(prop,ty);
+                            // subtitutes can only reference global types
+                            if (ty.name.equals("RootType"))
+                            {
+                                addSubstitutes(prop,ty);
+                            }
                         }
                         
                         // Do not add DASValue to ChangeSummary
@@ -524,6 +525,11 @@ namespace commonj
                 }
                 
             }
+
+            // The addition of the new types was succesful so adding these
+            // types to the defined types should succeed (no duplicates)
+            definedTypes.getTypeDefinitions().addTypeDefinitions(typedefs);
+
         } // End - defineTypes
         
         /**  getDataFactory returns the factory

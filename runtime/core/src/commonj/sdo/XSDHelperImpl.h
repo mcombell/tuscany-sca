@@ -138,6 +138,8 @@ namespace commonj
             }
  
             virtual void defineTypes(TypeDefinitions& types);
+ 
+            virtual TypeDefinitions& getDefinedTypes() {return definedTypes;}
 
         private:
             virtual void clearErrors();
@@ -157,6 +159,7 @@ namespace commonj
 
             std::vector<char*> parseErrors;
             
+            TypeDefinitions definedTypes;            
         };
         
     } // End - namespace sdo

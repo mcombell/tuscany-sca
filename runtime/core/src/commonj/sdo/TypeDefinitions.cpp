@@ -47,14 +47,10 @@ namespace commonj
         {
             copy(tds);
         }
-        
-        TypeDefinitions& TypeDefinitions::operator=(const TypeDefinitions& tds)
+
+        TypeDefinitions::TypeDefinitions(const TypeDefinitionsImpl& tds)
         {
-            if (this != &tds)
-            {
-                copy(tds);
-            }
-            return *this;
+            typedefinitions = new TypeDefinitionsImpl(tds);
         }
 
         void TypeDefinitions::addTypeDefinition(TypeDefinition& t)
@@ -78,5 +74,9 @@ namespace commonj
             return *typedefinitions;
         }
 
+        unsigned int TypeDefinitions::size()
+        {
+            return typedefinitions->types.size();
+        }
     } // End - namespace sdo
 } // End - namespace commonj

@@ -25,10 +25,11 @@
 	xmlns:company="companyNS"
 	targetNamespace="companyNS">
       <xsd:element name="company" type="company:CompanyType"/>
+      <xsd:element name="Publication" type="company:PublicationType" abstract="true"/>
       <xsd:complexType name="CompanyType">
       <xsd:sequence>
           <xsd:element name="departments" type="company:DepartmentType" maxOccurs="unbounded"/>
-          <xsd:element name="Publication" type="company:PublicationType" maxOccurs="1"/>
+          <xsd:element ref="company:Publication" maxOccurs="1"/>
        </xsd:sequence>
        <xsd:attribute name="name" type="xsd:string"/>
        <xsd:attribute name="cs" type="sdo:ChangeSummaryType"/>
@@ -58,7 +59,7 @@
       <xsd:complexType name="PublicationType" abstract="true" >
           <xsd:element name="title" type="xsd:string" maxOccurs="1"/>
       </xsd:complexType>
-      <xsd:element name="Book" type="company:BookType" substitutionGroup="Publication" />
+      <xsd:element name="Book" type="company:BookType" substitutionGroup="company:Publication" />
       <xsd:element name="Magazine" type="company:MagazineType" substitutionGroup="company:Publication" />
     </xsd:schema>
 
