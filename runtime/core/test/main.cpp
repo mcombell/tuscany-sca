@@ -46,9 +46,6 @@ int main (int argc, char** argv)
     int totaltests=0;
     int value = 0;
     try {
-
-    // TEST ( sdotest::upandatom() );
-
     //TEST (  sdotest::eBayTest() );
     TEST ( sdotest::xhtml1() );
     TEST ( sdotest::scopetest() );
@@ -168,7 +165,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::b47137b() );
     TEST (  sdotest::b46633() );
     TEST (  sdotest::b46693() );
-    /* TEST (  sdotest::b46734() ); */
+    TEST (  sdotest::b46734() ); 
     TEST (  sdotest::b46634() );
     TEST (  sdotest::b46617b() );
     TEST (  sdotest::b46617() );
@@ -185,6 +182,9 @@ int main (int argc, char** argv)
 	TEST (  sdotest::tuscany963() );
 	TEST (  sdotest::tuscany562() );
 	TEST (  sdotest::typedefinitionstest() );
+    
+    TEST (  sdotest::jira1174() );
+
     } catch(...)
     {
         cout << "unexpected exception caught" << endl;

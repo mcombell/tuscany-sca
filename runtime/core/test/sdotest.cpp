@@ -6812,10 +6812,10 @@ int sdotest::b46734()
 
         XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
         
-        xsh->defineFile("wsdl.xsd");
+        xsh->defineFile("http://schemas.xmlsoap.org/wsdl/");
         if ((i = xsh->getErrorCount()) > 0)
         {
-            if (!silent)
+            if (true)
             {
                 cout << "WSDL XSD reported some errors:" << endl;
                 for (j=0;j<i;j++)
@@ -6827,10 +6827,10 @@ int sdotest::b46734()
             }
             return 0;
         }
-        xsh->defineFile("wsdl-soap.xsd");
+        xsh->defineFile("http://schemas.xmlsoap.org/wsdl/soap/");
         if ((i = xsh->getErrorCount()) > 0)
         {
-            if (!silent) 
+            if (true) 
             {
                 cout << "WSDL SOAP XSD reported some errors:" << endl;
                 for (j=0;j<i;j++)
@@ -6842,10 +6842,10 @@ int sdotest::b46734()
             }
             return 0;
         }
-        xsh->defineFile("wsdl-http.xsd");
+        xsh->defineFile("http://schemas.xmlsoap.org/wsdl/http/");
         if ((i = xsh->getErrorCount()) > 0)
         {
-            if (!silent)
+            if (true)
             {
                 cout << "WSDL HTTP XSD reported some errors:" << endl;
                 for (j=0;j<i;j++)
@@ -6863,7 +6863,7 @@ int sdotest::b46734()
 
         if ((i = myXMLHelper->getErrorCount()) > 0)
         {
-            if (!silent)
+            if (true)
             {
                 cout << "XML reported some errors:" << endl;
                 for (j=0;j<i;j++)
@@ -6880,7 +6880,7 @@ int sdotest::b46734()
     }
     catch (SDORuntimeException e)
     {
-        if (!silent)cout << "b46734 failed" << endl << e << endl;
+        if (true)cout << "b46734 failed" << endl << e << endl;
         return 0;
     }
 

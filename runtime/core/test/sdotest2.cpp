@@ -1840,3 +1840,32 @@ int sdotest::eBayTest()
     }
     return 1;
 }
+
+int sdotest::jira1174()
+{
+
+    try {
+
+ 
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+ 
+        xsh->defineFile("company.xsd");
+
+
+        DataObjectPtr comp = mdg->create("companyNS", "CompanyType");
+        DataObjectPtr dept = comp->createDataObject("departments");
+        DataObjectPtr ron = dept->createDataObject("employees");
+        ron->setCString("name", "Ron");
+        comp->setDataObject("employeeOfTheMonth", ron);
+        comp = NULL;
+        return 1;
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in jira1174" << e << endl;
+        return 0;
+    }
+}
+

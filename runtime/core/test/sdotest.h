@@ -207,4 +207,5 @@ class sdotest {
         static int upandatom();
         static int typedefinitionstest();
         static int eBayTest();
+        static int jira1174();
 };
