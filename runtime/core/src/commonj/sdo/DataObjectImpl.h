@@ -556,13 +556,6 @@ class DataObjectImpl : public DataObject
       
     SDO_API DataFactory* getDataFactory();
 
-
-    // cache a copy of the change summary in this data object, if there
-    // is one in the tree.
-
-    virtual void setApplicableChangeSummary();
-
-
     // open type support
     virtual void   setInstancePropertyType(unsigned int index,
                                             const Type* t);
@@ -700,7 +693,6 @@ private:
     ChangeSummaryImpl* getChangeSummaryImpl();
     ChangeSummaryImpl* getSummary();
     ChangeSummaryImpl* localCS;
-    DataObjectImpl* changesummaryobject;
 
 
     // reference type support

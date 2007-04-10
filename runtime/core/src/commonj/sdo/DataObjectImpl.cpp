@@ -611,7 +611,6 @@ namespace sdo {
       DataObjectImpl* b =
          new DataObjectImpl(df, getProperty(propertyIndex).getType());
       b->setContainer(this);
-      b->setApplicableChangeSummary();
       PropertyValues.push_back(rdo(propertyIndex,b));
       b->setNull();
    }
@@ -761,7 +760,6 @@ namespace sdo {
             d = new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI,"DataObject"));
             PropertyValues.push_back(rdo(propIndex, d));
             d->setContainer(this);
-            d->setApplicableChangeSummary();
             
             DataObjectListImpl* list = new DataObjectListImpl(df,this,
                 propIndex,p.getType().getURI(),p.getType().getName());
@@ -1465,12 +1463,16 @@ namespace sdo {
         {
             return (ChangeSummaryPtr)localCS;
         }
-        // The changesummaryobject MUST be a change summary type
-        // but as an additional check against looping, I will use
-        // a redundent getSummary() method.
-        // TODO - remove this.
-        if (changesummaryobject != 0) return 
-            (ChangeSummaryPtr)(changesummaryobject->getSummary());
+		
+        DataObjectImpl* dob = getContainerImpl();
+        while (dob != 0) 
+		{
+            if (dob->getType().isChangeSummaryType())
+            {
+				return (ChangeSummaryPtr)dob->getSummary();
+            }
+            dob = dob->getContainerImpl();
+        }
         return 0;
     }
 
@@ -1481,11 +1483,16 @@ namespace sdo {
         {
             return localCS;
         }
-        // The changesummaryobject MUST be a change summary type
-        // but as an additional check against looping, I will use
-        // a redundent getSummary() method.
-        // TODO - remove this.
-        if (changesummaryobject != 0) return changesummaryobject->getSummary();
+
+        DataObjectImpl* dob = getContainerImpl();
+        while (dob != 0) 
+		{
+            if (dob->getType().isChangeSummaryType())
+            {
+				return dob->getSummary();
+            }
+            dob = dob->getContainerImpl();
+        }
         return 0;
     }
 
@@ -1824,7 +1831,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
    else
    {
       ((DataObjectImpl*)dob)->setContainer(this);
-      ((DataObjectImpl*)dob)->setApplicableChangeSummary();
       // log creation before putting into property values.
       // also log change - not done by logCreation
       logCreation((DataObjectImpl*)dob, this, prop);
@@ -2083,6 +2089,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
                                 PropertyValues.erase(i);
                                 dol->logDeletion();
                                 logChange(index);
+								dol->setContainer(0);
                             }
                         }
                         else
@@ -2092,6 +2099,10 @@ void DataObjectImpl::setDataObject(const Property& prop,
                         }
                     }
                     else {
+                        if (dol) 
+                        {
+                            dol->unsetReference(this, p);
+                        }
                         logChange(index);
                         PropertyValues.erase(i);
                     }
@@ -2293,7 +2304,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
             RefCountingPointer<DataObject> ptr = df->create(namespaceURI, typeName);
             DataObject* dob = ptr;
             ((DataObjectImpl*)dob)->setContainer(this);
-            ((DataObjectImpl*)dob)->setApplicableChangeSummary();
             
             // log creation before adding to list - the change must record the old state 
             // of the list
@@ -2311,7 +2321,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
                 PropertyValues.push_back(rdo(ind, (DataObjectImpl*) doptr));
 
                 ((DataObjectImpl*)doptr)->setContainer(this);
-                ((DataObjectImpl*)doptr)->setApplicableChangeSummary();
 
                 DataObjectListImpl* list = new DataObjectListImpl(df,
                     this, ind, namespaceURI,typeName);
@@ -2348,7 +2357,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
             DataObjectImpl* ditem = 
               new DataObjectImpl(df, df->getType(namespaceURI, typeName));
             ditem->setContainer(this);
-            ditem->setApplicableChangeSummary();
 
             // log both creation and change - creations no longer log
             // changes automatically.
@@ -2432,7 +2440,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
     }
 
     // Returns the containing Object
-    // of 0 if there is no container.
+    // or 0 if there is no container.
 
     RefCountingPointer<DataObject> DataObjectImpl::getContainer()
     {
@@ -3186,8 +3194,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
       container(0),
       doValue(0),
       isnull(false),
-      userdata((void*) 0xFFFFFFFF),
-      changesummaryobject(0)
+      userdata((void*) 0xFFFFFFFF)
    {
       // open type support
       openBase = t.getPropertiesSize() ;
@@ -3217,8 +3224,7 @@ void DataObjectImpl::setDataObject(const Property& prop,
       factory(df),
       container(0),
       isnull(false),
-      userdata((void*) 0xFFFFFFFF),
-      changesummaryobject(0)
+      userdata((void*) 0xFFFFFFFF)
    {
       // open type support
       openBase = ObjectType->getPropertiesSize() ;
@@ -3267,9 +3273,11 @@ void DataObjectImpl::setDataObject(const Property& prop,
         while (i != PropertyValues.end()) 
         {
             unsigned int pindx = (*i).first;
+            DataObjectImplPtr dol = (*i).second;
+
             unset(pindx);
             i = PropertyValues.begin();
-            if (i != PropertyValues.end() && (*i).first == pindx)
+            if (i != PropertyValues.end() && (*i).first == pindx && (*i).second == dol)
             {
                 // unset has not removed the item from the list - do it 
                 // here instead
@@ -3301,28 +3309,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
                 localCS = 0;
             }
         }
-    }
-
-    void DataObjectImpl::setApplicableChangeSummary()
-    {
-        changesummaryobject = 0;
-        if (getType().isChangeSummaryType())
-        {
-            changesummaryobject = 0;
-            return;
-        }
-        else {
-            DataObjectImpl* dob = getContainerImpl();
-            while (dob != 0) {
-                if (dob->getType().isChangeSummaryType())
-                {
-                    changesummaryobject = dob;
-                    return;
-                }
-                dob = dob->getContainerImpl();
-            }
-        }
-
     }
 
     void DataObjectImpl::logCreation(DataObjectImpl* dol, DataObjectImpl* cont,
@@ -3404,8 +3390,12 @@ void DataObjectImpl::setDataObject(const Property& prop,
         {
             // Note - no loop as the referer must be of type reference
             refs[i]->getDataObject()->unset(refs[i]->getProperty());
-            delete refs[i];
         }
+		// separate loop because the unsets may modify the refs
+		for (unsigned int j=0;j<refs.size();j++) 
+		{
+			delete refs[j];
+		}
         refs.clear();
     }
 
@@ -3810,7 +3800,6 @@ void DataObjectImpl::setDataObject(const Property& prop,
       DataObjectImpl* b =
          new DataObjectImpl(df, df->getType(Type::SDOTypeNamespaceURI, dataType.c_str()));
       b->setContainer(this);
-      b->setApplicableChangeSummary();
       logChange(propertyIndex);
       PropertyValues.push_back(rdo(propertyIndex, b));
       b->setSDOValue(sval);

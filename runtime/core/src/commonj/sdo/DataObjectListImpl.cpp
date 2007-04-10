@@ -254,7 +254,6 @@ void DataObjectListImpl::insert (unsigned int index, DataObjectPtr d)
         else 
         {
             ((DataObjectImpl*)dob)->setContainer(container);
-            ((DataObjectImpl*)dob)->setApplicableChangeSummary();
             ((DataObjectImpl*)dob)->logCreation((DataObjectImpl*)dob,
                 (DataObjectImpl*)container,
                 property);
@@ -455,7 +454,6 @@ void DataObjectListImpl::append (DataObjectPtr d)
       else 
       {
          ((DataObjectImpl*) dob)->setContainer(container);
-         ((DataObjectImpl*) dob)->setApplicableChangeSummary();
          if (!container->getProperty(pindex).getType().isDataType())
          {
             ((DataObjectImpl*) dob)->logCreation((DataObjectImpl*)dob,
