@@ -47,7 +47,7 @@ int main (int argc, char** argv)
     int value = 0;
     try {
     //TEST (  sdotest::eBayTest() );
-    TEST ( sdotest::xhtml1() );
+    // TEST ( sdotest::xhtml1() );
     TEST ( sdotest::scopetest() );
     TEST ( sdotest::xsdtosdo() );
     TEST (  sdotest::jira980() );
