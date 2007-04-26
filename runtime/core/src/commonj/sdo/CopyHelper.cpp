@@ -86,6 +86,11 @@ namespace sdo{
                     to->setString(p, buf, siz);
                     delete[] buf;
                 }
+                else
+                {
+                    // property is set to a NULL value
+                    to->setString(p, (const wchar_t*)0, 0);
+                }
             }
             break;
         case Type::BytesType:
@@ -97,6 +102,11 @@ namespace sdo{
                     from->getBytes(p,buf, siz);
                     to->setBytes(p, buf, siz);
                     delete buf;
+                }
+                else
+                {
+                    // property is set to a NULL value
+                    to->setBytes(p, (const char*)0, 0);
                 }
             }
             break;
@@ -157,6 +167,11 @@ namespace sdo{
                         to.append(buf,siz);
                         delete buf;
                     }
+                    else
+                    {
+                        // Property is set to a NULL value
+                        to.append((const wchar_t*)0, 0);
+                    }
                 }
                 break;
 
@@ -169,6 +184,11 @@ namespace sdo{
                         from.getBytes(i,buf,siz);
                         to.append(buf,siz);
                         delete buf;
+                    }
+                    else
+                    {
+                        // Property is set to a NULL value
+                        to.append((const char*)0, 0);
                     }
                 }
                 break;
@@ -225,6 +245,11 @@ namespace sdo{
                     to->addString(p, buf, siz);
                     delete[] buf;
                 }
+                else
+                {
+                    // property is set to a NULL value
+                    to->addString(p, 0, 0);
+                }
             }
             break;
         case Type::BytesType:
@@ -236,6 +261,11 @@ namespace sdo{
                     from->getBytesValue(index, buf, siz);
                     to->addBytes(p, buf, siz);
                     delete buf;
+                }
+                else
+                {
+                    // property is set to a NULL value
+                    to->addBytes(p, 0, 0);
                 }
             }
             break;
