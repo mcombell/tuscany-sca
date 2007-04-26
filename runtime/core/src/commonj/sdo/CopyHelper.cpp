@@ -44,6 +44,11 @@ namespace sdo{
 
     void CopyHelper::transferitem(DataObjectPtr to, DataObjectPtr from, const Property& p)
     {
+		if (from->isNull(p)) {
+			to->setNull(p);
+			return;
+		}
+
         switch (p.getTypeEnum())
         {
         case Type::BooleanType:
@@ -425,6 +430,11 @@ namespace sdo{
                             }
                             else 
                             {
+								if (dataObject->isNull(pl[i])) {
+									newob->setNull(pl[i]);
+									continue;
+								}
+								
                                 DataObjectPtr dob = dataObject->getDataObject(pl[i]);
                                 if (pl[i].isReference()) 
                                 {
@@ -470,6 +480,8 @@ namespace sdo{
     void CopyHelper::findReferences(DataObjectPtr oldDO, DataObjectPtr newDO,
         DataObjectPtr obj, DataObjectPtr newObj)
     {
+		if (!obj) return;
+
         if ( obj->getType().isSequencedType() )
         {
             Sequence* fromSequence = obj->getSequence();
