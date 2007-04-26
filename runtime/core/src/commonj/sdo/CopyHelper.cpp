@@ -274,6 +274,8 @@ namespace sdo{
     {
 
         DataObject* theob = dataObject;
+        if (!theob) return 0;
+
         DataFactoryPtr fac = ((DataObjectImpl*)theob)->getDataFactory();
         if (!fac) return 0;
 
