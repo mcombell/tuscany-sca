@@ -1869,3 +1869,25 @@ int sdotest::jira1174()
     }
 }
 
+int sdotest::jira1238()
+{
+
+    try {
+
+ 
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+ 
+        xsh->defineFile("overlappingtypes.xsd");
+
+        mdg->getType("http://www.example.org/AnnonTypes", "Overlapping");
+        mdg->getType("http://www.example.org/AnnonTypes", "Overlapping1");
+        return 1;
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in jira1238" << e << endl;
+        return 0;
+    }
+}

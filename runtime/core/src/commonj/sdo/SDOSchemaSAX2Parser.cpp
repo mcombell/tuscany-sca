@@ -1247,14 +1247,27 @@ namespace commonj
             const SAX2Attributes& attributes,
             const SAX2Namespaces& namespaces)
         {
-            std::map<SDOXMLString,SDOXMLString>::iterator it;
             setName(attributes, type.name, type.localname);
+
+
             // If localname is not set it is anonymous so use the enclosing element name
-
-
             if (type.localname.isNull())
             {
                 type.localname = currentProperty.name;
+
+                // ensure anonymous type name does not clash with existing type
+                for (int suffix = 1; ; suffix++)
+                {
+                    SDOXMLString typeUri = TypeDefinitionsImpl::getTypeQName(type.uri, type.localname);
+                    XMLDAS_TypeDefs::iterator it = typeDefinitions.types.find(typeUri);
+                    if(it == typeDefinitions.types.end())
+                    {
+                        break;
+                    }
+                    char buff[32];
+                    sprintf(buff, "%d", suffix);
+                    type.localname += buff;
+                }
             }
             else
             {

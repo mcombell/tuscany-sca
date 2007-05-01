@@ -184,6 +184,7 @@ int main (int argc, char** argv)
 	TEST (  sdotest::typedefinitionstest() );
     
     TEST (  sdotest::jira1174() );
+    TEST (  sdotest::jira1238() );
 
     } catch(...)
     {

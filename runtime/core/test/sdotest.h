@@ -208,4 +208,5 @@ class sdotest {
         static int typedefinitionstest();
         static int eBayTest();
         static int jira1174();
+        static int jira1238();
 };
