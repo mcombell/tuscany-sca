@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Enviroment Setup - Linux</title>
+       <bannertitle>Setting up Linux</bannertitle>
+    </properties>
+    <body>
+    <section name="Setting up your Linux enviroment">
+        <p>
+        These steps take no more than 15 mns to complete,starting from scratch. 
+        After you complete them, you should be all set to build the Tuscany C++ runtime.</p>
+        
+        <p>From a shell prompt, create a <i>$HOME/tuscany</i> directory.</p>
+    </section>
+    <section name="Prerequisites">
+        <p>Install the following prerequisites:
+        <ol>
+            <li>Subversion - SVN version 1.3.0 or later is good (most Linux distros already include SVN).<br/><br/></li>
+            
+            <li>Ant and a Java JDK are required by the SCA code generation tool used to generate proxies and wrappers for C++ components.
+                <ul>
+                    <li>Download <a href="http://ant.apache.org/bindownload.cgi">apache-ant-1.6.5-bin</a>.</li>
+                    <li><p>In <i>'$HOME/tuscany'</i> do <i>tar xzf apache-ant-1.6.5-bin.tar.gz</i>.</p></li>
+                    
+                    <li>Configure your environment:
+                        <pre>export JAVA_HOME=$HOME/tuscany/jdk1.5.0_06</pre>
+                        <pre>PATH=$JAVA_HOME/bin:$PATH</pre>
+                    </li>
+                    <li><p>Download JDK 5.0 from <a href="http://java.sun.com/javase/downloads/index.jsp">java.sun.com</a>.</p></li> 
+                    
+                    <li><p>From <i>$HOME/tuscany</i> run jdk-1_5_0_06-linux-i586.bin, this will extract the JDK in 
+                        <i>$HOME/tuscany/jdk1.5.0_06</i>.    
+                    </p></li>
+                    
+                    <li>Configure your environment:
+                        <pre>export JAVA_HOME=$HOME/tuscany/jdk1.5.0_06</pre>
+                        <pre>PATH=$JAVA_HOME/bin:$PATH</pre>
+                    </li>
+                </ul>    
+            </li>
+            
+            <li><p>Libxml2 2.6.20 or later.Libxml2 is already in most Linux distros, just check that you have version 2.6.20 or later.
+                To see which version of libxml2 is installed on your system do <i>rpm -aq | grep libxml2.</i></p>
+
+                Configure your environment:
+                <pre>export LIBXML2_LIB=/usr/lib</pre>
+                <pre>export LIBXML2_INCLUDE=/usr/include/libxml2</pre>
+            </li>
+       
+            <li>Axis2C version 0.92. 
+                <ul>
+                    <li><p>Download axis2c-bin-0.92-linux.tar.gz from <a href="http://ws.apache.org/axis2/c">Apache.org</a>.</p></li>
+
+                    <li><p>From $HOME/Tuscany do <i>tar xzf axis2c-bin-0.92-linux.tar.gz</i>, 
+                        this will install Axis2C in $HOME/Tuscany/axis2c-bin-0.92-linux.</p>
+                    </li>
+
+                    <li>Configure your environment:
+                            <pre>export AXIS2C_HOME=$HOME/tuscany/axis2c-bin-0.92-linux</pre>
+                            <pre>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$AXIS2C_HOME/lib</pre>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        </p>
+    </section>
+    
+    <section name="Download the Tuscany C++ code">
+        <ul>
+            <li><p>From $HOME/tuscany, do <i>svn co http://svn.apache.org/repos/asf/incubator/tuscany/cpp</i>, 
+                this will check out all the source code in $HOME/tuscany/cpp.</p>
+            </li>
+
+            <li>Configure your environment:
+                <pre>export TUSCANY_SCACPP=$HOME/tuscany/cpp/sca/deploy</pre>
+                <pre>export TUSCANY_SDOCPP=$HOME/tuscany/cpp/sdo/deploy</pre>
+                <pre>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TUSCANY_SDOCPP/lib:$TUSCANY_SCACPP/lib</pre>
+            </li>
+        </ul>
+    </section>
+    
+    <section name="Building Tuscany">
+        <p>The builds use the GNU automake + configure tools, which nicely analyze your environment and generate all the make files you need.
+
+            <p>To build the SDO C++ runtime:
+               
+<pre>    cd $HOME/tuscany/cpp/sdo
+    ./autogen.sh
+    ./configure --prefix=$TUSCANY_SDOCPP --enable-static=no
+    make
+    make install
+    cd $HOME/tuscany/cpp/sdo/samples
+    ./autogen.sh
+    ./configure --prefix=$TUSCANY_SDOCPP --enable-static=no
+    make
+    make install
+    </pre>
+            </p>
+        </p>
+        <p>Note: Tuscany already has build.sh scripts that do all of this for you, but I wanted to use the individual commands to understand what was going on at each step. Also, when you make code changes in general you just run make and make install and not the whole set of steps.</p>
+
+        <p>To run the the SDO test suite:
+        <pre>
+     cd $HOME/tuscany/cpp/sdo
+    ./sdotest.sh</pre>
+
+        To build the SCA C++ runtime:
+        <pre>
+    cd $HOME/tuscany/cpp/sca
+    ./autogen.sh
+    ./configure --prefix=$TUSCANY_SCACPP --enable-static=no
+    make
+    make install
+    cd $HOME/tuscany/cpp/sdo/samples
+    ./autogen.sh
+    ./configure --prefix=$TUSCANY_SCACPP --enable-static=no
+    make
+    make install</pre>
+
+        To run the SCA runtime tests:
+        <pre>
+    cd $HOME/tuscany/cpp/sdo
+    ./scatest.sh</pre>
+
+        To run the SCA calculator sample:
+        <pre>
+    cd $HOME/tuscany/cpp/sca/deploy/samples/Calculator/deploy/bin
+    ./runclient.sh</pre>
+        </p>
+    </section>
+  </body>
+</document>

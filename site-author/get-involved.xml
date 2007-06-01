@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Get Involved</title>
+       <bannertitle>Tuscany Get Involved</bannertitle>
+    </properties>
+    <body>
+        <section name="Getting Involved with Apache Tuscany">
+                        <p>
+                                You can get involved in Apache Tuscany in many different ways. The following are a few suggestions:
+                                </p>
+                        <ul>
+                                <li>
+                        Contribute new ideas/requirements that are based on real business experiences to the mailing list to improve Tuscany as a solution for SOA.  
+                                </li>
+                                <li>
+                        Answer questions posted to the <a href="mail-lists.html">mailing lists</a>.     
+                                </li>
+                                <li>
+                                Contribute to the <a href="faq.html">FAQ</a> or to 
+                    <a href='http://wiki.apache.org/ws/Tuscany' target="_blank">Wiki</a> 
+                                </li>
+                                <li>
+                        Contribute to user or developer <a href="documentation.html">Documentations</a>.
+                                </li>
+                                <li>
+                        Investigate 
+                    <a href='http://issues.apache.org/jira/secure/BrowseProject.jspa?id=12310210' target='_blank' >issues</a> 
+                        that have been reported and provide patches. 
+                                </li>
+                                <li>
+                        Help with development. Check for roadmap on the Wiki. 
+                                </li>
+                        </ul>
+                        
+
+                        Before you start, join <a href="mail-lists.html">Tuscany mailing list</a>. At the moment we only have one mailing list that handles both developer and user questions. 
+                  <ul>
+                        <li>
+                        Subscription: Send a blank email to    tuscany-dev-subscribe@ws.apache.org 
+                        </li>
+                        <li>
+                        Posting questions to the list: Send your question to tuscany-dev@ws.apache.org
+                        </li> 
+                  </ul>
+                
+
+                <p> 
+                You should also review <a href='http://www.apache.org/foundation/how-it-works.html' target='_blank'>How Apache works</a>
+                </p>
+
+                <p>
+                        Tuscany holds weekly IRC chats.  IRC chats are held weekly on <b>Mondays 15:30 GMT for an hour</b>. The IRC server is <code><b>irc.freenode.net</b></code> and the channel is <code><b>#tuscany</b></code>
+                    <a href='http://www.irchelp.org/' target="_blank">Internet Relay Chat (IRC) Help</a> 
+                    is a good source of
+                    information on understanding IRC chats.<br></br>
+                    The following are some IRC chat clients:
+                    <table class="bodyTable">
+                      <tbody>
+                       <tr class="a">
+                       <td>
+                        mIRC 
+                       </td>
+                       <td>
+                    <a href='http://www.mirc.com/' target="_blank">http://www.mirc.com/</a> 
+                       </td>
+                       </tr>
+                       <tr class="b">
+                       <td>
+                        Trillian
+                       </td>
+                       <td>
+                    <a href='http://www.ceruleanstudios.com/' target='_blank'>http://www.ceruleanstudios.com/</a> 
+                    
+                       </td>
+                       </tr>
+                        </tbody>
+                    </table>
+                        
+                </p>
+
+
+
+        </section>
+        <section name="How to get involved">
+                  <p> Apache Tuscany source code, documentation and web site are managed under version control using Subversion in 
+ <a href='https://svn.apache.org/repos/asf/incubator/tuscany' target='_blank'>Tuscany Subversion Repository</a>.  
+ In this repository structure you will find two main directories
+ <ol>
+                                <li> CPP directory holds SCA and SDO C++ source code. </li>
+                                 <li> Java directory holds SCA, SDO and DAS source code.</li> 
+                             </ol>
+                             We welcome your help with any of the sub projects. You can learn more about how to setup your development environment on <a href="./java-projects.html">Java project page </a> or
+                             <a href="./cpp-projects.html">C++ project page</a>. 
+                            </p> 
+                
+        </section>
+        <section name="Committer Guidelines">
+          <p>There are Apache guide lines for incubator projects that all Tuscany contributers should familiarize themselves with:
+            <ul>
+              <li><a href="http://incubator.apache.org/incubation/Incubation_Policy.html" target="_blank" >Incubation Policy</a></li>
+              <li><a href="http://incubator.apache.org/guides/releasemanagement.html"  target="_blank">A Guide To Release Management During Incubation</a></li>
+              <li><a href="http://incubator.apache.org/guides/sites.html"  target="_blank">Site Guide lines</a></li>
+            </ul>
+      </p>
+        </section>
+                
+    </body>
+</document>

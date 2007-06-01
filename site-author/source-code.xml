@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Source Code</title>
+       <bannertitle>Tuscany Source Code</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Source Code">
+                  <p> Apache Tuscany source code, documentation and web site are managed under version control using Subversion in 
+ <a href='https://svn.apache.org/repos/asf/incubator/tuscany' target='_blank'>Tuscany Subversion Repository</a>.  
+ In this repository structure you will find two main directories
+ <ol>
+                                <li> CPP directory holds SCA and SDO C++ source code. </li>
+                                 <li> Java directory holds SCA, SDO and DAS source code.</li> 
+                             </ol>
+                             We welcome your help with any of the sub projects. You can learn more about how to setup your development environment on <a href="java-projects.html">Java project page </a> or
+                             <a href="cpp-projects.html">C++ project page</a>. 
+                            </p> 
+        </section>
+    </body>
+</document>

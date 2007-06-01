@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Welcome to Tuscany</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Project Overview - Java">
+ <p>Welcome to Apache Tuscany. The Apache Tuscany project is currently in incubation within the Apache Incubator.</p>
+ <p>The Apache Tuscany project simplifies the development of business solutions that use a service-oriented architecture. 
+    It allows new solutions to be constructed by combining new or existing services within an easy to configure service oriented 
+    run time with little or no programming. It does this by providing implementations for the Service Component Architecture (SCA)
+    and Service Data Object (SDO) and providing a Data Access Service that supports SDO. Tuscany integrates with well 
+    established Web Services and server technologies such as Apache Axis2, Apache Tomcat and Geronimo. Specifications for 
+    SDO and SCA can be found on the <a href="documentation.html">Documentation
+page</a> </p>
+ <p>The main component parts of the Tuscany project are shown below. You can click through to get more detail.</p>
+
+  <br/>
+           <table class='non'>
+
+           <tr>
+            <td align="center" valign="center" >
+  <p><a href="index.html">General Tuscany Overview</a></p>
+            </td>
+            <td align="center" valign="center" >
+  <p><a href="index-java.html">Tuscany Java Overview</a></p>
+            </td>
+            <td align="center" valign="center">
+  <p><a href="index-cpp.html">Tuscany C++ Overview</a></p>
+            </td>
+
+           </tr>
+           <tr>
+              <td colspan="3" >
+
+              <img src ="./images/Tuscany-Block-Cpp.png" alt="Tuscany Overview" usemap="#tuscany_overview" border="0" />
+
+              <map name="tuscany_overview">
+                <area shape="rect" coords="1,74,108,290" href="das_index.html" target=""/>
+                <area shape="rect" coords="111,74,206,287" href="sdo_index.html" target=""/>
+                <area shape="rect" coords="208,33,620,335" href="sca_index.html" target=""/>
+                <area shape="rect" coords="620,32,859,333" href="tools_index.html" target=""/>
+              </map>
+              </td>
+           </tr>
+           </table>
+
+
+    </section>
+  </body>
+</document>

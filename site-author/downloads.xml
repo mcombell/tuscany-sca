@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Downloads</title>
+       <bannertitle>Tuscany Downloads</bannertitle>
+    </properties>
+    <body>
+        <section name="Downloads">
+        
+                <p>
+                        Welcome to the Apache Tuscany download page. The Apache Tuscany project is currently part of the
+<a href='http://incubator.apache.org/' target='_blank'>Apache Incubator</a>.
+</p>
+
+<br></br>Apache Tuscany is distributed under the
+<a href='http://www.apache.org/licenses/LICENSE-2.0.html' target='_blank'>Apache License, version 2.0</a>.
+<p><i>Note:For some links you may have to right click on the link and then select &quot;</i><b><code>Save Target As...</code></b><i>&quot;.</i>
+</p>
+                 <ul>
+                 <li>
+                   <a href="#Apache Tuscany Java Downloads">Java Downloads</a>
+                 </li>
+                 <li>
+                   <a href="#Apache Tuscany C++ Downloads">C++ Downloads</a>
+                 </li>
+                 </ul>
+                
+        </section>
+        <section name="Apache Tuscany Java Downloads">
+
+                <a name="Apache Tuscany Java Downloads"></a> 
+                <br/>
+<p>
+Tuscany is distributed in several formats for your convenience.
+</p>
+
+<h2>DAS Incubating-M2 (November 20th 2006)</h2>
+
+<table class="bodyTable" width="80%">
+      <thead>
+         <th width="45%">Description</th>
+         <th width="35%">Download link</th>
+         <th width="10%" align="center">MD5</th>
+         <th width="10%" align="center">PGP</th>
+      </thead>
+      <tbody>
+      
+      <tr class="a">
+	     <td>Tuscany M2 DAS binary (<i>Linux</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.tar.gz">das-1.0-incubator-M2-bin.tar.gz</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+       </tr>
+      
+      <tr class="a">
+	     <td>Tuscany M2 DAS source (<i>Linux</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.tar.gz">das-1.0-incubator-M2-src.tar.gz</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+       </tr>
+
+      <tr class="a">
+	     <td>Tuscany M2 DAS sample (<i>Linux</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.tar.gz">das-samples-1.0-incubator-M2-bin.tar.gz</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+       </tr>
+
+      <tr class="a">
+	     <td>Tuscany M2 DAS binary (<i>Windows</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.zip">das-1.0-incubator-M2-bin.zip</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/binary/das-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+       </tr>
+
+      <tr class="a">
+	     <td>Tuscany M2 DAS source (<i>Windows</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.zip">das-1.0-incubator-M2-src.zip</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/source/das-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+       </tr>
+
+      <tr class="a">
+	     <td>Tuscany M2 DAS sample (<i>Windows</i>)</td>
+	     <td><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.zip">das-samples-1.0-incubator-M2-bin.zip</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+	     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/das/1.0-incubator-M2/sample/das-samples-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+       </tr>
+       </tbody>
+
+</table>      
+   
+
+<h2>SDO Incubating-M2 (November 14th 2006)</h2>
+<p>
+    <p>
+        The distribution of Tuscany SDO is made in 4 archives, and in two formats,  one suitable for unpacking on Linux and the other on Windows.
+        The source distributions are split into the SDO 2.0.1 API and the Tuscany implementation of that API.  The binary distribution contains
+        the result of building those two source distributions.  The sample distribution contains sample source code which may be 
+        used to experiment with the binary distribution (Note that the samples are already included in the implementation source distribution).
+    </p>
+<!--
+For requirements please review 
+<script type="text/javascript">linkNewWindow('samples/java/GettingStarted.htm#System Requirements','Getting Started, System Requirements section ');</script>.
+-->
+
+   <table class="bodyTable" width="80%">
+      <thead>
+         <th width="45%">Description</th>
+         <th width="35%">Download link</th>
+         <th width="10%" align="center">MD5</th>
+         <th width="10%" align="center">PGP</th>
+      </thead>   
+      <tbody>
+
+      <tr class="a">
+         <td>Tuscany M2 SDO binary (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz">tuscany-sdo-1.0-incubator-M2-bin.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+      </tr>
+
+
+      <tr class="b">
+         <td>Tuscany M2 SDO API source (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz">tuscany-sdo-api-1.0-incubator-M2-src.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+      </tr>
+
+      <tr class="b">
+         <td>Tuscany M2 SDO Implementation source (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz">tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+      </tr>
+
+
+      <tr class="b">
+         <td>Tuscany M2 SDO Sample source (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz">tuscany-sdo-sample-1.0-incubator-M2-src.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz.asc">PGP</a></td>
+      </tr>
+
+
+      <tr class="a">
+         <td>Tuscany M2 SDO binary (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip">tuscany-sdo-1.0-incubator-M2-bin.zip</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+      </tr>
+
+      <tr class="b">
+         <td>Tuscany M2 SDO API source (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip">tuscany-sdo-api-1.0-incubator-M2-src.zip </a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+      </tr>
+
+
+      <tr class="b">
+         <td>Tuscany M2 SDO Implementation source (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip">tuscany-sdo-impl-1.0-incubator-M2-src.zip </a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+      </tr>
+
+
+      <tr class="b">
+         <td>Tuscany M2 SDO Sample source (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip">tuscany-sdo-sample-1.0-incubator-M2-src.zip</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip.asc">PGP</a></td>
+      </tr>
+
+      </tbody>
+</table>
+
+</p>
+<h2>Incubating-M1 (June 7, 2006)</h2>
+<!--
+For requirements please review 
+<script type="text/javascript">linkNewWindow('samples/java/GettingStarted.htm#System Requirements','Getting Started, System Requirements section ');</script>.
+-->
+
+<table class="bodyTable" width="80%">
+      <thead>
+         <th width="45%">Description</th>
+         <th width="35%">Download link</th>
+         <th width="10%" align="center">MD5</th>
+         <th width="10%" align="center">PGP</th>
+      </thead>   
+      <tbody>
+
+      <tr class="a">
+         <td>Tuscany M1 binary (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz">tuscany-incubating-M1.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.asc">PGP</a></td>
+      </tr>
+
+      <tr class="b">
+         <td>Tuscany M1 source (<i>Linux</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz">tuscany-incubating-M1-src.tar.gz</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.asc">PGP</a></td>
+      </tr>
+
+      <tr class="a">
+         <td>Tuscany M1 binary (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip">tuscany-incubating-M1.zip</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.asc">PGP</a></td>
+      </tr>
+
+      <tr class="b">
+         <td>Tuscany M1 source (<i>Windows</i>)</td>
+         <td><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip">tuscany-incubating-M1-src.zip </a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.md5">MD5</a></td>
+         <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.asc">PGP</a></td>
+      </tr>
+
+      </tbody>
+</table>
+
+</section>
+
+
+
+<section name="Apache Tuscany C++ Downloads"><a name="Apache Tuscany C++ Downloads"></a> 
+    <br/>
+    <h2>Incubating-M2 (November 3, 2006)</h2> 
+    <p>
+	The distributions are available as source and binary packages. There are 2 distributions;
+	Tuscany SCA and Tuscany SDO (required by Tuscany SCA).
+    </p>
+    <p>
+	Linux binary distribution is built on Red Hat Enterprise Linux 3.
+	<BR/>Win32 binary distribution is built on Windows XP with Microsoft VC7.
+	</p>
+	    <h3>SDO</h3>
+	    <p>
+		Please read the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-1.0-incubating-M2-final/sdo/GettingStarted.html">Getting Started</a> document.
+	    
+	    
+	    <table class="bodyTable" width="80%">
+	          <thead>
+	             <th width="45%">Description</th>
+	             <th width="35%">Download link</th>
+	             <th width="10%" align="center">MD5</th>
+	             <th width="10%" align="center">PGP</th>
+	          </thead>   
+                  <tbody>
+	    
+	          <tr class="a">
+	             <td>Tuscany SDO C++ M2 binary (<i>Linux</i>)</td>
+	             <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz">tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+	          </tr>
+
+
+	          <tr class="b">
+	             <td>Tuscany SDO C++ M1 source (<i>Linux</i>)</td>
+	             <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz">tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+	          </tr>
+
+
+	          <tr class="a">
+	             <td>Tuscany SDO C++ M1 binary (<i>Windows</i>)</td>
+	             <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip">tuscany_sdo_cpp-1.0-incubator-M2-bin.zip</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+	          </tr>
+
+	          <tr class="b">
+	             <td>Tuscany SDO C++ M1 source (<i>Windows</i>)</td>
+	             <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip">tuscany_sdo_cpp-1.0-incubator-M2-src.zip</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+	             <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+	          </tr>
+
+		  </tbody>
+	    </table>
+	    </p>
+
+	    <h3>SCA</h3>
+	    <p>
+		Please read the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-1.0-incubating-M2-final/sca/GettingStarted.html">Getting Started</a> document.
+
+                <table class="bodyTable" width="80%">
+	          <thead>
+	             <th width="45%">Description</th>
+	             <th width="35%">Download link</th>
+	             <th width="10%" align="center">MD5</th>
+	             <th width="10%" align="center">PGP</th>
+	          </thead>   
+                  <tbody>
+
+                  <tr class="a">
+		     <td>Tuscany SCA C++ M1 binary (<i>Linux</i>)</td>
+		     <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz">tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+		  </tr>
+
+		  <tr class="b">
+		     <td>Tuscany SCA C++ M1 source (<i>Linux</i>)</td>
+		     <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz">tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+		  </tr>
+
+
+		  <tr class="a">
+		     <td>Tuscany SCA C++ M1 binary (<i>Windows</i>)</td>
+		     <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip">tuscany_sca_cpp-1.0-incubator-M2-bin.zip</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+		  </tr>
+
+		  <tr class="b">
+		     <td>Tuscany SCA C++ M1 source (<i>Windows</i>)</td>
+		     <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip">tuscany_sca_cpp-1.0-incubator-M2-src.zip</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+		     <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+		  </tr>
+	          </tbody>
+	      </table>
+
+	    </p>
+	    <h2>Incubating-M1 (August 1, 2006)</h2> 
+	    <p>
+		The distributions are available as source and binary packages. There are 2 distributions;
+		Tuscany SCA and Tuscany SDO (required by Tuscany SCA).
+	    </p>
+	    <p>
+		Linux binary distribution is built on Red Hat Enterprise Linux 3.
+		<BR/>Win32 binary distribution is built on Windows XP with Microsoft VC6.
+		</p>
+		    <h3>SDO</h3>
+		    <p>
+			Please read the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-0.1.incubating-M1-final/sdo/GettingStarted.html">Getting Started</a> document.
+
+
+                   <table class="bodyTable" width="80%">
+   	             <thead>
+	                <th width="45%">Description</th>
+	                <th width="35%">Download link</th>
+	                <th width="10%" align="center">MD5</th>
+	                <th width="10%" align="center">PGP</th>
+	             </thead>   
+                     <tbody>
+
+		     <tr class="a">
+		        <td>Tuscany SDO C++ M1 binary (<i>Linux</i>)</td>
+		        <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz">tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz.md5">MD5</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz.asc">PGP</a></td>
+		     </tr>
+
+
+		     <tr class="b">
+		        <td>Tuscany SDO C++ M1 source (<i>Linux</i>)</td>
+		        <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz">tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz.md5">MD5</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz.asc">PGP</a></td>
+		     </tr>
+
+
+		     <tr class="a">
+		        <td>Tuscany SDO C++ M1 binary (<i>Windows</i>)</td>
+		        <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip">tuscany_sdo_cpp-0.1.incubating-M1-bin.zip</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip.md5">MD5</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip.asc">PGP</a></td>
+		     </tr>
+
+		     <tr class="b">
+		        <td>Tuscany SDO C++ M1 source (<i>Windows</i>)</td>
+		        <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip">tuscany_sdo_cpp-0.1.incubating-M1-src.zip</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip.md5">MD5</a></td>
+		        <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip.asc">PGP</a></td>
+		     </tr>
+
+		     </tbody>
+		   </table>
+		    </p>
+
+		    <h3>SCA</h3>
+		    <p>
+			Please read the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-0.1.incubating-M1-final/sca/GettingStarted.html">Getting Started</a> document.
+
+
+
+                     <table class="bodyTable" width="80%">
+     	               <thead>
+	                  <th width="45%">Description</th>
+	                  <th width="35%">Download link</th>
+	                  <th width="10%" align="center">MD5</th>
+	                  <th width="10%" align="center">PGP</th>
+	               </thead>   
+                       <tbody>
+			
+		       <tr class="a">
+		          <td>Tuscany SCA C++ M1 binary (<i>Linux</i>)</td>
+			  <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz">tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz.md5">MD5</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz.asc">PGP</a></td>
+		       </tr>
+
+		       <tr class="b">
+		          <td>Tuscany SCA C++ M1 source (<i>Linux</i>)</td>
+			  <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz">tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz.md5">MD5</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz.asc">PGP</a></td>
+		       </tr>
+
+		       <tr class="a">
+		          <td>Tuscany SCA C++ M1 binary (<i>Windows</i>)</td>
+			  <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip">tuscany_sca_cpp-0.1.incubating-M1-bin.zip</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip.md5">MD5</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip.asc">PGP</a></td>
+		       </tr>
+
+		       <tr class="b">
+			  <td>Tuscany SCA C++ M1 source (<i>Windows</i>)</td>
+			  <td><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip">tuscany_sca_cpp-0.1.incubating-M1-src.zip</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip.md5">MD5</a></td>
+			  <td align="center"><a href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip.asc">PGP</a></td>
+		       </tr>
+   		       </tbody>
+		    </table>
+		    </p>
+</section>
+        
+    </body>
+</document>

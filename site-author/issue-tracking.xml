@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Issuing Tracking</title>
+       <bannertitle>Tuscany DAS</bannertitle>
+    </properties>
+    <body>
+	<section name="Tuscany Issuing Tracking" >
+		<p>
+			Tuscany bug reports are handled via a 
+			<a href="http://issues.apache.org/jira/browse/TUScany" target="_blank"> JIRA issues list </a>.
+			Please use this list to report any bugs that you find - the list can also be used to
+			track the status of reported bugs.
+			<p>
+			To help developers to quickly fix the bug, please include as much information with your report as possible such as your platform, version numbers, error logs, configuration, 'how to reproduce the problem',  etc. </p>
+
+			
+		</p>
+
+		<p> Tuscany project welcomes your help to improve the project. Here is information on how to <a href="patches.html"> create and submit patches </a>.
+		</p>
+	</section>
+		
+    </body>
+</document>

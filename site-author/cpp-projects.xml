@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany C++ Projects</title>
+        <bannertitle>Tuscany C++ Projects</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany C++ Project">
+            <p>
+                The main Tuscany project repository is located at <a href="https://svn.apache.org/repos/asf/incubator/tuscany">
+                https://svn.apache.org/repos/asf/incubator/tuscany</a>. 
+                You can use SVN to check out the entire project, and you will get both the java and C++ repositories.
+                Alternatively you can check out just the cpp directory at <a href="https://svn.apache.org/repos/asf/incubator/tuscany/cpp">
+                https://svn.apache.org/repos/asf/incubator/tuscany/cpp</a>, to get the SCA and SDO implementations for C++.</p>
+        </section>
+
+        <section name="Building Apache Tuscany for C++">
+            <p>You can find detailed instructions on how to configure the C++ runtime and tools for <a href="./cpp_setup_linux.html">Linux</a>
+            and <a href="./cpp_setup_win.html">Windows</a>.</p>
+        </section>
+
+        <section name="System Requirements">
+            <p>In order to run the Tuscany C++ runtimes there are some minimum system requirements:
+            <table style="text-align: left; width: 100%;" border="1"
+                    cellpadding="2" cellspacing="2">
+                <tbody>
+                    <tr>
+                        <td>Operating System</td>
+                        <td>
+                            <ul>
+                                <li>Windows XP SP2</li>
+                                <li>Linux</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Other components</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="http://ws.apache.org/axis2/c/">
+                                                                Apache Axis2/C verion 0.92
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://xmlsoft.org/downloads.html">
+                                                                Libxml2 Parser version 2.6.20
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </p>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Implementation</bannertitle>
+    </properties>
+    <body>
+        <section name="Implementation">
+<p>
+Component implementations are concrete implementations of business function which provide services and/or consume services. SCA allows you to choose from any one of a wide range of implementation technologies, such as Java, BPEL or C++.
+</p>
+<p>
+Services, references and properties are the configurable aspects of an implementation, SCA refers to them collectively as the component type.
+</p>
+
+        </section>
+    </body>
+</document>

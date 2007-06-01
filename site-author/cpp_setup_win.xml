@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Enviroment Setup - Windows</title>
+       <bannertitle>Setting up Windos</bannertitle>
+    </properties>
+    <body>
+	    <section name="Setting up your Windows enviroment">
+	        <p>TBD</p>
+			<p>
+			These steps take no more than 15 mns to complete,starting from scratch. 
+	        After you complete them, you should be all set to build the Tuscany C++ runtime.</p>
+	        
+	        <ul>
+				<li/>Right click on <i>"My Computer"</i> and select <i>properties</i>. Select the advanced tab and click on 
+				<i>Enviroment Variables</i>. Under User Variables, click on new.
+				<li/> In variable name type <i>ANT_HOME</i>
+				<li/> In variable value insert the path to where you expanded apache ant. EG, <i>"C:\tuscany\apache-ant-1.6.5"</i> and hit ok.
+				<br/><br/>
+				<li/>Now select the User variable <i>PATH</i>. Select new if it doesn't already create it.
+				<li/>Append to the end the path to the apache-ant bin directory. EG, <i>"C:\tuscany\apache-ant-1.6.5\bin;"</i>
+				<li/>Select ok and close the windows.
+			</ul>    
+			
+			<ul>
+				<li>Run the JDK installer.</li>
+				<li>Right click on <i>"My Computer"</i> and select <i>properties</i>. Select the advanced tab and click on 
+				<i>Enviroment Variables</i>. Under User Variables, click on new.<br/><br/> </li>
+				<li> In variable name type <i>JAVA_HOME</i></li>
+				<li> In variable value insert the path to where you installed java. EG, <i>"C:\Program Files\Java\jdk1.5.0_07"</i></li>
+				<li>Select ok and close the windows.</li>
+			</ul>
+		</section>
+	</body>
+</document>
+                
+                

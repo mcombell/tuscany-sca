@@ -1,0 +1,1329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Content Stylesheet for Site -->
+
+        
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- GENERATED FILE, DO NOT EDIT, EDIT THE XML FILE IN xdocs INSTEAD! -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <script src="DropMenu.js"  type="text/javascript"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+                            <meta name="author" value="Kelvin Goodson">
+            <meta name="email" value="kelvingoodson+tuscanysite@gmail.com">
+    
+   
+            
+        
+    <title>Tuscany - Java SDO Overview</title>
+</head>
+
+<body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+	<table class="topbar" id="topbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="94" background="images/TopBarBG.png">
+		<tr>
+			<td width="244">
+				<img src="images/Logo.png" width="244" height="94" alt=""></td>
+                
+                            
+			 <td align="right"> 
+				<img src="http://incubator.apache.org/tuscany/images/apache-incubator-logo.png" style="padding: 5px;"> </td>
+		</tr>
+	</table>
+    <table border="0" width="100%" cellspacing="4">
+        <tr>
+            <!-- LEFT SIDE NAVIGATION -->
+			<td width="141" valign="top" nowrap="true" >
+				<table width="100%" class="navbar" border="0" cellpadding="0" cellspacing="0" align="center" height="100%" >
+					    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany General
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./index.html">Home</a>
+<br>
+                                            <a href="./news.html">News</a>
+<br>
+                                            <a href="./documentation.html">Documentation</a>
+<br>
+                                            <a href="./Releases.html">Releases</a>
+<br>
+                                            <a href="./getting_started.html">Getting Started</a>
+<br>
+                                            <a href="./license.html">License</a>
+<br>
+                                            <a href="http://www.apache.org/" target="_blank">ASF</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SCA
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sca_index.html">SCA Overview</a>
+<br>
+                                            <a href="./java_sca_overview.html">SCA Java</a>
+<br>
+                                            <a href="./cpp_sca_overview.html">SCA C++</a>
+<br>
+                                            <a href="./sca_documentation.html">SCA Docs.</a>
+<br>
+                                            <a href="./sca_downloads.html">SCA Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SDO
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sdo_index.html">SDO Overview</a>
+<br>
+                                            <a href="./java_sdo_overview.html">SDO Java</a>
+<br>
+                                            <a href="./cpp_sdo_overview.html">SDO C++</a>
+<br>
+                                            <a href="./sdo_documentation.html">SDO Docs.</a>
+<br>
+                                            <a href="./sdo_downloads.html">SDO Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany DAS
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./das_index.html">DAS Overview</a>
+<br>
+                                            <a href="./java_das_overview.html">DAS Java</a>
+<br>
+                                            <a href="./das_documentation.html">DAS Docs.</a>
+<br>
+                                            <a href="./das_downloads.html">DAS Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Community
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./get-involved.html">Get Involved</a>
+<br>
+                                            <a href="./mail-lists.html">Mailing Lists</a>
+<br>
+                                            <a href="./faq.html">FAQ</a>
+<br>
+                                            <a href="./issue-tracking.html">Issue Tracking</a>
+<br>
+                                            <a href="http://wiki.apache.org/ws/Tuscany" target="_blank">Wiki</a>
+<br>
+                                            <a href="http://apache-tuscany.blogspot.com" target="_blank">Blog</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Development
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./source-code.html">Source Code</a>
+<br>
+                                            <a href="./java-projects.html">Tuscany Java</a>
+<br>
+                                            <a href="./cpp-projects.html">Tuscany C++</a>
+<br>
+                                            <a href="./site_development.html">Tuscany WebSite</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    				</table>
+			</td>
+            <!-- CONTENT! -->
+            <td width="100%" align="left" valign="top">
+            <table class="content" border="0" width="98%" cellspacing="0" cellpadding="0" align="left">
+                	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Tuscany Service Data Objects - Java">Tuscany Service Data Objects - Java</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <H2>The Tuscany SDO Java Project</H2> 
+                                                         <P>This document proves a high-level overview of the Java SDO (Service
+Data Objects) subproject of the Apache Tuscany incubator project.</P> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="SDO Java Getting Started">SDO Java Getting Started</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <p>
+                 To get started with Java SDO, follow the downloads link and pick up either a binary or source distribution.  If you
+                 are working from a source distribution, you can follow the <a href="java-projects.html">general instructions</a> for building the whole of the Tuscany java projects,  or you
+                 can follow the intructions within the <A href="java_sdo_overview.html"> SDO Java overview </A> to build and explore just SDO java.
+            </p> 
+                                                         <h3>SDO Java Documents</h3> 
+                                                         <table>
+                <tr>
+                    <td>
+                        <a href="http://www.osoa.org/download/attachments/36/Java-SDO-Spec-v2.1.0-FINAL.pdf?version=1"> SDO Specification for Java V2.01</a>
+                    </td>
+                    <td>
+                        The Service Data Objects specification for Java. Describes the data programming interfaces of SDO in the Java language.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a href="http://www.osoa.org/download/attachments/287/Next-Gen-Data-Programming-Whitepaper.pdf?version=1">SDO White Paper</a></td>
+                    <td>A white paper that explains the SDO programming model</td>
+                </tr>
+            </table> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="SDO Java Overview">SDO Java Overview</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <P>The SDO Java project is a subproject of <A class="external" rel="nofollow" href="http://incubator.apache.org/tuscany/"> the Apache Tuscany incubator project</A>
+is intended to provide a Java implementation of the <A class="external" rel="nofollow" href="http://www.osoa.org/download/attachments/36/Java-SDO-Spec-v2.1.0-FINAL.pdf?version=1"> SDO 2 specification.</A></P> 
+                                                         <P>The project's code base includes the following:</P> 
+                                                         <UL>
+	<LI>
+	<P>Dynamic data object support</P>
+	</LI>
+	<LI>
+	<P>Basic static code generation (generator patterns still subject to
+	change)</P>
+	</LI>
+	<LI>
+	<P>Most Helper classes either partially or fully implemented
+	(XMLHelper, XSDHelper, DataFactory, CopyHelper, EqualityHelper)</P>
+	</LI>
+	<LI>
+	<P>Minimal ChangeSummary support (only in DataGraph context)</P>
+	</LI>
+	<LI>
+	<P>Limited example programs</P>
+	</LI>
+</UL> 
+                                                         <P>The Tuscany wiki contains an area for <A class="external" rel="nofollow" href="http://wiki.apache.org/ws/Tuscany/TuscanyJava/SDO/ThinkingAloud/"> raw thoughts and clarifications on SDO</A> that
+will eventually make it into well crafted documentation.</P> 
+                                                         <H3>Build Environment
+Setup</H3> 
+                                                         <H4 id="head-c3468f5a294e14dda4ae0cf21a4acf497a9b9e80">Tuscany Build
+Environment Setup</H4> 
+                                                         <P>SDO 2 is a subproject of the Tuscany project. If you check out and
+build the whole Tuscany Java project, you will have also built the SDO 2
+subproject. If you want to work with the SDO 2 project, without the rest
+of Tuscany, skip to the next section.</P> 
+                                                         <P>To build the whole Tuscany project follow <A class="external" rel="nofollow" href="java-projects.html"> these instructions</A>.</P> 
+                                                         <H4>SDO Java Build
+Environment Setup</H4> 
+                                                         <P>There are two motivations for building SDO from source and two well tested approches to doing so.
+You may be wanting to build a binary release distribution from source code. Alternatively you may be
+wishing to establish a development environment in order to futher the development of the code. The two
+tested approaches are either to use maven 2 commandline builds or to java source code create projects 
+in the Eclipse SDK.
+</P> 
+                                                         <P>If you simply want to create a source code distribution,  then even if you are an Eclipse user
+its best to just follow the instructions in the BUILDING.txt file at the top of the source code distribution
+and run a maven command line build (since the route to establishing an Eclipse environment requires installing maven anyway).
+Note that SDO for Java is distributed as two source code distributions. You'll need to
+<A HREF="downloads.html">download</A>
+two archives, one for the SDO API, and one for the Tuscany implementation of that API.
+</P> 
+                                                         <P>If you want to work with the SDO projects alone, without the rest of
+Tuscany, proceed with the following steps.</P> 
+                                                         <OL type="1">
+	<LI>
+	<P>Set up your environment using the <A class="external" rel="nofollow" href="java-projects.html"> instructions for building the whole of Tuscany</A>,
+	<STRONG>but</STRONG> only download and install Java 5, Maven and Svn
+	(note that only one file, Interface2JavaGenerator.java, has a Java 5
+	dependency, if you want to work with Java 1.4.2 then just delete this
+	file before building).</P>
+	</LI>
+	<LI>
+	<P>Make sure 'mvn' and 'svn' commands are in your PATH environment
+	variable.</P>
+	</LI>
+	<LI>
+	<P>Check out the SDO open source projects from Apache.</P>
+	</LI>
+<UL>
+	<LI style="list-style-type: none;">
+	<P>Commands:</P>
+	<P>md &lt;local tuscany dir&gt; <BR />
+	cd &lt;local tuscany dir&gt; <BR />
+	svn co -N <A rel="nofollow" href="https://svn.apache.org/repos/asf/incubator/tuscany/java">
+	https://svn.apache.org/repos/asf/incubator/tuscany/java</A> <BR />
+	cd java <BR />
+	svn up sdo <BR />
+	svn up -N spec <BR />
+	cd spec <BR />
+	svn up sdo-api <BR />
+	</P>
+	</LI>
+</UL>
+</OL> 
+                                                         <OL start="4" type="1">
+	<LI>
+	<P>Run "mvn" under &lt;local tuscany dir&gt;/java directory to install
+	POM files from the root project to the local repository</P>
+	</LI>
+</OL> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P>Commands:</P>
+	<UL>
+		<LI style="list-style-type: none;">
+		<P>cd &lt;local tuscany dir&gt;/java <BR />
+		mvn -N <BR />
+		cd spec <BR />
+		mvn -N <BR />
+		cd ../sdo <BR />
+		mvn -N (alternatively, run without the -N option - see Note below) <BR />
+		</P>
+		</LI>
+	</UL>
+	</LI>
+</UL> 
+                                                         <OL start="5" type="1">
+	<LI>
+	<P>Build, or rebuild, the individual SDO projects</P>
+	<UL>
+		<LI style="list-style-type: none;">
+		<P><STRONG>sdo.spec</STRONG> project</P>
+		<P>Commands:</P>
+		<UL>
+			<LI style="list-style-type: none;">
+			<P>cd &lt;local tuscany dir&gt;/java/spec/sdo-api <BR />
+			mvn <BR />
+			mvn -Peclipse eclipse:eclipse (optional: Run this command if you are using
+			Eclipse for development.) <BR />
+			</P>
+			</LI>
+		</UL>
+		<P><STRONG>sdo.impl</STRONG> project</P>
+		<P>Commands:</P>
+		<UL>
+			<LI style="list-style-type: none;">
+			<P>cd &lt;local tuscany dir&gt;/java/sdo/impl <BR />
+			mvn <BR />
+			mvn -Peclipse eclipse:eclipse (optional: Run this command if you are using
+			Eclipse for development.) <BR />
+			</P>
+			</LI>
+		</UL>
+		<P><STRONG>sdo.tools</STRONG> project</P>
+		<P>Commands:</P>
+		<UL>
+			<LI style="list-style-type: none;">
+			<P>cd &lt;local tuscany dir&gt;/java/sdo/tools <BR />
+			mvn <BR />
+			mvn -Peclipse eclipse:eclipse (optional: Run this command if you are using
+			Eclipse for development.) <BR />
+			</P>
+			</LI>
+		</UL>
+        <P><STRONG>sdo.samples</STRONG> project</P>
+		<P>Commands:</P>
+		<UL>
+			<LI style="list-style-type: none;">
+			<P>cd &lt;local tuscany dir&gt;/java/sdo/sample <BR />
+			mvn <BR />
+			mvn -Peclipse eclipse:eclipse (optional: Run this command if you are using
+			Eclipse for development.) <BR />
+			</P>
+			</LI>
+		</UL>
+		</LI>
+	</UL>
+	</LI>
+</OL> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P><STRONG>Notes:</STRONG></P>
+	<OL type="1">
+		<LI>
+		<P>You can all of the sdo.impl, sdo.tools and sdo.sample projects in one step by running
+		mvn in &lt;local tuscany dir&gt;/java/sdo.</P>
+		</LI>
+		<LI>
+		<P>If the mvn command completed successfully, you will see BUILD
+		SUCCESSFUL in the output and the results of compilation will be available in jar files created under
+		directories named "target" directly under the root directories of the projects.  These jar files are also
+        installed into your local maven repository ($HOME/.m2/repository) and are available as inputs to later build
+        operations.</P>
+		</LI>
+		<LI>
+		<P>Maven fetches external resources required for a build process from the internet.
+        These resources are at times unavailable. It may be necessary to
+		run "mvn" again at a later time.</P>
+		</LI>
+		<LI>
+		<P>If you are taking time to reply to firewall prompts, this can cause
+		some requests to time out. Set up the firewall to permit the action
+		without prompting.</P>
+		</LI>
+	</OL>
+	</LI>
+</UL> 
+                                                         <H3>SDO Project
+Structure</H3> 
+                                                         <P>The SDO project is divided into five parts:</P> 
+                                                         <OL type="1">
+	<LI>
+	<P><STRONG>sdo.spec</STRONG> contains the SDO (commonj) interfaces
+	defined and provided by the SDO 2 specification.</P>
+	</LI>
+	<LI>
+	<P><STRONG>sdo.impl</STRONG> provides the runtime implementation of the
+	SDO interfaces.</P>
+	</LI>
+	<LI>
+	<P><STRONG>sdo.tools</STRONG> contains import and generator tools.</P>
+	</LI>
+    <LI>
+	<P><STRONG>sdo.sample</STRONG> contains sample sdo code.</P>
+	</LI>
+    <LI>
+	<P><STRONG>sdo.plugin</STRONG> contains code to configure the way in which SDO is build by maven.</P>
+	</LI>
+
+</OL> 
+                                                         <P>The main source code in each of these subprojects is located in the
+directory src/main/java, and if applicable, test (example) classes are
+located in src/test/java. The directory src/test/resources contains any
+data files needed by the test programs.</P> 
+                                                         <H4>sdo.spec</H4> 
+                                                         <P>(<A rel="nofollow" href="https://svn.apache.org/repos/asf/incubator/tuscany/java/spec/sdo-api">
+https://svn.apache.org/repos/asf/incubator/tuscany/java/spec/sdo-api</A>)</P> 
+                                                         <P>This project contains the interfaces provided with the SDO 2
+specification. It is essentially an unzipped copy of the SDO Java API
+sources zip file available at <A rel="nofollow" href="http://ftpna2.bea.com/pub/downloads/SDO_20_Source.zip">
+http://ftpna2.bea.com/pub/downloads/SDO_20_Source.zip</A>, but with some
+errata corrections and a Tuscany-specific implementation of class
+HelperProvider.</P> 
+                                                         <P>The abstract class, HelperProvider, is used to obtain specific
+default helpers and other implementation-specific objects used by the
+Java implementation of SDO. In the Tuscany implementation of this class,
+there are two ways to specify the implementation of the HelperProvider
+class.</P> 
+                                                         <OL type="1">
+	<LI>
+	<P>Set a System Property named "commonj.sdo.impl.HelperProvider" equal
+	to the fully qualified class name of the implementation class (e.g.
+	"commonj.sdo.impl.HelperProvider=org.apache.tuscany.sdo.help.HelperProviderImpl").
+	</P>
+	</LI>
+	<LI class="gap">
+	<P>In your own jar file, create a text file called
+	"META-INF/services/commonj.sdo.impl.HelperProvider". In this text file,
+	specify the fully qualified custom HelperProvider implementation class
+	(e.g. org.apache.tuscany.sdo.help.HelperProviderImpl).</P>
+	</LI>
+</OL> 
+                                                         <P>In the event that both 1 and 2 are specified, the System Property
+will take precedence over the text file.</P> 
+                                                         <P>The Tuscany default helper provider implementation class is
+org.apache.tuscany.sdo.helper.HelperProviderImpl (in the sdo.impl
+project) and is registered using the second technique (services file),
+as described in the following section.</P> 
+                                                         <H4>sdo.impl</H4> 
+                                                         <P>(<A rel="nofollow" href="https://svn.apache.org/repos/asf/incubator/tuscany/java/sdo/impl">
+https://svn.apache.org/repos/asf/incubator/tuscany/java/sdo/impl</A>)</P> 
+                                                         <P>The sdo.impl subproject contains a test package under src/test/java
+(see the section below entitled <A href="#generator">Static
+Code Generator</A> for details) and the following implementation
+packages under src/main/java:</P> 
+                                                         <P>package <EM>org.apache.tuscany.sdo</EM></P> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P>Contains a few interfaces used by some of the implementation classes
+	in org.apache.tuscany.sdo.impl. (Note: this package is subject to
+	further cleanup.)</P>
+	</LI>
+</UL> 
+                                                         <P>package <EM>org.apache.tuscany.sdo.helper</EM></P> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P>This package contains implementations of the "helper" interfaces
+	defined in the commonj.sdo.helper package (in the sdo.spec project).
+	Each helper interface in commonj.sdo.helper has a corresponding
+	implementation class in this package. The name of each helper class is
+	the same as the corresponding interface, only with the suffix "Impl"
+	appended. For example class
+	org.apache.tuscany.sdo.helper.TypeHelperImpl implements the interface
+	commonj.sdo.TypeHelper.</P>
+	<P>The implementation class
+	org.apache.tuscany.sdo.helper.HelperProviderImpl is used to bootstrap
+	an implementation of the default INSTANCEs of the SDO helper (see class
+	commonj.sdo.impl.HelperProvider in sdo.spec). This implementation
+	creates instances of the other helper implementation classes in this
+	package and is registered using the services file
+	src/main/resources/META-INF/services/commonj.sdo.impl.HelperProvider.</P>
+	</LI>
+</UL> 
+                                                         <P>package <EM>org.apache.tuscany.sdo.impl</EM></P> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P>This package contains the majority of the SDO runtime implementation
+	code. This includes implementations of all of the commonj.sdo
+	interfaces (see sdo.spec), including several implementations of the
+	DataObject interface. The design and implementation of the most
+	important classes in this package are described <A href="#runtime">below</A>).
+	</P>
+	</LI>
+</UL> 
+                                                         <P>package <EM>org.apache.tuscany.sdo.util</EM></P> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P>Contains some utility classes used by the implementation. One class,
+	SDOUtil, is particularly important. It provides some useful static
+	utility functions which are not included in the SDO specification
+	itself. Although these are not "standard" APIs, use of them is
+	recommended, as opposed to resorting to low-level
+	implementation-specific APIs. The intent of this class is to
+	encapsulate, in a relatively clean way, common functions that are
+	needed, and can potentially be proposed for addition to the
+	specification in a future version of SDO.</P>
+	</LI>
+</UL> 
+                                                         <H4>sdo.tools</H4> 
+                                                         <P>This project will contain (command line) tools, such as SDO model
+importers and generators (Java code, XML schema, etc.). Currently
+however, there is only a single tool, a Java code generator implemented
+in class org.apache.tuscany.sdo.generate.XSD2JavaGenerator. This
+generator can be used to generate static SDO data objects and is
+described in more detail in <A href="#generator">below</A>.
+</P> 
+                                                         <P>The sdo.tools project also contains a test program and sample
+generated model located in src/test/java and src/test/resources
+respectively (see the <A href="#tests">tests</A>
+section below for more details).</P> 
+                                                         <H3>Dependency Jars</H3> 
+                                                         <P>The sdo.impl project requires the following EMF (Eclipse Modeling
+Framework - www.eclipse.org/emf) runtime jars to build:</P> 
+                                                         <UL>
+	<LI>
+	<P>emf-common-2.2.1-SNAPSHOT.jar - some common framework utility and
+	base classes</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-2.2.1-SNAPSHOT.jar - the EMF core runtime implementation
+	classes (the Ecore metamodel)</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-change-2.2.1-SNAPSHOT.jar - the EMF change recorder and
+	framework</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-xmi-2.2.1-SNAPSHOT.jar - EMF's default XML (and XMI)
+	serializer and loader</P>
+	</LI>
+	<LI>
+	<P>xsd-2.2.1-SNAPSHOT.jar - the XML Schema model</P>
+	</LI>
+</UL> 
+                                                         <P>The sdo.tools project also requires the EMF code generator framework
+jars:</P> 
+                                                         <UL>
+	<LI>
+	<P>emf-codegen-2.2.1-SNAPSHOT.jar - template-based codegen framework
+	(JET - Java Emitter Templates)</P>
+	</LI>
+	<LI>
+	<P>emf-codegen-ecore-2.2.1-SNAPSHOT.jar - the EMF code generator</P>
+	</LI>
+	<LI>
+	<P>emf-common-2.2.1-SNAPSHOT.jar - some common framework utility and
+	base classes</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-2.2.1-SNAPSHOT.jar - the EMF core runtime implementation
+	classes (the Ecore metamodel)</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-change-2.2.1-SNAPSHOT.jar - the EMF change recorder and
+	framework</P>
+	</LI>
+	<LI>
+	<P>emf-ecore-xmi-2.2.1-SNAPSHOT.jar - EMF's default XML (and XMI)
+	serializer and loader</P>
+	</LI>
+	<LI>
+	<P>xsd-2.2.1-SNAPSHOT.jar - the XML Schema model</P>
+	</LI>
+</UL> 
+                                                         <P>These are simply Maven-friendly versions of corresponding jar
+files/plugins obtained from Eclipse. SNAPSHOT maps to an EMF weekly
+integration build (for example, I200602160000). Note that if you are building
+SDO for a released source code distribution then the dependency jars will not be 
+snapshot jars,  but will instead themselves be released versions of the dependencies.</P> 
+                                                         <A id="runtime" /> 
+                                                         <P /> 
+                                                         <H3>Runtime
+Implementation</H3> 
+                                                         <P>The primary SDO runtime implementation classes are located in the
+package org.apache.tuscany.sdo.impl and consist of the following:</P> 
+                                                         <OL type="1">
+	<LI>
+	<P>DataObject implementation classes</P>
+	</LI>
+	<LI>
+	<P>Implementation of the SDO metamodel interfaces: Type and Property</P>
+	</LI>
+	<LI>
+	<P>ChangeSummary and DataGraph implementations</P>
+	</LI>
+</OL> 
+                                                         <P>The implementation of the SDO runtime is based on and leverages the
+EMF runtime model (i.e., EObject and the Ecore metamodel - refer to
+documentation at www.eclipse.org/emf). It subclasses and specializes the
+Ecore metamodel, and provides its own DataObject-tuned implementation(s)
+of the EObject interface. The design is described in more detail in the
+following sections.</P> 
+                                                         <H4>DataObject
+implementation classes</H4> 
+                                                         <P>SDO provides several DataObject implementation classes as shown in
+the following diagram:</P> 
+                                                         <P><img src="./images/do_uml.png" alt="do_uml.png" /></P> 
+                                                         <P>Class DataObjectImpl is the most important. It provides a complete
+base implementation of the SDO DataObject interface. It extends from the
+EMF base class BasicEObjectImpl, which provides the "scaffolding" needed
+to easily implement an EObject, but without allocating any storage
+itself.</P> 
+                                                         <P>DataObjectImpl provides the DataObject implementation while
+allocating only the minimum storage overhead needed to be a data object
+(e.g., container pointer and feature, change recorder). It does not,
+however, allocate any storage for the actual properties of the data
+object. It instead requires subclasses for this purpose. For example,
+statically generated SDOs (see the <A href="#generator">generator</A>
+section below) directly or indirectly extend from this class, providing
+their own storage in generated instance variables.</P> 
+                                                         <P>The subclass, DynamicDataObjectImpl serves as a concrete
+implementation class for dynamic data objects. It is the default
+implementation class used when creating dynamic data objects using the
+DataFactory.create() method, for example. DynamicDataObjectImpl provides
+efficient data storage using a dynamically allocated settings array.</P> 
+                                                         <P>StoreDataObjectImpl and DynamicStoreDataObjectImpl provide a
+delegating implementations for DataObjects that implement their own
+storage management using a store (see EMF's EStore interface)
+implementation class. StoreDataObjectImpl is used in conjuction with the
+"-storePattern" generator option (see section 4), while
+DynamicStoreDataObjectImpl, as its name implies, is used for dynamic
+store-based instances.</P> 
+                                                         <H4>Type and Property
+implementation classes</H4> 
+                                                         <P>The SDO implementation provides three implementations of the
+interface Type, one for each of the following three kinds of types:
+classes, simple data types, and enumerations.</P> 
+                                                         <OL type="1">
+	<LI>
+	<P>class ClassImpl extends EClassImpl implements Type</P>
+	</LI>
+	<LI>
+	<P>class DataTypeImpl extends EDataTypeImpl implements Type</P>
+	</LI>
+	<LI>
+	<P>class EnumImpl extends EEnumImpl implements Type</P>
+	</LI>
+</OL> 
+                                                         <P>For example, class org.apache.tuscany.sdo.impl.ClassImpl extends form
+the corresponding Ecore class, EClassImpl, and mixes in the SDO
+interface commonj.sdo.Type. All the Type methods are implemented by
+calls to super.</P> 
+                                                         <P>With this approach, a data object's Type, returned from
+DataObjectImpl.getType(), and its EClass, returned by
+DataObjectImpl.eClass(), are the same underlying meta object. This
+allows the SDO implementation to leverage any appropriate base
+functionality without any performance overhead. The arrangement is shown
+in the following diagram:</P> 
+                                                         <P><IMG src="./images/meta.png" alt="meta.png" /></P> 
+                                                         <P>The implementation of the SDO Property interface follows a similar
+pattern. Two implementation classes, subclasses of corresponding Ecore
+classes, mix in the Property interface:</P> 
+                                                         <OL type="1">
+	<LI>
+	<P>class AttributeImpl extends EAttributeImpl implements Property</P>
+	</LI>
+	<LI>
+	<P>class ReferenceImpl extends EReferenceImpl implements Property</P>
+	</LI>
+</OL> 
+                                                         <P>As with the Type implementation classes, these classes call methods
+on super to implement the mixed-in Property methods.</P> 
+                                                         <P>The following diagram illustrates the design:</P> 
+                                                         <P><IMG src="./images/meta2.png" alt="meta2.png" /></P> 
+                                                         <P>As shown, the getProperties() method in ClassImpl (i.e., of the SDO
+Type interface) returns a set of properties whose implementation classes
+also implement EAttribute or EReference, and since ClassImpl, extends
+EClassImpl (as shown in the previous diagram), these are in fact the
+same objects as those returned by the EClass.getEAllStructuralFeatures()
+method. The two metamodels are one and the same, making the
+implementation of many of the SDO APIs trivial calls to the base class.
+</P> 
+                                                         <H4>ChangeSummary and
+DataGraph implementation classes</H4> 
+                                                         <P>TBD.</P> 
+                                                         <A id="generator" /> 
+                                                         <P /> 
+                                                         <H2>Static Code
+Generator</H2> 
+                                                         <P>The SDO static code generator is a command line tool for generating
+Java source code (static SDOs) for DataObjects defined in an XML Schema.
+It is implemented by the class
+org.apache.tuscany.sdo.generate.XSD2JavaGenerator in the sdo.tools
+project. The generator is used as follows:</P> 
+                                                         <P>Usage arguments:</P> 
+                                                         <PRE> [ -targetDirectory &lt;target-root-directory&gt; ]
+ [ -javaPackage &lt;base-package-name&gt; ]
+ [ -prefix &lt;prefix-string&gt; ]
+ [ -sparsePattern | -storePattern ]
+ [ -noInterfaces ] [ -noContainment ] [ -noNotification ] [ -arrayAccessors ] [ -noUnsettable ] [-noEMF] 
+ &lt;xsd-file&gt; | &lt;wsdl-file&gt;
+</PRE> 
+                                                         <P>For example:</P> 
+                                                         <P>java XSD2JavaGenerator somedir/somefile.xsd</P> 
+                                                         <P>Options:</P> 
+                                                         <UL>
+	<LI style="list-style-type: none;">
+	<P><STRONG>-targetDirectory</STRONG> Generates the Java source code in
+	the specified directory. By default, the code is generated in the same
+	directory as the input xsd or wsdl file.</P>
+	<P><STRONG>-javaPackage</STRONG> Overrides the Java package for the
+	generated classes. If not specified, a default package or one specified
+	with an sdoJava:package annotation on the &lt;schema&gt; element in the
+	xsd file (see SDO specification for details) is used for the java
+	package.</P>
+	<P><STRONG>-prefix</STRONG> Specifies the prefix string to use for
+	naming the generated factory. For example "-prefix Foo" will result in
+	a factory interface with the name "FooFactory".</P>
+	<P><STRONG>-sparsePattern</STRONG> For SDO metamodels that have classes
+	with many properties of which only a few are typically set at runtime,
+	this option can be used to produce a space-optimized implementation (at
+	the expense of speed).</P>
+	<P><STRONG>-storePattern</STRONG> This option can be used to generate
+	static classes that work with a Store-based DataObject implementation.
+	It changes the generator pattern to generate accessors which delegate
+	to the reflective methods (as opposed to the other way around) and
+	changes the DataObject base class to
+	org.apache.tuscany.sdo.impl.StoreDataObjectImpl. Note that this option
+	generates classes that require a Store implementation to be provided
+	before they can be run.</P>
+	<P><STRONG>-noInterfaces</STRONG> By default, each DataObject generates
+	both a Java interface and a corresponding implementation class. If an
+	SDO metamodel does not use multiple inheritance (which is always the
+	case for XML Schema derived models), then this option can be used to
+	eliminate the interface and to generate only an implementation class.</P>
+	<P><STRONG>-noNotification</STRONG> This option eliminates all change
+	notification overhead in the generated classes. Changes to DataObjects
+	generated using this option cannot be recorded, and consequently the
+	classes cannot be used with an SDO ChangeSummary or DataGraph.</P>
+	<P><STRONG>-noContainment</STRONG> Turns off container management for
+	containment properties. DataObject.getContainer() will always return
+	null for data objects generated with this option, even if a containment
+	reference is set. Setting a containment reference will also not
+	automatically remove the target object from its previous container, if
+	it had one, so it will need to be explicitly removed by the client. Use
+	of this option is only recommended for scenarios where this kind of
+	container movement/management is not necessary.</P>
+	<P><STRONG>-arrayAccessors</STRONG> Generates Java array
+	getters/setters for multiplicity-many properties. <STRONG>Note that
+    this option is experimental prototype code and is not fully developed
+    </STRONG>With this option, the
+	set of "standard" JavaBean array accessor methods (e.g., Foo[]
+	getFoo(), Foo getFoo(int), int getFooLength(), setFoo(Foo[]), and void
+	setFoo(int, Foo)) are generated. The normal List-returning accessor is
+	renamed with the suffix "List" (e.g., List getFooList()). The array
+	returned by the generated method is not a copy, but instead a pointer
+	to the underlying storage array, so directly modifying it can have
+	undesirable consequences and should be avoided.</P>
+	<P><STRONG>-noUnsettable</STRONG> By default, some XML constructs
+	result in SDO property implementations that maintain additional state
+	information to record when the property has been set to the "default
+	value", as opposed to being truly unset (see DataObject.isSet() and
+	DataObject.unset()). The SDO specification allows an implementation to
+	choose to provide this behavior or not. With this option, all generated
+	properties will not record their unset state. The generated isSet()
+	methods simply returns whether the current value is equal to the
+	property's "default value".</P>
+	<P><STRONG>-noEMF</STRONG> By default, the generated java
+	implementation source files directly import the Eclipse EMF classes
+	which they depend upon. This can lead to a discrepancy in EMF library
+	level dependencies between the generated classes and the environment
+	into which they are deployed. The -noEmf option provides an early level
+	of function to avoid this situation. Classes generated using this
+	option access EMF function indirectly via inherited behaviour, thereby
+	allowing packaging of these generated classes into jar files which do
+	not directly depend on EMF.</P>
+	<P>This early implementation of this option is limited in the subset of
+	XML Schema it is known to handle, and is subject to change. The
+	generator is known to be able to deal with Complex content (including
+	content models which map to SDO Sequence), and Mixed content for
+	example .</P>
+
+	<PRE>      &lt;xsd:complexType mixed="true" name="Sequence"&gt;
+         &lt;xsd:sequence&gt;
+            &lt;xsd:choice maxOccurs="unbounded" minOccurs="0"&gt;
+               &lt;xsd:element name="a" type="xsd:string" /&gt;
+               &lt;xsd:element name="b" type="xsd:int" /&gt;
+            &lt;/xsd:choice&gt;
+            &lt;xsd:element name="split" type="xsd:string" /&gt;
+            &lt;xsd:choice maxOccurs="unbounded" minOccurs="0"&gt;
+               &lt;xsd:element name="y" type="xsd:string" /&gt;
+               &lt;xsd:element name="z" type="xsd:int" /&gt;
+            &lt;/xsd:choice&gt;
+        &lt;/xsd:sequence&gt;
+     &lt;/xsd:complexType&gt;
+</PRE></LI>
+</UL> 
+                                                         <H4>Generator
+Patterns</H4> 
+                                                         <P>The DataObject interface generation pattern is as described in the
+SDO specification (see Java Interface Specification section). The SDO
+specification does not define a factory pattern for efficient
+construction of static SDOs, which is however provided by the Tuscany
+implementation. The generated SDO Factory interface conforms to the
+following pattern:</P> 
+                                                         <PRE>public interface &lt;prefix&gt;Factory {
+  &lt;Type1&gt; create&lt;Type1&gt;();
+  &lt;Type2&gt; create&lt;Type2&gt;();
+  ...
+  &lt;prefix&gt;Factory INSTANCE = &lt;default_factory_impl&gt;;
+}
+</PRE> 
+                                                         <P>A generated factory corresponds to an SDO Type namespace uri (see
+commonj.sdo.Type.getURI) with one create() method for each SDO Type in
+the namespace. The &lt;prefix&gt; of the factory name is derived from
+the uri. An instance of the factory is available using the INSTANCE
+field in the interface.</P> 
+                                                         <P>Using the static factory, a DataObject might be created as follows:</P> 
+                                                         <PRE>Quote aQuote = StockFactory.INSTANCE.createQuote();
+... // do something with aQuote
+</PRE> 
+                                                         <P>The generated implementation of each create() method simply
+constructs an instance of the corresponding type like this:</P> 
+                                                         <PRE>  public Quote createQuote() {
+    QuoteImpl quote = new QuoteImpl();
+    return quote;
+  }
+</PRE> 
+                                                         <P>In addition to these generated type-specific create&lt;Type&gt;()
+methods, the generated factory implementation class also includes a
+generated reflective create() method that, given an SDO Type,
+efficiently dispatches to the correct type-specific create() method. The
+reflective create() method is called by the implementation of the SDO
+commonj.sdo.helper.DataFactory interface.</P> 
+                                                         <A id="tests" /> 
+                                                         <P /> 
+                                                         <H3>Test/Example
+Programs</H3> 
+                                                         <P>The SDO project does not include any proper sample programs at this
+time (any volunteers?) but it does include a number of JUnit test cases,
+some of which serve as good examples of how to use SDO APIs to perform
+various tasks.</P> 
+                                                         <P>The following tests are particularly good SDO examples included in
+the sdo.impl project:</P> 
+                                                         <UL>
+	<LI>
+	<P><STRONG>SimpleDynamicTestCase</STRONG> This program uses the SDO
+	XSDHelper.define() method to register a simple XML Schema based model
+	(simple.xsd). It then instantiates a DataObject instance (type Quote),
+	initializes several of its properties, and then serializes the instance
+	to an XML stream.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>MixedTypeTestCase</STRONG> This program shows how to uses
+	the Sequence API to create an XML instance which mixes arbitrary text
+	within the DataObject's XML structure. It uses the XML schema
+	complexType (MixedQuote) in mixed.xsd to define the SDO model.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>OpenTypeTestCase</STRONG> Uses an XML Schema complexType
+	with a wildcard (xsd:any) to illustrate how to work with and manipulate
+	an SDO open type. The type OpenQuote in open.xsd is used for this
+	example.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>SimpleCopyTestCase</STRONG> Uses the SDO CopyHelper to
+	create shallow and deep copies of the simple Quote model from
+	SimpleDynamicTest.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>SimpleEqualityTestCase</STRONG> Uses the SDO EqualityHelper
+	to perform deep and shallow equality checks.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>ChangeSummaryTestCase</STRONG> Creates a data graph with an
+	instance of type Quote (in simple.xsd) as the root object. It then
+	turns on change logging and makes a number of changes to the graph.
+	Finally, it turns off change logging and serializes the data graph.</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>XSDHelperTestCase</STRONG> This program shows how the
+	XSDHelper.define() method can be called multiple times with the same
+	schema. The second (and subsequent) call simply returns an empty list
+	since no new types are defined.</P>
+	</LI>
+</UL> 
+                                                         <P>The following is in the sdo.tools project:</P> 
+                                                         <UL>
+	<LI>
+	<P><STRONG>SimpleStaticTestCase</STRONG> - This test performs the same
+	function as SimpleDynamicTestCase, above, only using a generated
+	version of the simple.xsd model. The generated model has been
+	pre-generated (with default options) in the directory src/test, but it
+	can be regenerated using the XSD2JavaGenerator, possibly with different
+	generator options (e.g., -noInterfaces or -sparsePattern), if desired.
+	</P>
+	</LI>
+	<LI class="gap">
+	<P><STRONG>StaticSequenceNoEmfTest</STRONG> This test exercises the
+	-noEMF generator option with a set of complex types, focussing on
+	Sequenced behaviour in the generated classes. The generated model has
+	been pre-generated (with options -noEMF -javaPackage
+	com.example.noemf.sequences) in the directory src/test, but it can be
+	regenerated using the XSD2JavaGenerator, possibly with different
+	generator options (e.g., -noInterfaces or -sparsePattern), if desired.
+	</P>
+	</LI>
+</UL> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	                        </table>
+            </td>
+	</table>
+    <div class="copyright">
+	Copyright © 2006, The Apache Software Foundation
+Apache Tuscany is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Web Services PMC. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+	</div>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

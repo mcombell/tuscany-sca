@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Tuscany Project" href="http://incubator.apache.org/tuscany/">
+
+    <title>Tuscany</title>
+    <logo href="/images/tuscanylogo_candidate2.jpg">Tuscany</logo>
+
+    <body>
+	<!-- When adding new tabs, make sure to edit Dropmenu.js to match!-->
+    <!--tab name="sca" position="244" label="images/SCATab.png" 
+rollover="images/SCATab2.png" href="sca_index.html">
+        <item rollover="images/genMenuItem.png"    label="images/genMenuItemDown.png"   href="sca_index.html"/>
+        <item rollover="images/javaMenuItem.png"   label="images/javaMenuItemDown.png"  href="java_sca_overview.html"/>
+        <item rollover="images/cppMenuItem.png"    label="images/cppMenuItemDown.png"   href="cpp_sca_overview.html"/>
+    </tab>
+    
+    <tab name="sdo" position="308" label="images/SDOTab.png" rollover="images/SDOTab2.png" href="sdo_index.html">
+        <item rollover="images/genMenuItem.png"    label="images/genMenuItemDown.png"   href="sdo_index.html"/>
+        <item rollover="images/javaMenuItem.png"   label="images/javaMenuItemDown.png"  href="java_sdo_overview.html"/>
+        <item rollover="images/cppMenuItem.png"    label="images/cppMenuItemDown.png"   href="cpp_sdo_overview.html"/>
+    </tab>
+    
+    <tab name="das" position="372" label="images/DASTab.png" rollover="images/DASTab2.png" href="das_index.html">
+        <item rollover="images/genMenuItem.png"    label="images/genMenuItemDown.png"   href="das_index.html"/>
+        <item rollover="images/javaMenuItem.png"   label="images/javaMenuItemDown.png"  href="java_das_overview.html"/>
+    </tab-->
+
+    <menu name="Tuscany General" label="images/TuscanyGeneral.png">
+        <item name="Home"                   href="/index.html"/>
+        <item name="News"                   href="/news.html"/>
+        <item name="Documentation"          href="/documentation.html"/>
+        <item name="Releases"               href="/Releases.html"/>
+        <item name="Getting Started"        href="/getting_started.html"/>
+        <item name="License"                href="/license.html"/>
+        <item name="ASF"                    href="http://www.apache.org/"/>
+    </menu>
+
+    <menu name="Tuscany SCA" label="images/TuscanySCA.png">
+        <item name="SCA Overview"         href="/sca_index.html"/>
+        <item name="SCA Java"             href="/java_sca_overview.html"/>
+        <item name="SCA C++"              href="/cpp_sca_overview.html"/>
+        <item name="SCA Docs."            href="/sca_documentation.html"/>
+        <item name="SCA Downloads"        href="/sca_downloads.html"/>
+    </menu>
+
+    <menu name="Tuscany SDO" label="images/TuscanySDO.png">
+        <item name="SDO Overview"               href="/sdo_index.html"/>
+        <item name="SDO Java"                   href="/java_sdo_overview.html"/>
+        <item name="SDO C++"                    href="/cpp_sdo_overview.html"/>
+        <item name="SDO Docs."          href="/sdo_documentation.html"/>
+        <item name="SDO Downloads"      href="/sdo_downloads.html"/>     
+    </menu>
+
+    <menu name="Tuscany DAS" label="images/TuscanyDAS.png">
+        <item name="DAS Overview"               href="/das_index.html"/>
+        <item name="DAS Java"                   href="/java_das_overview.html"/>
+        <item name="DAS Docs."              href="/das_documentation.html"/>
+        <item name="DAS Downloads"         href="/das_downloads.html"/> 
+    </menu>
+
+    <menu name="Community" label="images/TuscanyCommunity.png">
+        <item name="Get Involved"           href="/get-involved.html"/>
+        <item name="Mailing Lists"          href="/mail-lists.html"/>
+        <item name="FAQ"                    href="/faq.html"/>
+        <item name="Issue Tracking"         href="/issue-tracking.html"/>
+        <item name="Wiki"                   href="http://wiki.apache.org/ws/Tuscany"/>
+        <item name="Blog"                   href="http://apache-tuscany.blogspot.com"/>
+    </menu>
+
+    <menu name="Development" label="images/TuscanyCommunity.png">
+        <item name="Source Code"           href="/source-code.html"/> 
+        <item name="Tuscany Java"          href="/java-projects.html"/>
+        <item name="Tuscany C++"           href="/cpp-projects.html"/>
+        <item name="Tuscany WebSite"       href="/site_development.html"/>
+    </menu>
+	</body>
+</project>
+

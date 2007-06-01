@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Reference</bannertitle>
+    </properties>
+    <body>
+        <section name="Reference">
+<p>
+SCA references within an implementation represent links to services that the implementation uses that must be provided by other components in the SCA system.  For a composite, references of components within the composite may be wired to references of the composite, indicating that those references must be resolved by services outside the composite. 
+</p>
+<p>
+References use bindings to describe the access methods used to invoke the services. See the section on Bindings for more details of bindings.
+</p>
+        </section>
+    </body>
+</document>

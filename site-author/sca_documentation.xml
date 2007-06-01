@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany SCA Documentation</title>
+        <bannertitle>Tuscany SCA Documentation</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany SCA Documentation">
+
+            <p>Here is where you will find all the documentation related to Tuscany SCA (Java, C++...).</p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font color="#ffffff">SCA 
+</font></b></td> </tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">Tuscany provides an 
+implementation
+of the SCA Specifications being developed by the OSOA Collaboration - <a
+				href="http://www.osoa.org">http://www.osoa.org</a>. <ul>
+				<li><a
+					href="http://www.osoa.org/display/Main/Service+Component+Architecture+Specifications">OSOA
+				- Service Component Architecture Specifications</a></li>
+				</ul>
+			Note : These specifications are continuously evolving. Each SCA release from Tuscany adheres to a specific level of these specification and this will be mentioned as part of the release notes.
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p></p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font color="#ffffff">SCA 
+Java</font></b></td> </tr> <tr bgcolor="#eeeeee">
+			<td width="596" align="left">This section deals with documents
+			related to SCA Java </td>
+		</tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="center">
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Specifications Related</font></b></td>
+					</tr>
+					<tr>
+						<td>The following are links to the OSOA specifications that relate to Java Implementation: -
+						<ul>
+							<li><span class="nobr"><a
+								href="http://www.osoa.org/download/attachments/35/SCA_ClientAndImplementationModelforJava_v0.95.pdf?version=3"
+								title="SCA_ClientAndImplementationModelforJava_v0.95.pdf attached to Service Component Architecture Specifications">SCA
+							Client and Implementation Model for Java (V0.95)</a></span>
+</li>
+						</ul></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Implementation Related</font></b></td>
+					</tr>
+					<tr>
+						<td>Here is a list of documentations that are specific to the Tuscany Implementation of SCA in Java:-<table width="100%" border="0" bgcolor="#fffff4">
+							<tbody>
+								<tr>
+									<td align="center" width="28" valign="top">1.</td>
+									<td width="871" valign="top"><a href="java_sca_overview.html">Getting
+									started with SCA Java Milestone 2 Release</a></td>
+								</tr>
+								<tr>
+									<td align="center" width="28" valign="top">2.</td><td width="871" valign="top">SCA Java<ul>
+										<li>Core
+										<ul>
+											<li>Kernel</li>
+											<li>API</li>
+											<li>SPI</li>
+										</ul>
+										</li>
+										<li>Extensions</li>
+										<li>DataBindings.</li>
+										<li>Distributions</li>
+									</ul>
+									</td>
+									
+								</tr>
+								<tr>
+									<td width="28" align="center" valign="top">3.</td>
+									<td width="871" valign="top">SCA Java Extensions    <ul>
+										<li>SCA Java Extensions
+										<ul>
+											<li>Implementation Types</li>
+											<li>Transport Bindings</li>
+											<li>Protocol Bindings</li>
+										</ul>
+										</li>
+										<li>SCA Java Extensibility
+										<ul>
+											<li>Writing your own extension</li>
+											<li>A sample extension walk-through</li>
+										</ul>
+										</li>
+									</ul>
+									</td>
+								</tr>
+								<tr>
+									<td width="28" align="center" valign="top">4.</td>
+									<td width="871" valign="top">SCA Java DataBinding Facility</td>
+								</tr>
+								<tr>
+									<td width="28" align="center" valign="top">5.</td>
+									<td width="871" valign="top">SCA Java Runtimes and Application Deployment
+									<ul>
+										<li>Standalone</li>
+										<li>Web Application</li>
+									</ul>
+									</td>
+								</tr>
+								<tr>
+									<td width="28" align="center" valign="top">6.</td>
+									<td width="871" valign="top">SCA Java Samples</td>
+								</tr>
+							</tbody>
+						</table></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">JavaDocs Related</font></b></td>
+					</tr>
+					<tr>
+						<td>Here are the links to the Tuscany Java SCA JavaDocs: <br />
+						<br />
+						<b>Javadocs available online</b>
+						<table border="0" width="100%">
+							<tbody>
+								<tr>
+									<td width="10">&gt;</td>
+									<td width="597"><a 
+href="http://people.apache.org/~svkrish/tuscanySite/apidocs/commonj/" 
+target="_blank">Commonj API for Timer and Work Manager 
+(1.0-incubator-M2)</a></td> </tr>
+								<tr>
+									<td width="10">&gt;</td>
+									<td width="597"><a 
+href="http://people.apache.org/~svkrish/tuscanySite/apidocs/sca/" target="_blank">SCA
+									Specs API (1.0-incubator-M2)</a></td>
+								</tr>
+								<tr>
+									<td width="10">&gt;</td>
+									<td width="597"><a 
+href="http://people.apache.org/~svkrish/tuscanySite/apidocs/tuscany-sca/" target="_blank">Tuscany
+									SCA Kernel API (1.0-incubator-M2)</a></td>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						<br />
+						<b>Javadocs available Downloadable</b><ul>
+							<li><a
+								href="sca_downloads.html">Tuscany
+							Java SCA Javadocs for Release M2</a></li>
+						</ul>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+	</tbody>
+</table>
+<p></p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font color="#ffffff">SCA 
+C++</font></b></td> </tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">This section deals with documents
+			related to SCA C++ </td>
+		</tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Specifications Related</font></b></td>
+					</tr>
+					<tr>
+						<td>The following are links to the OSOA specifications that relate
+						to C++ Implementation: -
+						<ul>
+							<li><span class="nobr"><a
+								href="http://www.osoa.org/download/attachments/35/SCA_ClientAndImplementationModelforCpp_V0.95.pdf?version=1"
+								title="SCA_ClientAndImplementationModelforCpp_V0.95.pdf attached to Service Component Architecture Specifications">SCA
+							Client &amp; Implementation for C++ (V0.95)</a></span>
+</li>
+						</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Implementation Related</font></b></td>
+					</tr>
+					<tr>
+						<td><table width="100%" border="0" bgcolor="#fffff4">
+							<tbody>
+								<tr>
+									<td align="center" width="28" valign="top">1.</td>
+									<td width="871" valign="top"><a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-1.0-incubating-M2-final/sca/GettingStarted.html">Getting
+									Started with the SCA C++ Milestone Release 2</a>
+</td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+    </body>
+</document>
+
+
+
+
+
+
+
+

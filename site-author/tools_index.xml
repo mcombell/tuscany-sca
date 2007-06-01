@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany SCA</title>
+       <bannertitle>Tuscany Tools</bannertitle>
+    </properties>
+    <body>
+        <section name="Tools">
+            <p>There are a number of tools associated with Tuscany that are used at build time rather than runtime. 
+Primarily these are concerned with generating infrastructure code based on interface definitions in order to ease
+the load of the developer and ensure that Tuscany runtimes can host the business logic without the developer have to write to 
+Tuscany APIs</p>
+            <p>TO DO - Tools summary</p>
+	    
+        </section>
+    </body>
+</document>

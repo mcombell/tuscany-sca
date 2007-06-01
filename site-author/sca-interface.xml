@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Interface</bannertitle>
+    </properties>
+    <body>
+        <section name="Interface">
+<p>
+Interfaces define one or more business functions.  These business functions are provided by Services and are used by References.  Services are defined by the Interface which they implement.  SCA currently supports the following interface type systems:
+</p>
+<ul>
+<li>Java interfaces </li>
+<li>WSDL 1.1 portTypes </li>
+<li>WSDL 2.0 interfaces </li>
+</ul>
+        </section>
+    </body>
+</document>

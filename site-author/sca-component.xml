@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Component</bannertitle>
+    </properties>
+    <body>
+        <section name="Component">
+<p>
+Components are configured instances of implementations. Components provide and consume services. More than one component can use and configure the same implementation, where each component configures the implementation differently. For example each component may configure a reference of the same implementation to consume a different service.
+</p>
+       </section>
+    </body>
+</document>

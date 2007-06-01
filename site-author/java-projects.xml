@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany Java projects</title>
+        <bannertitle>Tuscany Java projects</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Java Project">
+            <p>The main Tuscany project repository is located at
+                <a
+href="https://svn.apache.org/repos/asf/incubator/tuscany">https://svn . a p ache.org/repos/asf/incubator/tuscany</a>
+                . You can use SVN to check out the Tuscany Java projects by checking out the 
+                java directory at
+                <a
+href="https://svn.apache.org/repos/asf/incubator/tuscany/java">https://svn . a 
+pache.org/repos/asf/incubator/tuscany/java</a>
+                , to get the SCA, SDO and DAS implementations for Java.</p>
+        </section>
+
+
+        <section name="System requirements">
+            <p>Next, please download the following in order to get your machine ready for 
+            Java development.
+                <br></br>
+                <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+                    <tbody>
+                        <tr> <!-- heading -->
+                            <td>
+                                <b>Software</b>
+                            </td>
+                            <td>
+                                <b>Download Link</b>
+                            </td>
+                            <td>
+                                <b>Download Instructions</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>JDK 5.0 Update 6 or later</td>
+                            <td>
+                                <a href='http://java.sun.com/j2se/1.5.0/download.jsp' target='_blank'>jdk 5.0</a>
+                            </td>
+                            <td>Steps for Java setup is
+                                <a href="#Downloading and installing the Java JDK 5.0">here</a>
+                                . </td>
+                        </tr>
+                        <tr> <!--mvn -->
+                            <td>Apache Maven 2.0.4 or later</td>
+                            <td>
+                                <a href='http://maven.apache.org/download.html' target='_blank'>Maven 2.04</a>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>We are using Maven 2 to build Tuscany, plus a few Ant scripts. Steps for 
+                                    Maven setup is
+                                        <a href="#Downloading and installing Apache Maven">here</a>
+                                        .</li>
+                                    <li>A quick reference on Maven is available
+                                        <a href='maven.html' target='_blank'>here</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr> <!--ant -->
+                            <td>Apache Ant 1.6.5 or later</td>
+                            <td>
+                                <a href='http://ant.apache.org/bindownload.cgi' target='_blank'>Ant</a>
+                            </td>
+                            <td>Steps for Ant setup is
+                                <a href="#Downloading and installing Apache Ant">here</a>
+                                . </td>
+                        </tr>
+                        <tr> <!--svn -->
+                            <td>Subversion 1.3.0 or later </td>
+                            <td>
+                                <a href='http://subversion.tigris.org/project_packages.html' target='_blank'>Subversion</a>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Tuscany source code is stored in a Subversion (SVN) repository, you need 
+                                    Subversion to download it. Steps for svn setup is
+                                        <a href="#Downloading and installing Subversion">here</a>
+                                        . </li>
+                                    <li>A quick reference for subversion commands is
+                                        <a href='quicksubversion.html' target='_blank'>here</a>
+                                    </li>
+                                    <li>
+                                        <i>Note: Some linux distributions may already have a subversion client installed. 
+                                        try executing "svn --version"</i>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr><!--tomcat -->
+                            <td>Apache Tomcat 5.5.17 </td>
+                            <td>
+                                <a href='http://tomcat.apache.org/' target='_blank'>apache tomcat 5.5</a>
+                            </td>
+                            <td>This is the Web container that we integrate with, to allow you to use the 
+                            SCA programming model in Web applications. Steps for Tomcat setup is
+                                <a href="#Download and Setup Tomcat">here</a>
+                                .</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br></br>
+
+            </p>
+        </section><!-- system requirement for development -->
+
+        <section name="Environment scripts">
+            <p>There is a windows
+                <a href='setenv.bat'>setenv.bat</a>
+                and a linux
+                <a href='setenv.sh'>setenv.sh</a>
+                script that you can download by right clicking and "selecting save as..."  You 
+                can edit these scripts with the below described environment variables to set up 
+                your environment any time by running them. On linux you invoke the shell script 
+                with
+                <pre>. ./setenv.sh</pre>
+            </p>
+        </section>
+        
+        <section name="Downloading and installing the Java JDK 5.0">
+            <ul>
+                <li>Download and extract the appropriate JDK for your operating system from
+                    <a href='http://java.sun.com/j2se/1.5.0/download.jsp' target='_blank'>http://java.sun.com/j2se/1.5.0/download.jsp</a>
+                    .</li>
+                <li>set the JAVA_HOME environment variable to point to the root directory of 
+                where you extracted java download.</li>
+                <li>Add to your PATH environment variable to include the full path to the
+                    <b>bin</b>
+                    subdirectory of the JDK download package.</li>
+            </ul>
+        </section>
+
+
+        
+        <section name ="Downloading and installing Apache Maven">
+            <ul>
+                <li>Download and extract Maven 2.0.4 or later from
+                    <a href='http://maven.apache.org/download.html' target='_blank'>http://maven.apache.org/download.html</a>
+                    .</li>
+                <li>Add to your PATH environment variable to include the  the full path to the
+                    <b>bin</b>
+                    subdirectory of the Maven  download package.</li>
+            </ul>
+        </section>
+        
+        <section name ="Downloading and installing Apache Ant">
+            <ul>
+                <li>Download and extract Ant 1.6.5  or later from
+                    <a href='http://ant.apache.org/bindownload.cgi' target='_blank'>http://ant.apache.org/bindownload.cgi</a>
+                    .</li>
+                <li>Add to your PATH environment variable to include the  the full path to the
+                    <b>bin</b>
+                    subdirectory of the Ant download.</li>
+            </ul>
+        </section>
+        
+        <section name ="Downloading and installing Subversion">
+            <ul>
+                <li>Download and extract Subversion 1.3.1 or later from
+                    <a href='http://subversion.tigris.org/project_packages.html' target='_blank'>http://subversion.tigris.org/project_packages.html</a>
+                    .</li>
+                <li>Modify your path statement to include  the full path to the subversion
+                    <b>bin</b>
+                    directory.</li>
+                <p>
+                    <i>Note: For linux you may need to install subversion  as root </i>
+                </p>
+            </ul>
+            <p>A quick reference for subversion commands is
+                <a href='quicksubversion.html' target='_blank'>here</a>
+            </p>
+        </section>
+
+        
+        <section name ="Download and Setup Tomcat">
+            <ul>
+                <li>Dowload apache-tomcat-5.5.17
+                    <a href='http://www.uniontransit.com/apache/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.zip' target='_blank'>apache-tomcat-5.5.17.zip</a>
+                    for Windows or
+                    <a href='http://www.uniontransit.com/apache/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.tar.gz' target='_blank'>apache-tomcat-5.5.17.tar.gz</a>
+                    for Linux to the
+                    <B>tuscany\java\distribution\tomcat-overlay directory</B>
+                    . Do not unpack.</li>
+            </ul>
+        </section>
+
+        
+        <section name ="Checkout and Build Tuscany">
+            <p>
+                <b>
+                    <br />
+                </b>
+                Tuscany SCA and Tuscany DAS are dependent on Tuscany SDO. Hence if you plan to 
+                build all three from source then you must ensure that Tuscany SDO is the first 
+                that you build followed by the other two in any order. 
+                <br />
+                <br />
+                Alternatively, in you intend to build only either of Tuscany SCA or Tuscany DAS, 
+                then you may just do so in which case Maven (the build tool used in Tuscany) 
+                will download Tuscany SDO binaries from public Maven repositories dynamically 
+                during build time. 
+                <b>
+                    <br />
+                    <br />
+                </b>
+                For more information on checking out and building Tuscany SCA, SDO and DAS visit 
+                the following pages:</p>
+            <table border="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_sca_overview.html">Tuscany Java SCA</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_sdo_overview.html">Tuscany Java SDO</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_das_overview.html">Tuscany Java DAS</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p></p>
+        </section>
+        
+        <section name ="Running the Samples">
+            <p>The samples for Tuscany fall into two categories.</p>
+			<ul>
+			<li>Sample applications that use a mix of the Tuscany technologies SCA, SDO and DAS.  These samples show how
+			     SCA, SDO and DAS can be combined to create service-oriented applications that implement business scenarios.</li>
+			<li>Technology samples for each of the Tuscany technologies SCA, SDO and DAS.  These samples illustrate
+			     specific technical features of SCA, SDO and DAS and show how they can be used by an application developer.</li>
+			</ul>
+			<p>The sample applications are in the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/java/sampleapps">
+			    java/sampleapps</a> module.  See the <a href="http://svn.apache.org/repos/asf/incubator/tuscany/java/sampleapps/readme.htm">
+				Sample Applications readme</a> for instructions on how to build and run them.</p>
+			<p>For information on building and running the technology samples for SCA, SDO and DAS, visit the following pages:</p>
+            <table border="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_sca_overview.html">Tuscany Java SCA</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_sdo_overview.html">Tuscany Java SDO</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="97%">
+                            <a href="java_das_overview.html">Tuscany Java DAS</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+        
+        <section name="Using Eclipse (optional)">
+            <p>
+                <span style="font-size: 10pt;">Link to Eclipse download :
+                    <span>
+                        <a
+                                href="http://www.eclipse.org/downloads/index.php">http://www.eclipse.org/downloads/index.php</a>
+                    </span>
+                </span>
+            </p>
+            <p>Getting Started documentation:
+                <a href="http://www.eclipse.org/downloads/index.php">http://www.eclipse.org/downloads/index.php</a>
+            </p>
+            <p>To create the eclipse projects to use for SCA development:</p>
+            <p>1) When checking code out from subversion, checkout the subversion trunk to a 
+            location outside your eclipse workspace (it has to be outside because Eclipse 
+            will not allow you to import projects from a location overlapping with your 
+            workspace)</p>
+            <p>2) Go to Import / Existing projects into workspace.
+                <span style="" />
+                Select either the runtime, spec, tools or samples directory.
+                <span style="" />
+                The wizard proposes the list of Eclipse projects under that directory. Importing 
+                the projects does not copy the files; it just makes the files at that location 
+                visible under an Eclipse project.</p>
+            <p>3) If you need to use Eclipse to edit files outside of these projects (for 
+            example the etc directory, or the maven files at the root of the trunk), then 
+            delete the Eclipse projects, with the option to not delete the files, and import 
+            the whole trunk as a project.</p>
+        </section>
+        
+        <section name="Using Eclipse style templates">If you are using Eclipse, Tuscany 
+        has a preferred Java coding style. Please use the
+            <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-eclipse-codestyle.xml'>tuscany-eclipse-codestyle.xml</a>
+            in Eclipse.
+            <br/>
+            Download this file.
+            <i>You may need to right click and save.</i>
+            Then in Eclipse:
+            <br/>
+            <pre>Window->Preferences-&gt;Java-&gt;Code-Style-&gt;Formatter-&gt;Import...
+                <i>(Specify path and file to the tuscany-eclipse-codestyle.xml just downloaded. </i>
+            </pre>
+        </section>
+        
+        <section name="Using Subclipse (optional)">
+            <p>Install the Subversion Eclipse Plugin as described here:
+                <a href="http://subclipse.tigris.org/">http://subclipse.tigris.org/</a>
+            </p>
+            <ol>
+                <li>Open the SVN Repository Exploring perspective</li>
+
+                <li>Right click in the SVN Repository view.
+
+                </li>
+                <li>Select "New" and "Repository Location"
+
+                </li>
+                <li>Url:
+                    <a href="http://svn.apache.org/repos/asf/incubator/tuscany">http://svn.apache.org/repos/asf/incubator/tuscany</a>
+                    <p>Use URL https://svn.apache.org/repos/asf/incubator/tuscany if you have 
+                    committer rights and need to commit changes back to the repository.</p>
+                </li>
+                <li>Select the "Finish" button and allow Subeclipse time to access the 
+                repository and display its contents in the SVN Repository explorer.  Once the 
+                repository is displayed in the explorer, you will see a number of subfolders 
+                displayed.  The ones that are relevant are "java", "cpp" and "site" - which 
+                contain the Tuscany Java runtime, the Tuscany C++ runtime and the Tuscany 
+                website material respectively.</li>
+                <li>Select the folder you want to check out as a project - one of java, cpp or 
+                site for example Right click, select "Checkout" and "Checkout using new project 
+                wizard" - select the appropriate options for your needs and then click "Finish"</li>
+            </ol>
+            <p>You can check in changes using the "Commit" item in the team submenu of the 
+            Java perspective.</p>
+        </section>
+        
+        <section name="Using IDEA style templates">If you are using IDEA IDE, Tuscany 
+        has a preferred Java coding style. Please use the
+            <a href='http://svn.apache.org/repos/asf/incubator/tuscany/java/etc/tuscany-idea-codestyle.xml'>tuscany-idea-codestyle.xml</a>
+            in IDEA
+            <br/>
+            Download this file.
+            <i>You may need to right click and save.</i>
+            <pre>copy tuscany-idea-codestyle.xml to ~/.IntelliJIdea50/config/codestyles File-&gt;Settings, 
+            Project Code Styles, Import</pre>
+        </section>
+        
+        <section name="Logging">For more information regarding how to add logging to 
+        your code you can review
+            <a href='monitoring.htm' target='_blank'>Tuscany Monitoring</a>
+        </section>
+    </body>
+</document>
+
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Composite</bannertitle>
+    </properties>
+    <body>
+        <section name="Composite">
+<p>
+An SCA composite is used to assemble components in logical groupings. It is the basic unit of composition within an SCA System. An SCA Composite contains a set of Components, Services, References and the Wires that interconnect them. Composites are component implementations in higher-level composites in other words 
+composites can have components that are implemented by composites. 
+</p>
+<p>
+A composite has the following normative characteristics:
+</p>
+<ul>
+<li>It defines a boundary for Component visibility. Components may not be directly referenced outside of the composite that contains them.</li>  
+<li>It can be used as a unit of deployment. Composites are used to contribute business services to an SCA system.</li>
+
+</ul> 
+
+        </section>
+    </body>
+</document>

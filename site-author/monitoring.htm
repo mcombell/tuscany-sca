@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><!-- Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> <meta http-equiv="Content-Style-Type" content="text/css">
+<title>Tuscany Monitoring</title>
+<!-- LINK rel="stylesheet" href="ait.css" type="text/css" -->
+<style type="text/css" media="all">
+@import url("../../../../css/maven-base.css");
+@import url("../../../../css/maven-theme.css");
+@import url("../../../../css/site.css");
+</style><link rel="stylesheet" href="./css/print.css" type="text/css" media="print"></head>
+<body><h2>Tuscany
+Monitoring</h2>
+<h3>Overview</h3>
+<p>Monitoring or as it's more commonly called logging
+&nbsp;is a means of providing &nbsp;runtime diagnostic
+statements in&nbsp;the code. &nbsp;In Tuscany the means to do
+this has changed&nbsp;from &nbsp;the conventional factory
+pattern to an IOC type pattern of having the container provide or also
+known as inject the monitor (logger) class. &nbsp;The following
+sections will first describe how a component goes about obtaining the
+monitor class, how the framework is&nbsp;extended, and how it's
+initialized.</p><h3>Monitoring</h3>The
+first step is to provide&nbsp;an interface that you want to use
+to call &nbsp;monitor statements (logging). &nbsp;Here is an
+example:<br><span style="font-family: monospace;"></span><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td><pre><code>import org.apache.tuscany.common.monitor.LogLevel;<br><br>public interface MyLoggingInterface{</code></pre><pre><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: rgb(204, 0, 0);">@LogLevel("INFO")</span><br>	public void methodCalled(String methodName, Object[] args);</code></pre><pre><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: rgb(204, 0, 0);">@LogLevel("SEVERE")</span><br> 	public void methodReturned(String methodName, Object args);</code></pre><pre><code>&nbsp;&nbsp;&nbsp; }</code></pre></td></tr></tbody></table><span style="font-family: monospace;"><br></span>Was
+there something special about the name of this class ? &nbsp;No.<br>Did
+it need to implement another interface ? No that's why it didn't :-)<br>Was
+the names of the methods special? No, just personal preference.<br>Was
+the signature of the methods special? No could have been anything.<br><br>The
+interface may have to have a public accessor if its to
+be&nbsp; used in other packages and as well as the methods. It can
+even be a static interface that in another class (inner interface?).<br>The <code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">@LogLevel("SEVERE")</span></span></code>
+is Java annotation that sets<a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/Level.html" target="_blank">&nbsp;level </a>the logging
+should be at for this method to actually write log records; otherwise, the method produces no logging.<code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"></span><br><br></span></code>Next
+is to obtain an instance of this interface to do the actual monitoring.
+&nbsp;This follows the same&nbsp;pattern&nbsp;as how a
+reference to another SCA component is obtained when implementing an SCA
+component; specifically, create a field and a setter method for the
+field, but instead of using the @Reference annotation you use the
+@Monitor annotation. &nbsp;Here is an example:<br><br><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td><code>...<br><span style="color: rgb(255, 0, 0);">import
+org.apache.tuscany.core.system.annotation.Monitor</span>;
+&nbsp;<span style="color: rgb(0, 153, 0);">//this
+needs to be included for the annotation.</span><br>...<br>public
+class &nbsp;foobar {<br><span style="color: rgb(255, 0, 0);">&nbsp; &nbsp;@Monitor</span><br>&nbsp;&nbsp;&nbsp;
+protected MyLoggingInterface myLogger; &nbsp;<span style="color: rgb(0, 153, 0);">//Instance is inserted by
+container</span><br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(255, 0, 0);">@Monitor</span><br>&nbsp;&nbsp;&nbsp;
+public void setMyLoggingClass(MyLoggingInterface myLoggingClass) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.myLogger = myLoggingClass;<br>&nbsp;&nbsp;&nbsp;
+}<br>...<br>}</code><br></td></tr></tbody></table><br>There is no need to supply in the SCDL wiring for this reference.<br><br><br>To
+actually log, simply use the methods of the interface. As an example<br><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td>...<br>&nbsp;<code>public
+String getGreetings(String name) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(255, 0, 0);">myLogger.methodCalled(
+"getGreetings", new
+Object[]{name});</span> <span style="color: rgb(0, 153, 0);">//log
+this "event"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String ret="Hello " + name; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(255, 0, 0);">myLogger.methodReturned("getGreetings",
+ret);<span style="color: rgb(0, 153, 0);"> </span></span><span style="color: rgb(0, 153, 0);">// log this event</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return ret;<br>&nbsp;&nbsp;&nbsp; }<br>...</code></td></tr></tbody></table><br>That
+pretty much wraps up how you actually add&nbsp;monitoring (logging)
+to your code.<br><br><h3>Extending Monitoring</h3>To
+extend or&nbsp;define your own monitor you need to simply create a
+class that implements one interface: <code>org.apache.tuscany.common.monitor.MonitorFactory</code>
+that&nbsp;has only one method <code>getMonitor</code>. Couldn't be
+simpler. &nbsp;Here is the interface:<br><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td><code>public
+interface MonitorFactory {<br>&nbsp;&nbsp;&nbsp; /**<br>&nbsp;&nbsp;&nbsp;&nbsp;
+* Return a monitor for a component's monitor interface.<br>&nbsp;&nbsp;&nbsp;&nbsp;
+*<br>&nbsp;&nbsp;&nbsp;&nbsp; * @param
+monitorInterface the component's monitoring interface<br>&nbsp;&nbsp;&nbsp;&nbsp;
+* @return an implementation of the monitoring interface; will not be
+null<br>&nbsp;&nbsp;&nbsp;&nbsp; */<br>&nbsp;&nbsp;&nbsp;
+&lt;T&gt; T getMonitor(Class&lt;T&gt; monitorInterface);<br>}</code></td></tr></tbody></table><br>Oh,
+forgot to mention it uses Java 1.5 generics. &nbsp;For those not
+familar with this.. simply said &nbsp;for the <code>getMonitor
+</code>method given any&nbsp; interface (or class) as a
+parameter &nbsp;return an instance of that interface. <br><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2" frame="lhs"><tbody><tr><td>&nbsp;
+&nbsp;Side line:&nbsp; <code>&lt;T&gt;</code>
+notifies you that <code>T</code> can be any Object. &nbsp;So the <code>T </code>before
+<code>getMonitor</code> means return an instance of type object <code>T</code> given
+the parameter type <code>Class&lt;T&gt;. </code><code>Class&lt;T&gt;
+</code>is an interface (or class) that is of type <code>T</code>.&nbsp;
+&nbsp;</td></tr></tbody></table><br><br>There
+are two implementations currently&nbsp; in Tuscany that demonstrate
+how to extend the Monitoring infrastructure:<br>&nbsp;
+<br><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td>org.apache.tuscany.common.monitor.impl.NullMonitorFactory</td><td>Simply
+throws the logging messages away.</td></tr><tr><td>org.apache.tuscany.common.monitor.impl.JavaLoggingMonitorFactory</td><td>Uses
+Java logging infrastructure to back the Monitoring&nbsp;
+implementation.</td></tr></tbody></table><br>Looking at the simple one
+first <code>NullMonitorFactory</code>&nbsp;all the
+<code>getMonitor</code> method returns is a Java proxy that implements the interface
+passed in. <br><br><table style="text-align: left; width: 100%; margin-left: 40px;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td><code>public
+class NullMonitorFactory implements MonitorFactory {<br>&nbsp;public
+&lt;T&gt; T getMonitor(Class&lt;T&gt; monitorInterface)
+{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return
+monitorInterface.cast(Proxy.newProxyInstance(monitorInterface.getClassLoader(),
+new Class&lt;?&gt;[]{monitorInterface}, NULL_MONITOR));<br>&nbsp;&nbsp;&nbsp;
+}<br>&nbsp;&nbsp;&nbsp; private static final
+InvocationHandler NULL_MONITOR = new InvocationHandler() {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+public Object invoke(Object proxy, Method method, Object[] args) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return null;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}<br>&nbsp;&nbsp;&nbsp; };<br>}</code></td></tr></tbody></table><div style="margin-left: 40px;">The
+<code>monitorInterface.cast(...)</code> is just a cast of
+the proxy to the interface passed in and what is expected to be
+returned.<br>The first argument is to use the same
+classloader
+that loaded the interface.<br>The second argument&nbsp; <code>new
+Class&lt;?&gt;[]{monitorInterface) </code>&nbsp;is just an array
+of any
+Classes or Interfaces (type as any is signified by the
+&lt;?&gt;) that contains&nbsp;one interface
+..&nbsp;monitorInterface that needs to
+be implemented by the handler.<br>The last argument
+&nbsp;NULL_MONITOR is a Java Invocation handler for a proxy.
+&nbsp;Regardless of the method called it just does a return null
+(i.e nothing).<br><br></div>&nbsp;Looking at
+&nbsp;JavaLoggingMonitorFactory you can see it's a wrapper for the<a href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html" target="_blank"> Java logging utility</a>.
+&nbsp;In principle it's not much more than
+the&nbsp;NullMonitorFactory with the following enhancements:<br><div style="margin-left: 40px;">The proxies field simply provides
+a cache for instances of the interfaces. &nbsp;There doesn't need to
+be a unique instance for each interface since there is no state differences kept between
+an two of the same interfaces.<br>The logging levels on the
+methods on any interface can be initialized with a Properties object.
+that has keys with the format &lt;<span style="font-style: italic;">className</span>&gt;#&lt;<span style="font-style: italic;">methodName</span>&gt;
+and value of the level (eq<code> &nbsp;&nbsp;&nbsp;
+MyLoggingInterface#</code><code>methodReturned=</code><code style="color: rgb(0, 0, 0);">SEVERE)</code><br><code style="color: rgb(0, 0, 0);"></code>If the Properties
+does not have a level for the method the interface is introspected for
+the LogLevel annotation to determine its logging level.<br></div><div style="margin-left: 40px;">The Invocation handler uses Java
+logging to log a record. &nbsp;The actual text&nbsp; message is
+gotten from a resource bundle passed into
+the&nbsp;&nbsp;JavaLoggingMonitorFactory class when it was
+created. The key in that resource bundle&nbsp; is the same as the
+for the properties file that defines the level and the value is the
+actual message.<br><br>
+</div>
+<h3>Monitor Initialization</h3>The only aspect &nbsp;that is directly
+Tuscany specific with regard to initializing&nbsp; monitoring is
+providing the org.apache.tuscany.core.client.TuscanyRuntime a
+monitoring factory when the runtime is created. &nbsp;By default it
+will use the previously discussed NullMonitorFactory. &nbsp;Of course
+each specific monitor factory implementation&nbsp; may have it's own
+initialization requirements. &nbsp;The default, NullMonitorFactory
+requires no additional initialization.
+&nbsp;The&nbsp;JavaLoggingMonitorFactory monitor requires the
+previously discussed Java Properties to initialization the logging
+levels of the interface methods, &nbsp;a default &nbsp;Java logging
+level that is used if none is found in the Properties, or through
+introspection of the Interface LogLevel annotations, &nbsp;and the name
+of the resource bundle to be used.</body></html>

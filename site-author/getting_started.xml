@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany - Getting Started</title>
+        <bannertitle>Tuscany SCA Downloads</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany - Getting Started">
+
+            <p>You are probably on this page because you are new to Apache Tuscany and the technologies around which it is built and would like to get started with it.<br />
+<br />Here is a sequence of steps that we think will help you get started
+with Tuscany: -</p>
+<table border="0" width="100%">
+	<tbody>
+		<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">1</font></b></td>
+			<td width="596"><b><font color="#004566">A brief overview about Apache Tuscany  project</font></b></td>
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">Apache Tuscany if about
+			providing the next generation SOA infrastructure and programming
+			model that : -<br />
+			- enables uniform access to services implemented in heterogeneous
+			technologies<br />
+			- enables uniform processing model for service data exchanged across
+			service networks<br />
+			- enables uniform access to data residing in heterogeneous data
+			sources (RDB, XML, ...)<br />
+			<br />
+			Tuscany achieves this by providing implementations for the following
+			technologies : Service Component Architecture (SCA), Service Data
+			Objects (SDO) and Data Access Services (DAS), respectively. Hence
+			there are three different technologies implemented in Apache Tuscany,
+			each having its own motivation. You can start with any one of them
+			that interests you rightaway and move to the others.</td>
+		</tr>
+<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">2</font></b></td>
+			<td width="596"><b><font color="#004566">Understanding technologies underlying Tuscany - SCA / SDO / DAS </font></b></td>
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">Now that you have brief idea of what
+			Apache Tuscany project is about, here is how to go futher: -<br />
+			- First its important to get an understanding of SCA / SDO / DAS -
+			which ever you might choose to begin with. <br />
+			<br />
+			The SCA and SDO
+			technologies are being specified by the Open SOA collaboration -
+			http://www.osoa.org. A good start into these technologies would be to
+			take a look at the following documents: -<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a href="http://www.osoa.org/display/Main/Service+Component+Architecture+Specifications">
+<span class="nobr"><a
+							title="SCA_AssemblyModel_V096.pdf attached to Service Component Architecture Specifications" href="http://www.osoa.org/display/Main/Service+Component+Architecture+Specifications">SCA
+						Specifications <i> </i></a></span>
+</a><i> (Assembly Model Specs. and Java / C++ Cleint and Implementation
+						Prog. Model Specs)</i></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/287/Next-Gen-Data-Programming-Whitepaper.pdf?version=1"
+							title="Next-Gen-Data-Programming-Whitepaper.pdf attached to SDO Resources">Next
+						Generation Data Programming" Whitepaper about SDO</a></span>
+</td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="http://www.osoa.org/display/Main/Service+Data+Objects+Specifications">SDO
+						Specifications</a> </td>
+					</tr>
+				</tbody>
+			</table><br />
+			To get an understanding of DAS take a look at <table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567"><a
+							href="http://wiki.apache.org/ws/Tuscany/TuscanyJava/DAS_Java_Overview/RDBDAS_Java_User_Guide">DAS
+						Java User Guide</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			There are also other documents related to these technologies that you
+			can find in the 'Docs.' section of the technology specific area of
+			this website. Here are the links to those sections : -<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4">
+						<span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V096.pdf?version=1"
+							title="SCA_AssemblyModel_V096.pdf attached to Service Component Architecture Specifications"></a></span></a><a
+						    href="sca_documentation.html">Tuscany
+						SCA Documentation</a><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4"></a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="sdo_documentation.html">Tuscany
+						SDO Documentation</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/287/Next-Gen-Data-Programming-Whitepaper.pdf?version=1"
+							title="Next-Gen-Data-Programming-Whitepaper.pdf attached to SDO Resources"></a></span><a
+							href="das_documentation.html">Tuscany
+						DAS
+						Documentation</a></td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">3</font></b></td><td width="596"><b><font color="#004566"> Choose a technology (SCA/SDO/DAS) implementation, impl. language (Java / C++) and OS (Linux / Windows)</font></b></td>
+			
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">If you have gained a good
+			understanding of either SCA / SDO / DAS then its about time you got a
+			working feel of these technologies. First choose a platform and
+			language from the various flavours in which these technologies are
+			offered. Presently, SCA and SDO are available for Java &amp; C++
+			languages and on the Windows and Linux platforms. DAS is available in
+			Java language and on Windows and Linux platforms. To get an understanding of these take a look at the following: -<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4">
+						<span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V096.pdf?version=1"
+							title="SCA_AssemblyModel_V096.pdf attached to Service Component Architecture Specifications"></a></span></a><a
+							href="java_sca_overview.html">SCA Java</a><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4"></a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a href="cpp_sca_overview.html">SCA
+						C++</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a href="java_sdo_overview.html">SDO
+						Java</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a href="cpp_sdo_overview.html">SDO
+						C++</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a href="java_das_overview.html">DAS
+						Java</a></td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">4</font></b></td><td width="596"><b><font color="#004566"> Download Tuscany SCA / SDO / DAS and set it up </font></b></td>
+			
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">Having chosen
+			a technology (SCA/SDO/DAS), a language and a platform, you can
+			download and setup the latest releases of these from the 
+following links: -<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4">
+						<span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V096.pdf?version=1"
+							title="SCA_AssemblyModel_V096.pdf attached to Service Component Architecture Specifications"></a></span></a><a
+							href="sca_downloads.html">Tuscany
+						SCA Downloads</a><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4"></a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="sdo_downloads.html">Tuscany
+						SDO Downloads</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/287/Next-Gen-Data-Programming-Whitepaper.pdf?version=1"
+							title="Next-Gen-Data-Programming-Whitepaper.pdf attached to SDO Resources"></a></span><a
+							href="das_downloads.html">Tuscany
+						DAS Downloads</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			Alternatively, you can also download the current source code that is
+			under development from the Apache Tuscany Subversion Repository and
+			build them yourself. For details on downloading the source and
+			building it go to <a href="building_source.html">Building Tuscany
+			Source Distribution</a></td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">5</font></b></td><td width="596"><b><font color="#004566"> Try out the Samples</font></b></td>
+			
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">Now that you have set up
+			Tuscany SCA / SDO / DAS, its about time to get your hands dirtry by
+			trying out the samples packaged under each. Each of the samples have
+			a readme.html that explains the purpose of the sample i.e. what it
+			intends to demonstrate, how to set it up and get it running.<br />
+			<br />
+			If you have been successful in running the samples, a good step
+			forward would be to modify the samples as you like and retry them to
+			get a feel of the Tuscany implementation of the technology (SCA / SDO
+			/ DAS).</td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td width="5%" align="center"><b><font color="#004566">6</font></b></td><td width="596"><b><font color="#004566">Start using Tuscany </font></b></td>
+			
+		</tr>
+		<tr bgcolor="#f8f8f8">
+			<td width="32"></td>
+			<td width="596">If you have reached this far, then is probably time that you built your own ground-up applications around Tuscany's infrastructures.  You could also try extending the infrastructures.  To guide you in this there are documentations available in the respective technology areas in this website as follows:<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4">
+						<span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V096.pdf?version=1"
+							title="SCA_AssemblyModel_V096.pdf attached to Service Component Architecture Specifications"></a></span></a><a
+							href="sca_documentation.html">Tuscany
+						SCA Documentation</a><a
+							href="http://www.osoa.org/download/attachments/35/SCA_AssemblyModel_V095.pdf?version=4"></a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><a
+							href="sdo_documentation.html">Tuscany
+						SDO Documentation</a></td>
+					</tr>
+					<tr>
+						<td width="10"></td>
+						<td width="567" bgcolor="#fffff4"><span class="nobr"><a
+							href="http://www.osoa.org/download/attachments/287/Next-Gen-Data-Programming-Whitepaper.pdf?version=1"
+							title="Next-Gen-Data-Programming-Whitepaper.pdf attached to SDO Resources"></a></span><a
+							href="das_documentation.html">Tuscany
+						DAS Documentation</a></td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><br /></p>
+
+</section>
+
+    </body>
+</document>
+
+
+
+
+
+

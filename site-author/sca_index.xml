@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany SCA</title>
+       <bannertitle>Tuscany SCA</bannertitle>
+       <tab>sca</tab>
+    </properties>
+    <body>
+        <section name="Service Component Architecture - Overview">
+            <p> SCA provides developers with a simple, business-oriented, model for creating systems based on a service oriented 
+                architecture. It manages infrastructure complexities such as transactions, security and reliable 
+                messaging and frees the developer to focus on providing business function. The solutions developed 
+                using SCA can be changed declaratively to alter infrastructure capabilities or application configuration 
+                properties to meet changing business requirements. For example, infrastructure capabilities such as 
+                security policies may change from one environment to another and can be changed without the need for 
+                re-implementation. Application configuration may also be changed in this way, for example, the currency 
+                quoted by a stock quote feed may be changed though the SCA configuration mechanism.</p>
+
+           <p> SCA divides up the steps in building a service-oriented application into two major parts:</p>
+           <br/>
+           <p>* The Implementation of components which provide services and consume other services. SCA supports 
+              service implementations written using any one of many programming languages, both including conventional 
+              object-oriented and procedural languages such as Javatm, PHP, C ++. XML-centric languages such as BPEL 
+              and XSLT, and also declarative languages such as SQL and XQuery. SCA also supports a range of programming
+              styles, including asynchronous and message-oriented styles, in addition to the synchronous 
+              call-and-return style.</p>
+           <p>* The Assembly of sets of components to build composite business applications that addresses specific 
+              business requirements. This is performed by wiring together the service implementation components. </p>
+
+           <div align="center">
+		   <br/>
+		   Click on the diagram for more information.
+		   <br/><br/>
+           <img src ="images/SCAComposite.png" alt="SCA Composite" usemap ="#scaMap" border="0" />
+		   
+		   </div>
+
+<map name="scaMap">
+  <area shape ="rect" coords ="75,0,170, 55" href ="sca-interface.html" alt="Interface" />
+  <area shape ="rect" coords ="410,0,505,55" href ="sca-interface.html" alt="Interface" />
+
+  <area shape ="rect" coords ="75,222,160,308" href ="sca-binding.html" alt="Binding" />
+  <area shape ="rect" coords ="425,222,511,308" href ="sca-binding.html" alt="Binding" />
+
+  <area shape ="rect" coords ="245,222,330,308" href ="sca-implementation.html" alt="Implementation" />
+
+  <area shape ="rect" coords ="108,178,130,187" href ="sca-wire.html" alt="Wire" />
+  <area shape ="rect" coords ="280,178,305,187" href ="sca-wire.html" alt="Wire" />
+  <area shape ="rect" coords ="455,178,480,187" href ="sca-wire.html" alt="Wire" />
+
+  <area shape ="rect" coords ="145,105,260,170" href ="sca-component.html" alt="Component A" />
+  <area shape ="rect" coords ="320,105,435,170" href ="sca-component.html" alt="Component B" />
+
+  <area shape ="rect" coords ="0,105,105,170" href ="sca-service.html" alt="Service" />
+  <area shape ="rect" coords ="475,105,580,170" href ="sca-reference.html" alt="Reference" />
+
+  <area shape ="rect" coords ="245,0,307,22" href ="sca-property.html" alt="Property" />
+
+  <area shape ="rect" coords ="60,60,525,215" href ="sca-composite.html" alt="Composite" />
+
+</map>
+        </section>
+    </body>
+</document>

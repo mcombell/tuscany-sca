@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany DAS</title>
+       <bannertitle>Tuscany DAS</bannertitle>
+       <author email="luckbr1975@gmail.com">Luciano Resende</author>
+       <tab>das</tab>
+    </properties>
+    <body>
+
+        <section name="Data Access Service - Overview">
+			<p>RDB DAS provides robust a generic data access service that provides
+			transformation capability between SDO data graphs and relational databases and
+			vise versa. </p>
+			
+			<p>By using RDB DAS, applications developers avoid the details and complications 
+			of working directly with a relational database and also the complex transformation 
+			between relational rows/columns and Data Object types/properties.
+			</p>
+			
+			<p>RDB DAS works with SDO to improve your data access performance.The RDB DAS 
+			processes the SDO change summary and produces efficient update statements 
+			that only write to columns that have actually been modified.			
+			</p>
+			
+			
+			<p>The following diagram illustrates these two capabilities in
+			a typical client interaction.The client
+			starts by reading a graph of data specified by some query.The client then makes modifications to the
+			graph, possibly by adding elements, and then requests the DAS to push the
+			changes back to the database.</p>
+			
+			<img src ="images/sdo_das_sm.jpg" alt="DAS Capabilities" align="middle" border="0" height="407" width="600"/>
+			
+			<p>To further explore the benefits of DAS please refer to white
+			paper &quot;DAS White Paper: The Data Access Service&quot; on the <a
+			href="documentation.html">Documentation
+			page</a>.</p>
+        </section>
+
+       <section name="General DAS Documentation">
+	               <p>Below, there is a list of various links to documents that help to explain various aspects of the
+		       Tuscany DAS subproject and the programming model that it provides.  More general documentation 
+		       which applies to the Tuscany project as a whole can be found on the
+		       <a href="documentation.html">Tuscany Documentation page</a>.
+		      </p>
+		      
+                      <p>
+		      <table class="bodyTable">
+			 <tr class="b">
+			    <td>
+			       <span style="font-weight: bold;">Title</span>
+			    </td>
+			    <td>
+			       <span style="font-weight: bold;">Description</span>
+			    </td>
+			 </tr>
+
+			 <tr class="b">
+			    <td>
+			       <a href='RDB_DAS_white_paper_v-0.2.pdf' target='_blank'>DAS White Paper: The Data Access Service</a>
+			    </td>
+			    <td>
+			       How to access relational data in terms of Service Data Objects
+			    </td>
+			 </tr>
+
+			 <tr class="b">
+			    <td>
+			       <a class="external" rel="nofollow" href='http://java.sys-con.com/read/260053.htm'>JDJ DAS Article</a>
+			    </td>
+			    <td>
+			       How to access relational data in terms of Service Data Objects
+			    </td>
+			 </tr>	            
+		      </table>	    
+                      </p>
+    </section>
+
+    </body>
+</document>

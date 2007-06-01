@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Binding</bannertitle>
+    </properties>
+    <body>
+        <section name="Binding">
+           <p> Bindings are used by external services and entry points. External services use bindings to describe 
+               the access mechanism used to call an external service (which can be a service provided by another 
+               SCA module). Entry points use bindings to describe the access mechanism that clients 
+               (which can be a client from another SCA module) have to use to call the service published by the 
+               entry point.
+           </p>
+           <p> SCA supports the use of multiple different types of bindings.  Examples include SCA service, 
+               Web service, stateless session EJB, data base stored procedure, EIS service. An SCA runtime 
+               must provide support for SCA service and Web service binding types.  SCA provides an extensibility 
+               mechanism by which an SCA runtime can add support for additional binding types. For details on how 
+               additional binding types are defined, see the section on the Extension Model.
+           </p>
+
+        </section>
+    </body>
+</document>
+

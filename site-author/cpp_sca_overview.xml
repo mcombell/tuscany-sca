@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany</title>
+        <bannertitle>Welcome to Tuscany</bannertitle>
+        <tab>sca</tab>
+    </properties>
+    <body>
+        <section name="Tuscany Service Component Architecture - C++">
+            <H2>The Tuscany SCA C++ Project</H2>
+
+            <P>This page provides a high-level overview of the C++ SCA (Service Component 
+            Architecture) subproject of the Apache Tuscany incubator project.</P>
+
+        </section>
+        <section name="SCA C++ Overview">
+            <p>Tuscany SCA C++ is an implementation of the
+                <a href="http://www.osoa.org/download/attachments/35/SCA_ClientAndImplementationModelforCpp_V0.95.pdf?version=1">Service 
+                Component Architecture specification for C++ developers</a>
+                . To try it out, we recommend using the SCA C++ Milestone release 2 available 
+                from our
+                <A HREF="http://incubator.apache.org/tuscany/downloads.html" target='_blank'>downloads 
+                page</A>
+                . Alternatively, if you would like to work with the latest (possibly unstable) 
+                SCA C++ code, follow the
+                <a href="cpp-projects.html">general instructions</a>
+                for downloading and building SCA C++ from the Tuscany SVN repository.</p>
+            <h3>SCA C++ Documents</h3>
+            <table>
+                <tr>
+                    <td>
+                        <a href="http://www.osoa.org/download/attachments/35/SCA_ClientAndImplementationModelforCpp_V0.95.pdf?version=1">SCA 
+                        specification for C++ developers V0.95</a>
+                    </td>
+                    <td>The Service Component Architecture specification for C++ describes the SCA 
+                    Client and Implementation Model for the C++ programming language.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="http://www.osoa.org/display/Main/SCA+Resources">SCA Specification 
+                        Resources</a>
+                    </td>
+                    <td>Various papers that explain the SCA programming model</td>
+                </tr>
+            </table>
+        </section>
+        <section name="Getting Started with the SCA C++ Milestone release 2">
+            <P>If you haven't already done so, the first step is to download the SCA C++ 
+            Milestone release 2 of Apache Tuscany from our
+                <A HREF="http://incubator.apache.org/tuscany/downloads.html" target='_blank'>downloads 
+                page</A>
+                .</P>
+            <P>Please follow the 
+                <A HREF="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-1.0-incubating-M2-final/sca/GettingStarted.html">Getting 
+                Started</A>
+                information (also found within the download packages) to begin using Tuscany SCA 
+                C++</P>
+
+            <A NAME="help">
+                <H3>Getting Help</H3>
+            </A>
+
+            <P>First place to look is at the Tuscany FAQ at
+                <A HREF="faq.html" TARGET="_blank">Tuscany FAQ</A>
+            </P>
+
+            <P>Any problem with this release can be reported to the Tuscany
+                <A HREF="mail-lists.html" TARGET="_blank">Mailing 
+Lists</A> or create a JIRA issue at
+                <A HREF="http://issues.apache.org/jira/browse/Tuscany"
+    TARGET="_blank">Tuscany JIRAs</A>
+                .</P>
+
+        </section>
+    </body>
+</document>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+ <document > <!-- this is useful to both Java and C++ -->
+    <properties>
+       <title>Tuscany Maven Quick Introduction</title>
+       <bannertitle>Tuscany Maven Quick Introduction</bannertitle>
+    </properties>
+        <body>
+                        
+        <section name="Using Subversion (Command Line)">
+        <p>
+                You can download Subversion from 
+                <script type="text/javascript">linkNewWindow('http://subversion.tigris.org/','http://subversion.tigris.org/');</script>.
+        </p>
+        <p>
+                Subversion Reference manual ("the book") is located at 
+                <script type="text/javascript">linkNewWindow('http://svnbook.red-bean.com/','http://svnbook.red-bean.com/');</script>.
+        </p>
+        <p>
+        <span style="font-size: 10pt;">
+                If you use Eclipse as your development environment, there is a plugin available
+                which enables you to use Subversion from within Eclipse (ie it is a Subversion
+                client for Eclipse).  This plugin is called Subclipse and it is located at:
+                <script type="text/javascript">linkNewWindow('http://subclipse.tigris.org/','http://subclipse.tigris.org/');</script>
+                </span>
+                </p>
+                <p style="margin-right: -0.25in;">
+                <span style="font-size: 10pt;">
+                If you use Windows on your systems, there is also a graphical client implemented as an
+                        extension to the Windows shell, called TortoiseSVN:
+                                        <span style="" />
+                                        http://tortoisesvn.tigris.org/
+                                </span>
+                        </p>
+                        <span style="font-size: 14pt;">
+                                        Common Commands for Subversion
+                        </span>
+                        <p>Create a directory called tuscany and check out the project.
+                                <p>
+                                <b style="">
+                                        <i style="">To check out the Java project:</i>
+                                </b>
+                                </p>
+                        </p>
+                        <pre>
+Committers:                        
+svn co https://svn.apache.org/repos/asf/incubator/tuscany/java
+Non-Commiters:
+svn co http://svn.apache.org/repos/asf/incubator/tuscany/java
+                        </pre>
+                        <p>
+                                <b style="">
+                                        <i style="">To check out the C++ project:</i>
+                                </b>
+                        </p>
+                        <pre>
+Committers:                        
+svn co https://svn.apache.org/repos/asf/incubator/tuscany/cpp
+Non-Commiters:
+svn co http://svn.apache.org/repos/asf/incubator/tuscany/cpp
+                        </pre>
+                        <p>
+                                If it worked, you will see all the files as they
+                                checkout followed by a revision number - this is the
+                                version of the tree that you have (useful for comparing notes)
+                        </p>
+                        <p>
+                                <b style="">
+                                        <i style="">
+                                                To update your copy with other's people's committed changes:
+                                        </i>
+                                </b>
+                        </p>
+                        <pre>
+svn update
+                        </pre>
+                        <p>
+                                <b>
+                                        <i>To manipulate files in various ways:</i>
+                                </b>
+                        </p>
+                        <pre>
+svn add
+
+svn move
+
+svn remove
+
+svn diff
+                        </pre>
+                        <p>
+                                <b>
+                                        <i>To commit changes go to the root and:</i>
+                                </b>
+                        </p>
+                        <pre>
+svn commit -m"change comment"
+                        </pre>
+                        <p>
+                                This will commit the entire tree and display the new
+                                revision number. You can also commit sub-trees and
+                                individual files but this is not normal.
+                        </p>
+                        <p>
+                                <b>
+                                        <i>To undo changes:</i>
+                                </b>
+                        </p>
+                        <pre>svn revert ${file}</pre>
+                        <pre>svn revert -R ${directory}
+                        </pre>
+                        <p>
+                                <b>
+                                        <i>To see what has changed locally:</i>
+                                </b>
+                        </p>
+                        <pre>svn status</pre>
+                        <p style="margin-left: 0.5in;">
+                                <b>
+                                        <i>Results:</i>
+                                </b>
+                        </p>
+                        <p>
+                                A means a file has been added locally
+                        </p>
+                        <p>
+                                D means a file has been deleted locally
+                        </p>
+                        <p>
+                                M means a file has been modified locally
+                        </p>
+                        <p>
+                                ? means a file exists locally that is not being managed
+                                by svn.
+                                <span style="" />
+                                Typically this means you forgot to add it with
+                                <span style="font-family: Courier;">svn add</span>
+                                .
+                        </p>
+                        <p style="margin-left: 1in;">
+                                ! means a file that was being managed by svn no longer
+                                exists locally.
+                                <span style="" />
+                                Typically this means you didn't delete it using svn
+                                remove.
+                        </p>
+                </section>
+
+        </body>
+</document>

@@ -1,0 +1,55 @@
+.topbar .menu{
+	background-image:url("images/TitleC.png");
+	font-size: 0pt;
+}
+
+.navbarHead {
+	font-family: Gourmand;
+	font-size: 10pt;
+        color: #404000;
+        font-weight: bold;
+
+}
+        
+.navbarHead a{
+        
+        padding-left: 12px 
+        }
+
+
+.navbar{
+	font-family: TimesNewRoman;
+	font-size: 8pt;
+}
+
+.navbar a {
+	text-decoration: none;
+	color: #656565;
+	font-size: 10pt;
+	padding-left: 5px ;  
+}
+.navbar a:hover {
+	color: #006602;
+        text-decoration: underline;
+}
+
+.content {
+	font-family: Arial, Helvetica;
+	font-size: 12px;
+}
+.content .title a {
+        font-family: Gourmand;
+	text-decoration: none;
+	color: #404000;
+        font-weight: bold;
+        font-size: 10pt;
+}
+
+
+.copyright {                                               
+	font-family: Arial, Helvetica;
+	font-size: 10px;
+	text-align: center;
+	padding: 10px;
+}
+

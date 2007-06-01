@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Wire</bannertitle>
+    </properties>
+    <body>
+        <section name="Wire">
+<p>
+SCA wires within a composite connect references to services. Valid references are component references and composite services. Valid services are component services and composite references. 
+</p>
+<p>
+If the component or service that is the source of the wire is defined in the same composite file or the same partial composite file as the wire, then wires are defined by configuring references of components or reference elements of services. References are configured with the wire-target-URI of the service that resolves the reference.
+</p>
+        </section>
+    </body>
+</document>

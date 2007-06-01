@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Welcome to Tuscany</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Service Component Archetecture- Java">
+ <p>Desciption of SCA Java system. </p>
+  <br/>
+			<div align="center">
+              <img src ="./images/SCA-Java.png" alt="Tuscany Overview" usemap="#tuscany_overview" border="0" />
+			 </div>
+			  
+              <map name="tuscany_overview">
+                <area shape="rect" coords="1,74,108,290" href="das_index.html" target=""/>
+                <area shape="rect" coords="111,74,206,287" href="sdo_index.html" target=""/>
+                <area shape="rect" coords="208,33,620,335" href="sca_index.html" target=""/>
+                <area shape="rect" coords="620,32,859,333" href="tools_index.html" target=""/>
+              </map>
+ 
+    </section>
+  </body>
+</document>

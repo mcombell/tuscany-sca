@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Create a patch</title>
+       <bannertitle>Create a patch</bannertitle>
+    </properties>
+    <body>
+                <section name='Creating and Submitting a Patch'>
+                        Thank you for helping Tuscany project. Here are the steps to follow to create and submit a patch.
+                        <ul>
+                                <li>
+                                
+                                        <b> Check out the latest version </b> of source code from Subversion.
+                                If you have a version checked out already,
+                                do a fresh update before you make your changes. 
+                                
+                                
+                                <p>
+                                You can find information about how to setup development environment <a href="./java-projects.html"> for Java </a> or <a href="./cpp-projects.html"> for C++ </a> here. 
+                                </p>
+                                </li>
+                               
+                                <li> 
+                                
+                                        Please do a <b>full build with all tests enabled </b>. Try the following for Java projects:
+                                <p> 
+                                <code>
+                                 
+                                         maven -o clean new
+                                 </code>
+                                </p>
+                                </li>
+                         
+                                <li>
+                                
+                                         <b>Confirm</b> that the problem is actually fixed and include a test case in the patch where possible.
+                                 
+                                 </li>
+                                 
+                                 <li>
+                                 
+                                         <b>Generate a patch</b> by issuing the following command from tuscany directory.   
+                                 <p>
+                                 <code>
+                                         svn diff File &gt;&gt; patchfile
+                                 </code>
+                                 </p><p>
+                                  Please try to give your patch files meaningful names. This helps the developer
+                                  who applies a number of different patches. A recommendation is to use the JIRA 
+                                  issue number as part of patch file name. For example
+                                 </p>
+                                 <p> 
+                                 <code>
+                                          svn diff File &gt;&gt; File312
+                                  </code>
+                                  <br></br>
+                                  In this example, the number 312 is a JIRA issue number associated with this patch.
+                                 </p>
+                                
+                                </li>
+                        
+                                <li> 
+                                         Add your patch file as an attachment to the JIRA issue that it is fixing. 
+                                <p>
+                                        Please include detailed steps to reproduce the problem in the issue description 
+                                        so that the patch can be properly verified after it is applied.
+                                </p>
+                        </li>
+                        <li>
+                                Thank you! Your patch will be picked up for review. 
+                        </li>
+                </ul>
+                </section>
+    </body>
+</document>

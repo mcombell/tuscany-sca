@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany Documentation</title>
+        <bannertitle>Tuscany Documentation</bannertitle>
+    </properties>
+    <body>
+        <section name='Extensions'>
+            <p>This page provides links to a set of documents that help to explain various 
+            aspects of the Tuscany project and the SOA programming model that it provides (initially 
+            the SCA and SDO specifications).  There are also links to the OSOA 
+            specifications that the Tuscany Projects are based upon. </p>
+            <table class="bodyTable">
+                <tr>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td width="231" valign="top" bgcolor="#dbdbdb">
+                                        <b>
+                                            <font color="#002953">Title</font>
+                                        </b>
+                                    </td>
+                                    <td width="387" valign="top" bgcolor="#dbdbdb">
+                                        <b>
+                                            <font color="#002953">Description</font>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="250" valign="top">
+                                        <font color="#000000" face="arial,helvetica,sanserif" size="-1">
+                                            <a href="ExtendingTuscany.pdf" target="_blank">Extending Tuscany</a>
+                                        </font>
+                                    </td>
+                                    <td width="387">
+                                        <font color="#000000" face="arial,helvetica,sanserif" size="-1">Describes how to 
+                                        extend Tuscany by contributing a new implementation/binding type</font>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section name='Specification'>
+            <table>
+                <tr>
+                    <td>Tuscany is an implementation of the SCA and SDO Specifications being 
+                    developed by the
+                        <a
+                                       href="http://www.osoa.org">OSOA Collaboration</a>
+                        The current implementation is based on the following specifications:</td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>
+                                <a
+                                                    href="http://www.osoa.org/display/Main/Service+Component+Architecture+Specifications">OSOA 
+                                                    - Service Component Architecture Specifications</a>
+                            </li>
+                            <li>
+                                <a
+                                                    href="http://www.osoa.org/display/Main/Service+Data+Objects+Specifications">OSOA - 
+                                                    Service Data Objects Specifications </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>There are also other useful documentations such as white papers that you can 
+                    find on the
+                        <a href="http://www.osoa.org">OSOA Collaboration</a>
+                        site.</td>
+                </tr>
+
+            </table>
+        </section>
+        <section name='Presentations and Articles'>
+            <table>
+                <tr>
+                    <td>This section provides links to  presentations, webinars, articles that help 
+                    you understand SCA and SDO</td>
+                </tr>
+            </table>
+        </section>
+        <section name='Tuscany Wiki'>
+            <table>
+                <tr>
+                    <td>There are other documentation that can be found 
+on the <a href="http://cwiki.apache.org/confluence/display/TUSCANY/Index">Tuscany Wiki </a></td> </tr>
+            </table>
+        </section>
+    </body>
+</document>
+

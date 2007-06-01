@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany DAS Releases</title>
+        <bannertitle>Welcome to Tuscany DAS Releaases</bannertitle>
+        <tab>das</tab>
+    </properties>
+    <body>
+
+        <section name="DAS M2 release - Key features">
+
+            <p>Tuscany DAS is an implementation of a DAS RDB (relational database) with 
+            following key features :</p>
+            <ul>
+                <li>DAS Core features</li>
+                <ul>
+                    <li>
+                        <p>MySQL support</p>
+                    </li>
+                    <li>
+                        <p>Static Data Objects</p>
+                    </li>
+                    <li>
+                        <p>Dynamic root for static graphs</p>
+                    </li>
+                    <li>
+                        <p>"Unique" attribute on relationships</p>
+                    </li>
+                    <li>
+                        <p>Explicit ResultSet shape definition</p>
+                    </li>
+                    <li>
+                        <p>Improved logging</p>
+                    </li>
+                    <li>
+                        <p>Programmatic Configuration</p>
+                    </li>
+                    <li>
+                        <p>Helper for empty SDO Graph</p>
+                    </li>
+                    <li>
+                        <p>Convention over configuration</p>
+                    </li>
+                    <ul>
+                        <li>
+                            <p>Column named "ID" is the PK</p>
+                        </li>
+                        <li>
+                            <p>Column named "xxx_ID" is the FK to table "xxx"</p>
+                        </li>
+                    </ul>
+                </ul>
+                <li>DAS Samples</li>
+                <ul>
+                    <li>
+                        <p>Tomcat integration and automated DAS samples testing (htmlUnit)</p>
+                    </li>
+                    <li>
+                        <p>DAS Samples now have all dependencies and source code inside the sample war</p>
+                    </li>
+                </ul>
+            </ul>
+            <p>
+                <br />
+                To download DAS M2 Release go to 
+                <a href="das_downloads.html">das downloads</a>
+                page</p>
+
+            <p>You can also look at our
+                <a class="external" rel="nofollow" href="http://wiki.apache.org/ws/Tuscany/TuscanyJava/DAS_Java_Overview">Tuscany 
+                DAS Wiki</a>
+                for more updated and live information. .</p>
+
+        </section>
+
+        <section name="DAS M1 release - Key features">
+
+            <p>Tuscany DAS is an implementation of a DAS RDB (relational database) with 
+            following key features :</p>
+            <ul>
+                <li>
+                    <p>RDB CRUD operations in terms of SDO DataObjects</p>
+                </li>
+                <li>
+                    <p>Optimistic concurrency control</p>
+                </li>
+                <li>
+                    <p>Generated database IDs</p>
+                </li>
+                <li>
+                    <p>Stored procedures</p>
+                </li>
+                <li>
+                    <p>Paging API</p>
+                </li>
+                <li>
+                    <p>1..1 and 1..n relationships</p>
+                </li>
+                <li>
+                    <p>Partial row updates
+                        <br />
+                    </p>
+                </li>
+            </ul>
+            <p>To download DAS M1 Release go to 
+                <a href="das_downloads.html">das downloads</a>
+                page</p>
+        </section>
+    </body>
+</document>
+

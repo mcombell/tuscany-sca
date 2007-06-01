@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Releases</title>
+       <bannertitle>Welcome to Tuscany Releases</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Releases">
+ <p></p><p>This page provides information about the various Tuscany Releases. Tuscany has, upto now made two milestone release of each of SCA, DAS and SDO. While Milestone 1 (M1) was released with SCA, SDO and DAS bundled together, the Milestone 2 (M2) release of SCA, SDO and DAS is indenpendent of each other. To know more about the release go to the following links: -</p>
+<table border="0" width="100%">
+	<tbody>
+		<tr>
+			<td width="12"></td>
+			<td width="616"><a href="sca_releases.html">SCA Releases</a></td>
+		</tr>
+		<tr>
+			<td width="12"></td>
+			<td width="616"><a href="sdo_releases.html">SDO Releases</a></td>
+		</tr>
+		<tr>
+			<td width="12"></td>
+			<td width="616"><a href="das_releases.html">DAS Releases</a></td>
+		</tr>
+	</tbody>
+</table>
+</section>
+  </body>
+</document>
+
+

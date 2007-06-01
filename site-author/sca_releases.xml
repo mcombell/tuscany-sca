@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany SCA Releases</title>
+        <bannertitle>Welcome to Tuscany SCA Releases</bannertitle>
+        <tab>das</tab>
+    </properties>
+    <body>
+
+        <section name="SCA M2 Release">
+
+
+            <p>* SCA specification compliance.  Assembly (V0.96), Java Client and 
+            Implementation(V0.95):</p>
+
+            <ul>
+                <li>Recursive composite model (implementation.composite and include)</li>
+
+                <li>Support for component properties (simple types only)</li>
+
+                <li>Asynchronous oneway and request with callback</li>
+
+                <li>Java interface and WSDL 1.1 portType</li>
+            </ul>
+
+            <p>* Improved core for flexibility and extensibility</p>
+
+            <ul>
+                <li>Refactored to provide the default implementation of the SPI contracts</li>
+
+                <li>Packaging/deployment</li>
+
+                <li>Scope management</li>
+
+                <li>IoC</li>
+
+                <li>Autowire</li>
+
+                <li>Improved classloader isolation</li>
+
+                <li>Maven-based artifact repository</li>
+
+                <li>A Data Binding Framework</li>
+            </ul>
+
+            <p>* Improved Extension model and SPI</p>
+
+            <p>* Tuscany Standalone runtime launcher</p>
+
+            <p>* Tomcat integration to host Tuscany web applications</p>
+
+            <p>* Tuscany War Plugin to build web applications</p>
+
+            <p>* New and improved bindings:</p>
+
+            <ul>
+                <li>Axis, upgraded to version 1.1</li>
+
+                <li class="gap">Celtix</li>
+
+                <li class="gap">RMI Service Binding that helps in hosting component services as 
+                RMI servers without having to modify the service interfaces (for example to 
+                include java.rmi.Remote signatures) Reference Binding that helps SCA clients to 
+                seamlessly access RMI servers.</li>
+
+                <li class="gap">Jsonrpc</li>
+            </ul>
+
+            <p>* Component implementation:</p>
+
+            <ul>
+                <li>Javascript
+                    <br/>
+                    Script container that enables running of components implemented in 
+                    <a class="nonexistent" href=
+                       "http://wiki.apache.org/ws/JavaScript">JavaScript</a>
+                    . Supports component services, properties and references.</li>
+
+                <li class="gap">Spring</li>
+
+                <li class="gap">Ruby
+
+                    <ul>
+                        <li style="list-style-type: none;">Script container that enables running of 
+                        components implemented in Ruby. Supports component services, properties and 
+                        references.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <p>* DataBindings:</p>
+
+            <ul>
+                <li>AXIOM</li>
+
+                <li class="gap">SDO
+                    <br/>
+                </li>
+            </ul>
+
+            <p>* More samples</p>
+
+            <ul>
+                <li>Sample that demonstrates RMI Service and RMI Reference from a standalone 
+                Tuscany runtime</li>
+
+                <li>A combo sample - Calculator-Combo that demonstrates the assembly of 
+                different technologies using component implementations in Java, 
+                    <a class="nonexistent" href=
+                       "http://wiki.apache.org/ws/JavaScript">JavaScript</a>
+                    , Ruby and binding of service references to 
+                    <a class="nonexistent" href=
+                       "http://wiki.apache.org/ws/WebService">WebService</a>
+                    and RMI Service endpoints. Also included is a simple demontration of property 
+                    configuration and composite component implementation</li>
+            </ul>
+            <p>To download SCA M2 Release go to 
+               <a href="sca_downloads.html">sca downloads</a>
+               page</p>
+
+
+
+        </section>
+    </body>
+</document>
+

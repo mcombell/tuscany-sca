@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany SCA Downloads</title>
+        <bannertitle>Tuscany SCA Downloads</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany SCA Downloads">
+
+            <p>This section provides information on downloads related to Tuscany SCA</p>
+            <p>For more information about the contents of each SCA Release, please see : <a href="sca_releases.html">SCA Release Contents</a></p>
+ 
+        <table border="0" width="100%">
+	<tbody>
+		<tr bgcolor="#e0e0c2">
+			<td align="center" ><b><font color="#804040" face="Gourmand" 
+size="-1">SCA Java - Releases</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left" width="100%"><i><font color="#00254a"><b> </b><b>&gt;Incubating-M2
+			(Dec 22nd, 2006) </b></font></i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="center" width="100%">
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany M2 SCA</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-bin.tar.gz">tuscany-sca-1.0--incubator-M2-bin.tar.gz</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany M2 SCA</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-src.tar.gz">tuscany-sca-1.0--incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Linux<br />
+						Source</font></td><td align="center" width="287">Tuscany M2 SCA Samples</td><td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-samples.tar.gz">tuscany-sca-1.0--incubator-M2-samples.tar.gz</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-samples.tar.gz.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Linux<br />Source</font></td>
+						<td align="center" width="287">Tuscany Commonj Specs</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-src.tar.gz">tuscany-spec-commonj-1.1-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-src.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Linux<br />Source</font></td>
+						<td align="center" width="287">Tuscany SCA Specs.r.0.95</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-src.tar.gz">tuscany-spec-sca-r0.95-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-src.tar.gz.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Windows<br />Binary</font></td>
+						<td align="center" width="287">Tuscany M2 SCA</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-bin.zip">tuscany-sca-1.0-incubator-M2-bin.zip</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+						
+						
+						
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Windows<br />Source</font></td>
+						<td align="center" width="287">Tuscany M2 SCA</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-src.zip">tuscany-sca-1.0-incubator-M2-src.zip</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Windows<br />Source</font></td>
+						<td align="center" width="287">Tuscany M2 SCA Samples</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-samples.zip">tuscany-sca-1.0--incubator-M2-samples.zip</a></td>
+						<td align="center" width="66"></td>
+						<td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-samples.zip.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany Commonj Specs</td><td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-src.zip">tuscany-spec-commonj-1.1-incubator-M2-src.zip</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-src.zip.asc">PGP</a></td>
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">Windows<br />
+						Source</font></td><td align="center" width="287">Tuscany SCA Specs.r.0.95</td><td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-src.zip">tuscany-spec-sca-r0.95-incubator-M2-src.zip</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-src.zip.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60" valign="middle"><font face="Gourmand" size="-2">JavaDocs<br />Archive</font></td>
+						<td align="center" width="287">Tuscany M2 SCA Javadocs</td>
+						<td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-javadoc.zip">tuscany-sca-1.0-incubator-M2-javadoc.zip</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-sca-1.0-incubator-M2-javadoc.zip.asc">PGP</a></td>
+						
+						
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font face="Gourmand" size="-2">JavaDocs<br />
+						Archive
+						</font></td><td align="center" width="287">Tuscany 
+Commonj Specs</td><td align="center" width="414"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-javadoc.zip">tuscany-spec-commonj-1.1-incubator-M2-javadoc.zip</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-commonj-1.1-incubator-M2-javadoc.zip.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">JavaDocs<br />
+						Archive</font></td><td align="center" width="287">Tuscany SCA Specs.r.0.95</td><td align="center" width="414"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-javadoc.zip">tuscany-spec-sca-r0.95-incubator-M2-javadoc.zip</a></td><td align="center" width="66"></td><td align="center" width="64"><a href="http://people.apache.org/dist/incubator/tuscany/java/sca/1.0-incubator-M2/tuscany-spec-sca-r0.95-incubator-M2-javadoc.zip.asc">PGP</a></td>
+						
+						
+						
+						
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><b><font color="#00254a">&gt;Incubating-M1 (June 7th,
+			2006)</font></b></i><br />
+			<i>Note</i>
+			: <i>This is a single package release containing SDO and DAS 
+besides SCA.</i>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left">
+			<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td bgcolor="white" width="100%" align="center">
+						<table border="0" width="100%" bgcolor="#f7f7f7">
+							<tbody>
+								<tr bgcolor="#f7f7f7">
+									<td align="center" width="10%"></td>
+									<td align="center" width="32%"><b><i>Description</i></b></td>
+									<td align="center" width="46%"><b><i>Download link</i></b></td>
+									<td align="center" width="7%"><b><i>MD5</i></b></td>
+									<td align="center" width="7%"><b><i>PGP</i></b></td>
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="64"><font
+										face="Gourmand" size="-2">Linux<br />
+									Binary</font></td>
+									<td align="center" width="287">Tuscany M1 SCA</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz">tuscany-incubating-M1.tar.gz</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Linux<br />
+									Source</font></td>
+									<td align="center" width="287">Tuscany M1 SCA</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz">tuscany-incubating-M1-src.tar.gz</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Windows<br />
+									Binary</font></td>
+									<td align="center" width="287">Tuscany M1 SCA</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip">tuscany-incubating-M1.zip</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Windows<br />
+									Source</font></td>
+									<td align="center" width="287">Tuscany M1 SCA</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip">tuscany-incubating-M1-src.zip
+									</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.asc">PGP</a></td>
+
+
+								</tr>
+							</tbody>
+						</table>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SCA 
+Java - Development</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td>
+ Apache Tuscany source code, documentation and web site are managed under version control using Subversion in
+ 
+			<a href='http://svn.apache.org/repos/asf/incubator/tuscany' target='_blank'>Tuscany Subversion Repository</a>
+			. The source for the SCA Java project can be found at <a
+				href="http://svn.apache.org/repos/asf/incubator/tuscany/java/sca"
+				
+target="_blank">http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</a>. Please lookup <a href='building_source.html'>Building Tuscany Source Code</a> on how to download and build Tuscany SCA Java</td> </tr>
+	</tbody>
+</table>
+<p><br /></p>
+<table border="0" width="100%">
+	<tbody>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SCA 
+C++ - Releases</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><font color="#00254a"><b> </b><b>&gt;Incubating-M2
+			(Nov 3rd, 2006) </b></font></i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="center" width="100%">
+
+
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz">tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz">tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sca_cpp-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip">tuscany_sca_cpp-1.0-incubator-M2-bin.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip">tuscany_sca_cpp-1.0-incubator-M2-src.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sca_cpp-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><b><font color="#00254a">&gt;Incubating-M1 (August 1st, 2006)</font></b></i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0" width="100%">
+			<td align="center" width="100%">
+
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz">tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-bin.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz">tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sca_cpp-0.1.incubating-M1-src.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip">tuscany_sca_cpp-0.1.incubating-M1-bin.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-bin.zip.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SCA C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip">tuscany_sca_cpp-0.1.incubating-M1-src.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sca_cpp-0.1.incubating-M1-src.zip.asc">PGP</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SCA 
+C++ - Development</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td>Apache Tuscany source code, documentation and web site are managed under version control using Subversion in
+ 
+			<a href="http://svn.apache.org/repos/asf/incubator/tuscany"
+				target="_blank">Tuscany Subversion Repository</a>
+			. The source for the SCA Java project can be found at <a href="http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca"
+target="_blank">http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sca
+</a>. Please lookup <a href='building_source.html'>Building Tuscany Source Code</a> on how to download and build Tuscany SCA C++</td> </tr>
+	</tbody>
+</table>
+</section>
+
+    </body>
+</document>
+
+
+
+

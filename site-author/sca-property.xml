@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany</title>
+       <bannertitle>Tuscany SCA Property</bannertitle>
+    </properties>
+    <body>
+        <section name="Property">
+<p>
+Properties allow for the configuration of an implementation with externally set data values. An implementation can have zero or more properties.  Each property has a type, which may be either simple or complex.  An implementation may also define a default value for a property. 
+</p>
+        </section>
+    </body>
+</document>

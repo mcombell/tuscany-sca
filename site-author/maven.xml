@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document>
+
+    <properties>
+       <title>Tuscany Maven Quick Introduction</title>
+       <bannertitle>Tuscany Maven Quick Introduction</bannertitle>
+    </properties>
+
+
+        <body>
+<section name="Maven Quick Reference">
+                        <p>
+                                For some help getting started with Maven, look at:
+                    <script type="text/javascript">linkNewWindow('http://maven.apache.org/guides/getting-started/index.html','http://maven.apache.org/guides/getting-started/index.html');</script> 
+            </p>
+             <p>
+                    With Maven, there is no build "script" like the ant build.xml file. Instead you 
+                                provide Maven with a description of your project and it uses that information to
+                                determine how to achieve your build goal. The description is held in a pom.xml file.
+                                There is a pom.xml file at the top level of your project and there are subsidiary
+                                pom.xml files for modules within your project which are referenced from the top level
+                                pom file. The Maven project has also established a set of best practices for
+                                structuring builds and if you follow those you can get away with very little 
+                                description; the Tuscany builds are set up that way.
+                        </p>
+                        <p>
+                                The general rule for maven is that each (sub)project produces one build artifact 
+                                (typically a jar file). You can see this in the java project directory where
+                                there are separate projects for sca, sdo, das (etc) and within these, separate
+                                folders and pom files for major components such as container.java.
+                        </p>
+                        <p>
+                                The main Maven 2.x command is "mvn" and the default goal is "install" which will 
+                                compile, unit test and package each project. This will typically output a
+                                jar file that is installed locally so that other projects can depend on it.
+                        </p>
+                        <p>
+                           Once you have the Java project setup up, you can build the project by issuing the following command in the tuscany root directory:<br/>
+                           <code>
+                              mvn
+                            </code>
+                            
+                        </p>
+                </section>
+        </body>
+</document>

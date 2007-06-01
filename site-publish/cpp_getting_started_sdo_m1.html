@@ -1,0 +1,733 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Content Stylesheet for Site -->
+
+        
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- GENERATED FILE, DO NOT EDIT, EDIT THE XML FILE IN xdocs INSTEAD! -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <script src="DropMenu.js"  type="text/javascript"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+        
+   
+            
+        
+    <title>Tuscany - Getting Started with SDO C++ Milestone Release 1</title>
+</head>
+
+<body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+	<table class="topbar" id="topbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="94" background="images/TopBarBG.png">
+		<tr>
+			<td width="244">
+				<img src="images/Logo.png" width="244" height="94" alt=""></td>
+                
+                            
+			 <td align="right"> 
+				<img src="http://incubator.apache.org/tuscany/images/apache-incubator-logo.png" style="padding: 5px;"> </td>
+		</tr>
+	</table>
+    <table border="0" width="100%" cellspacing="4">
+        <tr>
+            <!-- LEFT SIDE NAVIGATION -->
+			<td width="141" valign="top" nowrap="true" >
+				<table width="100%" class="navbar" border="0" cellpadding="0" cellspacing="0" align="center" height="100%" >
+					    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany General
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./index.html">Home</a>
+<br>
+                                            <a href="./news.html">News</a>
+<br>
+                                            <a href="./documentation.html">Documentation</a>
+<br>
+                                            <a href="./Releases.html">Releases</a>
+<br>
+                                            <a href="./getting_started.html">Getting Started</a>
+<br>
+                                            <a href="./license.html">License</a>
+<br>
+                                            <a href="http://www.apache.org/" target="_blank">ASF</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SCA
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sca_index.html">SCA Overview</a>
+<br>
+                                            <a href="./java_sca_overview.html">SCA Java</a>
+<br>
+                                            <a href="./cpp_sca_overview.html">SCA C++</a>
+<br>
+                                            <a href="./sca_documentation.html">SCA Docs.</a>
+<br>
+                                            <a href="./sca_downloads.html">SCA Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SDO
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sdo_index.html">SDO Overview</a>
+<br>
+                                            <a href="./java_sdo_overview.html">SDO Java</a>
+<br>
+                                            <a href="./cpp_sdo_overview.html">SDO C++</a>
+<br>
+                                            <a href="./sdo_documentation.html">SDO Docs.</a>
+<br>
+                                            <a href="./sdo_downloads.html">SDO Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany DAS
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./das_index.html">DAS Overview</a>
+<br>
+                                            <a href="./java_das_overview.html">DAS Java</a>
+<br>
+                                            <a href="./das_documentation.html">DAS Docs.</a>
+<br>
+                                            <a href="./das_downloads.html">DAS Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Community
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./get-involved.html">Get Involved</a>
+<br>
+                                            <a href="./mail-lists.html">Mailing Lists</a>
+<br>
+                                            <a href="./faq.html">FAQ</a>
+<br>
+                                            <a href="./issue-tracking.html">Issue Tracking</a>
+<br>
+                                            <a href="http://wiki.apache.org/ws/Tuscany" target="_blank">Wiki</a>
+<br>
+                                            <a href="http://apache-tuscany.blogspot.com" target="_blank">Blog</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Development
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./source-code.html">Source Code</a>
+<br>
+                                            <a href="./java-projects.html">Tuscany Java</a>
+<br>
+                                            <a href="./cpp-projects.html">Tuscany C++</a>
+<br>
+                                            <a href="./site_development.html">Tuscany WebSite</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    				</table>
+			</td>
+            <!-- CONTENT! -->
+            <td width="100%" align="left" valign="top">
+            <table class="content" border="0" width="98%" cellspacing="0" cellpadding="0" align="left">
+                	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Getting Started with the SDO C++ Milestone Release 1">Getting Started with the SDO C++ Milestone Release 1</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <DIV CLASS="section"> 
+
+          <P>If you haven't already done so, the first step is to download the SDO C++ Milestone release 1 of Apache Tuscany from our
+          <A HREF="http://incubator.apache.org/tuscany/sdo_downloads.html" target="_blank">sdo downloads page</A>.<BR /> </P>
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <H3>Contents</H3> 
+          <OL>
+             <LI><A HREF="#requirements">System Requirements</A></LI>
+             <LI><A HREF="#install">Installing Tuscany SDO..</A>
+                 <UL>
+                     <LI><A HREF="#linuxbin">..from the binary release on Linux</A></LI>
+                     <LI><A HREF="#linuxsrc">..from the source release on Linux</A></LI>
+                     <LI><A HREF="#winbin">..from the binary release on Windows</A></LI>
+                     <LI><A HREF="#winsrc">..from the source release on Windows</A></LI>
+                 </UL></LI>
+             <LI><A HREF="#samples">Samples</A>
+                <UL>
+                   <LI><A HREF="#linuxbld">Building the samples on Linux</A></LI>
+                   <LI><A HREF="#linuxrun">Running the samples on Linux</A></LI>
+                   <LI><A HREF="#winbld">Building the samples on Windows</A></LI>
+                   <LI><A HREF="#winrun">Running the samples on Windows</A></LI>
+                </UL></LI>
+             <LI><A HREF="#help">Getting Help</A></LI>
+          </OL>
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="requirements"><H3>System Requirements</H3></A>
+
+          <P>In order to use Tuscany SDO there are some minimum requirements:</P> 
+          <TABLE CLASS="bodyTable">
+
+             <TBODY>
+             <TR CLASS="a">
+                <TD><B>Software</B></TD>
+                <TD><B>Download Link</B></TD>
+             </TR>
+             <TR CLASS="b">
+                <TD>Operating systems: 
+                   <UL>
+                      <LI>Windows XP SP2</LI> 
+                      <LI>Linux</LI> 
+                   </UL>
+                </TD>
+                <TD> 
+                </TD>
+             </TR>
+             <TR CLASS="a">
+                <TD>Axis2C Release 0.92</TD>
+
+                <TD> 
+                   <A HREF="http://ws.apache.org/axis2/c/download.cgi" TARGET="_blank">http://ws.apache.org/axis2/c/download.cgi</A><BR />
+                   Please download and follow the installation instructions. Ensure you can run the Axis2C samples                  
+                </TD>
+             </TR>
+             <TR CLASS="b">
+                <TD>libxml2 version 2.6.20</TD>
+
+                <TD> 
+                   <A HREF="http://xmlsoft.org/downloads.html" TARGET="_blank">http://xmlsoft.org/downloads.html</A><BR />
+                   Most Linux systems have libxml2 by default. On Windows you need to download and install libxml2 from <A HREF="http://www.zlatkovic.com/libxml.en.html" TARGET="_blank">http://www.zlatkovic.com/libxml.en.html</A><BR />
+                   Please read the installation notes for libxml2 particularly regarding it's pre-req's iconv and zlib on Windows. <BR />
+                   These libraries will need to be on the PATH in order to run Tuscany SDO.
+                </TD>
+             </TR>
+             </TBODY>
+          </TABLE>
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="install"><H3>Installing Tuscany SDO for C++</H3></A>
+          <A NAME="linuxbin"><H3>Getting Tuscany SDO for C++ working with the binary release on Linux</H3></A>
+           <OL>
+               <LI>Extract the binary tar package to a folder</LI>
+               <LI>Add the *install_dir*/lib directory to the LD_LIBRARY_PATH environment variable</LI>
+           </OL>
+          <A NAME="linuxsrc"><H3>Getting Tuscany SDO for C++ working with the source release on Linux</H3></A>
+           <OL>
+               <LI>Extract the source tar package to a folder &lt;tuscany_sdo&gt;</LI>
+               <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>LIBXML2_INCLUDE=&lt;path to libxml2 includes&gt;</LI>                                      
+                   <LI>LIBXML2_LIB=&lt;path to libxml2 lib&gt;<BR />
+                    Note: If you are using the default installation of libxml2 these are usually:<BR />
+                    LIBXML2_LIB=/usr/lib<BR />
+                    LIBXML2_INCLUDE=/usr/include/libxml2<BR /></LI>
+
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL></LI>
+               <LI>Build the source with the following command sequence:
+                   <UL>
+                       <LI>./configure</LI>
+                       <LI>make</LI>
+                       <LI>make install</LI>
+                   </UL>
+                   NOTE: If you don't provide a --prefix configure option, it will by default install into
+                   /usr/local/tuscany/sdo</LI>
+               <LI>Run the test:
+                   <UL>
+                       <LI>cd to &lt;tuscany_sdo&gt;/runtime/core/test</LI>
+                       <LI>./tuscany_sdo_test</LI>
+                   </UL></LI>
+           </OL>
+
+         <A NAME="winbin"><H3>Getting Tuscany SDO for C++ working with the binary release on Windows</H3></A>
+           <OL>
+               <LI>Unzip the supplied zip file to a folder</LI>
+               <LI>Add the *install_dir*\bin directory to the PATH environment variable</LI>
+           </OL>
+         <A NAME="winsrc"><H3>Getting Tuscany SDO for C++ working with the source release on Windows</H3></A>
+            <OL>   
+               <LI>Unzip the supplied source zip file</LI>
+               <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>LIBXML2_HOME=&lt;path to installed libxml2&gt;</LI>
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL></LI>
+               <LI>You must have set up the environment for Microsoft Visual C++ tools. The build command 
+                   will call vcvars32 to set the environment. Ensure the directory containing this is on your path.
+                   This will be where you installed the compiler.</LI>
+               <LI>Build the source:
+                   <UL>
+                       <LI>cd &lt;to where you unzipped the source&gt;</LI>
+                       <LI>build</LI>                      
+                   </UL>
+                   This will build all the projects and put the required output into the 'deploy' directory<BR /><BR />
+                   Alternatively, open the workspace tuscany_sdo.dsw in Visual Studio 6 - you can build projects individually
+                   or build the test project to build all its dependencies. Running the test project should give a list of
+                   tests passed - this is currently 108 tests, no failures.</LI>
+               <LI>Add the 'deploy'\bin directory PATH environment variable</LI>
+           </OL>
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="samples"><H3>Samples</H3></A>
+           <P>Tuscany SDO C++ includes some simple technology samples that demonstrate some of the basic sceanrios for C++ SDO. 
+             This page describes the samples and what is needed to install and run them.
+          </P>
+           <UL>
+          <LI>The ObjectCreation sample demonstrates building the metadata programmatically, followed by use 
+             of the metadata to instantiate objects in a graph.
+          </LI>
+          <LI>The XSDLoading sample shows how to load metadata from an XSD, and how to check for errors during 
+             parsing. The parser gathers all non-fatal errors into one list, so all errors can be checked at one
+             time after parsing. Elements which contained errors will have been omitted from the resulting metadata.
+          </LI>
+          <LI>The ChangeSummarySave sample modifies a data graph of employees, and saves the modified graph with
+             its change summary. The output in ChangeSummarySave-output.xml shows the summary and its relationship 
+             by references to the data graph.
+          </LI>
+          <LI>The Substitutes sample shows how to use substitites in XSD  to achieve a property which will accept a 
+             range of types.
+          </LI>
+          <LI>The Query sample shows how to use XPath to navigate within a graph to the required element. Note 
+             that exceptions such as "path not found" may well be thrown if the XPath specified does not lead to
+             a real object in the graph.
+          </LI>
+           </UL>
+          <P>The SDO samples are built together into a single executable called sdo_misc.exe on Windows and sdo_misc on Linux
+          </P>
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="linuxbld"><H3>Building the samples on Linux</H3></A>
+          <P>If using the binary distribution the samples are built and installed in
+             &lt;tuscany_sdo_install_dir&gt;/samples - go directly to <A HREF="#linuxrun">Running the samples on Linux</A>.</P>
+          <OL>
+              <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>TUSCANY_SDOCPP=&lt;path to installed Tuscany SDO&gt;</LI>                                      
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL>
+              </LI>
+              <LI>Build the source with the following command sequence:
+                   <UL>
+                       <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples</LI>
+                       <LI>./configure</LI>
+                       <LI>make</LI>
+                       <LI>make install</LI>
+                   </UL>
+                   NOTE: If you don't provide a --prefix configure option, it will by default install into
+                   /usr/local/tuscany/sdo/samples/misc</LI>
+          </OL>                                                  
+         </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="linuxrun"><H3>Running the samples on Linux</H3></A>
+          <OL>
+              <LI>Ensure that &lt;tuscany_sdo_install_dir&gt;/lib is included in the LD_LIBRARY_PATH environment variable
+              </LI>
+              <LI>Run the sample with the following commands:
+                 <UL>
+                    <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples/misc/deploy</LI>
+                    <LI>./bin/sdo_misc</LI>
+                 </UL>
+              </LI>
+          </OL>                                                  
+         </DIV> 
+                                                         <DIV CLASS="section">
+          <A NAME="winbld"><H3>Building the samples on Windows</H3></A>
+          <P>If using the binary distribution the samples are built and installed in
+             &lt;tuscany_sdo_install_dir&gt;/samples - go directly to <A HREF="#winrun">Running the samples on Windows</A>.</P>
+          <OL>
+              <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>TUSCANY_SDOCPP=&lt;path to installed Tuscany SDO&gt;</LI>                                     
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL>
+              </LI>
+              <LI>You must have set up the environment for Microsoft Visual C++ tools.
+                  The build command will call vcvars32 to set the environment. Ensure the 
+                  directory containing this is on your path. This will be where you 
+                  installed the compiler.
+              </LI>
+              <LI>Build the source, either via the Visual Studio 6 project under 
+                  &lt;tuscany_sdo_install_dir&gt;\samples\ides or via the command-line build file
+                  found at &lt;tuscany_sdo_install_dir&gt;\samples\ides\devstudio6\projects\misc\build.cmd
+                  which will build and deploy the samples.
+              </LI>
+          </OL>                                                  
+         </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="winrun"><H3>Running the samples on Windows</H3></A>
+          <OL>
+              <LI>Ensure that &lt;tuscany_sdo_install_dir&gt;\bin is included in the PATH environment variable
+              </LI>
+              <LI>Run the sample with the following commands:
+                 <UL>
+                    <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples/misc/deploy</LI>
+                    <LI>bin\sdo_misc</LI>
+                 </UL>
+              </LI>
+          </OL>                                                  
+       </DIV> 
+                                                         <DIV CLASS="section"> 
+          <A NAME="help"><H3>Getting Help</H3></A>
+
+          <P>First place to look is at the Tuscany FAQ at 
+          <A HREF="http://incubator.apache.org/tuscany/faq.html" TARGET="_blank">http://incubator.apache.org/tuscany/faq.html</A> </P>
+
+          <P>Any problem with this release can be reported to the Tuscany 
+          <A HREF="http://incubator.apache.org/tuscany/mail-lists.html" TARGET="_blank">mailing lists</A> or create a JIRA issue at 
+          <A HREF="http://issues.apache.org/jira/browse/Tuscany" TARGET="_blank">http://issues.apache.org/jira/browse/Tuscany</A>.</P>
+       </DIV> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	                        </table>
+            </td>
+	</table>
+    <div class="copyright">
+	Copyright © 2006, The Apache Software Foundation
+Apache Tuscany is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Web Services PMC. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+	</div>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,847 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Content Stylesheet for Site -->
+
+        
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- GENERATED FILE, DO NOT EDIT, EDIT THE XML FILE IN xdocs INSTEAD! -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <script src="DropMenu.js"  type="text/javascript"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+        
+   
+            
+        
+    <title>Tuscany - Tuscany Java Coding Guidelines</title>
+</head>
+
+<body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+	<table class="topbar" id="topbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="94" background="images/TopBarBG.png">
+		<tr>
+			<td width="244">
+				<img src="images/Logo.png" width="244" height="94" alt=""></td>
+                
+                            
+			 <td align="right"> 
+				<img src="http://incubator.apache.org/tuscany/images/apache-incubator-logo.png" style="padding: 5px;"> </td>
+		</tr>
+	</table>
+    <table border="0" width="100%" cellspacing="4">
+        <tr>
+            <!-- LEFT SIDE NAVIGATION -->
+			<td width="141" valign="top" nowrap="true" >
+				<table width="100%" class="navbar" border="0" cellpadding="0" cellspacing="0" align="center" height="100%" >
+					    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany General
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./index.html">Home</a>
+<br>
+                                            <a href="./news.html">News</a>
+<br>
+                                            <a href="./documentation.html">Documentation</a>
+<br>
+                                            <a href="./Releases.html">Releases</a>
+<br>
+                                            <a href="./getting_started.html">Getting Started</a>
+<br>
+                                            <a href="./license.html">License</a>
+<br>
+                                            <a href="http://www.apache.org/" target="_blank">ASF</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SCA
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sca_index.html">SCA Overview</a>
+<br>
+                                            <a href="./java_sca_overview.html">SCA Java</a>
+<br>
+                                            <a href="./cpp_sca_overview.html">SCA C++</a>
+<br>
+                                            <a href="./sca_documentation.html">SCA Docs.</a>
+<br>
+                                            <a href="./sca_downloads.html">SCA Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany SDO
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./sdo_index.html">SDO Overview</a>
+<br>
+                                            <a href="./java_sdo_overview.html">SDO Java</a>
+<br>
+                                            <a href="./cpp_sdo_overview.html">SDO C++</a>
+<br>
+                                            <a href="./sdo_documentation.html">SDO Docs.</a>
+<br>
+                                            <a href="./sdo_downloads.html">SDO Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Tuscany DAS
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./das_index.html">DAS Overview</a>
+<br>
+                                            <a href="./java_das_overview.html">DAS Java</a>
+<br>
+                                            <a href="./das_documentation.html">DAS Docs.</a>
+<br>
+                                            <a href="./das_downloads.html">DAS Downloads</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Community
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./get-involved.html">Get Involved</a>
+<br>
+                                            <a href="./mail-lists.html">Mailing Lists</a>
+<br>
+                                            <a href="./faq.html">FAQ</a>
+<br>
+                                            <a href="./issue-tracking.html">Issue Tracking</a>
+<br>
+                                            <a href="http://wiki.apache.org/ws/Tuscany" target="_blank">Wiki</a>
+<br>
+                                            <a href="http://apache-tuscany.blogspot.com" target="_blank">Blog</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    		<tr class="navbarHead">
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0" width="137">
+                          <tbody>
+                          <tr>
+                              <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                              <td height="4" background="images/NavBarT.png"></td>
+                              <td align="left"><img src="images/NavBarTR.png"></td>
+                          </tr>
+                          <tr>
+                              <td background="images/NavBarLS.png" width="8"></td>
+                              <td align="center" background="images/NavBarM.png">
+                                Development
+                              </td>
+                              <td width="8" height="4"background="images/NavBarRS.png" ></td>
+                          <tr>
+                              <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                              <td background="images/NavBarB.png"></td>
+                              <td align="left"><img src="images/NavBarBR.png"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </td>
+                  <td width="6"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <table border="0" cellspacing="0" cellpadding="0" >
+              <tr>
+                  <td background="images/leftSideGreyBorder.png" width="6" ></td>
+                  <td bgcolor="#fafafa" width="124">
+                                            <a href="./source-code.html">Source Code</a>
+<br>
+                                            <a href="./java-projects.html">Tuscany Java</a>
+<br>
+                                            <a href="./cpp-projects.html">Tuscany C++</a>
+<br>
+                                            <a href="./site_development.html">Tuscany WebSite</a>
+<br>
+                    </td>
+                  <td background="images/rightSideGreyBorder.png" width="7"></td>
+              </tr>
+          </table>
+      </td>
+    </tr>
+    <tr>
+        <td><img src="images/greyBottom.png" width="137" height="10" alt=""></td>
+    </tr>
+
+    				</table>
+			</td>
+            <!-- CONTENT! -->
+            <td width="100%" align="left" valign="top">
+            <table class="content" border="0" width="98%" cellspacing="0" cellpadding="0" align="left">
+                	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Tuscany Java Coding Guidelines">Tuscany Java Coding Guidelines</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <ol>
+                        <li><a href="#Indentation">Indentation</a></li>
+                        <li><a href="#Exception Handling">Exception Handling</a></li>
+                        <li><a href="#Package Naming"> Package Naming</a></li>
+                        <li><a href="#Logging">Logging</a></li>
+                </ol> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Indentation">Indentation</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <p>
+                                We follow Sun's coding standard rules which are pretty common in Java. We have also discussed to adopt a tool that would scan the code to make sure it is in the right format. More information will be added once that discussion is final.
+                        </p> 
+                                                         <p>
+                                <script type="text/javascript">linkNewWindow('http://java.sun.com/docs/codeconv/','http://java.sun.com/docs/codeconv/');</script>
+                        </p> 
+                                                         <p>
+                                <script type="text/javascript">linkNewWindow('http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html','http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html');</script>
+                        </p> 
+                                                         <p>
+                                Please use 4 characters indentation and do not use tabs. 
+                        </p> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Exception Handling">Exception Handling</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <p>
+In general Exceptions should be designed thinking what the catcher of exception would likely do with the exception. There are three types of exceptions.
+</p> 
+                                                         <ul>
+        <li>
+                Code Exception: Can be handled at some level of the call stack.  
+        </li>
+        <li>
+                User Exception: Problem can be handled by a user of the system, for example an Administrator.
+        </li>
+        <li>    
+                Assertion Exception: Problem remedied by developer fixing a bug in the code  
+        </li>
+</ul> 
+                                                         <p>
+        <span style="font-size: 14pt;"> 
+                Code Exceptions
+        </span>
+</p> 
+                                                         <p>
+        There are two types of code exceptions, checked and unchecked exceptions. A checked exception would be thrown when the code cannot handle a specific situation. In this case it is expected for the caller to handle this exception in one of the following ways: 1) handle the exception, 2) re-throw it to its caller, 3) change it to another exception that makes sense to its caller. In general, code exceptions should be checked exceptions. They should be named based on what happened, rather than based on who is throwing the exception. If the exception is well named, it should be possible for the exception to be present on signatures at several levels of a call stack and still make sense (e.g. ServiceUnavailableException).
+</p> 
+                                                         <p> 
+Throw unchecked exceptions if the exception is a programming error or system failure and cannot be handled by the caller (RuntimeException). 
+</p> 
+                                                         <p>
+        <span style="font-size: 14pt;">
+                User Exceptions
+        </span>
+</p> 
+                                                         <p>
+User Exceptions are exceptions that signal a problem that needs to be handled by the user of the system, for example an administrator. Text of the message that is carried with the exception needs to be clear in order to help the user to debug the problem. For example a stack trace is not useful information for a user. It is important to catch user type exceptions and add meaningful context to build a message that is useful.
+</p> 
+                                                         <p>
+A base UserException class can have an array of messages, rather than just one message. For example, code that parses an SCA subsystem file might have a rethrow that just adds "While parsing the xyz subsystem file". This message could probably not be generated by the code that discovered the problem (say an XML parsing problem), so a combination of the original message (e.g. "Missing end tag") and the higher level message ("while parsing the xyz subsystem file") are both necessary to  know what happened. Naturally it can be any number of levels deep.
+</p> 
+                                                         <p>
+The handling code for a user exception will somehow notify a user of the message and then possibly go on. 
+In a server, user exceptions can often be divided according to the fault type. 
+</p> 
+                                                         <ul>
+        <li>
+                Client fault: This is typically generated by the client code that sends the incoming message (e.g. SOAP faults). In this case, the message needs to be reported back to the client code in a format appropriate to the client. ClientExecption should be used to relay exceptions that occur on the client side.
+        </li>
+        <li>    
+                Code or configuration fault:  In this case, only a vague "problem occured here" message should be sent to the client and the real exception message should be logged and/or sent to an administrator. 
+        </li>
+</ul> 
+                                                         <p>
+The remaining user exceptions are typically problems with configuration or the environment. Some of them will be severe enough that the entire application needs to be brought down, while others could be handled by just logging the problem and going on. This difference implies that there needs to be a different exception type. In the case of session-scoped services, the problem is likely to require that the instance of the service be put into an error state (like paused). This is because subsequent messages for the service have been sent on the assumption that the previous message actually gets processed. If some configuration error prevents a session-scoped service from handling a single message, all future (async) messages for that service instance should be queued up so they can be processed once the problem has been solved. 
+</p> 
+                                                         <p>
+        <span style="font-size: 14pt;">
+                Assertion Exceptions
+        </span>
+</p> 
+                                                         <p>
+        Assertion exceptions are exceptions that result from a bug in Tuscany and as such are also intended to be solved by the developers. In these cases the message isn't nearly as important, since the stack trace provides valuable context. If an assertion exception occurs little can be known about the state of the server. If we wanted to be safe we would say that assertion exceptions always bring down the entire server. However, we could play it a little looser and say that assertion exceptions only bring down the application in which they are discovered. 
+</p> 
+                                                         <p>
+        <span style="font-size: 14pt;">
+        Guidelines
+        </span>
+</p> 
+                                                         <p>
+        The following are a set of guidelines based on the above exception philosophy:
+</p> 
+                                                         <p>
+1. Checked vs. unchecked exceptions
+Unchecked exceptions should be used when an error condition is not recoverable. Checked exceptions thrown by third party libraries that are not recoverable should be wrapped in unchecked exceptions rather than being propagated up the call stack. For example, an IOException raised when reading a file might be wrapped in an unchecked LoadException containing the name of the file. Unchecked must always be Javadoced and declared in the throws clause of a method. 
+</p> 
+                                                         <p>
+        2. Assertion exceptions should use the standard JDK assert facilities
+</p> 
+                                                         <p>
+        3. Any exception thrown to user code must extend the appropriate Exception as defined by the specification. This will typically be a runtime Exception.
+</p> 
+                                                         <p>
+        4. No other Exceptions should be thrown to user code. Each user API method should catch any internal exceptions and wrap them in the applicable Exception defined by the specification. Internal exceptions must ultimately extend either TuscanyException or TuscanyRuntimeException. 
+</p> 
+                                                         <p>
+4. When possible, create clear package exception hierarchies
+In most cases, packages should have a clear exception hierarchy with abstract root checked and unchecked exceptions which more specific concrete exceptions extend. Declaring the root package exceptions abstract avoids code throwing exceptions which are too general. Creating an exception hierarchy allows client code using a particular package to choose the level of exception handling granularity (which in turn simplifies the client code by avoiding unwieldy try..catch clauses). 
+</p> 
+                                                         <p>
+5. Preserve all stack trace information and the original exception
+Exceptions must always preserve the stack trace and original exception except under special circumstances. When wrapping exceptions to propagate, never modify the stack trace and always include the caught exception as the cause.
+</p> 
+                                                         <p>
+6. Only include local information pertinent to the failure
+For I18N, contextual information stored in the Exception should not be localized. It should comprise only data pertaining to the cause, such as the name of the artifact as above, or a key that can be used by the top level exception handler. This is needed because the locale used to render the exception may be completely different from the locale used by the code raising the exception. For example, an exception may be thrown on a system whose default locale is German, logged to the system log in English but displayed to the end user in French, Japanese, whatever their native language is. 
+</p> 
+                                                         <p>
+        7. For exceptions that require contextual information from various code layers, either wrap exceptions or create exceptions that can accept additional context as they are propagated up the call stack.
+</p> 
+                                                         <p>
+If a failure requires information from multiple levels, e.g. there was an error setting property X on component Y in module Zdo one of the following. If the initial exception should be wrapped as it is propagated (e.g. the exception occurs at a library boundary), add additional context information in the wrapping exception(s). If the initial exception can be propagated, include methods for adding additional context information as the exception is rethrown up the stack. For example, the previous failure scenario could result in the following exception handling strategy: 
+
+A component property is configured with an invalid integer type 
+The property value parsing code attempts to load an integer value using parseInt(), resulting in a NumberFormatException 
+NumberFormatException is wrapped in an InvalidParameterException (IPE) containing the name of the property. 
+IPE extends a more general ConfigException, which has setters for adding additional context information such as component and module names 
+As the IPE is thrown up the stack, the component and module parsers provide additional context information. 
+The configuration loader then wraps the IPE in a ConfigLoadExeption and provides the source from which the configuration is being loaded. 
+The UI being used to load the configuration reports the error to the user and displays the appropriate contextual information
+</p> 
+                                                         <p>
+8. getMessage() must return unformatted context info. If the Exception contains multiple context fields they should be surrounded in square brackets and separated by commas, e.g. "[ property X, component Y, module Z ]"
+</p> 
+                                                         <p>
+9. Do not override the behaviour of Throwable.toString() and Throwable.printStackTrace()
+</p> 
+                                                         <p>
+10. The java.lang.Exception base class is Serializable so all subclasses must provide a serial UID. Any context fields must be Serializable and should be defined in the base java namespace for JDK1.4.
+</p> 
+                                                         <p>
+11. Exceptions that wrap other Exceptions should ensure that any wrapped Exception can be deserialized in a client environment. This may require providing a custom writeObject method to extract any context information from the wrapped Exception during serialization; at a minimum the message should be preserved.
+                </p> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Package Naming">Package Naming</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <p>
+                                TBD
+                        </p> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	            	                 <tr>
+    <td>
+	<table class="content" border="0" width="100%" cellspacing="0" cellpadding="0" align="left">
+    <tr class="title" height="17" >
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              <tr>
+                  <td align="right" width="8" height="4"><img src= "images/NavBarTL.png"></td>
+                  <td height="4" background="images/NavBarT.png"></td>
+                  <td align="left"><img src="images/NavBarTR.png"></td>
+              </tr>
+              <tr>
+                  <td background="images/NavBarLS.png" width="8"></td>
+                  <td align="center" background="images/NavBarM.png">
+                        <a name="Logging">Logging</a>
+                  </td>
+                  <td width="8" height="4" background="images/NavBarRS.png" ></td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top"><img src= "images/NavBarBL.png"></td>
+                  <td background="images/NavBarB.png"></td>
+                  <td align="left"><img src="images/NavBarBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>
+              
+              <tr>
+                  <td background="images/ContentBoxLS.png" width="8"></td>
+                  <td align="left">
+                                                 <p>
+                                TBD
+                        </p> 
+                                              </td>
+                  <td width="8" height="4" background="images/ContentBoxRS.png" >
+                  </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="bottom"><img src= "images/ContentBoxBL.png"></td>
+                  <td background="images/ContentBoxB.png"></td>
+                  <td align="left"><img src="images/ContentBoxBR.png"></td>
+              </tr>
+              </tbody>
+          </table>
+        </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+	                        </table>
+            </td>
+	</table>
+    <div class="copyright">
+	Copyright © 2006, The Apache Software Foundation
+Apache Tuscany is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Web Services PMC. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+	</div>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

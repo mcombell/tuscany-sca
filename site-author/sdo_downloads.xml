@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany SDO Downloads</title>
+        <bannertitle>Tuscany SDO Downloads</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany SDO Downloads">
+
+            <p>This section provides information on downloads related to Tuscany SDO</p>
+            <p>For more information about the contents of each SDO Release, please see : <a href="sdo_releases.html">SDO Release Contents</a></p>
+            
+<table border="0" width="100%">
+	<tbody>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SDO
+			Java - Releases</font></b></td>
+		</tr>
+		<tr bgcolor="white">
+			<td align="left" valign="top">The distribution of Tuscany SDO is made
+			in 4 archives, and in two formats, one suitable for unpacking on
+			Linux and the other on Windows. The source distributions are split into the SDO 2.0.1 API and the
+			Tuscany implementation of that API. The binary distribution contains the result of building those two source distributions. The sample
+			distribution contains sample source code which may be used to experiment with the binary distribution (Note that the
+			samples are already included in the implementation source
+			distribution).</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left" width="100%"><i><font color="#00254a"><b> </b><b>&gt;Incubating-M2
+			(Nov 14th, 2006) </b></font></i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="center" width="100%">
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64" height="33"><font face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" height="33" width="290">Tuscany M2 SDO </td>
+						<td align="center" height="33" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz">tuscany-sdo-1.0-incubator-M2-bin.tar.gz</a></td>
+						<td align="center" height="33" width="7%"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td><td align="center" width="7%" height="33"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO API</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz">tuscany-sdo-api-1.0-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td><td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO Implementation</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz">tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO Sample</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz">tuscany-sdo-sample-1.0-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz.md5">MD5</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.tar.gz.asc">PGP</a></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Windows<br />
+						Binary</font></td>
+						<td align="center" width="290">Tuscany M2 SDO</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip">tuscany-sdo-1.0-incubator-M2-bin.zip</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip.md5">MD5</a></td><td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/binary/tuscany-sdo-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO API</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip">tuscany-sdo-api-1.0-incubator-M2-src.zip
+						</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip.md5">MD5</a></td><td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-api-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+						
+						
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO Implementation</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip">tuscany-sdo-impl-1.0-incubator-M2-src.zip
+						</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/source/tuscany-sdo-impl-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="290">Tuscany M2 SDO Sample</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip">tuscany-sdo-sample-1.0-incubator-M2-src.zip</a></td>
+						<td align="center" width="66"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip.md5">MD5</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/java/sdo/1.0-incubator-M2/sample/tuscany-sdo-sample-1.0-incubator-M2.zip.asc">PGP</a></td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><b><font color="#00254a">&gt;Incubating-M1 (June 7th,
+			2006)</font></b></i><br />
+			<i>Note</i>
+			: <i>This is a single package release containing SCA and DAS besides
+			SDO.</i>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left">
+			<table border="0" width="100%">
+				<tbody>
+					<tr>
+						<td bgcolor="white" width="100%" align="center">
+						<table border="0" width="100%" bgcolor="#f7f7f7">
+							<tbody>
+								<tr bgcolor="#f7f7f7">
+									<td align="center" width="10%"></td>
+									<td align="center" width="32%"><b><i>Description</i></b></td>
+									<td align="center" width="46%"><b><i>Download link</i></b></td>
+									<td align="center" width="7%"><b><i>MD5</i></b></td>
+									<td align="center" width="7%"><b><i>PGP</i></b></td>
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="64"><font
+										face="Gourmand" size="-2">Linux<br />
+									Binary</font></td>
+									<td align="center" width="287">Tuscany M1 SDO</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz">tuscany-incubating-M1.tar.gz</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.tar.gz.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Linux<br />
+									Source</font></td>
+									<td align="center" width="287">Tuscany M1 SDO</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz">tuscany-incubating-M1-src.tar.gz</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.tar.gz.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Windows<br />
+									Binary</font></td>
+									<td align="center" width="287">Tuscany M1 SDO</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip">tuscany-incubating-M1.zip</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1.zip.asc">PGP</a></td>
+
+
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td align="right" bgcolor="#ffffff" width="60"><font
+										face="Gourmand" size="-2">Windows<br />
+									Source</font></td>
+									<td align="center" width="287">Tuscany M1 SDO</td>
+									<td align="center" width="414"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip">tuscany-incubating-M1-src.zip
+									</a></td>
+									<td align="center" width="66"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.md5">MD5</a></td>
+									<td align="center" width="64"><a
+										href="http://people.apache.org/dist/incubator/tuscany/incubating-M1/tuscany-incubating-M1-src.zip.asc">PGP</a></td>
+
+
+								</tr>
+							</tbody>
+						</table>
+						<font face="Trebuchet MS"
+							size="-1"><b> </b></font>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SDO 
+Java - Development</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td>
+ Apache Tuscany source code, documentation and web site are managed under version control using Subversion in
+ 
+			<a href='https://svn.apache.org/repos/asf/incubator/tuscany' target='_blank'>Tuscany Subversion Repository</a>
+			. The source for the SDO Java project can be found at <a
+				href="http://svn.apache.org/repos/asf/incubator/tuscany/java/sca"
+				
+target="_blank">http://svn.apache.org/repos/asf/incubator/tuscany/java/sdo
+</a>. Please lookup <a href='building_source.html'>Building Tuscany Source Code</a> on how to download and build Tuscany Java SDO</td> </tr>
+	</tbody>
+</table>
+<br />
+<table border="0" width="100%">
+	<tbody>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SDO 
+C++ - Releases</font></b></td> </tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><font color="#00254a"><b> </b><b>&gt;Incubating-M2
+			(Nov 3rd, 2006) </b></font></i><br />
+			<i>Linux binary distribution is built on Red Hat Enterprise Linux 3.
+			Win32 binary distribution is built on Windows XP with Microsoft VC7.
+
+			</i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="center" width="100%">
+
+
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz">tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-bin.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz">tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/linux/tuscany_sdo_cpp-1.0-incubator-M2-src.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip">tuscany_sdo_cpp-1.0-incubator-M2-bin.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-bin.zip.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M2</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip">tuscany_sdo_cpp-1.0-incubator-M2-src.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/1.0-incubator-M2/win32/tuscany_sdo_cpp-1.0-incubator-M2-src.zip.asc">PGP</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#f0f0f0">
+			<td align="left"><i><b><font color="#00254a">&gt;Incubating-M1 (August 1st, 2006)</font></b></i><br />
+			<i>Linux binary distribution is built on Red Hat Enterprise Linux 3.
+			Win32 binary distribution is built on Windows XP with Microsoft VC6.
+
+			</i></td>
+		</tr>
+		<tr bgcolor="#f0f0f0" width="100%">
+			<td align="center" width="100%">
+
+			<table border="0" width="100%" bgcolor="#f7f7f7">
+				<tbody>
+					<tr bgcolor="#f7f7f7">
+						<td align="center" width="10%"></td>
+						<td align="center" width="32%"><b><i>Description</i></b></td>
+						<td align="center" width="46%"><b><i>Download link</i></b></td>
+						<td align="center" width="7%"><b><i>MD5</i></b></td>
+						<td align="center" width="7%"><b><i>PGP</i></b></td>
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="64"><font
+							face="Gourmand" size="-2">Linux<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz">tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-bin.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Linux<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz">tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/linux/tuscany_sdo_cpp-0.1.incubating-M1-src.tar.gz.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Binary</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip">tuscany_sdo_cpp-0.1.incubating-M1-bin.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-bin.zip.asc">PGP</a></td>
+
+
+					</tr>
+					<tr bgcolor="#ffffff">
+						<td align="right" bgcolor="#ffffff" width="60"><font
+							face="Gourmand" size="-2">Windows<br />
+						Source</font></td>
+						<td align="center" width="287">Tuscany SDO C++ M1</td>
+						<td align="center" width="413"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip">tuscany_sdo_cpp-0.1.incubating-M1-src.zip</a></td>
+						<td align="center" width="67"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip.md5">MD5</a></td>
+						<td align="center" width="64"><a
+							href="http://people.apache.org/dist/incubator/tuscany/cpp/incubating-M1/win32/tuscany_sdo_cpp-0.1.incubating-M1-src.zip.asc">PGP</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+		<tr bgcolor="#e0e0c2">
+			<td align="center"><b><font color="#804040" face="Gourmand" size="-1">SDO 
+C++ - Development</font></b></td> </tr> <tr bgcolor="#f0f0f0">
+			<td>Apache Tuscany source code, documentation and web site are managed under version control using Subversion in
+ 
+			<a href="https://svn.apache.org/repos/asf/incubator/tuscany"
+				target="_blank">Tuscany Subversion Repository</a>
+			. The source for the SDO C++ project can be found at <a
+				href="https://svn.apache.org/repos/asf/incubator/tuscany/cpp/sdo/">http://svn.apache.org/repos/asf/incubator/tuscany/cpp/sdo/</a>. Please lookup <a href='building_source.html'>Building Tuscany Source Code</a> on how to download and build Tuscany SDO C++</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+    </body>
+</document>
+
+
+
+

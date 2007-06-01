@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany Mailing Lists</title>
+       <bannertitle>Tuscany DAS</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Mailing Lists">
+        <p>These are the mailing lists that have been established for this project. For each list, there is a subscribe, unsubscribe, and an archive link.</p>
+        <table class="bodyTable"><tr class="a">
+          <th>Name</th><th>Subscribe</th><th>Unsubscribe</th><th>Post</th><th>Archive</th></tr>
+          <tr class="b"><td>Tuscany User List</td><td><a href="mailto:tuscany-user-subscribe@ws.apache.org">Subscribe</a></td><td><a href="mailto:tuscany-user-unsubscribe@ws.apache.org">Unsubscribe</a></td><td><a href="mailto:tuscany-user@ws.apache.org">Post</a></td><td><a href="http://www.mail-archive.com/tuscany-user%40ws.apache.org/" target="_blank">www.mail-archive.com</a></td></tr>
+          <tr class="a"><td>Tuscany Developer List</td><td><a href="mailto:tuscany-dev-subscribe@ws.apache.org">Subscribe</a></td><td><a href="mailto:tuscany-dev-unsubscribe@ws.apache.org">Unsubscribe</a></td><td><a href="mailto:tuscany-dev@ws.apache.org">Post</a></td><td><a href="http://www.mail-archive.com/tuscany-dev%40ws.apache.org/" target="_blank">www.mail-archive.com</a></td></tr>
+          <tr class="b"><td>Tuscany Commits List</td><td><a href="mailto:tuscany-commits-subscribe@ws.apache.org">Subscribe</a></td><td><a href="mailto:tuscany-commits-unsubscribe@ws.apache.org">Unsubscribe</a></td><td>-</td><td><a href="http://www.mail-archive.com/tuscany-commits%40ws.apache.org/maillist.html">www.mail-archive.com</a></td></tr>
+          <tr class="b"><td>General Incubator List</td><td><a href="mailto:general-subscribe@incubator.apache.org">Subscribe</a></td><td><a href="mailto:general-unsubscribe@incubator.apache.org">Unsubscribe</a></td><td><a href="mailto:general@incubator.apache.org">Post</a></td><td><a href="http://mail-archives.apache.org/mod_mbox/incubator-general/" target="_blank">www.mail-archive.com</a></td></tr>
+          </table>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany DAS Documentation</title>
+        <bannertitle>Tuscany DAS Documentation</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany DAS Documentation">
+
+            <p>Here is where you will find all the documentation related to Tuscany DAS.</p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font 
+color="#ffffff">DAS</font></b></td> </tr> <tr bgcolor="#eeeeee">
+			<td width="596" align="left">Here are some documents related to DAS: <ul>
+				<li><a
+					href='http://incubator.apache.org/tuscany/RDB_DAS_white_paper_v-0.2.pdf'>DAS
+				White Paper: The Data Access Service </a></li>
+				<li><a class="external" rel="nofollow"
+					href="http://java.sys-con.com/read/260053.htm">JDJ DAS Article</a>
+</li>
+			</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+</body>
+</document>
+
+
+
+
+
+

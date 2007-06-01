@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<document >
+
+        <properties>
+                <title>Tuscany News</title>
+                <bannertitle>Tuscany News</bannertitle>
+        </properties>   
+        
+        <body>
+
+        <section name="Tuscany News" >
+        
+        <p>
+          This page contains latest Tuscany News.
+  </p>
+
+<p><b>December 22 2006 -- Tuscany Java SCA M2 milestone is released.</b><br />
+<br />
+The Tuscany team release the DAS Java Milestone 2 deliverable. Please
+have a look at the <a href="sca_downloads.html">sca download page</a>.</p>
+<p></p>
+<p><b>November 20 2006  -- Tuscany Java DAS M2 milestone is released.</b><br/><br/>  
+The Tuscany team release the DAS Java Milestone 2 deliverable.  Please have a look at the 
+<a href="das_downloads.html">das download page</a>.<br/> <br/>
+</p>
+
+<p><b>November 14 2006  -- Tuscany Java SDO M2 milestone is released.</b><br/><br/>  
+The Tuscany team release the SDO Java Milestone 2 deliverable.  Please have a look at the 
+<a href="sdo_downloads.html">sdo download page</a>.<br/> <br/>
+</p>
+
+<p><b>November 3 2006  -- Tuscany makes available C++ M2 milestone release.</b><br/><br/>  
+The Tuscany team release the second C++ deliverable.  Please have a look at the 
+<a href="sca_downloads.html">sca download page</a> and <a href="sdo_downloads.html">sdo download page</a>.<br/> <br/>
+
+</p>
+
+<p><b>August 1 2006  -- Tuscany makes available C++ M1 milestone release.</b><br/><br/>  
+The Tuscany team release the first C++ deliverable.  Please have a look at the 
+<a href="sca_downloads.html">sca download page</a> and <a href="sdo_downloads.html">sdo download page</a>.<br/> <br/>
+
+</p>
+<p><b>June 7 2006  -- Tuscany Java makes available M1 milestone release.</b><br/><br/>  
+The Tuscany Java team is happy to bring to you their very first deliverable.  Please have a look at the 
+<a href="sca_downloads.html">download page</a>.<br/> <br/>
+</p>
+  
+<p><b>May 16-19 2006  -- JavaOne (San Francisco, USA)</b><br />
+<br />
+Various community members will be presenting SCA, SDO. There is also a BOF session for Tuscany on Thursday.
+<br />
+<br />
+</p>  
+    <p><b>March 6 2006  --  A stable level of source code is available for both Java and C++ </b><br />
+<br />
+Use the following SVN checkout command to get this version:
+        <pre> svn co -r 383106   http://svn.apache.org/repos/asf/incubator/tuscany/java
+        </pre>
+        Highlights for the Java project in this build:
+        <ul>
+         <li>SCA, SDO and DAS subprojects all have functional samples working, including the large BigBank sample.</li>
+         <li>Axis2 is supported for Web services.</li>
+         <li>Support for Javascript components</li>
+        </ul>
+        </p>
+<p><b>January 10 2006  -- Tuscany Project Initial Implementation</b><br /><br />
+We're looking to add a lot of additional function over the coming weeks and months, such as support for additional implementation types and for additional bindings. We're looking for people to help us add these capabilities - so please take some time to look over the project and join us in this exciting developement.
+        </p>
+        <p>
+The current codebase is designed to work with the Apache Tomcat runtime, and uses the Apache Axis runtime to provide support 
+for Web services. With this combination, you can write service components that can be used to provide Web services or which 
+can be used to provide business services behind Servlets and JSPs. 
+        </p>
+        </section>
+
+        </body>
+
+
+</document>
+
+

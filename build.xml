@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project name="site" default="docs" basedir=".">
+
+    <!-- Initialization properties -->
+    <property name="project.name"   value="site"/>
+
+    <!-- The source directory for our XML source documents which are
+    to be sytlized and transformed into XHTML. -->
+    <property name="docs.src" value="site-author"/>
+
+    <!-- The destination directory for content generated from our XML
+    sources. -->
+    <property name="docs.dest" value="site-publish"/>
+
+    <path id="classpath">
+        <fileset dir="./lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="prepare">    
+        <available classname="org.apache.velocity.anakia.AnakiaTask" 
+            property="AnakiaTask.present">
+            <classpath refid="classpath"/>
+        </available>
+    </target>
+
+    <target depends="prepare" name="prepare-error" unless="AnakiaTask.present">
+        <echo>
+            AnakiaTask is not present! Please check to make sure that 
+            velocity.jar is in your classpath.
+        </echo>
+    </target>
+
+    <target name="docs" depends="prepare-error" if="AnakiaTask.present">
+        <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+            <classpath refid="classpath"/>
+        </taskdef>
+        <anakia basedir="${docs.src}" destdir="${docs.dest}/"
+             extension=".html" style="./site.vsl"
+             projectFile="stylesheets/project.xml"
+             excludes="**/stylesheets/** empty.xml"
+             includes="**/*.xml"
+             lastModifiedCheck="true"
+             templatePath="${docs.src}/stylesheets"
+        >
+        </anakia>
+
+        <copy todir="${docs.dest}/" filtering="no">
+            <fileset dir="${docs.src}/">
+                <!-- Ignore the Anakia style sheet used for processing
+                of the xdocs, and the unprocessed xdocs themselves,
+                but copy all other content to the directory which is
+                checked out on the server. -->
+                <exclude name="**/*.xml"/>
+                <exclude name="**/stylesheets/**"/>
+                <!-- Editor-specific ignores. -->
+                <exclude name="**/*~"/>
+                <exclude name="**/.#*"/>
+            </fileset>
+        </copy>
+
+    </target>
+    <target name="clean">
+       <delete >
+         <fileset dir="site-publish" excludes="**/.svn/*"/>
+        </delete>
+    </target>
+</project>

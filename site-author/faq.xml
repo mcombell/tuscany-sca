@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany Frequently Asked Questions</title>
+        <bannertitle>Tuscany Frequently Asked Questions</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany Frequently Asked Questions">
+            <p>
+                Tuscany FAQs are maintained in the new 
+                <a
+                   href="http://cwiki.apache.org/confluence/display/TUSCANY/Index">Tuscany WIKI</a>
+                . The FAQs for Tuscany SCA, SDO and DAS can be found in the respective links as 
+                follows: -</p>
+            <ul>
+
+                <li>
+                    <a
+                            href="http://cwiki.apache.org/confluence/display/TUSCANY/Tuscany+SCA+-+FAQ">Tuscany 
+                            SCA FAQs</a>
+                </li>
+                <li>
+                    <a
+                            href="http://cwiki.apache.org/confluence/display/TUSCANY/Tuscany+SDO+-+FAQ">Tuscany 
+                            SDO FAQs</a>
+                </li>
+                <li>
+                    <a
+                            href="http://cwiki.apache.org/confluence/display/TUSCANY/Tuscany+DAS+-+FAQ">Tuscany 
+                            DAS FAQs</a>
+                </li>
+
+            </ul>
+        </section>
+    </body>
+</document>
+

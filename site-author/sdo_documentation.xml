@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Tuscany SDO Documentation</title>
+        <bannertitle>Tuscany SDO Documentation</bannertitle>
+    </properties>
+    <body>
+        <section name="Tuscany SDO Documentation">
+
+            <p>Here is where you will find all the documentation related to Tuscany SDO (Java, C++...).</p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font 
+color="#ffffff">SDO</font></b></td> </tr> <tr bgcolor="#eeeeee">
+			<td width="596" align="left">Tuscany provides an implementation of 
+                the SDO Specifications being developed by the OSOA Collaboration - <a
+				href="http://www.osoa.org">http://www.osoa.org</a>. <ul>
+				<li><a
+					href="http://www.osoa.org/display/Main/Service+Data+Objects+Specifications">OSOA
+				- Service Data Objects Specifications</a></li>
+			</ul>
+			Note : These specifications are continuously evolving. Each SDO release from Tuscany adheres to a specific level of these specification and this will be mentioned as part of the release notes.
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p></p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font color="#ffffff">SDO 
+Java</font></b></td> </tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">This section deals with documents
+			related to SDO Java </td>
+		</tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="center">
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Specifications Related</font></b></td>
+					</tr>
+					<tr>
+						<td>The following are links to the OSOA specifications that relate to Java Implementation: -
+						<ul>
+							<li><a href="http://www.osoa.org/download/attachments/36/Java-SDO-Spec-v2.1.0-FINAL.pdf?version=1">SDO Specification for Java V2.01</a>
+						</li>
+						</ul></td>
+					</tr>
+				</tbody>
+			</table><br />
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">JavaDocs Related</font></b></td>
+					</tr>
+					<tr>
+						<td>Here are the links to the Tuscany Java SDO  JavaDocs: <br />
+						<br />
+						<b>Javadocs available online</b>
+						<table border="0" width="100%">
+							<tbody>
+								<tr>
+									<td width="10">&gt;</td>
+									<td width="595"><a 
+href="http://people.apache.org/~svkrish/tuscanySite/apidocs/sdo/" target="_blank">SDO
+									Specs API (1.0-incubator-M2)</a></td>
+								</tr>
+								<tr>
+									<td width="10">&gt;</td>
+									<td width="595"><a 
+href="http://people.apache.org/~svkrish/tuscanySite/apidocs/tuscany-sdo/" target="_blank">Tuscany
+									SDO Implementation API (1.0-incubator-M2)</a></td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+	</tbody>
+</table>
+<p></p>
+<table border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr bgcolor="#7B9A5C">
+			<td width="596" align="center"><b><font color="#ffffff">SDO 
+C++</font></b></td> </tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">This section deals with documents
+			related to SDO C++ </td>
+		</tr>
+		<tr bgcolor="#eeeeee">
+			<td width="596" align="left">
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Specifications Related</font></b></td>
+					</tr>
+					<tr>
+						<td>The following are links to the OSOA specifications that relate
+						to C++ Implementation: -
+						<ul>
+							<li><a
+								href="http://www.osoa.org/display/Main/Service+Data+Objects+Specifications">SDO
+							Specification for C++ V2.01</a>
+						</li>
+						</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" width="100%">
+				<tbody>
+					<tr bgcolor="#e0e0c2">
+						<td><b><font color="#004566">Implementation Related</font></b></td>
+					</tr>
+					<tr>
+						<td><table width="100%" border="0" bgcolor="#fffff4">
+							<tbody>
+								<tr>
+									<td align="center" width="28" valign="top">1.</td>
+									<td width="871" valign="top"><a href="http://svn.apache.org/repos/asf/incubator/tuscany/tags/cpp-1.0-incubating-M2-final/sdo/GettingStarted.html">Getting
+									Started with the SDO C++ Milestone Release 2</a>
+</td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+				</tbody>
+			</table></td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+    </body>
+</document>
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Tuscany SDO</title>
+       <bannertitle>Tuscany SDO</bannertitle>
+       <author email="kelvingoodson+tuscanysite@gmail.com">Kelvin Goodson</author>
+       <tab>sdo</tab>
+    </properties>
+    <body>
+        <section name="Service Data Objects - Overview">
+            <p>
+                Service Data Objects simplify and unify SOA data access architecture and code in a heterogeneous environment.
+                SDO is programming language neutral.  Within Tuscany it is being implemented in Java and in C++.  A
+                <A  href="http://pecl.php.net/package/sdo"> PHP version of SDO  </A> is available for download from the
+                <A href="http://pecl.php.net/">PHP Extensions Community Library (PECL)</A>.
+            </p>
+            <p>
+                SDO can be used to represent data structures from the presentation layer all the way
+                through to the persistence layer.
+            </p>
+            <p>
+            <img src="./images/sdocontext_sm.jpg" alt="sdo context" />
+            </p>
+            <p>
+                SDO is a natural format for representing data on the wire in an SOA environment.
+            </p>
+            <p>
+            <img src="./images/sdo_soa_sm.jpg" alt="sdo in soa"/>
+            </p>
+            <p>
+                <A href="das_index.html">Data Access Services (DAS)</A> access data sources and produce data graphs. Modifications made
+                to graphs by the application are summarized in the graph structure, and the DAS can use this
+                change summary to update the original data source.
+            </p>
+        </section>
+    </body>
+</document>

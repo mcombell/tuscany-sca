@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+       <title>Getting Started with SDO C++ Milestone Release 1</title>
+       <bannertitle>Getting Started with SDO C++ Milestone Release 1</bannertitle> <tab>sdo</tab>
+    </properties>
+    <body>
+        <section name="Getting Started with the SDO C++ Milestone Release 1"> <DIV CLASS="section"> 
+
+          <P>If you haven't already done so, the first step is to download the SDO C++ Milestone release 1 of Apache Tuscany from our
+          <A HREF="http://incubator.apache.org/tuscany/sdo_downloads.html" 
+target='_blank'>sdo downloads page</A>.<BR/> </P>
+       </DIV>
+       <DIV CLASS="section"> 
+          <H3>Contents</H3> 
+          <OL>
+             <LI><A HREF="#requirements">System Requirements</A></LI>
+             <LI><A HREF="#install">Installing Tuscany SDO..</A>
+                 <UL>
+                     <LI><A HREF="#linuxbin">..from the binary release on Linux</A></LI>
+                     <LI><A HREF="#linuxsrc">..from the source release on Linux</A></LI>
+                     <LI><A HREF="#winbin">..from the binary release on Windows</A></LI>
+                     <LI><A HREF="#winsrc">..from the source release on Windows</A></LI>
+                 </UL></LI>
+             <LI><A HREF="#samples">Samples</A>
+                <UL>
+                   <LI><A HREF="#linuxbld">Building the samples on Linux</A></LI>
+                   <LI><A HREF="#linuxrun">Running the samples on Linux</A></LI>
+                   <LI><A HREF="#winbld">Building the samples on Windows</A></LI>
+                   <LI><A HREF="#winrun">Running the samples on Windows</A></LI>
+                </UL></LI>
+             <LI><A HREF="#help">Getting Help</A></LI>
+          </OL>
+       </DIV>
+
+       <DIV CLASS="section"> 
+          <A NAME="requirements"><H3>System Requirements</H3></A>
+
+          <P>In order to use Tuscany SDO there are some minimum requirements:</P> 
+          <TABLE CLASS="bodyTable">
+
+             <TBODY>
+             <TR CLASS="a">
+                <TD><B>Software</B></TD>
+                <TD><B>Download Link</B></TD>
+             </TR>
+             <TR CLASS="b">
+                <TD>Operating systems: 
+                   <UL>
+                      <LI>Windows XP SP2</LI> 
+                      <LI>Linux</LI> 
+                   </UL>
+                </TD>
+                <TD> 
+                </TD>
+             </TR>
+             <TR CLASS="a">
+                <TD>Axis2C Release 0.92</TD>
+
+                <TD> 
+                   <A HREF="http://ws.apache.org/axis2/c/download.cgi"
+                      TARGET="_blank">http://ws.apache.org/axis2/c/download.cgi</A><BR/>
+                   Please download and follow the installation instructions. Ensure you can run the Axis2C samples                  
+                </TD>
+             </TR>
+             <TR CLASS="b">
+                <TD>libxml2 version 2.6.20</TD>
+
+                <TD> 
+                   <A HREF="http://xmlsoft.org/downloads.html"
+                      TARGET="_blank">http://xmlsoft.org/downloads.html</A><BR/>
+                   Most Linux systems have libxml2 by default. On Windows you need to download and install libxml2 from <A HREF="http://www.zlatkovic.com/libxml.en.html" TARGET="_blank">http://www.zlatkovic.com/libxml.en.html</A><BR/>
+                   Please read the installation notes for libxml2 particularly regarding it's pre-req's iconv and zlib on Windows. <BR/>
+                   These libraries will need to be on the PATH in order to run Tuscany SDO.
+                </TD>
+             </TR>
+             </TBODY>
+          </TABLE>
+       </DIV> 
+       <DIV CLASS="section"> 
+          <A NAME="install"><H3>Installing Tuscany SDO for C++</H3></A>
+          <A NAME="linuxbin"><H3>Getting Tuscany SDO for C++ working with the binary release on Linux</H3></A>
+           <OL>
+               <LI>Extract the binary tar package to a folder</LI>
+               <LI>Add the *install_dir*/lib directory to the LD_LIBRARY_PATH environment variable</LI>
+           </OL>
+          <A NAME="linuxsrc"><H3>Getting Tuscany SDO for C++ working with the source release on Linux</H3></A>
+           <OL>
+               <LI>Extract the source tar package to a folder &lt;tuscany_sdo&gt;</LI>
+               <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>LIBXML2_INCLUDE=&lt;path to libxml2 includes&gt;</LI>                                      
+                   <LI>LIBXML2_LIB=&lt;path to libxml2 lib&gt;<BR/>
+                    Note: If you are using the default installation of libxml2 these are usually:<BR/>
+                    LIBXML2_LIB=/usr/lib<BR/>
+                    LIBXML2_INCLUDE=/usr/include/libxml2<BR/></LI>
+
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL></LI>
+               <LI>Build the source with the following command sequence:
+                   <UL>
+                       <LI>./configure</LI>
+                       <LI>make</LI>
+                       <LI>make install</LI>
+                   </UL>
+                   NOTE: If you don't provide a --prefix configure option, it will by default install into
+                   /usr/local/tuscany/sdo</LI>
+               <LI>Run the test:
+                   <UL>
+                       <LI>cd to &lt;tuscany_sdo&gt;/runtime/core/test</LI>
+                       <LI>./tuscany_sdo_test</LI>
+                   </UL></LI>
+           </OL>
+
+         <A NAME="winbin"><H3>Getting Tuscany SDO for C++ working with the binary release on Windows</H3></A>
+           <OL>
+               <LI>Unzip the supplied zip file to a folder</LI>
+               <LI>Add the *install_dir*\bin directory to the PATH environment variable</LI>
+           </OL>
+         <A NAME="winsrc"><H3>Getting Tuscany SDO for C++ working with the source release on Windows</H3></A>
+            <OL>   
+               <LI>Unzip the supplied source zip file</LI>
+               <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>LIBXML2_HOME=&lt;path to installed libxml2&gt;</LI>
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL></LI>
+               <LI>You must have set up the environment for Microsoft Visual C++ tools. The build command 
+                   will call vcvars32 to set the environment. Ensure the directory containing this is on your path.
+                   This will be where you installed the compiler.</LI>
+               <LI>Build the source:
+                   <UL>
+                       <LI>cd &lt;to where you unzipped the source&gt;</LI>
+                       <LI>build</LI>                      
+                   </UL>
+                   This will build all the projects and put the required output into the 'deploy' directory<BR/><BR/>
+                   Alternatively, open the workspace tuscany_sdo.dsw in Visual Studio 6 - you can build projects individually
+                   or build the test project to build all its dependencies. Running the test project should give a list of
+                   tests passed - this is currently 108 tests, no failures.</LI>
+               <LI>Add the 'deploy'\bin directory PATH environment variable</LI>
+           </OL>
+       </DIV>
+
+       <DIV CLASS="section"> 
+          <A NAME="samples"><H3>Samples</H3></A>
+           <P>Tuscany SDO C++ includes some simple technology samples that demonstrate some of the basic sceanrios for C++ SDO. 
+             This page describes the samples and what is needed to install and run them.
+          </P>
+           <UL>
+          <LI>The ObjectCreation sample demonstrates building the metadata programmatically, followed by use 
+             of the metadata to instantiate objects in a graph.
+          </LI>
+          <LI>The XSDLoading sample shows how to load metadata from an XSD, and how to check for errors during 
+             parsing. The parser gathers all non-fatal errors into one list, so all errors can be checked at one
+             time after parsing. Elements which contained errors will have been omitted from the resulting metadata.
+          </LI>
+          <LI>The ChangeSummarySave sample modifies a data graph of employees, and saves the modified graph with
+             its change summary. The output in ChangeSummarySave-output.xml shows the summary and its relationship 
+             by references to the data graph.
+          </LI>
+          <LI>The Substitutes sample shows how to use substitites in XSD  to achieve a property which will accept a 
+             range of types.
+          </LI>
+          <LI>The Query sample shows how to use XPath to navigate within a graph to the required element. Note 
+             that exceptions such as "path not found" may well be thrown if the XPath specified does not lead to
+             a real object in the graph.
+          </LI>
+           </UL>
+          <P>The SDO samples are built together into a single executable called sdo_misc.exe on Windows and sdo_misc on Linux
+          </P>
+       </DIV>
+
+        <DIV CLASS="section"> 
+          <A NAME="linuxbld"><H3>Building the samples on Linux</H3></A>
+          <P>If using the binary distribution the samples are built and installed in
+             &lt;tuscany_sdo_install_dir&gt;/samples - go directly to <A HREF="#linuxrun">Running the samples on Linux</A>.</P>
+          <OL>
+              <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>TUSCANY_SDOCPP=&lt;path to installed Tuscany SDO&gt;</LI>                                      
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL>
+              </LI>
+              <LI>Build the source with the following command sequence:
+                   <UL>
+                       <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples</LI>
+                       <LI>./configure</LI>
+                       <LI>make</LI>
+                       <LI>make install</LI>
+                   </UL>
+                   NOTE: If you don't provide a --prefix configure option, it will by default install into
+                   /usr/local/tuscany/sdo/samples/misc</LI>
+          </OL>                                                  
+         </DIV>
+
+        <DIV CLASS="section"> 
+          <A NAME="linuxrun"><H3>Running the samples on Linux</H3></A>
+          <OL>
+              <LI>Ensure that &lt;tuscany_sdo_install_dir&gt;/lib is included in the LD_LIBRARY_PATH environment variable
+              </LI>
+              <LI>Run the sample with the following commands:
+                 <UL>
+                    <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples/misc/deploy</LI>
+                    <LI>./bin/sdo_misc</LI>
+                 </UL>
+              </LI>
+          </OL>                                                  
+         </DIV>
+
+         <DIV CLASS="section">
+          <A NAME="winbld"><H3>Building the samples on Windows</H3></A>
+          <P>If using the binary distribution the samples are built and installed in
+             &lt;tuscany_sdo_install_dir&gt;/samples - go directly to <A HREF="#winrun">Running the samples on Windows</A>.</P>
+          <OL>
+              <LI>The following environment variables are required:                                 
+                 <UL>
+                   <LI>TUSCANY_SDOCPP=&lt;path to installed Tuscany SDO&gt;</LI>                                     
+                   <LI>AXIS2C_HOME=&lt;path to axis2c version 0.92&gt;</LI>
+                 </UL>
+              </LI>
+              <LI>You must have set up the environment for Microsoft Visual C++ tools.
+                  The build command will call vcvars32 to set the environment. Ensure the 
+                  directory containing this is on your path. This will be where you 
+                  installed the compiler.
+              </LI>
+              <LI>Build the source, either via the Visual Studio 6 project under 
+                  &lt;tuscany_sdo_install_dir&gt;\samples\ides or via the command-line build file
+                  found at &lt;tuscany_sdo_install_dir&gt;\samples\ides\devstudio6\projects\misc\build.cmd
+                  which will build and deploy the samples.
+              </LI>
+          </OL>                                                  
+         </DIV>
+
+        <DIV CLASS="section"> 
+          <A NAME="winrun"><H3>Running the samples on Windows</H3></A>
+          <OL>
+              <LI>Ensure that &lt;tuscany_sdo_install_dir&gt;\bin is included in the PATH environment variable
+              </LI>
+              <LI>Run the sample with the following commands:
+                 <UL>
+                    <LI>cd &lt;tuscany_sdo_install_dir&gt;/samples/misc/deploy</LI>
+                    <LI>bin\sdo_misc</LI>
+                 </UL>
+              </LI>
+          </OL>                                                  
+       </DIV>
+       <DIV CLASS="section"> 
+          <A NAME="help"><H3>Getting Help</H3></A>
+
+          <P>First place to look is at the Tuscany FAQ at 
+          <A HREF="http://incubator.apache.org/tuscany/faq.html"
+             TARGET="_blank">http://incubator.apache.org/tuscany/faq.html</A> </P>
+
+          <P>Any problem with this release can be reported to the Tuscany 
+          <A HREF="http://incubator.apache.org/tuscany/mail-lists.html"
+             TARGET="_blank">mailing lists</A> or create a JIRA issue at 
+          <A HREF="http://issues.apache.org/jira/browse/Tuscany"
+             TARGET="_blank">http://issues.apache.org/jira/browse/Tuscany</A>.</P>
+       </DIV>
+          </section>
+         </body>
+</document>
+
+
