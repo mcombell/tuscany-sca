@@ -1339,6 +1339,10 @@ namespace commonj
                               && propiTypeURI.equals(propTypeURI) )
                           {
                               // We have a match
+
+                              // it's a global element so we do not need xsi:type
+                              xsiTypeNeeded = false;
+
                               XSDPropertyInfo* ppi = getPropertyInfo(*propi);
                               PropertyDefinitionImpl propdef;
                               if (ppi)
