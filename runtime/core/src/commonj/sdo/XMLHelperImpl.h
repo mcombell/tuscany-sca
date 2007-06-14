@@ -172,12 +172,8 @@ namespace commonj
             DataFactoryPtr    dataFactory;
             SDOXMLString targetNamespaceURI;
 
-            XMLDocumentPtr createDocument(DataObjectPtr dataObject);
-
-//               const TypeImpl* findRoot(DataFactory* df,
-//                                         const char* rootElementURI);
-              const TypeImpl* findRoot(DataFactory* df,
-                                           const SDOString& rootElementURI);
+            const TypeImpl* findRoot(DataFactory* df,
+                const SDOString& rootElementURI);
 
             DataFactoryPtr getDataFactory();
         };

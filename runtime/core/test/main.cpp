@@ -185,6 +185,8 @@ int main (int argc, char** argv)
     
     TEST (  sdotest::jira1174() );
     TEST (  sdotest::jira1238() );
+    TEST ( sdotest::loadWithoutSchema() );
+
 
     } catch(...)
     {

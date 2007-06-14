@@ -1891,3 +1891,20 @@ int sdotest::jira1238()
         return 0;
     }
 }
+
+int sdotest::loadWithoutSchema()
+{
+
+    try {
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper();
+
+        XMLDocumentPtr doc = xmh->loadFile("stock.wsdl");
+
+        return 1;
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in loadWithoutSchema" << e << endl;
+        return 0;
+    }
+}

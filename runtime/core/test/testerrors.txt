@@ -3,5 +3,3 @@ Opening and ending tag mismatch: complexType line 44 and schema
 
 Premature end of data in tag schema line 22
 
-XML reported some errors:
-Parser found unknown element company

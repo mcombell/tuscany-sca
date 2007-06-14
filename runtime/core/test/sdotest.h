@@ -209,4 +209,5 @@ class sdotest {
         static int eBayTest();
         static int jira1174();
         static int jira1238();
+        static int loadWithoutSchema();
 };

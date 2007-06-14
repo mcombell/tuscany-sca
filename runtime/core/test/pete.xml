@@ -19,7 +19,7 @@
 -->
 
 <StockQuotes>
-<Stock>
+<Stock fred="joe">
 <Symbol>IBM</Symbol>
 <Last>79.78</Last>
 <Date>5/24/2006</Date>
