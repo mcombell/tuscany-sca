@@ -133,7 +133,10 @@ namespace commonj
                 SDOXMLString elementURI = doc->getRootElementURI();
                 if (elementURI.isNull() || elementURI.equals(""))
                 {
-                    elementURI = rootTypeURI;
+                    if (!rootTypeURI.equals(s_commonjsdo))
+                    {
+                        elementURI = rootTypeURI;
+                    }
                 }
                 SDOXMLString elementName = doc->getRootElementName();
                 if (elementName.isNull() || elementName.equals(""))

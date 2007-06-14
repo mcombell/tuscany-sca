@@ -1898,9 +1898,10 @@ int sdotest::loadWithoutSchema()
     try {
         XMLHelperPtr xmh = HelperProvider::getXMLHelper();
 
-        XMLDocumentPtr doc = xmh->loadFile("stock.wsdl");
+        XMLDocumentPtr doc = xmh->loadFile("pete.xml");
+        xmh->save(doc, "noschemaout.xml");
+        return comparefiles("noschemaout.xml" ,"noschema.xml");
 
-        return 1;
     }
     catch (SDORuntimeException e)
     {
