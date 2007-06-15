@@ -1145,7 +1145,27 @@ namespace commonj
                             }
                             else
                             {
-                                xmlTextWriterStartElementNS(writer, NULL, propertyName, NULL);
+                                // Write the startElement for non-root object
+                                SDOXMLString theName=propertyName;
+
+                                if (!propertyTypeURI.isNull() 
+                                    && !propertyTypeURI.equals("")
+                                    && !propertyTypeURI.equals(s_commonjsdo)
+                                    && !propertyTypeURI.equals(tnsURI))
+                                {
+                                    // Locate the namespace prefix
+                                    std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(propertyTypeURI);
+                                    if (it != namespaceMap.end())
+                                    {
+                                        theName = (*it).second;
+                                        theName += ":";
+                                        theName += propertyName;
+                                    }
+                                }
+
+                                xmlTextWriterStartElement(writer, theName);
+
+                                //xmlTextWriterStartElementNS(writer, NULL, propertyName, NULL);
                                 if (dataObject->isNull(pl[i]))
                                 {
                                     xmlTextWriterWriteAttributeNS(writer, s_xsi, s_nil, NULL, s_true);

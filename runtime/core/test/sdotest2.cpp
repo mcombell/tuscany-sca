@@ -1909,3 +1909,59 @@ int sdotest::loadWithoutSchema()
         return 0;
     }
 }
+
+int sdotest::jira445()
+{
+
+    try {
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper();
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper(xsh->getDataFactory());
+        xsh->defineFile("fidelity.xsd");
+        XMLDocumentPtr doc = xmh->loadFile("fidelity.xml");
+        xmh->save(doc, "jira445out.xml");
+        return comparefiles("jira445out.xml" ,"jira445expected.xml");
+
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in jira445" << e << endl;
+        return 0;
+    }
+}
+
+int sdotest::jira1112()
+{
+
+    try {
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper();
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper(xsh->getDataFactory());
+        xsh->defineFile("types.xsd");
+        unsigned int i,j;
+        if ((i = xsh->getErrorCount()) > 0)
+        {
+            cout << "types.xsd reported some errors: " <<endl;
+            for (j=0;j<i;j++)
+            {
+                cout << xsh->getErrorMessage(j) <<endl;
+            }
+        }
+
+        DataObjectPtr person = xsh->getDataFactory()->create("http://www.test.com/info","personType");
+        DataObjectPtr name = person->createDataObject("name");
+        name->setCString("first", "Will");
+        name->setCString("last", "Shakespeare");
+
+        DataObjectPtr add = xsh->getDataFactory()->create("http://Component" , "add");
+        add->setDataObject("person", person);
+
+        XMLDocumentPtr doc = xmh->createDocument(add, "", "BOGUS");
+        xmh->save(doc, "jira1112out.xml", 2);
+        return comparefiles("jira1112out.xml" ,"jira1112expected.xml");
+
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in jira1112" << e << endl;
+        return 0;
+    }
+}

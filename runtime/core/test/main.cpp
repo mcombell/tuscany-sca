@@ -186,11 +186,13 @@ int main (int argc, char** argv)
     TEST (  sdotest::jira1174() );
     TEST (  sdotest::jira1238() );
     TEST ( sdotest::loadWithoutSchema() );
+    //TEST (  sdotest::jira445() );
+    TEST (  sdotest::jira1112() );
 
 
     } catch(...)
     {
-        cout << "unexpected exception caught" << endl;
+        cout << "unexpected exception caught" << endl; 
     }
 
     cout << "Total tests:" << totaltests << " Tests passed:" << testspassed << endl;

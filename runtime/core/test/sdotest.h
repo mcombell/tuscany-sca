@@ -210,4 +210,6 @@ class sdotest {
         static int jira1174();
         static int jira1238();
         static int loadWithoutSchema();
+        static int jira445();
+        static int jira1112();
 };
