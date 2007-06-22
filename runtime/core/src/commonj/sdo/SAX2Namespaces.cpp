@@ -88,7 +88,7 @@ namespace commonj
 
         void SAX2Namespaces::empty()
         {
-            namespaceMap.empty();
+            namespaceMap.clear();
         }
 
     } // End - namespace sdo

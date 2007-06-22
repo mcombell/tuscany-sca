@@ -53,11 +53,11 @@ namespace commonj
              *
              */
 
-            SDO_API virtual const char* defineFile(const char* schemaFile, bool loadImportNamespace = false) = 0;
-            SDO_API virtual const char* defineFile(const SDOString& schemaFile, bool loadImportNamespace = false) = 0;
-            SDO_API virtual const char* define(std::istream& schema, bool loadImportNamespace = false) = 0;
-            SDO_API virtual const char* define(const char* schema, bool loadImportNamespace = false) = 0;
-            SDO_API virtual const char* define(const SDOString& schema, bool loadImportNamespace = false) = 0;
+            SDO_API virtual const char* defineFile(const char* schemaFile) = 0;
+            SDO_API virtual const char* defineFile(const SDOString& schemaFile) = 0;
+            SDO_API virtual const char* define(std::istream& schema) = 0;
+            SDO_API virtual const char* define(const char* schema) = 0;
+            SDO_API virtual const char* define(const SDOString& schema) = 0;
 
             /**  generate buildsXSD from types/properties
              *

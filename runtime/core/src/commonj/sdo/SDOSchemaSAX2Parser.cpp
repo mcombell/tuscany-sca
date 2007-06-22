@@ -41,8 +41,12 @@ namespace commonj
         
         SDOSchemaSAX2Parser::SDOSchemaSAX2Parser(SchemaInfo& schemaInf,
             ParserErrorSetter* insetter,
-            bool loadImpNamespace)
-            : schemaInfo(schemaInf), SAX2Parser(insetter), loadImportNamespace(loadImpNamespace)
+            PARSED_LOCATIONS& parsedLocs,
+            DEFINED_NAMESPACES& definedNSs)
+            : schemaInfo(schemaInf), 
+              SAX2Parser(insetter),
+              parsedLocations(parsedLocs),
+              definedNamespaces(definedNSs)
         {
             bInSchema = false;
             bInvalidElement = false;
@@ -229,10 +233,10 @@ namespace commonj
                         }                        
                     }
 
-
                     currentType.uri = schemaInfo.getTargetNamespaceURI();
                     currentType.name = "RootType";
                     currentType.localname="RootType";
+                    definedNamespaces.push_back(currentType.uri);
                     return;
                     
                 } // end schema handling
@@ -532,38 +536,37 @@ namespace commonj
             } 
 
         }
-        
-        void SDOSchemaSAX2Parser::free(xmlChar* absoluteUri)
+
+        int SDOSchemaSAX2Parser::parseURI(const SDOXMLString& location, const SDOXMLString& base)
         {
-            delete &schemaInfo;
-            delete this;
-            xmlFree(absoluteUri);
-        }
-        ParsedLocations::~ParsedLocations()
-        {
-            for( iterator iter = begin(); iter != end(); iter++ )
-                iter->second->free(iter->first);
-        }
-        SDOSchemaSAX2Parser* ParserErrorSetter::parseIfNot(const void* location, bool loadImportNamespace, const void* base)
-        {
-            xmlChar*const absoluteUri = xmlBuildURI((xmlChar*)location, (xmlChar*)base);
+            xmlChar* absoluteUri = xmlBuildURI(location, base);
             if (! absoluteUri)
-                SDO_THROW_EXCEPTION("parseIfNot", SDOFileNotFoundException, (char*)location);
-            LocationParserMap::iterator iter = parsedLocations.find(absoluteUri);
-            if (parsedLocations.end() == iter)
             {
-                SDOSchemaSAX2Parser*const schemaParser = new SDOSchemaSAX2Parser(*new SchemaInfo(), this, loadImportNamespace);
-			    try {
-				    if (0 == schemaParser->parse((char*)absoluteUri))
-                        return parsedLocations[ absoluteUri ] = schemaParser;
-                }
-			    catch (SDORuntimeException e)
-			    {}
-                schemaParser->free(absoluteUri);
+                SDO_THROW_EXCEPTION("parseURI", SDOFileNotFoundException, location);
+            }
+            SDOXMLString absUri(absoluteUri);
+            xmlFree(absoluteUri);
+
+            // Determine if this location has been parsed already
+            PARSED_LOCATIONS::iterator iter;
+            iter = parsedLocations.find(absUri);
+            if (iter != parsedLocations.end())
+            {
+                schemaInfo.setTargetNamespaceURI(iter->second);
                 return 0;
             }
-            xmlFree(absoluteUri);
-            return iter->second;
+
+
+            try
+            {
+                int rc = parse(absUri);
+                // add new location to map
+                parsedLocations[absUri] = schemaInfo.getTargetNamespaceURI();
+                return rc;
+            }
+            catch (SDORuntimeException) {}
+            
+            return -1;
         }
 
         // ============================================================================
@@ -580,61 +583,70 @@ namespace commonj
 
             if (!bInSchema) return;
 
-            TypeDefinitionsImpl* typedefs;
 
             SDOXMLString importNamespace = attributes.getValue("namespace");
             SDOXMLString schemaLocation = attributes.getValue("schemaLocation");
+
+            SchemaInfo schemaInf;
+            SDOSchemaSAX2Parser schemaParser(schemaInf, setter, parsedLocations, definedNamespaces);
+
             if (!schemaLocation.isNull())
             {
-                SDOSchemaSAX2Parser*const schemaParser = setter->parseIfNot((const char*)schemaLocation, false, getCurrentFile());
-                if (!schemaParser)
+                if (0 != schemaParser.parseURI(schemaLocation, getCurrentFile()))
                     return;
-                typedefs = &schemaParser->getTypeDefinitions();
             }
             else
             {
                 // schemaLocation isn't present. Try loading namespace for import
-                if (loadImportNamespace
-                    && localname.equalsIgnoreCase("import")
+                if (localname.equalsIgnoreCase("import")
                     && !importNamespace.isNull())
                 {
-                    SDOSchemaSAX2Parser*const sp = setter->parseIfNot((const char*)importNamespace);
-                    if (!sp)
+                    // Do not attempt to import namespaces alredy defined
+                    for (unsigned int i = 0; i < definedNamespaces.size(); i++)
+                    {
+                        if (definedNamespaces[i].equals(importNamespace))
+                        {
+                            return;
+                        }
+                    }
+
+                    if (0 != schemaParser.parseURI(importNamespace, SDOXMLString()))
                         return;
-                    typedefs = &sp->getTypeDefinitions();
                 }
                 else
                 {
                     return;
                 }
             }
-            
-            XMLDAS_TypeDefs types = typedefs->types;
-                XMLDAS_TypeDefs::iterator iter;
-                for (iter=types.begin(); iter != types.end(); iter++)
-                {    
-                    if ((*iter).second.name.equals("RootType")
+
+            // Add the parsed types to this parsers list
+            TypeDefinitionsImpl& typedefs = schemaParser.getTypeDefinitions();
+            XMLDAS_TypeDefs types = typedefs.types;
+            XMLDAS_TypeDefs::iterator iter;
+            for (iter=types.begin(); iter != types.end(); iter++)
+            {    
+                if ((*iter).second.name.equals("RootType")
                     && currentType.name.equals("RootType")
-                    &&  (*iter).second.uri.equals(currentType.uri))
+                    && (*iter).second.uri.equals(currentType.uri))
                 {
-                        // This must be true for an import/include to be
+                    // This must be true for an import/include to be
                     // legally positioned
-                    
+
                     XMLDAS_TypeDefs::iterator find = typeDefinitions.types.find(
                         (*iter).first);
-                    
+
                     std::list<PropertyDefinitionImpl>::iterator propit;
                     std::list<PropertyDefinitionImpl>::iterator currpropit;
                     bool found;
-                    
+
                     for (propit = (*iter).second.properties.begin() ; 
-                    propit != (*iter).second.properties.end(); ++ propit)
+                        propit != (*iter).second.properties.end(); ++ propit)
                     {
                         found = false;
                         // do not merge properties whose names clash
                         for ( currpropit = currentType.properties.begin();
-                        currpropit != currentType.properties.end();
-                        ++currpropit)
+                            currpropit != currentType.properties.end();
+                            ++currpropit)
                         {
                             if ((*currpropit).name.equals((*propit).name))
                             {
@@ -644,16 +656,16 @@ namespace commonj
                         }
                         if (!found) 
                         {
-                           currentType.properties.push_back(*propit);
+                            currentType.properties.push_back(*propit);
                         }
                     }
                 }
-                    else 
-                    {
-                        typeDefinitions.types.insert(*iter);
-                    }
+                else 
+                {
+                    typeDefinitions.types.insert(*iter);
                 }
-            
+            }
+
         }
 
         
