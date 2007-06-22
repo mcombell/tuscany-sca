@@ -171,7 +171,18 @@ namespace commonj
             const char* rootElementURI,
             const char* rootElementName)
         {
-            return new XMLDocumentImpl(dataObject, rootElementURI, rootElementName);
+        	SDOString uri;
+        	SDOString name = rootElementName;
+        	if (0 == rootElementURI)
+        	  uri = "";
+        	  else
+        	  uri =  rootElementURI;
+        	  if (0 == rootElementName)
+        	  name = "";
+        	  else
+        	  name =  rootElementName;
+        	  
+            return createDocument(dataObject, uri, name);
         }
         XMLDocumentPtr XMLHelperImpl::createDocument(
             DataObjectPtr dataObject,
@@ -193,7 +204,7 @@ namespace commonj
                                     this);
             if (sdoParser.parse(xmlFile) == 0)
             {                
-                return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), (const char*)sdoParser.getRootElementName());
+                return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
             }
             return 0;
         }
@@ -210,7 +221,7 @@ namespace commonj
                                     this);
             if (sdoParser.parse(xmlFile.c_str()) == 0)
             {                
-                return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), (const char*)sdoParser.getRootElementName());
+                return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(),   sdoParser.getRootElementName());
             }
             return 0;
         }
@@ -227,7 +238,7 @@ namespace commonj
                                     this);
             clearErrors();
             inXml>>sdoParser;
-            return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), (const char*)sdoParser.getRootElementName());
+            return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(),   sdoParser.getRootElementName());
        }
 
         XMLDocumentPtr XMLHelperImpl::load(
@@ -241,7 +252,7 @@ namespace commonj
                                     this);
             clearErrors();
             inXml>>sdoParser;
-            return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), (const char*)sdoParser.getRootElementName());
+            return createDocument(rootDataObject, (const char*)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
         }
         
         XMLDocumentPtr XMLHelperImpl::load(
