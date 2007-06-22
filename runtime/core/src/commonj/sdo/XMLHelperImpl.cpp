@@ -193,7 +193,7 @@ namespace commonj
                                     this);
             if (sdoParser.parse(xmlFile) == 0)
             {                
-                return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
+                return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), (SDOString)sdoParser.getRootElementName());
             }
             return 0;
         }
@@ -210,7 +210,7 @@ namespace commonj
                                     this);
             if (sdoParser.parse(xmlFile.c_str()) == 0)
             {                
-                return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
+                return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), (SDOString)sdoParser.getRootElementName());
             }
             return 0;
         }
@@ -227,7 +227,7 @@ namespace commonj
                                     this);
             clearErrors();
             inXml>>sdoParser;
-            return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
+            return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), (SDOString)sdoParser.getRootElementName());
        }
 
         XMLDocumentPtr XMLHelperImpl::load(
@@ -241,7 +241,7 @@ namespace commonj
                                     this);
             clearErrors();
             inXml>>sdoParser;
-            return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), sdoParser.getRootElementName());
+            return createDocument(rootDataObject, (SDOString)sdoParser.getRootElementURI(), (SDOString)sdoParser.getRootElementName());
         }
         
         XMLDocumentPtr XMLHelperImpl::load(
