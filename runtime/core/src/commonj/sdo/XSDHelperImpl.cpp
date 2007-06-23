@@ -56,7 +56,7 @@ namespace commonj
 
         XSDHelperImpl::XSDHelperImpl(DataFactoryPtr df)
         {
-            dataFactory = (DataFactory*)df;
+            dataFactory = df;
             if (!dataFactory) 
             {
                 dataFactory = DataFactory::getDataFactory();
