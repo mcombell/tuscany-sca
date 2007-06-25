@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<xsd:schema xmlns:DBConfig="http:///org.apache.tuscany.das.rdb/dbconfig.xsd" 
+	        xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	        elementFormDefault="qualified" 
+	        targetNamespace="http:///org.apache.tuscany.das.rdb/dbconfig.xsd">
+
+   <xsd:element name="DBConfig" type="DBConfig:DBConfig"/> 
+
+   <xsd:complexType name="DBConfig">
+      <xsd:sequence>
+        <xsd:element maxOccurs="1" minOccurs="1" name="ConnectionInfo" type="DBConfig:ConnectionInfo"/>
+        <xsd:element maxOccurs="unbounded" minOccurs="1" name="Table" type="DBConfig:Table"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ConnectionInfo">
+      <xsd:sequence>
+        <xsd:element maxOccurs="1" minOccurs="0" name="ConnectionProperties" type="DBConfig:ConnectionProperties"/>
+      </xsd:sequence>
+      <xsd:attribute name="dataSource" type="xsd:string"/>
+   </xsd:complexType>
+   
+   <xsd:complexType name="ConnectionProperties">
+      <xsd:attribute name="driverClass" type="xsd:string"/>
+      <xsd:attribute name="databaseURL" type="xsd:string"/>
+      <xsd:attribute default="" name="userName" type="xsd:string"/>
+      <xsd:attribute default="" name="password" type="xsd:string"/>
+      <xsd:attribute default="0" name="loginTimeout" type="xsd:int"/>      
+   </xsd:complexType>
+   
+   <xsd:complexType name="Table">
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" minOccurs="1" name="row" type="xsd:string"/>
+      </xsd:sequence>   
+   	  <xsd:attribute name="name" type="xsd:string"/>
+   	  <xsd:attribute name="SQLCreate" type="xsd:string"/>
+   </xsd:complexType>   
+</xsd:schema>

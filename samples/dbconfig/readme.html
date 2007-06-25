@@ -1,0 +1,597 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="readme_files/filelist.xml">
+<title>Tuscany RDB DAS Database Setup Utility/title&gt;</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="City"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="state"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>IBM_USER</o:Author>
+  <o:LastAuthor>IBM_User</o:LastAuthor>
+  <o:Revision>23</o:Revision>
+  <o:TotalTime>58</o:TotalTime>
+  <o:Created>2006-10-19T16:54:00Z</o:Created>
+  <o:LastSaved>2007-05-17T06:46:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>730</o:Words>
+  <o:Characters>4167</o:Characters>
+  <o:Company>IBM</o:Company>
+  <o:Lines>34</o:Lines>
+  <o:Paragraphs>9</o:Paragraphs>
+  <o:CharactersWithSpaces>4888</o:CharactersWithSpaces>
+  <o:Version>10.3501</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:Compatibility>
+   <w:ApplyBreakingRules/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:\5B8B\4F53;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:13.0pt;
+	font-family:Arial;}
+p.MsoFootnoteText, li.MsoFootnoteText, div.MsoFootnoteText
+	{mso-style-noshow:yes;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+span.MsoFootnoteReference
+	{mso-style-noshow:yes;
+	vertical-align:super;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+code
+	{font-family:"Courier New";
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";}
+span.codefrag
+	{mso-style-name:codefrag;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <u1:shapelayout u2:ext="edit">
+  <u1:idmap u2:ext="edit" data="1"/>
+ </u1:shapelayout>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="5122"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1><!--
+
+
+<p class=MsoNormal><span style="font-size: 9pt">&nbsp;</span></p>
+<pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+&quot;License&quot;); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.   </a></pre>
+<p class=MsoNormal><span style="font-size: 9pt"><br>
+&nbsp;</span></p>
+<p class=MsoNormal><span style='font-size:9.0pt'>
+<o:p>&nbsp;</o:p></span></p>
+
+-->
+
+<h1><st1:state><st1:place>Tuscany</st1:place></st1:state> RDB DAS Database
+Setup Utility<o:p></o:p></h1>
+
+<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
+
+<p class=MsoNormal>This utility provides a jar file to be used by RDB DAS
+sample applications (web or standalone) to do database setup.&nbsp; </p>
+
+<p class=MsoNormal><br>
+So far&nbsp; the samples provided canned pre-created Derby database with tables
+and data. &nbsp; There was no convenient way to&nbsp; refresh&nbsp; table&nbsp;
+data&nbsp; during&nbsp; the samples&nbsp; execution.&nbsp; This utility<span
+class=GramE>&nbsp; supports</span> <st1:City><st1:place>Derby</st1:place></st1:City>
+database at present and uses a <span class=SpellE>config</span> file to get the
+setup information.</p>
+
+<p class=MsoNormal><br>
+<b>APIs</b></p>
+
+<div style='border:solid blue 1.0pt;mso-border-alt:solid blue .5pt;padding:
+1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> <span class=SpellE>DBInitializer</span>()<u3:p></u3:p>
+– uses default provided <span class=SpellE>ConfigFile</span> <span
+class=SpellE>CannedSampleDBConfig.xml</span><o:p></o:p></span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> <span class=SpellE>DBInitializer</span>(String <span
+class=SpellE>ConfigFileLocation</span>)<u3:p></u3:p></span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> <span class=SpellE>DBInitializer</span> (<span
+class=SpellE>InputStream</span> <span class=SpellE>ConfigFileStream</span>)<u3:p></u3:p></span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> void <span class=SpellE>initializeDatabase</span>(<span
+class=SpellE>boolean</span> clean) - Create database tables and fill data. If
+clean=true, all tables will be dropped and recreated.<u3:p></u3:p> </span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> void <span class=SpellE>initializeDatabaseData</span>(<span
+class=SpellE>boolean</span> clean) - create database data (with clean=true, if
+a table has pre-existing data, it will be deleted first)<u3:p></u3:p></span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> void <span class=SpellE>refreshDatabaseData</span>()
+– calls <span class=SpellE>initializeDatabase</span>(clean=true)</span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> <span class=SpellE>boolean</span> <span
+class=SpellE>isDatabaseReady</span>() - will return true, if the tables exist
+in the database<u3:p></u3:p></span></h1>
+
+<h1 style='border:none;mso-border-alt:solid blue .5pt;padding:0in;mso-padding-alt:
+1.0pt 4.0pt 1.0pt 4.0pt'><span class=GramE><span style='font-size:12.0pt;
+font-family:"Times New Roman"'>public</span></span><span style='font-size:12.0pt;
+font-family:"Times New Roman"'> boolean <span class=SpellE>isDatabasePopulated</span>()
+- will return true, if the tables have data<u3:p></u3:p></span><o:p></o:p></h1>
+
+</div>
+
+<p class=MsoNormal><u3:p><o:p>&nbsp;</o:p></p>
+
+<h3>Assumptions:</h3>
+
+<p class=MsoNormal><span style='mso-fareast-font-family:SimSun'>&lt;<span
+class=GramE>table</span>&gt; element lists tables in proper sequence, i.e.
+parent tables first and then child tables. This sequence will be used in
+create,insert,delete,drop <br>
+to take care of referential integrity. <br>
+<br>
+The config file required by utility supports the following features through
+different attributes and elements. Sample xml file is shown at the end.<o:p></o:p></span></p>
+
+<h3>&lt;<span class=SpellE>ConnectionInfo</span>&gt;</h3>
+
+<p class=MsoNormal><span style='mso-fareast-font-family:SimSun'>This element
+provides connection specific information - like vendor specific database URL,
+user name, password etc. If the DataSource is <o:p></o:p></span></p>
+
+<p class=MsoNormal><u3:p>provided by the web container, user needs to only fill
+dataSource attribute in this. In case of standalone J2SE samples, user needs to
+fill ConnectionProperties <br>
+element inside ConnectionInfo. These two ways of connection specification are
+mutually exclusive.<br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]><o:p></o:p></p>
+
+<h3></u3:p>&lt;<span class=GramE>table</span>&gt;</h3>
+
+<p class=MsoNormal><span style='mso-fareast-font-family:SimSun'>&nbsp; This
+element needs to specify the table names required by the sample. Only these
+tables will be considered for creation, data population. This <o:p></o:p></span></p>
+
+<p class=MsoNormal><u3:p><span class=GramE>gives</span> flexibility to the user
+to choose the required set of tables based on the sample's requirement. It also
+needs to specify in the attributes, the Create SQL command used to create this
+table. &lt;<span class=GramE>table</span>&gt; has sequence element &lt;row&gt;
+which is used to provide the data to be populated in the table.<br
+style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]><o:p></o:p></p>
+
+<h3></u3:p>Set Up</h3>
+
+<p class=MsoNormal><span style='mso-fareast-font-family:SimSun'><br>
+To use this utility, include its jar and required database driver's jar in the classpath.
+Provide the config file used by this utility , similar to the example below, in
+the source folder of the sample.<o:p></o:p></span></p>
+
+<h3>DBConfig.xml example</h3>
+
+<p class=MsoNormal><span style='mso-fareast-font-family:SimSun'><o:p>&nbsp;</o:p></span></p>
+
+<div style='border:solid blue 1.0pt;mso-border-alt:solid blue .5pt;padding:
+1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><u3:p></u3:p><span
+class=GramE><u3:p></u3:p><u3:p>&lt;?xml</span> version=&quot;1.0&quot;
+encoding=&quot;ASCII&quot;?&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'>&lt;!--</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span>Licensed to the Apache Software Foundation
+(ASF) under one</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>or</span> more contributor
+license agreements.<span style='mso-spacerun:yes'>  </span>See the NOTICE file</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>distributed</span> with
+this work for additional information</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>regarding</span> copyright
+ownership.<span style='mso-spacerun:yes'>  </span>The ASF licenses this file</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>to</span> you under the
+Apache License, Version 2.0 (the</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span>&quot;License&quot;); you may not use this
+file except in compliance</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>with</span> the
+License.<span style='mso-spacerun:yes'>  </span>You may obtain a copy of the
+License at</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span>http://www.apache.org/licenses/LICENSE-2.0</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span>Unless required by applicable law or agreed
+to in writing,</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>software</span> distributed
+under the License is distributed on an</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span>&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES
+OR CONDITIONS OF ANY</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>KIND, either express or
+implied.</span><span style='mso-spacerun:yes'>  </span>See the License for the</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>specific</span> language
+governing permissions and limitations</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>  </span><span class=GramE>under</span> the License.</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'> </span>--&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'>&lt;<span class=SpellE>DBConfig</span>
+<span class=SpellE>xmlns</span>=&quot;http:///org.apache.tuscany.das.rdb/dbconfig.xsd&quot;&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;<span class=SpellE>ConnectionInfo</span>&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=SpellE>ConnectionProperties</span>
+</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+3'>                                    </span><span class=SpellE><span
+class=GramE>driverClass</span></span>=&quot;<span class=SpellE>org.apache.derby.jdbc.EmbeddedDriver</span>&quot;
+</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+3'>                                    </span><span class=SpellE><span
+class=GramE>databaseURL</span></span>=&quot;<span class=SpellE>jdbc:derby:target/dastest</span>;
+create = true&quot; </p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+3'>                                    </span><span class=SpellE><span
+class=GramE>loginTimeout</span></span>=&quot;600000&quot;/&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;/<span class=SpellE>ConnectionInfo</span>&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;Table name=&quot;COMPANY&quot; </p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>          </span><span
+style='mso-spacerun:yes'>  </span><span class=SpellE>SQLCreate</span>=&quot;CREATE
+TABLE COMPANY (ID INT PRIMARY KEY NOT NULL, NAME <span class=GramE>VARCHAR(</span>30),
+EOTMID INTEGER)&quot; &gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row&gt;</span>51, 'ACME
+Publishing', 0&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row&gt;</span>52,
+'Do-rite plumbing', 0&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row&gt;</span>53, '<span
+class=SpellE>MegaCorp</span>', 0&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;/Table&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;Table name=&quot;DEPARTMENT&quot; </p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>              </span><span class=SpellE>SQLCreate</span>=&quot;CREATE
+TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
+NAME<span style='mso-spacerun:yes'>   </span></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>              </span><span class=GramE>VARCHAR(</span>30),LOCATION
+VARCHAR(30), DEPNUMBER VARCHAR(10),COMPANYID INT)&quot; &gt;<span
+style='mso-tab-count:1'>   </span><span style='mso-tab-count:1'>            </span></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Advanced
+Technologies', 'NY', '123', 1&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Default
+Name', '', '', 51&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;/Table&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+1'>            </span>&lt;Table name=&quot;EMPLOYEE&quot; </p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>            </span><span class=SpellE>SQLCreate</span>=&quot;CREATE
+TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY<span
+class=GramE>,NAME</span> </p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span
+style='mso-spacerun:yes'>            </span><span class=GramE>VARCHAR(</span>30),SN
+VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)&quot; &gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'John
+Jones','E0001',0,12&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span>&lt;<span class=GramE>row</span>&gt;'Mary
+Smith','E0002',1,null&lt;/row&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span style='mso-tab-count:
+2'>                        </span><span lang=IT style='mso-ansi-language:IT'>&lt;row&gt;'Jane
+Doe','E0003',0,12&lt;/row&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span lang=IT
+style='mso-ansi-language:IT'><span style='mso-tab-count:2'>                        </span>&lt;row&gt;'Al
+Smith','E0004',1,12&lt;/row&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'><span lang=IT
+style='mso-ansi-language:IT'><span style='mso-tab-count:1'>            </span></span>&lt;/Table&gt;</p>
+
+<p class=MsoNormal style='border:none;mso-border-alt:solid blue .5pt;
+padding:0in;mso-padding-alt:1.0pt 4.0pt 1.0pt 4.0pt'>&lt;/<span class=SpellE>DBConfig</span>&gt;</p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+-->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.tuscany.das</groupId>
+        <artifactId>tuscany-das</artifactId>
+        <version>1.0-incubating-beta1</version>
+    </parent>
+
+    <artifactId>tuscany-das-rdb</artifactId>
+    <name>Tuscany DAS for Relational Databases</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tuscany.sdo</groupId>
+            <artifactId>tuscany-sdo-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>stax</groupId>
+            <artifactId>stax-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+	        <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.1.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+	    <build>
+		<plugins>
+		    <plugin>
+			<groupId>org.apache.tuscany.sdo</groupId>
+			<artifactId>tuscany-sdo-plugin</artifactId>
+			<executions>
+			    <execution>
+				<id>config</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/main/resources/config.xsd</schemaFile>
+				    <noNotification>true</noNotification>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>
+			    <execution>
+				<id>company</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/test/resources/company.xsd</schemaFile>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>                
+			    <execution>
+				<id>customer</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/test/resources/customer.xsd</schemaFile>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>
+			</executions>
+		    </plugin>
+
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+			    <includes>
+				<include>**/*AllTestsDerby.java</include>
+			    </includes>
+			</configuration>
+		    </plugin>
+		</plugins>
+	    </build>
+
+        </profile>
+
+        <profile>
+            <id>distribution</id>
+
+	    <build>
+		<plugins>
+		    <plugin>
+			<groupId>org.apache.tuscany.sdo</groupId>
+			<artifactId>tuscany-sdo-plugin</artifactId>
+			<executions>
+			    <execution>
+				<id>config</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/main/resources/config.xsd</schemaFile>
+				    <noNotification>true</noNotification>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>
+			    <execution>
+				<id>company</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/test/resources/company.xsd</schemaFile>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>                
+			    <execution>
+				<id>customer</id>
+				<configuration>
+				    <schemaFile>${basedir}/src/test/resources/customer.xsd</schemaFile>
+				    <noUnsettable>true</noUnsettable>
+				</configuration>
+				<goals>
+				    <goal>generate</goal>
+				</goals>
+			    </execution>
+			</executions>
+		    </plugin>
+
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+			    <includes>
+				<include>**/*AllTestsDerby.java</include>
+			    </includes>
+			</configuration>
+		    </plugin>
+
+
+		    <!-- Generates JavaDoc for DAS RDB API -->
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<configuration>
+				<version>2.0</version>
+				<quiet>true</quiet>
+				<maven.javadoc.failonerror>0</maven.javadoc.failonerror>
+				<maven.javadoc.warningsreport>false</maven.javadoc.warningsreport>
+			</configuration>
+			<executions>
+				<execution>
+				    <id>package</id>
+				    <phase>package</phase>
+				    <goals>
+					<goal>jar</goal>
+				    </goals>
+				</execution>
+			</executions>
+		    </plugin>
+		</plugins>
+	    </build>
+
+        </profile>
+    </profiles>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</project>
+
+

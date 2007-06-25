@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<DBConfig xmlns="http:///org.apache.tuscany.das.rdb/dbconfig.xsd">
+    
+    <!--Uncomment below for web container derby database setup-->
+	<ConnectionInfo dataSource="java:comp/env/jdbc/ajaxdastest">
+	</ConnectionInfo>
+				        
+    <!--<ConnectionInfo>
+		<ConnectionProperties 
+			driverClass="org.apache.derby.jdbc.EmbeddedDriver" 
+			databaseURL="jdbc:derby:target/dastest; create = true" 
+			loginTimeout="600000"/>
+	</ConnectionInfo>-->
+					        
+	<Table name="COMPANY" SQLCreate="CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30))">
+		<row>'ACME Publishing'</row>
+		<row>'Do-rite plumbing'</row>
+		<row>'MegaCorp'</row>
+	</Table>
+	
+	<Table name="DEPARTMENT" SQLCreate="CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30),LOCATION VARCHAR(30), DEPNUMBER VARCHAR(10),COMPANYID INT)">
+		<row>'Advanced Technologies', 'NY', '123', 1</row>
+	</Table>
+	
+	<Table name="CUSTOMER" SQLCreate="CREATE TABLE CUSTOMER (ID INT PRIMARY KEY NOT NULL,LASTNAME VARCHAR(30),ADDRESS VARCHAR(10) )">
+		<row>1, 'Pavick', 'CA'</row>
+		<row>2, 'Williams', 'NJ'</row>
+	</Table>
+			
+	<Table name="BOOK" SQLCreate="CREATE TABLE BOOK (BOOK_ID INT PRIMARY KEY NOT NULL,NAME VARCHAR(30),AUTHOR VARCHAR(30),QUANTITY INT, OCC INT )">
+		<row>1, 'The Brothers Karamazov', 'Fyodor Dostoevsky',5, 17</row>
+	</Table>
+						        
+</DBConfig>

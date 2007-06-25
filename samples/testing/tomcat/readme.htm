@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type"> <meta content="text/css" http-equiv="Content-Style-Type"><title>Tuscany End User Sample Testing</title><!-- LINK rel="stylesheet" href="ait.css" type="text/css" -->
+<style type="text/css" media="all">
+@import url("../../../css/maven-base.css");
+@import url("../../../css/maven-theme.css");
+@import url("../../../css/site.css");
+</style><link rel="stylesheet" href="./css/print.css" type="text/css" media="print"></head>
+<body>
+<h2>Tuscany End User Sample Testing</h2>
+<h3>Initial Setup</h3>&nbsp;
+&nbsp; &nbsp;Most of the following only needs to be done once
+unless noted otherwise.<br>
+<ul>
+<li>Be sure JAVA_HOME variable is pointing to a Java JDK directory.</li>
+<li>Follow the steps to build Tuscany DAS Companyweb sample application from <a target="_blank" href="http://incubator.apache.org/tuscany/das-java-developer-guide.html">DAS Java Developer Guide</a>.</li>
+
+<li>Change directory
+to <span style="font-weight: bold;">java/das/samples/testing/tomcat</span>.</li>
+
+<li>Download
+Tomcat Core 6.0.<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span>&nbsp;</span>zip
+for Windows or &nbsp;tar.gz for Linux &nbsp;from <a href="http://tomcat.apache.org/download-60.cgi" target="_blank">Apache
+Tomcat</a>.</li>
+
+<li>You can place the tomcat distribution in your java/samples/das/testing/tomcat directory or, alternatively, you can create/edit {user home}/build.properties to
+change the property <b>tuscany.acceptance.tomcat.zipped</b> to tell the build
+environment where the tomcat distribution zip file is located. </li>
+<li>You may have to edit build.xml &nbsp;to change the property <span style="font-weight: bold;">tuscany.acceptance.tomcat.version</span>
+to match the&nbsp;<span style="font-style: italic;"><span style="color: rgb(255, 102, 102);">xx</span></span>
+to the specific version that you downloaded.</li>
+</ul>
+
+<h3>&nbsp;Running</h3>In
+the <span style="font-weight: bold;">java/das/samples/testing/tomcat </span>
+directory<b> </b>run maven:<br><code>mvn</code><br><h3>Explanation</h3>Maven&nbsp;does
+the following:<br><ul><li>Unpacks the
+Tomcat distribution into the target directory to ensure a pristine
+environment.</li><li>It adds the appropriate Tuscany and it
+dependencies jars into Tomcat <a href="../../companyweb/readme.htm#Tomcat_Setup" target="_blank"><small><span style="font-style: italic;">(for more&nbsp; details)</span></small></a></li><li>Does
+the necessary changes
+to Tomcat's configuration as required.&nbsp;<a href="../../companyweb/readme.htm#Tomcat_Setup" target="_blank"><small><span style="font-style: italic;">(for more&nbsp; details)</span></small></a></li><li>Deploys
+Tuscany's DAS sample war files into Tomcat.</li><li>Starts
+Tomcat (You should see another window running Tomcat)&nbsp;</li><li>Begins
+running HTML unit tests that should closely match running the samples
+as a user would.</li></ul>If all goes well at the end you
+should see:<br>
+<pre>[INFO] ----------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ----------------------------------------------------------------------------
+[INFO] Tuscany Testing in Tomcat .............................. SUCCESS [0.961s]
+[INFO] Tuscany Testing Tomcat DAS Sample - Companyweb ......... SUCCESS [1:09.771s]
+[INFO] Tuscany Testing Ajax DAS Web Sample .................... SUCCESS [47.458s]
+[INFO] ----------------------------------------------------------------------------
+[INFO] ----------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL<br>
+[INFO] ----------------------------------------------------------------------------
+[INFO] Total time:  1 minute 59 seconds
+[INFO] Finished at: Sun Jun 10 01:23:19 VET 2007
+[INFO] Final Memory: 9M/17M
+[INFO] ----------------------------------------------------------------------------<br>
+</pre><h3>Cleanup</h3>Close
+the Tomcat window and issue <code>mvn clean</code>.<p><b><font size="4">Note</font></b></p>
+<p>Because the html unit tests execute multiple user actions that change the contents of the database tables, is recommended
+that you always run these tests in a clean environment (after a mvn clean),
+otherwise you may experience failure on some tests as the expected result data might have been affected by previous test runs.</p>
+
+</body></html>

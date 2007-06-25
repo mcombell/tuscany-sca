@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+-->
+<assembly>
+    <id>bin</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>zip</format>
+        <format>tar.gz</format>
+    </formats>
+
+    <fileSets>
+        <!-- include legal and other files -->
+        <fileSet>
+            <outputDirectory>tuscany-das-${das.version}</outputDirectory>
+            <includes>
+                <include>*.txt</include>
+                <include>*.htm</include>
+                <include>*.html</include>
+            </includes>
+        </fileSet>
+        
+        <!-- include javadocs -->
+        <!-- this will silient fail and generate empty distribution if javadoc is not available -->
+	<fileSet>
+	   <directory>../../rdb/target/apidocs</directory>
+	   <outputDirectory>tuscany-das-${das.version}/doc</outputDirectory>
+	</fileSet>  
+	
+	
+    </fileSets>
+
+    <dependencySets>
+        <!-- DAS api impl -->
+        <dependencySet>
+            <outputDirectory>tuscany-das-${das.version}/lib</outputDirectory>
+            <includes>
+                <include>org.apache.tuscany.das:tuscany-das-rdb</include>
+            </includes>
+            <fileMode>644</fileMode>
+        </dependencySet>
+        
+        <!-- DAS Samples - Companyweb -->
+        <dependencySet>
+	    <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
+	        <includes>
+	            <include>org.apache.tuscany.das.samples:tuscany-das-sample-companyweb</include>
+	        </includes>
+	    <fileMode>644</fileMode>
+        </dependencySet>
+
+        <!-- DAS Samples - Customer -->
+        <dependencySet>
+	    <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
+	        <includes>
+	            <include>org.apache.tuscany.das.samples:tuscany-das-sample-customer-j2se</include>
+	        </includes>
+	    <fileMode>644</fileMode>
+        </dependencySet>
+
+        <!-- DAS Samples - Ajax advanced features -->
+        <dependencySet>
+	    <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
+	        <includes>
+	            <include>org.apache.tuscany.das.samples:sample-ajax-das</include>
+	        </includes>
+	    <fileMode>644</fileMode>
+        </dependencySet>
+
+    </dependencySets>
+</assembly>

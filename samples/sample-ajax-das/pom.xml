@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *  Copyright (c) 2005-2006 The Apache Software Foundation or its licensors, as applicable.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ -->
+<project>
+	
+    <parent>
+        <groupId>org.apache.tuscany.das.samples</groupId>
+        <artifactId>tuscany-das-samples</artifactId>
+        <version>1.0-incubating-beta1</version>
+    </parent>
+	
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sample-ajax-das</artifactId>
+    <packaging>war</packaging>
+    <name>Tuscany DAS Ajax Sample</name>
+    <description>Sample demo of RDB DAS features in a Web application using Ajax</description>
+
+    <dependencies>
+		
+        <dependency>
+            <groupId>org.apache.tuscany.das</groupId>
+            <artifactId>tuscany-das-rdb</artifactId>
+            <version>${pom.version}</version>
+            <scope>compile</scope>
+          </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.das.samples</groupId>
+            <artifactId>tuscany-das-sample-dbconfig</artifactId>
+            <version>${pom.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        
+          <dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.1.2</version>
+	    <scope>runtime</scope>
+          </dependency>
+	  <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.1</version>
+          </dependency>        
+	  <dependency>
+	      <groupId>tomcat</groupId>
+	      <artifactId>servlet-api</artifactId>
+	      <version>5.0.18</version>
+	      <scope>provided</scope>
+	  </dependency>
+	  <dependency>
+	      <groupId>tomcat</groupId>
+	      <artifactId>jsp-api</artifactId>
+	      <version>5.0.18</version>
+	      <scope>provided</scope>
+	  </dependency>
+
+    </dependencies>
+    
+    <!-- this will place the java source files inside the war -->
+        <build>
+            <finalName>sample-ajax-das</finalName>
+            <sourceDirectory>src/main/java</sourceDirectory>
+            <resources>
+                <resource>
+                    <directory>src/main/java</directory>
+                </resource>
+                <resource>
+                  <directory>src/main/resources</directory>
+                </resource>
+            </resources>
+    </build>
+</project>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<Config xmlns="http:///org.apache.tuscany.das.rdb/config.xsd"> 
+		
+	<Command name="get all companies" SQL="select * from COMPANY" kind = "Select"/>
+	
+	<Command name="get named employee" SQL="select * from EMPLOYEE where NAME= ?" kind = "Select"/>
+  	
+	<Command name="get named employee with company" 
+		SQL="select * from EMPLOYEE left outer join COMPANY on EMPLOYEE.ID = COMPANY.EOTMID where EMPLOYEE.NAME= ?" kind = "Select"/>
+
+	<Command name="get employee by ID" SQL="select * from EMPLOYEE where ID= ?" kind = "Select"/>
+  	
+  	<Command name="get all employees" SQL="select * from EMPLOYEE" kind = "Select"/>
+  	
+    <Command name="get companies with employee of the month" 
+		SQL="select * from COMPANY left outer join EMPLOYEE on COMPANY.EOTMID = EMPLOYEE.ID" kind="Select"/>
+
+
+	<Table tableName="COMPANY">
+    	<Column columnName="ID" primaryKey="true" generated="true"/>
+  	</Table>
+  
+  	<Table tableName="DEPARTMENT">
+   		<Column columnName="ID" primaryKey="true" generated="true"/>
+  	</Table>
+  		
+  	<Table tableName="EMPLOYEE">
+  	  	<Column columnName="ID" primaryKey="true" generated="true"/>
+  	</Table>	
+	  	
+	<Relationship name="company" primaryKeyTable="EMPLOYEE" foreignKeyTable="COMPANY" many="false" keyRestricted="true">
+      	<KeyPair primaryKeyColumn="ID" foreignKeyColumn="EOTMID" />
+  	</Relationship>
+			
+</Config>
+			
