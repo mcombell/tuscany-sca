@@ -30,9 +30,9 @@
         <fileSet>
             <outputDirectory>tuscany-das-${das.version}</outputDirectory>
             <includes>
-                <include>*.txt</include>
-                <include>*.htm</include>
-                <include>*.html</include>
+                <include>LICENSE*</include>
+                <include>NOTICE*</include>
+                <include>README*</include>
             </includes>
         </fileSet>
         
@@ -43,6 +43,32 @@
 	   <outputDirectory>tuscany-das-${das.version}/doc</outputDirectory>
 	</fileSet>  
 	
+        <!-- include readme for companyweb sample -->
+	<fileSet>
+	   <directory>../../samples/companyweb</directory>
+	   <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
+	   <includes>
+	       <include>readme.htm</include>
+	   </includes>
+	</fileSet>  	
+
+        <!-- include readme for customer sample -->
+	<fileSet>
+	   <directory>../../samples/customer</directory>
+	   <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
+	   <includes>
+	       <include>readme.htm</include>
+	   </includes>
+	</fileSet>  	
+
+        <!-- include readme for ajax das sample -->
+	<fileSet>
+	   <directory>../../samples/sample-ajax-das</directory>
+	   <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
+	   <includes>
+	       <include>readme.htm</include>
+	   </includes>
+	</fileSet>  	
 	
     </fileSets>
 

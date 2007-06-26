@@ -27,9 +27,9 @@
   <fileSets>
     <fileSet>
       <includes>
-           <include>*.txt</include>
-           <include>*.htm</include>
-           <include>*.html</include>
+           <include>LICENSE*</include>
+           <include>NOTICE*</include>
+           <include>README*</include>
         <include>pom.xml</include>
       </includes>
       <useDefaultExcludes>true</useDefaultExcludes>
