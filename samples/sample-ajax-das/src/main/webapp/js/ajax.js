@@ -38,7 +38,7 @@ function init() {
 		brwsr="IE";
 		req = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	var url = "/sample-ajax-das/CommandServlet";
+	var url = "../CommandServlet";
 	req.open("POST", url, true);
 	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 }

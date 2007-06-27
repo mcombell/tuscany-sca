@@ -87,7 +87,7 @@ function refreshdb(){
 	}
 
 	//TODO
-	var urlDB = "/sample-ajax-das/CommandServlet";
+	var urlDB = "../CommandServlet";
 	reqDB.open("POST", urlDB, true);
 	reqDB.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	reqDB.onreadystatechange = dbresultHandler;
