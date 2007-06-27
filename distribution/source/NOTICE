@@ -14,7 +14,7 @@ by the ASF.
 
 Unless otherwise indicated, all distribution made available by the Apache Software Foundation
 is provided to you under the terms and conditions of the Apache License Version 2.0 ("AL").
-A copy of the AL is provided with this distribution as the LICENSE.txt file present in the
+A copy of the AL is provided with this distribution as the LICENSE file present in the
 root directory, and is also available at http://www.apache.org/licenses/.
 
 The terms and conditions governing the distribution may refer to the AL or other license
@@ -28,5 +28,5 @@ distribution. If term or condition is provided, please contact the Apache Softwa
 to determine what terms and conditions govern that particular distribution.
 
 This product also includes software developed by the Open Service Oriented Architecture organisation
-(http://osoa.org). The license for this software may be found in the LICENSE.txt file contained in this
+(http://osoa.org). The license for this software may be found in the LICENSE file contained in this
 distribution.

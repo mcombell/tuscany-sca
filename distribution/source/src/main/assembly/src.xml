@@ -27,6 +27,7 @@
   <fileSets>
     <fileSet>
       <includes>
+           <include>BUILDING*</include>
            <include>LICENSE*</include>
            <include>NOTICE*</include>
            <include>README*</include>
