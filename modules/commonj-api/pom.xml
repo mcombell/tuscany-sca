@@ -22,12 +22,12 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>0.91-incubating-SNAPSHOT</version>
+        <version>0.91-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.apache.tuscany</groupId>
     <artifactId>commonj-api</artifactId>
-    <version>0.91-incubating-SNAPSHOT</version>
+    <version>0.91-incubating</version>
     <name>Apache Tuscany Commonj API for Timer and Work Manager</name>
 
     <build>

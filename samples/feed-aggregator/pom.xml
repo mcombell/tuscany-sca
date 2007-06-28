@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-samples</artifactId>
-        <version>0.91-incubating-SNAPSHOT</version>
+        <version>0.91-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>sample-feed-aggregator</artifactId>
@@ -39,27 +39,27 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-feed</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-http-tomcat</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>0.91-incubating-SNAPSHOT</version>
+        <version>0.91-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-implementation-spring</artifactId>
@@ -34,55 +34,55 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-assembly</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-core</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-interface</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-assembly-xml</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution-impl</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>sca-api</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-databinding</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>  
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
         
         <!-- Temporarily depend on implementation-script for a set of utility classes -->
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-script</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
                 
         <!-- Spring dependencies... -->    
