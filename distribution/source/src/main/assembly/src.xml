@@ -48,6 +48,8 @@
       </includes>
       <excludes>
          <exclude>**/target/**</exclude>
+         <exclude>**/**.mdl</exclude>
+         <exclude>**/derby.log</exclude>
       </excludes>
       <fileMode>644</fileMode>
     </fileSet>
