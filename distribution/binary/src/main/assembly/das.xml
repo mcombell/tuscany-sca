@@ -44,35 +44,53 @@
 	   <directory>../../rdb/target/apidocs</directory>
 	   <outputDirectory>tuscany-das-${das.version}/doc</outputDirectory>
 	</fileSet>  
-	
-        <!-- include readme for companyweb sample -->
-	<fileSet>
-	   <directory>../../samples/companyweb</directory>
-	   <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
-	   <includes>
-	       <include>readme.htm</include>
-	   </includes>
-	</fileSet>  	
-
-        <!-- include readme for customer sample -->
-	<fileSet>
-	   <directory>../../samples/customer</directory>
-	   <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
-	   <includes>
-	       <include>readme.htm</include>
-	   </includes>
-	</fileSet>  	
-
-        <!-- include readme for ajax das sample -->
-	<fileSet>
-	   <directory>../../samples/sample-ajax-das</directory>
-	   <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
-	   <includes>
-	       <include>readme.htm</include>
-	   </includes>
-	</fileSet>  	
-	
+		
     </fileSets>
+
+        <files>
+            <!-- include readme for companyweb sample -->
+            <file>
+               <source>../../samples/companyweb/readme.htm</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+            <!-- include companyweb sample -->
+            <file>
+               <source>../../samples/companyweb/target/sample-companyweb.war</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+
+            
+            
+            <!-- include readme for ajax das sample -->
+            <file>
+               <source>../../samples/sample-ajax-das/readme.htm</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+            <!-- include ajax das sample -->
+            <file>
+               <source>../../samples/sample-ajax-das/target/sample-ajax-das.war</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+            
+            
+            <!-- include readme for customer sample -->
+            <file>
+               <source>../../samples/customer/readme.htm</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+            <!-- include ajax das sample -->
+            <file>
+               <source>../../samples/customer/target/sample-customer.jar</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
+        </files>
+
 
     <dependencySets>
         <!-- DAS api impl -->
@@ -84,29 +102,11 @@
             <fileMode>644</fileMode>
         </dependencySet>
         
-        <!-- DAS Samples - Companyweb -->
-        <dependencySet>
-	    <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
-	        <includes>
-	            <include>org.apache.tuscany.das.samples:tuscany-das-sample-companyweb</include>
-	        </includes>
-	    <fileMode>644</fileMode>
-        </dependencySet>
-
-        <!-- DAS Samples - Customer -->
+        <!-- DAS Samples - Customer derby dependency-->
         <dependencySet>
 	    <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
 	        <includes>
-	            <include>org.apache.tuscany.das.samples:tuscany-das-sample-customer-j2se</include>
-	        </includes>
-	    <fileMode>644</fileMode>
-        </dependencySet>
-
-        <!-- DAS Samples - Ajax advanced features -->
-        <dependencySet>
-	    <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
-	        <includes>
-	            <include>org.apache.tuscany.das.samples:sample-ajax-das</include>
+	            <include>org.apache.derby:derby</include>
 	        </includes>
 	    <fileMode>644</fileMode>
         </dependencySet>
