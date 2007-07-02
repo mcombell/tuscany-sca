@@ -67,6 +67,7 @@
 		    <plugin>
 			<groupId>org.apache.tuscany.sdo</groupId>
 			<artifactId>tuscany-sdo-plugin</artifactId>
+			<version>${sdo.version}</version>
 			<executions>
 			    <execution>
 				<id>config</id>
