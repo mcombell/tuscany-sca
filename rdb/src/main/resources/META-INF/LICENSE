@@ -203,10 +203,16 @@
 
 ===============================================================================================================
 
-Other components under Apache Software License 2.0 (log4j-1.2.12.jar, derby 10.1.2.1.jar and stax-api-1.0.1.jar)
+Other components and dependencies under Apache Software License 2.0 : 
+
+   log4j-1.2.12.jar    - Apache Logging Services
+   derby 10.1.2.1.jar  - Apache Derby
+   stax-api-1.0.1.jar  - The Streaming API for XML (StAX)
+   standard-1.1.1.jar  - The Apache Jackarta Taglibs
+   jstl-1.1.2.jar      - The Apache Jackarta Taglibs
+   *.tld               - The Apache Jackarta Taglibs
 
 ===============================================================================================================
-
 
 Apache Tuscany SDO for Java Subcomponents
 =========================================: 
