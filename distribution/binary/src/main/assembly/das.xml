@@ -89,6 +89,11 @@
                <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
                <fileMode>644</fileMode>
             </file>
+            <file>
+               <source>../../samples/customer/build.xml</source>
+               <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
+               <fileMode>644</fileMode>
+            </file>
         </files>
 
 
