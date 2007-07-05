@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-demos</artifactId>
-        <version>0.91-incubating-SNAPSHOT</version>
+        <version>0.91-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>demo-bigbank-account</artifactId>
@@ -41,54 +41,54 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-feed</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-ws-axis2</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-jsonrpc</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-rmi</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-resource</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-http-jetty</artifactId>
-            <version>0.91-incubating-SNAPSHOT</version>
+            <version>0.91-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
