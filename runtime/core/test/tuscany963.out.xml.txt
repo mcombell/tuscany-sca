@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<content xmlns="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://www.w3.org/2005/Atom" base="blah" lang="blah2"/>
+<tns:content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://www.w3.org/2005/Atom" base="blah" lang="blah2"/>

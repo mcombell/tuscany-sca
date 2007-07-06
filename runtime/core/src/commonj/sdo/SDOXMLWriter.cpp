@@ -131,13 +131,6 @@ namespace commonj
                 
                 // For the root DataObject we need to determine the element name
                 SDOXMLString elementURI = doc->getRootElementURI();
-                if (elementURI.isNull() || elementURI.equals(""))
-                {
-                    if (!rootTypeURI.equals(s_commonjsdo))
-                    {
-                        elementURI = rootTypeURI;
-                    }
-                }
                 SDOXMLString elementName = doc->getRootElementName();
                 if (elementName.isNull() || elementName.equals(""))
                 {
@@ -705,26 +698,6 @@ namespace commonj
             // First we need to write the startElement                      
             if (isRoot)
             {
-                if (elementURI.equals(s_commonjsdo))
-                {
-                    tnsURI = "";
-                }
-                else
-                {
-                    tnsURI = elementURI;
-                }
-
-                if (tnsURI.equals("")) {
-                    rc = xmlTextWriterStartElementNS(writer, NULL, elementName, NULL);
-                }
-                else
-                {
-                    rc = xmlTextWriterStartElementNS(writer, NULL, elementName, elementURI);
-                }
-                if (rc < 0) {
-                    SDO_THROW_EXCEPTION("writeDO", SDOXMLParserException, "xmlTextWriterStartElementNS failed");
-                }
-
                 // For the root element we will now gather all the namespace information
                 addNamespace(elementURI, true);
 
@@ -733,34 +706,41 @@ namespace commonj
 
                 DataObjectImpl* d = (DataObjectImpl*)(DataObject*)dataObject;
                 addToNamespaces(d);
-            }
-            else
-            {
-                // Write the startElement for non-root object
-                SDOXMLString theName=elementName;
 
-                // If an elementURI is specified then the elementForm is "qualified"
-                if (!elementURI.isNull() 
-                    && !elementURI.equals("")
-                    && !elementURI.equals(s_commonjsdo)
-                    //&& !elementURI.equals(tnsURI)
-                    )
+                if (elementURI.equals(s_commonjsdo))
                 {
-                    // Locate the namespace prefix
-                    std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
-                    if (it != namespaceMap.end())
-                    {
-                        theName = (*it).second;
-                        theName += ":";
-                        theName += elementName;
-                    }
+                    tnsURI = "";
                 }
-
-                rc = xmlTextWriterStartElement(writer, theName);
-                if (rc < 0) {
-                    SDO_THROW_EXCEPTION("writeDO", SDOXMLParserException, "xmlTextWriterStartElement failed");
-                }   
+                else
+                {
+                    tnsURI = elementURI;
+                }
             }
+            // Write the startElement for non-root object
+            SDOXMLString theName=elementName;
+
+            // If an elementURI is specified then the elementForm is "qualified"
+            if (!elementURI.isNull() 
+                && !elementURI.equals("")
+                && !elementURI.equals(s_commonjsdo)
+                //&& !elementURI.equals(tnsURI)
+                )
+            {
+                // Locate the namespace prefix
+                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
+                if (it != namespaceMap.end())
+                {
+                    theName = (*it).second;
+                    theName += ":";
+                    theName += elementName;
+                }
+            }
+
+            rc = xmlTextWriterStartElement(writer, theName);
+            if (rc < 0) {
+                SDO_THROW_EXCEPTION("writeDO", SDOXMLParserException, "xmlTextWriterStartElement failed");
+            }   
+
             // End - startElement is written
             // -----------------------------
 
@@ -802,7 +782,7 @@ namespace commonj
                 {
                     SDOXMLString theName=typeName;
 
-                    if (!typeURI.isNull() && !typeURI.equals(tnsURI) && !typeURI.equals(""))
+                    if (!typeURI.isNull() && !typeURI.equals(""))
                     {
                         std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(typeURI);
                         if (it != namespaceMap.end())

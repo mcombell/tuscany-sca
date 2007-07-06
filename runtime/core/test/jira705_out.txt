@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<getQuote xmlns="http://ConvertedStockQuote" xmlns:tns="http://ConvertedStockQuote" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<getQuote xsi:type="tns2:getQuote" xmlns:tns2="http://ConvertedStockQuote" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ticker1>IBM</ticker1>
   <ticker2 xsi:nil="true"/>
 </getQuote>

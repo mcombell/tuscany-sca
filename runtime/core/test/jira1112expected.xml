@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BOGUS xmlns="http://Component" xsi:type="add" xmlns:tns="http://Component" xmlns:tns2="http://www.test.com/info" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<BOGUS xsi:type="tns2:add" xmlns:tns2="http://Component" xmlns:tns3="http://www.test.com/info" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <person>
     <name>
       <first>Will</first>
