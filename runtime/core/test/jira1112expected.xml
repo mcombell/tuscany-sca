@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BOGUS xmlns="http://Component" xsi:type="add" xmlns:tns="http://Component" xmlns:tns2="http://www.test.com/info" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <person>
-    <tns2:name>
-      <tns2:first>Will</tns2:first>
-      <tns2:last>Shakespeare</tns2:last>
-    </tns2:name>
+    <name>
+      <first>Will</first>
+      <last>Shakespeare</last>
+    </name>
   </person>
 </BOGUS>

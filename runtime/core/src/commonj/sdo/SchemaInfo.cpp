@@ -26,7 +26,8 @@ namespace commonj
     {
 
         SchemaInfo::SchemaInfo()
-            : targetNamespaceURI("")
+            : targetNamespaceURI(""),
+              elementFormDefaultQualified(false)
         {
         }
         

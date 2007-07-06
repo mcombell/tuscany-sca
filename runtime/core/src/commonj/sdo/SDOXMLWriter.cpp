@@ -739,10 +739,12 @@ namespace commonj
                 // Write the startElement for non-root object
                 SDOXMLString theName=elementName;
 
+                // If an elementURI is specified then the elementForm is "qualified"
                 if (!elementURI.isNull() 
                     && !elementURI.equals("")
                     && !elementURI.equals(s_commonjsdo)
-                    && !elementURI.equals(tnsURI))
+                    //&& !elementURI.equals(tnsURI)
+                    )
                 {
                     // Locate the namespace prefix
                     std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(elementURI);
@@ -1388,8 +1390,8 @@ namespace commonj
               else
               {
                   // The property has been defined programatically so we will
-                  // assume it is the namespace fo the parent DataObject
-                  elementURI = typeImpl.getURI();
+                  // assume elementForm is "unqualified"
+                  elementURI = ""; 
               }
 
           }

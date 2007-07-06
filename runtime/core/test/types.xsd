@@ -19,8 +19,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:ns0="http://www.test.com/info"
-    targetNamespace="http://Component"
-    elementNameDefault="qualified">
+    targetNamespace="http://Component">
     <xs:import schemaLocation="person.xsd"
 namespace="http://www.test.com/info"/>
     <xs:element name="add">

@@ -230,6 +230,14 @@ namespace commonj
                         if (attributes[i].getName().equalsIgnoreCase("targetNamespace"))
                         {
                             schemaInfo.setTargetNamespaceURI(attributes[i].getValue());
+                        }
+
+                        if (attributes[i].getName().equalsIgnoreCase("elementFormDefault"))
+                        {
+                            if (attributes[i].getValue().equals("qualified"))
+                            {
+                                schemaInfo.setElementFormDefaultQualified(true);
+                            }
                         }                        
                     }
 
@@ -745,7 +753,23 @@ namespace commonj
                 thisProperty.name,
                 thisProperty.localname);
 
-            thisProperty.namespaceURI = schemaInfo.getTargetNamespaceURI();
+            // Set the property's namespace if elementForm is "qualified"
+            bool elementFormQualified = schemaInfo.isElementFormDefaultQualified();
+            SDOXMLString elementForm = attributes.getValue("form");
+            if (!elementForm.isNull())
+            {
+                elementFormQualified = false;
+                if (elementForm.equals("qualified"))
+                {
+                    elementFormQualified = true;
+                }
+            }
+
+            if (elementFormQualified
+                || currentType.name.equals("RootType"))
+            {
+                thisProperty.namespaceURI = schemaInfo.getTargetNamespaceURI();
+            }
             
             setType(thisProperty, attributes, namespaces);
 
