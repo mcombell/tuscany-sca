@@ -1,3 +1,9 @@
+DAS - Data Access Services
+
+Service Data Object(SDO) provides a uniform API for handling different types of data. Data Access Service (DAS) 
+simplifies handling of data when interacting with the back-end data source and frees application developers 
+from dealing with tedious and error-prone transformation between end source types and SDO Data Object Types/properties..
+
 What's new in Apache Tuscany DAS beta1
 ======================================
 
