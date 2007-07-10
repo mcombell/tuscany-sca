@@ -37,13 +37,13 @@ What's new in Apache Tuscany DAS beta1
 
    DAS Samples
 
-      - Introduced database utility to create, populate and refresh canned sample dbs
+      - Introduced database utility (dbConfig) to create, populate and refresh canned sample dbs
 
       - Introduced new sample that demonstrate usage of DAS in a J2SE environment
 
       - Introduced a new DAS sample that demonstrates DAS advanced features such as :
          - Basic CRUD
-         - Optimistic Concurrently Control (OCC)
+         - Optimistic Concurrency Control (OCC)
          - Result Set Shape
          - Column Converter
          - Integration with dbConfig
