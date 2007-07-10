@@ -49,4 +49,5 @@ Details are described below.
 
 Compatibility Concerns
 
-   - Changes on DAS Config file namespaces
+   - Changes on DAS Config file namespaces (http://issues.apache.org/jira/browse/TUSCANY-899). DAS config files should 
+   changed the attribute "xmlns"'s value of the "config" tag to "http:///org.apache.tuscany.das.rdb/config.xsd".
