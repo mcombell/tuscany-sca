@@ -85,7 +85,7 @@ namespace commonj
             friend std::istringstream& operator>>(std::istringstream& input, SDOSchemaSAX2Parser& parser);
 
 
-            int SDOSchemaSAX2Parser::parseURI(const SDOXMLString& location, const SDOXMLString& base);
+            int parseURI(const SDOXMLString& location, const SDOXMLString& base);
 
         private:
 
