@@ -9287,3 +9287,36 @@ int sdotest::cloneopentest()
       return 0;
    }
 }
+
+int sdotest::elementFormDefaultQualified()
+{
+    try {
+        DataFactoryPtr mdg  = DataFactory::getDataFactory();
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper(mdg);
+        xsh->defineFile("StockQuoteService.wsdl");
+
+        DataObjectPtr doObj = mdg->create("http://swanandmokashi.com",
+                                          "GetQuotes");
+
+        doObj->setCString("QuoteTicker", "IBM");
+        XMLHelperPtr xmlHelper = HelperProvider::getXMLHelper(mdg);
+
+
+        XMLDocumentPtr doc = 
+          xmlHelper->createDocument(doObj,
+                                    "http://swanandmokashi.com",
+                                    "GetQuotes");
+
+        xmlHelper->save(doc, "qualified-testout.xml");
+
+      return comparefiles("qualified.xml", "qualified-testout.xml");
+    }
+    catch (SDORuntimeException e) {
+        cout << "sdotest::elementFormDefaultQualified() failed" << endl << e << endl;
+        return 0;
+    }
+    return 0;
+}
+
+
+

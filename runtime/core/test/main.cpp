@@ -188,6 +188,7 @@ int main (int argc, char** argv)
     TEST ( sdotest::loadWithoutSchema() );
     //TEST (  sdotest::jira445() );
     TEST (  sdotest::jira1112() );
+    TEST (  sdotest::elementFormDefaultQualified() );
 
 
     } catch(...)

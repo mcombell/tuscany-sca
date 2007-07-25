@@ -1133,7 +1133,7 @@ namespace commonj
                                 if (!propertyTypeURI.isNull() 
                                     && !propertyTypeURI.equals("")
                                     && !propertyTypeURI.equals(s_commonjsdo)
-                                    && !propertyTypeURI.equals(tnsURI))
+                                    /* && !propertyTypeURI.equals(tnsURI) */)
                                 {
                                     // Locate the namespace prefix
                                     std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(propertyTypeURI);

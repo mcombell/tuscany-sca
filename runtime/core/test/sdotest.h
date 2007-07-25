@@ -212,4 +212,5 @@ class sdotest {
         static int loadWithoutSchema();
         static int jira445();
         static int jira1112();
+        static int elementFormDefaultQualified();
 };
