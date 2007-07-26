@@ -43,6 +43,12 @@
             <artifactId>tuscany-das-sample-dbconfig</artifactId>
             <version>${das.version}</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.derby</groupId>
+	            <artifactId>derby</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
