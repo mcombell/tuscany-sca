@@ -52,7 +52,7 @@
          <exclude>**/**.mdl</exclude>
          <exclude>**/derby.log</exclude>
       </excludes>
-      <fileMode>644</fileMode>
+      <fileMode>0644</fileMode>
     </fileSet>
   </fileSets>
 </assembly>

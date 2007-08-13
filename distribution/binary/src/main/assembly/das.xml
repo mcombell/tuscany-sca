@@ -52,13 +52,13 @@
             <file>
                <source>../../samples/companyweb/readme.htm</source>
                <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
             <!-- include companyweb sample -->
             <file>
                <source>../../samples/companyweb/target/sample-companyweb.war</source>
                <outputDirectory>tuscany-das-${das.version}/samples/companyweb</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
 
             
@@ -67,13 +67,13 @@
             <file>
                <source>../../samples/sample-ajax-das/readme.htm</source>
                <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
             <!-- include ajax das sample -->
             <file>
                <source>../../samples/sample-ajax-das/target/sample-ajax-das.war</source>
                <outputDirectory>tuscany-das-${das.version}/samples/sample-ajax-das</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
             
             
@@ -81,18 +81,18 @@
             <file>
                <source>../../samples/customer/readme.htm</source>
                <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
             <!-- include ajax das sample -->
             <file>
                <source>../../samples/customer/target/sample-customer.jar</source>
                <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
             <file>
                <source>../../samples/customer/build.xml</source>
                <outputDirectory>tuscany-das-${das.version}/samples/customer</outputDirectory>
-               <fileMode>644</fileMode>
+               <fileMode>0644</fileMode>
             </file>
         </files>
 
@@ -104,7 +104,7 @@
             <includes>
                 <include>org.apache.tuscany.das:tuscany-das-rdb</include>
             </includes>
-            <fileMode>644</fileMode>
+            <fileMode>0644</fileMode>
         </dependencySet>
         
         <!-- DAS Samples - Customer derby dependency-->
@@ -113,7 +113,7 @@
 	        <includes>
 	            <include>org.apache.derby:derby</include>
 	        </includes>
-	    <fileMode>644</fileMode>
+	    <fileMode>0644</fileMode>
         </dependencySet>
 
     </dependencySets>
