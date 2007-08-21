@@ -1965,3 +1965,35 @@ int sdotest::jira1112()
         return 0;
     }
 }
+int sdotest::elementFormDefaultQualifiedSequence()
+{
+
+    try {
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper();
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper(xsh->getDataFactory());
+        xsh->defineFile("elementFormDefaultQualifiedSeq.xsd");
+        unsigned int i,j;
+        if ((i = xsh->getErrorCount()) > 0)
+        {
+            cout << "elementFormDefaultQualifiedSeq.xsd reported some errors: " <<endl;
+            for (j=0;j<i;j++)
+            {
+                cout << xsh->getErrorMessage(j) <<endl;
+            }
+        }
+
+
+        DataObjectPtr x = xsh->getDataFactory()->create("test","xT");
+        DataObjectPtr a = x->createDataObject("a");
+        a->setCString("a1.1", "test data");
+
+        XMLDocumentPtr doc = xmh->createDocument(a, "", "a");
+        xmh->save(doc, "elementFormDefaultQualifiedSeq_out.xml", 2);
+        return comparefiles("elementFormDefaultQualifiedSeq_out.xml" ,"elementFormDefaultQualifiedSeq_expected.xml");
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in elementFormDefaultQualifiedSequence: " << e << endl;
+        return 0;
+    }
+}

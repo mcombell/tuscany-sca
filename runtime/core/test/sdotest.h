@@ -213,4 +213,5 @@ class sdotest {
         static int jira445();
         static int jira1112();
         static int elementFormDefaultQualified();
+        static int elementFormDefaultQualifiedSequence();
 };

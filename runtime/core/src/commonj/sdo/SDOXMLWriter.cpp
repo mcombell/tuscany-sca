@@ -989,8 +989,25 @@ namespace commonj
 							// many-valued.
 							if (!pi && !seqProp.isMany()) continue;
 
+                            // Write the startElement for non-root object
+                            SDOXMLString theName=seqPropName;
+
+                            if (!seqPropURI.isNull() 
+                                && !seqPropURI.equals("")
+                                && !seqPropURI.equals(s_commonjsdo))
+                            {
+                                // Locate the namespace prefix
+                                std::map<SDOXMLString,SDOXMLString>::iterator it = namespaceMap.find(seqPropURI);
+                                if (it != namespaceMap.end())
+                                {
+                                    theName = (*it).second;
+                                    theName += ":";
+                                    theName += seqPropName;
+                                }
+                            }
+                            xmlTextWriterStartElement(writer, theName);
+
                             /* Use our wrapper function just in case the element has CDATA in it */
-                            xmlTextWriterStartElement(writer, seqPropName);
                             writeXMLElement(writer,
                                     seqPropName,
                                     sequence->getCStringValue(i));

@@ -189,6 +189,7 @@ int main (int argc, char** argv)
     //TEST (  sdotest::jira445() );
     TEST (  sdotest::jira1112() );
     TEST (  sdotest::elementFormDefaultQualified() );
+    TEST (  sdotest::elementFormDefaultQualifiedSequence() );
 
 
     } catch(...)
