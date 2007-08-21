@@ -1997,3 +1997,36 @@ int sdotest::elementFormDefaultQualifiedSequence()
         return 0;
     }
 }
+
+int sdotest::xsiTypeAbstract()
+{
+
+    try {
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper();
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper(xsh->getDataFactory());
+        xsh->defineFile("xsiTypeAbstract.xsd");
+        unsigned int i,j;
+        if ((i = xsh->getErrorCount()) > 0)
+        {
+            cout << "xsiTypeAbstract.xsd reported some errors: " <<endl;
+            for (j=0;j<i;j++)
+            {
+                cout << xsh->getErrorMessage(j) <<endl;
+            }
+        }
+
+
+        DataObjectPtr x = xsh->getDataFactory()->create("","X");
+        DataObjectPtr concrete = xsh->getDataFactory()->create("","concreteType");
+        x->setDataObject("abstract", concrete);
+
+        XMLDocumentPtr doc = xmh->createDocument(x, "", "X");
+        xmh->save(doc, "xsiTypeAbstract_out.xml", 2);
+        return comparefiles("xsiTypeAbstract_out.xml" ,"xsiTypeAbstract_expected.xml");
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in xsiTypeAbstract: " << e << endl;
+        return 0;
+    }
+}

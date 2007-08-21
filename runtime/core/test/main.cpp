@@ -190,6 +190,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::jira1112() );
     TEST (  sdotest::elementFormDefaultQualified() );
     TEST (  sdotest::elementFormDefaultQualifiedSequence() );
+    TEST (  sdotest::xsiTypeAbstract() );
 
 
     } catch(...)
