@@ -1318,6 +1318,8 @@ namespace commonj
       {
           bool xsiTypeNeeded = false;
 
+          const Type& propertyType = prop.getType();
+
           // If this is a defined property with property information
           // we use the uri and name from the definition
           XSDPropertyInfo* pi = getPropertyInfo(prop);
@@ -1327,12 +1329,15 @@ namespace commonj
               propdef = pi->getPropertyDefinition();
               elementName = propdef.localname;
               elementURI = propdef.namespaceURI;
+              if (propertyType.isAbstractType())
+              {
+                  xsiTypeNeeded = true;
+              }
           }
           else
           {
               elementName = prop.getName();
 
-              const Type& propertyType = prop.getType();
               SDOXMLString propTypeName = propertyType.getName();
               SDOXMLString propTypeURI = propertyType.getURI();
               DataObjectImpl* dataObjectImpl = (DataObjectImpl*)(DataObject*)dataObject;
