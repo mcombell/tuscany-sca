@@ -1329,10 +1329,6 @@ namespace commonj
               propdef = pi->getPropertyDefinition();
               elementName = propdef.localname;
               elementURI = propdef.namespaceURI;
-              if (propertyType.isAbstractType())
-              {
-                  xsiTypeNeeded = true;
-              }
           }
           else
           {
@@ -1396,6 +1392,11 @@ namespace commonj
                   elementURI = ""; 
               }
 
+          }
+
+          if (propertyType.isAbstractType())
+          {
+              xsiTypeNeeded = true;
           }
 
           return xsiTypeNeeded;
