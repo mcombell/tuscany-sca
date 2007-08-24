@@ -16,5 +16,6 @@
 # under the License.
 
 # Implementation classes for the transformers
-org.apache.tuscany.sca.databinding.sdo2om.DataObject2OMElement;source=commonj.sdo.DataObject,target=org.apache.axiom.om.OMElement,weight=10
-org.apache.tuscany.sca.databinding.sdo2om.XMLDocument2OMElement;source=commonj.sdo.helper.XMLDocument,target=org.apache.axiom.om.OMElement,weight=10
+# [rfeng] Increase the weight from 10 to 1000 (in favor of sdo --> stax --> axiom) to work around https://issues.apache.org/jira/browse/WSCOMMONS-226
+org.apache.tuscany.sca.databinding.sdo2om.DataObject2OMElement;source=commonj.sdo.DataObject,target=org.apache.axiom.om.OMElement,weight=1000
+org.apache.tuscany.sca.databinding.sdo2om.XMLDocument2OMElement;source=commonj.sdo.helper.XMLDocument,target=org.apache.axiom.om.OMElement,weight=1000
