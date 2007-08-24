@@ -81,16 +81,13 @@
                 <exclude>helloworld-ws-reference/work/**/*</exclude>
                 <exclude>helloworld-ws-service/work</exclude>
                 <exclude>helloworld-ws-service/work/**/*</exclude>
-                <exclude>helloworld-ws-service-webapp/target/sample-helloworld-webapp</exclude>
-                <exclude>helloworld-ws-service-webapp/target/sample-helloworld-webapp/**/*</exclude>
+                <exclude>helloworld-ws-service-webapp/target/**/*</exclude>
                 <exclude>helloworld-ws-sdo/work</exclude>
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
-                <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-webapp</exclude>
-                <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-webapp/**/*</exclude>
+                <exclude>helloworld-ws-sdo-webapp/target/**/*</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp/**/*</exclude>
-                <exclude>calculator-webapp-ws/target/sample-calculator-webapp-ws</exclude>
-                <exclude>calculator-webapp-ws/target/sample-calculator-webapp-ws/**/*</exclude>
+                <exclude>calculator-webapp-ws/target/**/*</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp/**/*</exclude>
                 <exclude>helloworld-dojo/target/sample-helloworld-dojo</exclude>
@@ -136,16 +133,12 @@
             <excludes>
                 <exclude>alert-aggregator/src/main/webapp/dojo</exclude>
                 <exclude>alert-aggregator/src/main/webapp/dojo/**/*</exclude>
-                <exclude>alert-aggregator/target/demo-alert-aggregator</exclude>
-                <exclude>alert-aggregator/target/demo-alert-aggregator/**/*</exclude>
-                <exclude>alert-aggregator/target/sdo-source</exclude>
-                <exclude>alert-aggregator/target/sdo-source/**/*</exclude>
+                <exclude>alert-aggregator/target/**/*</exclude>
                 <exclude>helloworld-ws-sdo/work</exclude>
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>bigbank-account/src/main/resources/web/dojo</exclude> 
                 <exclude>bigbank-account/src/main/resources/web/dojo/**/*</exclude>
-                <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck</exclude>
-                <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck/**/*</exclude>
+                <exclude>mortgage-creditcheck/target/**/*</exclude>
                 <exclude>*/.classpath</exclude>
                 <exclude>*/.project</exclude>
                 <exclude>*/.settings</exclude>
