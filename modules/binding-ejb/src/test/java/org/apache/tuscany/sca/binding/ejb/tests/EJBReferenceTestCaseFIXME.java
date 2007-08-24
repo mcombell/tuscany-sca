@@ -26,8 +26,9 @@ import account.Customer;
 
 /**
  * Invokes the component which calls the reference using the EJB binding 
+ * *** remove from 0.99 branch due to snapshot dependency
  */
-public class EJBReferenceTestCase extends TestCase {
+public class EJBReferenceTestCaseFIXME extends TestCase {
     private static final int MOCK_PORT = 8085;
     private SCADomain scaDomain;
 
