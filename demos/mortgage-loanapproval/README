@@ -1,0 +1,77 @@
+Mortgage Loan Approval Demo
+===========================
+
+This is the latest version for the demo application described at http://jdj.sys-con.com/read/325183.htm.
+
+The demo consists of two modules:
+
+mortgage-loanapproval: It provides the function to approve a loan application based various factors
+mortgage-creditcheck: It provides the credit check as a web service
+
+To compile the demo, run "ant" for each of the two modules.
+
+To run the demo, open two commands windows.
+
+1) Go to demos\mortgage-creditcheck, run "ant run" to start the credit check server.
+
+Buildfile: build.xml
+
+run:
+     [java] Starting the CreditCheck Service...
+     [java] log4j:WARN No appenders could be found for logger (org.apache.axiom.
+om.util.StAXUtils).
+     [java] log4j:WARN Please initialize the log4j system properly.
+     [java] Aug 24, 2007 6:11:03 PM org.apache.catalina.core.StandardEngine star
+t
+     [java] INFO: Starting Servlet Engine: Apache Tomcat/6.0.10
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.ContextConfig de
+faultWebConfig
+     [java] INFO: No default web.xml
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.DigesterFactory
+register
+     [java] WARNING: Could not get url for /javax/servlet/jsp/resources/jsp_2_0.
+xsd
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.DigesterFactory
+register
+     [java] WARNING: Could not get url for /javax/servlet/jsp/resources/web-jspt
+aglibrary_1_1.dtd
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.DigesterFactory
+register
+     [java] WARNING: Could not get url for /javax/servlet/jsp/resources/web-jspt
+aglibrary_1_2.dtd
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.DigesterFactory
+register
+     [java] WARNING: Could not get url for /javax/servlet/jsp/resources/web-jspt
+aglibrary_2_0.xsd
+     [java] Aug 24, 2007 6:11:04 PM org.apache.catalina.startup.DigesterFactory
+register
+     [java] WARNING: Could not get url for /javax/servlet/resources/j2ee_web_ser
+vices_1_1.xsd
+     [java] Aug 24, 2007 6:11:04 PM org.apache.coyote.http11.Http11Protocol init
+
+     [java] INFO: Initializing Coyote HTTP/1.1 on http-8085
+     [java] Aug 24, 2007 6:11:04 PM org.apache.coyote.http11.Http11Protocol star
+t
+     [java] INFO: Starting Coyote HTTP/1.1 on http-8085
+     [java] Aug 24, 2007 6:11:04 PM org.apache.tuscany.sca.http.tomcat.TomcatSer
+ver addServletMapping
+     [java] INFO: Added Servlet mapping: http://localhost:8085/CreditCheckServic
+e
+     [java] Press Enter to Exit...
+
+2) Go to demos\mortgage-creditcheck, run "ant run" to start the loan approval client.
+
+Buildfile: build.xml
+
+run:
+     [java] log4j:WARN No appenders could be found for logger (org.apache.axiom.
+om.util.StAXUtils).
+     [java] log4j:WARN Please initialize the log4j system properly.
+     [java] Rejected: John Smith[111-22-3333]
+
+BUILD SUCCESSFUL
+Total time: 4 seconds
+
+The result of the approval is random.
+
+
