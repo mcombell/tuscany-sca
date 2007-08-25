@@ -14,9 +14,9 @@ Overview
         builds on the stability and modularity established with the
         previous releases including more complete implementation of SCA
         specifications, support for distributed SCA domains, SCA policy,
-        OSGi implementation types, and notification components for pub/sub
-        interactions. Start up time and memory footprint of the Tuscany SCA 
-        runtime has also been reduced.
+        OSGi implementation types, and pub/sub support with notification
+        components. Start up time and memory footprint of the runtime has
+        been reduced and there has been numerous bug fixes.
 
 See the CHANGES file for a detailed list of the features in this release.
 
