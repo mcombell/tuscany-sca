@@ -11,6 +11,11 @@ As this sample provides a web app there is a manual step where the WAR file
 that contains the sample is copied to your web app container. If you just want 
 to give this sample a go deploy the WAR file (target/sample-calculator-webapp.war)
 to you web application server. 
+
+*****
+Note: this sample does not come with a pre-built WAR so you must first
+      build the sample by following the building instructions below 
+*****
   
 You may find that you need to remove the servlet-api jars in WEB-INF/lib
 depending on which app server you are using. 
