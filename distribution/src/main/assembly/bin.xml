@@ -131,6 +131,8 @@
                 <include>**/*</include>
             </includes>
             <excludes>
+                <exclude>apachecon-training</exclude>
+                <exclude>apachecon-training/**/*</exclude>
                 <exclude>alert-aggregator/src/main/webapp/dojo</exclude>
                 <exclude>alert-aggregator/src/main/webapp/dojo/**/*</exclude>
                 <exclude>alert-aggregator/target/**/*</exclude>

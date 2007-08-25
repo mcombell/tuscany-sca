@@ -130,6 +130,8 @@
              <exclude>samples/spi-implementation-pojo/**/*</exclude>
              <exclude>samples/simple-callback-ws/work</exclude>
              <exclude>samples/simple-callback-ws/work/**/*</exclude>
+             <exclude>demos/apachecon-training</exclude>
+             <exclude>demos/apachecon-training/**/*</exclude>
              <exclude>demos/alert-aggregator/src/main/webapp/dojo</exclude>
              <exclude>demos/alert-aggregator/src/main/webapp/dojo/**/*</exclude>
              <exclude>demos/bigbank-account/src/main/resources/web/dojo</exclude> 
