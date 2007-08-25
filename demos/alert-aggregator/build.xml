@@ -209,9 +209,9 @@
             	<include name="xercesImpl-2.8.1.jar"/>
             	<include name="xml-apis-1.3.03.jar"/>
             	<include name="xsd-2.2.3.jar"/>
-            	<include name="tuscany-sdo-api-r2.1-0.99-incubating.jar"/>
-            	<include name="tuscany-sdo-impl-0.99-incubating.jar"/>
-            	<include name="tuscany-sdo-lib-0.99-incubating.jar"/>
+            	<include name="tuscany-sdo-api-r2.1-1.0-incubating.jar"/>
+            	<include name="tuscany-sdo-impl-1.0-incubating.jar"/>
+            	<include name="tuscany-sdo-lib-1.0-incubating.jar"/>
             </lib>
             <classes dir="target/classes"/>
         </war>
