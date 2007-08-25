@@ -161,6 +161,12 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-databinding-jaxb</artifactId>
             <version>${pom.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.stream</groupId> 
+                    <artifactId>stax-api</artifactId> 
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
