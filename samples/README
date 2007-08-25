@@ -52,10 +52,17 @@ implementation-composite - An SCA application that shows how composites are used
                            implement components
 supplychain              - A more complicated sample showing how asynchronous 
                            callbacks can be used
+osgi-supplychain         - the supplychain sample showing OSGi integration with
+                           SCA components using OSGi bundles
 databinding-echo         - An SCA application that shows how databindings 
                            transform data
 simple-bigbank           - A banking application built with java components 
                            and local wires
+binding-notification-*      - A set of samples demonstrating Tuscany's support
+implementation-notification   for PUB/SUB interactions
+
+calculator-distributed   - Demonstrates distributed SCA domains with calculator
+                           components running in multiple JVMs
 
 There are two samples that demonstrate how to build extensions for the 
 Tuscany SCA runtime. These samples are slightly different from the samples
