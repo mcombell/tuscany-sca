@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-samples</artifactId>
-        <version>0.99-incubating-SNAPSHOT</version>
+        <version>0.99-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>sample-calculator-distributed</artifactId>
@@ -39,50 +39,50 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
 
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-distributed</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>   
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-distributed-impl</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>         
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-topology</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency> 
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-topology-xml</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>                                 
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-sca-axis2</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>   
         
         <!-- dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-jms</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency -->         
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-http-jetty</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
             <scope>test</scope>
         </dependency>          
         

@@ -29,7 +29,7 @@
     <packaging>pom</packaging>
     <name>Apache Tuscany SCA Implementation Project</name>
     <url>http://incubator.apache.org/tuscany/</url>
-    <version>0.99-incubating-SNAPSHOT</version>
+    <version>0.99-incubating</version>
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</connection>

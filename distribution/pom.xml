@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>0.99-incubating-SNAPSHOT</version>
+        <version>0.99-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-webapp</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId> 
@@ -258,8 +258,8 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <copy file="${basedir}/target/apache-tuscany-sca-0.99-incubating-SNAPSHOT.zip" tofile="${basedir}/target-last-successful/apache-tuscany-sca-0.99-incubating-SNAPSHOT.zip" overwrite="yes"/>
-                                <copy file="${basedir}/target/apache-tuscany-sca-0.99-incubating-SNAPSHOT.tar.gz" tofile="${basedir}/target-last-successful/apache-tuscany-sca-0.99-incubating-SNAPSHOT.tar.gz" overwrite="yes"/>
+                                <copy file="${basedir}/target/apache-tuscany-sca-0.99-incubating.zip" tofile="${basedir}/target-last-successful/apache-tuscany-sca-0.99-incubating.zip" overwrite="yes"/>
+                                <copy file="${basedir}/target/apache-tuscany-sca-0.99-incubating.tar.gz" tofile="${basedir}/target-last-successful/apache-tuscany-sca-0.99-incubating.tar.gz" overwrite="yes"/>
                             </tasks>
                         </configuration>
                         <goals>

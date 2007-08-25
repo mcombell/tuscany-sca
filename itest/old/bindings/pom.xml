@@ -22,12 +22,12 @@
   <parent>
      <groupId>org.apache.tuscany.sca</groupId>
      <artifactId>tuscany-itest</artifactId>
-     <version>0.99-incubating-SNAPSHOT</version>
+     <version>0.99-incubating</version>
      <relativePath>../pom.xml</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <version>0.99-incubating-SNAPSHOT</version>
+  <version>0.99-incubating</version>
   <artifactId>bindingstest</artifactId>
   <packaging>pom</packaging>
   <name>SCA FVT Test Tool Suite</name>

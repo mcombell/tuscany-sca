@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>itest-databindings</artifactId>
-        <version>0.99-incubating-SNAPSHOT</version>
+        <version>0.99-incubating</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>itest-databindings-sdo</artifactId>
-    <version>0.99-incubating-SNAPSHOT</version>
+    <version>0.99-incubating</version>
     <packaging>jar</packaging>
     <name>Apache Tuscany SDO Databinding Integration Test</name>
 

@@ -22,34 +22,34 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>0.99-incubating-SNAPSHOT</version>
+        <version>0.99-incubating</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-binding-notification-broker</artifactId>
     <name>Apache Tuscany Notification Binding Broker Sample</name>
-    <version>0.99-incubating-SNAPSHOT</version>
+    <version>0.99-incubating</version>
     <description>A sample illustrating use of binding.notification</description>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-notification</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-notification</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-databinding</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>0.99-incubating-SNAPSHOT</version>
+            <version>0.99-incubating</version>
         </dependency>
         <!-- test dependencies -->
         <dependency>
