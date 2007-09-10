@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<Config xmlns="http:///org.apache.tuscany.das.rdb/config.xsd"> 
+
+  <Table tableName="CUSTOMER">  		 
+	  <create sql="insert into customer values (?, ?, ?)" >
+	  <Parameters>
+	   <Parameter name="ID" index="1"/>
+	   <Parameter name="LASTNAME" index="1"/>
+	   <Parameter name="ADDRESS" index="3"/>
+	  </Parameters>
+	  </create>
+	  
+	  <update sql="update customer set lastname = ?, address = ? where ID = ?" >
+	  <Parameters>
+	   <Parameter name="LASTNAME" index="1"/>
+	   <Parameter name="ADDRESS" index="2"/>
+	   <Parameter name="ID" index="5"/>
+	  </Parameters>	  
+	  </update>
+      
+      <delete sql="delete from customer where ID = ? and LASTNAME = ?">
+	  <Parameters>
+	   <Parameter name="LASTNAME" columnType="commonj.sdo.String" index="2"/>	   	  
+	   <Parameter name="ID" columnType="commonj.sdo.IntObject" index="1"/>	   
+	  </Parameters>      
+      </delete>
+  </Table>
+	
+  <Command name="getCustomer" SQL="Select * from CUSTOMER where ID = ?" kind="Select">
+  	<Parameter name="ID" index="1"/>
+  </Command>
+  
+  <Command name="createCustomer" SQL="insert into CUSTOMER values ( ?, ?, ?)" kind="Insert">
+   	<Parameter name="ID" index="1"/>
+   	<Parameter name="LASTNAME" index="2"/>
+   	<Parameter name="ADDRESS" index="3"/>
+  </Command>
+
+  <Command name="createCustomerNoParam" SQL="insert into CUSTOMER values ( ?, ?, ?)" kind="Insert"/>
+  
+  <Command name="updateCustomer" SQL="update CUSTOMER set LASTNAME = ? where ID = ?" kind="Update">
+   	<Parameter name="LASTNAME" index="1"/>
+   	<Parameter name="ID" index="2"/>
+  </Command>
+
+  <Command name="updateCustomerNoParam" SQL="update CUSTOMER set LASTNAME = ? where ID = ?" kind="Update">
+  </Command>
+  
+  <Command name="deleteCustomer" SQL="delete from CUSTOMER where ID = ?" kind="Delete">
+   	<Parameter name="ID" index="1"/>  
+  </Command>
+
+  <Command name="deleteCustomerNoParam" SQL="delete from CUSTOMER where ID = ?" kind="Delete"/>
+
+</Config>

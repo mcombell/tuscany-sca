@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Tuscany RDB DAS Sample</TITLE>
+	<META NAME="GENERATOR" CONTENT="BrOffice.org 2.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20070704;1002817">
+	<META NAME="CHANGEDBY" CONTENT="a a">
+	<META NAME="CHANGED" CONTENT="20070704;2123396">
+	<!-- <pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+&quot;License&quot;); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.   </a></pre>
+
+-->
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 LANG="pt-BR">RDB DAS Customer Sample</H1>
+<H2 LANG="pt-BR">Introduction</H2>
+<P LANG="pt-BR">This stand-alone sample demonstrates the RDB Data
+Access Service in the context of a simple java application.</P>
+<H2 LANG="pt-BR">Building and Running</H2>
+<UL>
+	<LI><P LANG="pt-BR">Apache Ant latest version installed.</P>
+	<UL>
+		<UL>
+			<LI><P LANG="pt-BR">Download Apache Ant latest version on and
+			extract into folder &lt;apache_ant_folder&gt;. You can find it
+			here: <A HREF="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</A>.</P>
+			<LI><P LANG="pt-BR">Add &lt;apache_ant_folder&gt;/bin directory to
+			your OS path variable.</P>
+		</UL>
+	</UL>
+	<LI><P LANG="pt-BR">On console change the actual directory to
+	&lt;tuscany_das_java_distribution&gt;/samples/customer/ and execute
+	ant application:</P>
+	<UL>
+		<P LANG="pt-BR">&lt;tuscany_das_java_distribution&gt;/samples/customer/
+		&gt; ant</P>
+	</UL>
+</UL>
+<P LANG="pt-BR">The sample will run and output the following:</P>
+<P LANG="pt-BR" STYLE="margin-left: 2cm; margin-bottom: 0cm"><FONT SIZE=2>Buildfile:
+build.xml</FONT> <BR><BR><FONT SIZE=2>run:</FONT><BR><FONT SIZE=2>[java]
+connection info from config***************</FONT><BR><FONT SIZE=2>[java]
+dbName:jdbc:derby:target/dastest; create = true user:
+password:</FONT><BR><FONT SIZE=2>[java]
+******************************************</FONT><BR><FONT SIZE=2>[java]
+Setting up for derby run!</FONT><BR><FONT SIZE=2>[java] Dropping
+tables</FONT><BR><FONT SIZE=2>[java] Dropping procedures</FONT><BR><FONT SIZE=2>[java]
+Creating tables</FONT><BR><FONT SIZE=2>[java] Creating
+procedures</FONT><BR><FONT SIZE=2>[java] Inserting data in
+tables</FONT><BR><FONT SIZE=2>[java] Database setup complete!</FONT><BR><FONT SIZE=2>[java]
+Result:select all customers</FONT><BR><FONT SIZE=2>[java] ID:1
+LASTNAME:John ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2
+LASTNAME:Amita ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3
+LASTNAME:Patrick ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4
+LASTNAME:Jane ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] Result:insert
+new customer</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:John
+ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
+ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
+ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
+ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] ID:5 LASTNAME:Jenny
+ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] Result:update first
+customer</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:BlueBerry
+ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
+ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
+ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
+ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] ID:5 LASTNAME:Jenny
+ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] Result:delete last
+customer</FONT><BR><FONT SIZE=2>[java] Deleting customer named:
+Jenny</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:BlueBerry
+ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
+ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
+ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
+ADDRESS:UN</FONT><BR><BR><FONT SIZE=2>BUILD SUCCESSFUL</FONT><BR><FONT SIZE=2>Total
+time: 29 seconds</FONT></P>
+
+<P LANG="pt-BR" STYLE="margin-bottom: 0cm"><FONT SIZE=3>Observation:
+The build.xml ant file only works on DAS Java binary distribution.</FONT></P>
+</BODY>
+</HTML>

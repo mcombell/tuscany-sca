@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<project name="setup tomcat" default="prepareTomcat" basedir='.'>
+        <property environment="env" />
+        <property file="${user.home}/tuscany/build.properties" />
+        <property file="${user.home}/build.properties" />
+
+        <property name="tuscany.acceptance.tomcat.version" value='6.0.13' />
+        <condition property="tuscany.acceptance.tomcat.zipped" value='apache-tomcat-${tuscany.acceptance.tomcat.version}.zip'>
+            <os family="windows"/>
+        </condition>
+        <condition property="tuscany.acceptance.tomcat.zipped" value='apache-tomcat-${tuscany.acceptance.tomcat.version}.tar.gz'>
+            <or>
+                <os family="unix"/>
+                <os family="mac"/>
+            </or>
+        </condition>
+        <condition property="ant.home" value="${env.ANT_HOME}">
+            <os family="unix"/>
+        </condition>
+
+        <property name="tuscany.acceptance.target.dir" value='target' />
+        <property name="tuscany.acceptance.tc.dir" value='${tuscany.acceptance.target.dir}/apache-tomcat-${tuscany.acceptance.tomcat.version}' />
+        <condition property="tuscany.acceptance.tc.bin.dir" value="${tuscany.acceptance.tc.dir}/lib">
+            <contains string="${tuscany.acceptance.tomcat.version}" substring="6."/>
+        </condition>
+        <condition property="tuscany.acceptance.tc.bin.dir" value="${tuscany.acceptance.tc.dir}/common/lib">
+            <contains string="${tuscany.acceptance.tomcat.version}" substring="5."/>
+        </condition>
+
+
+<!-- KJW define property for the complete path of apache dir -->
+        <property name="fullpath.tuscany.acceptance.tc.dir" value= '${basedir}/${tuscany.acceptance.tc.dir}' />
+
+        <property name="tuscany.acceptance.groupId" value='org/apache/tuscany' />
+        <property name="tuscany.acceptance.version" value='incubating-M1' />
+
+        <property name="tuscany.commonj.acceptance.groupId" value='commonj' />
+        <property name="tuscany.commonj.acceptance.version" value='incubating-M1' />
+
+        <property name="tuscany.sdo.acceptance.groupId" value='org/apache/tuscany' />
+        <property name="tuscany.sdo.acceptance.version" value='incubating-M1' />
+
+<!--KJW  Define location of canned Derby database -->
+        <property name="tuscany.acceptance.das.samples.companyweb.dir" value='../../company-webapp' />
+        <property name="tuscany.acceptance.das.samples.advancedweb.dir" value='../../advanced-webapp' />
+
+        <property name="tuscany.maven.repos.dir" value='${user.home}\.m2\repository' />
+        <condition property="isWindows">
+            <os family="windows"/>
+        </condition>
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+        <condition property="isMac">
+            <os family="mac"/>
+        </condition>
+
+        <patternset id="tuscany.acceptance.common.dependencies">
+	            <include name="**/stax/stax-api/1.0/stax-api-1.0.jar"/>
+                <include name="**/woodstox/wstx-asl/2.9.3/wstx-asl-2.9.3.jar" />
+        </patternset>
+
+        <patternset id="tuscany.acceptance.emf.dependencies">
+                <include name="**/org/eclipse/emf/common/2.2.3/common-2.2.3.jar" />
+                <include name="**/org/eclipse/emf/ecore/2.2.3/ecore-2.2.3.jar" />
+                <include name="**/org/eclipse/emf/ecore-change/2.2.3/ecore-change-2.2.3.jar" />
+                <include name="**/org/eclipse/emf/ecore-xmi/2.2.3/ecore-xmi-2.2.3.jar" />
+                <include name="**/org/eclipse/xsd/xsd/2.2.3/xsd-2.2.3.jar" />
+        </patternset>
+
+        <patternset id="tuscany.acceptance.tc.specsdoimpl">  <!--jars which need to go into tomcat common/lib  -->
+                <include name="**/${tuscany.sca.acceptance.groupId}/sca-api/${tuscany.sca.acceptance.version}/sca-api-${tuscany.sca.acceptance.version}.jar" />
+                <include name="**/${tuscany.commonj.acceptance.groupId}/sdo-api/${tuscany.commonj.acceptance.version}/sdo-api-${tuscany.commonj.acceptance.version}.jar" />
+                <include name="**/${tuscany.acceptance.groupId}/tuscany-sdo-impl/${tuscany.acceptance.version}/tuscany-sdo-impl-${tuscany.acceptance.version}.jar" />
+        </patternset>
+
+        <target name="init">
+                <available property='tomcat.is.available' file='${tuscany.acceptance.tc.dir}/server/lib/catalina.jar' type='file' />
+                <available property='tuscany.acceptance.tomcat.zipped.available' file='${tuscany.acceptance.tomcat.zipped}' type='file' />
+                <available property='tuscany.acceptance.tomcat.serverxmlorg.available' file='${tuscany.acceptance.tc.dir}/conf/server.xml.original' />
+                <available property='tuscany.acceptance.tomcat.contextxmlorg.available' file='${tuscany.acceptance.tc.dir}/conf/context.xml.original' />
+        </target>
+
+        <target name="check.for.zip" depends="init" unless='tuscany.acceptance.tomcat.zipped.available'>
+                <property name='tuscany.acceptance.tomcat.zipped.full' location="${tuscany.acceptance.tomcat.zipped}" />
+                <echo level="error" message="${tuscany.acceptance.tomcat.zipped} file not found here:'${tuscany.acceptance.tomcat.zipped.full}'" />
+                <echo level="error" message="Either place zip file there or change ${user.home}/build.properties in home dir to include 'tuscany.acceptance.tomcat.zipped' property to where zip is located. " />
+                <fail />
+        </target>
+
+
+        <target name="tuscany.tomcat.unzipWindows" if="isWindows" depends='init,check.for.zip' description='Just unzip tomcat' unless='tomcat.is.available'>
+                <unzip src="${tuscany.acceptance.tomcat.zipped}" dest="${tuscany.acceptance.target.dir}" />
+        </target>
+        <target name="tuscany.tomcat.unzipUnix" if="isUnix" depends='init,check.for.zip' description='Just unzip tomcat' unless='tomcat.is.available'>
+            <mkdir dir="${tuscany.acceptance.target.dir}" />
+            <gunzip src="${tuscany.acceptance.tomcat.zipped}" dest="${tuscany.acceptance.target.dir}/temp.tar"/>
+            <!-- Exec tar because ant builtin tar does not preserve execute permissions. -->
+            <exec executable="tar" dir="${tuscany.acceptance.target.dir}">
+                <arg value="xf"/>
+                <arg value="temp.tar"/>
+            </exec>
+			<delete file="${tuscany.acceptance.target.dir}/temp.tar"/>
+        </target>
+        <target name="tuscany.tomcat.unzipMac" if="isMac" depends='init,check.for.zip' description='Just unzip tomcat' unless='tomcat.is.available'>
+                <antcall target="tuscany.tomcat.unzipUnix" /> <!-- just use unix for now -->
+        </target>
+
+        <target name="prepareTomcat" depends='tuscany.tomcat.unzipWindows,tuscany.tomcat.unzipUnix,tuscany.tomcat.unzipMac,tuscany.tomcat.fixup,tuscany.deploy.das.standalone' description='Unzip tomcat, fix it up, and deploy samples'>
+                <dirname property='tuscany.acceptance.tc.dir.full' file="${tuscany.acceptance.tc.dir}/bin" />
+                <echo level="info" message="Tomcat fixed up here:  ${tuscany.acceptance.tc.dir.full}" />
+                
+        </target>
+        <target name="startTestServer" depends='prepareTomcat' description='start server prepared to run tests'>
+                <waitfor maxwait="1" maxwaitunit="second" checkevery="200" timeoutproperty="tuscany.tomcat.notstarted" >
+                        <http url="http://localhost:8080"/>
+                </waitfor>
+                <condition property="tuscany.tomcat.alreadystarted">
+                    <not>
+                     <istrue value="${tuscany.tomcat.notstarted}"/>
+                    </not>
+                </condition>
+                <antcall target="startTomcat" />
+        </target>
+
+        <target name="tuscany.tomcat.fixup" depends='tuscany.tomcat.fixserverconfig' description='Fix up tomcat for tuscany.'>
+                <mkdir dir="${tuscany.acceptance.target.dir}" />
+
+                <copy todir="${tuscany.acceptance.tc.bin.dir}" flatten='true'>
+                        <fileset dir="${tuscany.maven.repos.dir}">
+                                <patternset refid="tuscany.acceptance.emf.dependencies" />
+                        </fileset>
+                        <fileset dir="${tuscany.maven.repos.dir}">
+                                <patternset refid="tuscany.acceptance.tc.specsdoimpl" />
+                        </fileset>
+                        <fileset dir="${tuscany.acceptance.das.samples.advancedweb.dir}">
+                                <include name="**/*.war" />
+                        </fileset>                        
+                        <fileset dir="${tuscany.maven.repos.dir}">
+                                <patternset>  <!-- for Derby and DAS support -->
+                                  <include name="**/${tuscany.acceptance.groupId}/das/tuscany-das-rdb/${tuscany.acceptance.version}/tuscany-das-rdb-${tuscany.acceptance.version}.jar" />
+                                  <include name="**/org/apache/derby/derby/10.1.2.1/derby-10.1.2.1.jar" />
+                                </patternset>
+                        </fileset>
+	                    <fileset dir="${tuscany.maven.repos.dir}">
+        	                    <patternset refid="tuscany.acceptance.common.dependencies" />
+    	                </fileset>
+                </copy>
+        </target>
+
+        <!-- DAS standalone target -->
+        <target name="tuscany.deploy.das.standalone" description='Deploy DAS stand alone sample to tomcat.'>
+               <copy todir="${tuscany.acceptance.tc.dir}/webapps" flatten='true'>
+                        <fileset dir="${tuscany.acceptance.das.samples.companyweb.dir}">
+                                <include name="**/*.war" />
+                        </fileset>
+                        <fileset dir="${tuscany.acceptance.das.samples.advancedweb.dir}">
+                                <include name="**/*.war" />
+                        </fileset>                         
+                        <!-- lresende - using the right name on the build now, don't need to clean up -->
+                        <!-- chainedmapper>
+                                <flattenmapper/>
+                                <globmapper from="*-1.0-incubating-beta2.war" to="*.war"/>
+                        </chainedmapper -->
+                </copy>
+
+                <!-- Create directory for the derby database -->
+                <property name="tuscany.acceptance.target.databases.dir" value='${tuscany.acceptance.tc.dir}/Databases' />
+                <mkdir dir="${tuscany.acceptance.target.databases.dir}" />
+
+                <!-- Copy over the Derby database -->
+                <!-- lresende - we now use the dbConfig, and don't need to copy canned database here -->
+                <!-- copy todir="${tuscany.acceptance.target.databases.dir}">
+                        <fileset dir="${tuscany.acceptance.das.samples.companyweb.dir}">
+                                <include name="**/dastest/**" />
+                        </fileset>
+                        <fileset dir="${tuscany.acceptance.das.samples.advancedweb.dir}">
+                                <include name="**/ajaxdastest/**" />
+                        </fileset>
+                </copy -->
+        </target>
+
+
+        <!-- provide a convenient -Djava.ext.dirs=  to run j2se samples -->
+        <target name="j2se" description='create a java extensions directory to run J2SE tuscany applications.'>
+                <property name="tuscany.acceptance.j2se.dir" value='${tuscany.acceptance.target.dir}/j2se' />
+                <mkdir dir="${tuscany.acceptance.j2se.dir}" />
+                <copy todir="${tuscany.acceptance.j2se.dir}" flatten='true'>
+                        <fileset dir="${tuscany.maven.repos.dir}">
+                                <patternset refid="tuscany.acceptance.common.dependencies" />
+                        </fileset>
+                        <fileset dir="${tuscany.maven.repos.dir}">
+                                <patternset refid="tuscany.acceptance.emf.dependencies" />
+                                <patternset refid="tuscany.acceptance.tc.specsdoimpl" />
+                        </fileset>
+                </copy>
+        </target>
+
+        <target name="backup.server.xml" depends="init" unless='tuscany.acceptance.tomcat.serverxmlorg.available'>
+                <copy file='${tuscany.acceptance.tc.dir}/conf/server.xml' tofile='${tuscany.acceptance.tc.dir}/conf/server.xml.original' />
+        </target>
+        <target name="backup.context.xml" depends="init" unless='tuscany.acceptance.tomcat.contextxmlorg.available'>
+                <copy file='${tuscany.acceptance.tc.dir}/conf/context.xml' tofile='${tuscany.acceptance.tc.dir}/conf/context.xml.original' />
+        </target>
+        <target name="tuscany.tomcat.fixserverconfig" depends='tuscany.tomcat.fixserverxml,tuscany.tomcat.fixcontextxml' description='Add listeners' />
+        <target name="tuscany.tomcat.fixserverxml" depends='init,backup.server.xml'  unless='tuscany.acceptance.tomcat.serverxmlorg.available'>
+                <property name="tuscany.acceptance.tomcat.serverxmlorg.available" value='true' />
+
+<!-- KJW save results to server_temp.xml -->
+                <!-- DO NOTHING AT THIS TIME                
+                <xslt processor="trax"
+                  in="${tuscany.acceptance.tc.dir}/conf/server.xml.original" 
+                  style="server.xsl" 
+                  out="${tuscany.acceptance.tc.dir}/conf/server_temp.xml">
+                </xslt>
+                -->
+
+                
+<!--KJW modify server.xml to include derby database resource -->
+               <echo level="info" message="Running datasource.xsl" />
+               <xslt processor="trax"
+                  in="${tuscany.acceptance.tc.dir}/conf/server.xml.original" style="datasource.xsl" 
+                  out="${tuscany.acceptance.tc.dir}/conf/server.xml">
+                  <param name="database_location" expression="jdbc:derby:../Databases/dastest"/>
+                  <param name="database_location_ajax" expression="jdbc:derby:../Databases/ajaxdastest"/>                  
+                </xslt>
+
+
+        </target>
+        <target name="tuscany.tomcat.fixcontextxml" depends='init,backup.context.xml'  unless='tuscany.acceptance.tomcat.contextxmlorg.available'>
+                <property name="tuscany.acceptance.tomcat.contextxmlorg.available" value='true' />
+                <!-- DO NOTHING AT THIS TIME                
+                <xslt
+                  in="${tuscany.acceptance.tc.dir}/conf/context.xml.original" style="context.xsl" 
+                  out="${tuscany.acceptance.tc.dir}/conf/context.xml">
+
+                 </xslt>
+                 -->
+        </target>
+        
+        <target name="startTomcatWindows" if="isWindows" unless='tuscany.tomcat.alreadystarted' >
+                <exec spawn='true' vmlauncher="false" failonerror='false' dir="${tuscany.acceptance.tc.dir}\bin" executable="cmd.exe" >
+                        <arg line="/C start &quot; Tomcat running ${tuscany.acceptance.tc.dir}&quot;  catalina run &amp;&amp;   exit" />
+                </exec>
+        </target>
+        <target name="startTomcatUnix" if="isUnix" unless='tuscany.tomcat.alreadystarted'>
+            <echo level="info" message="Starting Tomcat"/>
+            <exec spawn='true' vmlauncher="false" failonerror='false' dir="${tuscany.acceptance.tc.dir}/bin" executable="xterm" >
+                <arg line="-e ./catalina.sh run"/>
+            </exec>
+        </target>
+        <target name="startTomcatMac" if="isMac" unless='tuscany.tomcat.alreadystarted' >
+                <antcall target="startTomcatUnix" />
+        </target>
+
+        <target name="tuscany.tomcat.alreadystartedmsg" if="tuscany.tomcat.alreadystarted">
+             <echo level="info" message="Tomcat has been already started! ${tuscany.tomcat.alreadystarted}" />
+        </target>
+        <target name="startTomcat" description="Start up tomcat." depends="tuscany.tomcat.alreadystartedmsg,startTomcatWindows,startTomcatUnix,startTomcatMac" unless='tuscany.tomcat.alreadystarted'>
+                <sleep seconds="10"/> <!-- it's going to at least require this -->
+                <waitfor maxwait="15" maxwaitunit="second" checkevery="200">
+                        <http url="http://localhost:8080"/>
+                </waitfor>
+                
+        </target>
+
+        <target name="clean" description='Clean out all built artifacts'>
+                <delete dir="${tuscany.acceptance.target.dir}" />
+        </target>
+
+        <target name='setup.TC.antscripts' depends='tuscany.tomcat.unzipWindows,tuscany.tomcat.unzipUnix,tuscany.tomcat.unzipMac'>
+                <!-- Configure the custom Ant tasks for the Manager application -->
+                <taskdef resource="org/apache/catalina/ant/catalina.tasks">
+                        <classpath>
+                                <fileset dir="${tuscany.acceptance.tc.dir}/server/lib">
+                                        <include name="*.jar" />
+                                </fileset>
+                                <fileset dir="${tuscany.acceptance.tc.bin.dir}">
+                                        <include name="*.jar" />
+                                </fileset>
+                                <fileset dir="${tuscany.acceptance.tc.dir}/bin">
+                                        <include name="*.jar" />
+                                </fileset>
+                        </classpath>
+                </taskdef>
+
+        </target>
+
+</project>
+
+

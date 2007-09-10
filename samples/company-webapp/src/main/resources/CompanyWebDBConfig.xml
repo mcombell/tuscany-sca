@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<DBConfig xmlns="http:///org.apache.tuscany.das.rdb/dbconfig.xsd">
+	
+	<!--ConnectionInfo>
+		<ConnectionProperties 
+			driverClass="org.apache.derby.jdbc.EmbeddedDriver" 
+			databaseURL="jdbc:derby:../Databases/dastest; create = true" 
+			loginTimeout="600000"/>
+	</ConnectionInfo-->
+    <ConnectionInfo dataSource="java:comp/env/jdbc/dastest"/>
+    
+	<Table name="COMPANY" SQLCreate="CREATE TABLE COMPANY (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY , NAME VARCHAR(30))" >
+		<row>'ACME Publishing'</row>
+		<row>'Do-rite plumbing'</row>
+		<row>'MegaCorp'</row>
+	</Table>
+	<Table name="DEPARTMENT" SQLCreate="CREATE TABLE DEPARTMENT (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, NAME VARCHAR(30),LOCATION VARCHAR(30), DEPNUMBER VARCHAR(10),COMPANYID INT)">
+		<row>'Advanced Technologies', 'NY', '123', 1</row>
+		<row>'Default Name 2', '', '', 1</row>
+		<row>'Default Name 3', '', '', 1</row>
+		<row>'Default Name 4', '', '', 1</row>
+		<row>'Default Name 5', '', '', 1</row>
+		<row>'Default Name 6', '', '', 1</row>
+		<row>'Default Name 7', '', '', 1</row>
+		<row>'Default Name 8', '', '', 1</row>
+	</Table>
+	<Table name="EMPLOYEE" SQLCreate="CREATE TABLE EMPLOYEE (ID INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,NAME VARCHAR(30),SN VARCHAR(10), MANAGER SMALLINT, DEPARTMENTID INT)">
+		<row>'John Jones','E0001',0,1</row>
+		<row>'Mary Smith','E0002',1,null</row>
+		<row>'Jane Doe','E0003',0,1</row>
+		<row>'Al Smith','E0004',1,1</row>
+	</Table>
+</DBConfig>

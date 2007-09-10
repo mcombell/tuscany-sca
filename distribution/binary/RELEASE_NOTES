@@ -1,0 +1,59 @@
+DAS - Data Access Services
+
+Service Data Object(SDO) provides a uniform API for handling different types of data. Data Access Service (DAS) 
+simplifies handling of data when interacting with the back-end data source and frees application developers 
+from dealing with tedious and error-prone transformation between end source types and SDO Data Object Types/properties..
+
+What's new in Apache Tuscany DAS beta1
+======================================
+
+   DAS core features
+
+      - Support for J2SE connections in DAS config using Driver Manager.
+
+      - Added support for multiple database schemas in queries
+
+      - Enhanced Logging
+
+      - Enhanced Optimistic Concurrency Control with overqualified updates
+
+      - Enhanced support in ApplyChanges for generating proper INSERT for empty DataObjects 
+
+      - Enhanced support for invalid ResultSetMetadata
+
+      - Supporting ApplyChange commands as single atomic unit
+
+      - MySQL based test cases complete with success.
+
+
+   Documentation
+
+      - DAS API Javadocs now available in binary distribution
+
+      - Improved user guide available in Tuscany DAS website
+
+      - New Developer and Architect guides in Tuscany DAS website
+
+
+   DAS Samples
+
+      - Introduced database utility (dbConfig) to create, populate and refresh canned sample dbs
+
+      - Introduced new sample that demonstrate usage of DAS in a J2SE environment
+
+      - Introduced a new DAS sample that demonstrates DAS advanced features such as :
+         - Basic CRUD
+         - Optimistic Concurrency Control (OCC)
+         - Result Set Shape
+         - Column Converter
+         - Integration with dbConfig
+
+Details are described below.
+
+   DAS Java beta1 is a superset of previous DAS Java M1 and M2 releases.
+   Anything in M1 or M2 is also in beta1, but beta1 contains features and bug fixes not present in M1 or M2 release.
+
+Compatibility Concerns
+
+   - Changes on DAS Config file namespaces (http://issues.apache.org/jira/browse/TUSCANY-899). DAS config files should 
+   changed the attribute "xmlns"'s value of the "config" tag to "http:///org.apache.tuscany.das.rdb/config.xsd".

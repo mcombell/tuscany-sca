@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+-->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.tuscany</groupId>
+        <artifactId>parent</artifactId>
+        <version>2-incubating</version>
+    </parent>
+    <groupId>org.apache.tuscany.das</groupId>
+    <artifactId>tuscany-das</artifactId>
+    <version>1.0-incubating-beta2</version>
+    <packaging>pom</packaging>
+    <name>Apache Tuscany DAS Implementation project</name>
+    
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany/java/das</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/tuscany/java/das</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/tuscany/java/das/</url>
+    </scm>
+    
+    <properties>
+        <das.version>1.0-incubating-beta2</das.version>
+        <sdo.version>1.0-incubating</sdo.version>
+    </properties>
+    
+    <!-- definition of repositories where the parent pom can be found -->
+    <repositories>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>apache.incubator</id>
+            <name>Apache Incubator Repository</name>
+            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.tuscany.sdo</groupId>
+                <artifactId>tuscany-sdo-impl</artifactId>
+                <version>${sdo.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <build>
+        <defaultGoal>install</defaultGoal>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.4</source>
+                    <target>1.4</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*TestCase.java</include>
+                    </includes>
+                    <reportFormat>brief</reportFormat>
+                    <useFile>false</useFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+			<manifestEntries>
+			    <Extension-Name>${project.artifactId}</Extension-Name>
+			    <Specification-Title>${name}</Specification-Title>
+			    <Specification-Vendor>The Apache Software Foundation</Specification-Vendor>
+			    <Specification-Version>${version}</Specification-Version>
+			    <Implementation-Title>${name}</Implementation-Title>
+			    <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+			    <Implementation-Vendor>The Apache Software Foundation</Implementation-Vendor>
+			    <Implementation-Version>${version}</Implementation-Version>
+			</manifestEntries>                        
+                    </archive>
+                </configuration>
+		<version>2.1</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <modules>
+                <module>rdb</module>
+                <module>samples</module>
+            </modules>
+        </profile>
+        
+        <profile>
+            <id>distribution</id>
+            <modules>
+                <module>rdb</module>
+                <module>samples</module>
+                <module>distribution/binary</module>
+                <module>distribution/source</module>
+            </modules>
+        </profile>
+     </profiles>
+
+</project>

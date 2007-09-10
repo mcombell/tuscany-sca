@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  Copyright (c) 2005 The Apache Software Foundation or its licensors, as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web
+Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app id="WebApp">
+	<display-name>Tuscany DAS Features</display-name>
+    <welcome-file-list id="WelcomeFileList">
+        <welcome-file>html/DASWebSampleFrame.html</welcome-file>
+    </welcome-file-list>
+
+   	<!-- Command Servlet -->
+	<servlet>
+		<display-name>CommandServlet</display-name>
+		<servlet-name>CommandServlet</servlet-name>
+		<servlet-class>org.apache.tuscany.samples.web.CommandServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CommandServlet</servlet-name>
+		<url-pattern>/CommandServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- JSTL Tag Library Descriptors -->
+        <taglib>
+		<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+		<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
+	</taglib>    
+	<taglib>
+		<taglib-uri>http://java.sun.com/jstl/fmt</taglib-uri>
+		<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
+	</taglib>	
+</web-app>

@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Tuscany DAS Sample - Advanced webapp</title>
+
+<style>
+.code {font-size: 11px; color: #006699}
+.codebox {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px}
+.codebox2 {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px; width:85%}
+.codeboxW {border: 1px solid #6699CC; background-color: #FFFFFF;padding:15px}
+.codeboxB {background-color: #C9DBED;padding:1px 10px 10px 10px}
+</style>
+
+</head>
+
+
+
+
+<body>
+
+
+<h1><center>Advanced DAS web application Sample</center></h1>
+
+<br>
+<br>
+
+<p>
+This web sample demonstrates DAS advanced features in the context of a simple web application using Ajax.<br>
+The application user can navigate the menu to see examples of different DAS features.<br>
+The application uses "dbConfig" utility to create canned Derby database with required tables and populate initial data in them. For refreshing database data to initial state, user can click on Refresh Button.<br>
+</p>
+
+<ul>
+   <li><b>Adhoc Query</b>  (CRUD operations on COMPANY and DEPARTMENT using adhoc Sql statements)</li>
+   <li><b>DAS Command</b> (CRUD operations on COMPANY and DEPARTMENT using DAS config commands)</li>
+   <li><b>Advanced features:</b>
+      <ul>
+         <li><b>Optimistic Concurrency Control</b> (Using BOOK. NAME)</li>
+         <li><b>Converter</b>(Using CUSTOMER.LASTNAME)</li>
+         <li><b>Result Set Shape</b>(Using CUSTOMER table)</li>
+       </ul>
+    </li>
+</ul>
+
+<p>
+In future more features will get added.
+</p>
+
+
+<h2>Running the sample</h2>
+
+<p>
+There are two options for running this sample:
+
+<ul>
+   <li>Run from Tomcat configured by the build</li>
+   <li>Deploying the sample-advanced-webapp WAR into a Tomcat you configure yourself</li>
+</ul>
+
+<h2>Running from Tomcat configured by the build</h2>
+
+<p>
+You need to download the Tuscany RDB DAS source distribution and run maven build to use this option. When you build using maven from the source root {SRC_ROOT} directory, the sample war file is created under {SRC_ROOT}/samples/sample-ajax-das/target. This sample application is deployed to an instance of Tomcat as part of our automated sample testing.  For this, follow instructions from reademe.htm from {SRC_ROOT}/samples/testing/tomcat. This will in-effect run the htmlunit tests on the sample. The sample deployed on Tomcat instance will be ready this way and you can just point your browser to <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a> to test further.
+</p>
+
+<h2>Deploying the sample-ajax-das WAR into a Tomcat you configure yourself</h2>
+
+<p>
+Alternatively, you can deploy the sample to your own configured Tomcat installation by following the instructions below. <br>
+These instructions assume that you have either :
+<ul>
+   <li>1) Downloaded the Tuscany binary distribution or </li>
+   <li>2) Downloaded the Tuscany source and run maven build </li>
+</ul>
+see the following link to more details steps on how to build DAS Sample applications <a href="http://incubator.apache.org/tuscany/das-java-developer-guide.html">http://incubator.apache.org/tuscany/das-java-developer-guide.html</a> .
+</p>
+
+<h3>Set Up</h3>
+
+<ul>
+   <li>Download and install the most recent stable version of Tomcat 5.5 or Tomcat 6.  You can find it here: http://tomcat.apache.org/download-60.cgi</li>
+   <li>Download the most recent official release of Derby from here: http://db.apache.org/derby/index.html.  The only file you'll need from this download is derby(version).jar</li>
+   <li>Stop Tomcat</li>
+   <li>Copy derby(version).jar (from the derby distribution) to {Tomcat_Home}/common/lib (for Tomcat 5.5) or to {Tomcat_Home}/lib (for Tomcat 6) - e.g. derby-10.2.2.0.jar.</li>
+   <li>Add the sample war file to {Tomcat_Home}/webapps
+      <ul>
+         <li>sample-advanced-webapp.war</li>
+      </ul>
+   </li>
+   <li>Define a DataSource by adding a datasource definition to {Tomcat_Home}/conf/server.xml.
+      <ul>
+         <li>Find the end-of-section marker </GlobalNamingResources> and add the following lines just above it:</li>
+      </ul>
+
+        <pre STYLE="{font-style:italic}">
+        &lt;!-- Global Datasource for Derby ajaxdastest database --&gt;
+        &lt;Resource name="jdbc/ajaxdastest" 
+                  type="javax.sql.DataSource" auth="Container"
+                  description="Derby database for DAS Company sample"
+                  maxActive="100" maxIdle="30" maxWait="10000"
+                  username="" password=""
+                  driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+                  url="jdbc:derby:{absolute path}Databases/ajaxdastest;create=true"/&gt;
+        </pre>
+
+	   <b>Requirement:</b> You must include the absolute path to the <i>Databases</i> directory in the above url attribute. <br/>
+       Fore example:  url="jdbc:derby:c:\apache-tomcat-6.0.13\Databases/ajaxdastest;create=true "
+       <p/>
+   </li>
+   <li>Start tomcat and point your browser to: <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a></li>
+</ul>
+
+
+
+<h2>Sample Architecture</h2>
+
+<p>The design is modular and reusable by other web samples. There are java servlet, other java classes, jsp, javascript, xml, xsl, css and html files.</p>
+
+<h3><u>Client Side Files</u></h3>
+
+<h4><u>Javascripts</u></h4>
+
+<p></p>
+
+<ul>
+    <li><b>Ajax.js:</b> <br>
+        Ajax.js and dasmenu.js are generic (not DAS specific) and reusable by any web sample.</li>
+    <li><b>Dasmenu.js:</b> <br>
+        Set response handler when request is passed to servlet. Response handler's  job is transform xml response using xsl into html or plain text based on the example�s requirement.</li>
+</ul>
+
+<p>Used for menu/submenu rendering, is quite generic and can be used to display any menu.</p>
+
+<h4><u>HTMLs & jsps (DAS specific files)</u></h4>
+
+<ul>
+    <li><b>DASMenu.html</b> and <b>DASWebSampleFrame.html</b> are for giving frame and menu to web sample. DASMenu.html calls required .jsps like indexAdhoc.jsp, indexCommand.jsp, occ.jsp, converter.jsp. These jsps are all DAS specific. The .jsp file is responsible for deciding the DAS config file required by current sample and relevant .xsl file.</li>
+</ul>
+
+
+<h4><u>Serverside files</u></h4>
+
+<ul>
+   <li><b>CommandServlet.java</b> and <b>ServiceProcessor.java</b> <br> 
+       Used for invoking required service and returning results back to ajax.js. These files are not DAS specific.</li>
+
+   <li><b>DASQueryProcessor.java</b> <br>
+       Specific to DAS sample, has logic to invoke required sample example.</li>
+</ul>       

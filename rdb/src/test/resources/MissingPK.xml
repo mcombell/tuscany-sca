@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ASCII"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<Config xmlns="http:///org.apache.tuscany.das.rdb/config.xsd"> 
+  <Command name="testNullDataInPK" SQL="SELECT SINGER.ID, SINGER.NAME, SONG.ID, SONG.TITLE FROM SINGER, SONG WHERE SINGER.ID = SONG.SINGERID" kind="Select"/>
+  <Command name="testOuterJoin" SQL="SELECT SINGER.ID, SINGER.NAME, SONG.ID, SONG.TITLE FROM SINGER LEFT OUTER JOIN SONG ON SINGER.ID = SONG.SINGERID WHERE SINGER.ID = 3" kind="Select"/>
+
+  <Table tableName="SINGER">
+    <Column columnName="ID" primaryKey="true"/>
+  </Table>
+  
+  <Table tableName="SONG">
+    <Column columnName="ID" primaryKey="true" />
+  </Table>
+  
+  <Command name="test11" SQL="SELECT OWNER.ID, OWNER.NAME, DOG.ID, DOG.NAME  FROM OWNER, DOG WHERE OWNER.ID = DOG.OWNER_ID" kind="Select"/>
+  <Command name="test22" SQL="SELECT OWNER.ID, OWNER.NAME,  DOG.NAME FROM OWNER, DOG WHERE OWNER.ID = DOG.OWNER_ID" kind="Select"/>
+  <Command name="test33" SQL="SELECT OWNER.NAME, DOG.ID, DOG.NAME FROM OWNER, DOG WHERE OWNER.ID = DOG.OWNER_ID" kind="Select"/>
+  <Command name="test44" SQL="SELECT OWNER.NAME, DOG.NAME FROM OWNER, DOG WHERE OWNER.ID = DOG.OWNER_ID" kind="Select"/>
+
+  <Table tableName="OWNER">
+    <Column columnName="ID" primaryKey="true"/>
+  </Table>
+  
+  <Table tableName="DOG">
+    <Column columnName="ID" primaryKey="true" />
+  </Table>
+
+ <Command name="testPartFail" SQL="SELECT PART.QUANTITY FROM PART" kind="Select"/>
+  
+ <Table tableName="PART">
+    <Column columnName="ID"/>
+  </Table>  
+    
+  <Command name="get all books" SQL="SELECT AUTHOR FROM BOOK" kind="Select"/>
+  
+	<Table tableName="BOOK" typeName="BookInfo">
+        <Column columnName="BOOK_ID" propertyName="BookID" primaryKey="true"/>
+        <Column columnName="AUTHOR" propertyName="Writer"/>
+	    <Column columnName="OCC" collision="true"/>
+    </Table>
+      
+</Config>
