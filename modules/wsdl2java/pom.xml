@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>1.0-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-wsdl2java</artifactId>
@@ -197,7 +197,7 @@
     <repositories>
         <repository>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
             <id>java.net</id>
             <name>java.net Maven 1.x Repository</name>

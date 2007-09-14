@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>1.0-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-modules</artifactId>
@@ -75,7 +75,6 @@
                 <module>databinding-saxon</module>
                 -->
                 <module>databinding-xmlbeans</module>
-                <module>data-engine-helper</module>
                 <!--
                 <module>discovery-jms</module>
                 -->
