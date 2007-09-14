@@ -97,8 +97,6 @@
                 <module>interface-wsdl</module>
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
-                <module>implementation-das</module>
-                <module>implementation-data</module>
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
                 <module>implementation-java-runtime</module>
@@ -123,9 +121,9 @@
                 <module>node-impl</module>
                 <module>policy</module>
                 <module>policy-xml</module>
-		<module>policy-security</module>
+                <module>policy-security</module>
                 <module>sca-api</module>
-		<module>sca-definitions</module>
+                <module>sca-definitions</module>
                 <module>topology</module>
                 <module>topology-xml</module>
                 <module>wsdl2java</module>

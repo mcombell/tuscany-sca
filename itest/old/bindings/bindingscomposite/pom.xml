@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+org.apache.tuscany.sdo<?xml version="1.0" encoding="UTF-8"?>
 <!--
     * Licensed to the Apache Software Foundation (ASF) under one
     * or more contributor license agreements.  See the NOTICE file
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-api-r2.1</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.0-incubating</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.0-incubating</version>
             <scope>runtime</scope>
         </dependency>
 

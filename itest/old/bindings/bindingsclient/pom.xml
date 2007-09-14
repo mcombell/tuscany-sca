@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-api-r2.1</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.0-incubating</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
