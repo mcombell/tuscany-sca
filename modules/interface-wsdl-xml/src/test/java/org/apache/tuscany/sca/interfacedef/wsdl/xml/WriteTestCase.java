@@ -27,8 +27,6 @@ import javax.xml.stream.XMLOutputFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
@@ -37,10 +35,15 @@ import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
 import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
 import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
 import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
+import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
+import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
+import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.interfacedef.wsdl.DefaultWSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.xml.WSDLInterfaceProcessor;
+import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
@@ -58,22 +61,27 @@ public class WriteTestCase extends TestCase {
     private PolicyFactory policyFactory;
     private InterfaceContractMapper mapper;
 
+    @Override
     public void setUp() throws Exception {
+        ModelFactoryExtensionPoint modelFactories = new DefaultModelFactoryExtensionPoint();
         factory = new DefaultAssemblyFactory();
         policyFactory = new DefaultPolicyFactory();
-        mapper = new DefaultInterfaceContractMapper();
+        mapper = new InterfaceContractMapperImpl();
         inputFactory = XMLInputFactory.newInstance();
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
+        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(modelFactories);
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
 
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(factory, policyFactory, mapper, staxProcessor));
+        staxProcessors.addArtifactProcessor(new CompositeProcessor(new ContributionFactoryImpl(), factory, policyFactory, mapper, staxProcessor));
         staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(factory, policyFactory, staxProcessor));
         staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(factory, policyFactory, staxProcessor));
 
-        WSDLInterfaceProcessor wsdlProcessor = new WSDLInterfaceProcessor(new DefaultWSDLFactory(), null);
+        WSDLFactory wsdlFactory = new DefaultWSDLFactory();
+        modelFactories.addFactory(wsdlFactory);
+        WSDLInterfaceProcessor wsdlProcessor = new WSDLInterfaceProcessor(modelFactories);
         staxProcessors.addArtifactProcessor(wsdlProcessor);
     }
 
+    @Override
     public void tearDown() throws Exception {
         inputFactory = null;
         staxProcessors = null;

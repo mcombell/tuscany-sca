@@ -20,19 +20,21 @@ package loanapplication;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.host.embedded.SCADomain;
+import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 public class LoanApplicationTestCase extends TestCase {
 
     private LoanClient loanClient;
     private SCADomain domain;
 
+    @Override
     protected void setUp() throws Exception {
         domain = SCADomain.newInstance("loanapplication.composite");
 
         loanClient = domain.getService(LoanClient.class, "LoanClientComponent");
     }
     
+    @Override
     protected void tearDown() throws Exception {
     	domain.close();
     }

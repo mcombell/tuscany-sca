@@ -28,14 +28,13 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.implementation.java.introspect.impl.JavaIntrospectionHelper;
-import org.apache.tuscany.sca.implementation.java.mock.Target;
 
 public class JavaIntrospectionHelperTestCase extends TestCase {
 
     private List testNoGenericsList;
     private List<String> testList;
     private Map<String, Bean1> testMap;
-    private Target[] testArray;
+    private Entry[] testArray;
     private String[] testStringArray;
 
     public JavaIntrospectionHelperTestCase() {
@@ -47,22 +46,22 @@ public class JavaIntrospectionHelperTestCase extends TestCase {
     }
 
     public void testBean1AllPublicProtectedFields() throws Exception {
-        Set<Field> beanFields = JavaIntrospectionHelper.getAllPublicAndProtectedFields(Bean1.class);
+        Set<Field> beanFields = JavaIntrospectionHelper.getAllPublicAndProtectedFields(Bean1.class, true);
         assertEquals(4, beanFields.size());                //Bean1.ALL_BEAN1_PUBLIC_PROTECTED_FIELDS
     }
 
     public void testGetSuperAllMethods() throws Exception {
-        Set<Method> superBeanMethods = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(SuperBean.class);
+        Set<Method> superBeanMethods = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(SuperBean.class, true);
         assertEquals(SuperBean.ALL_SUPER_METHODS, superBeanMethods.size());
     }
 
     public void testGetBean1AllMethods() throws Exception {
-        Set<Method> beanMethods = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class);
+        Set<Method> beanMethods = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class, true);
         assertEquals(Bean1.ALL_BEAN1_METHODS, beanMethods.size());
     }
 
     public void testOverrideMethod() throws Exception {
-        Set<Method> beanFields = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class);
+        Set<Method> beanFields = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class, true);
         boolean invoked = false;
         for (Method method : beanFields) {
             if (method.getName().equals("override")) {
@@ -76,7 +75,7 @@ public class JavaIntrospectionHelperTestCase extends TestCase {
     }
 
     public void testNoOverrideMethod() throws Exception {
-        Set<Method> beanFields = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class);
+        Set<Method> beanFields = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(Bean1.class, true);
         boolean found = false;
         for (Method method : beanFields) {
             if (method.getName().equals("noOverride") && method.getParameterTypes().length == 0) {
@@ -152,7 +151,7 @@ public class JavaIntrospectionHelperTestCase extends TestCase {
 
     }
 
-    public void setTestArray(Target[] array) {
+    public void setTestArray(Entry[] array) {
     }
 
     private interface W {

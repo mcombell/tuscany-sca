@@ -26,24 +26,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-binding-rmi</artifactId>
-    <name>Apache Tuscany Java RMI Binding</name>
+    <name>Apache Tuscany SCA RMI Binding Extension</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-assembly-xml</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-interface-java</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-core-spi</artifactId>
+            <artifactId>tuscany-extension-helper</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
@@ -66,10 +55,5 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

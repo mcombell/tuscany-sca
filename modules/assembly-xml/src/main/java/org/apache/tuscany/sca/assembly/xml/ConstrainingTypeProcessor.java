@@ -27,13 +27,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.tuscany.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.assembly.AbstractContract;
 import org.apache.tuscany.sca.assembly.AbstractProperty;
 import org.apache.tuscany.sca.assembly.AbstractReference;
 import org.apache.tuscany.sca.assembly.AbstractService;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -41,13 +41,14 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.w3c.dom.Document;
 
 /**
- * A contrainingType content handler.
+ * A constrainingType processor.
  * 
  * @version $Rev$ $Date$
  */
-public class ConstrainingTypeProcessor extends BaseArtifactProcessor implements StAXArtifactProcessor<ConstrainingType> {
+public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements StAXArtifactProcessor<ConstrainingType> {
 
     /**
      * Construct a new constrainingType processor.
@@ -59,7 +60,7 @@ public class ConstrainingTypeProcessor extends BaseArtifactProcessor implements 
         super(factory, policyFactory, extensionProcessor);
     }
 
-    public ConstrainingType read(XMLStreamReader reader) throws ContributionReadException {
+    public ConstrainingType read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         ConstrainingType constrainingType = null;
         AbstractService abstractService = null;
         AbstractReference abstractReference = null;
@@ -67,132 +68,182 @@ public class ConstrainingTypeProcessor extends BaseArtifactProcessor implements 
         AbstractContract abstractContract = null;
         QName name = null;
         
-        try {
-            
-            // Read the constrainingType document
-            while (reader.hasNext()) {
-                int event = reader.getEventType();
-                switch (event) {
-    
-                    case START_ELEMENT:
-                        name = reader.getName();
+        // Read the constrainingType document
+        while (reader.hasNext()) {
+            int event = reader.getEventType();
+            switch (event) {
+
+                case START_ELEMENT:
+                    name = reader.getName();
+                    
+                    // Read a <constrainingType>
+                    if (Constants.CONSTRAINING_TYPE_QNAME.equals(name)) {
+                        constrainingType = assemblyFactory.createConstrainingType();
+                        constrainingType.setName(new QName(getString(reader, TARGET_NAMESPACE), getString(reader, NAME)));
+                        policyProcessor.readPolicies(constrainingType, reader);
+
+                    } else if (Constants.SERVICE_QNAME.equals(name)) {
                         
-                        // Read a <constrainingType>
-                        if (Constants.CONSTRAINING_TYPE_QNAME.equals(name)) {
-                            constrainingType = assemblyFactory.createConstrainingType();
-                            constrainingType.setName(new QName(getString(reader, TARGET_NAMESPACE), getString(reader, NAME)));
-                            readIntents(constrainingType, reader);
-    
-                        } else if (Constants.SERVICE_QNAME.equals(name)) {
+                        // Read a <service>
+                        abstractService = assemblyFactory.createAbstractService();
+                        abstractContract = abstractService;
+                        abstractService.setName(getString(reader, Constants.NAME));
+                        constrainingType.getServices().add(abstractService);
+                        policyProcessor.readPolicies(abstractService, reader);
+
+                    } else if (Constants.REFERENCE_QNAME.equals(name)) {
+                        
+                        // Read a <reference>
+                        abstractReference = assemblyFactory.createAbstractReference();
+                        abstractContract = abstractReference;
+                        abstractReference.setName(getString(reader, Constants.NAME));
+                        readMultiplicity(abstractReference, reader);
+                        constrainingType.getReferences().add(abstractReference);
+                        policyProcessor.readPolicies(abstractReference, reader);
+
+                    } else if (Constants.PROPERTY_QNAME.equals(name)) {
+                        
+                        // Read a <property>
+                        abstractProperty = assemblyFactory.createAbstractProperty();
+                        readAbstractProperty(abstractProperty, reader);
+                        
+                        // Read the property value
+                        Document value = readPropertyValue(abstractProperty.getXSDElement(), abstractProperty.getXSDType(), reader);
+                        abstractProperty.setValue(value);
+                        
+                        constrainingType.getProperties().add(abstractProperty);
+                        policyProcessor.readPolicies(abstractProperty, reader);
+                        
+                    } else if (OPERATION.equals(name)) {
+
+                        // Read an <operation>
+                        Operation operation = assemblyFactory.createOperation();
+                        operation.setName(getString(reader, NAME));
+                        operation.setUnresolved(true);
+                        policyProcessor.readPolicies(abstractContract, operation, reader);
+                        
+                    } else {
+
+                        // Read an extension element
+                        Object extension = extensionProcessor.read(reader);
+                        if (extension instanceof InterfaceContract) {
                             
-                            // Read a <service>
-                            abstractService = assemblyFactory.createAbstractService();
-                            abstractContract = abstractService;
-                            abstractService.setName(getString(reader, Constants.NAME));
-                            constrainingType.getServices().add(abstractService);
-                            readIntents(abstractService, reader);
-    
-                        } else if (Constants.REFERENCE_QNAME.equals(name)) {
-                            
-                            // Read a <reference>
-                            abstractReference = assemblyFactory.createAbstractReference();
-                            abstractContract = abstractReference;
-                            abstractReference.setName(getString(reader, Constants.NAME));
-                            readMultiplicity(abstractReference, reader);
-                            constrainingType.getReferences().add(abstractReference);
-                            readIntents(abstractReference, reader);
-    
-                        } else if (Constants.PROPERTY_QNAME.equals(name)) {
-                            
-                            // Read a <property>
-                            abstractProperty = assemblyFactory.createAbstractProperty();
-                            readAbstractProperty(abstractProperty, reader);
-                            constrainingType.getProperties().add(abstractProperty);
-                            readIntents(abstractProperty, reader);
-                            
-                        } else if (OPERATION.equals(name)) {
-    
-                            // Read an <operation>
-                            Operation operation = assemblyFactory.createOperation();
-                            operation.setName(getString(reader, NAME));
-                            operation.setUnresolved(true);
-                            readIntents(abstractContract, operation, reader);
-                            
+                            // <service><interface> and <reference><interface>
+                            abstractContract.setInterfaceContract((InterfaceContract)extension);
                         } else {
-    
-                            // Read an extension element
-                            Object extension = extensionProcessor.read(reader);
-                            if (extension instanceof InterfaceContract) {
-                                
-                                // <service><interface> and <reference><interface>
-                                abstractContract.setInterfaceContract((InterfaceContract)extension);
+
+                            // Add the extension element to the current element
+                            if (abstractContract != null) {
+                                abstractContract.getExtensions().add(extension);
+                            } else {
+                                constrainingType.getExtensions().add(extension);
                             }
+                            
                         }
-                        break;
-    
-                    case END_ELEMENT:
-                        name = reader.getName();
-    
-                        // Clear current state when reading reaching end element
-                        if (SERVICE_QNAME.equals(name)) {
-                            abstractService = null;
-                            abstractContract = null;
-                        } else if (REFERENCE_QNAME.equals(name)) {
-                            abstractReference = null;
-                            abstractContract = null;
-                        } else if (PROPERTY_QNAME.equals(name)) {
-                            abstractProperty = null;
-                        }
-                        break;
-                }
-                if (reader.hasNext()) {
-                    reader.next();
-                }
+                    }
+                    break;
+
+                case END_ELEMENT:
+                    name = reader.getName();
+
+                    // Clear current state when reading reaching end element
+                    if (SERVICE_QNAME.equals(name)) {
+                        abstractService = null;
+                        abstractContract = null;
+                    } else if (REFERENCE_QNAME.equals(name)) {
+                        abstractReference = null;
+                        abstractContract = null;
+                    } else if (PROPERTY_QNAME.equals(name)) {
+                        abstractProperty = null;
+                    }
+                    break;
             }
-            return constrainingType;
-            
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+            if (reader.hasNext()) {
+                reader.next();
+            }
         }
+        return constrainingType;
     }
     
-    public void write(ConstrainingType constrainingType, XMLStreamWriter writer) throws ContributionWriteException {
-        
-        try {
-            writeStartDocument(writer, CONSTRAINING_TYPE,
-               new XAttr(TARGET_NAMESPACE, constrainingType.getName().getNamespaceURI()),
-               new XAttr(NAME, constrainingType.getName().getLocalPart()));
-    
-            for (AbstractService service : constrainingType.getServices()) {
-                writeStart(writer, SERVICE, new XAttr(NAME, service.getName()));
-                extensionProcessor.write(service.getInterfaceContract(), writer);
-                writeEnd(writer);
-            }
-    
-            for (AbstractReference reference : constrainingType.getReferences()) {
-                writeStart(writer, REFERENCE,
-                      new XAttr(NAME, reference.getName()));
-                extensionProcessor.write(reference.getInterfaceContract(), writer);
-                writeEnd(writer);
-            }
-    
-            for (AbstractProperty property : constrainingType.getProperties()) {
-                writeStart(writer, PROPERTY, new XAttr(NAME, property.getName()));
-                writeEnd(writer);
-            }
-    
-            writeEndDocument(writer);
+    public void write(ConstrainingType constrainingType, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
+
+        // Write <constrainingType> element
+        writeStartDocument(writer, CONSTRAINING_TYPE,
+           new XAttr(TARGET_NAMESPACE, constrainingType.getName().getNamespaceURI()),
+           new XAttr(NAME, constrainingType.getName().getLocalPart()),
+           policyProcessor.writePolicies(constrainingType));
+
+        // Write <service> elements 
+        for (AbstractService service : constrainingType.getServices()) {
+            writeStart(writer, SERVICE, new XAttr(NAME, service.getName()),
+                       policyProcessor.writePolicies(service));
             
-        } catch (XMLStreamException e) {
-            throw new ContributionWriteException(e);
+            extensionProcessor.write(service.getInterfaceContract(), writer);
+
+            for (Object extension: service.getExtensions()) {
+                extensionProcessor.write(extension, writer);
+            }
+            
+            writeEnd(writer);
         }
+
+        // Write <reference> elements
+        for (AbstractReference reference : constrainingType.getReferences()) {
+            writeStart(writer, REFERENCE, new XAttr(NAME, reference.getName()),
+                       policyProcessor.writePolicies(reference));
+            
+            extensionProcessor.write(reference.getInterfaceContract(), writer);
+
+            for (Object extension: reference.getExtensions()) {
+                extensionProcessor.write(extension, writer);
+            }
+            
+            writeEnd(writer);
+        }
+
+        // Write <property> elements
+        for (AbstractProperty abstractProperty : constrainingType.getProperties()) {
+            writeStart(writer,
+                       PROPERTY,
+                       new XAttr(NAME, abstractProperty.getName()),
+                       new XAttr(MUST_SUPPLY, abstractProperty.isMustSupply()),
+                       new XAttr(MANY, abstractProperty.isMany()),
+                       new XAttr(TYPE, abstractProperty.getXSDType()),
+                       new XAttr(ELEMENT, abstractProperty.getXSDElement()),
+                       policyProcessor.writePolicies(abstractProperty));
+
+            // Write property value
+            writePropertyValue(abstractProperty.getValue(), abstractProperty.getXSDElement(), abstractProperty.getXSDType(), writer);
+
+            // Write extensions
+            for (Object extension : abstractProperty.getExtensions()) {
+                extensionProcessor.write(extension, writer);
+            }
+
+            writeEnd(writer);
+        }
+
+        // Write extension elements
+        for (Object extension: constrainingType.getExtensions()) {
+            extensionProcessor.write(extension, writer);
+        }
+        
+        writeEndDocument(writer);
     }
     
     public void resolve(ConstrainingType constrainingType, ModelResolver resolver) throws ContributionResolveException {
-
         // Resolve component type services and references
         resolveAbstractContracts(constrainingType.getServices(), resolver);
         resolveAbstractContracts(constrainingType.getReferences(), resolver);
+        
+        resolveIntents(constrainingType.getRequiredIntents(), resolver);
+        for ( AbstractService service  : constrainingType.getServices() ) {
+            resolveIntents(service.getRequiredIntents(), resolver);
+        }
+        
+        for ( AbstractReference reference : constrainingType.getReferences() ) {
+            resolveIntents(reference.getRequiredIntents(), resolver);
+        }
     }
     
     public QName getArtifactType() {

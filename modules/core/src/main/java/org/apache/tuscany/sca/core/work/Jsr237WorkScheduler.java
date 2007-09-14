@@ -23,10 +23,7 @@ import org.apache.tuscany.sca.work.WorkScheduler;
 import org.apache.tuscany.sca.work.WorkSchedulerException;
 
 import commonj.work.WorkEvent;
-import commonj.work.WorkException;
 import commonj.work.WorkListener;
-import commonj.work.WorkManager;
-import commonj.work.WorkRejectedException;
 
 /**
  * A work scheduler implementation based on a JSR 237 work manager.
@@ -42,18 +39,15 @@ public class Jsr237WorkScheduler implements WorkScheduler {
     /**
      * Underlying JSR-237 work manager
      */
-    private WorkManager jsr237WorkManager;
+    private ThreadPoolWorkManager jsr237WorkManager;
 
     /**
      * Initializes the JSR 237 work manager.
      *
      * @param jsr237WorkManager JSR 237 work manager.
      */
-    public Jsr237WorkScheduler(WorkManager jsr237WorkManager) {
-        if (jsr237WorkManager == null) {
-            throw new IllegalArgumentException("Work manager cannot be null");
-        }
-        this.jsr237WorkManager = jsr237WorkManager;
+    public Jsr237WorkScheduler() {
+        jsr237WorkManager = new ThreadPoolWorkManager(10);
     }
 
     /**
@@ -87,16 +81,20 @@ public class Jsr237WorkScheduler implements WorkScheduler {
                 Jsr237WorkListener<T> jsr237WorkListener = new Jsr237WorkListener<T>(listener, work);
                 jsr237WorkManager.schedule(jsr237Work, jsr237WorkListener);
             }
-        } catch (WorkRejectedException ex) {
+        } catch (IllegalArgumentException ex) {
             if (listener != null) {
                 listener.workRejected(work);
             } else {
                 throw new WorkSchedulerException(ex);
             }
-        } catch (WorkException ex) {
+        } catch (Exception ex) {
             throw new WorkSchedulerException(ex);
         }
 
+    }
+
+    public void destroy() {
+        jsr237WorkManager.destroy();
     }
 
     /*

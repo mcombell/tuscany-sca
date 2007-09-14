@@ -20,12 +20,10 @@ package org.apache.tuscany.sca.implementation.java.injection;
 
 import java.lang.reflect.Method;
 
-import org.apache.tuscany.sca.implementation.java.injection.MethodInjector;
-import org.apache.tuscany.sca.implementation.java.injection.SingletonObjectFactory;
-import org.apache.tuscany.sca.spi.ObjectCreationException;
-import org.apache.tuscany.sca.spi.ObjectFactory;
-
 import junit.framework.TestCase;
+
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -57,6 +55,7 @@ public class MethodInjectorTestCase extends TestCase {
         }
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         fooMethod = Foo.class.getMethod("foo", String.class);

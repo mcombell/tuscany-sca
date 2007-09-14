@@ -19,6 +19,8 @@
 
 package org.apache.tuscany.sca.interfacedef.wsdl.impl;
 
+import java.net.URI;
+
 import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
 import org.apache.ws.commons.schema.XmlSchema;
 
@@ -31,6 +33,7 @@ public class XSDefinitionImpl implements XSDefinition {
     
     private XmlSchema definition;
     private String namespace;
+    private URI location;
     private boolean unresolved;
     
     protected XSDefinitionImpl() {
@@ -58,7 +61,7 @@ public class XSDefinitionImpl implements XSDefinition {
         } else if (definition != null) {
             return definition.getTargetNamespace();
         } else {
-            return null;
+            return namespace;
         }
     }
     
@@ -70,23 +73,17 @@ public class XSDefinitionImpl implements XSDefinition {
         }
     }
     
-    @Override
-    public int hashCode() {
-        return String.valueOf(getNamespace()).hashCode();
+    /**
+     * @return the location
+     */
+    public URI getLocation() {
+        return location;
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof XSDefinition) {
-            if (getNamespace() != null) {
-                return getNamespace().equals(((XSDefinition)obj).getNamespace());
-            } else {
-                return ((XSDefinition)obj).getNamespace() == null;
-            }
-        } else {
-            return false;
-        }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(URI location) {
+        this.location = location;
     }
 }

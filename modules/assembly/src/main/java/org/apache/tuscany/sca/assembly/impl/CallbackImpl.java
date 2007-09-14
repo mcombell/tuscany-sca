@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.Callback;
-import org.apache.tuscany.sca.assembly.Visitor;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
@@ -33,17 +33,10 @@ import org.apache.tuscany.sca.policy.PolicySet;
  * 
  * @version $Rev$ $Date$
  */
-public class CallbackImpl extends BaseImpl implements Callback {
+public class CallbackImpl extends ExtensibleImpl implements Callback {
     private List<Binding> bindings = new ArrayList<Binding>();
-    private List<PolicySet> policySets = new ArrayList<PolicySet>();
     private List<Intent> requiredIntents = new ArrayList<Intent>();
-    
-    protected CallbackImpl() {
-    }
-
-    public List<Binding> getBindings() {
-        return bindings;
-    }
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
 
     public List<PolicySet> getPolicySets() {
         return policySets;
@@ -53,10 +46,18 @@ public class CallbackImpl extends BaseImpl implements Callback {
         return requiredIntents;
     }
 
-    public boolean accept(Visitor visitor) {
-        if (!super.accept(visitor)) {
-            return false;
-        }
-        return true;
+    protected CallbackImpl() {
     }
+
+    public List<Binding> getBindings() {
+        return bindings;
+    }
+    
+    public IntentAttachPointType getType() {
+        return null;
+    }
+
+    public void setType(IntentAttachPointType type) {
+    }
+
 }

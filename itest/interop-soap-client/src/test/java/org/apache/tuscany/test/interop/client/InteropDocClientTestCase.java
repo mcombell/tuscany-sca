@@ -20,9 +20,9 @@ package org.apache.tuscany.test.interop.client;
 
 import java.rmi.RemoteException;
 
-import org.apache.tuscany.test.SCATestCase;
-import org.osoa.sca.CompositeContext;
-import org.osoa.sca.CurrentCompositeContext;
+import junit.framework.TestCase;
+
+import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.soapinterop.ArrayOfSimpleDocument;
 import org.soapinterop.ChildDocument;
 import org.soapinterop.ComplexDocument;
@@ -33,16 +33,31 @@ import org.soapinterop.SingleTag;
 
 import commonj.sdo.helper.DataFactory;
 
-public class InteropDocClientTestCase extends SCATestCase {
-
+public class InteropDocClientTestCase extends TestCase {
+    private SCADomain scaDomain;
+    
     private DataFactory dataFactory;
 
     private DocTestPortType interopDoc;
 
     public InteropDocClientTestCase(){};
 
+    
+    @Override
+    protected void setUp() throws Exception {
+
+        scaDomain = SCADomain.newInstance("default.composite");
+        interopDoc = locateInteropDocService();
+
+        //Get the SDO DataFactory
+        dataFactory = DataFactory.INSTANCE;
+    }
+    
+    
     public void testSingleTag() throws RemoteException {
 
+        assertNotNull(interopDoc);
+        
         // Create the input
         SingleTag input = (SingleTag) dataFactory.create(SingleTag.class);
 
@@ -56,6 +71,8 @@ public class InteropDocClientTestCase extends SCATestCase {
 
     public void testSimpleDocument() throws RemoteException {
 
+        assertNotNull(interopDoc);
+        
         // Create the input
         SimpleDocument1 input = (SimpleDocument1) dataFactory.create(SimpleDocument1.class);
         input.setValue("123");
@@ -71,18 +88,20 @@ public class InteropDocClientTestCase extends SCATestCase {
 
     public void testComplexDocument() throws RemoteException {
 
+        assertNotNull(interopDoc);
+        
         // Create the input
         ComplexDocument input = (ComplexDocument) dataFactory.create(ComplexDocument.class);
         input.setAnAttribute("789");
         ChildDocument childDocument = (ChildDocument) dataFactory.create(ChildDocument.class);
         SimpleDocument simpleDocument = (SimpleDocument) dataFactory.create(SimpleDocument.class);
-        ;
+
         SimpleDocument1 simpleDocument1 = (SimpleDocument1) dataFactory.create(SimpleDocument1.class);
-        ;
+
         simpleDocument.setSimpleDocument(simpleDocument1);
         simpleDocument1.setValue("456");
         ArrayOfSimpleDocument arrayOfSimpleDocument = (ArrayOfSimpleDocument) dataFactory.create(ArrayOfSimpleDocument.class);
-        ;
+
         arrayOfSimpleDocument.getSimpleDocument().add(simpleDocument1);
         childDocument.setChildSimpleDoc(arrayOfSimpleDocument);
         input.setChild(childDocument);
@@ -100,34 +119,6 @@ public class InteropDocClientTestCase extends SCATestCase {
 
     }
 
-    protected void setUp() throws Exception {
-        
-        setApplicationSCDL(LoopbackInteropDocServiceComponentImpl.class, "META-INF/sca/default.scdl");
-        
-        addExtension("test.extensions", getClass().getClassLoader().getResource("META-INF/tuscany/extensions/test-extensions.scdl"));
-        /*
-        addExtension("org.apache.tuscany.idl.wsdl.WSDLDefinitionRegistry", getClass().getClassLoader().getResource(
-                      
-        "META-INF/tuscany/interface.wsdl.scdl"));
-
-        addExtension("org.apache.tuscany.idl.wsdl.InterfaceWSDLIntrospector", getClass().getClassLoader().getResource(
-        "META-INF/tuscany/interface.wsdl.scdl"));
-
-        
- 
-        addExtension("org.apache.tuscany.binding.axis2.WebServiceBinding", getClass().getClassLoader().getResource(
-                "META-INF/tuscany/binding.axis2.scdl"));
-        addExtension("org.apache.tuscany.databinding.sdo", getClass().getClassLoader().getResource("META-INF/tuscany/databinding.sdo.scdl"));
-        */
-        super.setUp();
-
-        // Get the SDO DataFactory
-        dataFactory = DataFactory.INSTANCE;
-
-        // Locate the service to test
-        interopDoc = locateInteropDocService();
-
-    }
 
     /**
      * Locate the interop service to test
@@ -147,9 +138,7 @@ public class InteropDocClientTestCase extends SCATestCase {
         if (interopLocation == null)
             interopLocation = "Remote";
 
-        CompositeContext compositeContext = CurrentCompositeContext.getContext();
-
-        return (DocTestPortType) compositeContext.locateService(DocTestPortType.class, interopLocation + "InteropDocService");
+        return scaDomain.getService(DocTestPortType.class, interopLocation + "InteropDocService");
     }
 
 }

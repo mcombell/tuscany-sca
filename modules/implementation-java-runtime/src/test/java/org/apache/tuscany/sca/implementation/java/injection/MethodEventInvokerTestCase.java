@@ -20,9 +20,10 @@ package org.apache.tuscany.sca.implementation.java.injection;
 
 import java.lang.reflect.Method;
 
-import org.apache.tuscany.sca.implementation.java.injection.MethodEventInvoker;
-
 import junit.framework.TestCase;
+
+import org.apache.tuscany.sca.implementation.java.invocation.EventInvocationException;
+import org.apache.tuscany.sca.implementation.java.invocation.MethodEventInvoker;
 
 /**
  * @version $Rev$ $Date$
@@ -36,7 +37,7 @@ public class MethodEventInvokerTestCase extends TestCase {
         try {
             injector.invokeEvent(new Foo());
             fail();
-        } catch (AssertionError e) {
+        } catch (EventInvocationException e) {
             // expected
         }
     }
@@ -51,6 +52,7 @@ public class MethodEventInvokerTestCase extends TestCase {
         }
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         privateMethod = MethodEventInvokerTestCase.Foo.class.getDeclaredMethod("hidden");
@@ -58,7 +60,7 @@ public class MethodEventInvokerTestCase extends TestCase {
 
     }
 
-    private class Foo {
+    public class Foo {
 
         public void foo() {
         }

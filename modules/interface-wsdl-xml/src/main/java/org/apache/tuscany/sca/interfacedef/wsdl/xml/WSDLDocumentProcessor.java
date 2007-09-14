@@ -23,168 +23,161 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 
 import javax.wsdl.Definition;
-import javax.wsdl.Types;
-import javax.wsdl.WSDLException;
-import javax.wsdl.extensions.ExtensionRegistry;
-import javax.wsdl.extensions.schema.Schema;
-import javax.wsdl.xml.WSDLLocator;
-import javax.wsdl.xml.WSDLReader;
+import javax.wsdl.Import;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
-import org.apache.tuscany.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
-import org.apache.tuscany.sca.contribution.service.ContributionRuntimeException;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
-import org.apache.ws.commons.schema.XmlSchemaCollection;
-import org.apache.ws.commons.schema.resolver.URIResolver;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
+import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
 
 /**
  * An ArtifactProcessor for WSDL documents.
- *
+ * 
  * @version $Rev$ $Date$
  */
 public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinition> {
 
-    private javax.wsdl.factory.WSDLFactory wsdlFactory;
-    private ExtensionRegistry wsdlExtensionRegistry;
+    public static final QName WSDL11 = new QName("http://schemas.xmlsoap.org/wsdl/", "definitions");
+    public static final QName XSD = new QName("http://www.w3.org/2001/XMLSchema", "schema");
+
+    private final static XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+
     private WSDLFactory factory;
 
-    /**
-     * Implementation of a WSDL locator.
-     */
-    private class WSDLLocatorImpl implements WSDLLocator {
-        private InputStream inputStream;
-        private URL base;
-        private String latestImportURI;
-
-        public WSDLLocatorImpl(URL base, InputStream is) {
-            this.base = base;
-            this.inputStream = is;
-        }
-
-        public void close() {
-        }
-
-        public InputSource getBaseInputSource() {
-            return new InputSource(inputStream);
-        }
-
-        public String getBaseURI() {
-            return base.toString();
-        }
-
-        public InputSource getImportInputSource(String parentLocation, String importLocation) {
-            try {
-                URL url = new URL(new URL(parentLocation), importLocation);
-                latestImportURI = url.toString();
-                return new InputSource(url.openStream());
-            } catch (Exception e) {
-                throw new ContributionRuntimeException(e);
-            }
-        }
-
-        public String getLatestImportURI() {
-            return latestImportURI;
-        }
-
+    public WSDLDocumentProcessor(ModelFactoryExtensionPoint modelFactories) {
+        this.factory = modelFactories.getFactory(WSDLFactory.class);
     }
 
-    /**
-     * URI resolver implementation for xml schema
-     */
-    private class URIResolverImpl implements URIResolver {
-
-        public org.xml.sax.InputSource resolveEntity(java.lang.String targetNamespace,
-                                                     java.lang.String schemaLocation,
-                                                     java.lang.String baseUri) {
-            try {
-                URL url = new URL(new URL(baseUri), schemaLocation);
-                return new InputSource(url.openStream());
-            } catch (IOException e) {
-                return null;
-            }
-        }
-    }
-
-    public WSDLDocumentProcessor(WSDLFactory factory, javax.wsdl.factory.WSDLFactory wsdlFactory) {
-        this.factory = factory;
-        
-        if (wsdlFactory != null) {
-            this.wsdlFactory = wsdlFactory;
-        } else {
-            try {
-                this.wsdlFactory = javax.wsdl.factory.WSDLFactory.newInstance();
-            } catch (WSDLException e) {
-                throw new ContributionRuntimeException(e);
-            }
-        }
-        
-        wsdlExtensionRegistry = this.wsdlFactory.newPopulatedExtensionRegistry();
-    }
-    
     public WSDLDefinition read(URL contributionURL, URI artifactURI, URL artifactURL) throws ContributionReadException {
         try {
+            return indexRead(artifactURL);
+        } catch (Exception e) {
+            throw new ContributionReadException(e);
+        }
+    }
 
-            // Read a WSDL document
-            InputStream is = artifactURL.openStream();
-            WSDLReader reader = wsdlFactory.newWSDLReader();
-            reader.setFeature("javax.wsdl.verbose", false);
-            reader.setExtensionRegistry(wsdlExtensionRegistry);
-
-            WSDLLocatorImpl locator = new WSDLLocatorImpl(artifactURL, is);
-            Definition definition = reader.readWSDL(locator);
-            
-            WSDLDefinition wsdlDefinition = factory.createWSDLDefinition();
-            wsdlDefinition.setDefinition(definition);
-            
-            // get base uri for any relative schema includes
-
-            
-            // Read inline schemas 
-            Types types = definition.getTypes();
-            if (types != null) {
-                wsdlDefinition.getInlinedSchemas().setSchemaResolver(new URIResolverImpl());
-                for (Object ext : types.getExtensibilityElements()) {
-                    if (ext instanceof Schema) {
-                        Element element = ((Schema)ext).getElement();
-
-                        // TODO: fix to make includes in imported
-                        //       schema work. The XmlSchema library was crashing
-                        //       because the base uri was not set. This doesn't
-                        //       affect imports. Need to check that this
-                        //       is the right approach for XSDs included by a
-                        //       XSD which is itself imported inline in a WSDL
-                        XmlSchemaCollection schemaCollection = wsdlDefinition.getInlinedSchemas();            
-                        schemaCollection.setBaseUri(((Schema)ext).getDocumentBaseURI());
-
-                        wsdlDefinition.getInlinedSchemas().read(element, element.getBaseURI());
+    public void resolve(WSDLDefinition model, ModelResolver resolver) throws ContributionResolveException {
+        Definition definition = model.getDefinition();
+        if (definition != null) {
+            for (Object imports : definition.getImports().values()) {
+                List importList = (List)imports;
+                for (Object i : importList) {
+                    Import imp = (Import)i;
+                    if (imp.getDefinition() != null) {
+                        continue;
+                    }
+                    if (imp.getLocationURI() == null) {
+                        // FIXME: [rfeng] By the WSDL 1.1 spec, the location attribute is required
+                        // We need to resolve it by QName
+                        WSDLDefinition proxy = factory.createWSDLDefinition();
+                        proxy.setUnresolved(true);
+                        proxy.setNamespace(imp.getNamespaceURI());
+                        WSDLDefinition resolved = resolver.resolveModel(WSDLDefinition.class, proxy);
+                        if (resolved != null && !resolved.isUnresolved()) {
+                            imp.setDefinition(resolved.getDefinition());
+                        }
+                    } else {
+                        String location = imp.getLocationURI();
+                        URI uri = URI.create(location);
+                        if (uri.isAbsolute()) {
+                            WSDLDefinition resolved;
+                            try {
+                                resolved = read(null, uri, uri.toURL());
+                                imp.setDefinition(resolved.getDefinition());
+                            } catch (Exception e) {
+                                throw new ContributionResolveException(e);
+                            }
+                        } else {
+                            if (location.startsWith("/")) {
+                                // This is a relative URI against a contribution
+                                location = location.substring(1);
+                                // TODO: Need to resolve it against the contribution
+                            } else {
+                                // This is a relative URI against the WSDL document
+                                URI baseURI = URI.create(model.getDefinition().getDocumentBaseURI());
+                                URI locationURI = baseURI.resolve(location);
+                                WSDLDefinition resolved;
+                                try {
+                                    resolved = read(null, locationURI, locationURI.toURL());
+                                    imp.setDefinition(resolved.getDefinition());
+                                } catch (Exception e) {
+                                    throw new ContributionResolveException(e);
+                                }
+                            }
+                        }
                     }
                 }
             }
-            
-            return wsdlDefinition;
-            
-        } catch (WSDLException e) {
-            throw new ContributionReadException(e);
-        } catch (IOException e) {
-            throw new ContributionReadException(e);
         }
     }
-    
-    public void resolve(WSDLDefinition model, ModelResolver resolver) throws ContributionResolveException {
-    }
-    
+
     public String getArtifactType() {
         return ".wsdl";
     }
-    
+
     public Class<WSDLDefinition> getModelType() {
         return WSDLDefinition.class;
     }
+
+    /**
+     * Read the namespace for the WSDL definition and inline schemas
+     * 
+     * @param doc
+     * @return
+     * @throws IOException
+     * @throws XMLStreamException
+     */
+    protected WSDLDefinition indexRead(URL doc) throws Exception {
+        WSDLDefinition wsdlDefinition = factory.createWSDLDefinition();
+        wsdlDefinition.setUnresolved(true);
+        wsdlDefinition.setLocation(doc.toURI());
+
+        InputStream is = doc.openStream();
+        try {
+            XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+            int eventType = reader.getEventType();
+            while (true) {
+                if (eventType == XMLStreamConstants.START_ELEMENT) {
+                    if (WSDL11.equals(reader.getName())) {
+                        String tns = reader.getAttributeValue(null, "targetNamespace");
+                        wsdlDefinition.setNamespace(tns);
+                        // The definition is marked as resolved but not loaded
+                        wsdlDefinition.setUnresolved(false);
+                        wsdlDefinition.setDefinition(null);
+                    }
+                    if (XSD.equals(reader.getName())) {
+                        String tns = reader.getAttributeValue(null, "targetNamespace");
+                        XSDefinition xsd = factory.createXSDefinition();
+                        xsd.setUnresolved(true);
+                        xsd.setNamespace(tns);
+                        // The definition is marked as resolved but not loaded
+                        xsd.setUnresolved(false);
+                        xsd.setSchema(null);
+                        wsdlDefinition.getXmlSchemas().add(xsd);
+                    }
+                }
+                if (reader.hasNext()) {
+                    eventType = reader.next();
+                } else {
+                    break;
+                }
+            }
+            return wsdlDefinition;
+        } finally {
+            is.close();
+        }
+    }
+
 }

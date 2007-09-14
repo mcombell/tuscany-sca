@@ -20,16 +20,16 @@
 <project>
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
-        <artifactId>tuscany-itest-databindings</artifactId>
+        <artifactId>itest-databindings</artifactId>
         <version>1.0-incubating-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tuscany-itest-databindings-interop</artifactId>
+    <artifactId>itest-databindings-interop</artifactId>
     <version>1.0-incubating-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Apache Tuscany Interoperability Databindings Integration Test</name>
+    <name>Apache Tuscany SCA DataBinding Interop Integration Tests</name>
 
     <repositories>
         <repository>
@@ -38,7 +38,7 @@
             </snapshots>
             <id>java.net</id>
             <name>java.net Maven 1.x Repository</name>
-            <url>https://maven-repository.dev.java.net/nonav/repository</url>
+            <url>http://download.java.net/maven/1</url>
             <layout>legacy</layout>
         </repository>
     </repositories>
@@ -50,7 +50,7 @@
             </snapshots>
             <id>java.net</id>
             <name>java.net Maven 1.x Repository</name>
-            <url>https://maven-repository.dev.java.net/repository</url>
+            <url>http://download.java.net/maven/1</url>
             <layout>legacy</layout>
         </pluginRepository>
     </pluginRepositories>
@@ -89,29 +89,29 @@
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.1</version>
+            <version>2.1.4</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>2.1</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-itest-databindings-common</artifactId>
+            <artifactId>itest-databindings-common</artifactId>
             <version>${pom.version}</version>
             <scope>compile</scope>
         </dependency> 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-itest-databindings-sdo</artifactId>
+            <artifactId>itest-databindings-sdo</artifactId>
             <version>${pom.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-itest-databindings-jaxb</artifactId>
+            <artifactId>itest-databindings-jaxb</artifactId>
             <version>${pom.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -129,13 +129,13 @@
         </dependency> 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-interface-java-runtime</artifactId>
+            <artifactId>tuscany-interface-java-xml</artifactId>
             <version>${pom.version}</version>
             <scope>compile</scope>
         </dependency>  
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-http-jetty</artifactId>
+            <artifactId>tuscany-host-jetty</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>                 
@@ -156,7 +156,7 @@
                           <artifactItems>
                               <artifactItem>
                                   <groupId>org.apache.tuscany.sca</groupId>
-                                  <artifactId>tuscany-itest-databindings-common</artifactId>
+                                  <artifactId>itest-databindings-common</artifactId>
                                   <version>${project.version}</version>
                                   <overWrite>true</overWrite>
                                   <outputDirectory>${project.build.directory}/classes</outputDirectory>

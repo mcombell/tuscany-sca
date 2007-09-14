@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-contribution-impl</artifactId>
-    <name>Apache Tuscany SCA Contribution Service Implementation</name>
+    <name>Apache Tuscany SCA Contribution Model Implementation</name>
 
     <dependencies>
         <dependency>
@@ -36,9 +36,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-java</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-namespace</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

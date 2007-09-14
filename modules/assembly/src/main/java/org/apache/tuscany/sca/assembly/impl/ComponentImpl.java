@@ -27,8 +27,8 @@ import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Implementation;
-import org.apache.tuscany.sca.assembly.Visitor;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
  * 
  * @version $Rev$ $Date$
  */
-public class ComponentImpl extends BaseImpl implements Component, Cloneable {
+public class ComponentImpl extends ExtensibleImpl implements Component, Cloneable {
     private ConstrainingType constrainingType;
     private Implementation implementation;
     private String name;
@@ -46,37 +46,38 @@ public class ComponentImpl extends BaseImpl implements Component, Cloneable {
     private List<ComponentService> services = new ArrayList<ComponentService>();
     private List<Intent> requiredIntents = new ArrayList<Intent>();
     private List<PolicySet> policySets = new ArrayList<PolicySet>();
-    private boolean autowire;
-    
+    private Boolean autowire;
+    private IntentAttachPointType type;
+
     /**
      * Constructs a new component.
      */
     protected ComponentImpl() {
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         ComponentImpl clone = (ComponentImpl)super.clone();
 
         clone.properties = new ArrayList<ComponentProperty>();
-        for (ComponentProperty property: getProperties()) {
+        for (ComponentProperty property : getProperties()) {
             clone.properties.add((ComponentProperty)property.clone());
         }
         clone.references = new ArrayList<ComponentReference>();
-        for (ComponentReference reference: getReferences()) {
+        for (ComponentReference reference : getReferences()) {
             clone.references.add((ComponentReference)reference.clone());
         }
         clone.services = new ArrayList<ComponentService>();
-        for (ComponentService service: getServices()) {
+        for (ComponentService service : getServices()) {
             clone.services.add((ComponentService)service.clone());
         }
         return clone;
     }
-    
+
     public String getURI() {
         return uri;
     }
-    
+
     public void setURI(String uri) {
         this.uri = uri;
     }
@@ -126,32 +127,23 @@ public class ComponentImpl extends BaseImpl implements Component, Cloneable {
     }
 
     public boolean isAutowire() {
+        return (autowire == null) ? false : autowire.booleanValue();
+    }
+
+    public void setAutowire(Boolean autowire) {
+        this.autowire = autowire;
+    }
+    
+    public Boolean getAutowire() {
         return autowire;
     }
 
-    public void setAutowire(boolean autowire) {
-        this.autowire = autowire;
+    public IntentAttachPointType getType() {
+        return type;
     }
 
-    public boolean accept(Visitor visitor) {
-        if (!super.accept(visitor)) {
-            return false;
-        }
-        for (ComponentProperty property : properties) {
-            if (!visitor.visit(property)) {
-                return false;
-            }
-        }
-        for (ComponentReference reference : references) {
-            if (!visitor.visit(reference)) {
-                return false;
-            }
-        }
-        for (ComponentService service : services) {
-            if (!visitor.visit(service)) {
-                return false;
-            }
-        }
-        return true;
+    public void setType(IntentAttachPointType type) {
+        this.type = type;
     }
+
 }

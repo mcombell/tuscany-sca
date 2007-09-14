@@ -15,32 +15,33 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- */
+ */ 
 
 package org.apache.tuscany.sca.assembly.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.builder.impl.DefaultCompositeBuilder;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
-import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
+import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
+import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
+import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
@@ -52,39 +53,48 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
 public class WriteAllTestCase extends TestCase {
     private DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
     private ExtensibleStAXArtifactProcessor staxProcessor;
-    private DefaultModelResolver resolver; 
-    private AssemblyFactory factory;
+    private TestModelResolver resolver; 
+    private AssemblyFactory assemblyFactory;
+    private SCABindingFactory scaBindingFactory;
     private PolicyFactory policyFactory;
     private InterfaceContractMapper mapper;
-    private DefaultCompositeBuilder compositeUtil;
+    private CompositeBuilderImpl compositeUtil;
 
 
+    @Override
     public void setUp() throws Exception {
-        factory = new DefaultAssemblyFactory();
+        assemblyFactory = new DefaultAssemblyFactory();
+        scaBindingFactory = new TestSCABindingFactoryImpl();
         policyFactory = new DefaultPolicyFactory();
-        mapper = new DefaultInterfaceContractMapper();
-        compositeUtil = new DefaultCompositeBuilder(factory, mapper, null);
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
+        mapper = new InterfaceContractMapperImpl();
+        compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null, null);
+        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(factory, policyFactory, mapper, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(factory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(factory, policyFactory, staxProcessor));
-        resolver = new DefaultModelResolver(getClass().getClassLoader());
+        staxProcessors.addArtifactProcessor(new CompositeProcessor(new ContributionFactoryImpl(), assemblyFactory, policyFactory, mapper, staxProcessor));
+        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
+        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
+        resolver = new TestModelResolver();
     }
 
+    @Override
     public void tearDown() throws Exception {
-        staxProcessors = null;
-        resolver = null;
-        policyFactory = null;
-        factory = null;
-        mapper = null;
     }
 
     public void testReadWriteComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("TestAllCalculator.composite");
         Composite composite = staxProcessor.read(is, Composite.class);
+        
+        verifyComposite(composite);
+        
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         staxProcessor.write(composite, bos);
+        bos.close();
+        
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+        composite = staxProcessor.read(bis, Composite.class);
+        
+        verifyComposite(composite);
+        
     }
 
     public void testReadWireWriteComposite() throws Exception {
@@ -110,6 +120,15 @@ public class WriteAllTestCase extends TestCase {
         staxProcessor.resolve(constrainingType, resolver);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         staxProcessor.write(constrainingType, bos);
+    }
+    
+    private void verifyComposite(Composite composite) {
+        assertEquals(composite.getProperties().get(0).getName(),"prop1");
+        assertEquals(composite.getProperties().get(0).isMany(), true);
+        assertEquals(composite.getProperties().get(1).getName(),"prop2");
+        assertEquals(composite.getProperties().get(1).isMustSupply(), true);
+        assertEquals(composite.getProperties().get(0).getXSDType(), new QName("http://foo", "MyComplexType"));
+        assertEquals(composite.getProperties().get(1).getXSDElement(), new QName("http://www.osoa.org/xmlns/sca/1.0", "MyComplexPropertyValue1"));
     }
 
 }

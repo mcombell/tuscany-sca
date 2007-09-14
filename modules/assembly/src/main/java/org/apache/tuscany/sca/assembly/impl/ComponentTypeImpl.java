@@ -26,16 +26,17 @@ import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.assembly.Visitor;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Represents a component type.
  * 
  * @version $Rev$ $Date$
  */
-public class ComponentTypeImpl extends BaseImpl implements ComponentType, Cloneable {
+public class ComponentTypeImpl extends ExtensibleImpl implements ComponentType, Cloneable, PolicySetAttachPoint {
     private String uri;
     private ConstrainingType constrainingType;
     private List<Property> properties = new ArrayList<Property>();
@@ -104,27 +105,12 @@ public class ComponentTypeImpl extends BaseImpl implements ComponentType, Clonea
     public List<PolicySet> getPolicySets() {
         return policySets;
     }
+    
+    public IntentAttachPointType getType() {
+        return null;
+    }
 
-    public boolean accept(Visitor visitor) {
-        if (!super.accept(visitor)) {
-            return false;
-        }
-        for (Property property : properties) {
-            if (!visitor.visit(property)) {
-                return false;
-            }
-        }
-        for (Reference reference : references) {
-            if (!visitor.visit(reference)) {
-                return false;
-            }
-        }
-        for (Service service : services) {
-            if (!visitor.visit(service)) {
-                return false;
-            }
-        }
-        return true;
+    public void setType(IntentAttachPointType type) {
     }
 
     @Override

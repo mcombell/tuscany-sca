@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.sca.assembly;
 
-import java.util.List;
 
 /**
  * An addressable instance of a service associated with a particular component.
@@ -42,17 +41,19 @@ public interface ComponentService extends Service {
     void setService(Service service);
 
     /**
-     * Derived relationship. Returns the list of composite services that
-     * promote this service.
-     *  
-     * @return
-     */
-    List<CompositeService> promotedAs();
-    
-    /**
-     * Clone the component service.
+     * Returns the callback reference created internally as a source endpoint
+     * for callbacks from this service.
      * 
-     * @return a clone of the component service
+     * @return the callback reference
      */
-    Object clone() throws CloneNotSupportedException;
+    ComponentReference getCallbackReference();
+
+    /**
+     * Sets the callback reference created internally as a source endpoint
+     * for callbacks from this service.
+     * 
+     * @param callbackReference the callback reference
+     */
+    void setCallbackReference(ComponentReference callbackReference);
+
 }

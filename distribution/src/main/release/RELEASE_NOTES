@@ -1,9 +1,52 @@
-Apache Tuscany 1.0 Beta1 (incubating) Release Notes
+Apache Tuscany SCA 0.99 (incubating) August 2007 Release Notes
+==============================================================
 
-1. Overview
+Apache Tuscany provides a runtime based on the Service Component
+Architecture. SCA is a set of specifications aimed at simplifying SOA
+Application Development which are being standardized at OASIS as part
+of Open Composite Services Architecture (Open CSA).
 
+Overview
+--------
 
+        This 0.99 release of Apache Tuscany SCA is expected to be
+        the last point release before 1.0 final release. It further
+        builds on the stability and modularity established with the
+        previous releases including more complete implementation of SCA
+        specifications, support for distributed SCA domains, SCA policy,
+        OSGi implementation types, and notification components for pub/sub
+        interactions. Start up time and memory footprint of the Tuscany SCA 
+        runtime has also been reduced.
 
-2. Installation Prerequisites 
+See the CHANGES file for a detailed list of the features in this release.
 
+Support
+-------
 
+For more information on Apache Tuscany visit the website at:
+
+    http://incubator.apache.org/tuscany/
+ 
+Any issues with this release can be reported to Apache Tuscany
+using the mailing lists or in the JIRA issue tracker.
+
+    Mailing lists:
+
+       http://mail-archives.apache.org/mod_mbox/ws-tuscany-user/
+       http://mail-archives.apache.org/mod_mbox/ws-tuscany-dev/
+
+    Jira:
+
+       http://issues.apache.org/jira/browse/TUSCANY
+
+To find out more about OASIS Open CSA go to: 
+
+    http://www.oasis-opencsa.org.
+
+Apache Tuscany welcomes your help. Any contribution, including code,
+testing, improving the documentation, or bug reporting is always
+appreciated. 
+
+Thank you for using Apache Tuscany!
+
+- The Tuscany Team.

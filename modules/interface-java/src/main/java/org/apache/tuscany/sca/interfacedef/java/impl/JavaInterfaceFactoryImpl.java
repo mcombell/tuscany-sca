@@ -18,21 +18,54 @@
  */
 package org.apache.tuscany.sca.interfacedef.java.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
+import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceVisitor;
 
 /**
  * A factory for the Java model.
  */
 public abstract class JavaInterfaceFactoryImpl implements JavaInterfaceFactory {
+    
+    private List<JavaInterfaceVisitor> visitors = new ArrayList<JavaInterfaceVisitor>();
+    private JavaInterfaceIntrospectorImpl introspector;
+    
+    public JavaInterfaceFactoryImpl() {
+        introspector = new JavaInterfaceIntrospectorImpl(this);
+    }
 
     public JavaInterface createJavaInterface() {
         return new JavaInterfaceImpl();
+    }
+    
+    public JavaInterface createJavaInterface(Class<?> interfaceClass) throws InvalidInterfaceException {
+        JavaInterface javaInterface = createJavaInterface();
+        introspector.introspectInterface(javaInterface, interfaceClass);
+        return javaInterface;
+    }
+    
+    public void createJavaInterface(JavaInterface javaInterface, Class<?> interfaceClass) throws InvalidInterfaceException {
+        introspector.introspectInterface(javaInterface, interfaceClass);
     }
     
     public JavaInterfaceContract createJavaInterfaceContract() {
         return new JavaInterfaceContractImpl();
     }
 
+    public void addInterfaceVisitor(JavaInterfaceVisitor extension) {
+        visitors.add(extension);
+    }
+
+    public void removeInterfaceVisitor(JavaInterfaceVisitor extension) {
+        visitors.remove(extension);
+    }
+
+    public List<JavaInterfaceVisitor> getInterfaceVisitors() {
+        return visitors;
+    }
 }

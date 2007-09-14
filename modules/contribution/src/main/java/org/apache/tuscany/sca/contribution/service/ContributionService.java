@@ -22,15 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.apache.tuscany.contribution.Contribution;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-
 
 /**
  * Service interface that manages artifacts contributed to a Tuscany runtime.
  *
- * @version $Rev: 527398 $ $Date: 2007-04-10 23:43:31 -0700 (Tue, 10 Apr 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ContributionService {
     /**
@@ -40,12 +39,31 @@ public interface ContributionService {
      * the URL's path).
      * 
      * @param contributionURI The URI that is used as the contribution unique ID. 
-     * @param sourceURL the location of the resource containing the artifact
-     * @param modelResolver the model resolver to use to resolve models in the
+     * @param sourceURL The location of the resource containing the artifact
+     * @param modelResolver The model resolver to use to resolve models in the
      *             scope of this contribution
-     * @param storeInRepository flag that identifies if you want to copy the
+     * @param storeInRepository Flag that identifies if you want to copy the
      *            contribution to the repository
-     * @return the contribution model representing the contribution 
+     * @return The contribution model representing the contribution 
+     * @throws DeploymentException if there was a problem with the contribution
+     * @throws IOException if there was a problem reading the resource
+     */
+    Contribution contribute(String contributionURI, URL sourceURL, boolean storeInRepository) throws ContributionException,
+        IOException;
+    
+    /**
+     * Contribute an artifact to the SCA Domain. The type of the contribution is
+     * determined by the Content-Type of the resource or, if that is undefined,
+     * by some implementation-specific means (such as mapping an extension in
+     * the URL's path).
+     * 
+     * @param contributionURI The URI that is used as the contribution unique ID. 
+     * @param sourceURL The location of the resource containing the artifact
+     * @param modelResolver The model resolver to use to resolve models in the
+     *             scope of this contribution
+     * @param storeInRepository Flag that identifies if you want to copy the
+     *            contribution to the repository
+     * @return The contribution model representing the contribution 
      * @throws DeploymentException if there was a problem with the contribution
      * @throws IOException if there was a problem reading the resource
      */
@@ -56,15 +74,34 @@ public interface ContributionService {
      * Contribute an artifact to the SCA Domain.
      * 
      * @param contributionURI The URI that is used as the contribution unique ID.
-     * @param sourceURL the location of the resource containing the artifact. 
+     * @param sourceURL The location of the resource containing the artifact. 
      *            This is used to identify what name should be used when storing
      *            the contribution on the repository 
-     * @param modelResolver the model resolver to use to resolve models in the
+     * @param modelResolver The model resolver to use to resolve models in the
      *             scope of this contribution
-     * @param contributionContent a stream containing the resource being
+     * @param contributionContent A stream containing the resource being
      *            contributed; the stream will not be closed but the read
      *            position after the call is undefined
-     * @return the contribution model representing the contribution 
+     * @return The contribution model representing the contribution 
+     * @throws DeploymentException if there was a problem with the contribution
+     * @throws IOException if there was a problem reading the stream
+     */
+    Contribution contribute(String contributionURI, URL sourceURL, InputStream contributionContent)
+        throws ContributionException, IOException;
+    
+    /**
+     * Contribute an artifact to the SCA Domain.
+     * 
+     * @param contributionURI The URI that is used as the contribution unique ID.
+     * @param sourceURL The location of the resource containing the artifact. 
+     *            This is used to identify what name should be used when storing
+     *            the contribution on the repository 
+     * @param modelResolver The model resolver to use to resolve models in the
+     *             scope of this contribution
+     * @param contributionContent A stream containing the resource being
+     *            contributed; the stream will not be closed but the read
+     *            position after the call is undefined
+     * @return The contribution model representing the contribution 
      * @throws DeploymentException if there was a problem with the contribution
      * @throws IOException if there was a problem reading the stream
      */
@@ -87,6 +124,10 @@ public interface ContributionService {
      * The added or updated deployment composite is given a relative URI that
      * matches the "name" attribute of the composite, with a ".composite"
      * suffix.
+     * 
+     * @param contribution The contribution to where 
+     * @param composite
+     * @throws ContributionException
      */
     void addDeploymentComposite(Contribution contribution, Composite composite) throws ContributionException;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.tuscany.sca.implementation.java.injection;
 
-import org.apache.tuscany.sca.spi.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 
 /**
  * Denotes an exception thrown when a runtime resource is not found
@@ -26,6 +26,11 @@ import org.apache.tuscany.sca.spi.ObjectCreationException;
  * @version $Rev$ $Date$
  */
 public class ResourceNotFoundException extends ObjectCreationException {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     public ResourceNotFoundException() {
         super();

@@ -31,6 +31,12 @@
     <url>http://incubator.apache.org/tuscany/</url>
     <version>1.0-incubating-SNAPSHOT</version>
 
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/tuscany/java/sca</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</url>
+    </scm>
+
     <repositories>
        <repository>
           <id>apache.incubator</id>
@@ -50,10 +56,47 @@
                 <module>itest</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>distribution</id>
+            <modules>
+                <module>modules</module>
+                <module>samples</module>
+                <module>itest</module>
+                <module>distribution</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>eclipse</id>
+            <modules>
+                <module>modules</module>
+                <module>samples</module>
+                <module>itest</module>
+                <module>demos</module>
+                <module>distribution</module>
+            </modules>
+        </profile>
     </profiles>
 
     <build>
         <defaultGoal>install</defaultGoal>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${notice.dir}</directory>
+                <targetPath>META-INF</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>DISCLAIMER</include>
+                    <include>LICENSE</include>
+                    <include>NOTICE</include>
+                </includes>
+            </resource>
+        </resources>
 
         <pluginManagement>
             <plugins>
@@ -82,6 +125,27 @@
                         <useFile>false</useFile>
                         <forkMode>once</forkMode>
                         <argLine>-ea -Xmx128m</argLine>
+                    </configuration>
+                </plugin>
+
+                <!-- jar plugin configuration -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Extension-Name>${project.artifactId}</Extension-Name>
+                                <Specification-Title>${name}</Specification-Title>
+                                <Specification-Vendor>The Apache Software Foundation</Specification-Vendor>
+                                <Specification-Version>${version}</Specification-Version>
+                                <Implementation-Title>${name}</Implementation-Title>
+                                <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+                                <Implementation-Vendor>The Apache Software Foundation</Implementation-Vendor>
+                                <Implementation-Version>${version}</Implementation-Version>
+                            </manifestEntries>
+                         </archive>
                     </configuration>
                 </plugin>
 

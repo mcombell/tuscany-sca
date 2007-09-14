@@ -24,9 +24,4 @@ package org.apache.tuscany.sca.assembly;
  * @version $Rev$ $Date$
  */
 public interface SCABinding extends Binding {
-    
-    Component getComponent();
-    
-    void setComponent(Component component);
-
 }

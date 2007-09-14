@@ -25,50 +25,19 @@ import java.net.URL;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.Contribution;
-import org.apache.tuscany.contribution.DeployedArtifact;
-import org.apache.tuscany.contribution.processor.DefaultPackageProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.DefaultURLArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.ExtensiblePackageProcessor;
-import org.apache.tuscany.contribution.processor.ExtensibleStAXArtifactProcessor;
-import org.apache.tuscany.contribution.processor.ExtensibleURLArtifactProcessor;
-import org.apache.tuscany.contribution.processor.PackageProcessor;
-import org.apache.tuscany.contribution.processor.PackageProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.StAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.URLArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
-import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
-import org.apache.tuscany.sca.contribution.processor.impl.FolderContributionProcessor;
-import org.apache.tuscany.sca.contribution.processor.impl.JarContributionProcessor;
-import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.Contribution;
+import org.apache.tuscany.sca.contribution.DeployedArtifact;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-import org.apache.tuscany.sca.contribution.service.ContributionRepository;
+import org.apache.tuscany.sca.contribution.resolver.impl.ModelResolverImpl;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
-import org.apache.tuscany.sca.contribution.service.impl.ContributionRepositoryImpl;
-import org.apache.tuscany.sca.contribution.service.impl.ContributionServiceImpl;
-import org.apache.tuscany.sca.contribution.service.impl.PackageTypeDescriberImpl;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
-import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
-import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.host.embedded.impl.EmbeddedSCADomain;
 
 /**
  * This is more intended to be a integration test then a unit test. *
@@ -79,62 +48,28 @@ public class ContributionServiceTestCase extends TestCase {
     private static final String JAR_CONTRIBUTION = "/repository/sample-calculator.jar";
     private static final String FOLDER_CONTRIBUTION = "target/classes/";
 
+    private ClassLoader cl;
+    private EmbeddedSCADomain domain;
     private ContributionService contributionService;
 
+    @Override
     protected void setUp() throws Exception {
+        //Create a test embedded SCA domain
+        cl = getClass().getClassLoader();
+        domain = new EmbeddedSCADomain(cl, "http://localhost");
+        
+        //Start the domain
+        domain.start();
 
-        // Create default factories
-        AssemblyFactory assemblyFactory = new DefaultAssemblyFactory();
-        PolicyFactory policyFactory = new DefaultPolicyFactory();
-        InterfaceContractMapper mapper = new DefaultInterfaceContractMapper();
-
-        // Create an extension point registry
-        ExtensionPointRegistry extensionRegistry = new DefaultExtensionPointRegistry();
-
-        // Add artifact processor extension points
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        extensionRegistry.addExtensionPoint(StAXArtifactProcessorExtensionPoint.class, staxProcessors);
-        ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        DefaultURLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint();
-        extensionRegistry.addExtensionPoint(URLArtifactProcessorExtensionPoint.class, documentProcessors);
-        ExtensibleURLArtifactProcessor documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors);
-
-        // Register base artifact processors
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(assemblyFactory, policyFactory, mapper,
-                                                                   staxProcessor));
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(assemblyFactory, policyFactory,
-                                                                          staxProcessor));
-
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
-
-        // Create package processor extension point
-        PackageTypeDescriberImpl describer = new PackageTypeDescriberImpl();
-        PackageProcessorExtensionPoint packageProcessors = new DefaultPackageProcessorExtensionPoint();
-        PackageProcessor packageProcessor = new ExtensiblePackageProcessor(packageProcessors, describer);
-        extensionRegistry.addExtensionPoint(PackageProcessorExtensionPoint.class, packageProcessors);
-
-        // Register base package processors
-        packageProcessors.addPackageProcessor(new JarContributionProcessor());
-        packageProcessors.addPackageProcessor(new FolderContributionProcessor());
-
-        // Create a repository
-        ContributionRepository repository = new ContributionRepositoryImpl("target");
-
-        // Create an artifact resolver and contribution service
-        this.contributionService = new ContributionServiceImpl(repository, packageProcessor, documentProcessor,
-                                                               assemblyFactory,
-                                                               new ContributionFactoryImpl(), XMLInputFactory
-                                                                   .newInstance());
+        //get a reference to the contribution service
+        contributionService = domain.getContributionService();
     }
 
     public void testContributeJAR() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
+        //URL contributionLocation = new URL("file:/D:/dev/Opensource/Apache/Tuscany/source/java/sca/samples/calculator/target/sample-calculator.jar");
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
         contributionService.contribute(contributionId, contributionLocation, resolver, false);
         assertNotNull(contributionService.getContribution(contributionId));
     }
@@ -142,7 +77,7 @@ public class ContributionServiceTestCase extends TestCase {
     public void testStoreContributionPackageInRepository() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
         contributionService.contribute(contributionId, contributionLocation, resolver, true);
 
         assertTrue(FileHelper.toFile(new URL(contributionService.getContribution(contributionId).getLocation()))
@@ -162,7 +97,7 @@ public class ContributionServiceTestCase extends TestCase {
 
         InputStream contributionStream = contributionLocation.openStream();
         try {
-            ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+            ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
             contributionService.contribute(contributionId, contributionLocation, contributionStream, resolver);
         } finally {
             IOHelper.closeQuietly(contributionStream);
@@ -182,11 +117,11 @@ public class ContributionServiceTestCase extends TestCase {
     public void testStoreDuplicatedContributionInRepository() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId1 = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
         contributionService.contribute(contributionId1, contributionLocation, resolver, true);
         assertNotNull(contributionService.getContribution(contributionId1));
         String contributionId2 = CONTRIBUTION_002_ID;
-        ModelResolver resolver2 = new DefaultModelResolver(getClass().getClassLoader());
+        ModelResolver resolver2 = new ModelResolverImpl(getClass().getClassLoader());
         contributionService.contribute(contributionId2, contributionLocation, resolver2, true);
         assertNotNull(contributionService.getContribution(contributionId2));
     }
@@ -201,7 +136,7 @@ public class ContributionServiceTestCase extends TestCase {
          //    FileHelper.forceMkdir(metadataDirectory); 
          //}
          //FileHelper.copyFileToDirectory(calculatorMetadataFile, metadataDirectory); 
-         ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+         ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
          contributionService.contribute(contributionId, rootContributionFolder.toURL(), resolver, false);
          assertNotNull(contributionService.getContribution(contributionId));
     }
@@ -209,7 +144,7 @@ public class ContributionServiceTestCase extends TestCase {
     public void testAddDeploymentComposites() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new DefaultModelResolver(getClass().getClassLoader());
+        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
         Contribution contribution = contributionService.contribute(contributionId, contributionLocation, resolver, false);
         assertNotNull(contributionService.getContribution(contributionId));
 

@@ -25,7 +25,7 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>org.osoa</groupId>
+    <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>sca-api</artifactId>
     <name>Apache Tuscany SCA API</name>
 
@@ -49,7 +49,7 @@
                     <bottom>Apache Tuscany is an effort undergoing incubation at the Apache Software Foundation(ASF) and sponsored by the Apache WS PMC.</bottom>
                     <header>Apache Tuscany OSOA SCA API</header>
                     <footer>Apache Tuscany OSOA SCA API</footer>
-                    <sourcepath>${basedir}/src/main/java${path.separator}${basedir}/target/generated/src/main/java</sourcepath>
+                    <sourcepath>${basedir}/src/main/java</sourcepath>
                     <subpackages>org.osoa.sca</subpackages>
                 </configuration>
             </plugin>

@@ -22,16 +22,27 @@ import java.net.URL;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.ContentType;
+import org.apache.tuscany.sca.contribution.ContentType;
 import org.apache.tuscany.sca.contribution.service.impl.PackageTypeDescriberImpl;
 
 public class PackageTypeDescriberImplTestCase extends TestCase {
     private PackageTypeDescriberImpl packageTypeDescriber;
 
-    public void testResolvePackageType() throws Exception {
+    public void testResolveArchivePackageType() throws Exception {
         URL artifactURL = getClass().getResource("/deployables/sample-calculator.jar");
         assertEquals(ContentType.JAR, this.packageTypeDescriber.getType(artifactURL, null));
     }
+
+    public void testResolveFolderPackageType() throws Exception {
+        URL artifactURL = getClass().getResource("/deployables/");
+        assertEquals(ContentType.FOLDER, this.packageTypeDescriber.getType(artifactURL, null));
+    }
+
+    public void testResolveFolder2PackageType() throws Exception {
+        URL artifactURL = getClass().getResource("/deployables");
+        assertEquals(ContentType.FOLDER, this.packageTypeDescriber.getType(artifactURL, null));
+    }
+
     
     public void testResolveUnknownPackageType() throws Exception {
         URL artifactURL = getClass().getResource("/test.ext");
@@ -44,8 +55,8 @@ public class PackageTypeDescriberImplTestCase extends TestCase {
                 packageTypeDescriber.getType(artifactURL, "application/vnd.tuscany.ext"));        
     }
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
         packageTypeDescriber = new PackageTypeDescriberImpl();
     }
 

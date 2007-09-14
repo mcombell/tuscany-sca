@@ -43,6 +43,10 @@ public class ComponentPropertyImpl extends PropertyImpl implements ComponentProp
         return super.clone();
     }
     
+    // FIXME getValue should not delegate to property.getValue()
+    // Doing this violates the setValue/getValue semantics, as you
+    // can call setValue() then get a different value from getValue()
+    @Override
     public Object getValue() {
         if (super.getValue() == null && property != null) {
             return property.getValue();

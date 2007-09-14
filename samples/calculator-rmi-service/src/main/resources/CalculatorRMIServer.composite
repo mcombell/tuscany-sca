@@ -18,14 +18,16 @@
  * under the License.    
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	       xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+           targetNamespace="http://sample"
+           xmlns:sample="http://sample"
            name="Calculator">
 
-    <service name="CalculatorService" promote="CalculatorServiceComponent">
-        <interface.java interface="calculator.CalculatorService"/>
-        <binding.rmi host="localhost" port="8099" serviceName="CalculatorRMIService"/>
-    </service>
-
     <component name="CalculatorServiceComponent">
+	    <service name="CalculatorService">
+	        <interface.java interface="calculator.CalculatorService"/>
+	        <tuscany:binding.rmi host="localhost" port="8099" serviceName="CalculatorRMIService"/>
+	    </service>
 		<implementation.java class="calculator.CalculatorServiceImpl"/>
 		<reference name="addService" target="AddServiceComponent"></reference>
         <reference name="subtractService" target="SubtractServiceComponent"></reference>

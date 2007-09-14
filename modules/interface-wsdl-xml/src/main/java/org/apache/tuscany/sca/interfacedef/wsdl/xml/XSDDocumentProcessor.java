@@ -19,85 +19,59 @@
 
 package org.apache.tuscany.sca.interfacedef.wsdl.xml;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 
-import org.apache.tuscany.contribution.processor.URLArtifactProcessor;
+import javax.xml.namespace.QName;
+
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
 import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
-import org.apache.ws.commons.schema.XmlSchema;
-import org.apache.ws.commons.schema.XmlSchemaCollection;
-import org.apache.ws.commons.schema.resolver.URIResolver;
-import org.xml.sax.InputSource;
 
 /**
  * An ArtifactProcessor for XSD documents.
- *
+ * 
  * @version $Rev$ $Date$
  */
 public class XSDDocumentProcessor implements URLArtifactProcessor<XSDefinition> {
 
     private WSDLFactory factory;
 
-    /**
-     * URI resolver implementation for xml schema
-     */
-    private class URIResolverImpl implements URIResolver {
-
-        public org.xml.sax.InputSource resolveEntity(java.lang.String targetNamespace,
-                                                     java.lang.String schemaLocation,
-                                                     java.lang.String baseUri) {
-            try {
-                URL url = new URL(new URL(baseUri), schemaLocation);
-                return new InputSource(url.openStream());
-            } catch (IOException e) {
-                return null;
-            }
-        }
+    public XSDDocumentProcessor(ModelFactoryExtensionPoint modelFactories) {
+        this.factory = modelFactories.getFactory(WSDLFactory.class);
     }
 
-    public XSDDocumentProcessor(WSDLFactory factory) {
-        this.factory = factory;
-    }
-    
     public XSDefinition read(URL contributionURL, URI artifactURI, URL artifactURL) throws ContributionReadException {
         try {
-
-            // Read an XSD document
-            InputStream is = artifactURL.openStream();
-            try {
-    
-                XmlSchemaCollection collection = new XmlSchemaCollection();
-                collection.setSchemaResolver(new URIResolverImpl());
-                XmlSchema schema = collection.read(new InputStreamReader(is), null);
-    
-                XSDefinition xsDefinition = factory.createXSDefinition();
-                xsDefinition.setSchema(schema);
-                
-                return xsDefinition;
-            } finally {
-                is.close();
-            }
-            
-        } catch (IOException e) {
+            return indexRead(artifactURL);
+        } catch (Exception e) {
             throw new ContributionReadException(e);
         }
     }
-    
+
     public void resolve(XSDefinition model, ModelResolver resolver) throws ContributionResolveException {
     }
-    
+
     public String getArtifactType() {
         return ".xsd";
     }
-    
+
     public Class<XSDefinition> getModelType() {
         return XSDefinition.class;
+    }
+
+    public static final QName XSD = new QName("http://www.w3.org/2001/XMLSchema", "schema");
+
+    protected XSDefinition indexRead(URL doc) throws Exception {
+        XSDefinition xsd = factory.createXSDefinition();
+        xsd.setUnresolved(true);
+        xsd.setNamespace(XMLDocumentHelper.readTargetNamespace(doc, XSD, true, "targetNamespace"));
+        xsd.setLocation(doc.toURI());
+        xsd.setUnresolved(false);
+        return xsd;
     }
 }

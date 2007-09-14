@@ -25,6 +25,8 @@ import junit.framework.TestCase;
 
 import org.apache.tuscany.databinding.jaxb.fault.InvalidSymbolFault;
 import org.apache.tuscany.databinding.jaxb.fault.InvalidSymbolFault_Exception;
+import org.apache.tuscany.sca.databinding.jaxb.JAXBDataBinding;
+import org.apache.tuscany.sca.databinding.jaxb.JAXBExceptionHandler;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
@@ -39,6 +41,7 @@ public class JAXBExceptionHandlerTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         this.handler = new JAXBExceptionHandler();

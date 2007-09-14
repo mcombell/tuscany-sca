@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-sca-manifest</artifactId>
-    <name>Apache Tuscany Manifest Jar</name>
+    <name>Apache Tuscany SCA Manifest Jar</name>
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
@@ -42,17 +42,57 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-assembly-java-dsl</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-assembly-xml</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-dwr</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-ejb</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-feed</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-http</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-jsonrpc</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-notification</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-rmi</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-sca</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-sca-axis2</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-sca-xml</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -71,11 +111,6 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.tuscany</groupId>
-            <artifactId>commonj-api</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-contribution</artifactId>
             <version>${pom.version}</version>
@@ -83,6 +118,16 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-contribution-impl</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-contribution-java</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-contribution-namespace</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -98,11 +143,6 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-core-spi</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-core-spring</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -132,6 +172,16 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-distributed</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-distributed-impl</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -142,12 +192,22 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-http-jetty</artifactId>
+            <artifactId>tuscany-host-rmi</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-http-tomcat</artifactId>
+            <artifactId>tuscany-host-webapp</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-host-jetty</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-host-tomcat</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -167,22 +227,12 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-interface-java-runtime</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-interface-wsdl</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-interface-wsdl-xml</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-interface-wsdl-runtime</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -202,22 +252,22 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-implementation-osgi</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-implementation-resource</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-implementation-script</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-java2wsdl</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-maven-java2wsdl</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-maven-wsdl2java</artifactId>
+            <artifactId>tuscany-implementation-spring</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -227,22 +277,32 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-host-rmi</artifactId>
+            <artifactId>tuscany-policy-xml</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.osoa</groupId>
-            <artifactId>sca-api</artifactId>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-java2wsdl</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-wsdl2java</artifactId>
             <version>${pom.version}</version>
+        </dependency>        
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>sca-api</artifactId>
+            <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tuscany.sdo</groupId>
+            <artifactId>tuscany-sdo-tools</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
      </dependencies>

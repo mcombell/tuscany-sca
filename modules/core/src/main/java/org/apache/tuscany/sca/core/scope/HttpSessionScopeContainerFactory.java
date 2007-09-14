@@ -19,25 +19,19 @@
 
 package org.apache.tuscany.sca.core.scope;
 
-import org.apache.tuscany.sca.core.RuntimeComponent;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.scope.ScopeContainer;
-import org.apache.tuscany.sca.scope.ScopeContainerFactory;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
  * @version $Rev$ $Date$
  */
 public class HttpSessionScopeContainerFactory implements ScopeContainerFactory {
-    private WorkContext workContext;
 
-    public HttpSessionScopeContainerFactory(WorkContext workContext) {
+    public HttpSessionScopeContainerFactory() {
         super();
-        this.workContext = workContext;
     }
 
     public ScopeContainer createScopeContainer(RuntimeComponent component) {
-        return new HttpSessionScopeContainer(workContext, component);
+        return new HttpSessionScopeContainer(component);
     }
 
     public Scope getScope() {

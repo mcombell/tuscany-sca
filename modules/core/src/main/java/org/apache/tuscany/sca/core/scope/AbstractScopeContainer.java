@@ -21,29 +21,23 @@ package org.apache.tuscany.sca.core.scope;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.tuscany.sca.core.RuntimeComponent;
+import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.event.Event;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
-import org.apache.tuscany.sca.provider.ScopedImplementationProvider;
-import org.apache.tuscany.sca.scope.InstanceWrapper;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.scope.ScopeContainer;
-import org.apache.tuscany.sca.spi.AbstractLifecycle;
-import org.apache.tuscany.sca.spi.component.GroupInitializationException;
-import org.apache.tuscany.sca.spi.component.PersistenceException;
-import org.apache.tuscany.sca.spi.component.TargetDestructionException;
-import org.apache.tuscany.sca.spi.component.TargetResolutionException;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
  * Implements functionality common to scope contexts.
  * 
  * @version $Rev$ $Date$
  */
-public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle implements ScopeContainer<KEY> {
+public abstract class AbstractScopeContainer<KEY> implements ScopeContainer<KEY> {
     protected Map<KEY, InstanceWrapper<?>> wrappers = new ConcurrentHashMap<KEY, InstanceWrapper<?>>();
     protected final Scope scope;
 
     protected RuntimeComponent component;
+    protected volatile int lifecycleState = UNINITIALIZED;
+
 
     public AbstractScopeContainer(Scope scope, RuntimeComponent component) {
         this.scope = scope;
@@ -74,7 +68,7 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
     }
 
     public InstanceWrapper getAssociatedWrapper(KEY contextId) throws TargetResolutionException {
-        return null;
+        return getWrapper(contextId); // TODO: what is this method spossed to do diff than getWrapper? 
     }
 
     public Scope getScope() {
@@ -83,6 +77,16 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
 
     public InstanceWrapper getWrapper(KEY contextId) throws TargetResolutionException {
         return wrappers.get(contextId);
+    }
+    
+    public void addWrapperReference(KEY existingContextId, KEY newContextId) 
+      throws TargetResolutionException 
+    {
+        // do nothing here. the conversational scope container implements this
+    }
+
+    public void registerWrapper(InstanceWrapper wrapper, KEY contextId) throws TargetResolutionException { 
+        // do nothing here. the conversational scope container implements this
     }
 
     public void onEvent(Event event) {
@@ -96,12 +100,17 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
         return false;
     }
 
-    public void remove() throws PersistenceException {
-        throw new UnsupportedOperationException("Scope does not support persistence");
-    }
-
     public void returnWrapper(InstanceWrapper wrapper, KEY contextId) throws TargetDestructionException {
     }
+    
+    /**
+     * Default implmentation of remove which does nothing 
+     * 
+     * @param contextId the identifier of the context to remove. 
+     */
+    public void remove(KEY contextId) 
+        throws TargetDestructionException {
+    }    
 
     public synchronized void start() {
         int lifecycleState = getLifecycleState();
@@ -111,7 +120,7 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
         setLifecycleState(RUNNING);
     }
 
-    public void startContext(KEY contextId) throws GroupInitializationException {
+    public void startContext(KEY contextId) {
         if(isEagerInit()) {
             try {
                 getWrapper(contextId);
@@ -133,8 +142,39 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
         wrappers.remove(contextId);
     }
 
+    @Override
     public String toString() {
-        return "In state [" + super.toString() + ']';
+        String s;
+        switch (lifecycleState) {
+            case ScopeContainer.CONFIG_ERROR:
+                s = "CONFIG_ERROR";
+                break;
+            case ScopeContainer.ERROR:
+                s = "ERROR";
+                break;
+            case ScopeContainer.INITIALIZING:
+                s = "INITIALIZING";
+                break;
+            case ScopeContainer.INITIALIZED:
+                s = "INITIALIZED";
+                break;
+            case ScopeContainer.RUNNING:
+                s = "RUNNING";
+                break;
+            case ScopeContainer.STOPPING:
+                s = "STOPPING";
+                break;
+            case ScopeContainer.STOPPED:
+                s = "STOPPED";
+                break;
+            case ScopeContainer.UNINITIALIZED:
+                s = "UNINITIALIZED";
+                break;
+            default:
+                s = "UNKNOWN";
+                break;
+        }
+        return "In state [" + s + ']';
     }
 
     public RuntimeComponent getComponent() {
@@ -144,4 +184,18 @@ public abstract class AbstractScopeContainer<KEY> extends AbstractLifecycle impl
     public void setComponent(RuntimeComponent component) {
         this.component = component;
     }
+
+    public int getLifecycleState() {
+        return lifecycleState;
+    }
+
+    /**
+     * Set the current state of the Lifecycle.
+     *
+     * @param lifecycleState the new state
+     */
+    protected void setLifecycleState(int lifecycleState) {
+        this.lifecycleState = lifecycleState;
+    }
+
 }

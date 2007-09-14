@@ -25,6 +25,8 @@ import javax.xml.bind.JAXBElement;
 
 import junit.framework.TestCase;
 
+import org.apache.tuscany.sca.databinding.jaxb.JAXBWrapperHandler;
+
 import com.example.ipo.jaxb.ObjectFactory;
 import com.example.ipo.jaxb.PurchaseOrderType;
 
@@ -38,6 +40,7 @@ public class JAXBWrapperHandlerTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         this.handler = new JAXBWrapperHandler();

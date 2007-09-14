@@ -25,8 +25,12 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.Composite;
-import org.apache.tuscany.sca.assembly.Visitor;
+import org.apache.tuscany.sca.assembly.CompositeReference;
+import org.apache.tuscany.sca.assembly.CompositeService;
+import org.apache.tuscany.sca.assembly.Reference;
+import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.Wire;
 
 public class CompositeImpl extends ComponentTypeImpl implements Composite, Cloneable {
@@ -34,30 +38,49 @@ public class CompositeImpl extends ComponentTypeImpl implements Composite, Clone
     private List<Composite> includes = new ArrayList<Composite>();
     private QName name;
     private List<Wire> wires = new ArrayList<Wire>();
-    private boolean autowire;
+    private Boolean autowire;
     private boolean local = true;
-    
+
     /**
      * Constructs a new composite.
      */
     protected CompositeImpl() {
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         CompositeImpl clone = (CompositeImpl)super.clone();
-        
+
         clone.components = new ArrayList<Component>();
-        for (Component component: getComponents()) {
-            clone.components.add((Component)component.clone());
+        for (Component component : getComponents()) {
+            Component clonedComponent = (Component)component.clone();
+            for (Service service : clone.getServices()) {
+                CompositeService compositeService = (CompositeService)service;
+                // Force the promoted component/service to be rebuilt against the clone
+                if (compositeService.getPromotedComponent() != null) {
+                    compositeService.getPromotedComponent().setUnresolved(true);
+                }
+                if (compositeService.getPromotedService() != null) {
+                    compositeService.getPromotedService().setUnresolved(true);
+                }
+            }
+            for (Reference reference : clone.getReferences()) {
+                CompositeReference compositeReference = (CompositeReference)reference;
+                for (ComponentReference ref : compositeReference.getPromotedReferences()) {
+                    // Force the promoted reference to be rebuilt against the clone
+                    ref.setUnresolved(true);
+                }
+            }
+
+            clone.components.add(clonedComponent);
         }
         clone.wires = new ArrayList<Wire>();
-        for (Wire wire: getWires()) {
+        for (Wire wire : getWires()) {
             clone.wires.add((Wire)wire.clone());
         }
         return clone;
     }
-    
+
     public List<Component> getComponents() {
         return components;
     }
@@ -74,51 +97,35 @@ public class CompositeImpl extends ComponentTypeImpl implements Composite, Clone
         return wires;
     }
 
-    public boolean isAutowire() {
-        return autowire;
-    }
-
     public boolean isLocal() {
         return local;
-    }
-
-    public void setAutowire(boolean autowire) {
-        this.autowire = autowire;
     }
 
     public void setLocal(boolean local) {
         this.local = local;
     }
 
+    public boolean isAutowire() {
+        return (autowire == null) ? false : autowire.booleanValue();
+    }
+
+    public void setAutowire(Boolean autowire) {
+        this.autowire = autowire;
+    }
+    
+    public Boolean getAutowire() {
+        return autowire;
+    }
+    
     public void setName(QName name) {
         this.name = name;
     }
-    
-    @Override
-    public boolean accept(Visitor visitor) {
-        boolean result = super.accept(visitor);
-        if (!result) {
-            return false;
-        }
-        
-        for (Component component: components) {
-            if (!component.accept(visitor)) {
-                return false;
-            }
-        }
-        
-        for (Wire wire: wires) {
-            if (!visitor.visit(wire))
-                return false;
-        }
-        return true;
-    }
-    
+
     @Override
     public int hashCode() {
         return String.valueOf(getName()).hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

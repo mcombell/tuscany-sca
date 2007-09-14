@@ -23,22 +23,23 @@ import java.util.List;
 
 import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
-import org.osoa.sca.annotations.Service;
 
 import bigbank.accountdata.AccountDataService;
 import bigbank.accountdata.CheckingAccount;
 import bigbank.accountdata.SavingsAccount;
 import bigbank.accountdata.StockAccount;
+import bigbank.stockquote.StockQuoteService;
 
 /**
- * @version $$Rev$$ $$Date$$
+ * Account service implementation
  */
-
-@Service(AccountService.class)
 public class AccountServiceImpl implements AccountService {
 
     @Reference
     public AccountDataService accountDataService;
+    
+    @Reference
+    public StockQuoteService stockQuoteService;
     
     @Property
     public String currency;
@@ -53,10 +54,15 @@ public class AccountServiceImpl implements AccountService {
         summaries.add(sa.getSummary());
 
         StockAccount sk = accountDataService.getStockAccount(s);
+        
+        double price = stockQuoteService.getQuote(sk.getSymbol());
+        sk.setBalance(sk.getQuantity() * price);
+        
         summaries.add(sk.getSummary());
 
         AccountReport report = new AccountReport(currency, summaries);
         
         return report;
     }
+
 }

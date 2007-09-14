@@ -19,14 +19,12 @@
 
 package org.apache.tuscany.sca.core;
 
-import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
-import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-
 import junit.framework.TestCase;
 
 public class DefaultExtensionPointRegistryTestCase extends TestCase {
     private ExtensionPointRegistry registry;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         registry = new DefaultExtensionPointRegistry();
@@ -34,13 +32,13 @@ public class DefaultExtensionPointRegistryTestCase extends TestCase {
 
     public void testRegistry() {
         MyRegistry service = new MyREgistryImpl();
-        registry.addExtensionPoint(MyRegistry.class, service);
+        registry.addExtensionPoint(service);
         assertSame(service, registry.getExtensionPoint(MyRegistry.class));
-        registry.removeExtensionPoint(MyRegistry.class);
+        registry.removeExtensionPoint(service);
         assertNull(registry.getExtensionPoint(MyRegistry.class));
     }
 
-    private static interface MyRegistry {
+    public static interface MyRegistry {
         void doSomething();
     }
 

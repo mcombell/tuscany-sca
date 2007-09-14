@@ -100,10 +100,12 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
             this.node = node;
         }
 
+        @Override
         public ScriptEngine getEngine() {
             return TuscanyJRubyScriptEngine.this;
         }
 
+        @Override
         public Object eval(ScriptContext ctx) throws ScriptException {
             return evalNode(node, ctx);
         }
@@ -227,8 +229,8 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
             if (filename == null) {
                 filename = "<unknown>";
             }
-            return runtime.parse(script, filename, null);
-        } catch (Exception exp) {
+            return runtime.parse(script, filename, null, 0);
+        } catch (Exception exp) { 
             throw new ScriptException(exp);
         } finally {
             if (oldGlobals != null) {
@@ -246,7 +248,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
             if (filename == null) {
                 filename = "<unknown>";
             }
-            return runtime.parse(reader, filename, null);
+            return runtime.parse(reader, filename, null, 0);
         } catch (Exception exp) {
             throw new ScriptException(exp);
         } finally {
@@ -261,6 +263,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
         setGlobalVariables(new GlobalVariables(runtime) {
                 GlobalVariables parent = runtime.getGlobalVariables();
                 
+                @Override
                 public void define(String name, IAccessor accessor) {
                     assert name != null;
                     assert accessor != null;
@@ -272,6 +275,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                 }
 
 
+                @Override
                 public void defineReadonly(String name, IAccessor accessor) {
                     assert name != null;
                     assert accessor != null;
@@ -283,6 +287,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                     }
                 } 
 
+                @Override
                 public boolean isDefined(String name) {
                     assert name != null;
                     assert name.startsWith("$");
@@ -293,6 +298,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                     }
                 }
 
+                @Override
                 public void alias(String name, String oldName) {
                     assert name != null;
                     assert oldName != null;
@@ -314,6 +320,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                     }
                 }
 
+                @Override
                 public IRubyObject get(String name) {
                     assert name != null;
                     assert name.startsWith("$");
@@ -335,6 +342,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                     }                    
                 }
 
+                @Override
                 public IRubyObject set(String name, IRubyObject value) {
                     assert name != null;
                     assert name.startsWith("$");
@@ -361,6 +369,7 @@ public class TuscanyJRubyScriptEngine extends AbstractScriptEngine
                     }
                 }
 
+                @Override
                 public Iterator getNames() {                    
                     List list = new ArrayList();
                     synchronized (ctx) {

@@ -27,15 +27,21 @@
     </parent>
 
     <artifactId>tuscany-host-webapp</artifactId>
-    <name>Apache Tuscany webapp host</name>
+    <name>Apache Tuscany SCA Webapp Host</name>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-impl</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-http</artifactId>
 	        <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>

@@ -31,9 +31,9 @@ import org.osoa.sca.annotations.Service;
 public class CallBackSetCallbackServiceImpl implements CallBackSetCalbackService {
 
     @Callback
-    private CallBackSetCallbackCallback callback;
+    protected CallBackSetCallbackCallback callback;
     @Context
-    private ComponentContext context;
+    protected ComponentContext context;
 
     public void knockKnock(String aString) {
 
@@ -48,7 +48,7 @@ public class CallBackSetCallbackServiceImpl implements CallBackSetCalbackService
 
     }
 
-    public void setCallbackIllegally(String aString) {
+    public boolean setCallbackIllegally(String aString) {
 
         System.out.println("CallBackBasicServiceImpl.setCallbackIllegally() message received: " + aString);
 
@@ -56,48 +56,20 @@ public class CallBackSetCallbackServiceImpl implements CallBackSetCalbackService
         RequestContext requestContext = null;
         ServiceReference serviceRef = null;
 
-        // Context is not working properly so we can't trust that this is
-        // working.....
         try {
             requestContext = context.getRequestContext();
             serviceRef = (ServiceReference) requestContext.getServiceReference();
-        } catch (Exception ex) {
-            System.out.println("CallBackBasicServiceImpl.setCallbackIllegally()  " + ex.toString());
-            ex.printStackTrace();
-            return;
-        }
-
-        // Ok, call setCallback with my own service reference.
-        try {
             serviceRef.setCallback(serviceRef);
-        } catch (NullPointerException npe) // This needs to be removed once
-                                            // appropriate exception is
-                                            // identified.
-        {
-            // This is not an appropriate exception.
-            System.out.println("Test10 NPE exception during setCallback to own service reference");
-            npe.printStackTrace();
-            return;
-        }
-        // This needs to catch the appropriate exception, once we figure out
-        // what is needs to be!
-        catch (Exception ex) {
+        } catch (ClassCastException goodEx) {
             exceptionProduced = true;
             System.out.println("Test10 appropriate exception caught during setCallback to own service reference");
+        } catch (Exception badEx) {
+            System.out.println("CallBackBasicServiceImpl.setCallbackIllegally()  " + badEx.toString());
+            badEx.printStackTrace();
         }
-        ;
 
-        // If we get the exception we are looking for then create the marker
-        // file.
-        if (exceptionProduced == true) {
-            File aFile = new File("target/test10_marker");
-            try {
-                aFile.createNewFile();
-            } catch (Exception ex) {
-                System.out.println("Error Creating target/test10_marker marker file");
-                ex.printStackTrace();
-            }
-        }
+        // Return a flag indicating whether we got the exception we are looking for
+        return exceptionProduced;
 
     }
 }

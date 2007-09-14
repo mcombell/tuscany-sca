@@ -19,10 +19,9 @@
 package org.apache.tuscany.sca.policy;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
-
-import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * Represents a policy set. See the Policy Framework specification for a
@@ -49,7 +48,7 @@ public interface PolicySet {
      * 
      * @return
      */
-    List<Operation> getOperations();
+    //List<Operation> getOperations();
 
     /**
      * Returns the list of
@@ -65,14 +64,6 @@ public interface PolicySet {
      */
     List<Intent> getProvidedIntents();
 
-    /**
-     * Returns the list of SCA constructs that this policy set is meant to
-     * configure.
-     * 
-     * @return the list of SCA constructs that this policy set is meant to
-     *         configure
-     */
-    List<QName> getAppliesTo();
 
     /**
      * Returns the list of concrete policies, either WS-Policy policy
@@ -96,5 +87,39 @@ public interface PolicySet {
      * @param unresolved whether the model element is unresolved
      */
     void setUnresolved(boolean unresolved);
+    
+    /**
+     * Returns the xpath expression that is to be used to evaluate
+     * if this PolicySet applies to specific attachment point
+     * 
+     * @return the xpath expression
+     */
+    String getAppliesTo();
+    
+    /**
+     * Sets the xpath expression that is to be used to evaluate
+     * if this PolicySet applies to specific attachment point
+     * 
+     * @return 
+     */
+    void setAppliesTo(String xpath);
+    
+    
+    /**
+     * Returns the policies / policy attachments provided thro intent maps
+     * 
+     * @return
+     */
+    Map<Intent, List<Object>>getMappedPolicies();
+    
+    
+    
+    /**
+     * Returns the list of SCA constructs that this policy set is meant to
+     * configure.
+     * 
+     * @return the list of SCA constructs that this policy set is meant to
+     *         configure
+    List<QName> getAppliesTo(); */
 
 }

@@ -24,11 +24,14 @@ import java.util.List;
 import org.apache.tuscany.sca.assembly.AbstractContract;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 
-public class ContractImpl extends BaseImpl implements AbstractContract {
+public class ContractImpl extends ExtensibleImpl implements AbstractContract {
     private InterfaceContract interfaceContract;
     private String name;
     private List<Intent> requiredIntents = new ArrayList<Intent>();
+    
+    private boolean isCallback = false;
     
     /**
      * Constructs a new contract.
@@ -54,6 +57,21 @@ public class ContractImpl extends BaseImpl implements AbstractContract {
     
     public List<Intent> getRequiredIntents() {
         return requiredIntents;
+    }
+
+    public boolean isCallback() {
+        return isCallback;
+    }
+
+    public void setIsCallback(boolean isCallback) {
+        this.isCallback = isCallback;
+    }
+
+    public IntentAttachPointType getType() {
+        return null;
+    }
+
+    public void setType(IntentAttachPointType type) {
     }
 
 }

@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
  */
 public class PropertyImpl extends AbstractPropertyImpl implements Property, Cloneable {
     private List<PolicySet> policySets = new ArrayList<PolicySet>();
-
+    
     /**
      * Constructs a new property.
      */

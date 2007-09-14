@@ -28,6 +28,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import org.apache.tuscany.sca.host.embedded.impl.DefaultSCADomain;
+import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 import org.osoa.sca.ServiceRuntimeException;
@@ -38,6 +39,8 @@ import org.osoa.sca.ServiceRuntimeException;
  * @version $Rev$ $Date$
  */
 public abstract class SCADomain {
+    
+    final static String LOCAL_DOMAIN_URI = "http://localhost";
 
     /**
      * Static variable to hold the most recent instance of SCADomain
@@ -45,6 +48,27 @@ public abstract class SCADomain {
     // TODO: Temporary support for SCADomain.connect() API
     private static SCADomain theDomain;
 
+    
+    /**
+     * Returns a new instance of a local SCA domain.
+     *  
+     * @return
+     */
+    public static SCADomain newInstance() {
+        return createNewInstance(LOCAL_DOMAIN_URI, null);
+    }
+    
+    /**
+     * Returns a new instance of a local SCA domain. The specified deployable
+     * composite will be included in the SCA domain.
+     * 
+     * @param composite the deployable composite to include in the SCA domain.
+     * @return
+     */
+    public static SCADomain newInstance(String composite) {
+        return createNewInstance(LOCAL_DOMAIN_URI, "/", composite);
+    }
+    
     /**
      * Returns a new instance of a local SCA domain. The specified deployable
      * composites will be included in the SCA domain.
@@ -63,7 +87,7 @@ public abstract class SCADomain {
      * 
      * @param domainInstance the instance to be removed
      */
-    // TODO: Adding this as temporary support for the "connect" API
+    // FIXME: Adding this as temporary support for the "connect" API
     public static void removeInstance(SCADomain domainInstance) {
         theDomain = null;
     }
@@ -74,20 +98,9 @@ public abstract class SCADomain {
      * @param domainURI the URI of the SCA domain
      * @return
      */
-    // TODO : this is a temporary implementation to get the capability working
+    // FIXME : this is a temporary implementation to get the capability working
     public static SCADomain connect(String domainURI) {
         return theDomain;
-    }
-
-    /**
-     * Returns a new instance of a local SCA domain. The specified deployable
-     * composite will be included in the SCA domain.
-     * 
-     * @param composite the deployable composite to include in the SCA domain.
-     * @return
-     */
-    public static SCADomain newInstance(String composite) {
-        return createNewInstance("http://localhost", ".", composite);
     }
 
     /**
@@ -195,9 +208,11 @@ public abstract class SCADomain {
         SCADomain domain = null;
 
         try {
+            // Determine the runtime and application classloader
             final ClassLoader runtimeClassLoader = SCADomain.class.getClassLoader();
             final ClassLoader applicationClassLoader = Thread.currentThread().getContextClassLoader();
-
+            
+            // Discover the SCADomain implementation
             final String name = SCADomain.class.getName();
             String className = AccessController.doPrivileged(new PrivilegedAction<String>() {
                 public String run() {
@@ -208,27 +223,50 @@ public abstract class SCADomain {
             if (className == null) {
                 className = getServiceName(runtimeClassLoader, name);
             }
+            
             if (className == null) {
+                
+                // Create a default SCA domain implementation
                 domain =
-                    new DefaultSCADomain(runtimeClassLoader, applicationClassLoader, domainURI, contributionLocation,
+                    new DefaultSCADomain(runtimeClassLoader,
+                                         applicationClassLoader,
+                                         domainURI,
+                                         contributionLocation,
                                          composites);
             } else {
+                
+                // Create an instance of the discovered SCA domain implementation
                 Class cls = Class.forName(className, true, runtimeClassLoader);
-                Constructor<?> constructor = cls.getConstructor(String.class, String.class, String[].class);
-                domain =
-                    (SCADomain)constructor.newInstance(runtimeClassLoader,
-                                                       applicationClassLoader,
-                                                       domainURI,
-                                                       contributionLocation,
-                                                       composites);
+                Constructor<?> constructor = null;
+                try {
+                    constructor = cls.getConstructor(ClassLoader.class, ClassLoader.class,
+                                                     String.class, String.class, String[].class);
+                } catch (NoSuchMethodException e) {}
+                if (constructor != null) {
+                    domain = (SCADomain)constructor.newInstance(runtimeClassLoader,
+                                                                applicationClassLoader,
+                                                                domainURI,
+                                                                contributionLocation,
+                                                                composites);
+                } else {
+                    
+                    constructor = cls.getConstructor(ClassLoader.class, String.class);
+                    domain = (SCADomain)constructor.newInstance(runtimeClassLoader, domainURI);
+                }
             }
-            // TODO: tempoarary support for connect() API
+            
+            // FIXME: temporary support for connect() API
             theDomain = domain;
+            
             return domain;
 
         } catch (Exception e) {
             throw new ServiceRuntimeException(e);
         }
+    }
+
+    public ComponentManager getComponentManager() {
+        return null; 
     }
 
 }

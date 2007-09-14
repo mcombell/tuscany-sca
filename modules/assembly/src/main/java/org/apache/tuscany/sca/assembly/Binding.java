@@ -18,15 +18,13 @@
  */
 package org.apache.tuscany.sca.assembly;
 
-import org.apache.tuscany.sca.policy.IntentAttachPoint;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Represents a binding.
  * 
  * @version $Rev$ $Date$
  */
-public interface Binding extends Base, IntentAttachPoint, PolicySetAttachPoint {
+public interface Binding extends Base {
 
     /**
      * Returns the binding URI.

@@ -27,24 +27,26 @@ import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.builder.impl.DefaultCompositeBuilder;
+import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
 import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
 import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
+import org.apache.tuscany.sca.binding.sca.impl.SCABindingFactoryImpl;
 import org.apache.tuscany.sca.binding.ws.DefaultWebServiceBindingFactory;
 import org.apache.tuscany.sca.binding.ws.WebServiceBindingFactory;
-import org.apache.tuscany.sca.binding.ws.xml.WebServiceBindingProcessor;
+import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
+import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
+import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.interfacedef.wsdl.DefaultWSDLFactory;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.introspect.DefaultWSDLInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.wsdl.introspect.WSDLInterfaceIntrospector;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
@@ -58,42 +60,40 @@ public class ReadTestCase extends TestCase {
     XMLInputFactory inputFactory;
     DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
     ExtensibleStAXArtifactProcessor staxProcessor;
-    private AssemblyFactory factory;
+    private AssemblyFactory assemblyFactory;
+    private SCABindingFactory scaBindingFactory;
     private PolicyFactory policyFactory;
     private InterfaceContractMapper mapper;
-    private WebServiceBindingFactory wsFactory;
-    private WSDLInterfaceIntrospector introspector;
-    private WSDLFactory wsdlFactory;
 
+    @Override
     public void setUp() throws Exception {
-        factory = new DefaultAssemblyFactory();
+        ModelFactoryExtensionPoint factories = new DefaultModelFactoryExtensionPoint();
+        assemblyFactory = new DefaultAssemblyFactory();
+        factories.addFactory(assemblyFactory);
+        scaBindingFactory = new SCABindingFactoryImpl();
+        factories.addFactory(scaBindingFactory);
         policyFactory = new DefaultPolicyFactory();
-        mapper = new DefaultInterfaceContractMapper();
+        factories.addFactory(policyFactory);
+        mapper = new InterfaceContractMapperImpl();
         inputFactory = XMLInputFactory.newInstance();
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
+        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        wsFactory = new DefaultWebServiceBindingFactory();
-        wsdlFactory = new DefaultWSDLFactory();
         
-        introspector = new DefaultWSDLInterfaceIntrospector(wsdlFactory);
-
-        WebServiceBindingProcessor wsdlProcessor = new WebServiceBindingProcessor(
-                                                                                  factory, policyFactory, wsFactory,
-                                                                                  wsdlFactory, introspector);
+        WebServiceBindingFactory wsFactory = new DefaultWebServiceBindingFactory();
+        factories.addFactory(wsFactory);
+        WSDLFactory wsdlFactory = new DefaultWSDLFactory();
+        factories.addFactory(wsdlFactory);
+        
+        WebServiceBindingProcessor wsdlProcessor = new WebServiceBindingProcessor(factories);
         staxProcessors.addArtifactProcessor(wsdlProcessor);
     }
 
+    @Override
     public void tearDown() throws Exception {
-        inputFactory = null;
-        staxProcessors = null;
-        staxProcessor = null;
-        policyFactory = null;
-        factory = null;
-        mapper = null;
     }
 
     public void testReadComponentType() throws Exception {
-        ComponentTypeProcessor componentTypeProcessor = new ComponentTypeProcessor(factory, policyFactory, staxProcessor);
+        ComponentTypeProcessor componentTypeProcessor = new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor);
         InputStream is = getClass().getResourceAsStream("CalculatorImpl.componentType");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
         ComponentType componentType = componentTypeProcessor.read(reader);
@@ -103,13 +103,13 @@ public class ReadTestCase extends TestCase {
     }
 
     public void testReadComposite() throws Exception {
-        CompositeProcessor compositeProcessor = new CompositeProcessor(factory, policyFactory, mapper, staxProcessor);
+        CompositeProcessor compositeProcessor = new CompositeProcessor(new ContributionFactoryImpl(), assemblyFactory, policyFactory, mapper, staxProcessor);
         InputStream is = getClass().getResourceAsStream("Calculator.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
         Composite composite = compositeProcessor.read(reader);
         assertNotNull(composite);
 
-        DefaultCompositeBuilder compositeUtil = new DefaultCompositeBuilder(factory, mapper, null);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null, null);
         compositeUtil.build(composite);
 
         //new PrintUtil(System.out).print(composite);

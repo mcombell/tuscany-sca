@@ -26,13 +26,26 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-interface-wsdl-xml</artifactId>
-    <name>Apache Tuscany SCA XML WSDL Interface Extension</name>
+    <name>Apache Tuscany SCA WSDL Interface XML Model</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-namespace</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-impl</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -46,5 +59,12 @@
             <artifactId>tuscany-interface-wsdl</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-sca</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>
 </project>

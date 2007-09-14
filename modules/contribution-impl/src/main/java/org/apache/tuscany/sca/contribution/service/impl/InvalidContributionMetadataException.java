@@ -20,17 +20,13 @@ package org.apache.tuscany.sca.contribution.service.impl;
 
 import org.apache.tuscany.sca.contribution.service.ContributionException;
 
-
 /**
  * Exception that indicates that the supplied XML Document invalid.
  *
- * @version $Rev: 511466 $ $Date: 2007-02-25 00:45:22 -0800 (Sun, 25 Feb 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidContributionMetadataException extends ContributionException {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -3184477070625689942L;
 
     protected InvalidContributionMetadataException() {

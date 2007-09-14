@@ -16,15 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-       xmlns:foo="http://foo"
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" 
+       xmlns:foo="http://foo" 
+       xmlns:cust="http://www.example.com/Customer"
+       xmlns:dbsdo="http://tuscany.apache.org/xmlns/sca/databinding/sdo/1.0"
        targetNamespace="http://foo"
-           name="PropertyTest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       name="PropertyTest"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
            
     <service name="ProperterTestService" promote="ABComponent">
         <interface.java interface="org.apache.tuscany.sca.itest.ABComponent"/>
     </service>           
            
+    <dbsdo:import.sdo location="customer.xsd" />
+    <!-- dbsdo:import.sdo factory="com.example.customer.sdo.SdoFactory" / -->
+               
     <property name="number" type="xsd:int">1</property>
     <property name="complex" type="foo:MyComplexType" >
         <foo:MyComplexValue xsi:type="foo:MyComplexType" >
@@ -187,6 +193,20 @@
                     <foo:doubleNumber>33333.33333</foo:doubleNumber>
                 </foo:numberSet>
             </foo:PropertyFourElement>
+        </property>
+        <property name="sdoProperty" type="cust:Customer">	
+        	<cust:customer>
+        		<cust:firstName>Firstly Name</cust:firstName>
+        		<cust:middleName>Middler Name</cust:middleName>
+        		<cust:lastName>Lasting Name</cust:lastName>
+       		</cust:customer>
+        </property>
+        <property name="customerSdo" type="cust:Customer">	
+        	<cust:customer>
+        		<cust:firstName>Sdo Firstly Name</cust:firstName>
+        		<cust:middleName>Sdo Middler Name</cust:middleName>
+        		<cust:lastName>Sdo Lasting Name</cust:lastName>
+       		</cust:customer>
         </property>
     </component>
 </composite>

@@ -28,35 +28,18 @@
     </parent>
 
     <artifactId>tuscany-implementation-script</artifactId>
-    <name>Apache Tuscany Implementation Script</name>
-
-    <repositories>
-       <!-- This is required to work around a bug in the JRuby pom, see http://jira.codehaus.org/browse/JRUBY-901 -->
-       <repository>
-          <id>ant-jruby</id>
-          <url>http://people.apache.org/~antelder/jruby-repo</url>
-          <snapshots>
-             <enabled>true</enabled>
-          </snapshots>
-       </repository>
-    </repositories>
+    <name>Apache Tuscany SCA Script Implementation Extension</name>
 
     <dependencies>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
+            <artifactId>tuscany-extension-helper</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-databinding</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osoa</groupId>
             <artifactId>sca-api</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
             <scope>compile</scope>
@@ -69,9 +52,28 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-interface-wsdl</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+       <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+            <version>1.2.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>                                      
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -101,19 +103,33 @@
         <dependency>
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
-            <version>1.6R5</version>
+            <version>1.6R6</version>
             <scope>compile</scope> 
         </dependency>
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <version>0.9.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jline</groupId>
+                    <artifactId>jline</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
-            <version>2.2-beta1</version>
+            <version>2.2</version>
             <scope>compile</scope>
          </dependency>
          <dependency>

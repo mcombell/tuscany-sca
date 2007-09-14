@@ -22,7 +22,7 @@
 
   <service name="CalculatorService">
         <interface.wsdl interface="http://sample/calculator#wsdl.interface(Calculator)"/>
-        <binding.ws uri="http://localhost:8080/Calculator" wsdlElement="http://sample/calculator#wsdl.service(CalculatorService)"/>
+        <binding.ws uri="http://localhost:8085/Calculator" wsdlElement="http://sample/calculator#wsdl.service(CalculatorService)"/>
         <binding.ws wsdli:wsdlLocation="http://tempuri.org" wsdlElement="http://sample/calculator#wsdl.binding(CalculatorBinding)"/>
         <binding.ws wsdlElement="http://sample/calculator#wsdl.port(CalculatorService/CalculatorPort)"/>
         <binding.ws wsdlElement="http://sample/calculator#wsdl.endpoint(CalculatorService/CalculatorEndpoint)"/>
@@ -34,6 +34,11 @@
         <binding.ws uri="tempuri.org" wsdlElement="http://sample/calculator#wsdl.binding(DivideBinding)"/>
         <binding.ws uri="tempuri.org" wsdlElement="http://sample/calculator#wsdl.port(DivideService/DividePort)"/>
         <binding.ws uri="tempuri.org" wsdlElement="http://sample/calculator#wsdl.endpoint(DivideService/DivideEndpoint)"/>
+        <binding.ws>
+           <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+              <wsa:Address>myURI</wsa:Address>
+           </wsa:EndpointReference>
+        </binding.ws>
   </reference>  
 
 </componentType>              

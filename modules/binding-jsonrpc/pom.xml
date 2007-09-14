@@ -27,14 +27,7 @@
     </parent>
 
     <artifactId>tuscany-binding-jsonrpc</artifactId>
-    <name>Apache Tuscany JSON-RPC Binding</name>
-
-    <repositories>
-       <repository>
-          <id>apache.incubator</id>
-          <url>http://people.apache.org/repo/m2-incubating-repository</url>
-       </repository>
-    </repositories>
+    <name>Apache Tuscany SCA JSON-RPC Binding Extension</name>
 
     <dependencies>
         <dependency>
@@ -51,27 +44,10 @@
 	        <scope>test</scope>
         </dependency>
      
-        <dependency>
-            <groupId>org.osoa</groupId>
-            <artifactId>sca-api</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>        
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-assembly</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-core-spi</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
+            <artifactId>tuscany-extension-helper</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
@@ -103,14 +79,7 @@
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-http-jetty</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
+            <artifactId>tuscany-host-jetty</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
@@ -121,6 +90,7 @@
             <version>4.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
 	        <groupId>httpunit</groupId>
 	        <artifactId>httpunit</artifactId>

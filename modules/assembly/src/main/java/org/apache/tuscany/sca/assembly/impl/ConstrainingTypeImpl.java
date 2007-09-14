@@ -27,15 +27,16 @@ import org.apache.tuscany.sca.assembly.AbstractProperty;
 import org.apache.tuscany.sca.assembly.AbstractReference;
 import org.apache.tuscany.sca.assembly.AbstractService;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.Visitor;
+
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 
 /**
  * Represents a constraining type.
  * 
  * @version $Rev$ $Date$
  */
-public class ConstrainingTypeImpl extends BaseImpl implements ConstrainingType {
+public class ConstrainingTypeImpl extends ExtensibleImpl implements ConstrainingType {
     private QName name;
     private List<AbstractProperty> properties = new ArrayList<AbstractProperty>();
     private List<AbstractReference> references = new ArrayList<AbstractReference>();
@@ -72,28 +73,6 @@ public class ConstrainingTypeImpl extends BaseImpl implements ConstrainingType {
         return requiredIntents;
     }
 
-    public boolean accept(Visitor visitor) {
-        if (!super.accept(visitor)) {
-            return false;
-        }
-        for (AbstractProperty property : properties) {
-            if (!visitor.visit(property)) {
-                return false;
-            }
-        }
-        for (AbstractReference reference : references) {
-            if (!visitor.visit(reference)) {
-                return false;
-            }
-        }
-        for (AbstractService service : services) {
-            if (!visitor.visit(service)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     public int hashCode() {
         return String.valueOf(getName()).hashCode();
@@ -112,5 +91,12 @@ public class ConstrainingTypeImpl extends BaseImpl implements ConstrainingType {
         } else {
             return false;
         }
+    }
+    
+    public IntentAttachPointType getType() {
+        return null;
+    }
+
+    public void setType(IntentAttachPointType type) {
     }
 }

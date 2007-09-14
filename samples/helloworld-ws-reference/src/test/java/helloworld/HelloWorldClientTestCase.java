@@ -33,17 +33,19 @@ import org.junit.Test;
 public class HelloWorldClientTestCase {
 
     private HelloWorldService helloWorldService;
-    private SCADomain domain;
+    private HelloWorldService helloTuscanyService;
+    private SCADomain scaDomain;
     
     private SCATestCaseRunner server;
 
     @Before
     public void startClient() throws Exception {
         try {
-            domain = SCADomain.newInstance("helloworldwsclient.composite");
-            helloWorldService = domain.getService(HelloWorldService.class, "HelloWorldServiceComponent");
+            scaDomain = SCADomain.newInstance("helloworldwsclient.composite");
+            helloWorldService = scaDomain.getService(HelloWorldService.class, "HelloWorldServiceComponent");
+            helloTuscanyService = scaDomain.getService(HelloWorldService.class, "HelloTuscanyServiceComponent");
     
-            server =  new SCATestCaseRunner(HelloWorldServerTest.class);
+            server =  new SCATestCaseRunner(HelloWorldTestServer.class);
             server.before();
 
         } catch (Throwable e) {
@@ -55,12 +57,18 @@ public class HelloWorldClientTestCase {
     public void testWSClient() throws Exception {
         String msg = helloWorldService.getGreetings("Smith");
         Assert.assertEquals("Hello Smith", msg);
+   }
+    
+    @Test
+    public void testEmbeddedReferenceClient() throws Exception {
+        String msg = helloTuscanyService.getGreetings("Tuscany");
+        Assert.assertEquals("Hello Tuscany", msg);
     }
     
     @After
     public void stopClient() throws Exception {
     	server.after();
-    	domain.close();
+        scaDomain.close();
     }
 
 }

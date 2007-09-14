@@ -18,11 +18,11 @@
  */
 package org.apache.tuscany.sca.assembly;
 
+
 /**
  * Represents a component implementation.
  * 
  * @version $Rev$ $Date$
  */
 public interface Implementation extends ComponentType {
-
 }

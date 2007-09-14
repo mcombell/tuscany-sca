@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.interfacedef.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.sca.interfacedef.ConversationSequence;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -39,11 +40,12 @@ public class OperationImpl implements Operation {
     private DataType<List<DataType>> inputType;
     private List<DataType> faultTypes;
     private Interface interfaze;
-    private ConversationSequence conversationSequence = ConversationSequence.NO_CONVERSATION;
+    private ConversationSequence conversationSequence = ConversationSequence.CONVERSATION_NONE;
     private boolean nonBlocking;
     private boolean wrapperStyle;
     private WrapperInfo wrapper;
     private String dataBinding;
+    private boolean dynamic;
 
     /**
      * @param name
@@ -174,11 +176,6 @@ public class OperationImpl implements Operation {
         this.nonBlocking = nonBlocking;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int PRIME = 31;
@@ -281,4 +278,39 @@ public class OperationImpl implements Operation {
         this.dataBinding = dataBinding;
     }
 
+    public boolean isDynamic() {
+        return dynamic;
+    }
+
+    public void setDynamic(boolean b) {
+        this.dynamic = b;
+    }
+
+    @Override
+    public OperationImpl clone() throws CloneNotSupportedException {
+        OperationImpl copy = (OperationImpl) super.clone();
+        
+        final List<DataType> clonedFaultTypes = new ArrayList<DataType>(this.faultTypes.size());
+        for (DataType t : this.faultTypes) {
+            clonedFaultTypes.add((DataType) t.clone());
+        }
+        copy.faultTypes = clonedFaultTypes;
+
+        List<DataType> clonedLogicalTypes = new ArrayList<DataType>();
+        for (DataType t : inputType.getLogical()) {
+            DataType type = (DataType) t.clone();
+            clonedLogicalTypes.add(type);
+        }
+        DataType<List<DataType>> clonedInputType =
+            new DataTypeImpl<List<DataType>>(inputType.getPhysical(), clonedLogicalTypes);
+        clonedInputType.setDataBinding(inputType.getDataBinding());
+        copy.inputType = clonedInputType;
+        
+        if(this.outputType!=null) {
+            copy.outputType = (DataType) this.outputType.clone();
+        }
+        
+        return copy;
+    }
+    
 }

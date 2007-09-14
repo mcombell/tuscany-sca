@@ -1,14 +1,76 @@
 The Apache Tuscany SCA Samples
 ==============================
-
 The Apache Tuscany SCA samples are built as part of the main Maven build and 
-run, using the provided JUnit tests cases, as extra tests in the Maven build. 
+run, using the provided JUnit test cases, as tests in the Maven build.
+
 In the binary distribution of Apache Tuscany the samples can also 
-be run using the provided Ant build.xml file. This shows the samples running 
+be run using the provided Ant build.xml files. These show the samples running 
 from a simple main() method without the need for a JUnit test case. 
 
 In these notes text that appears in angled brackets like this <example> means 
-that you need to make a choice and provide you own text at that point. 
+that you need to make a choice and provide your own text at that point. 
+
+These simple samples have been created with the intention of illustrating the 
+usage of the SCA API and annotations and certainly not to levels of SCA component 
+abstraction.  In real life situations you should use SCA to assemble real and 
+usually bigger components, and when you do that you'll get all the benefits of 
+SCA, bindings, policies, integration in an SOA environment etc..
+
+Sample Overview
+---------------
+The samples generally show off different features of the SCA runtime
+and the extensions that come packaged with it. This list is ordered in a rough
+order of increasing complexity. 
+
+calculator               - A calculator built with java components and local 
+                           wires
+calculator-script        - The calculator but this time built using various 
+                           script languages
+calculator-webapp        - The calculator again but this time running inside a 
+                           web app
+chat-webapp              - A simple chat style web app demonsrating how to use
+                           the AJAX binding
+feed-aggregator          - Demonstrates using the ATOM binding
+helloworld-ws-reference  - The client side of a hello world sample that uses a 
+                           web service binding
+helloworld-ws-service    - The server side of a hello world sample that uses a 
+                           web service binding
+helloworld-ws-sdo	 - helloworld using ws binding and SDO
+calculator-rmi-reference - The calculator configured to talk RMI to the 
+                           calculator-rmi-service sample
+calculator-rmi-service   - The calculator configured to accept RMI requests 
+                           from calculator-rmi-reference
+helloworld-jsonrpc-webapp       - An SCA application that exposes a service using 
+                           JSONRPC
+helloworld-dojo-webapp          - An SCA application that exposes a service using 
+                           JSONRPC and a client using the Dojo toolkit
+simple-callback          - An SCA application with two components demonstrating
+                           the callback interface
+simple-callback-ws       - An SCA application with two components demonstrating
+                           the callback interface across the Web service binding
+implementation-composite - An SCA application that shows how composites are used to 
+                           implement components
+supplychain              - A more complicated sample showing how asynchronous 
+                           callbacks can be used
+databinding-echo         - An SCA application that shows how databindings 
+                           transform data
+simple-bigbank           - A banking application built with java components 
+                           and local wires
+
+There are two samples that demonstrate how to build extensions for the 
+Tuscany SCA runtime. These samples are slightly different from the samples
+above in that the provided code is concerned with building the extension
+and not with building an application that uses it. The application
+that shows how the new extension can be used is provided in an associated
+sample. 
+
+implementation-crud-extension - Shows how to build new implementation type 
+                                extensions
+implementation-crud        - A sample application that exercises the new 
+                             implementation extensions
+binding-echo-extension     - Shows how to build new binding extensions
+binding-echo               - A sample application that exercises the new 
+                             binding extension
 
 Sample Layout
 -------------
@@ -25,6 +87,7 @@ calculator/
       java          - Java test sources files. Usually JUnit test cases
   target/           - Holds the files generated when the sample is built
     classes/        - For example, Java class files
+    test-classes/   - classes from src/test and other test files
 
 Getting Ready To Build
 ----------------------
@@ -63,10 +126,11 @@ If you look in the target directory of each sample you will see this jar file. T
 run a sample based on all of the precompiled artifacts all you have to do is:
 
 cd <sampledir>
-ant
+ant run
 
 Check each <sampledir>/README file as some samples require that two progams are
-run to get the desired result. 
+run to get the desired result, for example, the two samples that show how
+to build extensions are run from their associated application samples. 
 
 If you want to rebuild a sample, for example, if you have changed it, do the
 following:
@@ -80,18 +144,22 @@ way best suits you. Two alternatives are provided in the ant build files.
 The compile target builds the class files and then builds the jar so you can use 
 the same command as before:
 
-ant
+ant run
 
 This will use the generated jar to run the samples. The command line version of
 this is:
 
 on Windows
 
-java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-calculator.jar calculator.CalculatorClient
+java -cp ..\..\lib\tuscany-sca-manifest.jar;target\<sample jar file> <sample runnable class>
 
-on *nux 
+for example : java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-calculator.jar calculator.CalculatorClient
 
-java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-calculator.jar calculator.CalculatorClient
+on *nix 
+
+java -cp ../../lib/tuscany-sca-manifest.jar:target/<sample jar file> <sample runnable class>
+
+for example : java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-calculator.jar calculator.CalculatorClient
 
 
 You can use the compiled classes directly using
@@ -102,14 +170,18 @@ The command line version of this is:
 
 on Windows
 
-java -cp ..\..\lib\tuscany-sca-manifest.jar;target\classes calculator.CalculatorClient
+java -cp ..\..\lib\tuscany-sca-manifest.jar;target\classes <sample runnable class>
 
-on *nux 
+for example : java -cp ..\..\lib\tuscany-sca-manifest.jar;target\classes calculator.CalculatorClient
 
-java -cp ../../lib/tuscany-sca-manifest.jar:target/classes calculator.CalculatorClient
+on *nix 
+
+java -cp ../../lib/tuscany-sca-manifest.jar:target/classes <sample runnable class>
+
+for example : java -cp ../../lib/tuscany-sca-manifest.jar:target/classes calculator.CalculatorClient
 
 The class specified on the command of course depends on which sample you want to 
-run. In this case we are running the CalculatorClient from the calculator sample. 
+run. In the examples we have used we are running the CalculatorClient from the calculator sample. 
 
 
 Building And Running The SCA Samples Using Maven
@@ -138,7 +210,7 @@ sometimes not see any test output. You will always see an indication of test
 success or failure. 
 
 Using The Samples In An IDE
----------------------------
+---------------------------------------------
 The easiest way to use the samples in an IDE is to use Maven to generate all 
 of the IDE project files for you automatically. This works best if you 
 generate IDE projects for all of the Apache Tuscany modules. You can then 
@@ -163,9 +235,30 @@ new project from existing source" you can specify an SCA module directory,
 which includes the generated project files, and Eclipse will treat it like any
 other Java project. 
 
-TODO 
-  running inside an IDE
+Using The Samples In An IDE Without Maven
+-----------------------------------------
+We don't provide any IDE project files with our distributions so you will have to 
+import the sample files into your IDE manually. Here's an example of how it can be 
+done using Eclipse.
+ 
+In a new or existing workspace
+    Create a new java project to represent the sample you want to work on, e.g.
+        calculator
+    Import all of the sample code and resources into this project, e.g.
+        File, Import and then select tuscany-sca-0.90-incubating\samples\calculator from the filesystem
+    Configure the source path to include
+        src/main/java
+        src/main/resources
+    Configure the output folder to be
+        calculator/target
+    Configure the build path to include all of the jars provided in
+        lib
+     If you select calculator.CalculatorClient.java and run as "Java Application" you should see
+        3 + 2=5.0
+        3 - 2=1.0
+        3 * 2=6.0
+        3 / 2=1.5
 
-
-
+The details of how to do this for other development environments will
+vary but the process will be similar. 
 

@@ -18,38 +18,52 @@
  */
 package org.apache.tuscany.sca.implementation.script;
 
-import org.apache.tuscany.implementation.spi.AbstractImplementation;
-import org.apache.tuscany.sca.assembly.Implementation;
+import org.apache.tuscany.sca.extension.helper.utils.ResourceHelper;
 
 /**
  * Represents a Script implementation.
  */
-public class ScriptImplementation extends AbstractImplementation implements Implementation {
+public class ScriptImplementation {
 
     protected String scriptName;
     protected String scriptSrc;
     protected String scriptLanguage;
 
-    public ScriptImplementation(String scriptName, String scriptLanguage, String scriptSrc) {
-        this.scriptName = scriptName;
-        this.scriptLanguage = scriptLanguage;
-        this.scriptSrc = scriptSrc;
-    }
-
-    public String getScriptName() {
+    public String getScript() {
         return scriptName;
     }
 
+    public void setScript(String scriptName) {
+        this.scriptName = scriptName;
+    }
+
+    public void setLanguage(String language) {
+        this.scriptLanguage = language;
+    }
+
+    public void setElementText(String elementText) {
+        scriptSrc = elementText;
+    }
+
     public String getScriptLanguage() {
+        if (scriptLanguage == null || scriptLanguage.length() < 1) {
+            int i = scriptName.lastIndexOf('.');
+            if (i > 0) {
+                scriptLanguage = scriptName.substring(i + 1);
+            }
+        }
         return scriptLanguage;
     }
 
     public String getScriptSrc() {
+        if (scriptSrc == null) {
+            if (scriptName == null) {
+                throw new IllegalArgumentException("script name is null and no inline source used");
+            }
+
+            // TODO: how should resources be read? Soould this use the contrabution sevrice?
+            scriptSrc = ResourceHelper.readResource(scriptName);
+        }
         return scriptSrc;
     }
-
-    public void setScriptSrc(String scriptSrc) {
-        this.scriptSrc = scriptSrc;
-    }
-
 }

@@ -19,12 +19,16 @@
 
 package org.apache.tuscany.sca.contribution.impl;
 
-import org.apache.tuscany.contribution.Contribution;
-import org.apache.tuscany.contribution.ContributionExport;
-import org.apache.tuscany.contribution.ContributionFactory;
-import org.apache.tuscany.contribution.ContributionImport;
-import org.apache.tuscany.contribution.DeployedArtifact;
+import org.apache.tuscany.sca.contribution.Contribution;
+import org.apache.tuscany.sca.contribution.ContributionFactory;
+import org.apache.tuscany.sca.contribution.DeployedArtifact;
 
+
+/**
+ * Contribution model object factory
+ * 
+ * @version $Rev$ $Date$
+ */
 public class ContributionFactoryImpl implements ContributionFactory {
     
     public Contribution createContribution() {
@@ -33,13 +37,5 @@ public class ContributionFactoryImpl implements ContributionFactory {
 
     public DeployedArtifact createDeployedArtifact() {
         return new DeployedArtifactImpl();
-    }
-
-    public ContributionImport createContributionImport() {
-        return new ContributionImportImpl();
-    }
-    
-    public ContributionExport createContributionExport() {
-        return new ContributionExportImpl();
     }
 }

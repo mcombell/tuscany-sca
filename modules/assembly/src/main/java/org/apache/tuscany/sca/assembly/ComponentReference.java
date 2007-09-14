@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.sca.assembly;
 
-import java.util.List;
 
 /**
  * An instance of a reference associated with a particular component.
@@ -30,44 +29,53 @@ public interface ComponentReference extends Reference {
     /**
      * Returns the reference defined by the implementation for this reference.
      * 
-     * @return
+     * @return the implementation reference
      */
     Reference getReference();
 
     /**
      * Sets the reference defined by the implementation for this reference.
      * 
-     * @param reference
+     * @param reference the implementation reference
      */
     void setReference(Reference reference);
     
     /**
-     * Returns true if the reference should be autowired.
+     * Returns true if the component references should be autowired.
      * 
-     * @return whether the reference should be autowired.
+     * @return whether component references should be autowired.
      */
+    @Deprecated
     boolean isAutowire();
-
-    /**
-     * Sets whether the reference should be autowired.
-     * 
-     * @param autowire whether the reference should be autowired
-     */
-    void setAutowire(boolean autowire);
-
-
-    /**
-     * Derived relationship. Returns the list of composite references that
-     * promote this reference.
-     *  
-     * @return
-     */
-    List<CompositeReference> promotedAs();
     
     /**
-     * Clone the component reference.
-     * 
-     * @return a clone of the component reference
+     * Return the Boolean value of autowire
+     * @return null/TRUE/FALSE
      */
-    Object clone() throws CloneNotSupportedException;
+    Boolean getAutowire();
+
+    /**
+     * Sets whether component references should be autowired.
+     * 
+     * @param autowire whether component references should be autowired
+     */
+    void setAutowire(Boolean autowire);
+
+
+    /**
+     * Returns the callback service created internally as a target endpoint
+     * for callbacks to this reference.
+     * 
+     * @return the callback service
+     */
+    public ComponentService getCallbackService();
+
+    /**
+     * Sets the callback service created internally as a target endpoint
+     * for callbacks to this reference.
+     * 
+     * @param callbackService the callback service
+     */
+    public void setCallbackService(ComponentService callbackService);
+
 }

@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-simple-bigbank</artifactId>
-    <name>Apache Tuscany Simplified BigBank Sample</name>
+    <name>Apache Tuscany SCA Simplified BigBank Sample</name>
 
     <repositories>
        <repository>
@@ -49,12 +49,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-core-databinding</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-                
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

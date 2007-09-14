@@ -25,8 +25,8 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>tuscany-itest-contribution</artifactId>
-    <name>Apache Tuscany Contribution Integration Tests</name>
+    <artifactId>itest-contribution</artifactId>
+    <name>Apache Tuscany SCA Contribution Integration Tests</name>
 
     <dependencies>
         <dependency>

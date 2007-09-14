@@ -19,6 +19,7 @@
 
 package org.apache.tuscany.sca.host.embedded;
 
+import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 
@@ -26,8 +27,8 @@ public class SCADomainBean extends SCADomain {
     
     private SCADomain instance;
     
-    private String uri = "http://localhost";
-    private String location = ".";
+    private String uri = LOCAL_DOMAIN_URI;
+    private String location = "/";
     private String[] composites;
 
     /**
@@ -36,6 +37,7 @@ public class SCADomainBean extends SCADomain {
     public SCADomainBean() {
     }
 
+    @Override
     public String getURI() {
         return uri;
     }
@@ -107,5 +109,13 @@ public class SCADomainBean extends SCADomain {
             instance.close();
             instance = null;
         }
+    }
+
+    @Override
+    public ComponentManager getComponentManager() {
+        if (instance == null) {
+            instance = SCADomain.createNewInstance(uri, location, composites);
+        }
+        return instance.getComponentManager();
     }
 }

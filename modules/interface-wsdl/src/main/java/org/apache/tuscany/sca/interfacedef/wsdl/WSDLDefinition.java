@@ -19,8 +19,12 @@
 
 package org.apache.tuscany.sca.interfacedef.wsdl;
 
+import java.net.URI;
+import java.util.List;
+
 import javax.wsdl.Definition;
 
+import org.apache.tuscany.sca.assembly.Base;
 import org.apache.ws.commons.schema.XmlSchemaCollection;
 
 /**
@@ -29,7 +33,7 @@ import org.apache.ws.commons.schema.XmlSchemaCollection;
  *
  * @version $Rev$ $Date$
  */
-public interface WSDLDefinition {
+public interface WSDLDefinition extends Base {
     
     /**
      * Returns the WSDL definition model
@@ -60,19 +64,12 @@ public interface WSDLDefinition {
      * @param namespace the namespace of this WSDL definition
      */
     void setNamespace(String namespace);
-
+    
     /**
-     * Returns true if the model element is unresolved.
-     * 
-     * @return true if the model element is unresolved.
+     * @return
      */
-    boolean isUnresolved();
-
-    /**
-     * Sets whether the model element is unresolved.
-     * 
-     * @param unresolved whether the model element is unresolved
-     */
-    void setUnresolved(boolean unresolved);
-
+    List<XSDefinition> getXmlSchemas();
+    
+    URI getLocation();
+    void setLocation(URI url);
 }

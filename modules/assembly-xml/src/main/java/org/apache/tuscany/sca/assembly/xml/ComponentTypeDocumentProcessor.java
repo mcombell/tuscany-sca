@@ -27,10 +27,12 @@ import java.net.URL;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.validation.Schema;
 
-import org.apache.tuscany.contribution.processor.StAXArtifactProcessor;
-import org.apache.tuscany.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.assembly.ComponentType;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.ValidatingXMLStreamReader;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -40,8 +42,9 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
  * 
  * @version $Rev$ $Date$
  */
-public class ComponentTypeDocumentProcessor extends BaseArtifactProcessor implements URLArtifactProcessor<ComponentType> {
+public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implements URLArtifactProcessor<ComponentType> {
     private XMLInputFactory inputFactory;
+    private Schema schema;
     
     /**
      * Constructs a new componentType processor.
@@ -49,19 +52,46 @@ public class ComponentTypeDocumentProcessor extends BaseArtifactProcessor implem
      * @param policyFactory
      * @param registry
      */
-    public ComponentTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory) {
+    public ComponentTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory, Schema schema) {
         super(null, null, staxProcessor);
         this.inputFactory = inputFactory;
+        this.schema = schema;
     }
     
     public ComponentType read(URL contributionURL, URI uri, URL url) throws ContributionReadException {
         InputStream urlStream = null;
         try {
+            
+            // Create a stream reader
             urlStream = url.openStream();
             XMLStreamReader reader = inputFactory.createXMLStreamReader(urlStream);
+            reader = new ValidatingXMLStreamReader(reader, schema);
             reader.nextTag();
+            
+            // Reader the componentType model 
             ComponentType componentType = (ComponentType)extensionProcessor.read(reader);
-            componentType.setURI(url.toString());
+            if (componentType != null) {
+                componentType.setURI(uri.toString());
+            }
+
+            // For debugging purposes, write it back to XML
+//            if (componentType != null) {
+//                try {
+//                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                    XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+//                    outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
+//                    extensionProcessor.write(componentType, outputFactory.createXMLStreamWriter(bos));
+//                    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bos.toByteArray()));
+//                    OutputFormat format = new OutputFormat();
+//                    format.setIndenting(true);
+//                    format.setIndent(2);
+//                    XMLSerializer serializer = new XMLSerializer(System.out, format);
+//                    serializer.serialize(document);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            
             return componentType;
             
         } catch (XMLStreamException e) {

@@ -25,11 +25,19 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.tuscany.sca.contribution.Contribution;
+
+/**
+ * Contribution repository 
+ * 
+ * @version $Rev$ $Date$
+ */
 public interface ContributionRepository {
+    
     /**
      * Get the URI of the SCA domain 
      * 
-     * @return
+     * @return The domain URI
      */
     URI getDomain();
     
@@ -43,13 +51,21 @@ public interface ContributionRepository {
      *            provided
      * @param contributionStream InputStream with the content of the
      *            distribution
+     * @return A URL pointing to the content of the contribution in the
+     *         repository
+     * @throws IOException
      */
     URL store(String contribution, URL sourceURL, InputStream contributionStream) throws IOException;
     /**
      * Copy a contribution from the source URL to the repository
-     * @param contribution
-     * @param sourceURL
-     * @return
+     * 
+     * @param contribution A URl pointing to the contribution being copied to
+     *            the repository
+     * @param sourceURL url of the source. this would be used to calculate the right
+     *            filename to be stored on the repository when a inputStream is being
+     *            provided
+     * @return A URL pointing to the content of the contribution in the
+     *         repository
      * @throws IOException
      */
     URL store(String contribution, URL sourceURL) throws IOException;
@@ -77,4 +93,36 @@ public interface ContributionRepository {
      * @return A list of contribution URIs
      */
     List<String> list();
+    
+    /**
+     * Returns the contributions available in the repository.
+     * @return The list of contributions.
+     */
+    List<Contribution> getContributions();
+    
+    /**
+     * Adds a contribution to the repository.
+     * @param contribution The new contribution.
+     */
+    void addContribution(Contribution contribution);
+    
+    /**
+     * Removes a contribution from the repository.
+     * @param contribution The contribution to remove
+     */
+    void removeContribution(Contribution contribution);
+    
+    /**
+     * Updates a contribution in the repository
+     * @param contribution The contribution to update
+     */
+    void updateContribution(Contribution contribution);
+    
+    /**
+     * Returns the contribution with the given URI.
+     * @param uri the URI of the contribution
+     * @return The contribution
+     */
+    Contribution getContribution(String uri);
+
 }

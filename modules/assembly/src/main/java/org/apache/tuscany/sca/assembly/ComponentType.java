@@ -20,15 +20,12 @@ package org.apache.tuscany.sca.assembly;
 
 import java.util.List;
 
-import org.apache.tuscany.sca.policy.IntentAttachPoint;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
-
 /**
  * Describes an implementation and represents its configurable aspects.
  * 
  * @version $Rev$ $Date$
  */
-public interface ComponentType extends Base, IntentAttachPoint, PolicySetAttachPoint {
+public interface ComponentType extends Base {
     
     /**
      * Returns the URI of this component type.

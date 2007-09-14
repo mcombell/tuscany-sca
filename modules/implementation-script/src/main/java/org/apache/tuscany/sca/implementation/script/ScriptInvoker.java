@@ -19,11 +19,13 @@
 
 package org.apache.tuscany.sca.implementation.script;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.bsf.xml.XMLHelper;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 
@@ -32,33 +34,46 @@ import org.apache.tuscany.sca.invocation.Message;
  */
 public class ScriptInvoker implements Invoker {
 
-    protected ScriptImplementationProvider provider;
-    protected String operationName;
+    protected ScriptEngine scriptEngine;
+    protected XMLHelper xmlHelper;
+    protected Operation operation;
 
-    /**
-     * TODO: passing in the impl is a bit of a hack to get at scriptEngine as thats all this uses
-     * but its not created till the start method which is called after the invokers are created 
-     */
-    public ScriptInvoker(ScriptImplementationProvider provider, String operationName) {
-        this.provider = provider;
-        this.operationName = operationName;
+    public ScriptInvoker(ScriptEngine scriptEngine, XMLHelper xmlHelper, Operation operation) {
+        this.scriptEngine = scriptEngine;
+        this.xmlHelper = xmlHelper;
+        this.operation = operation;
     }
 
-    private Object doInvoke(Object[] objects) throws InvocationTargetException {
-        try {
-
-            return ((Invocable)provider.scriptEngine).invokeFunction(operationName, objects);
-
-        } catch (ScriptException e) {
-            throw new InvocationTargetException(e);
+    protected Object doInvoke(Object[] objects, Operation op) throws ScriptException {
+        if (xmlHelper != null) {
+            objects[0] = xmlHelper.toScriptXML((OMElement)objects[0]);
         }
+
+        Operation oper = operation;  // static setting
+        if (oper.getName() == null) {  // if no static setting
+            oper = op;  // use dynamic setting
+        }
+        Object response;
+        try {
+            response = ((Invocable)scriptEngine).invokeFunction(oper.getName(), objects);
+        } catch (ScriptException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ScriptException(e);
+        }
+
+        if (xmlHelper != null) {
+            response = xmlHelper.toOMElement(response);
+        }
+
+        return response;
     }
 
     public Message invoke(Message msg) {
         try {
-            Object resp = doInvoke((Object[])msg.getBody());
+            Object resp = doInvoke((Object[])msg.getBody(), msg.getOperation());
             msg.setBody(resp);
-        } catch (InvocationTargetException e) {
+        } catch (ScriptException e) {
             msg.setFaultBody(e.getCause());
         }
         return msg;

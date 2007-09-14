@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.xml.stream.XMLInputFactory;
+
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.contribution.service.impl.ContributionRepositoryImpl;
@@ -31,10 +33,10 @@ import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 public class ContributionRepositoryTestCase extends TestCase {
     private ContributionRepositoryImpl repository;
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
         // create repository (this should re-create the root directory)
-        this.repository = new ContributionRepositoryImpl("target/repository/");
+        this.repository = new ContributionRepositoryImpl("target/repository/", XMLInputFactory.newInstance());
         repository.init();
     }
 

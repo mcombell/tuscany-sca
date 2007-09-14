@@ -20,7 +20,6 @@ package org.apache.tuscany.test.interop.client;
 
 import java.rmi.RemoteException;
 
-import org.osoa.sca.annotations.Scope;
 import org.osoa.sca.annotations.Service;
 import org.soapinterop.ComplexDocument;
 import org.soapinterop.DocTestPortType;
@@ -31,19 +30,17 @@ import org.soapinterop.SingleTag;
  * This class implements the DocTest service component.
  */
 @Service(DocTestPortType.class)
-//FIXME workaround for JIRA TUSCANY-41
-@Scope("COMPOSITE")
 public class LoopbackInteropDocServiceComponentImpl implements DocTestPortType {
     
-    public ComplexDocument ComplexDocument(ComplexDocument param0) throws RemoteException {
+    public ComplexDocument ComplexDocument(ComplexDocument param0){
         return param0;
     }
     
-    public SimpleDocument1 SimpleDocument(SimpleDocument1 param4) throws RemoteException {
+    public SimpleDocument1 SimpleDocument(SimpleDocument1 param4) {
         return param4;
     }
     
-    public SingleTag SingleTag(SingleTag param2) throws RemoteException {
+    public SingleTag SingleTag(SingleTag param2) {
         return param2;
     }
 }

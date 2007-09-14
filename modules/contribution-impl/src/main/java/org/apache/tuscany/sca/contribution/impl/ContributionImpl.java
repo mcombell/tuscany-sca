@@ -22,21 +22,21 @@ package org.apache.tuscany.sca.contribution.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tuscany.contribution.Contribution;
-import org.apache.tuscany.contribution.ContributionExport;
-import org.apache.tuscany.contribution.ContributionImport;
-import org.apache.tuscany.contribution.DeployedArtifact;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.contribution.Contribution;
+import org.apache.tuscany.sca.contribution.Export;
+import org.apache.tuscany.sca.contribution.Import;
+import org.apache.tuscany.sca.contribution.DeployedArtifact;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 
 /**
  * The representation of a deployed contribution
  *
- * @version $Rev: 531146 $ $Date: 2007-04-21 22:40:50 -0700 (Sat, 21 Apr 2007) $
+ * @version $Rev$ $Date$
  */
 public class ContributionImpl extends ArtifactImpl implements Contribution {
-    private List<ContributionExport> exports = new ArrayList<ContributionExport>();
-    private List<ContributionImport> imports = new ArrayList<ContributionImport>();
+    private List<Export> exports = new ArrayList<Export>();
+    private List<Import> imports = new ArrayList<Import>();
     private List<Composite> deployables = new ArrayList<Composite>();
     private ModelResolver modelResolver;
     
@@ -48,11 +48,11 @@ public class ContributionImpl extends ArtifactImpl implements Contribution {
     protected ContributionImpl() {
     }
     
-    public List<ContributionExport> getExports() {
+    public List<Export> getExports() {
         return exports;
     }
 
-    public List<ContributionImport> getImports() {
+    public List<Import> getImports() {
         return imports;
     }
 

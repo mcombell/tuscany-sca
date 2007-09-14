@@ -21,7 +21,9 @@ package org.apache.tuscany.sca.core;
 
 
 /**
- * The registry for the Tuscany core extension points.
+ * The registry for the Tuscany core extension points. As the point of contact 
+ * for all extension artifacts this registry allows loaded extensions to find 
+ * all other parts of the system and register themselves appropriately.
  * 
  * @version $Rev$ $Date$
  */
@@ -29,23 +31,20 @@ public interface ExtensionPointRegistry {
     
     /**
      * Add an extension point to the registry
-     * @param <T>
-     * @param extensionPointType The interface of the extension point
      * @param extensionPoint The instance of the extension point
      */
-    <T> void addExtensionPoint(Class<T> extensionPointType, T extensionPoint);
+    void addExtensionPoint(Object extensionPoint);
     
     /**
      * Get the extension point by the interface
-     * @param <T>
-     * @param extensionPointType
-     * @return
+     * @param extensionPointType The lookup key (extension point interface)
+     * @return The instance of the extension point
      */
     <T> T getExtensionPoint(Class<T> extensionPointType);
     
     /**
      * Remove an extension point
-     * @param extensionPoint
+     * @param extensionPoint The extension point to remove
      */
-    void removeExtensionPoint(Class extensionPoint);
+    void removeExtensionPoint(Object extensionPoint);
 }

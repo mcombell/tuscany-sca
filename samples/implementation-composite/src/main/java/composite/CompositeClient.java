@@ -23,21 +23,19 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 /**
  * Simple client program that invokes the components that we wired together.
- *
- * @version $Rev$ $Date$
  */
 public class CompositeClient {
 
     public static void main(String[] args) throws Exception {
-    	SCADomain domain = SCADomain.newInstance("http://localhost", ".", "OuterComposite.composite");
+    	SCADomain scaDomain = SCADomain.newInstance();
     	
-        Source source = domain.getService(Source.class, "SourceComponent");
+        Source source = scaDomain.getService(Source.class, "SourceComponent");
         
         System.out.println("Main thread " + Thread.currentThread());
         source.clientMethod("Client.main");
         System.out.println("Sleeping ...");
         Thread.sleep(1000);
         
-        domain.close();
+        scaDomain.close();
     }
 }

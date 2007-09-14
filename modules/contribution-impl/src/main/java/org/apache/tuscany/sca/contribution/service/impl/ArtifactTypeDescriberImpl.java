@@ -25,13 +25,13 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.tuscany.contribution.ContentType;
-import org.apache.tuscany.contribution.Contribution;
+import org.apache.tuscany.sca.contribution.ContentType;
+import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.service.TypeDescriber;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 
 /**
- * Implementation of the content describer
+ * Implementation of the content describer for files
  *
  * @version $Rev$ $Date$
  */
@@ -67,9 +67,9 @@ public class ArtifactTypeDescriberImpl implements TypeDescriber {
      * If not found, we try to check file contentType Or we return
      * defaultContentType provided
      * 
-     * @param url
-     * @param defaultContentType
-     * @return
+     * @param resourceURL The artifact url
+     * @param defaultContentType The default content type if we can't find the correc one
+     * @return The content type
      */
     public String getType(URL resourceURL, String defaultContentType) {
         URLConnection connection = null;

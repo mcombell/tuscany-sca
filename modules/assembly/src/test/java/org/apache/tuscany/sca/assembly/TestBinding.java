@@ -18,12 +18,6 @@
  */
 package org.apache.tuscany.sca.assembly;
 
-import java.util.List;
-
-import org.apache.tuscany.sca.assembly.AssemblyFactory;
-import org.apache.tuscany.sca.assembly.Binding;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * A test interface model.
@@ -31,9 +25,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
  * @version $Rev$ $Date$
  */
 public class TestBinding implements Binding {
-
     public TestBinding(AssemblyFactory factory) {
-        setURI("http://test");
     }
 
     public String getName() {
@@ -50,18 +42,6 @@ public class TestBinding implements Binding {
     public void setURI(String uri) {
     }
 
-    public List<PolicySet> getPolicySets() {
-        return null;
-    }
-
-    public List<Intent> getRequiredIntents() {
-        return null;
-    }
-
-    public List<Object> getExtensions() {
-        return null;
-    }
-    
     public void setUnresolved(boolean unresolved) {
     }
     

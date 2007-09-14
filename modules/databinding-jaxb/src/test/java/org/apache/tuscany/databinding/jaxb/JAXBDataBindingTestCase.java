@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
+import org.apache.tuscany.sca.databinding.jaxb.JAXBDataBinding;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
@@ -44,6 +45,7 @@ public class JAXBDataBindingTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         binding = new JAXBDataBinding();
@@ -51,7 +53,7 @@ public class JAXBDataBindingTestCase extends TestCase {
 
     /**
      * Test method for
-     * {@link org.apache.tuscany.databinding.jaxb.JAXBDataBinding#introspect(java.lang.Class, Annotation)}.
+     * {@link org.apache.tuscany.sca.databinding.jaxb.JAXBDataBinding#introspect(java.lang.Class, Annotation)}.
      */
     public final void testIntrospect() {
         DataType dataType = new DataTypeImpl<Class>(JAXBElement.class, null);
@@ -111,7 +113,7 @@ public class JAXBDataBindingTestCase extends TestCase {
         poType.setComment("Comment");
         PurchaseOrderType copy = (PurchaseOrderType)binding.copy(poType);
         assertTrue(copy instanceof PurchaseOrderType);
-        assertEquals("Comment", ((PurchaseOrderType)copy).getComment());
+        assertEquals("Comment", (copy).getComment());
     }
 
     @SuppressWarnings("unchecked")
@@ -121,7 +123,7 @@ public class JAXBDataBindingTestCase extends TestCase {
         address.setCity("San Jose");
         USAddress copy = (USAddress)binding.copy(address);
         assertTrue(copy instanceof USAddress);
-        assertEquals("San Jose", ((USAddress)copy).getCity());
+        assertEquals("San Jose", (copy).getCity());
 
     }
 }

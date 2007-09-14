@@ -27,10 +27,12 @@ import java.net.URL;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.validation.Schema;
 
-import org.apache.tuscany.contribution.processor.StAXArtifactProcessor;
-import org.apache.tuscany.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.ValidatingXMLStreamReader;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -40,8 +42,9 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
  * 
  * @version $Rev$ $Date$
  */
-public class CompositeDocumentProcessor extends BaseArtifactProcessor implements URLArtifactProcessor<Composite> {
+public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements URLArtifactProcessor<Composite> {
     private XMLInputFactory inputFactory;
+    private Schema schema;
 
     /**
      * Construct a new composite processor
@@ -49,18 +52,46 @@ public class CompositeDocumentProcessor extends BaseArtifactProcessor implements
      * @param policyFactory
      * @param staxProcessor
      */
-    public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory) {
+    public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory, Schema schema) {
         super(null, null, staxProcessor);
         this.inputFactory = inputFactory;
+        this.schema = schema;
     }
 
     public Composite read(URL contributionURL, URI uri, URL url) throws ContributionReadException {
         InputStream urlStream = null;
         try {
+            
+            // Create a stream reader
             urlStream = url.openStream();
             XMLStreamReader reader = inputFactory.createXMLStreamReader(urlStream);
+            reader = new ValidatingXMLStreamReader(reader, schema);
             reader.nextTag();
+            
+            // Read the composite model
             Composite composite = (Composite)extensionProcessor.read(reader);
+            if (composite != null) {
+                composite.setURI(uri.toString());
+            }
+
+            // For debugging purposes, write it back to XML
+//            if (composite != null) {
+//                try {
+//                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                    XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+//                    outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
+//                    extensionProcessor.write(composite, outputFactory.createXMLStreamWriter(bos));
+//                    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bos.toByteArray()));
+//                    OutputFormat format = new OutputFormat();
+//                    format.setIndenting(true);
+//                    format.setIndent(2);
+//                    XMLSerializer serializer = new XMLSerializer(System.out, format);
+//                    serializer.serialize(document);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            
             return composite;
             
         } catch (XMLStreamException e) {

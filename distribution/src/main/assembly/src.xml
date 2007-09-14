@@ -31,6 +31,7 @@
              <directory>src/main/release</directory>
 	     <outputDirectory>tuscany-sca-${tuscany.version}-src</outputDirectory>
 	     <includes>
+             <include>CHANGES</include>
              <include>DISCLAIMER</include>
              <include>README</include>
              <include>RELEASE_NOTES</include>
@@ -58,29 +59,86 @@
 	     <includes>
 	         <include>**/*</include>
            </includes>
-           <excludes>
-		 <exclude>contrib</exclude>
-		 <exclude>contrib/**/*</exclude>
-		 <exclude>doc</exclude>
-		 <exclude>doc/**/*</exclude>
+         <excludes>
+    		 <exclude>contrib</exclude>
+    		 <exclude>contrib/**/*</exclude>
+    		 <exclude>doc</exclude>
+    		 <exclude>doc/**/*</exclude>
              <exclude>**/target</exclude>
-		 <exclude>**/target/**/*</exclude>
-		 <exclude>**/build</exclude>
-		 <exclude>**/build/**/*</exclude>
-		 <exclude>**/.settings</exclude>
-		 <exclude>**/.classpath</exclude>
-		 <exclude>**/.project</exclude>
-		 <exclude>**/.wtpmodules</exclude>
-		 <exclude>**/surefire*</exclude>
-		 <exclude>**/cobertura.ser</exclude>
-		 <exclude>bin</exclude>
-		 <exclude>bin/*</exclude>
-		 <exclude>**/var/journal</exclude>
-		 <exclude>**/build.out*</exclude>
-		 <exclude>velocity.log</exclude>
-             <exclude>samples/helloworld-jsonrpc/src/main/webapp/dojo</exclude>
-             <exclude>samples/helloworld-jsonrpc/src/main/webapp/dojo/**/*</exclude>
-          </excludes>
+    		 <exclude>**/target/**/*</exclude>
+    		 <exclude>**/build</exclude>
+    		 <exclude>**/build/**/*</exclude>
+    		 <exclude>**/.settings</exclude>
+    		 <exclude>**/.settings/**/*</exclude>
+    		 <exclude>**/.classpath</exclude>
+    		 <exclude>**/.project</exclude>
+    		 <exclude>**/.wtpmodules</exclude>
+    		 <exclude>**/surefire*</exclude>
+    		 <exclude>**/cobertura.ser</exclude>
+    		 <exclude>bin</exclude>
+    		 <exclude>bin/*</exclude>
+    		 <exclude>**/var/journal</exclude>
+    		 <exclude>**/build.out*</exclude>
+    		 <exclude>velocity.log</exclude>
+    		 <exclude>distribution/target-last-successful</exclude>
+    		 <exclude>distribution/target-last-successful/**/*</exclude>
+    		 <exclude>itest/velocity.log</exclude>
+    		 <exclude>itest/databindings/jaxbgen/velocity.log</exclude>
+             <exclude>itest/old</exclude>
+             <exclude>itest/old/**/*</exclude>
+             <exclude>itest/contribution-import-export/import-wsdl/work</exclude>
+             <exclude>itest/contribution-import-export/import-wsdl/work/**/*</exclude>
+             <exclude>itest/contribution-import-export/import-composite/work</exclude>
+             <exclude>itest/contribution-import-export/import-composite/work/**/*</exclude>
+             <exclude>itest/osgi-implementation</exclude>
+             <exclude>itest/osgi-implementation/**/*</exclude>
+             <exclude>modules/host-tomcat/work</exclude>
+             <exclude>modules/host-tomcat/work/**/*</exclude>
+             <exclude>modules/binding-jms</exclude>
+             <exclude>modules/binding-jms/**/*</exclude>
+             <exclude>modules/implementation-das</exclude>
+             <exclude>modules/implementation-das/**/*</exclude>
+             <exclude>modules/implementation-data</exclude>
+             <exclude>modules/implementation-data/**/*</exclude>
+             <exclude>modules/implementation-osgi/.felix</exclude>
+             <exclude>modules/implementation-osgi/.felix/**/*</exclude>
+             <exclude>samples/old</exclude>
+             <exclude>samples/old/**/*</exclude>
+             <exclude>samples/company-das</exclude>
+             <exclude>samples/company-das/**/*</exclude>
+             <exclude>samples/company-das-webapp</exclude>
+             <exclude>samples/company-das-webapp/**/*</exclude>
+             <exclude>samples/das-service</exclude>
+             <exclude>samples/das-service/**/*</exclude>
+             <exclude>samples/das-service-web</exclude>
+             <exclude>samples/das-service-web/**/*</exclude>
+             <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo</exclude>
+             <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo/**/*</exclude>
+             <exclude>samples/helloworld-dojo-webapp/src/main/webapp/dojo</exclude>
+             <exclude>samples/helloworld-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
+             <exclude>samples/helloworld-ws-reference/work</exclude>
+             <exclude>samples/helloworld-ws-reference/work/**/*</exclude>
+             <exclude>samples/helloworld-ws-sdo/work</exclude>
+             <exclude>samples/helloworld-ws-sdo/work/**/*</exclude>
+             <exclude>samples/helloworld-ws-service/work</exclude>
+             <exclude>samples/helloworld-ws-service/work/**/*</exclude>
+             <exclude>samples/osgi-supplychain/.felix</exclude>
+             <exclude>samples/osgi-supplychain/.felix/**/*</exclude>
+             <exclude>samples/quote-xquery</exclude>
+             <exclude>samples/quote-xquery/**/*</exclude>
+             <exclude>samples/spi-implementation-pojo</exclude>
+             <exclude>samples/spi-implementation-pojo/**/*</exclude>
+             <exclude>samples/simple-callback-ws/work</exclude>
+             <exclude>samples/simple-callback-ws/work/**/*</exclude>
+             <exclude>demos/alert-aggregator-webapp/src/main/webapp/dojo</exclude>
+             <exclude>demos/alert-aggregator-webapp/src/main/webapp/dojo/**/*</exclude>
+             <exclude>demos/bigbank-account/src/main/resources/web/dojo</exclude> 
+             <exclude>demos/bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
+             <exclude>*/**/*.svg</exclude>
+             <exclude>*/**/*.ruleset</exclude>
+             <exclude>*/**/*.pmd</exclude>
+             <exclude>*/**/*.checkstyle</exclude>
+         </excludes>
 	 </fileSet>
      </fileSets>
 </assembly>

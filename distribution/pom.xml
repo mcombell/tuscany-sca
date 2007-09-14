@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-distribution</artifactId>
-    <name>Apache Tuscany Distribution</name>
+    <name>Apache Tuscany SCA Distribution</name>
     <packaging>pom</packaging>
 
     <properties>
@@ -38,6 +38,7 @@
     <modules>
         <module>bundle</module>
         <module>manifest</module>
+        <module>webapp</module>
     </modules>
 
     <dependencies>
@@ -75,6 +76,11 @@
             </exclusions>
        </dependency>
         <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-webapp</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
@@ -93,6 +99,8 @@
         </resources>
 
         <plugins>
+            <!-- Temporarily Remove Javadoc -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -107,7 +115,7 @@
                             <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.osoa</groupId>
+                                    <groupId>org.apache.tuscany.sca</groupId>
                                     <artifactId>sca-api</artifactId>
                                     <classifier>javadoc</classifier>
                                     <version>${pom.version}</version>
@@ -123,21 +131,26 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
+	    <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ant-plugin</artifactId>
+                ####
+                <version>1.1</version>
+                ####
                 <executions>
                     <execution>
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
-
                         <goals>
                             <goal>ant</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -155,12 +168,13 @@
                                 <descriptor>src/main/assembly/src.xml</descriptor>
                             </descriptors>
                             <tarLongFileMode>gnu</tarLongFileMode>
-                            <finalName>tuscany-sca-${pom.version}</finalName>
+                            <finalName>apache-tuscany-sca-${pom.version}</finalName>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+	    <!-- Temporarily remove to avoid out of memory
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -194,14 +208,47 @@
 
                                 <echo file="${basedir}/target/srcbuild_env${output.ext}" message="${output.cp}" />
                                 <echo file="${basedir}/target/version.properties" message="tuscany.version=${pom.version}" />
-                                <!-- copy file="${basedir}/src/main/assembly/jbi.xml" tofile="${basedir}/target/jbi.xml" overwrite="yes">
+                                #########
+                                ### THIS WAS ALREADY COMMENTED
+                                <copy file="${basedir}/src/main/assembly/jbi.xml" tofile="${basedir}/target/jbi.xml" overwrite="yes">
                                     <filterset>
                                         <filter token="TUSCANY_VERSION" value="${pom.version}" />
                                     </filterset>
-                                </copy -->
+                                </copy>
+                                ###
                                 <delete file="build.xml" />
                             </tasks>
 
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-trax</artifactId>
+                        <version>1.6.5</version>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <id>save-distribution</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <copy file="${basedir}/target/apache-tuscany-sca-1.0-incubating-SNAPSHOT.zip" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.0-incubating-SNAPSHOT.zip" overwrite="yes"/>
+                                <copy file="${basedir}/target/apache-tuscany-sca-1.0-incubating-SNAPSHOT.tar.gz" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.0-incubating-SNAPSHOT.tar.gz" overwrite="yes"/>
+                            </tasks>
                         </configuration>
                         <goals>
                             <goal>run</goal>

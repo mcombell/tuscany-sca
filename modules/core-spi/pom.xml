@@ -30,7 +30,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.osoa</groupId>
+            <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>sca-api</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -102,8 +102,7 @@
                     <bottom>Apache Tuscany is an effort undergoing incubation at the Apache Software Foundation(ASF) and sponsored by the Apache WS PMC.</bottom>
                     <header>Apache Tuscany SCA Core SPI</header>
                     <footer>Apache Tuscany SCA Core SPI</footer>
-                    <sourcepath>${basedir}/src/main/java${path.separator}${basedir}/target/generated/src/main/java</sourcepath>
-                    <subpackages>org.apache.tuscany.sca.spi</subpackages>
+                    <sourcepath>${basedir}/src/main/java</sourcepath>
                 </configuration>
             </plugin>
         </plugins>

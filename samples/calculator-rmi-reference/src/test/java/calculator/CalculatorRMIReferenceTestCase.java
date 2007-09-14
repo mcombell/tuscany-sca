@@ -31,20 +31,22 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
  */
 public class CalculatorRMIReferenceTestCase extends TestCase {
 
-    private SCADomain domain;
+    private SCADomain scaDomain;
     private CalculatorService calculatorService;
 
+    @Override
     protected void setUp() throws Exception {
-        CalculatorServiceRmiImpl rmiCalculatorImpl = new CalculatorServiceRmiImpl();
+        CalculatorRMIServiceImpl rmiCalculatorImpl = new CalculatorRMIServiceImpl();
         Registry rmiRegistry = LocateRegistry.createRegistry(8099);
         rmiRegistry.bind("CalculatorRMIService", rmiCalculatorImpl);
         
-        domain = SCADomain.newInstance("CalculatorRMIReference.composite");
-        calculatorService = domain.getService(CalculatorService.class, "CalculatorServiceComponent");
+        scaDomain = SCADomain.newInstance("CalculatorRMIReference.composite");
+        calculatorService = scaDomain.getService(CalculatorService.class, "CalculatorServiceComponent");
     }
     
+    @Override
     protected void tearDown() throws Exception {
-        domain.close();
+        scaDomain.close();
         LocateRegistry.getRegistry(8099).unbind("CalculatorRMIService");
     }
 

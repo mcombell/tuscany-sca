@@ -18,24 +18,20 @@
  */
 package org.apache.tuscany.sca.core.invocation;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.tuscany.sca.core.RuntimeWire;
-import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.interfacedef.java.impl.JavaInterfaceUtil;
+import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.core.assembly.RuntimeWireImpl;
+import org.apache.tuscany.sca.core.context.CallableReferenceImpl;
+import org.apache.tuscany.sca.core.conversation.ConversationState;
 import org.apache.tuscany.sca.invocation.InvocationChain;
+import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.invocation.MessageFactory;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
+import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.osoa.sca.NoRegisteredCallbackException;
+import org.osoa.sca.ServiceRuntimeException;
 
 /**
  * Responsible for dispatching to a callback through a wire. <p/> TODO cache
@@ -43,64 +39,84 @@ import org.osoa.sca.NoRegisteredCallbackException;
  * 
  * @version $Rev$ $Date$
  */
-public class JDKCallbackInvocationHandler extends AbstractInvocationHandler implements InvocationHandler {
+public class JDKCallbackInvocationHandler extends JDKInvocationHandler {
     private static final long serialVersionUID = -3350283555825935609L;
-    private transient WorkContext context;
-    private transient Map<URI, RuntimeWire> wires;
-    private List<String> sourceWireNames;
 
-    /**
-     * Constructor used for deserialization only
-     */
-    public JDKCallbackInvocationHandler(MessageFactory messageFactory) {
-        super(messageFactory, false);
-        sourceWireNames = new ArrayList<String>();
-        wires = new HashMap<URI, RuntimeWire>();
+    public JDKCallbackInvocationHandler(MessageFactory messageFactory, CallbackWireObjectFactory wireFactory) {
+        super(messageFactory, wireFactory);
+        this.fixedWire = false;
     }
 
-    public JDKCallbackInvocationHandler(MessageFactory messageFactory, List<RuntimeWire> wireList, WorkContext context) {
-        super(messageFactory, false);
-        this.context = context;
-        this.wires = new HashMap<URI, RuntimeWire>();
-        for (RuntimeWire wire : wireList) {
-            URI uri = URI.create(wire.getSource().getComponent().getURI() + "#"
-                                 + wire.getSource().getComponentReference().getName());
-            wires.put(uri, wire);
-        }
-        sourceWireNames = new ArrayList<String>();
-        for (URI uri : wires.keySet()) {
-            sourceWireNames.add(uri.getFragment());
-        }
-    }
-
+    @Override
     @SuppressWarnings( {"unchecked"})
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getParameterTypes().length == 0 && "toString".equals(method.getName())) {
-            return "[Proxy - " + Integer.toHexString(hashCode()) + "]";
-        } else if (method.getDeclaringClass().equals(Object.class) && "equals".equals(method.getName())) {
-            // TODO implement
-            throw new UnsupportedOperationException();
-        } else if (Object.class.equals(method.getDeclaringClass()) && "hashCode".equals(method.getName())) {
-            return hashCode();
-            // TODO beter hash algorithm
+        if (Object.class == method.getDeclaringClass()) {
+            return invokeObjectMethod(method, args);
         }
-        LinkedList<URI> callbackUris = context.getCallbackUris();
-        assert callbackUris != null;
-        URI targetAddress = callbackUris.getLast();
-        assert targetAddress != null;
-        RuntimeWire wire = wires.get(targetAddress);
-        assert wire != null;
-        List<InvocationChain> chains = wire.getCallbackInvocationChains();
-        IdentityHashMap<Operation, InvocationChain> map = new IdentityHashMap<Operation, InvocationChain>();
-        for (InvocationChain chain : chains) {
-            map.put(chain.getTargetOperation(), chain);
+
+        // wire not pre-selected, so select a wire now to be used for the callback
+        Message msgContext = ThreadMessageContext.getMessageContext();
+        RuntimeWire wire = ((CallbackWireObjectFactory)callableReference).selectCallbackWire(msgContext);
+        if (wire == null) {
+            //FIXME: need better exception
+            throw new ServiceRuntimeException("No callback wire found for " + msgContext.getFrom().getURI());
         }
-        Operation operation = JavaInterfaceUtil.findOperation(method, map.keySet());
-        InvocationChain chain = map.get(operation);
-        Object correlationId = context.getCorrelationId();
-        context.setCorrelationId(null);
+
+        // set the conversational state based on the interface that
+        // is specified for the reference that this wire belongs to
+        init(wire);
+
+        // set the conversation id into the conversation object. This is
+        // a special case for callbacks as, unless otherwise set manually,
+        // the callback should use the same conversation id as was received
+        // on the incoming call to this component
+        if (conversational) {
+
+            if (conversation == null || conversation.getState() == ConversationState.ENDED) {
+                conversation = null;
+            }
+            Object convID = conversation == null ? null : conversation.getConversationID();
+
+            // create a conversation id if one doesn't exist 
+            // already, i.e. the conversation is just starting
+            if (convID == null) {
+                convID = msgContext.getTo().getReferenceParameters().getConversationID();
+                if (convID != null) {
+                    conversation = ((RuntimeWireImpl)wire).getConversationManager().getConversation(convID);
+                    if (callableReference != null) {
+                        ((CallableReferenceImpl)callableReference).attachConversation(conversation);
+                    }
+                }
+            }
+        }
+
+        callbackID = msgContext.getTo().getReferenceParameters().getCallbackID();
+        ((CallbackWireObjectFactory)callableReference).attachCallbackID(callbackID);
+
+        setEndpoint(msgContext.getFrom().getCallbackEndpoint());
+
+        // need to set the endpoint on the binding also so that when the chains are created next
+        // the sca binding can decide whether to provide local or remote invokers. 
+        // TODO - there is a problem here though in that I'm setting a target on a 
+        //        binding that may possibly be trying to point at two things in the multi threaded 
+        //        case. Need to confirm the general model here and how the clone and bind part
+        //        is intended to work
+        wire.getSource().getBinding().setURI(msgContext.getFrom().getCallbackEndpoint().getURI());
+
+        // also need to set the target contract as it varies for the sca binding depending on 
+        // whether it is local or remote
+        RuntimeComponentReference ref = (RuntimeComponentReference)wire.getSource().getContract();
+        Binding binding = wire.getSource().getBinding();
+        wire.getTarget().setInterfaceContract(ref.getBindingProvider(binding).getBindingInterfaceContract());
+
+        //FIXME: can we use the same code as JDKInvocationHandler to select the chain? 
+        InvocationChain chain = getInvocationChain(method, wire);
+        if (chain == null) {
+            throw new IllegalArgumentException("No matching operation is found: " + method);
+        }
+
         try {
-            return invoke(chain, args, correlationId, callbackUris, context);
+            return invoke(chain, args, wire);
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof NoRegisteredCallbackException) {
@@ -110,7 +126,4 @@ public class JDKCallbackInvocationHandler extends AbstractInvocationHandler impl
         }
     }
 
-    public void setWorkContext(WorkContext context) {
-        this.context = context;
-    }
 }

@@ -26,13 +26,19 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-binding-ws-xml</artifactId>
-    <name>Apache Tuscany SCA XML Web Service Binding Extension</name>
+    <name>Apache Tuscany SCA WS Binding XML Model</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-impl</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -46,11 +52,19 @@
             <artifactId>tuscany-binding-ws</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-interface-wsdl</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-sca</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>         
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>

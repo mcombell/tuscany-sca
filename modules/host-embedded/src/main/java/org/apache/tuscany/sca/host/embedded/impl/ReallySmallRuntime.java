@@ -19,28 +19,43 @@
 
 package org.apache.tuscany.sca.host.embedded.impl;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
-import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
+import org.apache.tuscany.sca.context.ContextFactoryExtensionPoint;
+import org.apache.tuscany.sca.context.DefaultContextFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.ContributionFactory;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.service.ContributionReadException;
+import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
+import org.apache.tuscany.sca.contribution.util.ServiceConfigurationUtil;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ModuleActivator;
+import org.apache.tuscany.sca.core.assembly.ActivationException;
+import org.apache.tuscany.sca.core.assembly.CompositeActivator;
+import org.apache.tuscany.sca.core.assembly.RuntimeAssemblyFactory;
+import org.apache.tuscany.sca.core.invocation.MessageFactoryImpl;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
-import org.apache.tuscany.sca.core.runtime.ActivationException;
-import org.apache.tuscany.sca.core.runtime.CompositeActivator;
-import org.apache.tuscany.sca.core.runtime.RuntimeAssemblyFactory;
-import org.apache.tuscany.sca.core.work.ThreadPoolWorkManager;
+import org.apache.tuscany.sca.core.scope.ScopeRegistry;
+import org.apache.tuscany.sca.definitions.SCADefinitions;
+import org.apache.tuscany.sca.definitions.SCADefinitionsDocumentProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
+import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
+import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
+import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.scope.ScopeRegistry;
-import org.apache.tuscany.sca.spi.component.WorkContext;
-import org.apache.tuscany.sca.spi.component.WorkContextTunnel;
+import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.work.WorkScheduler;
 
 public class ReallySmallRuntime {
 
@@ -51,9 +66,10 @@ public class ReallySmallRuntime {
     private AssemblyFactory assemblyFactory;
     private ContributionService contributionService;
     private CompositeActivator compositeActivator;
-    private WorkContext workContext;
-    private ThreadPoolWorkManager workManager;
+    private CompositeBuilder compositeBuilder;
+    private WorkScheduler workScheduler;
     private ScopeRegistry scopeRegistry;
+    private ProxyFactory proxyFactory;
 
     public ReallySmallRuntime(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -64,42 +80,97 @@ public class ReallySmallRuntime {
         // Create our extension point registry
         registry = new DefaultExtensionPointRegistry();
 
-        // Create a work context
-        workContext = ReallySmallRuntimeBuilder.createWorkContext(registry);
-
-        // Create a work manager
-        workManager = new ThreadPoolWorkManager(10);
+//      Get work scheduler
+        workScheduler = registry.getExtensionPoint(WorkScheduler.class);
 
         // Create an interface contract mapper
-        InterfaceContractMapper mapper = new DefaultInterfaceContractMapper();
+        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
+
+        // Get factory extension point
+        ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        
+        // Create context factory extension point
+        ContextFactoryExtensionPoint contextFactories = new DefaultContextFactoryExtensionPoint();
+        registry.addExtensionPoint(contextFactories);
+        
+        // Create Message factory
+        MessageFactory messageFactory = new MessageFactoryImpl();
+        factories.addFactory(messageFactory);
 
         // Create a proxy factory
-        ProxyFactory proxyFactory = ReallySmallRuntimeBuilder.createProxyFactory(registry, workContext, mapper);
+        proxyFactory = ReallySmallRuntimeBuilder.createProxyFactory(registry, mapper, messageFactory);
 
         // Create model factories
-        assemblyFactory = new RuntimeAssemblyFactory(mapper, proxyFactory);
+        assemblyFactory = new RuntimeAssemblyFactory();
+        factories.addFactory(assemblyFactory);
         PolicyFactory policyFactory = new DefaultPolicyFactory();
-
+        factories.addFactory(policyFactory);
+        SCABindingFactory scaBindingFactory = factories.getFactory(SCABindingFactory.class);
+        IntentAttachPointTypeFactory intentAttachPointTypeFactory = new DefaultIntentAttachPointTypeFactory();
+        factories.addFactory(intentAttachPointTypeFactory);
+        ContributionFactory contributionFactory = factories.getFactory(ContributionFactory.class); 
+        
         // Create a contribution service
-        contributionService = ReallySmallRuntimeBuilder.createContributionService(registry,
+        contributionService = ReallySmallRuntimeBuilder.createContributionService(classLoader,
+                                                                                  registry,
+                                                                                  contributionFactory,
                                                                                   assemblyFactory,
                                                                                   policyFactory,
                                                                                   mapper);
-
+        
         // Create the ScopeRegistry
-        scopeRegistry = ReallySmallRuntimeBuilder.createScopeRegistry(registry);
-
+        scopeRegistry = ReallySmallRuntimeBuilder.createScopeRegistry(registry); 
+        
         // Create a composite activator
         compositeActivator = ReallySmallRuntimeBuilder.createCompositeActivator(registry,
                                                                                 assemblyFactory,
+                                                                                messageFactory,
+                                                                                scaBindingFactory,
                                                                                 mapper,
+                                                                                proxyFactory,
                                                                                 scopeRegistry,
-                                                                                workContext,
-                                                                                workManager);
+                                                                                workScheduler);
 
+        
+        // Load the runtime modules
+        modules = loadModules(registry, classLoader);
+        
         // Start the runtime modules
-        modules = startModules(registry, classLoader);
+        startModules(registry, modules);
 
+        // Load the definitions.xml
+        URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+        SCADefinitionsDocumentProcessor definitionsProcessor = (SCADefinitionsDocumentProcessor)documentProcessors.getProcessor(SCADefinitions.class);
+        SCADefinitions definitions = loadDomainDefinitions(definitionsProcessor);
+        List<PolicySet> domainPolicySets;
+        if ( definitions != null ) {
+            domainPolicySets = definitions.getPolicySets();
+        } else {
+            domainPolicySets = null;
+        }
+        
+        //Create a composite builder
+        compositeBuilder = ReallySmallRuntimeBuilder.createCompositeBuilder(assemblyFactory,
+                                                                            scaBindingFactory,
+                                                                            mapper,
+                                                                            domainPolicySets);
+    }
+    
+    private SCADefinitions loadDomainDefinitions(SCADefinitionsDocumentProcessor definitionsProcessor) throws ActivationException {
+        URL url = this.classLoader.getResource("definitions.xml");
+        SCADefinitions definitions = null;
+        
+        if ( url != null ) {
+            try {
+                definitions = definitionsProcessor.read(null, null, url);
+                definitionsProcessor.resolve(definitions, definitionsProcessor.getDomainModelResolver());
+            } catch ( ContributionReadException e ) {
+                throw new ActivationException(e);
+            } catch ( ContributionResolveException e ) {
+                throw new ActivationException(e);
+            }
+        } 
+        return definitions;
     }
 
     public void stop() throws ActivationException {
@@ -107,12 +178,17 @@ public class ReallySmallRuntime {
         // Stop the runtime modules
         stopModules(registry, modules);
 
-        // FIXME remove this
-        workContext.setIdentifier(Scope.COMPOSITE, null);
-
         // Stop and destroy the work manager
-        workManager.destroy();
-        
+        workScheduler.destroy(); 
+
+        // Cleanup
+        modules = null;
+        registry = null;
+        assemblyFactory = null;
+        contributionService = null;
+        compositeActivator = null;
+        workScheduler = null;
+        scopeRegistry = null;
     }
 
     public ContributionService getContributionService() {
@@ -122,32 +198,46 @@ public class ReallySmallRuntime {
     public CompositeActivator getCompositeActivator() {
         return compositeActivator;
     }
+    
+    public CompositeBuilder getCompositeBuilder() {
+        return compositeBuilder;
+    }
 
     public AssemblyFactory getAssemblyFactory() {
         return assemblyFactory;
     }
 
     @SuppressWarnings("unchecked")
-    private List<ModuleActivator> startModules(ExtensionPointRegistry registry, ClassLoader classLoader)
-        throws ActivationException {
+    private List<ModuleActivator> loadModules(ExtensionPointRegistry registry, ClassLoader classLoader) throws ActivationException {
 
         // Load and instantiate the modules found on the classpath
-        List<ModuleActivator> modules = ReallySmallRuntimeBuilder.getServices(classLoader, ModuleActivator.class);
-        for (ModuleActivator module : modules) {
-            Map<Class, Object> extensionPoints = module.getExtensionPoints();
-            if (extensionPoints != null) {
-                for (Map.Entry<Class, Object> e : extensionPoints.entrySet()) {
-                    registry.addExtensionPoint(e.getKey(), e.getValue());
-                }
+        modules = new ArrayList<ModuleActivator>();
+        try {
+            List<String> classNames = ServiceConfigurationUtil.getServiceClassNames(classLoader, ModuleActivator.class.getName());
+            for (String className : classNames) {       
+                Class moduleClass = Class.forName(className, true, classLoader);
+                ModuleActivator module = (ModuleActivator)moduleClass.newInstance();
+                modules.add(module);
             }
+        } catch (IOException e) {
+            throw new ActivationException(e);
+        } catch (ClassNotFoundException e) {
+            throw new ActivationException(e);
+        } catch (InstantiationException e) {
+            throw new ActivationException(e);
+        } catch (IllegalAccessException e) {
+            throw new ActivationException(e);
         }
+
+        return modules;
+    }
+    
+    private void startModules(ExtensionPointRegistry registry, List<ModuleActivator> modules) throws ActivationException {
 
         // Start all the extension modules
         for (ModuleActivator activator : modules) {
             activator.start(registry);
         }
-
-        return modules;
     }
 
     private void stopModules(ExtensionPointRegistry registry, List<ModuleActivator> modules) {
@@ -156,11 +246,18 @@ public class ReallySmallRuntime {
         }
     }
 
-    // FIXME Remove this
-    @SuppressWarnings("unchecked")
-    public void startDomainWorkContext(Composite domain) {
-        workContext.setIdentifier(Scope.COMPOSITE, domain);
-        WorkContextTunnel.setThreadWorkContext(workContext);
+    /**
+     * @return the proxyFactory
+     */
+    public ProxyFactory getProxyFactory() {
+        return proxyFactory;
+    }
+
+    /**
+     * @return the registry
+     */
+    public ExtensionPointRegistry getExtensionPointRegistry() {
+        return registry;
     }
 
 }

@@ -1,6 +1,6 @@
 Hello World Web Service Service Sample
 ======================================
-This sample  demonstrates an SCA service that uses a web service binding. 
+This sample demonstrates an SCA service that uses a web service binding. 
 
 The README in the samples directory (the directory above this) provides 
 general instructions about building and running samples. Take a look there 
@@ -9,7 +9,7 @@ first.
 If you just want to run it to see what happens open a command prompt, navigate
 to this sample directory and do:
 
-ant 
+ant run
 
 OR if you don't have ant, on Windows do
 
@@ -19,7 +19,7 @@ and on *nix do
 
 java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-helloworld-ws-service.jar helloworld.HelloWorldServer
 
-Now the server is started you can use the helloworld-ws-reference test to 
+Now the server is started you can use the helloworld-ws-reference sample to 
 exercise it. 
 
 Sample Overview
@@ -44,6 +44,10 @@ helloworld-ws-service/
           helloworld.wsdl                 - the service description that describes
                                             the exposed service
         helloworldws.composite            - the SCA assembly for this sample
+    test/
+      java/
+        helloworld/
+          HelloWorldServerTestCase.java   - JUnit test case 
   helloworld-ws-service.png               - a pictorial representation of the 
                                             sample .composite file
   build.xml                               - the Ant build file
@@ -56,7 +60,7 @@ following commands
 
 cd helloworld-ws-service
 ant compile
-ant
+ant run
 
 You should see the following output from the run target.
 
@@ -64,17 +68,17 @@ run:
      [java] log4j:WARN No appenders could be found for logger (org.apache.axiom.
 om.util.StAXUtils).
      [java] log4j:WARN Please initialize the log4j system properly.
-     [java] HelloWorld server started
+     [java] HelloWorld server started (press enter to shutdown)
      
 As this point the SCA service is exposed as a web service by a web server 
 started automatically by the SCA runtime. To stop the server just press 
 enter.
 
-To exercise the service run up the helloworld-ws-referemce test. Take a look at 
+To exercise the service run up the helloworld-ws-reference sample. Take a look at 
 the README in that sample and you will see you need the following commands
 
 cd helloworld-ws-reference
-ant
+ant run
 
 Building And Running The Sample Using Maven 
 -------------------------------------------
@@ -114,11 +118,11 @@ WARNING: Could not get url for /javax/servlet/jsp/resources/web-jsptaglibrary_2_
 WARNING: Could not get url for /javax/servlet/resources/j2ee_web_services_1_1.xs
 d
 10-May-2007 13:48:43 org.apache.coyote.http11.Http11Protocol init
-INFO: Initializing Coyote HTTP/1.1 on http-8080
+INFO: Initializing Coyote HTTP/1.1 on http-8085
 10-May-2007 13:48:43 org.apache.coyote.http11.Http11Protocol start
-INFO: Starting Coyote HTTP/1.1 on http-8080
+INFO: Starting Coyote HTTP/1.1 on http-8085
 10-May-2007 13:48:43 org.apache.coyote.http11.Http11Protocol destroy
-INFO: Stopping Coyote HTTP/1.1 on http-8080
+INFO: Stopping Coyote HTTP/1.1 on http-8085
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.857 sec
 
 Results :

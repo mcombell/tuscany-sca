@@ -19,14 +19,15 @@
 
 package org.apache.tuscany.sca.implementation.java.invocation;
 
-import org.apache.tuscany.databinding.DataBindingExtensionPoint;
-import org.apache.tuscany.sca.core.RuntimeComponent;
+import org.apache.tuscany.sca.context.ComponentContextFactory;
+import org.apache.tuscany.sca.context.RequestContextFactory;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
+import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
-import org.apache.tuscany.sca.implementation.java.context.JavaPropertyValueObjectFactory;
+import org.apache.tuscany.sca.implementation.java.injection.JavaPropertyValueObjectFactory;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.provider.ImplementationProviderFactory;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
  * @version $Rev$ $Date$
@@ -35,24 +36,28 @@ public class JavaImplementationProviderFactory implements ImplementationProvider
     private JavaPropertyValueObjectFactory propertyValueObjectFactory;
     private DataBindingExtensionPoint dataBindingRegistry;
     private ProxyFactory proxyService;
-    private WorkContext workContext;
+    private ComponentContextFactory componentContextFactory;
+    private RequestContextFactory requestContextFactory;
 
-    public JavaImplementationProviderFactory(
-                                      ProxyFactory proxyService,
-                                      WorkContext workContext,
-                                      DataBindingExtensionPoint dataBindingRegistry,
-                                      JavaPropertyValueObjectFactory propertyValueObjectFactory) {
+    public JavaImplementationProviderFactory(ProxyFactory proxyService,
+                                             DataBindingExtensionPoint dataBindingRegistry,
+                                             JavaPropertyValueObjectFactory propertyValueObjectFactory,
+                                             ComponentContextFactory componentContextFactory,
+                                             RequestContextFactory requestContextFactory) {
         super();
         this.proxyService = proxyService;
-        this.workContext = workContext;
         this.dataBindingRegistry = dataBindingRegistry;
         this.propertyValueObjectFactory = propertyValueObjectFactory;
+        this.componentContextFactory = componentContextFactory;
+        this.requestContextFactory = requestContextFactory;
     }
 
-    public ImplementationProvider createImplementationProvider(RuntimeComponent component, JavaImplementation implementation) {
-        return new JavaImplementationProvider(component, implementation, proxyService, workContext, dataBindingRegistry, propertyValueObjectFactory);
+    public ImplementationProvider createImplementationProvider(RuntimeComponent component,
+                                                               JavaImplementation implementation) {
+        return new JavaImplementationProvider(component, implementation, proxyService, dataBindingRegistry,
+                                              propertyValueObjectFactory, componentContextFactory, requestContextFactory);
     }
-    
+
     public Class<JavaImplementation> getModelType() {
         return JavaImplementation.class;
     }

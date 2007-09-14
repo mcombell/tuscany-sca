@@ -19,8 +19,10 @@
 
 package org.apache.tuscany.sca.assembly.builder.impl;
 
-import org.apache.tuscany.sca.assembly.builder.Problem;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
+import org.apache.tuscany.sca.assembly.builder.Problem;
 
 /**
  * Reports a composite assembly problem. 
@@ -28,7 +30,7 @@ import org.apache.tuscany.sca.assembly.builder.Problem;
  * @version $Rev$ $Date$
  */
 public class ProblemImpl implements Problem {
-    
+
     private String message;
     private Severity severity;
     private Object model;
@@ -83,7 +85,7 @@ public class ProblemImpl implements Problem {
     public String getMessage() {
         return message;
     }
-    
+
     public Object getModel() {
         return model;
     }
@@ -91,8 +93,25 @@ public class ProblemImpl implements Problem {
     public Object getResource() {
         return resource;
     }
-    
+
     public Exception getCause() {
         return cause;
+    }
+
+    @Override
+    public String toString() {
+        StringWriter sw = new StringWriter();
+        PrintWriter writer = new PrintWriter(sw);
+        writer.format("[%s] %s %s", severity, message, resource);
+        //PrintUtil util = new PrintUtil(writer, false);
+        //if (model != null) {
+        //    writer.println();
+        //    util.print(model);
+        //}
+        if (cause != null) {
+            writer.println();
+            cause.printStackTrace(writer);
+        }
+        return sw.toString();
     }
 }

@@ -22,11 +22,6 @@ import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicyFactory;
-import org.apache.tuscany.sca.policy.PolicySet;
-
 /**
  * Test building of policy model instances using the policy factory.
  * 
@@ -36,10 +31,12 @@ public class PolicyFactoryTestCase extends TestCase {
 
     PolicyFactory factory;
 
+    @Override
     public void setUp() throws Exception {
         factory = new DefaultPolicyFactory();
     }
 
+    @Override
     public void tearDown() throws Exception {
         factory = null;
     }

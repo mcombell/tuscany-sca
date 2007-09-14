@@ -25,11 +25,7 @@ import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
 /**
  * Represents an operation on a service interface.
  */
-public interface Operation {
-    enum ConversationSequence {
-        NO_CONVERSATION, CONVERSATION_CONTINUE, CONVERSATION_END
-    };
-
+public interface Operation extends Cloneable {
     /**
      * Returns the name of the operation.
      * 
@@ -161,4 +157,23 @@ public interface Operation {
      * @param dataBinding
      */
     void setDataBinding(String dataBinding);
+    
+    /**
+     * Returns true if the operation is dynamic.
+     * 
+     * @return true if the operation is dynamic otherwise false
+     */
+    boolean isDynamic();
+
+    /**
+     * Set if the operation is dynamic
+     * @param b
+     */
+    void setDynamic(boolean b);
+
+    /**
+     * Implementations must support cloning.
+     */
+    Object clone() throws CloneNotSupportedException;
+    
 }

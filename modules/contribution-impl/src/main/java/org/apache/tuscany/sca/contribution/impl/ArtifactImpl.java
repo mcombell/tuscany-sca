@@ -19,8 +19,14 @@
 
 package org.apache.tuscany.sca.contribution.impl;
 
-import org.apache.tuscany.contribution.Artifact;
+import org.apache.tuscany.sca.contribution.Artifact;
 
+
+/**
+ * Base Artifact interface to accomodate common properties between Contribution and Deployed Artifact
+ * 
+ * @version $Rev$ $Date$
+ */
 public abstract class ArtifactImpl implements Artifact {
     private String uri;
     private String location;
@@ -43,4 +49,23 @@ public abstract class ArtifactImpl implements Artifact {
     public void setURI(String uri) {
         this.uri = uri;
     }
+
+    @Override
+    public int hashCode() {
+        return uri.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else {
+            if (obj instanceof Artifact) {
+                return uri.equals(((Artifact)obj).getURI());
+            } else {
+                return false;
+            }
+        }
+    }
+
 }

@@ -18,50 +18,78 @@
  * under the License.    
  -->
 <project>
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.apache.tuscany.testing</groupId>
-        <artifactId>tuscany-interop-services</artifactId>
-        <version>0.1-integration-incubating-SNAPSHOT</version>
+        <groupId>org.apache.tuscany.sca</groupId>
+        <artifactId>tuscany-itest</artifactId>
+        <version>1.0-incubating-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>interop-service-webserviceInteropDoc</artifactId>
+    <artifactId>itest-interop-soap-service</artifactId>
     <packaging>war</packaging>
-    <name>Tuscany Interop Testing - Services - InteropDoc</name>
+    <name>Apache Tuscany SCA WS Interop Service Integration Tests</name>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca.runtime</groupId>
-            <artifactId>webapp</artifactId>
-             <version>${sca.version}</version>
-            <scope>runtime</scope> <!-- runtime is need for webapp integration to include jar -->
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tuscany.sca.runtime</groupId>
-            <artifactId>webapp-host</artifactId>
-             <version>${sca.version}</version>
-            <scope>runtime</scope> <!-- runtime is need for webapp integration to include jar -->
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca.services.idl</groupId>
-            <artifactId>tuscany-wsdl</artifactId>
-             <version>${sca.version}</version>
-            <scope>runtime</scope> <!-- runtime is need for webapp integration to include jar -->
+       <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-embedded</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-          <groupId>org.apache.ws.commons.axiom</groupId>
-          <artifactId>axiom-api</artifactId>
-          <version>SNAPSHOT</version>
-            <scope>compile</scope> 
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-java-runtime</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
         </dependency>
+
         <dependency>
-          <groupId>org.apache.ws.commons.axiom</groupId>
-          <artifactId>axiom-impl</artifactId>
-          <version>SNAPSHOT</version>
-          <scope>runtime</scope>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-ws-axis2</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-tomcat</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+<dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>1.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.8.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+            <version>1.2.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>3.2.1</version>
+            <scope>runtime</scope>
         </dependency>
         
     </dependencies>
@@ -69,9 +97,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.tuscany.sdo</groupId>
-                <artifactId>tuscany-sdo-plugin</artifactId>
-                <version>${sdo.version}</version>
+		<groupId>org.apache.tuscany.sdo</groupId>
+		<artifactId>tuscany-sdo-plugin</artifactId>
+		<version>1.0-incubating-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <configuration>
@@ -88,9 +116,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.tuscany.sca.extensions.axis2.plugins</groupId>
-                <artifactId>tuscany-plugin-wsdl2java</artifactId>
-                <version>${sca.version}</version>
+		<groupId>org.apache.tuscany.sca</groupId>
+		<artifactId>tuscany-maven-wsdl2java</artifactId>
+		<version>1.0-incubating-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <configuration>

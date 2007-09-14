@@ -18,12 +18,10 @@
  */
 package org.apache.tuscany.sca.core.invocation;
 
-import java.util.LinkedList;
-
-import org.apache.tuscany.sca.core.RuntimeWire;
-import org.apache.tuscany.sca.invocation.ConversationSequence;
+import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.EndpointReference;
 
 /**
  * The default implementation of a message flowed through a wire during an invocation
@@ -32,55 +30,36 @@ import org.apache.tuscany.sca.spi.component.WorkContext;
  */
 public class MessageImpl implements Message {
     private Object body;
-    private LinkedList<RuntimeWire> callbackWires;
     private Object messageID;
     private Object correlationID;
     private boolean isFault;
-    private ConversationSequence conversationSequence;
-    private WorkContext workContext;
+    private Operation operation;
 
-    protected MessageImpl() {
+    private EndpointReference from;
+    private EndpointReference to;
+    private EndpointReference replyTo;
+
+    public MessageImpl() {
+        this.from = new EndpointReferenceImpl("/");
+        this.to = new EndpointReferenceImpl("/");
     }
 
     @SuppressWarnings("unchecked")
-    public Object getBody() {
-        return body;
+    public <T> T getBody() {
+        return (T)body;
     }
 
-    public void setBody(Object body) {
+    public <T> void setBody(T body) {
         this.isFault = false;
         this.body = body;
     }
 
-    public WorkContext getWorkContext() {
-        return workContext;
+    public Object getConversationID() {
+        return getTo().getReferenceParameters().getConversationID();
     }
 
-    public void setWorkContext(WorkContext workContext) {
-        this.workContext = workContext;
-    }
-    
-    public ConversationSequence getConversationSequence() {
-        return conversationSequence;
-    }
-
-    public void setConversationSequence(ConversationSequence conversationSequence) {
-        this.conversationSequence = conversationSequence;
-    }
-
-    public void pushCallbackWire(RuntimeWire wire) {
-        if (callbackWires == null) {
-            callbackWires = new LinkedList<RuntimeWire>();
-        }
-        callbackWires.add(wire);
-    }
-
-    public LinkedList<RuntimeWire> getCallbackWires() {
-        return callbackWires;
-    }
-
-    public void setCallbackWires(LinkedList<RuntimeWire> wires) {
-        this.callbackWires = wires;
+    public void setConversationID(Object conversationID) {
+        getTo().getReferenceParameters().setConversationID(conversationID);
     }
 
     public Object getMessageID() {
@@ -106,6 +85,44 @@ public class MessageImpl implements Message {
     public void setFaultBody(Object fault) {
         this.isFault = true;
         this.body = fault;
+    }
+
+    public EndpointReference getFrom() {
+        return from;
+    }
+
+    public void setFrom(EndpointReference from) {
+        this.from = from;
+    }
+
+    public EndpointReference getTo() {
+        return to;
+    }
+
+    public void setTo(EndpointReference to) {
+        this.to = to;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Operation op) {
+        this.operation = op;
+    }
+
+    /**
+     * @return the replyTo
+     */
+    public EndpointReference getReplyTo() {
+        return replyTo;
+    }
+
+    /**
+     * @param replyTo the replyTo to set
+     */
+    public void setReplyTo(EndpointReference replyTo) {
+        this.replyTo = replyTo;
     }
 
 }

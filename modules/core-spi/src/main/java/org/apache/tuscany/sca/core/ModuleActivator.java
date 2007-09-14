@@ -19,27 +19,26 @@
 
 package org.apache.tuscany.sca.core;
 
-import java.util.Map;
 
 /**
- * ModuleActivator represents a module that plugs into the Tuscany system. Each module should
- * provide an implementation of this interface and registry the implementation class by defining 
- * a file named as "META-INF/services/org.apache.tuscany.spi.bootstrp.ModuleActivator". The
- * content of the file is the class name of the implementation. The implementation class must
- * have a no-arg constructor. The same instance will be used to invoke all the methods during
- * different phases of the module activation.
+ * ModuleActivator represents a module that plugs into the Tuscany system. Each 
+ * module should provide an implementation of this interface and register the 
+ * ModuleActivator implementation class by defining a file named 
+ * 
+ * "META-INF/services/org.apache.tuscany.spi.bootstrp.ModuleActivator"
+ * 
+ * The content of the file is the class name of the ModuleActivator implementation. 
+ * The implementation class must have a no-arg constructor. The same instance 
+ * will be used to invoke all the methods during different phases of the module 
+ * activation. Note that the start and stop methods defined by this interface
+ * take a reference to the Tuscany SCA runtime ExtensionPointRegistry. This 
+ * gives the ModuleActivator the oppotunity to add extension points to the
+ * registry as it is requested to start up and remove them when it is requested
+ * to shut down.
  * 
  * @version $Rev$ $Date$
  */
 public interface ModuleActivator {
-    /**
-     * Get a map of the extension points defined by this module. The key is the
-     * java interface to represent the extension point and the the value is the
-     * instance of the implementation of the interface.
-     * 
-     * @return All the extension points defined by this module
-     */
-    Map<Class, Object> getExtensionPoints();
 
     /**
      * This method is invoked when the module is started by the Tuscany system.

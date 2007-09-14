@@ -22,15 +22,16 @@ package calculator;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 /**
- * @version $Rev: 529177 $ $Date: 2007-04-16 14:34:39 +0530 (Mon, 16 Apr 2007) $
+ * A claculator service server. Starts up the SCA runtime which 
+ * will start listening for RMI service requests.
  */
 public class CalculatorServer {
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting the SCA Calculator Application exposed as RMI Services...");
-        SCADomain domain = SCADomain.newInstance("CalculatorRMIServer.composite");
+        System.out.println("Starting of the SCA Calculator Application exposed as RMI Services...");
+        SCADomain scaDomain = SCADomain.newInstance("CalculatorRMIServer.composite");
         System.out.println("... Press Enter to Exit...");
         System.in.read();
-        domain.close();
+        scaDomain.close();
         System.out.println("Exited...");
         System.exit(0);
     }

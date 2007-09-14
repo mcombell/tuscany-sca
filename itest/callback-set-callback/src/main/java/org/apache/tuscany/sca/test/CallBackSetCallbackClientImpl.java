@@ -31,9 +31,9 @@ import org.osoa.sca.annotations.Service;
 public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient {
 
     @Reference
-    protected CallBackSetCalbackService aCallBackService;
+    protected ServiceReference<CallBackSetCalbackService> aCallBackService;
     @Reference
-    protected CallBackSetCallbackCallback callBack;
+    protected ServiceReference<CallBackSetCallbackCallback> callBack;
 
     public void run() {
 
@@ -93,9 +93,9 @@ public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient 
         if (aFile.exists())
             aFile.delete();
 
-        ((ServiceReference)aCallBackService).setCallback(callBack);
+        aCallBackService.setCallback(callBack);
 
-        aCallBackService.knockKnock("Knock Knock");
+        aCallBackService.getService().knockKnock("Knock Knock");
 
         // Lets give the callback a little time to complete....
 
@@ -110,6 +110,8 @@ public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient 
         }
 
         Assert.assertEquals("CallBackSetCallback - Test4", true, aFile.exists());
+
+        aCallBackService.setCallback(null);  // leave this in the default state for next test
 
     }
 
@@ -128,7 +130,7 @@ public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient 
         //
 
         try {
-            aCallBackService.knockKnock("Knock Knock");
+            aCallBackService.getService().knockKnock("Knock Knock");
         } catch (NoRegisteredCallbackException NotRegEx) {
             correctException = true;
         } catch (Exception ex) {
@@ -145,20 +147,20 @@ public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient 
 
         //
         // This test is to specify an Object that is not a service reference
-        // that does impliment
+        // that does implement
         // the callback interface. However because this callback service is
         // stateless the expected
         // result is an appropriate exception.
         //
 
         try {
-            ((ServiceReference)aCallBackService).setCallback(new CallBackSetCallbackObjectCallback());
-            aCallBackService.knockKnock("Knock Knock");
+            aCallBackService.setCallback(new CallBackSetCallbackObjectCallback());
+            aCallBackService.getService().knockKnock("Knock Knock");
         }
         //
         // This should catch an appropriate exception.
         //
-        catch (NoRegisteredCallbackException NotRegEx) {
+        catch (IllegalArgumentException goodEx) {
             correctException = true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -169,25 +171,20 @@ public class CallBackSetCallbackClientImpl implements CallBackSetCallbackClient 
     }
 
     private void test10() {
+
         //
-        // Since callbacks do not synchronously return and this test results in
-        // a failure on the service
-        // side of the fence I am using a marker file to determine the outcome.
-        // The presence of the marker
-        // file will be used for the Assertion test. If it exists then all is
-        // good.
+        // The appropriate exception should be thrown and caught on the service side.
+        // If this happens, the setCallbackIllegally() method will return true.
+        // If not, this method will return false.
         //
 
-        // Make sure the marker file is not present before starting the test.
-        File aFile = new File("target/test10_marker");
-        if (aFile.exists())
-            aFile.delete();
+        aCallBackService.setCallback(callBack);  // ensure no client-side exception
 
-        aCallBackService.setCallbackIllegally("Try to set callback on your own service reference");
+        boolean result = aCallBackService.getService().setCallbackIllegally
+                             ("Try to set callback on your own service reference");
 
-        Assert.assertEquals("CallBackSetCallback - Test10", true, aFile.exists());
+        Assert.assertEquals("CallBackSetCallback - Test10", true, result);
 
-        return;
     }
 
 }

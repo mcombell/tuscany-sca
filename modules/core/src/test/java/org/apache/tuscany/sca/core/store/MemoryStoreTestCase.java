@@ -24,9 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.core.RuntimeComponent;
-import org.apache.tuscany.sca.core.store.MemoryStore;
 import org.apache.tuscany.sca.event.RuntimeEventListener;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.store.DuplicateRecordException;
 import org.apache.tuscany.sca.store.Store;
 import org.apache.tuscany.sca.store.StoreExpirationEvent;
@@ -157,8 +156,8 @@ public class MemoryStoreTestCase extends TestCase {
         store.destroy();
     }
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
         monitor = EasyMock.createNiceMock(StoreMonitor.class);
         EasyMock.replay(monitor);
     }

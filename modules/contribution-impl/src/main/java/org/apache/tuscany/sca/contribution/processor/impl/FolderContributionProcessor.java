@@ -29,11 +29,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tuscany.contribution.ContentType;
-import org.apache.tuscany.contribution.processor.PackageProcessor;
+import org.apache.tuscany.sca.contribution.ContentType;
+import org.apache.tuscany.sca.contribution.processor.PackageProcessor;
 import org.apache.tuscany.sca.contribution.service.ContributionException;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 
+/**
+ * Folder contribution package processor
+ * 
+ * @version $Rev$ $Date$
+ */
 public class FolderContributionProcessor implements PackageProcessor {
     /**
      * Package-type that this package processor can handle
@@ -57,9 +62,19 @@ public class FolderContributionProcessor implements PackageProcessor {
     private void traverse(List<URI> fileList, File file, File root) throws IOException {
         if (file.isFile()) {
             fileList.add(root.toURI().relativize(file.toURI()));
+            
         } else if (file.isDirectory()) {
             // FIXME: Maybe we should externalize it as a property
             // Regular expression to exclude .xxx files
+            
+            String uri = root.toURI().relativize(file.toURI()).toString();
+            if (uri.endsWith("/")) {
+                uri = uri.substring(0, uri.length() - 1);
+            }
+            fileList.add(URI.create(uri));
+            
+            //FIXME Do we really need to use a regexp here to filter out
+            // file names that start one or two dots?
             File[] files = file.listFiles(FileHelper.getFileFilter("[^\u002e].*", true));
             for (int i = 0; i < files.length; i++) {
                 traverse(fileList, files[i], root);
@@ -72,9 +87,9 @@ public class FolderContributionProcessor implements PackageProcessor {
     }
 
     /**
-     * Get a list of files from the directory
+     * Get a list of artifact URI from the folder
      * 
-     * @return
+     * @return The list of artifact URI for the folder
      * @throws IOException
      */
     public List<URI> getArtifacts(URL packageSourceURL, InputStream inputStream) throws ContributionException,

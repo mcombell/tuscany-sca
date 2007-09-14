@@ -21,14 +21,48 @@ package org.apache.tuscany.sca.implementation.java.impl;
 /**
  * A factory for the Java model.
  */
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
 
 public abstract class JavaImplementationFactoryImpl implements JavaImplementationFactory {
+    
+    private List<JavaClassVisitor> visitors = new ArrayList<JavaClassVisitor>();
+    private JavaClassIntrospectorImpl introspector;
+    
+    public JavaImplementationFactoryImpl() {
+        introspector = new JavaClassIntrospectorImpl(visitors);
+    }
 
     public JavaImplementation createJavaImplementation() {
         JavaImplementation javaImplementation = new JavaImplementationImpl();
         return javaImplementation;
+    }
+    
+    public JavaImplementation createJavaImplementation(Class<?> implementationClass) throws IntrospectionException {
+        JavaImplementation javaImplementation = createJavaImplementation();
+        introspector.introspectClass(javaImplementation, implementationClass);
+        return javaImplementation;
+    }
+    
+    public void createJavaImplementation(JavaImplementation javaImplementation, Class<?> implementationClass) throws IntrospectionException {
+        introspector.introspectClass(javaImplementation, implementationClass);
+    }
+
+    public void addClassVisitor(JavaClassVisitor visitor) {
+        visitors.add(visitor);
+    }
+
+    public void removeClassVisitor(JavaClassVisitor visitor) {
+        visitors.remove(visitor);
+    }
+    
+    public List<JavaClassVisitor> getClassVisitors() {
+        return visitors;
     }
 
 }

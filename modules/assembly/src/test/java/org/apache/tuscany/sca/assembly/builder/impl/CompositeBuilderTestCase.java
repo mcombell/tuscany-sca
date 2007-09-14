@@ -29,50 +29,46 @@ import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.builder.impl.DefaultCompositeBuilder;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
 
 public class CompositeBuilderTestCase extends TestCase {
     
-    private DefaultCompositeBuilder compositeUtil;
-    private AssemblyFactory factory;
+    private AssemblyFactory assemblyFactory;
     
+    @Override
     protected void setUp() throws Exception {
-        factory = new DefaultAssemblyFactory();
-        
-        compositeUtil = new DefaultCompositeBuilder(factory, new DefaultInterfaceContractMapper(), null);
+        assemblyFactory = new DefaultAssemblyFactory();
     }
     
+    @Override
     protected void tearDown() throws Exception {
-        compositeUtil = null;
-        factory = null;
+        assemblyFactory = null;
     }
     
     public void testFuseIncludes() {
-        Composite c1 = factory.createComposite();
+        Composite c1 = assemblyFactory.createComposite();
         c1.setName(new QName("http://foo", "C1"));
-        Component a = factory.createComponent();
+        Component a = assemblyFactory.createComponent();
         a.setName("a");
         c1.getComponents().add(a);
-        CompositeService s = factory.createCompositeService();
+        CompositeService s = assemblyFactory.createCompositeService();
         s.setName("s");
         c1.getServices().add(s);
-        CompositeReference r = factory.createCompositeReference();
+        CompositeReference r = assemblyFactory.createCompositeReference();
         r.setName("r");
         c1.getReferences().add(r);
 
-        Composite c2 = factory.createComposite();
+        Composite c2 = assemblyFactory.createComposite();
         c2.setName(new QName("http://foo", "C2"));
         c1.getIncludes().add(c2);
-        Component b = factory.createComponent();
+        Component b = assemblyFactory.createComponent();
         b.setName("b");
         c2.getComponents().add(b);
         
-        Composite c = factory.createComposite();
+        Composite c = assemblyFactory.createComposite();
         c.setName(new QName("http://foo", "C"));
         c.getIncludes().add(c1);
         
-        compositeUtil.fuseIncludes(c);
+        new CompositeIncludeBuilderImpl(null).fuseIncludes(c);
         
         assertTrue(c.getComponents().get(0).getName().equals("a"));
         assertTrue(c.getComponents().get(1).getName().equals("b"));
@@ -81,40 +77,40 @@ public class CompositeBuilderTestCase extends TestCase {
     }
     
     public void testExpandComposites() {
-        Composite c1 = factory.createComposite();
+        Composite c1 = assemblyFactory.createComposite();
         c1.setName(new QName("http://foo", "C1"));
-        Component a = factory.createComponent();
+        Component a = assemblyFactory.createComponent();
         a.setName("a");
         c1.getComponents().add(a);
-        CompositeService s = factory.createCompositeService();
+        CompositeService s = assemblyFactory.createCompositeService();
         s.setName("s");
         c1.getServices().add(s);
-        CompositeReference r = factory.createCompositeReference();
+        CompositeReference r = assemblyFactory.createCompositeReference();
         r.setName("r");
         c1.getReferences().add(r);
 
-        Composite c2 = factory.createComposite();
+        Composite c2 = assemblyFactory.createComposite();
         c2.setName(new QName("http://foo", "C2"));
-        Component b = factory.createComponent();
+        Component b = assemblyFactory.createComponent();
         b.setName("b");
         c2.getComponents().add(b);
         
-        Composite c = factory.createComposite();
+        Composite c = assemblyFactory.createComposite();
         c.setName(new QName("http://foo", "C"));
-        Component x = factory.createComponent();
+        Component x = assemblyFactory.createComponent();
         x.setName("x");
         x.setImplementation(c1);
         c.getComponents().add(x);
-        Component y = factory.createComponent();
+        Component y = assemblyFactory.createComponent();
         y.setName("y");
         y.setImplementation(c2);
         c.getComponents().add(y);
-        Component z = factory.createComponent();
+        Component z = assemblyFactory.createComponent();
         z.setName("z");
         z.setImplementation(c1);
         c.getComponents().add(z);
         
-        compositeUtil.expandComposites(c);
+        new CompositeCloneBuilderImpl(null).expandCompositeImplementations(c);
         
         assertTrue(c.getComponents().get(0).getImplementation() != c1);
         assertTrue(c.getComponents().get(1).getImplementation() != c2);

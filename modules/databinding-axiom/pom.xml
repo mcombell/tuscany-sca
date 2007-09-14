@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-databinding-axiom</artifactId>
-    <name>Apache Tuscany Data Binding for Axiom</name>
+    <name>Apache Tuscany SCA Data Binding for Axiom</name>
 
     <dependencies>
         <dependency>
@@ -55,7 +55,7 @@
                     <artifactId>xercesImpl</artifactId>
                 </exclusion>
             </exclusions>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
         </dependency>
 
         <dependency>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-impl</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>
 

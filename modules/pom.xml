@@ -39,17 +39,28 @@
                 <module>assembly</module>
                 <module>assembly-java-dsl</module>
                 <module>assembly-xml</module>
-                <!--
+                <module>assembly-xsd</module>
+                <module>binding-dwr</module>
+                <module>binding-ejb</module>
+                <module>binding-feed</module>
+                <module>binding-http</module>
                 <module>binding-jms</module>
-		-->
                 <module>binding-jsonrpc</module>
+                <module>binding-notification</module>
                 <module>binding-rmi</module>
+                <module>binding-sca</module>
+                <module>binding-sca-axis2</module>
+                <!--
+                <module>binding-sca-jms</module>
+                -->
+                <module>binding-sca-xml</module>
                 <module>binding-ws</module>
                 <module>binding-ws-axis2</module>
                 <module>binding-ws-xml</module>
-                <module>commonj-api</module>
                 <module>contribution</module>
                 <module>contribution-impl</module>
+                <module>contribution-namespace</module>
+                <module>contribution-java</module>
                 <module>core</module>
                 <module>core-databinding</module>
                 <module>core-spi</module>
@@ -59,27 +70,48 @@
                 <module>databinding-jaxb</module>
                 <module>databinding-sdo</module>
                 <module>databinding-sdo-axiom</module>
+                <module>databinding-json</module>
+                <!--
+                <module>databinding-saxon</module>
+                -->
+                <module>databinding-xmlbeans</module>
+                <module>data-engine-helper</module>
                 <!--
                 <module>discovery-jms</module>
                 -->
+                <module>domain</module>
+                <module>domain-impl</module>
+                <module>extension-helper</module>
                 <module>host-embedded</module>
+                <!--
+                <module>host-home</module>
+                -->
                 <module>host-http</module>
+                <module>host-rmi</module>
                 <module>host-webapp</module>
-                <module>http-jetty</module>
-                <module>http-tomcat</module>
+                <module>host-jetty</module>
+                <module>host-tomcat</module>
                 <module>interface</module>
                 <module>interface-java</module>
                 <module>interface-java-xml</module>
-                <module>interface-java-runtime</module>
                 <module>interface-wsdl</module>
                 <module>interface-wsdl-xml</module>
-                <module>interface-wsdl-runtime</module>
+                <module>implementation-bpel</module>
+                <module>implementation-das</module>
+                <module>implementation-data</module>
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
                 <module>implementation-java-runtime</module>
+                <module>implementation-node</module>
+                <module>implementation-node-xml</module>
+                <module>implementation-node-runtime</module>
+                <module>implementation-notification</module>
+                <module>implementation-osgi</module>
+                <module>implementation-resource</module>
                 <module>implementation-script</module>
-                <!--
                 <module>implementation-spring</module>
+                <!--
+                <module>implementation-xquery</module>
                 -->
                 <module>java2wsdl</module>
                 <!--
@@ -87,9 +119,15 @@
                 -->
                 <module>maven-java2wsdl</module>
                 <module>maven-wsdl2java</module>
+                <module>node</module>
+                <module>node-impl</module>
                 <module>policy</module>
-		<module>host-rmi</module>
+                <module>policy-xml</module>
+		<module>policy-security</module>
                 <module>sca-api</module>
+		<module>sca-definitions</module>
+                <module>topology</module>
+                <module>topology-xml</module>
                 <module>wsdl2java</module>
             </modules>
         </profile>

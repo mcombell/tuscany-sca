@@ -18,10 +18,8 @@
  */
 package org.apache.tuscany.sca.invocation;
 
-import java.util.LinkedList;
-
-import org.apache.tuscany.sca.core.RuntimeWire;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.runtime.EndpointReference;
 
 /**
  * Represents a request, response, or exception flowing through a wire
@@ -32,72 +30,90 @@ public interface Message {
 
     /**
      * Returns the body of the message, which will be the payload or parameters associated with the wire
+     * @return The body of the message
      */
     <T> T getBody();
 
     /**
      * Sets the body of the message.
+     * @param body The body of the message
      */
     <T> void setBody(T body);
 
     /**
-     * Returns the context associated with this invocation.
-     * @return the context associated with this invocation
+     * @deprecated
+     * Get the conversation id
+     * @return The conversation ID
      */
-    WorkContext getWorkContext();
+    @Deprecated
+    Object getConversationID();
 
     /**
-     * Sets the context associated with this invocation.
-     * @param workContext the context associated with this invocation
+     * @deprecated
+     * Set the conversation id
+     * @param conversationId The conversation ID
      */
-    void setWorkContext(WorkContext workContext);
+    @Deprecated
+    void setConversationID(Object conversationId);
 
     /**
-     * Adds a callback wire to the ordered list of callbacks for the current invocation
-     *
-     * @param wire the callback wire
+     * Get the end point reference of the source reference
+     * @return The end point reference of the reference originating the message
      */
-    void pushCallbackWire(RuntimeWire wire);
+    EndpointReference getFrom();
 
     /**
-     * Returns the ordered list of callback wires for the current invocation
-     *
-     * @return the ordered list of callback wires for the current invocation
+     * Set the end point reference of the reference originating the message
+     * @param from The end point reference of the reference originating the message
      */
-    LinkedList<RuntimeWire> getCallbackWires();
+    void setFrom(EndpointReference from);
 
     /**
-     * Sets the ordered list of callback wires for the current invocation
-     *
-     * @param wires the ordered list of callback wires for the current invocation
+     * Get the end point reference of target service
+     * @return The end point reference of the service that the message targets
      */
-    void setCallbackWires(LinkedList<RuntimeWire> wires);
+    EndpointReference getTo();
+
+    /**
+     * Set the end point reference of target service
+     * @param to The end point reference of the service that the message targets
+     */
+    void setTo(EndpointReference to);
+    
+    EndpointReference getReplyTo();
+    void setReplyTo(EndpointReference replyTo);
 
     /**
      * Returns the id of the message
+     * @return The message Id
      */
     Object getMessageID();
 
     /**
      * Sets the id of the message
+     * @param messageId The message ID
      */
     void setMessageID(Object messageId);
 
     /**
      * Returns the correlation id of the message or null if one is not available. Correlation ids are used by transports
      * for message routing.
+     * @return The correlation Id
      */
+    @Deprecated
     Object getCorrelationID();
 
     /**
      * Sets the correlation id of the message. Correlation ids are used by transports for message routing.
+     * @param correlationId The correlation Id
      */
+    @Deprecated
     void setCorrelationID(Object correlationId);
 
     /**
      * Determines if the message represents a fault/exception
      *
-     * @return true if the message body is a fault object, false if the body is a normal payload
+     * @return true If the message body is a fault object, false if the body is a normal payload
      */
     boolean isFault();
 
@@ -109,18 +125,17 @@ public interface Message {
     <T> void setFaultBody(T fault);
 
     /**
-     * Returns the conversational sequence the message is associated with, NONE, START, CONTINUE, or END on {@link
-     * TargetInvoker}
+     * Returns the operation that created the message.
      *
-     * @return the conversational sequence the message is associated with
+     * @return The operation that created the message
      */
-    ConversationSequence getConversationSequence();
+    Operation getOperation();
 
     /**
-     * Returns the conversational sequence the message is associated with, NONE, START, CONTINUE, or END
+     * Sets the operation that created the message.
      *
-     * @param sequence the conversational sequence
+     * @param op The operation that created the message
      */
-    void setConversationSequence(ConversationSequence sequence);
+    void setOperation(Operation op);
 
 }

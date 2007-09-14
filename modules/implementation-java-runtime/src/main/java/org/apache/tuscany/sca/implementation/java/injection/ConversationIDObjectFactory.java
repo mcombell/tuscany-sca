@@ -18,19 +18,15 @@
  */
 package org.apache.tuscany.sca.implementation.java.injection;
 
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.spi.ObjectFactory;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
+import org.apache.tuscany.sca.core.invocation.ThreadMessageContext;
 
-public class ConversationIDObjectFactory implements ObjectFactory<String> {
-    
-    private WorkContext workContext;
-    
-    public ConversationIDObjectFactory(WorkContext workContext) {
-        this.workContext = workContext;
+public class ConversationIDObjectFactory implements ObjectFactory {
+
+    public ConversationIDObjectFactory() {
     }
 
-    public String getInstance() {
-        return (String)workContext.getIdentifier(Scope.CONVERSATION);
+    public Object getInstance() {
+        return ThreadMessageContext.getMessageContext().getConversationID();
     }
 }

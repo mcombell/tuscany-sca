@@ -26,6 +26,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-interface</artifactId>
-    <name>Apache Tuscany Interface Model</name>
-
+    <name>Apache Tuscany SCA Interface Model</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-policy</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

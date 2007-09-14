@@ -18,8 +18,10 @@
  */
 package org.apache.tuscany.tools.wsdl2java.generate;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,10 +31,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sdo.helper.XSDHelperImpl;
+import org.apache.tuscany.sdo.generate.XSD2JavaGenerator;
+import org.apache.tuscany.sdo.helper.HelperContextImpl;
 import org.apache.tuscany.sdo.util.DataObjectUtil;
 import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
@@ -51,9 +55,18 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 
+import commonj.sdo.helper.HelperContext;
 import commonj.sdo.helper.XSDHelper;
 
 public class WSDL2JavaGenerator {
+    //Note: Dynamic SDO is defined as 0x4000 to avoid conflict with XSD2Java genOptions
+    static protected final int DYNAMIC_SDO = 0x1;
+    static protected final int GENERATE_SDO = 0x2;
+    static protected final int VERBOSE_MODE = 0x4;
+    static protected final String NO_GEN_PARM = "-noGenerate";
+    static protected final String TARGET_DIR_PARM = "-targetDirectory";
+    static protected final String JAVA_PACKAGE_PARM = "-javaPackage";
+    static protected final String ALL_NAMESPACES_PARM = "-schemaNamespace all";
 
     /**
      * Generate Java interfaces from WSDL Usage arguments: [ -targetDirectory
@@ -77,6 +90,9 @@ public class WSDL2JavaGenerator {
         String targetDirectory = null;
         String wsdlJavaPackage = null;
         String xsdJavaPackage = null;
+        String sdoGenArgs = null;
+        String sdoGenArgsString = null;
+        int genOptions = 0;
 
         int index = 0;
         for (; index < args.length && args[index].startsWith("-"); ++index) {
@@ -86,6 +102,14 @@ public class WSDL2JavaGenerator {
                 targetDirectory = args[++index];
             } else if (args[index].equalsIgnoreCase("-javaPackage")) {
                 wsdlJavaPackage = args[++index];
+            } else if (args[index].equalsIgnoreCase("-dynamicSDO")) {
+                genOptions |= DYNAMIC_SDO;
+            } else if (args[index].equalsIgnoreCase("-generateSDO")){
+                genOptions |= GENERATE_SDO;
+            } else if (args[index].equalsIgnoreCase("-sdoGenArgs")){
+                sdoGenArgs = args[++index];
+            } else if (args[index].equalsIgnoreCase("-verbose")){
+               genOptions |= VERBOSE_MODE; 
             }
             // else if (...)
             else {
@@ -93,30 +117,162 @@ public class WSDL2JavaGenerator {
                 return;
             }
         }
-
+        if (sdoGenArgs!=null && (GENERATE_SDO & genOptions)== 0){
+            genOptions |= GENERATE_SDO;
+        }
+        
+        if (targetDirectory == null) {
+            targetDirectory = ".";
+        }
         String wsdlFileName = args[index];
-        if (wsdlFileName == null || targetDirectory == null) {
+        if (wsdlFileName == null || ((DYNAMIC_SDO & genOptions)!=0 && (GENERATE_SDO & genOptions)!= 0)) {
             printUsage();
             return;
         }
+        if (sdoGenArgs !=null){
+            try {
+                    File inFile = new File(sdoGenArgs).getAbsoluteFile();
+                    FileReader inputFile = new FileReader(inFile);
+                    BufferedReader bufRead = new BufferedReader(inputFile);
+                    StringBuffer fileContents= new StringBuffer();
+                    String line;
+                    while ((line = bufRead.readLine())!=null){
+                        fileContents.append(line + " ");
+                    }
+                    sdoGenArgsString = fileContents.toString();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new IllegalArgumentException(e);
+                }
+        } else {
+                sdoGenArgsString = null;
+        }
+        
+        if ((DYNAMIC_SDO & genOptions) != 0){
+            generateDynamicFromWSDL(wsdlFileName, portName!=null? new String[]{portName}:null, targetDirectory, wsdlJavaPackage, xsdJavaPackage, genOptions);
+        } else {
+            generateFromWSDL(wsdlFileName, portName!=null? new String[]{portName}:null, targetDirectory, wsdlJavaPackage, genOptions, sdoGenArgsString);   
+        }
+        
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void generateFromWSDL(String wsdlFileName, String[] ports, String targetDirectory, String wsdlJavaPackage, int genOptions, String sdoGenArgsString)
+    {
+        try {        
+                if (targetDirectory == null) {
+                    targetDirectory = new File(wsdlFileName).getCanonicalFile().getParent();
+                } else {
+                    targetDirectory = new File(targetDirectory).getCanonicalPath();
+                }
+                          
+                // Populate the typeMapping table that will be given to the Axis2 WSDL2Java 
+                Map<QName, SDODataBindingTypeMappingEntry> typeMapping =
+                                        new HashMap<QName, SDODataBindingTypeMappingEntry>();
+                StringBuffer buildCommand = new StringBuffer();
+                //build XSD command lines
+                //build generic command for simple case & dynamic SDO
+                buildCommand.append(ALL_NAMESPACES_PARM);
+                if (sdoGenArgsString == null){
+                     buildCommand.append(" " + TARGET_DIR_PARM + " " + targetDirectory);
+                     if (wsdlJavaPackage != null && (genOptions & GENERATE_SDO)!=0){
+                         buildCommand.append(" " + JAVA_PACKAGE_PARM + " " + wsdlJavaPackage);
+                     }
+                     if ((genOptions & GENERATE_SDO)==0){
+                          buildCommand.append(" ");
+                          buildCommand.append(NO_GEN_PARM);        
+                     }
+                } else {
+                    buildCommand.append(" ");
+                    buildCommand.append(sdoGenArgsString);
+                }
+                
+                //TUSCANY-1642 - We shouldn't split the wsdlFileName as it my contain a filename with spaces
+                Vector sdoCommand = new Vector(java.util.Arrays.asList(buildCommand.toString().split("\\s+")));
+                sdoCommand.add(wsdlFileName);
 
-        generateFromWSDL(wsdlFileName, portName!=null? new String[]{portName}:null, targetDirectory, wsdlJavaPackage, xsdJavaPackage, 0);
-
+                String[] sdoGenCommand = new String[sdoCommand.size()];
+                sdoCommand.toArray(sdoGenCommand);  
+                
+                if ((genOptions & VERBOSE_MODE)!=0){
+                        System.out.println("Options passed to XSD2Java: ");
+                        for (int i=0; i<sdoGenCommand.length; i++){ System.out.println("\"" + sdoGenCommand[i] + "\"");}        
+                }
+                
+                XSD2JavaGenerator codeGen = new XSD2JavaGenerator();
+                try {
+                        codeGen.generateFromXMLSchema( sdoGenCommand );  
+                } catch (IllegalArgumentException e) {
+                            System.out.println("Specified Invalid XSD2Java Arguments.\nFollow the XSD2Java usage, omitting the wsdl/xsd file argument.");
+                            throw new IllegalArgumentException(e);
+                }
+                                    
+                List packages = codeGen.getGeneratedPackageInfo();
+                     
+                for (Iterator iter = packages.iterator(); iter.hasNext();)
+                {
+                    XSD2JavaGenerator.GeneratedPackage packageInfo = (XSD2JavaGenerator.GeneratedPackage)iter.next();
+                    for (Iterator iterClass = packageInfo.getClasses().iterator(); iterClass.hasNext();)
+                    {
+                        XSD2JavaGenerator.GeneratedPackage.PackageClassInfo classInfo = (XSD2JavaGenerator.GeneratedPackage.PackageClassInfo)iterClass.next();
+                        SDODataBindingTypeMappingEntry typeMappingEntry;
+                        if ((genOptions & DYNAMIC_SDO)==0){
+                            
+                            typeMappingEntry = new SDODataBindingTypeMappingEntry(classInfo.getClassName(), classInfo.getAnonymous(), classInfo.getProperties());
+                        } else {
+                            // TO DO implement dynamic sdo case
+                            typeMappingEntry = null;
+                            System.out.println();
+                        }                              
+                        QName qname = new QName(packageInfo.getNamespace(),classInfo.getName());
+                        
+                        //FIXME Workaround for JIRA TUSCANY-1673
+                        // Do not overwrite a typemapping entry describing a element typed by an anonymous
+                        // complex type with a typemapping entry describing a complex type named like the
+                        // element
+                        SDODataBindingTypeMappingEntry existingTypeMapping = typeMapping.get(qname);
+                        if (existingTypeMapping == null || !existingTypeMapping.isAnonymous()) {
+                            typeMapping.put(qname, typeMappingEntry);
+                        }
+                    }          
+                }
+       
+                JavaInterfaceGenerator codeGenerator = new JavaInterfaceGenerator(wsdlFileName,
+                                                                                  ports,
+                                                                                  targetDirectory,
+                                                                                  wsdlJavaPackage,
+                                                                                  typeMapping);
+                codeGenerator.generate();
+        } catch (Exception e) {
+                e.printStackTrace();
+                throw new IllegalArgumentException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
     public static void generateFromWSDL(String wsdlFileName, String targetDirectory,
             String wsdlJavaPackage,
             String xsdJavaPackage, int genOptions){
-        generateFromWSDL( wsdlFileName, null, targetDirectory,
-                wsdlJavaPackage,
-                xsdJavaPackage, genOptions);
+        String sdoGenArgsString = null;
+        if (xsdJavaPackage != null){
+            sdoGenArgsString = JAVA_PACKAGE_PARM + " " + xsdJavaPackage;
+        }
+        generateFromWSDL( wsdlFileName, null, targetDirectory, wsdlJavaPackage, genOptions, sdoGenArgsString);
         
     }
     
+    public static void generateFromWSDL(String wsdlFileName, String[] ports,
+                    String targetDirectory, String wsdlJavaPackage,
+                    String xsdJavaPackage, int genOptions) {
+        String sdoGenArgsString = null;
+        if (xsdJavaPackage != null){
+           sdoGenArgsString = JAVA_PACKAGE_PARM + " " + xsdJavaPackage;
+        }
+        generateFromWSDL( wsdlFileName, null, targetDirectory, wsdlJavaPackage, genOptions, sdoGenArgsString);
+    }
     
     @SuppressWarnings("unchecked")
-      public static void generateFromWSDL(String wsdlFileName, String[] ports,
+      public static void generateDynamicFromWSDL(String wsdlFileName, String[] ports,
                  String targetDirectory, String wsdlJavaPackage,
                  String xsdJavaPackage, int genOptions) 
      {
@@ -125,7 +281,8 @@ public class WSDL2JavaGenerator {
         DataObjectUtil.initRuntime();
         EPackage.Registry packageRegistry = new EPackageRegistryImpl(EPackage.Registry.INSTANCE);
         ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(packageRegistry);
-        XSDHelper xsdHelper = new XSDHelperImpl(extendedMetaData, null);
+        HelperContext context = new HelperContextImpl(extendedMetaData, false);
+        XSDHelper xsdHelper = context.getXSDHelper();
 
         try {
             
@@ -174,8 +331,9 @@ public class WSDL2JavaGenerator {
                     for (GenClass genClass : (List<GenClass>)currentGenPackage.getGenClasses()) {
                         QName qname = new QName(extendedMetaData.getNamespace(currentEPackage),
                                                 extendedMetaData.getName(genClass.getEcoreClass()));
-                        String interfaceName = currentGenPackage.getInterfacePackageName() + '.'
-                                               + genClass.getInterfaceName();
+                        String interfaceName = (DYNAMIC_SDO & genOptions) == DYNAMIC_SDO ? "commonj.sdo.DataObject" : currentGenPackage
+                                .getInterfacePackageName()
+                                + '.' + genClass.getInterfaceName();
                         SDODataBindingTypeMappingEntry typeMappingEntry =
                                 new SDODataBindingTypeMappingEntry(interfaceName, false, null);
                         typeMapping.put(qname, typeMappingEntry);
@@ -195,7 +353,8 @@ public class WSDL2JavaGenerator {
                                 GenClass genClass = genClasses.get(elementType);
                                 QName qname = new QName(extendedMetaData.getNamespace(currentEPackage),
                                         extendedMetaData.getName(element));
-                                String interfaceName = genClass.getGenPackage().getInterfacePackageName()
+                                String interfaceName = (DYNAMIC_SDO & genOptions) == DYNAMIC_SDO ? "commonj.sdo.DataObject" : genClass
+                                        .getGenPackage().getInterfacePackageName()
                                 + '.' + genClass.getInterfaceName();
                                 boolean anonymous = extendedMetaData.isAnonymous(eClass);
                                 
@@ -205,7 +364,8 @@ public class WSDL2JavaGenerator {
                                     EClassifier propertyType = feature.getEType();
                                     if (propertyType instanceof EClass) {
                                         GenClass propertyGenClass = genClasses.get(propertyType);
-                                        String propertyClassName = propertyGenClass.getGenPackage().getInterfacePackageName()
+                                        String propertyClassName = (DYNAMIC_SDO & genOptions) == DYNAMIC_SDO ? "commonj.sdo.DataObject"
+                                                : propertyGenClass.getGenPackage().getInterfacePackageName() + '.'
                                                                + '.' + propertyGenClass.getInterfaceName();
                                         propertyClassNames.add(propertyClassName);
                                     } else if (propertyType instanceof EClassifier) {
@@ -241,10 +401,12 @@ public class WSDL2JavaGenerator {
                                                                                   typeMapping);
                 codeGenerator.generate();
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new IllegalArgumentException(e);
             }
 
         } catch (IOException e) {
+                e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
     }
@@ -325,6 +487,21 @@ public class WSDL2JavaGenerator {
         }
         return safeQualifiedName.toString();
     }
+    /*
+     * Converts myClassName to MyClassName
+     */
+    public static String normalizeClassName(String className) {
+
+        StringBuffer normalizedClassName = new StringBuffer();
+        
+        String beginPart = className.substring(0,1);
+        String endPart = className.substring(1);
+        
+        normalizedClassName.append(beginPart.toUpperCase());
+        normalizedClassName.append(endPart);
+
+        return normalizedClassName.toString();
+    }
 
     protected static void printDiagnostic(Diagnostic diagnostic, String indent) {
         System.out.print(indent);
@@ -338,11 +515,14 @@ public class WSDL2JavaGenerator {
         System.out.println("Usage arguments:");
         System.out.println("  [ -targetDirectory <target-root-directory> ]");
         System.out.println("  [ -javaPackage <java-package-name> ]");
+        System.out.println("  [ -dynamicSDO | -generateSDO [ -sdoGenArgs <command-file-name> ]]");
+        System.out.println("  [ -verbose ]");
         System.out.println("  <wsdl-file>");
         System.out.println("");
+        System.out.println("Where <command-file-name> is a text file containing valid XSD2Java command\narguments (w/o the wsdl/xsd file name)");
         System.out.println("For example:");
         System.out.println("");
-        System.out.println("  generate somedir/somefile.wsdl");
+        System.out.println("    WSDL2JavaGenerator -targetDirectory myDir somedir/somefile.wsdl");
     }
 
 

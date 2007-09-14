@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * 
  * @version $Rev$ $Date$
  */
-public interface Component extends Base, IntentAttachPoint, PolicySetAttachPoint, Visitable {
+public interface Component extends Base, Extensible, IntentAttachPoint, PolicySetAttachPoint, Cloneable {
     
     /**
      * Returns the URI of the component.
@@ -113,14 +113,21 @@ public interface Component extends Base, IntentAttachPoint, PolicySetAttachPoint
      * 
      * @return whether component references should be autowired.
      */
+    @Deprecated
     boolean isAutowire();
+    
+    /**
+     * Return the Boolean value of autowire
+     * @return null/TRUE/FALSE
+     */
+    Boolean getAutowire();
 
     /**
      * Sets whether component references should be autowired.
      * 
      * @param autowire whether component references should be autowired
      */
-    void setAutowire(boolean autowire);
+    void setAutowire(Boolean autowire);
 
     /**
      * Returns a clone of the component.

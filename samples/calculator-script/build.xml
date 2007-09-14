@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="calculator-script" default="run">
+<project name="calculator-script" default="compile">
     <property name="test.class" value="calculator.CalculatorClient" />
 	<property name="test.jar"   value="sample-calculator-script.jar" />
 	
@@ -37,6 +37,11 @@
         <copy todir="target/classes">
             <fileset dir="src/main/resources"/>
         </copy>
+        <jar destfile="target/${test.jar}" basedir="target/classes">
+            <manifest>
+                <attribute name="Main-Class" value="${test.class}" /> 
+            </manifest>
+        </jar>    	
     </target>	
 	
     <target name="run-classes">

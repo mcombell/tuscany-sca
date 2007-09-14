@@ -20,6 +20,7 @@ package org.apache.tuscany.sca.core.wire;
 
 import junit.framework.TestCase;
 
+import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
 import org.apache.tuscany.sca.core.invocation.CallbackInterfaceInterceptor;
 import org.apache.tuscany.sca.core.invocation.MessageFactoryImpl;
 import org.apache.tuscany.sca.invocation.Interceptor;
@@ -32,20 +33,26 @@ import org.osoa.sca.NoRegisteredCallbackException;
  */
 public class CallbackInterfaceInterceptorTestCase extends TestCase {
 
-    public void testImplements() {
-        CallbackInterfaceInterceptor interceptor = new CallbackInterfaceInterceptor(true);
+    public void testHasCallbackObject() {
+        CallbackInterfaceInterceptor interceptor = new CallbackInterfaceInterceptor();
         Interceptor next = EasyMock.createMock(Interceptor.class);
         EasyMock.expect(next.invoke(EasyMock.isA(Message.class))).andReturn(null);
         EasyMock.replay(next);
         interceptor.setNext(next);
-        interceptor.invoke(new MessageFactoryImpl().createMessage());
+        Message msg = new MessageFactoryImpl().createMessage();
+        msg.setFrom(new EndpointReferenceImpl("uri"));
+        msg.getTo().getReferenceParameters().setCallbackObjectID("java:" + System.identityHashCode("ABC"));
+        interceptor.invoke(msg);
         EasyMock.verify(next);
     }
 
-    public void testDoesNotImplement() {
-        CallbackInterfaceInterceptor interceptor = new CallbackInterfaceInterceptor(false);
+    public void testNoCallbackObject() {
+        CallbackInterfaceInterceptor interceptor = new CallbackInterfaceInterceptor();
+        Message msg = new MessageFactoryImpl().createMessage();
+        msg.setFrom(new EndpointReferenceImpl("uri"));
+        msg.getTo().getReferenceParameters().setCallbackObjectID(null);
         try {
-            interceptor.invoke(new MessageFactoryImpl().createMessage());
+            interceptor.invoke(msg);
             fail();
         } catch (NoRegisteredCallbackException e) {
             // expected

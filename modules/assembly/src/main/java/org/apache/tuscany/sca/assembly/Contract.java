@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * 
  * @version $Rev$ $Date$
  */
-public interface Contract extends AbstractContract, PolicySetAttachPoint {
+public interface Contract extends AbstractContract, PolicySetAttachPoint, Cloneable {
 
     /**
      * Returns the bindings supported by this contract.
@@ -47,6 +47,16 @@ public interface Contract extends AbstractContract, PolicySetAttachPoint {
     <B> B getBinding(Class<B> bindingClass);
 
     /**
+     * Returns a callback binding of the specified type or null if there is no such
+     * callback binding configured on this contract.
+     * 
+     * @param <B> the callback binding type
+     * @param bindingClass the callback binding type class
+     * @return the callback binding or null if there is no callback binding of the specified type
+     */
+    <B> B getCallbackBinding(Class<B> bindingClass);
+
+    /**
      * Returns a callback definition of the bindings to use for callbacks.
      * 
      * @return a definition of the bindings to use for callbacks
@@ -59,5 +69,13 @@ public interface Contract extends AbstractContract, PolicySetAttachPoint {
      * @param callback a definition of the bindings to use for callbacks
      */
     void setCallback(Callback callback);
+
+    /**
+     * Returns a clone of the contract.
+     * 
+     * @return a clone of the reference
+     * @throws CloneNotSupportedException
+     */
+    Object clone() throws CloneNotSupportedException;
 
 }

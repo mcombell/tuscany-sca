@@ -9,7 +9,7 @@ first.
 If you just want to run it to see what happens open a command prompt, navigate
 to this sample directory and do:
 
-ant 
+ant run
 
 OR if you don't have ant, on Windows do
 
@@ -32,19 +32,23 @@ simple-callback/
     main/
       java/
         simplecallback/
-          MyCient.java            - client interface 
+          MyClient.java           - client interface 
           MyClientImpl.java       - implements the client and service callback
                                     interfaces
           MyService.java          - service interface
           MyServiceCallback.java  - service callback interface, implemented by the 
                                     client
-          MyServiceImple.java     - implements the service interface
+          MyServiceImpl.java      - implements the service interface
           SimpleCallbackClient.java - starts the SCA Runtime and 
                                     deploys the simplecallback.composite. 
                                     It then calls MyClientComponent which in turn
                                     calls MyServiceComponent
       resources/
-        simplecallbac.composite   - the SCA assembly for this sample
+        simplecallback.composite  - the SCA assembly for this sample
+    test/
+      java/
+        simplecallback/
+          SimpleCallbackTestCase.java - JUnit test case 
   simple-callback.png             - a pictorial representation of the sample 
                                     .composite file
   build.xml                       - the Ant build file
@@ -56,7 +60,8 @@ With the binary distribution the sample can be built and run using Ant as
 follows
 
 cd simple-callback
-ant 
+ant compile
+ant run
 
 You should see the following output from the run target.
 

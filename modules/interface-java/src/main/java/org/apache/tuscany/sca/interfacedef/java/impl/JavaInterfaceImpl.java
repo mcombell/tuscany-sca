@@ -68,6 +68,7 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
         this.callbackClass = callbackClass;
     }
     
+    @Override
     public String toString() {
         return getName();
     }
@@ -91,4 +92,10 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
             return false;
         }
     }
+
+    @Override
+    public JavaInterfaceImpl clone() throws CloneNotSupportedException {
+        return (JavaInterfaceImpl) super.clone();
+    }
+
 }

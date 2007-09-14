@@ -18,13 +18,10 @@
  */
 package org.apache.tuscany.sca.core.scope;
 
-import org.apache.tuscany.sca.core.RuntimeComponent;
+import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.core.event.HttpSessionEnd;
 import org.apache.tuscany.sca.event.Event;
-import org.apache.tuscany.sca.scope.InstanceWrapper;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.spi.component.TargetResolutionException;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
  * A scope context which manages atomic component instances keyed on HTTP
@@ -33,21 +30,22 @@ import org.apache.tuscany.sca.spi.component.WorkContext;
  * @version $Rev$ $Date$
  */
 public class HttpSessionScopeContainer extends AbstractScopeContainer<Object> {
-    private final WorkContext workContext;
 
-    public HttpSessionScopeContainer(WorkContext workContext, RuntimeComponent component) {
+    public HttpSessionScopeContainer(RuntimeComponent component) {
         super(Scope.SESSION, component);
-        this.workContext = workContext;
     }
 
+    @Override
     public void onEvent(Event event) {
         checkInit();
         if (event instanceof HttpSessionEnd) {
-            Object key = ((HttpSessionEnd)event).getSessionID();
-            workContext.clearIdentifier(key);
+            //FIXME key is not used
+            //Object key = ((HttpSessionEnd)event).getSessionID();
+            // FIXME: Remove the session id
         }
     }
 
+    @Override
     public synchronized void start() {
         if (lifecycleState != UNINITIALIZED && lifecycleState != STOPPED) {
             throw new IllegalStateException("Scope must be in UNINITIALIZED or STOPPED state [" + lifecycleState + "]");
@@ -55,12 +53,15 @@ public class HttpSessionScopeContainer extends AbstractScopeContainer<Object> {
         lifecycleState = RUNNING;
     }
 
+    @Override
     public synchronized void stop() {
         lifecycleState = STOPPED;
     }
 
     protected InstanceWrapper getInstanceWrapper(boolean create) throws TargetResolutionException {
-        Object key = workContext.getIdentifier(Scope.SESSION);
+//        Object key = workContext.getIdentifier(Scope.SESSION);
+        // FIXME: Need to fix this
+        Object key ="http-session-id";
         assert key != null : "HTTP session key not bound in work context";
         InstanceWrapper ctx = wrappers.get(key);
         if (ctx == null && !create) {

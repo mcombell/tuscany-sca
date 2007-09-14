@@ -19,33 +19,39 @@
 
 package org.apache.tuscany.sca.assembly.xml;
 
+import java.net.URI;
 import java.net.URL;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.ValidatorHandler;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.DefaultURLArtifactProcessorExtensionPoint;
-import org.apache.tuscany.contribution.processor.ExtensibleStAXArtifactProcessor;
-import org.apache.tuscany.contribution.processor.ExtensibleURLArtifactProcessor;
-import org.apache.tuscany.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
-import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
+import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.DefaultURLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.DefaultInterfaceContractMapper;
+import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.Parser;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Test reading SCA XML assembly documents.
@@ -55,46 +61,66 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
 public class ReadDocumentTestCase extends TestCase {
 
     private ExtensibleURLArtifactProcessor documentProcessor;
-    private DefaultModelResolver resolver; 
+    private TestModelResolver resolver; 
 
+    @Override
     public void setUp() throws Exception {
         AssemblyFactory factory = new DefaultAssemblyFactory();
         PolicyFactory policyFactory = new DefaultPolicyFactory();
-        InterfaceContractMapper mapper = new DefaultInterfaceContractMapper();
+        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
         
-        URLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint();
+        URLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors); 
         
         // Create Stax processors
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
+        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(factory, policyFactory, mapper, staxProcessor));
+        staxProcessors.addArtifactProcessor(new CompositeProcessor(new ContributionFactoryImpl(), factory, policyFactory, mapper, staxProcessor));
         staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(factory, policyFactory, staxProcessor));
         staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(factory, policyFactory, staxProcessor));
         
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd")); 
+        
         // Create document processors
         XMLInputFactory inputFactory = XMLInputFactory.newInstance(); 
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
+        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory, schema));
+        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory, schema));
+        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory, schema));
 
-        resolver = new DefaultModelResolver(getClass().getClassLoader());
+        resolver = new TestModelResolver();
     }
 
+    @Override
     public void tearDown() throws Exception {
-        documentProcessor = null;
-        resolver = null;
+    }
+    
+    public void xtestValidate() throws Exception {
+        
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd"));
+        ValidatorHandler handler = schema.newValidatorHandler();
+        
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        URL url = getClass().getResource("Calculator.composite");
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setContentHandler(handler);
+        reader.parse(new InputSource(url.openStream()));
+        
     }
 
     public void testResolveConstrainingType() throws Exception {
         
         URL url = getClass().getResource("CalculatorComponent.constrainingType");
-        ConstrainingType constrainingType = (ConstrainingType)documentProcessor.read(null, null, url);
+        URI uri = URI.create("CalculatorComponent.constrainingType");
+        ConstrainingType constrainingType = (ConstrainingType)documentProcessor.read(null, uri, url);
         assertNotNull(constrainingType);
         resolver.addModel(constrainingType);
 
         url = getClass().getResource("TestAllCalculator.composite");
-        Composite composite = (Composite)documentProcessor.read(null, null, url);
+        uri = URI.create("TestAllCalculator.constrainingType");
+        Composite composite = (Composite)documentProcessor.read(null, uri, url);
         assertNotNull(composite);
         
         documentProcessor.resolve(composite, resolver);
@@ -105,12 +131,14 @@ public class ReadDocumentTestCase extends TestCase {
 
     public void testResolveComposite() throws Exception {
         URL url = getClass().getResource("Calculator.composite");
-        Composite nestedComposite = (Composite)documentProcessor.read(null, null, url);
+        URI uri = URI.create("Calculator.composite");
+        Composite nestedComposite = (Composite)documentProcessor.read(null, uri, url);
         assertNotNull(nestedComposite);
         resolver.addModel(nestedComposite);
 
         url = getClass().getResource("TestAllCalculator.composite");
-        Composite composite = (Composite)documentProcessor.read(null, null, url);
+        uri = URI.create("TestAllCalculator.composite");
+        Composite composite = (Composite)documentProcessor.read(null, uri, url);
         
         documentProcessor.resolve(composite, resolver);
         

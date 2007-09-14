@@ -22,7 +22,7 @@ import java.net.URL;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.contribution.ContentType;
+import org.apache.tuscany.sca.contribution.ContentType;
 import org.apache.tuscany.sca.contribution.service.impl.ArtifactTypeDescriberImpl;
 
 public class ContentTypeDescriberImplTestCase extends TestCase {
@@ -45,8 +45,8 @@ public class ContentTypeDescriberImplTestCase extends TestCase {
                 contentTypeDescriber.getType(artifactURL, "application/vnd.tuscany.ext"));        
     }
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
         contentTypeDescriber = new ArtifactTypeDescriberImpl();
     }
 

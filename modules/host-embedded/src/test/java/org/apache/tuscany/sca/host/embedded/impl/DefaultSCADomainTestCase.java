@@ -19,10 +19,11 @@
 
 package org.apache.tuscany.sca.host.embedded.impl;
 
-import org.apache.tuscany.sca.host.embedded.impl.DefaultSCADomain;
+import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
+
+import test.crud.CRUD;
 
 import junit.framework.TestCase;
-import crud.CRUD;
 
 /**
  * @version $Rev$ $Date$
@@ -33,6 +34,7 @@ public class DefaultSCADomainTestCase extends TestCase {
     /**
      * @throws java.lang.Exception
      */
+    @Override
     protected void setUp() throws Exception {
         domain = new DefaultSCADomain(getClass().getClassLoader(), getClass().getClassLoader(),
                                       "http://localhost", ".", "crud.composite");
@@ -43,9 +45,21 @@ public class DefaultSCADomainTestCase extends TestCase {
         assertNotNull(service);
     }
 
+    public void testComponentManager() throws Exception {
+        ComponentManager componentManager = domain.getComponentManager();
+        assertEquals(1, componentManager.getComponentNames().size());
+        assertEquals("CRUDServiceComponent", componentManager.getComponentNames().iterator().next());
+        assertNotNull(componentManager.getComponent("CRUDServiceComponent"));
+        
+        assertTrue(componentManager.isComponentStarted("CRUDServiceComponent"));
+        componentManager.stopComponent("CRUDServiceComponent");
+        assertFalse(componentManager.isComponentStarted("CRUDServiceComponent"));
+    }
+    
     /**
      * @throws java.lang.Exception
      */
+    @Override
     protected void tearDown() throws Exception {
         domain.close();
     }

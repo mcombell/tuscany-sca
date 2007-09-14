@@ -20,13 +20,12 @@ package org.apache.tuscany.sca.core.invocation;
 
 import java.util.LinkedList;
 
-import org.apache.tuscany.sca.core.RuntimeWire;
-import org.apache.tuscany.sca.invocation.ConversationSequence;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.spi.component.WorkContext;
+import org.apache.tuscany.sca.runtime.EndpointReference;
+import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.apache.tuscany.sca.work.WorkScheduler;
 import org.osoa.sca.ServiceRuntimeException;
 
@@ -40,34 +39,46 @@ public class NonBlockingInterceptor implements Interceptor {
     private static final Message RESPONSE = new ImmutableMessage();
 
     private WorkScheduler workScheduler;
-    private WorkContext workContext;
     private Invoker next;
 
-    public NonBlockingInterceptor(WorkScheduler workScheduler, WorkContext workContext) {
+    public NonBlockingInterceptor(WorkScheduler workScheduler) {
         this.workScheduler = workScheduler;
-        this.workContext = workContext;
     }
 
-    public NonBlockingInterceptor(WorkScheduler workScheduler, WorkContext workContext, Interceptor next) {
+    public NonBlockingInterceptor(WorkScheduler workScheduler, Interceptor next) {
         this.workScheduler = workScheduler;
-        this.workContext = workContext;
         this.next = next;
+    }
+
+    /**
+     * Sets desired workScheduler to NonBlockingInterceptor. This is a usefull function for the extension framework
+     * to set desired workmanager on the InvocationChain, other than default workmanager which is set per Tuscany runtime.
+     * Using this function, extension framework can set desired workmanager on InvocationChain during post wire processing.
+     * @param workScheduler workScheduler which contains workmanager
+     */
+    public void setWorkScheduler(WorkScheduler workScheduler){
+        this.workScheduler = workScheduler;
     }
 
     public Message invoke(final Message msg) {
         // Retrieve conversation id to transfer to new thread
         // Notice that we cannot clear the conversation id from the current thread
-        final Object conversationID = workContext.getIdentifier(Scope.CONVERSATION);
+        final Object conversationID = ThreadMessageContext.getMessageContext().getConversationID();
         // Schedule the invocation of the next interceptor in a new Work instance
         try {
             workScheduler.scheduleWork(new Runnable() {
                 public void run() {
-                    workContext.setCorrelationId(null);
+                    msg.setCorrelationID(null);
                     // if we got a conversation id, transfer it to new thread
                     if (conversationID != null) {
-                        workContext.setIdentifier(Scope.CONVERSATION, conversationID);
+                        msg.setConversationID(conversationID);
                     }
-                    next.invoke(msg);
+                    Message context = ThreadMessageContext.setMessageContext(msg);
+                    try {
+                        next.invoke(msg);
+                    } finally {
+                        ThreadMessageContext.setMessageContext(context);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -89,6 +100,18 @@ public class NonBlockingInterceptor implements Interceptor {
      */
     private static class ImmutableMessage implements Message {
 
+        public String getConversationID() {
+            return null;
+        }
+
+        public RuntimeWire getWire() {
+            return null;
+        }
+
+        public void setConversationID(Object conversationId) {
+            throw new UnsupportedOperationException();
+        }
+
         @SuppressWarnings("unchecked")
         public Object getBody() {
             return null;
@@ -98,21 +121,6 @@ public class NonBlockingInterceptor implements Interceptor {
             if (body != null) {
                 throw new UnsupportedOperationException();
             }
-        }
-
-        public WorkContext getWorkContext() {
-            throw new UnsupportedOperationException();
-        }
-
-        public void setWorkContext(WorkContext workContext) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void pushCallbackWire(RuntimeWire wire) {
-        }
-
-        public LinkedList<RuntimeWire> getCallbackWires() {
-            return null;
         }
 
         public void setCallbackWires(LinkedList<RuntimeWire> wires) {
@@ -143,12 +151,42 @@ public class NonBlockingInterceptor implements Interceptor {
             throw new UnsupportedOperationException();
         }
 
-        public void setConversationSequence(ConversationSequence sequence) {
+        public EndpointReference getFrom() {
+            return null;
+        }
+
+        public EndpointReference getTo() {
+            return null;
+        }
+
+        public void setFrom(EndpointReference from) {
             throw new UnsupportedOperationException();
         }
-        
-        public ConversationSequence getConversationSequence() {
+
+        public void setTo(EndpointReference to) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Operation getOperation() {
             return null;
+        }
+
+        public void setOperation(Operation op) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @see org.apache.tuscany.sca.invocation.Message#getReplyTo()
+         */
+        public EndpointReference getReplyTo() {
+            return null;
+        }
+
+        /**
+         * @see org.apache.tuscany.sca.invocation.Message#setReplyTo(org.apache.tuscany.sca.runtime.EndpointReference)
+         */
+        public void setReplyTo(EndpointReference replyTo) {
+            throw new UnsupportedOperationException();
         }
 
     }
