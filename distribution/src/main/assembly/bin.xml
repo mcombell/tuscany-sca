@@ -125,6 +125,15 @@
                 <exclude>*/target/sdo-source</exclude>
                 <exclude>*/target/sdo-source/**/*</exclude>
                 <exclude>*/**/*.svg</exclude>
+
+                <exclude>calculator-ws-webapp/target/sample-calculator-ws-webapp.war</exclude>
+                <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp.war</exclude>
+                <exclude>helloworld-ws-service-webapp/target/sample-helloworld-ws-service-webapp.war</exclude>
+                <exclude>helloworld-dojo-webapp/target/sample-helloworld-dojo-webapp.war</exclude>
+                <exclude>helloworld-jsonrpc-webapp/target/sample-helloworld-jsonrpc-webapp.war</exclude>
+                <exclude>chat-webapp/target/sample-chat-webapp.war</exclude>
+                <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp.war</exclude>
+
             </excludes>
         </fileSet>
         <!-- Add all the demos to the demos directory -->
@@ -162,6 +171,7 @@
                 <exclude>*/target/surefire-reports/**/*</exclude>
                 <exclude>*/**/*.svg</exclude>
                 <exclude>*/**/*.ruleset</exclude>
+
             </excludes>
         </fileSet>
         <!-- Add the generated tuscany manifest classpath jar to the lib directory -->
