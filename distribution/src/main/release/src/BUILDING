@@ -1,0 +1,48 @@
+Building the Apache Tuscany SCA 0.91 (incubating) July 2007 Release source distribution
+=======================================================================================
+
+Initial Setup
+-------------
+
+1) Install J2SE 5.0 SDK, which can be downloaded from 
+   http://java.sun.com/j2se/1.5.0/download.jsp. Use version of 1.5.0_06 JDK.
+
+2) Make sure that your JAVA_HOME environment variable is set to the newly installed 
+   JDK location, and that your PATH includes %JAVA_HOME%\bin (windows) or 
+   $JAVA_HOME$/bin (unix).
+
+3) Install Maven 2.0.5, which can be downloaded from 
+   http://maven.apache.org/download.html. Make sure that your PATH includes 
+   the MVN_HOME/bin directory. 
+
+
+Building
+--------
+
+1) Change to the top level directory of Apache Tuscany source distribution.
+2) Run
+
+	$> mvn
+
+   This will compile Apache Tuscany and run all of the tests in the source
+   distribution. 
+
+   Depending on the load of remote Maven 2.0 repositories, you may have 
+   to run "mvn" several times utill the required dependencies are 
+   all located in your local maven repository. It usually takes some time for 
+   maven to download required dependencies in the first build. Once all the 
+   dependencies have been downloaded you may use the -o option to run maven
+   in offline mode, for example, 'mvn clean install -o'.
+
+
+Building the distributions
+--------------------------
+
+1) Change to the distributions folder
+2) Run
+
+	$> mvn
+
+   This will build the binary and source distribution with .zip and .gz 
+   formats in the distribution/target directory.
+
