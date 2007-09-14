@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.    
+-->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.tuscany.sca</groupId>
+        <artifactId>tuscany-sca</artifactId>
+        <version>1.0-incubating-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>tuscany-modules</artifactId>
+    <packaging>pom</packaging>
+    <name>Apache Tuscany SCA Implementation Modules</name>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>assembly</module>
+                <module>assembly-java-dsl</module>
+                <module>assembly-xml</module>
+                <module>assembly-xsd</module>
+                <module>binding-dwr</module>
+                <module>binding-ejb</module>
+                <module>binding-feed</module>
+                <module>binding-http</module>
+                <module>binding-jms</module>
+                <module>binding-jsonrpc</module>
+                <module>binding-notification</module>
+                <module>binding-rmi</module>
+                <module>binding-sca</module>
+                <module>binding-sca-axis2</module>
+                <!--
+                <module>binding-sca-jms</module>
+                -->
+                <module>binding-sca-xml</module>
+                <module>binding-ws</module>
+                <module>binding-ws-axis2</module>
+                <module>binding-ws-xml</module>
+                <module>contribution</module>
+                <module>contribution-impl</module>
+                <module>contribution-namespace</module>
+                <module>contribution-java</module>
+                <module>core</module>
+                <module>core-databinding</module>
+                <module>core-spi</module>
+                <module>core-spring</module>
+                <module>databinding</module>
+                <module>databinding-axiom</module>
+                <module>databinding-jaxb</module>
+                <module>databinding-sdo</module>
+                <module>databinding-sdo-axiom</module>
+                <module>databinding-json</module>
+                <!--
+                <module>databinding-saxon</module>
+                -->
+                <module>databinding-xmlbeans</module>
+                <module>data-engine-helper</module>
+                <!--
+                <module>discovery-jms</module>
+                -->
+                <module>domain</module>
+                <module>domain-impl</module>
+                <module>extension-helper</module>
+                <module>host-embedded</module>
+                <!--
+                <module>host-home</module>
+                -->
+                <module>host-http</module>
+                <module>host-rmi</module>
+                <module>host-webapp</module>
+                <module>host-jetty</module>
+                <module>host-tomcat</module>
+                <module>interface</module>
+                <module>interface-java</module>
+                <module>interface-java-xml</module>
+                <module>interface-wsdl</module>
+                <module>interface-wsdl-xml</module>
+                <module>implementation-bpel</module>
+                <module>implementation-das</module>
+                <module>implementation-data</module>
+                <module>implementation-java</module>
+                <module>implementation-java-xml</module>
+                <module>implementation-java-runtime</module>
+                <module>implementation-node</module>
+                <module>implementation-node-xml</module>
+                <module>implementation-node-runtime</module>
+                <module>implementation-notification</module>
+                <module>implementation-osgi</module>
+                <module>implementation-resource</module>
+                <module>implementation-script</module>
+                <module>implementation-spring</module>
+                <!--
+                <module>implementation-xquery</module>
+                -->
+                <module>java2wsdl</module>
+                <!--
+                <module>jmx</module>
+                -->
+                <module>maven-java2wsdl</module>
+                <module>maven-wsdl2java</module>
+                <module>node</module>
+                <module>node-impl</module>
+                <module>policy</module>
+                <module>policy-xml</module>
+		<module>policy-security</module>
+                <module>sca-api</module>
+		<module>sca-definitions</module>
+                <module>topology</module>
+                <module>topology-xml</module>
+                <module>wsdl2java</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>        
+    </dependencies>
+    
+</project>
