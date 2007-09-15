@@ -21,7 +21,7 @@ package node;
 
 import java.io.IOException;
 
-import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeImpl;
 
 import calculator.CalculatorService;
 
@@ -50,7 +50,7 @@ public class CalculatorNode {
             // Create the distributed domain representation. We use the network implementation 
             // here so that the node contacts a registry running somewhere out on the 
             // network. 
-            NodeImpl node = new NodeImpl(domainName, nodeName);
+            SCANodeImpl node = new SCANodeImpl(domainName, nodeName);
             node.start();
 
             // the application components are added. The null here just gets the node

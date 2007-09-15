@@ -25,7 +25,8 @@ import static junit.framework.Assert.assertEquals;
 import junit.framework.Assert;
 
 
-import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,9 +40,9 @@ public class CallableReferenceRemoteTestCase {
     
     private static String DEFAULT_DOMAIN_NAME = "mydomain";
 
-    private static NodeImpl registry;
-    private static NodeImpl nodeA;
-    private static NodeImpl nodeB;
+    private static SCANodeImpl domain;
+    private static SCANodeImpl nodeA;
+    private static SCANodeImpl nodeB;
    
     private static AComponent acomponent;
 
@@ -50,22 +51,21 @@ public class CallableReferenceRemoteTestCase {
         
         try {
             System.out.println("Setting up distributed registry");
-            registry = new NodeImpl();
-            registry.start();
-            registry.getContributionManager().startContribution(CallableReferenceRemoteTestCase.class.getClassLoader().getResource("domain/"));
-            //registry.getContributionManager().startContribution("file:///C:/simon/tuscany/java-head/sca/modules/distributed-impl/target/tuscany-distributed-impl-1.0-incubating-SNAPSHOT.jar");
+            domain = new SCANodeImpl();
+            domain.start();
+            domain.getContributionManager().startContribution(SCANodeUtil.findContributionFromComposite(CallableReferenceRemoteTestCase.class.getClassLoader(), "domain.composite"));
             
             System.out.println("Setting up distributed nodes");
                     
             // create the node that runs the 
             // calculator component
-            nodeA = new NodeImpl(DEFAULT_DOMAIN_NAME, "nodeA");
+            nodeA = new SCANodeImpl(DEFAULT_DOMAIN_NAME, "nodeA");
             nodeA.start();
             nodeA.getContributionManager().startContribution(CallableReferenceRemoteTestCase.class.getClassLoader().getResource("nodeA/"));
     
             // create the node that runs the 
             // add component
-            nodeB = new NodeImpl(DEFAULT_DOMAIN_NAME, "nodeB");
+            nodeB = new SCANodeImpl(DEFAULT_DOMAIN_NAME, "nodeB");
             nodeB.start();
             nodeB.getContributionManager().startContribution(CallableReferenceRemoteTestCase.class.getClassLoader().getResource("nodeB/"));            
          
@@ -82,7 +82,8 @@ public class CallableReferenceRemoteTestCase {
     public static void destroy() throws Exception {
         // stop the nodes and hence the domains they contain        
         nodeA.stop();
-        nodeB.stop();   
+        nodeB.stop(); 
+        domain.stop();
     }
 
     @Test

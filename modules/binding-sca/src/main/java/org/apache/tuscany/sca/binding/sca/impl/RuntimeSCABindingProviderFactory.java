@@ -22,8 +22,8 @@ package org.apache.tuscany.sca.binding.sca.impl;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.DomainFactory;
+import org.apache.tuscany.sca.node.SCADomainFactory;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -39,12 +39,12 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 public class RuntimeSCABindingProviderFactory implements BindingProviderFactory<SCABinding> {
     
     private ExtensionPointRegistry extensionPoints;
-    private Domain domain = null;
+    private SCADomain domain = null;
     
     public RuntimeSCABindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         this.extensionPoints = extensionPoints;
         ModelFactoryExtensionPoint factories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
-        DomainFactory domainFactory = factories.getFactory(DomainFactory.class);
+        SCADomainFactory domainFactory = factories.getFactory(SCADomainFactory.class);
         
         if (domainFactory != null) {
         	domain = domainFactory.getDomain();
