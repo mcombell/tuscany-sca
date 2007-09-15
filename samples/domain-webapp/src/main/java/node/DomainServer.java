@@ -20,7 +20,8 @@ package node;
 
 import java.io.IOException;
 
-import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeUtil;
 
 /**
  * This server program that loads a composite to provide simple registry function.
@@ -31,9 +32,9 @@ public class DomainServer {
 
     public static void main(String[] args) {
         try {
-            NodeImpl node = new NodeImpl();
+            SCANodeImpl node = new SCANodeImpl();
             node.start();
-            node.getContributionManager().startContribution(DomainServer.class.getClassLoader().getResource("."));
+            node.getContributionManager().startContribution(SCANodeUtil.findContributionFromComposite(DomainServer.class.getClassLoader(), "domain.composite"));
     
             try {
                 System.out.println("Domain server started (press enter to shutdown)");

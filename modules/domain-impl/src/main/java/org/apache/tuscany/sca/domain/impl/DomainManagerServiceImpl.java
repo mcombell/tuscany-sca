@@ -25,8 +25,8 @@ import java.util.List;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.domain.DomainManagerService;
 import org.apache.tuscany.sca.domain.NodeInfo;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
-import org.apache.tuscany.sca.domain.impl.ServiceDiscoveryServiceImpl.ServiceEndpoint;
+import org.apache.tuscany.sca.domain.SCADomainService;
+import org.apache.tuscany.sca.domain.impl.SCADomainServiceImpl.ServiceEndpoint;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
 
@@ -40,7 +40,7 @@ import org.osoa.sca.annotations.Scope;
 public class DomainManagerServiceImpl implements DomainManagerService{
     
     @Reference 
-    public ServiceDiscoveryService serviceDiscovery;
+    public SCADomainService scaDomainService;
 
     List<NodeInfo> nodes = new ArrayList<NodeInfo>();
     
@@ -72,7 +72,7 @@ public class DomainManagerServiceImpl implements DomainManagerService{
         
         // get the nodeManagerUrl for each node
         for(NodeInfo node : nodes){
-            String url = serviceDiscovery.findServiceEndpoint(node.getDomainUri(), 
+            String url = scaDomainService.findServiceEndpoint(node.getDomainUri(), 
                                                               node.getNodeUri() + "NodeManagerService",
                                                               "");
                                                  

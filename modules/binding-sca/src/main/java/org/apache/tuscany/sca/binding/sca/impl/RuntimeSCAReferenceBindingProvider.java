@@ -23,11 +23,11 @@ import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.binding.sca.DistributedSCABinding;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
+import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider2;
@@ -50,7 +50,7 @@ import org.osoa.sca.ServiceUnavailableException;
 public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvider2 {
 
     private ExtensionPointRegistry extensionPoints;
-    private Domain domain;
+    private SCADomain domain;
     private RuntimeComponent component;
     private RuntimeComponentReference reference;
     private SCABinding binding;
@@ -60,7 +60,7 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
     private ReferenceBindingProvider2 distributedProvider = null;
 
     public RuntimeSCAReferenceBindingProvider(ExtensionPointRegistry extensionPoints,
-    		                                  Domain domain,
+    		                                  SCADomain domain,
                                               RuntimeComponent component,
                                               RuntimeComponentReference reference,
                                               SCABinding binding) {
@@ -101,7 +101,7 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
             // at this node. The binding uri might be null here if the dynamic reference has been
             // fully configured yet. It won't have all of the information until invocation time
             if ((domain != null) && (binding.getURI() != null)) {
-                ServiceDiscoveryService serviceDiscovery = domain.getServiceDiscovery();
+                SCADomainService serviceDiscovery = domain.getServiceDiscovery();
 
                 String serviceUrl =
                     serviceDiscovery.findServiceEndpoint(domain.getDomainUri(),

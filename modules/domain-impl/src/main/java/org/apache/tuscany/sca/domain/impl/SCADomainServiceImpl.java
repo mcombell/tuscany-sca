@@ -17,30 +17,32 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.sca.axis2;
+package org.apache.tuscany.sca.domain.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.domain.ServiceInfo;
+import org.osoa.sca.annotations.Scope;
 
 
 /**
  * Stores details of services exposed and retrieves details of remote services
  * 
- * @version $Rev: 552343 $ $Date: 2007-07-01 18:43:40 +0100 (Sun, 01 Jul 2007) $
+ * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
  */
-public class TestServiceDiscoveryImpl implements SCADomainService{
+@Scope("COMPOSITE")
+public class SCADomainServiceImpl implements SCADomainService {
     
     List<ServiceEndpoint> serviceEndpoints = new ArrayList<ServiceEndpoint>();
     
     public class ServiceEndpoint {
-        private String domainUri;
-        private String nodeUri;
-        private String serviceName;
-        private String bindingName;
-        private String url;
+        public String domainUri;
+        public String nodeUri;
+        public String serviceName;
+        public String bindingName;
+        public String url;
         
         public ServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
             this.domainUri = domainUri;
@@ -97,14 +99,15 @@ public class TestServiceDiscoveryImpl implements SCADomainService{
      * @param bindingName the remote binding that is providing the endpoint
      * @param url the enpoint url
      */
-    public String registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
+    public String  registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
         // if the service name ends in a "/" remove it
         String modifiedServiceName = null;
         if ( serviceName.endsWith("/") ) {
             modifiedServiceName = serviceName.substring(0, serviceName.length() - 1);
         } else {
             modifiedServiceName = serviceName;
-        }        
+        }
+        
         ServiceEndpoint serviceEndpoint = new ServiceEndpoint (domainUri, nodeUri, modifiedServiceName, bindingName, URL);
         serviceEndpoints.add(serviceEndpoint);
         System.err.println("Registering service: " + serviceEndpoint.toString());
@@ -127,20 +130,41 @@ public class TestServiceDiscoveryImpl implements SCADomainService{
                            bindingName +
                            "]");
         
-        String url = null;
+        String url = "";
         
         for(ServiceEndpoint serviceEndpoint : serviceEndpoints){
             if ( serviceEndpoint.match(domainUri, serviceName, bindingName)){
                 url = serviceEndpoint.getUrl();
+                // if you want to temporarily modify the registered port 
+                // numbers for debugging uncomment this line
+                //url = replacePort(url, "8085", "8086");
                 System.err.println("Matching service url: " + url); 
             }
         }
         return url;
     }
     
-    public ServiceInfo getServiceInfo() {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * Converts a port number to something else to allow for debugging using a
+     * HTTP sniffer
+     * @param url
+     * @param fromPort the port to look for
+     * @param toPort the port to replace it with
+     * @return the new url
+     */
+    private String replacePort(String url, String fromPort, String toPort) {
+    	return url.replace(fromPort, toPort);
+    }
+    
+    public ServiceInfo getServiceInfo(){
+        
+        ServiceEndpoint serviceEndpoint = serviceEndpoints.get(0);
+        
+        return new ServiceInfoImpl(serviceEndpoint.domainUri, 
+                                   serviceEndpoint.nodeUri, 
+                                   serviceEndpoint.serviceName, 
+                                   serviceEndpoint.bindingName, 
+                                   serviceEndpoint.url);
     }
     
 }

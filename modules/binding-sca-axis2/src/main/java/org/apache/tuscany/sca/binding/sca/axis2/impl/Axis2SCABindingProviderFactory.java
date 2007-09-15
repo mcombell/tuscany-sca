@@ -22,11 +22,11 @@ package org.apache.tuscany.sca.binding.sca.axis2.impl;
 import org.apache.tuscany.sca.binding.sca.DistributedSCABinding;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.DomainFactory;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.node.SCADomainFactory;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -43,14 +43,14 @@ public class Axis2SCABindingProviderFactory implements BindingProviderFactory<Di
     
     private MessageFactory messageFactory;
     private ServletHost servletHost;
-    private Domain domain = null;
+    private SCADomain domain = null;
 
     public Axis2SCABindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
         this.servletHost = servletHosts.getServletHosts().get(0);
         ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
         this.messageFactory = modelFactories.getFactory(MessageFactory.class);
-        DomainFactory domainFactory = modelFactories.getFactory(DomainFactory.class);
+        SCADomainFactory domainFactory = modelFactories.getFactory(SCADomainFactory.class);
         
         if (domainFactory != null) {
             this.domain = domainFactory.getDomain();

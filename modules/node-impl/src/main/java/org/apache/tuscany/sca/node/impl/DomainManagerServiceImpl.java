@@ -19,33 +19,34 @@
 
 package org.apache.tuscany.sca.node.impl;
 
-import org.apache.tuscany.sca.domain.SCADomainService;
-import org.apache.tuscany.sca.node.SCADomainFactory;
-import org.apache.tuscany.sca.node.SCADomain;
-import org.osoa.sca.CallableReference;
-import org.osoa.sca.ServiceReference;
+import java.util.List;
+
+import org.apache.tuscany.sca.domain.DomainManagerService;
+import org.apache.tuscany.sca.domain.NodeInfo;
+import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Scope;
 
 
 /**
- * A factory that always returns the same domain object
+ * Stores details of services exposed and retrieves details of remote services
  * 
- * @version $Rev: 556897 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
+ * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
  */
-public class DomainFactoryImpl implements SCADomainFactory {
-	
-	SCADomain domain = null;
-	
-	public DomainFactoryImpl(SCADomain domain){
-		this.domain = domain;
-	}
+@Scope("COMPOSITE")
+public class DomainManagerServiceImpl implements DomainManagerService{
     
-    /**
-     * Returns the domain object
-     * 
-     * @return the domain 
-     */
-    public SCADomain getDomain(){
-    	return domain;
+    @Reference
+    protected DomainManagerService domainManager;
+
+    public String registerNode(String domainUri, String nodeUri) {
+        return domainManager.registerNode(domainUri, nodeUri);
+    }
+
+    public String removeNode(String domainUri, String nodeUri) {
+        return domainManager.removeNode(domainUri, nodeUri);
     }
     
+    public List<NodeInfo> getNodeInfo(){
+        return domainManager.getNodeInfo();
+    }
 }
