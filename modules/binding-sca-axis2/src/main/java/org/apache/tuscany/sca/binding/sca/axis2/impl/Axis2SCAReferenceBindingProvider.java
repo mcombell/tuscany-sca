@@ -139,7 +139,7 @@ public class Axis2SCAReferenceBindingProvider implements ReferenceBindingProvide
 	                }
 	            }
             } else {
-	            throw new IllegalStateException("No service manager available for component: "+
+	            throw new IllegalStateException("No domain service available while trying to find component: "+
 						                        component.getName() +
 						                        " and service: " + 
 						                        reference.getName());	 

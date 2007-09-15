@@ -107,7 +107,7 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
                     serviceDiscovery.findServiceEndpoint(domain.getDomainUri(),
                                                          binding.getURI(),
                                                          SCABinding.class.getName());
-                if (serviceUrl == null) {
+                if ((serviceUrl == null) || serviceUrl.equals("")) {
                     targetIsRemote = false;
                 } else {
                     targetIsRemote = true;
