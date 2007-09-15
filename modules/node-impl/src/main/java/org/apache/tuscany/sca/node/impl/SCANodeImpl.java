@@ -181,12 +181,12 @@ public class SCANodeImpl implements SCADomain, SCANode {
       throws ActivationException {
         try {
             // create a runtime for components to run on that will be used for talking to the 
-            // rest of the domain
+            // rest of the domain. The components are defined in the node.composite file
             String nodeCompositeName = "node.composite";
             URL contributionURL = SCANodeUtil.findContributionFromComposite(domainClassLoader, nodeCompositeName );
             
             if ( contributionURL != null ){ 
-                logger.log(Level.INFO, "Domain node management configured from " + contributionURL);
+                logger.log(Level.INFO, "Node management configured from " + contributionURL);
                 
                 // start a local domain in order to talk to the logical domain
                 managementRuntime = new EmbeddedSCADomain(domainClassLoader, "node");   
