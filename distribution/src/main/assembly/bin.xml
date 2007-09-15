@@ -87,6 +87,8 @@
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp/**/*</exclude>
+                <exclude>calculator-distributed/work</exclude>
+                <exclude>calculator-distributed/work/**/*</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp/**/*</exclude>
                 <exclude>calculator-ws-webapp/target/sample-calculator-ws-webapp</exclude>
