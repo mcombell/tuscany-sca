@@ -36,11 +36,11 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
 import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.core.context.ServiceReferenceImpl;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
+import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.host.embedded.impl.ReallySmallRuntime;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentContext;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -54,11 +54,11 @@ import org.osoa.sca.ServiceRuntimeException;
  * 
  * @version $Rev: 552343 $ $Date$
  */
-public class TestDomain implements Domain {
+public class TestDomain implements SCADomain {
     
     private String nodeName;
     private String domainURI;
-    private static ServiceDiscoveryService serviceDiscovery;   
+    private static SCADomainService serviceDiscovery;   
     private ReallySmallRuntime nodeRuntime;
     
     private ClassLoader cl = BaseTest.class.getClassLoader();
@@ -135,7 +135,7 @@ public class TestDomain implements Domain {
         return domainURI;
     } 
     
-    public ServiceDiscoveryService getServiceDiscovery(){
+    public SCADomainService getServiceDiscovery(){
         return serviceDiscovery;
     }     
     

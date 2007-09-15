@@ -18,7 +18,7 @@
  */
 package org.apache.tuscany.sca.binding.sca.axis2;
 
-import org.apache.tuscany.sca.domain.Domain;
+import org.apache.tuscany.sca.node.SCADomain;
 
 public class BaseTest {
 

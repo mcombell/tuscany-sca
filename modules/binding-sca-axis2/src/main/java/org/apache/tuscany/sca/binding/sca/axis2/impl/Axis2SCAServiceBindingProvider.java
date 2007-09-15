@@ -30,14 +30,14 @@ import org.apache.tuscany.sca.binding.ws.DefaultWebServiceBindingFactory;
 import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
 import org.apache.tuscany.sca.binding.ws.axis2.Axis2ServiceProvider;
 import org.apache.tuscany.sca.binding.ws.axis2.Java2WSDLHelper;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
+import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider2;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -52,7 +52,7 @@ public class Axis2SCAServiceBindingProvider implements ServiceBindingProvider2 {
     
     private final static Logger logger = Logger.getLogger(Axis2SCAServiceBindingProvider.class.getName());
 
-    private Domain domain;
+    private SCADomain domain;
     private SCABinding binding;
     private Axis2ServiceProvider axisProvider;
     private WebServiceBinding wsBinding;
@@ -60,7 +60,7 @@ public class Axis2SCAServiceBindingProvider implements ServiceBindingProvider2 {
     private boolean started = false;
 
 
-    public Axis2SCAServiceBindingProvider(Domain domain,
+    public Axis2SCAServiceBindingProvider(SCADomain domain,
     		                              RuntimeComponent component,
                                           RuntimeComponentService service,
                                           DistributedSCABinding binding,
@@ -94,7 +94,7 @@ public class Axis2SCAServiceBindingProvider implements ServiceBindingProvider2 {
         if (domain != null){
 	        // get the url out of the binding and send it to the registry if
 	        // a distributed domain is configured
-	        ServiceDiscoveryService serviceDiscovery = domain.getServiceDiscovery();
+	        SCADomainService serviceDiscovery = domain.getServiceDiscovery();
 	        
 	        if (serviceDiscovery != null) {
 		        // register endpoint against the path element of the binding uri

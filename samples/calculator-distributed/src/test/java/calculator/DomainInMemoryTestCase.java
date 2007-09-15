@@ -21,7 +21,8 @@ package calculator;
 
 import junit.framework.Assert;
 
-import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeImpl;
+import org.apache.tuscany.sca.node.impl.SCANodeUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,12 +35,12 @@ import calculator.CalculatorService;
  */
 public class DomainInMemoryTestCase {
     
-    private static String DEFAULT_DOMAIN_NAME = "mydomain";
+    private static String DEFAULT_DOMAIN_URL = "http:/localhost:8080";
 
-    private static NodeImpl registry;
-    private static NodeImpl domainNodeA;
-    private static NodeImpl domainNodeB;
-    private static NodeImpl domainNodeC;
+    private static SCANodeImpl domain;
+    private static SCANodeImpl domainNodeA;
+    private static SCANodeImpl domainNodeB;
+    private static SCANodeImpl domainNodeC;
 
     private static CalculatorService calculatorServiceA;
 
@@ -49,25 +50,25 @@ public class DomainInMemoryTestCase {
         try {
                 System.out.println("Setting up domain registry");
                 
-                registry = new NodeImpl();
-                registry.start();
-                registry.getContributionManager().startContribution(DomainInMemoryTestCase.class.getClassLoader().getResource("domain/"));
+                domain = new SCANodeImpl();
+                domain.start();
+                domain.getContributionManager().startContribution(SCANodeUtil.findContributionFromComposite(DomainInMemoryTestCase.class.getClassLoader(), "domain.composite"));
                 
                 System.out.println("Setting up distributed nodes");
                        
                 // Create the domain representation
-                domainNodeA = new NodeImpl(DEFAULT_DOMAIN_NAME, "nodeA");
+                domainNodeA = new SCANodeImpl(DEFAULT_DOMAIN_URL, "nodeA");
                 domainNodeA.start();
                 domainNodeA.getContributionManager().startContribution(DomainInMemoryTestCase.class.getClassLoader().getResource("nodeA/"));
                 
                 // Create the domain representation
-                domainNodeB = new NodeImpl(DEFAULT_DOMAIN_NAME, "nodeB");
+                domainNodeB = new SCANodeImpl(DEFAULT_DOMAIN_URL, "nodeB");
                 domainNodeB.start();
                 domainNodeB.getContributionManager().startContribution(DomainInMemoryTestCase.class.getClassLoader().getResource("nodeB/"));        
                 
                 // create the node that runs the 
                 // subtract component 
-                domainNodeC = new NodeImpl(DEFAULT_DOMAIN_NAME, "nodeC");
+                domainNodeC = new SCANodeImpl(DEFAULT_DOMAIN_URL, "nodeC");
                 domainNodeC.start();
                 domainNodeC.getContributionManager().startContribution(DomainInMemoryTestCase.class.getClassLoader().getResource("nodeC/"));         
         
@@ -85,6 +86,7 @@ public class DomainInMemoryTestCase {
         domainNodeA.stop();
         domainNodeB.stop();
         domainNodeC.stop();
+        domain.stop();
     }
 
     @Test

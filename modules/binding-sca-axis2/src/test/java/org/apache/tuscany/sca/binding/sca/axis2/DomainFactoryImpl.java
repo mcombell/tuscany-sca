@@ -19,23 +19,19 @@
 
 package org.apache.tuscany.sca.binding.sca.axis2;
 
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.DomainFactory;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
-import org.osoa.sca.CallableReference;
-import org.osoa.sca.ServiceReference;
-
+import org.apache.tuscany.sca.node.SCADomainFactory;
+import org.apache.tuscany.sca.node.SCADomain;
 
 /**
  * A factory that always returns the same domain object
  * 
  * @version $Rev: 556897 $ $Date$
  */
-public class DomainFactoryImpl implements DomainFactory {
+public class DomainFactoryImpl implements SCADomainFactory {
 	
-	Domain domain = null;
+	SCADomain domain = null;
 	
-	public DomainFactoryImpl(Domain domain){
+	public DomainFactoryImpl(SCADomain domain){
 		this.domain = domain;
 	}
     
@@ -44,7 +40,7 @@ public class DomainFactoryImpl implements DomainFactory {
      * 
      * @return the domain 
      */
-    public Domain getDomain(){
+    public SCADomain getDomain(){
     	return domain;
     }
     

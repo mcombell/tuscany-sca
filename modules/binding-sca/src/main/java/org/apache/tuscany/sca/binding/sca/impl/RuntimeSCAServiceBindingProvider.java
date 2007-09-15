@@ -23,11 +23,11 @@ import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.binding.sca.DistributedSCABinding;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.domain.Domain;
-import org.apache.tuscany.sca.domain.ServiceDiscoveryService;
+import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
+import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider2;
@@ -44,14 +44,14 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
  */
 public class RuntimeSCAServiceBindingProvider implements ServiceBindingProvider2 {
   
-	private Domain domain;
+	private SCADomain domain;
     private RuntimeComponentService service;
     private BindingProviderFactory<DistributedSCABinding> distributedProviderFactory;
     private ServiceBindingProvider2 distributedProvider;
     private DistributedSCABinding distributedBinding;
     
     public RuntimeSCAServiceBindingProvider(ExtensionPointRegistry extensionPoints,
-    		                                Domain domain,
+    		                                SCADomain domain,
                                             RuntimeComponent component,
                                             RuntimeComponentService service,
                                             SCABinding binding) {
