@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ import javax.xml.namespace.QName;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeService;
@@ -72,8 +74,8 @@ public class SCANodeImpl implements SCADomain, SCANode {
 	
     private final static Logger logger = Logger.getLogger(SCANodeImpl.class.getName());
 	
-    public final static String LOCAL_DOMAIN_URI = "localdomain";
-    public final static String LOCAL_NODE_URI = "localnode";
+    public final static String LOCAL_DOMAIN_URI = "standalonedomain";
+    public final static String LOCAL_NODE_URI = "standalonenode";
     
     private boolean isStandalone = false;
     
@@ -84,8 +86,10 @@ public class SCANodeImpl implements SCADomain, SCANode {
     private ClassLoader domainClassLoader;
     
     // representation of the private state of the node that the domain is running on
-    private String domainUri;    	
+    private String domainUri; 
+    private String domainUrl;
     private String nodeUri;
+    private String nodeUrl;
     private ReallySmallRuntime nodeRuntime;
     private Composite nodeComposite; 
     
@@ -117,15 +121,15 @@ public class SCANodeImpl implements SCADomain, SCANode {
      * Creates a node connected to a wider domain.  To find its place in the domain 
      * node and domain identifiers must be provided. 
      * 
-     * @param domainUri the domain identifier
-     * @param nodeUri the node identifier
+     * @param domainUri - identifies what host and port the domain service is running on, e.g. http://localhost:8081
+     * @param nodeUri - if this is a url it is assumed that this will be used as root url for management components, e.g. http://localhost:8082
      * @throws ActivationException
      */
     public SCANodeImpl(String domainUri, String nodeUri)
     throws ActivationException {
         this.domainUri = domainUri;
         this.nodeUri = nodeUri;
-        this.isStandalone = false;
+        this.isStandalone = LOCAL_DOMAIN_URI.equals(domainUri);
         init();
     }    
     
@@ -133,8 +137,8 @@ public class SCANodeImpl implements SCADomain, SCANode {
      * Creates a node connected to a wider domain and allows a classpath to be specified.  
      * To find its place in the domain node and domain identifiers must be provided. 
      * 
-     * @param domainUri the domain identifier
-     * @param nodeUri the node identifier
+     * @param domainUri - identifies what host and port the domain service is running on, e.g. http://localhost:8081
+     * @param nodeUri - if this is a url it is assumed that this will be used as root url for management components, e.g. http://localhost:8082
      * @param classpath the classpath to use for loading system resources for the node
      * @throws ActivationException
      */
@@ -168,6 +172,27 @@ public class SCANodeImpl implements SCADomain, SCANode {
             	managementRuntime = null;
             	scaDomain = null;
             } else {
+                // check where domain and node uris are urls, they will be used to configure various
+                // endpoints if they are
+                URI tmpURI;
+                try {
+                    tmpURI = new URI(domainUri); 
+                    if (tmpURI.isAbsolute()){
+                        domainUrl = domainUri;
+                    }
+                } catch(Exception ex) {
+                    domainUrl = null;
+                }
+                
+                try {
+                    tmpURI = new URI(nodeUri); 
+                    if (tmpURI.isAbsolute()){
+                        nodeUrl = nodeUri;
+                    }
+                } catch(Exception ex) {
+                    nodeUrl = null;
+                }
+
                 createManagementNode();
             }
         } catch(ActivationException ex) {
@@ -210,22 +235,21 @@ public class SCANodeImpl implements SCADomain, SCANode {
                     // in service discovery. It's not on an SCA binding. 
                     // TODO - really want to be able to hand out service references but they
                     //        don't serialize out over web services yet. 
-                    fixUpNodeServiceUrls();                    
+                    SCANodeUtil.fixUpNodeServiceUrls(managementRuntime.getDomainComposite().getIncludes().get(0).getComponents(), nodeUrl); 
+                    SCANodeUtil.fixUpNodeReferenceUrls(managementRuntime.getDomainComposite().getIncludes().get(0).getComponents(), domainUrl);  
                   
                     managementRuntime.getCompositeActivator().activate(composite); 
                     managementRuntime.getCompositeActivator().start(composite);
                 
                     // get the management components out of the domain so that they 
-                    // can be configured/used. None are yet but this would be the place to 
-                    // get components out of the management domain and give them access to 
-                    // useful parts of the node
+                    // can be configured/used. 
                     scaDomain =  managementRuntime.getService(SCADomainService.class, "SCADomainComponent");
                     domainManager = managementRuntime.getService(DomainManagerService.class, "DomainManagerComponent");
                     nodeManagerInit = managementRuntime.getService(NodeManagerInitService.class, "NodeManagerComponent/NodeManagerInitService");
                     
-                    // Now get the uri back out of the component no it has been build and started
+                    // Now get the uri back out of the component now it has been built and started
                     // TODO - this doesn't pick up the url from external hosting environments
-                    String nodeManagerUrl = getNodeManagerServiceUrl();
+                    String nodeManagerUrl = SCANodeUtil.getNodeManagerServiceUrl(managementRuntime.getDomainComposite().getIncludes().get(0).getComponents());
                     
                     if (nodeManagerUrl != null) {
                         if (isStandalone == false){
@@ -238,8 +262,10 @@ public class SCANodeImpl implements SCADomain, SCANode {
                                                                   nodeManagerUrl);
                                 
                             } catch(Exception ex) {
-                                // not sure what to do here
-                                logger.log(Level.WARNING,  "Can't connect to domain manager");
+                                logger.log(Level.SEVERE,  
+                                           "Can't connect to domain manager at: " + 
+                                           domainUrl);
+                                throw new ActivationException(ex);
                             }
                         }                        
                     }
@@ -259,109 +285,7 @@ public class SCANodeImpl implements SCADomain, SCANode {
         } catch(Exception ex) {
             throw new ActivationException(ex);
         }
-    }
-    
-    /** 
-     * A rather ugly method to find out to fix the url of the service, assuming that there
-     * is one. 
-     *  
-     * we can't get is out of a service reference
-     * the component itself doesn't know how to get it  
-     * the binding can't to do it automatically as it's not he sca binding
-     * 
-     * TODO - This would be better done by passing out a serializable reference to service discovery 
-     *         but this doesn't work yet     
-     * 
-     * @return node manager url
-     */    
-    private void fixUpNodeServiceUrls(){
-        String nodeManagerUrl = null;
-        
-        // First get the NodeManager binding from the model 
-        List<Component> components = managementRuntime.getDomainComposite().getIncludes().get(0).getComponents();
-       
-        for(Component component : components){
-            for (ComponentService service : component.getServices() ){
-                for (Binding binding : service.getBindings() ) {
-                    fixUpBindingUrl(binding);  
-                }
-            }            
-        }
-    }
-    
-    private String getNodeManagerServiceUrl(){
-        String nodeManagerUrl = null;
-        
-        // First get the NodeManager binding from the model 
-        List<Component> components = managementRuntime.getDomainComposite().getIncludes().get(0).getComponents();
-        
-        for(Component component : components){
-            for (ComponentService service : component.getServices() ){
-                
-                if ( service.getName().equals("NodeManagerService")) {
-                    nodeManagerUrl = service.getBindings().get(0).getURI();
-                }
-            }            
-        }
-        
-        return nodeManagerUrl;
-    }    
-    
-    /**
-     * For http protocol find a port that isn't in use and make sure the domain name is the real domain name
-     * 
-     * @param binding
-     */
-    private void fixUpBindingUrl(Binding binding){
-
-        String urlString = binding.getURI(); 
-        
-        try {
-            
-            if( (urlString.startsWith("http") != true ) ||
-                (binding instanceof SCABinding)) {
-                return;
-            }
-            
-            URL url =  new URL(urlString);
-            String protocol = url.getProtocol();
-            
-            // first find a socket that is available starting with what
-            // is in the composite file
-            int port = url.getPort();
-            int startPort = port;
-            boolean portIsBusy = true;
-            
-            do {
-                try {
-                    ServerSocket socket = new ServerSocket(port);
-                    portIsBusy = false;
-                    socket.close();
-                    break;
-                }
-                catch (IOException ex) {
-                    // the port is busy
-                    port = port + 1;
-                }
-            } while (portIsBusy || port > 9999); 
-            
-            urlString = urlString.replace(String.valueOf(startPort), String.valueOf(port));
-            
-            // now replace localhost, if its there,  with the real host name
-            InetAddress address = InetAddress.getLocalHost();
-            urlString = urlString.replace("localhost", address.getHostName());
-            
-            // set the address back into the NodeManager binding.
-            binding.setURI(urlString);
-        
-        } catch (Exception ex) {
-            // don't do anything and leave the address as is
-            logger.log(Level.WARNING, 
-                       "Exception while fixing up binding url in management composite " + 
-                       urlString, 
-                       ex);
-        }
-    }    
+    }   
     
         
     // methods that implement interfaces 
@@ -399,8 +323,10 @@ public class SCANodeImpl implements SCADomain, SCANode {
                 // go out and add this node to the wider domain
                 domainManager.registerNode(domainUri, nodeUri);
             } catch(Exception ex) {
-                // not sure what to do here
-                logger.log(Level.WARNING,  "Can't connect to domain manager");
+                logger.log(Level.SEVERE,  
+                           "Can't connect to domain manager at: " + 
+                           domainUrl);
+                throw new ActivationException(ex);
             }
         }
     }
@@ -419,8 +345,10 @@ public class SCANodeImpl implements SCADomain, SCANode {
             try {
                 domainManager.removeNode(domainUri, nodeUri);
             } catch(Exception ex) {
-                // not sure what to do here
-                logger.log(Level.WARNING,  "Can't connect to domain manager");
+                logger.log(Level.SEVERE,  
+                        "Can't connect to domain manager at: " + 
+                        domainUrl);
+                throw new ActivationException(ex);
             }
         }
     }    

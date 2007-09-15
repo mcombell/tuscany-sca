@@ -69,21 +69,18 @@ public class InMemoryTestCase {
             
             // create the node that runs the 
             // subtract component 
-            domainNodeC = new SCANodeImpl(DEFULT_DOMAIN_URI, "nodeC");
+            domainNodeC = new SCANodeImpl(DEFULT_DOMAIN_URI, "http://localhost:8088");
             domainNodeC.start();
             domainNodeC.getContributionManager().startContribution(InMemoryTestCase.class.getClassLoader().getResource("nodeC/"));         
     
             // get a reference to the calculator service from domainA
             // which will be running this component
             calculatorServiceA = domainNodeA.getService(CalculatorService.class, "CalculatorServiceComponent");
-    } catch(Exception ex){
+            calculatorServiceB = domainNodeB.getService(CalculatorService.class, "CalculatorServiceComponent");
+            
+        } catch(Exception ex){
             System.err.println(ex.toString());
-    }
-        
-        // get a reference to the calculator service from domainA
-        // which will be running this component
-        calculatorServiceA = domainNodeA.getService(CalculatorService.class, "CalculatorServiceComponent1");
-        calculatorServiceB = domainNodeB.getService(CalculatorService.class, "CalculatorServiceComponent");       
+        }  
         
    }
 
