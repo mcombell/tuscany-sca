@@ -17,6 +17,13 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
+
+
+<!--
+  The components used to interact with a Node. The components her are expect to be here
+  to edit with caution. In particular the service and reference urls are edited at runtime
+  in the in memory model. So don;t rely on the values here.  
+-->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
            targetNamespace="http://management"
            xmlns:sample="http://management"
@@ -31,11 +38,11 @@
         </service>
         <service name="NodeManagerService">
             <interface.java interface="org.apache.tuscany.sca.node.NodeManagerService"/>
-            <tuscany:binding.jsonrpc uri="http://localhost:8082/NodeManagerComponent/NodeManagerJson"/>
+            <tuscany:binding.jsonrpc uri="http://localhost:8080/NodeManagerComponent/NodeManagerJson"/>
         </service>
         <service name="ComponentManagerService">
             <interface.java interface="org.apache.tuscany.sca.node.ComponentManagerService"/>
-            <tuscany:binding.jsonrpc uri="http://localhost:8082/NodeManagerComponent/ComponentManagerJson"/>
+            <tuscany:binding.jsonrpc uri="http://localhost:8080/NodeManagerComponent/ComponentManagerJson"/>
         </service>
     </component>           
     
@@ -56,7 +63,7 @@
 
     <component name="node">
         <service name="Resource">
-            <tuscany:binding.http uri="http://localhost:8082/node"/>
+            <tuscany:binding.http uri="http://localhost:8080/node"/>
         </service>
        <tuscany:implementation.resource location="webroot"/>
     </component>    

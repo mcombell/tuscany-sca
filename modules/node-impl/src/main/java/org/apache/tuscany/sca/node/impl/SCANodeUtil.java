@@ -19,11 +19,21 @@
 
 package org.apache.tuscany.sca.node.impl;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.assembly.ComponentService;
+import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.node.SCADomainFactory;
 import org.apache.tuscany.sca.node.SCADomain;
@@ -40,7 +50,7 @@ public class SCANodeUtil {
 	private final static Logger logger = Logger.getLogger(SCANodeUtil.class.getName());
 	
 	/**
-	 * Given the name of a composite this methid finds the contribution that it belongs to
+	 * Given the name of a composite this method finds the contribution that it belongs to
 	 * this could be either a local directory of a jar file.
 	 * 
 	 * @param classLoader
@@ -82,4 +92,137 @@ public class SCANodeUtil {
         
     	return contributionURL;
     } 
+    
+    
+    /** 
+     * A rather ugly method to find out to fix the url of the service, assuming that there
+     * is one. 
+     *  
+     * we can't get is out of a service reference
+     * the component itself doesn't know how to get it  
+     * the binding can't to do it automatically as it's not the sca binding
+     * 
+     * TODO - This would be better done by passing out a serializable reference to service discovery 
+     *         but this doesn't work yet     
+     * 
+     * @return node manager url
+     */    
+    public static void fixUpNodeServiceUrls(List<Component> nodeComponents, String nodeUrlString)
+      throws MalformedURLException, UnknownHostException {
+        String nodeManagerUrl = null;
+      
+        for(Component component : nodeComponents){
+            for (ComponentService service : component.getServices() ){
+                for (Binding binding : service.getBindings() ) {
+                    fixUpBindingUrl(binding, nodeUrlString);  
+                }
+            }            
+        }
+    }
+    
+    public static void fixUpNodeReferenceUrls(List<Component> nodeComponents, String domainUrlString)
+      throws MalformedURLException, UnknownHostException{
+        String nodeManagerUrl = null;
+              
+        for(Component component : nodeComponents){
+            for (ComponentReference reference : component.getReferences() ){
+                if ( reference.getName().equals("domainManager") ||
+                     reference.getName().equals("scaDomainService")) {
+                    for (Binding binding : reference.getBindings() ) {
+                        fixUpBindingUrl(binding, domainUrlString);  
+                    }
+                }
+            }            
+        }
+    }    
+    
+    public static String getNodeManagerServiceUrl(List<Component> nodeComponents){
+        String nodeManagerUrl = null;
+              
+        for(Component component : nodeComponents){
+            for (ComponentService service : component.getServices() ){
+                
+                if ( service.getName().equals("NodeManagerService")) {
+                    nodeManagerUrl = service.getBindings().get(0).getURI();
+                }
+            }            
+        }
+        
+        return nodeManagerUrl;
+    }    
+    
+    /**
+     * For http(s) protocol find a port that isn't in use and make sure the domain name 
+     * is the real domain name
+     * 
+     * @param binding
+     * @param nodeURL the URL provided as the identifier of the node
+     */
+    public static void fixUpBindingUrl(Binding binding, String manualUrlString)
+      throws MalformedURLException, UnknownHostException{
+
+        String urlString = binding.getURI(); 
+        
+        // only going to fiddle with bindings that use HTTP protocol
+        if( ((urlString.startsWith("http") != true ) &&
+            (urlString.startsWith("https") != true )) ||
+            (binding instanceof SCABinding)) {
+            return;
+        }
+        
+        URL bindingUrl =  new URL(urlString);
+        String originalHost = bindingUrl.getHost();
+        String newHost = null;
+        int originalPort = bindingUrl.getPort();
+        int newPort = 0;
+        
+        if (manualUrlString != null) {
+            // the required url has been specified manually
+            URL manualUrl = new URL(manualUrlString);
+            newHost = manualUrl.getHost();
+            newPort = manualUrl.getPort();
+            
+            if ( newHost.equals("localhost")){
+                newHost = InetAddress.getLocalHost().getHostName();
+            }
+        } else {
+            // discover the host and port information
+            newHost = InetAddress.getLocalHost().getHostName();
+            newPort = findFreePort(originalPort);
+        }
+        
+        // replace the old with the new
+        urlString = urlString.replace(String.valueOf(originalPort), String.valueOf(newPort));          
+        urlString = urlString.replace(originalHost, newHost);
+        
+        // set the address back into the NodeManager binding.
+        binding.setURI(urlString);   
+    }  
+    
+    /**
+     * Find a port on this machine that isn't in use. 
+     * 
+     * @param startPort
+     * @return
+     */
+    public static int findFreePort(int startPort)
+    {
+        boolean portIsBusy = true;
+        int freePort = startPort;
+        
+        do {
+            try {
+                ServerSocket socket = new ServerSocket(freePort);
+                portIsBusy = false;
+                socket.close();
+                break;
+            }
+            catch (IOException ex) {
+                // the port is busy
+                freePort = freePort + 1;
+            }
+        } while (portIsBusy || freePort > 9999); 
+        
+        return freePort;
+    }       
 }
