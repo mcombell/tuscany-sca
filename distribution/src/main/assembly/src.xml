@@ -102,6 +102,8 @@
              <exclude>modules/implementation-osgi/.felix/**/*</exclude>
              <exclude>samples/old</exclude>
              <exclude>samples/old/**/*</exclude>
+             <exclude>samples/calculator-distributed/work</exclude>
+             <exclude>samples/calculator-distributed/work/**/*</exclude>
              <exclude>samples/company-das</exclude>
              <exclude>samples/company-das/**/*</exclude>
              <exclude>samples/company-das-webapp</exclude>
