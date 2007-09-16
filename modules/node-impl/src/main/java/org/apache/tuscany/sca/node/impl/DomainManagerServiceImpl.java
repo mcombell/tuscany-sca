@@ -19,10 +19,14 @@
 
 package org.apache.tuscany.sca.node.impl;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.tuscany.sca.domain.DomainManagerService;
 import org.apache.tuscany.sca.domain.NodeInfo;
+import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
 
@@ -35,11 +39,40 @@ import org.osoa.sca.annotations.Scope;
 @Scope("COMPOSITE")
 public class DomainManagerServiceImpl implements DomainManagerService{
     
+    private final static Logger logger = Logger.getLogger(DomainManagerServiceImpl.class.getName());    
+    
+    @Property
+    protected int retryCount = 100;
+    
+    @Property 
+    protected int retryInterval = 5000; //ms    
+    
     @Reference
     protected DomainManagerService domainManager;
 
     public String registerNode(String domainUri, String nodeUri) {
-        return domainManager.registerNode(domainUri, nodeUri);
+        
+        String returnValue = null;
+        
+        for (int i =0; i < retryCount; i++){
+            try {        
+                returnValue =  domainManager.registerNode(domainUri, nodeUri);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to regsiter node " + 
+                                       nodeUri + 
+                                       " with domain " +
+                                       domainUri);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
+        
+        return returnValue;
     }
 
     public String removeNode(String domainUri, String nodeUri) {
