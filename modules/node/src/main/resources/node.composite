@@ -62,10 +62,10 @@
     </component>
 
     <component name="node">
+       <tuscany:implementation.resource location="webroot"/>
         <service name="Resource">
             <tuscany:binding.http uri="http://localhost:8080/node"/>
         </service>
-       <tuscany:implementation.resource location="webroot"/>
     </component>    
     
 
