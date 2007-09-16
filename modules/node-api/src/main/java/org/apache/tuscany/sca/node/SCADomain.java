@@ -39,14 +39,14 @@ public interface SCADomain {
      * 
      * @return the domain Uri
      */
-    public String getDomainUri();
+    public String getDomainURI();
     
     /**
      * Returns the name of this node
      * 
      * @return the node uri
      */
-    public String getNodeUri();  
+    public String getNodeURI();  
     
     /**
      * Returns the root url of the domain that this node
@@ -54,14 +54,14 @@ public interface SCADomain {
      * 
      * @return the domain Url
      */
-    public URL getDomainUrl();
+    public URL getDomainURL();
     
     /**
      * Returns the root url of this  node
      * 
      * @return the node url
      */
-    public URL getNodeUrl();      
+    public URL getNodeURL();      
          
     
     /**

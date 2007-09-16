@@ -104,7 +104,7 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
                 SCADomainService serviceDiscovery = domain.getDomainService();
 
                 String serviceUrl =
-                    serviceDiscovery.findServiceEndpoint(domain.getDomainUri(),
+                    serviceDiscovery.findServiceEndpoint(domain.getDomainURI(),
                                                          binding.getURI(),
                                                          SCABinding.class.getName());
                 if ((serviceUrl == null) || serviceUrl.equals("")) {

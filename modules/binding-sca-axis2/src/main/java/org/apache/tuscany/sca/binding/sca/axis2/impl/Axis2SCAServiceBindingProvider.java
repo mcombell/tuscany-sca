@@ -144,7 +144,7 @@ public class Axis2SCAServiceBindingProvider implements ServiceBindingProvider2 {
 		            // the service URL will likely be completely different to that 
 		            // calculated by the ws binding so replace it with the node url
 		            // The node url will have been set via init parameters in the web app
-                    URL nodeUrl = domain.getNodeUrl();
+                    URL nodeUrl = domain.getNodeURL();
                     
                     if (nodeUrl != null){
                         newHost = nodeUrl.getHost();
@@ -169,16 +169,16 @@ public class Axis2SCAServiceBindingProvider implements ServiceBindingProvider2 {
                 componentServiceUrlString = componentServiceUrlString.replace(originalHost, newHost);		        
 		        		
 		        try {
-		            domainService.registerServiceEndpoint(domain.getDomainUri(), 
-    		                                              domain.getNodeUri(), 
+		            domainService.registerServiceEndpoint(domain.getDomainURI(), 
+    		                                              domain.getNodeURI(), 
     		                                              componentServiceName, 
     		                                              SCABinding.class.getName(), 
     		                                              componentServiceUrlString);
                 } catch(Exception ex) {
                     logger.log(Level.WARNING, 
                                "Unable to  register service: "  +
-                               domain.getDomainUri() + " " +
-                               domain.getNodeUri() + " " +
+                               domain.getDomainURI() + " " +
+                               domain.getNodeURI() + " " +
                                componentServiceName + " " +
                                SCABinding.class.getName() + " " +
                                componentServiceUrlString);
