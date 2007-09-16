@@ -19,8 +19,13 @@
 
 package org.apache.tuscany.sca.node.impl;
 
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.domain.ServiceInfo;
+import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 
 
@@ -30,6 +35,15 @@ import org.osoa.sca.annotations.Reference;
  * @version $Rev: 552343 $ $Date: 2007-09-09 23:54:46 +0100 (Sun, 09 Sep 2007) $
  */
 public class SCADomainServiceImpl implements SCADomainService{
+    
+    private final static Logger logger = Logger.getLogger(SCADomainServiceImpl.class.getName());
+    
+    @Property
+    protected int retryCount = 100;
+    
+    @Property 
+    protected int retryInterval = 5000; //ms
+    
     
     @Reference
     protected SCADomainService scaDomainService;
@@ -41,41 +55,67 @@ public class SCADomainServiceImpl implements SCADomainService{
      * @param nodeUri the string uri for the current node
      * @param serviceName the name of the service that is exposed and the provided endpoint
      * @param bindingName the remote binding that is providing the endpoint
-     * @param url the enpoint url
-     * @return dummy valus just so that we don;t have a void return which doesn't work 
+     * @param url the endpoint url
+     * @return dummy values just so that we don't have a void return which doesn't work 
      */
     public String registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
-     /*
-        System.err.println("Registering service: [" + 
-                domainUri + " " +
-                nodeUri + " " +
-                serviceName + " " +
-                bindingName + " " +
-                URL +
-                "]");
-      */
-        
+     
         String dummy = null; 
         
-     //   try {
-            dummy =  scaDomainService.registerServiceEndpoint(domainUri, nodeUri, serviceName, bindingName, URL);
-     //   } catch(Exception ex) {
-            // When we get round to caching we could keep a list of registered endpoints
-            // and try again later either when this object is called or when the 
-            // domain comes back up again
-            /* not sure this should be an exception 
-            throw new IllegalStateException("Unable to  registering service: "  +
-                                            domainUri + " " +
-                                            nodeUri + " " +
-                                            serviceName + " " +
-                                            bindingName + " " +
-                                            URL, ex );
-            */
-     //   }
+        for (int i =0; i < retryCount; i++){
+            try {
+                dummy = scaDomainService.registerServiceEndpoint(domainUri, nodeUri, serviceName, bindingName, URL);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to register service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
         
         return dummy;
     }
     
+    /**
+     * Removes information about a service endpoint 
+     * 
+     * @param domainUri the string uri for the distributed domain
+     * @param nodeUri the string uri for the current node
+     * @param serviceName the name of the service that is exposed and the provided endpoint
+     * @param bindingName the remote binding that is providing the endpoint
+     * @return dummy values just so that we don't have a void return which doesn't work 
+     */
+    public String removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName){
+     
+        String dummy = null; 
+        
+        for (int i =0; i < retryCount; i++){
+            try {
+                dummy = scaDomainService.removeServiceEndpoint(domainUri, nodeUri, serviceName, bindingName);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to remove service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
+        
+        return dummy;
+    }    
    
     /**
      * Locates information about a service endpoint 
@@ -86,22 +126,27 @@ public class SCADomainServiceImpl implements SCADomainService{
      * @return url the endpoint url
      */
     public String findServiceEndpoint(String domainUri, String serviceName, String bindingName){
-     /*        
-        System.err.println("Finding service: [" + 
-                domainUri + " " +
-                serviceName + " " +
-                bindingName +
-                "]");
-      */
+
         
         String url = null;
         
-        try {
-            url =  scaDomainService.findServiceEndpoint(domainUri, serviceName, bindingName);
-        } catch(Exception ex) {
-            // do nothing here. 
-            // If we can't find a service fo what ever reason then just return null
-        }
+        for (int i =0; i < retryCount; i++){
+            try {
+                url =  scaDomainService.findServiceEndpoint(domainUri, serviceName, bindingName);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to find service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
         
         return url;
     }

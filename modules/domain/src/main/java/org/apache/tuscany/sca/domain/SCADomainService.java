@@ -44,6 +44,18 @@ public interface SCADomainService {
      */
     public String registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL);
     
+    
+    /**
+     * Removes information about a service endpoint
+     * 
+     * @param domainUri the string uri for the distributed domain
+     * @param nodeUri the string uri for the current node
+     * @param serviceName the name of the service that is exposed and the provided endpoint
+     * @param bindingName the remote binding that is providing the endpoint
+     */    
+    public String  removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName);
+     
+        
     /**
      * Locates information about a service endpoint 
      * 
@@ -54,6 +66,7 @@ public interface SCADomainService {
      */
     public String findServiceEndpoint(String domainUri, String serviceName, String bindingName); 
     
+       
     
     /** 
      * Returns information for all registered services

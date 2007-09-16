@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class CallableReferenceRemoteTestCase {
     
-    private static String DEFAULT_DOMAIN_NAME = "http://localhost:8080";
+    private static String DEFAULT_DOMAIN_NAME = "http://localhost:8877";
 
     private static SCANodeImpl domain;
     private static SCANodeImpl nodeA;

@@ -36,7 +36,7 @@ import calculator.CalculatorService;
  */
 public class InMemoryTestCase {
     
-    private static String DEFULT_DOMAIN_URI = "http://localhost:8080";
+    private static String DEFULT_DOMAIN_URI = "http://localhost:8877";
 
     private static SCANodeImpl registry;
     private static SCANodeImpl domainNodeA;

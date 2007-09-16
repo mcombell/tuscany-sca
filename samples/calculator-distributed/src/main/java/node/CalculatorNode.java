@@ -38,15 +38,15 @@ public class CalculatorNode {
     public static void main(String[] args) throws Exception {
         
         // Check that the correct arguments have been provided
-        if (null == args || args.length != 2) {
+        if (null == args || args.length < 2) {
              System.err.println("Useage: java CalculatorNode domainname nodename");   
              System.exit(1);
         }    
         
         try {
             String domainName = args[0];
-            String nodeName   = args[1];                       
-            
+            String nodeName   = args[1];
+             
             // Create the distributed domain representation. We use the network implementation 
             // here so that the node contacts a registry running somewhere out on the 
             // network. 
@@ -64,12 +64,23 @@ public class CalculatorNode {
                 // do some application stuff
                 CalculatorService calculatorService = 
                     node.getService(CalculatorService.class, "CalculatorServiceComponent");
-        
+                
                 // Calculate
                 System.out.println("3 + 2=" + calculatorService.add(3, 2));
                 System.out.println("3 - 2=" + calculatorService.subtract(3, 2));
                 System.out.println("3 * 2=" + calculatorService.multiply(3, 2));
                 System.out.println("3 / 2=" + calculatorService.divide(3, 2));
+                
+                // a little hidden loop test to put some load on the nodes
+                if (args.length > 2){
+                    for (int i=0; i < 1000; i++){
+                        // Calculate
+                        System.out.println("3 + 2=" + calculatorService.add(3, 2));
+                        System.out.println("3 - 2=" + calculatorService.subtract(3, 2));
+                        System.out.println("3 * 2=" + calculatorService.multiply(3, 2));
+                        System.out.println("3 / 2=" + calculatorService.divide(3, 2));
+                    }
+                }
             } else {
                 // start up and wait for messages
                 try {
