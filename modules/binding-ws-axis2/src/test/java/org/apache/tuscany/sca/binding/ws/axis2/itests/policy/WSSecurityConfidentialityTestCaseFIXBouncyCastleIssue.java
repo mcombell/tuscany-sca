@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.binding.ws.axis2.itests.policy;
 import java.security.Provider;
 import java.security.Security;
 
-public class WSSecurityConfidentialityTestCase extends AbstractHelloWorldOMTestCase {
+public class WSSecurityConfidentialityTestCaseFIXBouncyCastleIssue extends AbstractHelloWorldOMTestCase {
 
     /**
      * @see org.apache.tuscany.sca.binding.ws.axis2.itests.policy.AbstractHelloWorldOMTestCase#setUp()
