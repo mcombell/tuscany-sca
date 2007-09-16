@@ -135,7 +135,16 @@ public class TestDomain implements SCADomain {
         return domainURI;
     } 
     
-    public SCADomainService getServiceDiscovery(){
+    
+    public URL getNodeUrl(){
+        return null;
+    }  
+    
+    public URL getDomainUrl(){
+        return null;
+    }     
+    
+    public SCADomainService getDomainService(){
         return serviceDiscovery;
     }     
     
