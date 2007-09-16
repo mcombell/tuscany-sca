@@ -24,10 +24,10 @@
            name="Domain">
            
     <component name="domain">
+       <tuscany:implementation.resource location="webroot"/>
         <service name="Resource">
             <tuscany:binding.http/>
         </service>
-       <tuscany:implementation.resource location="webroot"/>
     </component>            
                  
     <component name="DomainManagerComponent">
