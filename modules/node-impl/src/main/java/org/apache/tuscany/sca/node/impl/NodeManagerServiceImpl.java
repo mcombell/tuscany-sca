@@ -44,7 +44,7 @@ public class NodeManagerServiceImpl implements NodeManagerService, NodeManagerIn
     private SCANode node;
 
     public String getNodeUri() {
-        return node.getNodeUri();
+        return node.getNodeURI();
     }
 
     // NodeManagerInitService

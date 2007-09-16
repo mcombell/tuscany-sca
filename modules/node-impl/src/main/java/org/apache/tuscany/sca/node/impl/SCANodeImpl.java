@@ -355,19 +355,19 @@ public class SCANodeImpl implements SCADomain, SCANode {
         }
     }    
  
-    public String getDomainUri(){
+    public String getDomainURI(){
         return domainUri;
     }
     
-    public String getNodeUri(){
+    public String getNodeURI(){
         return nodeUri;
     }  
     
-    public URL getDomainUrl(){
+    public URL getDomainURL(){
         return domainUrl;
     }
     
-    public URL getNodeUrl(){
+    public URL getNodeURL(){
         return nodeUrl;
     }     
     

@@ -127,20 +127,20 @@ public class TestDomain implements SCADomain {
     }
     
         
-    public String getNodeUri(){
+    public String getNodeURI(){
         return nodeName;
     }  
     
-    public String getDomainUri(){
+    public String getDomainURI(){
         return domainURI;
     } 
     
     
-    public URL getNodeUrl(){
+    public URL getNodeURL(){
         return null;
     }  
     
-    public URL getDomainUrl(){
+    public URL getDomainURL(){
         return null;
     }     
     

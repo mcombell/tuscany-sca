@@ -129,7 +129,7 @@ public class Axis2SCAReferenceBindingProvider implements ReferenceBindingProvide
 	            // The binding URI might be null in the case where this reference is completely
 	            // dynamic, for example, in the case of callbacks
 	            if (binding.getURI() != null) {
-	                String serviceUrl = serviceDiscovery.findServiceEndpoint(domain.getDomainUri(), 
+	                String serviceUrl = serviceDiscovery.findServiceEndpoint(domain.getDomainURI(), 
 	                                                                         binding.getURI(), 
 	                                                                         SCABinding.class.getName());
 	                
