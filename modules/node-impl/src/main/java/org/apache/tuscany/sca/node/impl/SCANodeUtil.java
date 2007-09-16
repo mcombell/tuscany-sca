@@ -34,6 +34,7 @@ import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.SCABinding;
+import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.node.SCADomainFactory;
 import org.apache.tuscany.sca.node.SCADomain;
@@ -68,13 +69,12 @@ public class SCANodeUtil {
             int jarPosition = contributionString.indexOf(".jar");
     	
             if (jarPosition> -1){
-                // if the node dir is in a jar just contribute the name of the jar
-                // file
+                // if the node dir is in a jar just contribute the name of the jar file
                 // rather the name of the directory in the jar file.
                 // changing
-                // jar:file:/myjarfile.jar!/contributiondir
+                //   jar:file:/myjarfile.jar!/contributiondir
                 // to
-                // file:/myjarfile.jar
+                //   file:/myjarfile.jar
                 contributionString = contributionString.substring(0, jarPosition + 4);
                 contributionString = contributionString.substring(4);
                 contributionURL = new URL(contributionString);  
@@ -95,7 +95,7 @@ public class SCANodeUtil {
     
     
     /** 
-     * A rather ugly method to find out to fix the url of the service, assuming that there
+     * A rather ugly method to find and fix the url of the service, assuming that there
      * is one. 
      *  
      * we can't get is out of a service reference
@@ -107,35 +107,25 @@ public class SCANodeUtil {
      * 
      * @return node manager url
      */    
-    public static void fixUpNodeServiceUrls(List<Component> nodeComponents, String nodeUrlString)
+    public static void fixUpNodeServiceUrls(List<Component> nodeComponents, URL nodeUrlString)
       throws MalformedURLException, UnknownHostException {
         String nodeManagerUrl = null;
       
         for(Component component : nodeComponents){
             for (ComponentService service : component.getServices() ){
                 for (Binding binding : service.getBindings() ) {
-                    fixUpBindingUrl(binding, nodeUrlString);  
+                    fixUpNodeServiceBindingUrl(binding, nodeUrlString);  
                 }
             }            
         }
-    }
+    }   
     
-    public static void fixUpNodeReferenceUrls(List<Component> nodeComponents, String domainUrlString)
-      throws MalformedURLException, UnknownHostException{
-        String nodeManagerUrl = null;
-              
-        for(Component component : nodeComponents){
-            for (ComponentReference reference : component.getReferences() ){
-                if ( reference.getName().equals("domainManager") ||
-                     reference.getName().equals("scaDomainService")) {
-                    for (Binding binding : reference.getBindings() ) {
-                        fixUpBindingUrl(binding, domainUrlString);  
-                    }
-                }
-            }            
-        }
-    }    
-    
+    /**
+     * Find and return the URL of the NodeManagerService
+     * 
+     * @param nodeComponents
+     * @return
+     */
     public static String getNodeManagerServiceUrl(List<Component> nodeComponents){
         String nodeManagerUrl = null;
               
@@ -152,20 +142,22 @@ public class SCANodeUtil {
     }    
     
     /**
-     * For http(s) protocol find a port that isn't in use and make sure the domain name 
+     * For node management services that use the http(s) protocol then use the node url as the enpoint
+     * if it has been specified otherwise find a port that isn't in use and make sure the domain name 
      * is the real domain name
      * 
      * @param binding
      * @param nodeURL the URL provided as the identifier of the node
      */
-    public static void fixUpBindingUrl(Binding binding, String manualUrlString)
+    public static void fixUpNodeServiceBindingUrl(Binding binding, URL manualUrl)
       throws MalformedURLException, UnknownHostException{
 
         String urlString = binding.getURI(); 
         
         // only going to fiddle with bindings that use HTTP protocol
-        if( ((urlString.startsWith("http") != true ) &&
-            (urlString.startsWith("https") != true )) ||
+        if( (urlString == null) ||
+            ((urlString.startsWith("http") != true ) &&
+             (urlString.startsWith("https") != true )) ||
             (binding instanceof SCABinding)) {
             return;
         }
@@ -176,9 +168,8 @@ public class SCANodeUtil {
         int originalPort = bindingUrl.getPort();
         int newPort = 0;
         
-        if (manualUrlString != null) {
+        if (manualUrl != null) {
             // the required url has been specified manually
-            URL manualUrl = new URL(manualUrlString);
             newHost = manualUrl.getHost();
             newPort = manualUrl.getPort();
             
@@ -224,5 +215,72 @@ public class SCANodeUtil {
         } while (portIsBusy || freePort > 9999); 
         
         return freePort;
-    }       
+    }  
+    
+    /**
+     * For node services that have to talk to the domain fix up the reference URL using the 
+     * provided domain url if it has been provided
+     * 
+     * @param nodeComponents
+     * @param domainUrlString
+     * @throws MalformedURLException
+     * @throws UnknownHostException
+     */
+    public static void fixUpNodeReferenceUrls(List<Component> nodeComponents, URL domainUrl)
+    throws MalformedURLException, UnknownHostException, ActivationException{
+      String nodeManagerUrl = null;
+            
+      for(Component component : nodeComponents){
+          for (ComponentReference reference : component.getReferences() ){
+              if ( reference.getName().equals("domainManager") ||
+                   reference.getName().equals("scaDomainService")) {
+                  for (Binding binding : reference.getBindings() ) {
+                      fixUpNodeReferenceBindingUrl(binding, domainUrl);  
+                  }
+              }
+          }            
+       }
+    }   
+    
+    /**
+     * For node management references to the domain fix up the binding URLs so that they point
+     * to the endpoint described in the domainURL
+     * 
+     * @param binding
+     * @param nodeURL the URL provided as the identifier of the node
+     */
+    public static void fixUpNodeReferenceBindingUrl(Binding binding, URL manualUrl)
+      throws MalformedURLException, UnknownHostException, ActivationException{
+
+        String urlString = binding.getURI();
+        
+        // only going to fiddle with bindings that use HTTP protocol
+        if( (urlString == null) ||
+            ((urlString.startsWith("http") != true ) &&
+             (urlString.startsWith("https") != true )) ||
+            (binding instanceof SCABinding) ) {
+            return;
+        }
+        
+        URL bindingUrl =  new URL(urlString);
+        String originalHost = bindingUrl.getHost();
+        String newHost = null;
+        int originalPort = bindingUrl.getPort();
+        int newPort = 0;
+        
+        if (manualUrl != null) {
+            // the required url has been specified manually
+            newHost = manualUrl.getHost();
+            newPort = manualUrl.getPort();
+        } else {
+            throw new ActivationException("domain uri can't be null");
+        }
+        
+        // replace the old with the new
+        urlString = urlString.replace(String.valueOf(originalPort), String.valueOf(newPort));          
+        urlString = urlString.replace(originalHost, newHost);
+        
+        // set the address back into the NodeManager binding.
+        binding.setURI(urlString);   
+    }      
 }
