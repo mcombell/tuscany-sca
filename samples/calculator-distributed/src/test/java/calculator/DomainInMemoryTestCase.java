@@ -35,7 +35,7 @@ import calculator.CalculatorService;
  */
 public class DomainInMemoryTestCase {
     
-    private static String DEFAULT_DOMAIN_URL = "http://localhost:8080";
+    private static String DEFAULT_DOMAIN_URL = "http://localhost:8877";
 
     private static SCANodeImpl domain;
     private static SCANodeImpl domainNodeA;

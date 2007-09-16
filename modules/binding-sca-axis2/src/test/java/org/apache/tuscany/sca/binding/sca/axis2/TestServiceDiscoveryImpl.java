@@ -111,7 +111,9 @@ public class TestServiceDiscoveryImpl implements SCADomainService{
         return "";
     }
     
-   
+    public String removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName){
+        return "";  
+    }
     /**
      * Locates information about a service endpoint 
      * 

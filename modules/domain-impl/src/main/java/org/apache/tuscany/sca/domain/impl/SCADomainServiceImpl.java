@@ -21,6 +21,8 @@ package org.apache.tuscany.sca.domain.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.domain.ServiceInfo;
@@ -34,6 +36,8 @@ import org.osoa.sca.annotations.Scope;
  */
 @Scope("COMPOSITE")
 public class SCADomainServiceImpl implements SCADomainService {
+    
+    private final static Logger logger = Logger.getLogger(SCADomainServiceImpl.class.getName());    
     
     List<ServiceEndpoint> serviceEndpoints = new ArrayList<ServiceEndpoint>();
     
@@ -108,12 +112,38 @@ public class SCADomainServiceImpl implements SCADomainService {
             modifiedServiceName = serviceName;
         }
         
+        
         ServiceEndpoint serviceEndpoint = new ServiceEndpoint (domainUri, nodeUri, modifiedServiceName, bindingName, URL);
         serviceEndpoints.add(serviceEndpoint);
-        System.err.println("Registering service: " + serviceEndpoint.toString());
+        logger.log(Level.INFO, "Registered service: " + serviceEndpoint.toString());
         return "";
     }
     
+    /**
+     * Removes information about a service endpoint
+     * 
+     * @param domainUri the string uri for the distributed domain
+     * @param nodeUri the string uri for the current node
+     * @param serviceName the name of the service that is exposed and the provided endpoint
+     * @param bindingName the remote binding that is providing the endpoint
+     */    
+    public String  removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName){
+        
+        List<ServiceEndpoint> serviceEndpointsToRemove = new ArrayList<ServiceEndpoint>();
+        
+        for(ServiceEndpoint serviceEndpoint : serviceEndpoints){
+            if ( serviceEndpoint.match(domainUri, serviceName, bindingName)){
+                serviceEndpointsToRemove.add(serviceEndpoint);
+            }
+        }
+        
+        for(ServiceEndpoint serviceEndpointToRemove : serviceEndpointsToRemove){
+            serviceEndpoints.remove(serviceEndpointToRemove);
+            logger.log(Level.INFO, "Removed service: " +  serviceName );
+        }
+        
+        return "";
+    }
    
     /**
      * Locates information about a service endpoint 
@@ -124,11 +154,11 @@ public class SCADomainServiceImpl implements SCADomainService {
      * @return url the endpoint url
      */
     public String findServiceEndpoint(String domainUri, String serviceName, String bindingName){
-        System.err.println("Finding service: [" + 
-                           domainUri + " " +
-                           serviceName + " " +
-                           bindingName +
-                           "]");
+        logger.log(Level.INFO, "Finding service: [" + 
+                               domainUri + " " +
+                               serviceName + " " +
+                               bindingName +
+                               "]");
         
         String url = "";
         
@@ -138,7 +168,7 @@ public class SCADomainServiceImpl implements SCADomainService {
                 // if you want to temporarily modify the registered port 
                 // numbers for debugging uncomment this line
                 //url = replacePort(url, "8085", "8086");
-                System.err.println("Matching service url: " + url); 
+                logger.log(Level.INFO, "Found service url: " + url); 
             }
         }
         return url;

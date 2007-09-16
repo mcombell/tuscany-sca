@@ -150,6 +150,16 @@ public class Axis2SCAReferenceBindingProvider implements ReferenceBindingProvide
     }
     
     /**
+     * Go back to the distributed domain to go and get the service endpoint
+     * 
+     * @return An EPR for the target service that this reference refers to 
+     */
+    public EndpointReference refreshServiceEndpoint(){ 
+        serviceEPR= null;
+        return getServiceEndpoint();
+    }
+    
+    /**
      * Retrieves the uri of the callback service (that this reference has created)
      * returns null if there is no callback service for the sca binding
      * 
