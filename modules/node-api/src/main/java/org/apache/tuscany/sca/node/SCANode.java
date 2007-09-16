@@ -19,7 +19,6 @@
 
 package org.apache.tuscany.sca.node;
 
-import org.apache.tuscany.sca.domain.SCADomainService;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 
@@ -37,14 +36,14 @@ public interface SCANode {
      * 
      * @return the domain URI
      */
-    public String getDomainUri();
+    public String getDomainURI();
     
     /**
      * Returns the name of the name of this node
      * 
      * @return the node name
      */
-    public String getNodeUri();  
+    public String getNodeURI();  
     
     /**
      * Return the nodes component manager
@@ -53,10 +52,6 @@ public interface SCANode {
      */
     public ComponentManager getComponentManager();
 
-/*
-    public CompositeManager getCompositeManager();
-*/
-    
     /**
      * Return the nodes contribution manager
      * 
