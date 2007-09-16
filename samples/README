@@ -28,18 +28,24 @@ calculator-script        - The calculator but this time built using various
                            script languages
 calculator-webapp        - The calculator again but this time running inside a 
                            web app
+calculator-ws-webapp     - The calculator webapp again but this time also showing
+                           the use of SCA web services binding   
 chat-webapp              - A simple chat style web app demonsrating how to use
                            the AJAX binding
 feed-aggregator          - Demonstrates using the ATOM binding
+web-resource             - Demonstrates using an SCA Web resource component
 helloworld-ws-reference  - The client side of a hello world sample that uses a 
                            web service binding
 helloworld-ws-service    - The server side of a hello world sample that uses a 
                            web service binding
-helloworld-ws-sdo	 - helloworld using ws binding and SDO
+helloworld-ws-sdo        - helloworld using ws binding and SDO
+helloworld-ws-sdo-webapp - helloworld using ws binding and SDO within a webapp
 calculator-rmi-reference - The calculator configured to talk RMI to the 
                            calculator-rmi-service sample
 calculator-rmi-service   - The calculator configured to accept RMI requests 
                            from calculator-rmi-reference
+calculator-distributed   - A calculator built using SCA nodes running on 
+                           multiple JVMs
 helloworld-jsonrpc-webapp       - An SCA application that exposes a service using 
                            JSONRPC
 helloworld-dojo-webapp          - An SCA application that exposes a service using 
@@ -261,4 +267,5 @@ In a new or existing workspace
 
 The details of how to do this for other development environments will
 vary but the process will be similar. 
+
 
