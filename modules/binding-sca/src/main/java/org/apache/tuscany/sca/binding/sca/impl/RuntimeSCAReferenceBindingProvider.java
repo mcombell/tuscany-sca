@@ -101,7 +101,7 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
             // at this node. The binding uri might be null here if the dynamic reference has been
             // fully configured yet. It won't have all of the information until invocation time
             if ((domain != null) && (binding.getURI() != null)) {
-                SCADomainService serviceDiscovery = domain.getServiceDiscovery();
+                SCADomainService serviceDiscovery = domain.getDomainService();
 
                 String serviceUrl =
                     serviceDiscovery.findServiceEndpoint(domain.getDomainUri(),

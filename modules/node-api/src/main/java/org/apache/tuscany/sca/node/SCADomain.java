@@ -19,6 +19,8 @@
 
 package org.apache.tuscany.sca.node;
 
+import java.net.URL;
+
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
@@ -32,7 +34,7 @@ import org.osoa.sca.ServiceReference;
 public interface SCADomain {
     
     /**
-     * Returns the name of the distributed domain that this node
+     * Returns the name of the domain that this node
      * is part of.
      * 
      * @return the domain Uri
@@ -40,11 +42,26 @@ public interface SCADomain {
     public String getDomainUri();
     
     /**
-     * Returns the name of the name of this node
+     * Returns the name of this node
      * 
      * @return the node uri
      */
     public String getNodeUri();  
+    
+    /**
+     * Returns the root url of the domain that this node
+     * is part of.
+     * 
+     * @return the domain Url
+     */
+    public URL getDomainUrl();
+    
+    /**
+     * Returns the root url of this  node
+     * 
+     * @return the node url
+     */
+    public URL getNodeUrl();      
          
     
     /**
@@ -52,7 +69,7 @@ public interface SCADomain {
      * 
      * @return The service discovery interface
      */    
-    public SCADomainService getServiceDiscovery();
+    public SCADomainService getDomainService();
 
     /**
      * Cast a type-safe reference to a CallableReference. Converts a type-safe

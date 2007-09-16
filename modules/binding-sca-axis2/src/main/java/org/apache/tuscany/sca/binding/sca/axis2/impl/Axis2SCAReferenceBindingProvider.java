@@ -122,7 +122,7 @@ public class Axis2SCAReferenceBindingProvider implements ReferenceBindingProvide
         
         if ( serviceEPR == null && domain != null ){
             // try to resolve the service endpoint with the registry 
-            SCADomainService serviceDiscovery = domain.getServiceDiscovery();
+            SCADomainService serviceDiscovery = domain.getDomainService();
             
             if (serviceDiscovery != null){
             

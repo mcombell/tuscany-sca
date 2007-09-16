@@ -1,4 +1,4 @@
-/*
+ /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -87,9 +87,9 @@ public class SCANodeImpl implements SCADomain, SCANode {
     
     // representation of the private state of the node that the domain is running on
     private String domainUri; 
-    private String domainUrl;
+    private URL domainUrl;
     private String nodeUri;
-    private String nodeUrl;
+    private URL nodeUrl;
     private ReallySmallRuntime nodeRuntime;
     private Composite nodeComposite; 
     
@@ -178,16 +178,18 @@ public class SCANodeImpl implements SCADomain, SCANode {
                 try {
                     tmpURI = new URI(domainUri); 
                     if (tmpURI.isAbsolute()){
-                        domainUrl = domainUri;
+                        domainUrl = tmpURI.toURL();
                     }
                 } catch(Exception ex) {
-                    domainUrl = null;
+                    throw new ActivationException("domain uri " + 
+                                                  domainUri + 
+                                                  "must be a valid url");
                 }
                 
                 try {
                     tmpURI = new URI(nodeUri); 
                     if (tmpURI.isAbsolute()){
-                        nodeUrl = nodeUri;
+                        nodeUrl = tmpURI.toURL();
                     }
                 } catch(Exception ex) {
                     nodeUrl = null;
@@ -359,7 +361,15 @@ public class SCANodeImpl implements SCADomain, SCANode {
     
     public String getNodeUri(){
         return nodeUri;
-    }    
+    }  
+    
+    public URL getDomainUrl(){
+        return domainUrl;
+    }
+    
+    public URL getNodeUrl(){
+        return nodeUrl;
+    }     
     
     public ComponentManager getComponentManager() {
         return componentManager;
@@ -387,7 +397,7 @@ public class SCANodeImpl implements SCADomain, SCANode {
      * 
      * @return The service discovery interface
      */    
-    public SCADomainService getServiceDiscovery(){
+    public SCADomainService getDomainService(){
         return scaDomain;
     }
        
