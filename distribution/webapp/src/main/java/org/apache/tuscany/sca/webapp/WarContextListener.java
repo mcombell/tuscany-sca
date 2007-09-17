@@ -126,9 +126,9 @@ public class WarContextListener implements ServletContextListener {
 
     }
 
-    protected void addContribution(URL contribution) throws CompositeBuilderException, ActivationException, URISyntaxException {
+    protected void addContribution(URL contribution) throws CompositeBuilderException, ContributionException, IOException, ActivationException, URISyntaxException {
         classLoader.addURL(contribution);
-        ((ContributionManagerImpl)node.getContributionManager()).addContributionJAR(contribution);
+        ((ContributionManagerImpl)node.getContributionManager()).addContribution(contribution);
         existingContributions.put(contribution, new Long(new File(contribution.toURI()).lastModified()));
         logger.log(Level.INFO, "Added contribution: " + contribution);
     }

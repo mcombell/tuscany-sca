@@ -49,9 +49,9 @@ import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.core.context.ServiceReferenceImpl;
 import org.apache.tuscany.sca.node.ComponentManager;
 import org.apache.tuscany.sca.node.ContributionManager;
-import org.apache.tuscany.sca.node.SCADomain;
 import org.apache.tuscany.sca.node.SCANode;
 import org.apache.tuscany.sca.node.NodeManagerInitService;
+import org.apache.tuscany.sca.domain.SCADomain;
 import org.apache.tuscany.sca.domain.DomainManagerService;
 import org.apache.tuscany.sca.domain.SCADomainService;
 import org.apache.tuscany.sca.host.embedded.impl.EmbeddedSCADomain;
@@ -70,7 +70,7 @@ import org.osoa.sca.ServiceRuntimeException;
  * 
  * @version $Rev: 552343 $ $Date: 2007-09-09 23:54:46 +0100 (Sun, 09 Sep 2007) $
  */
-public class SCANodeImpl implements SCADomain, SCANode {
+public class SCANodeImpl extends SCADomain implements SCANode {
 	
     private final static Logger logger = Logger.getLogger(SCANodeImpl.class.getName());
 	
@@ -85,6 +85,9 @@ public class SCANodeImpl implements SCADomain, SCANode {
     // class loader used to get the runtime going
     private ClassLoader domainClassLoader;
     
+    // class loader used to get application resources
+    private ClassLoader applicationClassLoader;    
+    
     // representation of the private state of the node that the domain is running on
     private String domainUri; 
     private URL domainUrl;
@@ -95,7 +98,6 @@ public class SCANodeImpl implements SCADomain, SCANode {
     
     // the managers used to control the domain node
     private ComponentManagerServiceImpl componentManager;
- //   private CompositeManagerImpl compositeManager;
     private ContributionManagerImpl contributionManager;
     
     // the proxies to the domain
@@ -113,6 +115,8 @@ public class SCANodeImpl implements SCADomain, SCANode {
       throws ActivationException {
         this.domainUri = LOCAL_DOMAIN_URI ; 
         this.nodeUri = LOCAL_NODE_URI;
+        this.domainClassLoader = SCANodeImpl.class.getClassLoader(); 
+        this.applicationClassLoader = Thread.currentThread().getContextClassLoader();                
         this.isStandalone = true;
         init();
     }
@@ -129,6 +133,8 @@ public class SCANodeImpl implements SCADomain, SCANode {
     throws ActivationException {
         this.domainUri = domainUri;
         this.nodeUri = nodeUri;
+        this.domainClassLoader = SCANodeImpl.class.getClassLoader(); 
+        this.applicationClassLoader = Thread.currentThread().getContextClassLoader();        
         this.isStandalone = LOCAL_DOMAIN_URI.equals(domainUri);
         init();
     }    
@@ -139,7 +145,7 @@ public class SCANodeImpl implements SCADomain, SCANode {
      * 
      * @param domainUri - identifies what host and port the domain service is running on, e.g. http://localhost:8081
      * @param nodeUri - if this is a url it is assumed that this will be used as root url for management components, e.g. http://localhost:8082
-     * @param classpath the classpath to use for loading system resources for the node
+     * @param cl - the ClassLoader to use for loading system resources for the node
      * @throws ActivationException
      */
     public SCANodeImpl(String domainUri, String nodeUri, ClassLoader cl)
@@ -147,8 +153,50 @@ public class SCANodeImpl implements SCADomain, SCANode {
         this.domainUri = domainUri;
         this.nodeUri = nodeUri;
         this.domainClassLoader = cl;
+        this.applicationClassLoader = Thread.currentThread().getContextClassLoader();
         this.isStandalone = LOCAL_DOMAIN_URI.equals(domainUri);
         init();
+    } 
+    
+    /** 
+     * Creates a node connected to a wider domain and allows a classpath to be specified.  
+     * To find its place in the domain node and domain identifiers must be provided. 
+     * 
+     * @param domainUri - identifies what host and port the domain service is running on, e.g. http://localhost:8081
+     * @param nodeUri - if this is a url it is assumed that this will be used as root url for management components, e.g. http://localhost:8082
+     * @param cl - the ClassLoader to use for loading system resources for the node
+     * @param applicationCl - the ClassLoader to use for loading application resources for the node
+     * @throws ActivationException
+     */
+    public SCANodeImpl(String domainUri, String nodeUri, ClassLoader cl, ClassLoader applicationCl, String contributionPath, String[] composites)
+    throws ActivationException {
+        this.domainUri = domainUri;
+        this.nodeUri = nodeUri;
+        this.domainClassLoader = cl;
+        this.applicationClassLoader = applicationCl;        
+        this.isStandalone = LOCAL_DOMAIN_URI.equals(domainUri);
+        init();
+        start();        
+        
+        try {
+            URL contributionURL = SCANodeUtil.findContributionURLFromCompositeNameOrPath(applicationClassLoader, contributionPath, composites);
+            
+            contributionManager.addContribution(contributionURL);
+            
+            if (composites.length > 0 ){
+                for(int i = 0; i < composites.length; i++) {
+                    contributionManager.addComposite(composites[i]);
+                    contributionManager.startComposite(composites[i]);
+                }
+            } else {
+                contributionManager.addAllComposites(contributionURL);
+                contributionManager.startAllComposites(contributionURL);
+            }
+             
+        } catch(Exception ex) {
+            throw new ActivationException(ex);
+        }
+        
     }    
     
     /**
@@ -159,9 +207,6 @@ public class SCANodeImpl implements SCADomain, SCANode {
     private void init()
       throws ActivationException {
         try {
-            if (domainClassLoader == null) {
-            	domainClassLoader = SCANodeImpl.class.getClassLoader(); 
-            }
             
             // create a node runtime for the domain contributions to run on
             nodeRuntime = new ReallySmallRuntime(domainClassLoader);
@@ -210,7 +255,7 @@ public class SCANodeImpl implements SCADomain, SCANode {
             // create a runtime for components to run on that will be used for talking to the 
             // rest of the domain. The components are defined in the node.composite file
             String nodeCompositeName = "node.composite";
-            URL contributionURL = SCANodeUtil.findContributionFromComposite(domainClassLoader, nodeCompositeName );
+            URL contributionURL = SCANodeUtil.findContributionURLFromCompositeNameOrPath(domainClassLoader, null, new String[]{nodeCompositeName} );
             
             if ( contributionURL != null ){ 
                 logger.log(Level.INFO, "Node management configured from " + contributionURL);
@@ -310,12 +355,12 @@ public class SCANodeImpl implements SCADomain, SCANode {
         //        I have a domain factory which always returns the same domain
         //        object. I.e. this node
         ModelFactoryExtensionPoint factories = nodeRuntime.getExtensionPointRegistry().getExtensionPoint(ModelFactoryExtensionPoint.class);
-        DomainFactoryImpl domainFactory = new DomainFactoryImpl(this);
+        NodeFactoryImpl domainFactory = new NodeFactoryImpl(this);
         factories.addFactory(domainFactory);
         
         // create the domain node managers
         componentManager = new ComponentManagerServiceImpl(domainUri, nodeUri, nodeComposite, nodeRuntime);
-        contributionManager = new ContributionManagerImpl(domainUri, nodeUri, nodeComposite, nodeRuntime, domainClassLoader, null);
+        contributionManager = new ContributionManagerImpl(domainUri, nodeUri, nodeComposite, nodeRuntime, applicationClassLoader, null);
         
         if (isStandalone == false){
             // pass this object into the node manager
@@ -332,8 +377,21 @@ public class SCANodeImpl implements SCADomain, SCANode {
             }
         }
     }
+    
+    @Override
+    public void close() {
+        try {
+            stop();
+        } catch (Exception ex) {
+            throw new ServiceRuntimeException(ex);
+        }
+    }
 
     public void stop() throws ActivationException {
+        // stop the components
+        
+        // remove contributions
+        
         // Stop the node
     	nodeRuntime.stop();
         
@@ -355,6 +413,10 @@ public class SCANodeImpl implements SCADomain, SCANode {
         }
     }    
  
+    public String getURI(){
+        return domainUri;
+    }
+    
     public String getDomainURI(){
         return domainUri;
     }
@@ -374,22 +436,11 @@ public class SCANodeImpl implements SCADomain, SCANode {
     public ComponentManager getComponentManager() {
         return componentManager;
     } 
-
-/*
-    public CompositeManager getCompositeManager() {
-        return compositeManager;
-    }
-*/
     
     public ContributionManager getContributionManager() {    	
         return contributionManager;
     }     
-    
-    public ContributionManager getContributionManager(ClassLoader classLoader) {
-        
-    	return new ContributionManagerImpl(domainUri, nodeUri, nodeComposite, nodeRuntime, classLoader, new ModelResolverImpl(classLoader));
-    }      
-
+      
     
     /**
      * Return an interface for registering local services and for

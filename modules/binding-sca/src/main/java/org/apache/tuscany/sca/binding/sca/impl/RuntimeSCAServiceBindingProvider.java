@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
-import org.apache.tuscany.sca.node.SCADomain;
+import org.apache.tuscany.sca.node.SCANode;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -42,18 +42,18 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
  */
 public class RuntimeSCAServiceBindingProvider implements ServiceBindingProvider {
   
-    private SCADomain domain;
+	private SCANode node;
     private RuntimeComponentService service;
     private BindingProviderFactory<DistributedSCABinding> distributedProviderFactory;
     private ServiceBindingProvider distributedProvider;
     private DistributedSCABinding distributedBinding;
     
     public RuntimeSCAServiceBindingProvider(ExtensionPointRegistry extensionPoints,
-    		                                SCADomain domain,
+    		                                SCANode node,
                                             RuntimeComponent component,
                                             RuntimeComponentService service,
                                             SCABinding binding) {
-    	this.domain = domain;
+    	this.node = node;
         this.service = service;
         // if there is potentially a wire to this service that crosses the node boundary 
         if (service.getInterfaceContract().getInterface().isRemotable()) {  
@@ -73,7 +73,7 @@ public class RuntimeSCAServiceBindingProvider implements ServiceBindingProvider 
             // - distributed domain in which to look for remote endpoints 
             // - remotable interface on the service
             if (distributedProviderFactory != null) {
-                if (this.domain != null) {
+                if (this.node != null) {
                     if (!service.getInterfaceContract().getInterface().isRemotable()) {
                         throw new IllegalStateException("Reference interface not remoteable for component: "+
                                                         component.getName() +

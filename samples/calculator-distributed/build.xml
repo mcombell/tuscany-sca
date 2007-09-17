@@ -129,7 +129,7 @@
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-interface\1.0-incubating-SNAPSHOT\tuscany-interface-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-policy-xml\1.0-incubating-SNAPSHOT\tuscany-policy-xml-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\commons-logging\commons-logging\1.1\commons-logging-1.1.jar"/>
-    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-node-api\1.0-incubating-SNAPSHOT\tuscany-node-api-1.0-incubating-SNAPSHOT.jar"/>
+    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-domain-api\1.0-incubating-SNAPSHOT\tuscany-domain-api-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-extension-helper\1.0-incubating-SNAPSHOT\tuscany-extension-helper-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\geronimo\specs\geronimo-activation_1.1_spec\1.0-M1\geronimo-activation_1.1_spec-1.0-M1.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-binding-jsonrpc\1.0-incubating-SNAPSHOT\tuscany-binding-jsonrpc-1.0-incubating-SNAPSHOT.jar"/>

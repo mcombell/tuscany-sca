@@ -27,8 +27,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>tuscany-node</artifactId>
-    <name>Apache Tuscany SCA Node</name>
+    <artifactId>tuscany-domain-api</artifactId>
+    <name>Apache Tuscany SCA Node API</name>
 
     <dependencies>   
         <dependency>
@@ -37,36 +37,6 @@
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
  
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-assembly</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>   
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-contribution</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency> 
-        
-         <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-core</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency> 
-        
-         <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-domain</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>  
-                    
-         <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-domain-api</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>                     
-
     </dependencies>
 
 </project>

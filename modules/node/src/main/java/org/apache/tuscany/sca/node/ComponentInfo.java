@@ -16,16 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.sca.axis2;
 
+package org.apache.tuscany.sca.node;
 
-public class BaseTest {
+/**
+ * A collection of information about a component
+ * 
+ * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
+ */
+public interface ComponentInfo {
+    
+    /**
+     * Get the component name
+     * 
+     * @return component name
+     */
+    public String getName();
+    
+    /**
+     * Set the component name
+     * 
+     * @param name component name
+     */
+    public void setName(String name);
 
-    public static String DEFULT_DOMAIN_NAME = "mydomain";
-    public static TestServiceDiscoveryImpl serviceDiscovery = new TestServiceDiscoveryImpl();
+    /**
+     * Set to true if the component has been started
+     * 
+     * @return true if the component is started
+     */
+    public boolean isStarted();
+    
+    /** 
+     * Set the started status of the component
+     * 
+     * @param started
+     */
+    public void setStarted(boolean started);
 
-    public static TestDomain createDomain(String nodeName) throws Exception {
-       
-        return new TestDomain(DEFULT_DOMAIN_NAME, nodeName,serviceDiscovery);
-    }
 }
