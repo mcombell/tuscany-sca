@@ -107,10 +107,10 @@ public class Axis2SCABindingInvoker implements Interceptor {
         // do the axis2 stuff
         Message returnMessage = null;
         
-        for (int i =0; i < retryCount; i++){
+    //    for (int i =0; i < retryCount; i++){
             
             returnMessage = axis2Invoker.invoke(msg);
-            
+   /*         
             if ( AxisFault.class.isInstance(returnMessage.getBody())){
                 
                 AxisFault axisFault =  returnMessage.getBody();  
@@ -144,7 +144,7 @@ public class Axis2SCABindingInvoker implements Interceptor {
             } catch(InterruptedException ex) {
             }
          }            
-        
+        */
         return returnMessage;
     }
 }

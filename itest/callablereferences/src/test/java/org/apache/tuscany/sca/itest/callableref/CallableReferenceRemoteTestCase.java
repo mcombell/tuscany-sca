@@ -25,6 +25,7 @@ import static junit.framework.Assert.assertEquals;
 import junit.framework.Assert;
 
 
+import org.apache.tuscany.sca.domain.SCADomain;
 import org.apache.tuscany.sca.node.impl.SCANodeImpl;
 import org.apache.tuscany.sca.node.impl.SCANodeUtil;
 import org.junit.AfterClass;
@@ -38,11 +39,11 @@ import org.junit.Test;
  */
 public class CallableReferenceRemoteTestCase {
     
-    private static String DEFAULT_DOMAIN_NAME = "http://localhost:8877";
+    private static String DEFAULT_DOMAIN_URL = "http://localhost:8877";
 
-    private static SCANodeImpl domain;
-    private static SCANodeImpl nodeA;
-    private static SCANodeImpl nodeB;
+    private static SCADomain domain;
+    private static SCADomain domainNodeA;
+    private static SCADomain domainNodeB;
    
     private static AComponent acomponent;
 
@@ -51,28 +52,22 @@ public class CallableReferenceRemoteTestCase {
         
         try {
             System.out.println("Setting up distributed registry");
-            domain = new SCANodeImpl();
-            domain.start();
-            domain.getContributionManager().startContribution(SCANodeUtil.findContributionFromComposite(CallableReferenceRemoteTestCase.class.getClassLoader(), "domain.composite"));
+            domain = SCADomain.newInstance("domain.composite");
             
             System.out.println("Setting up distributed nodes");
                     
             // create the node that runs the 
             // calculator component
-            nodeA = new SCANodeImpl(DEFAULT_DOMAIN_NAME, "nodeA");
-            nodeA.start();
-            nodeA.getContributionManager().startContribution(CallableReferenceRemoteTestCase.class.getClassLoader().getResource("nodeA/"));
+            domainNodeA = SCADomain.newInstance(DEFAULT_DOMAIN_URL, "nodeA", null, "nodeA/CompositeA.composite");
     
             // create the node that runs the 
             // add component
-            nodeB = new SCANodeImpl(DEFAULT_DOMAIN_NAME, "nodeB");
-            nodeB.start();
-            nodeB.getContributionManager().startContribution(CallableReferenceRemoteTestCase.class.getClassLoader().getResource("nodeB/"));            
+            domainNodeB = SCADomain.newInstance(DEFAULT_DOMAIN_URL, "nodeB", null, "nodeB/CompositeB.composite");
          
             
             // get a reference to the calculator service from domainA
             // which will be running this component
-            acomponent = nodeA.getService(AComponent.class, "AComponent/AComponent");   
+            acomponent = domainNodeA.getService(AComponent.class, "AComponent/AComponent");   
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
@@ -81,9 +76,9 @@ public class CallableReferenceRemoteTestCase {
     @AfterClass
     public static void destroy() throws Exception {
         // stop the nodes and hence the domains they contain        
-        nodeA.stop();
-        nodeB.stop(); 
-        domain.stop();
+        domainNodeA.close();
+        domainNodeB.close(); 
+        domain.close();
     }
 
     @Test

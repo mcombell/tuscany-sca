@@ -17,22 +17,32 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.node;
+package org.apache.tuscany.sca.node.impl;
 
-import org.apache.tuscany.sca.node.SCADomain;
+import org.apache.tuscany.sca.node.NodeFactory;
+import org.apache.tuscany.sca.node.SCANode;
+
 
 /**
  * A factory that always returns the same domain object
  * 
  * @version $Rev: 556897 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
  */
-public interface SCADomainFactory {
+public class NodeFactoryImpl implements NodeFactory {
+	
+	SCANode node = null;
+	
+	public NodeFactoryImpl(SCANode node){
+		this.node = node;
+	}
     
     /**
      * Returns the domain object
      * 
      * @return the domain 
      */
-    public SCADomain getDomain();
+    public SCANode getNode(){
+    	return node;
+    }
     
 }

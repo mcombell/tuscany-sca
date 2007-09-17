@@ -23,8 +23,6 @@ import junit.framework.Assert;
 
 import org.apache.tuscany.sca.binding.sca.axis2.helloworld.HelloWorldClient;
 import org.apache.tuscany.sca.binding.sca.axis2.helloworld.impl.HelloWorldClientCallbackOnewayRemoteImpl;
-import org.apache.tuscany.sca.host.embedded.impl.EmbeddedSCADomain;
-import org.apache.tuscany.sca.node.SCADomain;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
