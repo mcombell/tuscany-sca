@@ -189,7 +189,15 @@
                 <include>tuscany-sca-manifest.jar</include>
             </includes>
         </fileSet>
-
+    
+        <!-- temporary fix since maven dependencies of rampart seems to refere to SNAPSHOT versions of the parent pom --> 
+        <fileSet>
+            <directory>../modules/binding-ws-axis2/target/classes/org/apache/tuscany/sca/binding/ws/axis2/engine/config/modules</directory>
+            <outputDirectory>tuscany-sca-${tuscany.version}/lib</outputDirectory>
+            <includes>
+                <include>rampart-1.3.mar</include> 
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
