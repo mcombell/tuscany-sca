@@ -239,6 +239,12 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-implementation-bpel</artifactId>
             <version>${pom.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ant</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
