@@ -24,11 +24,21 @@
 
     <script language="JavaScript">
     
+       nodeManager = new JSONRpcClient("../NodeManagerComponent/NodeManagerJson");
        componentManager = new JSONRpcClient("../NodeManagerComponent/ComponentManagerJson");
 
+       function getNodeUri() {
+          nodeManager.NodeManagerService.getNodeUri(handleGetNodeUri);
+          getComponentInfos()
+       }
+       
+       function handleGetNodeUri(result) {
+          document.getElementById('nodeUri').innerHTML=result;
+       }       
+       
        function getComponentInfos() {
           componentManager.ComponentManagerService.getComponentInfos(handleGetComponentInfos);
-       }
+       }       
        
        function handleGetComponentInfos(result) {
        
@@ -41,7 +51,8 @@
               text = text + "<TR CLASS='source_2' >";
               text = text + "  <TD>" + component.name+ "</TD>";
               text = text + "  <TD>" + component.started+ "</TD>";
-              text = text + "</TR>";               
+              text = text + "</TR>";      
+              text = text + "</table>";          
           }
 
           document.getElementById('nodeInfo').innerHTML=text;
@@ -53,14 +64,21 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
-<body onload="getComponentInfos()">
+<body onload="getNodeUri()">
 
 
 <h1 id="top">Apache Tuscany Node</h1>
 <div id="errors"></div>
 
-<p>Node Name<span id="nodeName"></span>:</p>
+<p>Node Uri <span id="nodeUri"></span>:</p>
 
+<table>
+<TR>
+<TD>Component Name</TD>
+<TD>Component Is Started</TD>
+</TR>      
+</table>
+  
 <div id="nodeInfo"></div>
 
 <p /><input type="button" value="Refresh" onclick="getComponentInfos()" />
