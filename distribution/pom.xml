@@ -133,7 +133,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.apache.tuscany.sca</groupId>
-                                    <artifactId>sca-api</artifactId>
+                                    <artifactId>tuscany-sca-api</artifactId>
                                     <classifier>javadoc</classifier>
                                     <version>${pom.version}</version>
                                 </artifactItem>
