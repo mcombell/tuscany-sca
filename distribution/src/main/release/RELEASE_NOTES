@@ -12,14 +12,14 @@ Overview
      The Apache Tuscany SCA 1.0 release includes implementations of the
      main SCA specifications including:
 
-        SCA Assembly Model 
-        SCA Policy Framework 
-        SCA Java Common Annotations and APIs 
-        SCA Java Component Implementation
-        SCA Spring Component Implementation
-        SCA BPEL Client and Implementation
-        SCA Web Services Binding 
-        SCA EJB Session Bean Binding
+        SCA Assembly Model V1.0
+        SCA Policy Framework V1.0
+        SCA Java Common Annotations and APIs V1.0
+        SCA Java Component Implementation V1.0
+        SCA Spring Component Implementation V1.0
+        SCA BPEL Client and Implementation V1.0
+        SCA Web Services Binding V1.0
+        SCA EJB Session Bean Binding V1.0
 
     It also includes implementations of many features not yet defined
     by SCA specifications, including:
@@ -47,7 +47,7 @@ For more information on Apache Tuscany visit the website at:
 Any issues with this release can be reported to Apache Tuscany
 using the mailing lists or in the JIRA issue tracker.
 
-    Mailing lists:
+    Mailing list archives:
 
        http://mail-archives.apache.org/mod_mbox/ws-tuscany-user/
        http://mail-archives.apache.org/mod_mbox/ws-tuscany-dev/
@@ -55,6 +55,10 @@ using the mailing lists or in the JIRA issue tracker.
     Jira:
 
        http://issues.apache.org/jira/browse/TUSCANY
+
+To join the project's mailing lists follow the instructions at:
+
+    http://incubator.apache.org/tuscany/mailing-lists.html
 
 To find out more about OASIS Open CSA go to: 
 
