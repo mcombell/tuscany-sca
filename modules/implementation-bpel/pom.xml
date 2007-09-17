@@ -243,14 +243,6 @@
 		<version>1.2-beta</version>
 		<exclusions>
 			<exclusion>
-				<groupId>org.apache.geronimo.specs</groupId>
-				<artifactId>geronimo-ejb_2.1_spec</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>org.objectweb.howl</groupId>
-				<artifactId>howl</artifactId>
-			</exclusion>
-			<exclusion>
 				<groupId>ognl</groupId>
 				<artifactId>ognl</artifactId>
 			</exclusion>
@@ -271,6 +263,11 @@
 		<groupId>org.apache.derby</groupId>
 		<artifactId>derby</artifactId>
 		<version>10.1.3.1</version>
+	</dependency>
+	<dependency>
+		<groupId>tranql</groupId>
+		<artifactId>tranql-connector</artifactId>
+		<version>1.1</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.openjpa</groupId>
@@ -316,7 +313,12 @@
 	    <groupId>xerces</groupId>
 	    <artifactId>xercesImpl</artifactId>
 	    <version>2.8.0</version>
-	</dependency>		
+	</dependency>	
+        <dependency>
+		<groupId>org.apache.xmlbeans</groupId>
+		<artifactId>xmlbeans</artifactId>
+		<version>2.3.0</version>
+	</dependency>	
 	<dependency>
 		<groupId>net.sf.saxon</groupId>
 		<artifactId>saxon</artifactId>
@@ -344,7 +346,7 @@
 				<useFile>false</useFile>
 				<trimStackTrace>false</trimStackTrace>
 				<skip>true</skip>
-				<!--useSystemClassLoader>true</useSystemClassLoader-->
+				<!-- useSystemClassLoader>true</useSystemClassLoader -->
 			</configuration>
 		</plugin>
 			
