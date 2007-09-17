@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 import util.OSGiTestUtil;
 
 
-public class HelloWorldTestCase extends TestCase {
+public class HelloWorldTestCaseFIXME extends TestCase {
 
     private SCADomain scaDomain;
     private HelloWorld helloWorld;
