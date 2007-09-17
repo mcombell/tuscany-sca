@@ -9,8 +9,31 @@ of Open Composite Services Architecture (Open CSA).
 Overview
 --------
 
-     This 1.0 release of Apache Tuscany SCA...
+     The Apache Tuscany SCA 1.0 release includes implementations of the
+     main SCA specifications including:
 
+        SCA Assembly Model 
+        SCA Policy Framework 
+        SCA Java Common Annotations and APIs 
+        SCA Java Component Implementation
+        SCA Spring Component Implementation
+        SCA BPEL Client and Implementation
+        SCA Web Services Binding 
+        SCA EJB Session Bean Binding
+
+    It also includes implementations of many features not yet defined
+    by SCA specifications, including:
+
+        - SCA bindings for Direct Web Remoting, RSS and ATOM Feeds, 
+          HTTP resources, JSON-RPC, PUB/SUB Notifications, and RMI.
+        - SCA implementation types for OSGI, XQuery, and various 
+          dynamic languages including Groovy, Javascript, Python and Ruby
+        - There are databindings for Service Data Objects (SDO), JAXB, 
+          XmlBeans, and Axis2's Axiom
+
+    Tuscany SCA supports running standalone with Jetty or Tomcat based runtimes
+    or running as a standard web application. The runtime can be configured as 
+    a single node SCA domain or with nodes distributed across multiple instances.
 
 See the CHANGES file for a detailed list of the features in this release.
 
