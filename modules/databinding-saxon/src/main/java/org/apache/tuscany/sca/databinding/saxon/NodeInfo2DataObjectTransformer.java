@@ -57,6 +57,10 @@ public class NodeInfo2DataObjectTransformer extends BaseTransformer<NodeInfo, Da
         this.nodeInfo2NodeTransformer = nodeInfo2NodeTransformer;
     }
 
+    public NodeInfo2DataObjectTransformer() {
+        this.nodeInfo2NodeTransformer = new NodeInfo2NodeTransformer();
+    }    
+
     @Override
     protected Class getSourceType() {
         return NodeInfo.class;
