@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-sca</artifactId>
+            <artifactId>tuscany-binding-ws-axis2</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
