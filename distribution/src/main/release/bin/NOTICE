@@ -46,6 +46,14 @@ This product includes/uses DWR (http://getahead.org/dwr)
 This product includes/uses dojotoolkit (http://dojotoolkit.org/)
  Copyright (c) 2005, The Dojo Foundation. All rights reserved.
 
+The Program includes all or portions of the following software: "The 
+Saxon XSLT and XQuery Processor from Saxonica Limited" distributed under
+an MPL v1.0 license. Please refer to the homepage URL at 
+http://www.saxonica.com/.
+
+This product includes/uses Serp (http://serp.sourceforge.net/) under the BSD license:
+ Copyright (c) 2002, A. Abram White. All rights reserved.
+
 This product also includes software under the BSD license
 with the following copyright:
 
