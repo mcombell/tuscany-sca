@@ -48,7 +48,7 @@ public class CalculatorNode {
             String domainName = args[0];
             String nodeName   = args[1];
              
-            SCADomain domainNode = SCADomain.newInstance(domainName, nodeName, null, nodeName + "/");
+            SCADomain domainNode = SCADomain.newInstance(domainName, nodeName, null, nodeName + "/Calculator.composite");
                                
             // nodeA is the head node and runs some tests while all other nodes
             // simply listen for incoming messages
