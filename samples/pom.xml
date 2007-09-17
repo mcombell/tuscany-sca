@@ -50,7 +50,6 @@
                 <module>calculator-ws-webapp</module>
                 <module>chat-webapp</module>
                 <module>databinding-echo</module>
-                <module>domain-webapp</module>
                 <module>feed-aggregator</module>
                 <module>feed-aggregator-webapp</module>
                 <module>helloworld-dojo-webapp</module>
