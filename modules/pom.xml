@@ -49,7 +49,6 @@
                 <module>binding-rmi</module>
                 <module>binding-sca</module>
                 <module>binding-sca-axis2</module>
-                <module>binding-osgi</module>
                 <!--
                 <module>binding-sca-jms</module>
                 -->
