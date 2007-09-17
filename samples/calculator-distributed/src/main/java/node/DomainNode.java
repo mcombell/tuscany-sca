@@ -18,6 +18,7 @@
  */
 package node;
 
+import org.apache.tuscany.sca.domain.SCADomain;
 import org.apache.tuscany.sca.node.impl.SCANodeImpl;
 import org.apache.tuscany.sca.node.impl.SCANodeUtil;
 
@@ -32,15 +33,12 @@ public class DomainNode {
     public static void main(String[] args) {
 
         try {
-            SCANodeImpl domain;
-            domain = new SCANodeImpl();
-            domain.start();
-            domain.getContributionManager().startContribution(SCANodeUtil.findContributionFromComposite(DomainNode.class.getClassLoader(), "domain.composite"));
+            SCADomain domainNode = SCADomain.newInstance("domain.composite");            
         
             System.out.println("Domain node started (press enter to shutdown)");
             System.in.read();
             
-            domain.stop();
+            domainNode.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

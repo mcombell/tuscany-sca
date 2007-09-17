@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
+import java.net.URI;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -34,10 +35,12 @@ import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.SCABinding;
+import org.apache.tuscany.sca.contribution.Contribution;
+import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.domain.SCADomainService;
-import org.apache.tuscany.sca.node.SCADomainFactory;
-import org.apache.tuscany.sca.node.SCADomain;
+import org.apache.tuscany.sca.node.NodeFactory;
+import org.apache.tuscany.sca.domain.SCADomain;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 
@@ -50,6 +53,174 @@ import org.osoa.sca.ServiceReference;
 public class SCANodeUtil {
 	private final static Logger logger = Logger.getLogger(SCANodeUtil.class.getName());
 	
+    /**
+     * Given a contribution path an array of composite names or neither this method finds 
+     * a suitable contribution to load
+     * 
+     * @param classLoader
+     * @param compositePath
+     * @param composites
+     * @return the contribution URL
+     * @throws MalformedURLException
+     */
+/* original version
+    public static URL findContributionURLFromCompositeNameOrPath(ClassLoader classLoader, String contributionPath, String[] composites)
+    throws MalformedURLException {
+      if (contributionPath != null && contributionPath.length() > 0) {
+          //encode spaces as they would cause URISyntaxException
+          contributionPath = contributionPath.replace(" ", "%20");
+          URI contributionURI = URI.create(contributionPath);
+          if (contributionURI.isAbsolute() || composites.length == 0) {
+              return new URL(contributionPath);
+          }
+      }
+  
+      String contributionArtifactPath = null;
+      URL contributionArtifactURL = null;
+      if (composites != null && composites.length > 0 && composites[0].length() > 0) {
+  
+          // Here the SCADomain was started with a reference to a composite file
+          contributionArtifactPath = composites[0];
+          contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+          if (contributionArtifactURL == null) {
+              throw new IllegalArgumentException("Composite not found: " + contributionArtifactPath);
+          }
+      } else {
+  
+          // Here the SCANode was started without any reference to a composite file
+          // We are going to look for an sca-contribution.xml or sca-contribution-generated.xml
+  
+          // Look for META-INF/sca-contribution.xml
+          contributionArtifactPath = Contribution.SCA_CONTRIBUTION_META;
+          contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+  
+          // Look for META-INF/sca-contribution-generated.xml
+          if (contributionArtifactURL == null) {
+              contributionArtifactPath = Contribution.SCA_CONTRIBUTION_GENERATED_META;
+              contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+          }
+  
+          // Look for META-INF/sca-deployables directory
+          if (contributionArtifactURL == null) {
+              contributionArtifactPath = Contribution.SCA_CONTRIBUTION_DEPLOYABLES;
+              contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+          }
+      }
+  
+      if (contributionArtifactURL == null) {
+          throw new IllegalArgumentException("Can't determine contribution deployables. Either specify a composite file, or use an sca-contribution.xml file to specify the deployables.");
+      }
+  
+      URL contributionURL = null;
+      // "jar:file://....../something.jar!/a/b/c/app.composite"
+      try {
+          String url = contributionArtifactURL.toExternalForm();
+          String protocol = contributionArtifactURL.getProtocol();
+          if ("file".equals(protocol)) {
+              // directory contribution
+              if (url.endsWith(contributionArtifactPath)) {
+                  String location = url.substring(0, url.lastIndexOf(contributionArtifactPath));
+                  // workaround from evil url/uri form maven
+                  contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
+              }
+  
+          } else if ("jar".equals(protocol)) {
+              // jar contribution
+              String location = url.substring(4, url.lastIndexOf("!/"));
+              // workaround for evil url/uri from maven
+              contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
+          }
+      } catch (MalformedURLException mfe) {
+          throw new IllegalArgumentException(mfe);
+      }
+  
+      return contributionURL;
+  }   
+ */
+    public static URL findContributionURLFromCompositeNameOrPath(ClassLoader classLoader, String contributionPath, String[] composites)
+      throws MalformedURLException {
+        
+        String contributionArtifactPath = null;
+        URL contributionArtifactURL = null;
+        
+        
+        if (contributionPath != null && contributionPath.length() > 0) {
+            
+            //encode spaces as they would cause URISyntaxException
+            contributionPath = contributionPath.replace(" ", "%20");
+            URI contributionURI = URI.create(contributionPath);
+            if (contributionURI.isAbsolute() || composites.length == 0) {
+                return new URL(contributionPath);
+            } else {
+        //        contributionArtifactURL = classLoader.getResource(contributionPath);
+        //        if (contributionArtifactURL == null) {
+        //            throw new IllegalArgumentException("Composite not found: " + contributionArtifactPath);
+        //        }
+            }
+        }
+
+        if ( contributionArtifactURL == null){
+            if (composites != null && composites.length > 0 && composites[0].length() > 0) {
+        
+                // Here the SCADomain was started with a reference to a composite file
+                contributionArtifactPath = composites[0];
+                contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+                if (contributionArtifactURL == null) {
+                    throw new IllegalArgumentException("Composite not found: " + contributionArtifactPath);
+                }
+            } else {
+        
+                // Here the SCANode was started without any reference to a composite file
+                // We are going to look for an sca-contribution.xml or sca-contribution-generated.xml
+        
+                // Look for META-INF/sca-contribution.xml
+                contributionArtifactPath = Contribution.SCA_CONTRIBUTION_META;
+                contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+        
+                // Look for META-INF/sca-contribution-generated.xml
+                if (contributionArtifactURL == null) {
+                    contributionArtifactPath = Contribution.SCA_CONTRIBUTION_GENERATED_META;
+                    contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+                }
+        
+                // Look for META-INF/sca-deployables directory
+                if (contributionArtifactURL == null) {
+                    contributionArtifactPath = Contribution.SCA_CONTRIBUTION_DEPLOYABLES;
+                    contributionArtifactURL = classLoader.getResource(contributionArtifactPath);
+                }
+            }
+        }
+    
+        if (contributionArtifactURL == null) {
+            throw new IllegalArgumentException("Can't determine contribution deployables. Either specify a composite file, or use an sca-contribution.xml file to specify the deployables.");
+        }
+    
+        URL contributionURL = null;
+        // "jar:file://....../something.jar!/a/b/c/app.composite"
+        try {
+            String url = contributionArtifactURL.toExternalForm();
+            String protocol = contributionArtifactURL.getProtocol();
+            if ("file".equals(protocol)) {
+                // directory contribution
+                if (url.endsWith(contributionArtifactPath)) {
+                    String location = url.substring(0, url.lastIndexOf(contributionArtifactPath));
+                    // workaround from evil url/uri form maven
+                    contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
+                }
+    
+            } else if ("jar".equals(protocol)) {
+                // jar contribution
+                String location = url.substring(4, url.lastIndexOf("!/"));
+                // workaround for evil url/uri from maven
+                contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
+            }
+        } catch (MalformedURLException mfe) {
+            throw new IllegalArgumentException(mfe);
+        }
+    
+        return contributionURL;
+    }	
+    
 	/**
 	 * Given the name of a composite this method finds the contribution that it belongs to
 	 * this could be either a local directory of a jar file.
@@ -59,6 +230,7 @@ public class SCANodeUtil {
 	 * @return the contribution URL
 	 * @throws MalformedURLException
 	 */
+/*    
     public static URL findContributionFromComposite(ClassLoader classLoader, String compositeString)
       throws MalformedURLException {
     	   	
@@ -92,7 +264,7 @@ public class SCANodeUtil {
         
     	return contributionURL;
     } 
-    
+*/  
     
     /** 
      * A rather ugly method to find and fix the url of the service, assuming that there
@@ -109,7 +281,6 @@ public class SCANodeUtil {
      */    
     public static void fixUpNodeServiceUrls(List<Component> nodeComponents, URL nodeUrlString)
       throws MalformedURLException, UnknownHostException {
-        String nodeManagerUrl = null;
       
         for(Component component : nodeComponents){
             for (ComponentService service : component.getServices() ){
@@ -228,7 +399,6 @@ public class SCANodeUtil {
      */
     public static void fixUpNodeReferenceUrls(List<Component> nodeComponents, URL domainUrl)
     throws MalformedURLException, UnknownHostException, ActivationException{
-      String nodeManagerUrl = null;
             
       for(Component component : nodeComponents){
           for (ComponentReference reference : component.getReferences() ){

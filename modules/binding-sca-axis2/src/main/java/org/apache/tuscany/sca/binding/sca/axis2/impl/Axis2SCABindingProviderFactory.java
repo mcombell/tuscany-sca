@@ -25,8 +25,8 @@ import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.invocation.MessageFactory;
-import org.apache.tuscany.sca.node.SCADomainFactory;
-import org.apache.tuscany.sca.node.SCADomain;
+import org.apache.tuscany.sca.node.NodeFactory;
+import org.apache.tuscany.sca.node.SCANode;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -43,30 +43,30 @@ public class Axis2SCABindingProviderFactory implements BindingProviderFactory<Di
     
     private MessageFactory messageFactory;
     private ServletHost servletHost;
-    private SCADomain domain = null;
+    private SCANode node = null;
 
     public Axis2SCABindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
         this.servletHost = servletHosts.getServletHosts().get(0);
         ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
         this.messageFactory = modelFactories.getFactory(MessageFactory.class);
-        SCADomainFactory domainFactory = modelFactories.getFactory(SCADomainFactory.class);
+        NodeFactory nodeFactory = modelFactories.getFactory(NodeFactory.class);
         
-        if (domainFactory != null) {
-            this.domain = domainFactory.getDomain();
+        if (nodeFactory != null) {
+            this.node = nodeFactory.getNode();
         }
     }    
 
     public ReferenceBindingProvider createReferenceBindingProvider(RuntimeComponent component,
                                                                    RuntimeComponentReference reference,
                                                                    DistributedSCABinding binding) {
-        return new Axis2SCAReferenceBindingProvider(domain, component, reference, binding, servletHost, messageFactory);
+        return new Axis2SCAReferenceBindingProvider(node, component, reference, binding, servletHost, messageFactory);
     }
 
     public ServiceBindingProvider createServiceBindingProvider(RuntimeComponent component,
                                                                RuntimeComponentService service,
                                                                DistributedSCABinding binding) {
-        return new Axis2SCAServiceBindingProvider(domain, component, service, binding, servletHost, messageFactory);
+        return new Axis2SCAServiceBindingProvider(node, component, service, binding, servletHost, messageFactory);
     }
 
     public Class<DistributedSCABinding> getModelType() {

@@ -21,6 +21,7 @@ package node;
 
 import java.io.IOException;
 
+import org.apache.tuscany.sca.domain.SCADomain;
 import org.apache.tuscany.sca.node.impl.SCANodeImpl;
 
 import calculator.CalculatorService;
@@ -47,23 +48,14 @@ public class CalculatorNode {
             String domainName = args[0];
             String nodeName   = args[1];
              
-            // Create the distributed domain representation. We use the network implementation 
-            // here so that the node contacts a registry running somewhere out on the 
-            // network. 
-            SCANodeImpl node = new SCANodeImpl(domainName, nodeName);
-            node.start();
-
-            // the application components are added. The null here just gets the node
-            // implementation to read a directory from the classpath with the node name
-            // TODO - should be done as a management action.       
-            node.getContributionManager().startContribution(CalculatorNode.class.getClassLoader().getResource(nodeName + "/"));  
+            SCADomain domainNode = SCADomain.newInstance(domainName, nodeName, null, nodeName + "/");
                                
             // nodeA is the head node and runs some tests while all other nodes
             // simply listen for incoming messages
             if ( nodeName.equals("nodeA") ) {            
                 // do some application stuff
                 CalculatorService calculatorService = 
-                    node.getService(CalculatorService.class, "CalculatorServiceComponent");
+                    domainNode.getService(CalculatorService.class, "CalculatorServiceComponent");
                 
                 // Calculate
                 System.out.println("3 + 2=" + calculatorService.add(3, 2));
@@ -92,7 +84,7 @@ public class CalculatorNode {
             }
             
             // stop the node and all the domains in it 
-            node.stop(); 
+            domainNode.close(); 
         
         } catch(Exception ex) {
             System.err.println("Exception in node - " + ex.getMessage());

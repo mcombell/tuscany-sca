@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.sca.axis2;
 
+package org.apache.tuscany.sca.node;
 
-public class BaseTest {
+import java.util.EventListener;
 
-    public static String DEFULT_DOMAIN_NAME = "mydomain";
-    public static TestServiceDiscoveryImpl serviceDiscovery = new TestServiceDiscoveryImpl();
+import org.apache.tuscany.sca.assembly.Component;
 
-    public static TestDomain createDomain(String nodeName) throws Exception {
-       
-        return new TestDomain(DEFULT_DOMAIN_NAME, nodeName,serviceDiscovery);
-    }
+/**
+ * A listener interface for changes in component state
+ * 
+ * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
+ */
+public interface ComponentListener extends EventListener {
+    
+    /**
+     * Component has been started
+     * 
+     * @param component
+     */ 
+    void componentStarted(Component component);
+    
+    /** 
+     * Compoent has been stopped
+     * 
+     * @param component
+     */
+    void componentStopped(Component component);
+
 }

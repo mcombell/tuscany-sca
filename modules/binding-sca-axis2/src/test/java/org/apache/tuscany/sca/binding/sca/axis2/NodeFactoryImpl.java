@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
+
 package org.apache.tuscany.sca.binding.sca.axis2;
 
+import org.apache.tuscany.sca.node.NodeFactory;
+import org.apache.tuscany.sca.node.SCANode;
 
-public class BaseTest {
-
-    public static String DEFULT_DOMAIN_NAME = "mydomain";
-    public static TestServiceDiscoveryImpl serviceDiscovery = new TestServiceDiscoveryImpl();
-
-    public static TestDomain createDomain(String nodeName) throws Exception {
-       
-        return new TestDomain(DEFULT_DOMAIN_NAME, nodeName,serviceDiscovery);
+/**
+ * A factory that always returns the same domain object
+ * 
+ * @version $Rev: 556897 $ $Date: 2007-09-15 12:27:27 +0100 (Sat, 15 Sep 2007) $
+ */
+public class NodeFactoryImpl implements NodeFactory {
+	
+	SCANode node = null;
+	
+	public NodeFactoryImpl(SCANode node){
+		this.node = node;
+	}
+    
+    /**
+     * Returns the domain object
+     * 
+     * @return the domain 
+     */
+    public SCANode getNode(){
+    	return node;
     }
+    
 }

@@ -78,6 +78,7 @@
                 <module>discovery-jms</module>
                 -->
                 <module>domain</module>
+                <module>domain-api</module>
                 <module>domain-impl</module>
                 <module>extension-helper</module>
                 <module>host-embedded</module>
@@ -116,7 +117,6 @@
                 <module>maven-java2wsdl</module>
                 <module>maven-wsdl2java</module>
                 <module>node</module>
-                <module>node-api</module>
                 <module>node-impl</module>
                 <module>policy</module>
                 <module>policy-xml</module>
