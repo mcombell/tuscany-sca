@@ -8,7 +8,7 @@ first.
 
 To run this sample
 ------------------
-This sample is dependent on hello-ws-service. Open a command prompt to start
+This sample is dependent on helloworld-ws-service. Open a command prompt to start
 the service. If you are running ant do the following:
 
 cd helloworld-ws-service
