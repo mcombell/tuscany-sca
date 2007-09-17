@@ -227,6 +227,10 @@
 				<groupId>xpp3</groupId>
 				<artifactId>xpp3</artifactId>
 			</exclusion>
+			<exclusion>
+				<groupId>xstream</groupId>
+				<artifactId>xstream</artifactId>
+			</exclusion>
 		</exclusions>
 	</dependency>
 	<dependency>
