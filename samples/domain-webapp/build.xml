@@ -135,7 +135,7 @@
         <pathelement location="${m2.repo}\org\apache\geronimo\specs\geronimo-jms_1.1_spec\1.1\geronimo-jms_1.1_spec-1.1.jar"/>
         <pathelement location="${m2.repo}\org\apache\httpcomponents\jakarta-httpcore\4.0-alpha4\jakarta-httpcore-4.0-alpha4.jar"/>
         <pathelement location="${m2.repo}\org\apache\neethi\neethi\2.0.1\neethi-2.0.1.jar"/>
-        <pathelement location="${m2.repo}\org\apache\tuscany\sca\sca-api\1.0-incubating-SNAPSHOT\sca-api-1.0-incubating-SNAPSHOT.jar"/>
+        <pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-sca-api\1.0-incubating-SNAPSHOT\tuscany-sca-api-1.0-incubating-SNAPSHOT.jar"/>
         <pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-assembly\1.0-incubating-SNAPSHOT\tuscany-assembly-1.0-incubating-SNAPSHOT.jar"/>
         <pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-assembly-xml\1.0-incubating-SNAPSHOT\tuscany-assembly-xml-1.0-incubating-SNAPSHOT.jar"/>
         <pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-binding-sca\1.0-incubating-SNAPSHOT\tuscany-binding-sca-1.0-incubating-SNAPSHOT.jar"/>
@@ -205,7 +205,7 @@
     	<pathelement location="${m2.repo}\org\apache\geronimo\specs\geronimo-jms_1.1_spec\1.1\geronimo-jms_1.1_spec-1.1.jar"/>
     	<pathelement location="${m2.repo}\org\apache\httpcomponents\jakarta-httpcore\4.0-alpha4\jakarta-httpcore-4.0-alpha4.jar"/>
     	<pathelement location="${m2.repo}\org\apache\neethi\neethi\2.0.1\neethi-2.0.1.jar"/>
-    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\sca-api\1.0-incubating-SNAPSHOT\sca-api-1.0-incubating-SNAPSHOT.jar"/>
+    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-sca-api\1.0-incubating-SNAPSHOT\tuscany-sca-api-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-assembly\1.0-incubating-SNAPSHOT\tuscany-assembly-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-assembly-xml\1.0-incubating-SNAPSHOT\tuscany-assembly-xml-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-binding-http\1.0-incubating-SNAPSHOT\tuscany-binding-http-1.0-incubating-SNAPSHOT.jar"/>
