@@ -102,12 +102,12 @@
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.tuscany.sdo</groupId>
-			<artifactId>tuscany-sdo-impl</artifactId>
-			<version>1.0-incubating</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.tuscany.sdo</groupId>
+            <artifactId>tuscany-sdo-impl</artifactId>
+            <version>1.0-incubating</version>
+            <scope>compile</scope>
+        </dependency>
 		
         <dependency>
             <groupId>junit</groupId>
@@ -323,16 +323,17 @@
 
     <build>
 	<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
-					<useSystemClassLoader>true</useSystemClassLoader>
-				</configuration>
-			</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<useFile>false</useFile>
+				<trimStackTrace>false</trimStackTrace>
+				<skip>true</skip>
+				<!--useSystemClassLoader>true</useSystemClassLoader-->
+			</configuration>
+		</plugin>
 			
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
