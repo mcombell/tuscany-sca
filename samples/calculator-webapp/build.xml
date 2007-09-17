@@ -42,7 +42,7 @@
              webxml="src/main/webapp/WEB-INF/web.xml">
             <fileset dir="src/main/webapp"/>
             <zipfileset dir="../../modules" prefix="WEB-INF/lib">
-            	<include name="sca-api-1.0-incubating-SNAPSHOT.jar"/>
+            	<include name="tuscany-sca-api-1.0-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-assembly-1.0-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-assembly-xml-1.0-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-binding-sca-1.0-incubating-SNAPSHOT.jar"/>

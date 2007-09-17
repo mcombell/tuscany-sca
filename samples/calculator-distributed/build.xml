@@ -157,7 +157,7 @@
     	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-binding-sca-axis2\1.0-incubating-SNAPSHOT\tuscany-binding-sca-axis2-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\ant\ant-launcher\1.7.0\ant-launcher-1.7.0.jar"/>
     	<pathelement location="${m2.repo}\jaxen\jaxen\1.1-beta-9\jaxen-1.1-beta-9.jar"/>
-    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\sca-api\1.0-incubating-SNAPSHOT\sca-api-1.0-incubating-SNAPSHOT.jar"/>
+    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-sca-api\1.0-incubating-SNAPSHOT\tuscany-sca-api-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\rampart\rampart-policy\1.3\rampart-policy-1.3.jar"/>
     	<pathelement location="${m2.repo}\org\apache\httpcomponents\httpcore-niossl\4.0-alpha5\httpcore-niossl-4.0-alpha5.jar"/>
     	<pathelement location="${m2.repo}\com\metaparadigm\json-rpc\1.0\json-rpc-1.0.jar"/>
@@ -270,7 +270,7 @@
     	<pathelement location="${m2.repo}\xalan\xalan\2.7.0\xalan-2.7.0.jar"/>
     	<pathelement location="${m2.repo}\org\apache\ant\ant-launcher\1.7.0\ant-launcher-1.7.0.jar"/>
     	<pathelement location="${m2.repo}\org\apache\axis2\axis2-adb-codegen\1.3\axis2-adb-codegen-1.3.jar"/>
-    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\sca-api\1.0-incubating-SNAPSHOT\sca-api-1.0-incubating-SNAPSHOT.jar"/>
+    	<pathelement location="${m2.repo}\org\apache\tuscany\sca\tuscany-sca-api\1.0-incubating-SNAPSHOT\tuscany-sca-api-1.0-incubating-SNAPSHOT.jar"/>
     	<pathelement location="${m2.repo}\org\apache\tomcat\coyote\6.0.10\coyote-6.0.10.jar"/>
     	<pathelement location="${m2.repo}\com\metaparadigm\json-rpc\1.0\json-rpc-1.0.jar"/>
     	<pathelement location="${m2.repo}\org\apache\ws\commons\axiom\axiom-impl\1.2.5\axiom-impl-1.2.5.jar"/>
