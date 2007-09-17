@@ -243,6 +243,10 @@
 				<artifactId>geronimo-ejb_2.1_spec</artifactId>
 			</exclusion>
 			<exclusion>
+				<groupId>org.objectweb.howl</groupId>
+				<artifactId>howl</artifactId>
+			</exclusion>
+			<exclusion>
 				<groupId>ognl</groupId>
 				<artifactId>ognl</artifactId>
 			</exclusion>
