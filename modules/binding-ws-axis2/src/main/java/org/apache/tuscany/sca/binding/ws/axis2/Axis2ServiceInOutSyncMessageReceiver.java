@@ -30,9 +30,10 @@ import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.receivers.AbstractInOutSyncMessageReceiver;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.FaultException;
+import org.osoa.sca.ServiceRuntimeException;
 
 public class Axis2ServiceInOutSyncMessageReceiver extends AbstractInOutSyncMessageReceiver {
-	private static final Logger logger = Logger.getLogger(Axis2ServiceInOutSyncMessageReceiver.class.getName());
+    private static final Logger logger = Logger.getLogger(Axis2ServiceInOutSyncMessageReceiver.class.getName());
 	
     protected Operation operation;
 
@@ -66,7 +67,6 @@ public class Axis2ServiceInOutSyncMessageReceiver extends AbstractInOutSyncMessa
 
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
-            logger.log(Level.SEVERE, e.getMessage(), t);
             if (t instanceof FaultException && ((FaultException)t).getFaultInfo() instanceof OMElement) {
                 OMElement faultDetail = (OMElement)((FaultException)t).getFaultInfo();
                 inMC.setProperty(Constants.FAULT_NAME, faultDetail.getQName().getLocalPart());
@@ -76,7 +76,8 @@ public class Axis2ServiceInOutSyncMessageReceiver extends AbstractInOutSyncMessa
             if (t instanceof Exception) {
                 throw AxisFault.makeFault((Exception)t);
             }
-            throw new RuntimeException(e);
+            logger.log(Level.SEVERE, e.getMessage(), t);
+            throw new ServiceRuntimeException(e);
         } catch (Throwable e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             throw AxisFault.makeFault(e);
