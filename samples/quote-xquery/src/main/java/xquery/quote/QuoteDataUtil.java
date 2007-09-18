@@ -20,9 +20,7 @@ package xquery.quote;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.List;
 
-import junit.framework.TestCase;
 
 import org.example.avail.AvailFactory;
 import org.example.avail.AvailQuote;
@@ -32,14 +30,11 @@ import org.example.price.PriceQuote;
 import org.example.price.PriceRequest;
 import org.example.price.PriceRequests;
 import org.example.price.ShipAddress;
-import org.example.quote.Quote;
-import org.example.quote.QuoteResponse;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.helper.XMLHelper;
-import commonj.sdo.impl.HelperProvider;
 
-public class TestHelper {
+public class QuoteDataUtil {
 
     public static AvailQuote buildAvailQuoteData() {
         AvailQuote availQuote = AvailFactory.INSTANCE.createAvailQuote();
@@ -99,53 +94,13 @@ public class TestHelper {
         return priceQuote;
     }
 
-    public static void assertQuote(AvailQuote availQuote, PriceQuote priceQuote, Quote quote, float taxRate) {
-        QuoteCalculatorImpl quoteCalculatorImpl = new QuoteCalculatorImpl();
-
-        TestCase.assertEquals(priceQuote.getCustomerName(), quote.getName());
-        ShipAddress shipAddress = priceQuote.getShipAddress();
-        TestCase.assertEquals(shipAddress.getStreet() + ","
-            + shipAddress.getCity()
-            + ","
-            + shipAddress.getState().toUpperCase()
-            + ","
-            + shipAddress.getZip(), quote.getAddress());
-        List availRequests = availQuote.getAvailRequest();
-        List priceRequests = priceQuote.getPriceRequests().getPriceRequest();
-        List quoteResponses = quote.getQuoteResponse();
-        TestCase.assertEquals(availRequests.size(), priceRequests.size());
-        TestCase.assertEquals(availRequests.size(), quoteResponses.size());
-
-        for (int i = 0; i < availRequests.size(); i++) {
-            AvailRequest availRequest = (AvailRequest)availRequests.get(i);
-            PriceRequest priceRequest = (PriceRequest)priceRequests.get(i);
-            QuoteResponse quoteResponse = (QuoteResponse)quoteResponses.get(i);
-            TestCase.assertEquals(availRequest.getWidgetId(), quoteResponse.getWidgetId());
-            TestCase.assertEquals(priceRequest.getPrice(), quoteResponse.getUnitPrice());
-            TestCase.assertEquals(availRequest.getRequestedQuantity(), quoteResponse.getRequestedQuantity());
-            TestCase.assertEquals(availRequest.isQuantityAvail(), quoteResponse.isFillOrder());
-            if (availRequest.getShipDate() == null) {
-                TestCase.assertNull(quoteResponse.getShipDate());
-            } else {
-                TestCase.assertEquals(availRequest.getShipDate(), quoteResponse.getShipDate());
-            }
-            TestCase.assertEquals(taxRate, quoteResponse.getTaxRate());
-            TestCase.assertEquals(quoteCalculatorImpl.calculateTotalPrice(taxRate,
-                                                                          availRequest.getRequestedQuantity(),
-                                                                          priceRequest.getPrice(),
-                                                                          availRequest.isQuantityAvail()),
-                                  quoteResponse.getTotalCost());
-        }
-    }
-
     public static void serializeToSystemOut(DataObject object, String name) {
-        XMLHelper helper = HelperProvider.INSTANCE.xmlHelper();
+        XMLHelper helper = XMLHelper.INSTANCE;
 
         try {
             helper.save(object, null, name, System.out);
             System.out.println();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
