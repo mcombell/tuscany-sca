@@ -103,14 +103,15 @@ public class ClassReferenceModelResolver implements ModelResolver {
         //Load a class on demand
         Class clazz = null;
 
-        if (unresolved == resolved || resolved == null) {
-            try {
-                clazz = Class.forName(((ClassReference)unresolved).getClassName(), true, classLoader.get());
-            } catch (ClassNotFoundException e) {
-                //we will later try to delegate to imported model resolvers
+        try {
+            clazz = Class.forName(((ClassReference)unresolved).getClassName(), true, classLoader.get());
+        } catch (ClassNotFoundException e) {
+            //we will later try to delegate to imported model resolvers
+            if (osgiResolver != null) {
+                resolved = osgiResolver.resolveModel(modelClass, unresolved);
+                clazz = ((ClassReference)resolved).getJavaClass();
             }
-        } else
-            clazz = ((ClassReference)resolved).getJavaClass();
+        }
 
         if (clazz != null) {
             //if we load the class            
@@ -123,12 +124,6 @@ public class ClassReferenceModelResolver implements ModelResolver {
         } else {
             //delegate resolution of the class
             resolved = this.resolveImportedModel((ClassReference)unresolved);
-            if (unresolved == resolved || resolved == null) {
-                if (osgiResolver != null) {
-                    resolved = osgiResolver.resolveModel(modelClass, unresolved);
-                }
-            }
-
             return modelClass.cast(resolved);
         }
 

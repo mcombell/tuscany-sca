@@ -34,7 +34,7 @@ public abstract class OSGiRuntime {
 
     public abstract BundleContext getBundleContext();
 
-    public abstract void shutdown() throws Exception;
+    protected abstract void shutdown() throws Exception;
 
     public abstract boolean supportsBundleFragments();
 
