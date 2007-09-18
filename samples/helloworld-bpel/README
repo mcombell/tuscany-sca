@@ -6,10 +6,8 @@ The README in the samples directory (the directory above this) provides
 general instructions about building and running samples. Take a look there 
 first. 
 
-If you just want to run it to see what happens open a command prompt, navigate
-to this sample directory and do:
-
-ant run
+If you just want to run it to see what happens open a command prompt, please 
+check the section to build and run the sample using maven.
 
 The sample will start the an embedded BPEL engine, deploy process and invoke it.
 
