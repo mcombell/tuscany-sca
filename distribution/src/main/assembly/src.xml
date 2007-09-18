@@ -92,6 +92,8 @@
              <exclude>itest/callablereferences/work/**/*</exclude>
              <exclude>itest/large-sdo-ws/work</exclude>
              <exclude>itest/large-sdo-ws/work/**/*</exclude>
+             <exclude>itest/ws-void-args-return/work</exclude>
+             <exclude>itest/ws-void-args-return/work/**/*</exclude>
              <exclude>itest/contribution-import-export/import-wsdl/work</exclude>
              <exclude>itest/contribution-import-export/import-wsdl/work/**/*</exclude>
              <exclude>itest/contribution-import-export/import-composite/work</exclude>
