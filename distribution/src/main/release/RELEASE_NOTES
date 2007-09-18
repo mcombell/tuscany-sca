@@ -39,20 +39,11 @@ Overview
      - running with embedded Jetty or Tomcat
      - running as a standard web application                                     
      - running as a module in Geronimo (experimental). 
-    Note: This release does not include support for WebApp host deployment for
-          a distributed SCA Domain
      
      
     The Wepapp samples included in this release have been tried and tested on Tomcat, 
     WebSphere.
         
-    
-    The following are things that are part of this release, but yet to attain full 
-    support for, with work in progess : -
-     - BPEL implementation type, integrating with Apache ODE
-     - OSGI implementation type, integrating with Apache Felix
-     - XQuery implementation type
-    
 
 See the CHANGES file for a detailed list of the features in this release.
 
