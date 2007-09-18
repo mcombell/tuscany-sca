@@ -81,6 +81,7 @@
             	<include name="jaxen-1.1-beta-9.jar"/>
             	<include name="neethi-2.0.2.jar"/>
             	<include name="stax-api-1.0.1.jar"/>
+                <include name="stax-api-1.0-2.jar"/>
             	<include name="wstx-asl-3.2.1.jar"/>
             	<include name="xalan-2.7.0.jar"/>
             	<include name="xercesImpl-2.6.2.jar"/>
