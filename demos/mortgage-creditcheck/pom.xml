@@ -51,12 +51,22 @@
             <scope>runtime</scope>
         </dependency>
 
+<!--
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-tomcat</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
+-->
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-webapp</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+    
 
         <dependency>
             <groupId>junit</groupId>
