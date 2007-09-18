@@ -1,0 +1,318 @@
+Quote Xquery Sample
+===================
+
+ This sample covers the most important integration scenarios for the xquery
+ implementation type and its corresponding saxon data bindings.
+ 
+If you just want to run it to see what happens open two command prompts (one for the server
+and the other for the client), navigate to this sample directory and do:
+
+ant run-server
+ant run
+
+OR if you don't have ant, on Windows do
+
+In the directory samples\quote-xquery use the JDK 1.5 java command to run the class xquery.quote.XQueryQuoteClient 
+
+Linux:   java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-quote-xquery.jar xquery.quote.XQueryQuoteServer
+Linux:   java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-quote-xquery.jar xquery.quote.XQueryQuoteClient
+
+Windows: java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-quote-xquery.jar xquery.quote.XQueryQuoteServer
+Windows: java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-quote-xquery.jar xquery.quote.XQueryQuoteClient
+
+Results
+----------
+The sample when run should simply display on the standard output some startup messages followed by:
+
+The service side:
+Sep 18, 2007 12:28:57 AM org.apache.tuscany.sca.http.jetty.JettyServer addServletMapping
+INFO: Added Servlet mapping: http://localhost:8085/QuoteJoinService
+Sep 18, 2007 12:28:57 AM org.apache.tuscany.sca.http.jetty.JettyServer addServletMapping
+INFO: Added Servlet mapping: http://localhost:8085/AvailQuoteProviderService
+XQuery Quote server started (press enter to shutdown)
+
+The client side:
+Input quote for the price list:
+<?xml version="1.0" encoding="ASCII"?>
+<priceQuote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pri="http://www.example.org/price" xsi:type="pri:PriceQuote">
+  <customerName>Acme Inc</customerName>
+  <shipAddress street="12 Springs Rd" city="Morris Plains" state="nj" zip="07960"/>
+  <priceRequests>
+    <priceRequest>
+      <widgetId>12</widgetId>
+      <price>1.0</price>
+    </priceRequest>
+    <priceRequest>
+      <widgetId>134</widgetId>
+      <price>34.1</price>
+    </priceRequest>
+    <priceRequest>
+      <widgetId>211</widgetId>
+      <price>10.0</price>
+    </priceRequest>
+  </priceRequests>
+</priceQuote>
+
+Input quote for the availability:
+<?xml version="1.0" encoding="ASCII"?>
+<availQuote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ava="http://www.example.org/avail" xsi:type="ava:AvailQuote">
+  <availRequest>
+    <widgetId>12</widgetId>
+    <requestedQuantity>10</requestedQuantity>
+    <quantityAvail>true</quantityAvail>
+    <shipDate>2003-03-22</shipDate>
+  </availRequest>
+  <availRequest>
+    <widgetId>134</widgetId>
+    <requestedQuantity>345</requestedQuantity>
+    <quantityAvail>false</quantityAvail>
+    <shipDate>BackOrder</shipDate>
+  </availRequest>
+  <availRequest>
+    <widgetId>211</widgetId>
+    <requestedQuantity>100</requestedQuantity>
+    <quantityAvail>true</quantityAvail>
+    <shipDate>2003-04-21</shipDate>
+  </availRequest>
+</availQuote>
+
+
+Output quote from local join:
+<?xml version="1.0" encoding="ASCII"?>
+<quote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:quo="http://www.example.org/quote" xsi:type="quo:Quote">
+  <name>Acme Inc</name>
+  <address>12 Springs Rd,Morris Plains,NJ,07960</address>
+  <quoteResponse>
+    <widgetId>12</widgetId>
+    <unitPrice>1.0</unitPrice>
+    <requestedQuantity>10</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-03-22</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>11.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>134</widgetId>
+    <unitPrice>34.1</unitPrice>
+    <requestedQuantity>345</requestedQuantity>
+    <fillOrder>false</fillOrder>
+    <shipDate>BackOrder</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>0.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>211</widgetId>
+    <unitPrice>10.0</unitPrice>
+    <requestedQuantity>100</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-04-21</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>1100.0</totalCost>
+  </quoteResponse>
+</quote>
+
+
+Output quote from local join (second invokation):
+<?xml version="1.0" encoding="ASCII"?>
+<quote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:quo="http://www.example.org/quote" xsi:type="quo:Quote">
+  <name>Acme Inc</name>
+  <address>12 Springs Rd,Morris Plains,NJ,07960</address>
+  <quoteResponse>
+    <widgetId>12</widgetId>
+    <unitPrice>1.0</unitPrice>
+    <requestedQuantity>10</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-03-22</shipDate>
+    <taxRate>0.2</taxRate>
+    <totalCost>12.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>134</widgetId>
+    <unitPrice>34.1</unitPrice>
+    <requestedQuantity>345</requestedQuantity>
+    <fillOrder>false</fillOrder>
+    <shipDate>BackOrder</shipDate>
+    <taxRate>0.2</taxRate>
+    <totalCost>0.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>211</widgetId>
+    <unitPrice>10.0</unitPrice>
+    <requestedQuantity>100</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-04-21</shipDate>
+    <taxRate>0.2</taxRate>
+    <totalCost>1200.0</totalCost>
+  </quoteResponse>
+</quote>
+
+
+Output quote from web service join:
+<?xml version="1.0" encoding="ASCII"?>
+<quote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:quo="http://www.example.org/quote" xsi:type="quo:Quote">
+  <name>Acme Inc</name>
+  <address>12 Springs Rd,Morris Plains,NJ,07960</address>
+  <quoteResponse>
+    <widgetId>12</widgetId>
+    <unitPrice>1.0</unitPrice>
+    <requestedQuantity>10</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-03-22</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>11.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>134</widgetId>
+    <unitPrice>34.1</unitPrice>
+    <requestedQuantity>345</requestedQuantity>
+    <fillOrder>false</fillOrder>
+    <shipDate>BackOrder</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>0.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>211</widgetId>
+    <unitPrice>10.0</unitPrice>
+    <requestedQuantity>100</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-04-21</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>1100.0</totalCost>
+  </quoteResponse>
+</quote>
+
+
+Output quote from properties join:
+<?xml version="1.0" encoding="ASCII"?>
+<quote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:quo="http://www.example.org/quote" xsi:type="quo:Quote">
+  <name>Acme Inc</name>
+  <address>12 Springs Rd,Morris Plains,NJ,07960</address>
+  <quoteResponse>
+    <widgetId>12</widgetId>
+    <unitPrice>1.0</unitPrice>
+    <requestedQuantity>10</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-03-22</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>11.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>134</widgetId>
+    <unitPrice>34.1</unitPrice>
+    <requestedQuantity>345</requestedQuantity>
+    <fillOrder>false</fillOrder>
+    <shipDate>BackOrder</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>0.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>211</widgetId>
+    <unitPrice>10.0</unitPrice>
+    <requestedQuantity>100</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-04-21</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>1100.0</totalCost>
+  </quoteResponse>
+</quote>
+
+
+Output quote from external references join:
+<?xml version="1.0" encoding="ASCII"?>
+<quote xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:quo="http://www.example.org/quote" xsi:type="quo:Quote">
+  <name>Acme Inc</name>
+  <address>12 Springs Rd,Morris Plains,NJ,07960</address>
+  <quoteResponse>
+    <widgetId>12</widgetId>
+    <unitPrice>1.0</unitPrice>
+    <requestedQuantity>10</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-03-22</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>11.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>134</widgetId>
+    <unitPrice>34.1</unitPrice>
+    <requestedQuantity>345</requestedQuantity>
+    <fillOrder>false</fillOrder>
+    <shipDate>BackOrder</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>0.0</totalCost>
+  </quoteResponse>
+  <quoteResponse>
+    <widgetId>211</widgetId>
+    <unitPrice>10.0</unitPrice>
+    <requestedQuantity>100</requestedQuantity>
+    <fillOrder>true</fillOrder>
+    <shipDate>2003-04-21</shipDate>
+    <taxRate>0.1</taxRate>
+    <totalCost>1100.0</totalCost>
+  </quoteResponse>
+</quote>
+
+
+
+Sample Overview
+---------------
+
+ 1. There is a central component for invoking the different
+    scenarios: QuoteJoinLocalComponent
+ 2. It provides the following cases:
+    - invoke XQuery component in the current assembly, by providing all needed
+      information as input parameters
+    - invoke XQuery component in external assembly, which is exposed as a web 
+      service
+    - invoke XQuery component in the current assembly, which retrieves the needed
+      information from the component properties
+    - invoke XQuery component in the current assembly, which retrieves the needed
+      information from its references to other components:
+         - one of the components is in the current assembly
+         - the other component is in anther assembly and it is exposed (and accessed)
+           as web service
+    
+  3. All of the XQuery components have reference to a component for calculation of the
+    total price 
+  4. SDO is used for data interchange
+
+src/main/resources
+    wsdl
+        AvailQuote.xsd 
+        PriceQuote.xsd
+        Quote.xsd
+        quotejoin.wsdl
+    META-INF
+        sca
+            quote_join_external_references.xq --- the external references xquery script
+            quote_join_properties.xq --- the property-based join xquery script
+            quote_join.xq --- the join xquery script
+    xqueryquotews.composite --- composite file for the client side
+    xqueryquotewsclient.composite --- composite file for the service side
+    
+    build.xml                            - the Ant build file
+    pom.xml                              - the Maven build file   
+
+
+Building And Running The Sample Using Ant
+-----------------------------------------
+cd quote-xquery
+ant compile 
+ant run-server
+
+you should see: 
+Buildfile: build.xml
+
+run:
+ 
+
+
+Building And Running The Sample Using Maven 
+-------------------------------------------
+With either the binary or source distributions the sample can be built and run 
+using Maven as follows. 
+
+cd quote-xquery
+mvn
+
+
+This shows that the Junit test cases have run successfully. 
