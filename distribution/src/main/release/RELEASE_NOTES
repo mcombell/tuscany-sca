@@ -28,12 +28,13 @@ Overview
           HTTP resources, JSON-RPC, PUB/SUB Notifications, and RMI.
         - SCA implementation types for OSGI, XQuery, and various 
           dynamic languages including Groovy, Javascript, Python and Ruby
-        - There are databindings for Service Data Objects (SDO), JAXB, 
-          XmlBeans, and Axis2's Axiom
+        - Databindings for Service Data Objects (SDO), JAXB, XmlBeans, 
+          Axis2's AXIOM, JSON, SAXON, DOM, SAX and StAX
 
-    Tuscany SCA supports running standalone with Jetty or Tomcat based runtimes
-    or running as a standard web application. The runtime can be configured as 
-    a single node SCA domain or with nodes distributed across multiple instances.
+    Tuscany SCA supports running standalone, running with embedded Jetty or Tomcat,
+    running as a standard web application, or running as a module in Geronimo (experimental). 
+    The runtime can be configured as a single node SCA domain or with nodes distributed 
+    across multiple instances.
 
 See the CHANGES file for a detailed list of the features in this release.
 
