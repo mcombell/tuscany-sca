@@ -27,11 +27,13 @@ public class XQueryQuoteServer {
     public static void main(String[] args) {
         SCADomain scaDomain = SCADomain.newInstance("xqueryquotews.composite");
         try {
-            System.out.println("XQuery Quote server started (press enter to shutdown)");
+            System.out.println("XQuery Quote server is started (press enter to shutdown).");
             System.in.read();
+            System.out.println("XQuery Quote server is stopping...");
         } catch (IOException e) {
             e.printStackTrace();
         }
         scaDomain.close();
+        System.out.println("XQuery Quote server is now stopped.");
     }
 }

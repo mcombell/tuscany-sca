@@ -25,11 +25,52 @@
 		<mkdir dir="target/classes" />
 	</target>
 
-	<target name="compile" depends="init">
+	<property name="tuscany.sca.manifest.location" value="../../lib/tuscany-sca-manifest.jar" />
+
+	<path id="project.classpath">
+		<pathelement path="target/classes" />
+		<pathelement path="target/sdo-source" />
+		<pathelement location="${tuscany.sca.manifest.location}" />
+	</path>
+
+	<target name="generate-sdo" depends="init">
+		<java classname="org.apache.tuscany.sdo.generate.XSD2JavaGenerator" fork="true">
+			<arg value="-targetDirectory" />
+			<arg value="target/sdo-source" />
+			<arg value="-noNotification" />
+			<arg value="-noContainment" />
+			<arg value="-noUnsettable" />
+			<arg value="src/main/resources/wsdl/Quote.xsd" />
+
+			<classpath refid="project.classpath" />
+		</java>
+		<java classname="org.apache.tuscany.sdo.generate.XSD2JavaGenerator" fork="true">
+			<arg value="-targetDirectory" />
+			<arg value="target/sdo-source" />
+			<arg value="-noNotification" />
+			<arg value="-noContainment" />
+			<arg value="-noUnsettable" />
+			<arg value="src/main/resources/wsdl/AvailQuote.xsd" />
+
+			<classpath refid="project.classpath" />
+		</java>
+		<java classname="org.apache.tuscany.sdo.generate.XSD2JavaGenerator" fork="true">
+			<arg value="-targetDirectory" />
+			<arg value="target/sdo-source" />
+			<arg value="-noNotification" />
+			<arg value="-noContainment" />
+			<arg value="-noUnsettable" />
+			<arg value="src/main/resources/wsdl/PriceQuote.xsd" />
+
+			<classpath refid="project.classpath" />
+		</java>
+
+	</target>
+
+
+	<target name="compile" depends="init, generate-sdo">
 		<javac srcdir="src/main/java" destdir="target/classes" debug="on" source="1.5" target="1.5">
-			<classpath>
-				<pathelement location="../../lib/tuscany-sca-manifest.jar" />
-			</classpath>
+			<classpath refid="project.classpath" />
 		</javac>
 		<copy todir="target/classes">
 			<fileset dir="src/main/resources" />
@@ -46,8 +87,8 @@
 		<java classname="${test.class}" fork="true">
 			<classpath>
 				<pathelement path="target/classes" />
-				<pathelement location="../../lib/tuscany-sca-manifest.jar" />
 			</classpath>
+			<classpath refid="project.classpath" />
 		</java>
 	</target>
 
@@ -55,20 +96,20 @@
 		<java classname="${test.class}" fork="true">
 			<classpath>
 				<pathelement path="target/${test.jar}" />
-				<pathelement location="../../lib/tuscany-sca-manifest.jar" />
 			</classpath>
+			<classpath refid="project.classpath" />
 		</java>
 	</target>
-	
-    <target name="run-server" depends="compile">
-        <java classname="${test.server.class}" fork="true">
-            <classpath>
-                <pathelement path="target/${test.jar}" />
-                <pathelement location="../../lib/tuscany-sca-manifest.jar" />
-            </classpath>
-        </java>
-    </target>
-	
+
+	<target name="run-server" depends="compile">
+		<java classname="${test.server.class}" fork="true">
+			<classpath>
+				<pathelement path="target/${test.jar}" />
+			</classpath>
+			<classpath refid="project.classpath" />
+		</java>
+	</target>
+
 	<target name="clean">
 		<delete quiet="true" includeemptydirs="true">
 			<fileset dir="target" />
