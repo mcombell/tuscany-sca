@@ -68,15 +68,15 @@ public class XQueryQuoteClient {
     }
 
     public void testQuoteJoin() {
-        AvailQuote availQuote = TestHelper.buildAvailQuoteData();
-        PriceQuote priceQuote = TestHelper.buildPriceQuoteData();
+        AvailQuote availQuote = QuoteDataUtil.buildAvailQuoteData();
+        PriceQuote priceQuote = QuoteDataUtil.buildPriceQuoteData();
 
         if (SHOW_DEBUG_MSG) {
             System.out.println("Input quote for the price list:");
-            TestHelper.serializeToSystemOut((DataObject)priceQuote, "priceQuote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)priceQuote, "priceQuote");
             System.out.println();
             System.out.println("Input quote for the availability:");
-            TestHelper.serializeToSystemOut((DataObject)availQuote, "availQuote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)availQuote, "availQuote");
             System.out.println();
         }
 
@@ -84,7 +84,7 @@ public class XQueryQuoteClient {
         if (SHOW_DEBUG_MSG) {
             System.out.println();
             System.out.println("Output quote from local join:");
-            TestHelper.serializeToSystemOut((DataObject)quote, "quote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)quote, "quote");
             System.out.println();
         }
         //        TestHelper.assertQuote(availQuote, priceQuote, quote, 0.1f);
@@ -93,7 +93,7 @@ public class XQueryQuoteClient {
         if (SHOW_DEBUG_MSG) {
             System.out.println();
             System.out.println("Output quote from local join (second invokation):");
-            TestHelper.serializeToSystemOut((DataObject)quote, "quote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)quote, "quote");
             System.out.println();
         }
         //        TestHelper.assertQuote(availQuote, priceQuote, quote, 0.2f);
@@ -102,7 +102,7 @@ public class XQueryQuoteClient {
         if (SHOW_DEBUG_MSG) {
             System.out.println();
             System.out.println("Output quote from web service join:");
-            TestHelper.serializeToSystemOut((DataObject)quote, "quote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)quote, "quote");
             System.out.println();
         }
         //        TestHelper.assertQuote(availQuote, priceQuote, quote, 0.1f);
@@ -111,7 +111,7 @@ public class XQueryQuoteClient {
         if (SHOW_DEBUG_MSG) {
             System.out.println();
             System.out.println("Output quote from properties join:");
-            TestHelper.serializeToSystemOut((DataObject)quote, "quote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)quote, "quote");
             System.out.println();
         }
         // TestHelper.assertQuote(availQuote, priceQuote, quote, 0.1f);
@@ -120,7 +120,7 @@ public class XQueryQuoteClient {
         if (SHOW_DEBUG_MSG) {
             System.out.println();
             System.out.println("Output quote from external references join:");
-            TestHelper.serializeToSystemOut((DataObject)quote, "quote");
+            QuoteDataUtil.serializeToSystemOut((DataObject)quote, "quote");
             System.out.println();
         }
         // TestHelper.assertQuote(availQuote, priceQuote, quote, 0.1f);
