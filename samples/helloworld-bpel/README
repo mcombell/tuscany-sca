@@ -1,0 +1,140 @@
+Hello World BPEL Sample
+======================================
+This sample demonstrates an SCA service implemented by a BPEL process. 
+
+The README in the samples directory (the directory above this) provides 
+general instructions about building and running samples. Take a look there 
+first. 
+
+If you just want to run it to see what happens open a command prompt, navigate
+to this sample directory and do:
+
+ant run
+
+The sample will start the an embedded BPEL engine, deploy process and invoke it.
+
+Sample Overview
+---------------
+The sample provides a single component that is wired to a service with a 
+web service binding.
+
+helloworld-bpel/
+  src/
+    main/
+      java/
+        helloworld/
+          BPELClient.java          	  - client application for  
+                                            BEPELHelloWorldComponent
+
+      resources/
+          deploy.xml			  - ODE deployment descriptor
+          helloworld.bpel		  - helloworld bpel process
+          helloworld.componentType	  - helloworld bpel service description
+          helloworld.composite            - the SCA assembly for this sample
+          helloworld.wsdl                 - the service description that describes
+                                            the bpel process
+          log4j.properties				  - logging configuration
+          
+    test/
+      java/
+        helloworld/
+          BPELHelloWorldTestCase.java     - JUnit test case 
+  helloworld-bpel.png                     - a pictorial representation of the 
+                                            sample .composite file
+  build.xml                               - the Ant build file
+  pom.xml                                 - the Maven build file        
+
+Building And Running The Sample Using Ant
+-----------------------------------------
+
+Ant script is not supported at the moment.
+     
+
+Building And Running The Sample Using Maven 
+-------------------------------------------
+With either the binary or source distributions the sample can be built and run 
+using Maven as follows. When using Maven, a simple test is present that exercise
+the same logic as the client to invoke the BPEl process.
+
+We first need to tweek the helloworld-bpel pom.xml in order to overcome a surefire 
+defect. See below the changes that need to be done on the helloworld-bpel\pom.xml
+
+Original:
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<skip>true</skip>
+					<!--useSystemClassLoader>true</useSystemClassLoader-->
+				</configuration>
+			</plugin>
+
+Updated:
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<useSystemClassLoader>true</useSystemClassLoader>
+				</configuration>
+			</plugin>
+
+Now that you have the updated pom :
+
+cd helloworld-bpel
+mvn
+
+You should see the following output from the test phase.
+
+-
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running helloworld.BPELHelloWorldTestCase
+Starting BPELHelloWorldComponent org.apache.tuscany.sca.core.assembly.RuntimeComponentImpl
+INFO - GeronimoLog.info(79) | BPEL Server Started.
+10:19:31,609 INFO  [BpelServerImpl] BPEL Server Started.
+Deploying : D:\dev\Opensource\Apache\Tuscany\source\java\sca\samples\helloworld-bpel\target\classes
+D:\dev\Opensource\Apache\Tuscany\source\java\sca\samples\helloworld-bpel\target\classes
+INFO - GeronimoLog.info(79) | Process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1 has been unregistered.
+10:19:37,656 INFO  [BpelServerImpl] Process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1 has been unregistered.
+INFO - GeronimoLog.info(79) | Activated process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1.
+10:19:38,312 INFO  [BpelServerImpl] Activated process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1.
+INFO - GeronimoLog.info(79) | Process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1 has been unregistered.
+10:19:38,312 INFO  [BpelServerImpl] Process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1 has been unregistered.
+INFO - GeronimoLog.info(79) | Activated process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1.
+10:19:38,453 INFO  [BpelServerImpl] Activated process {http://tuscany.apache.org/implementation/bpel/example/helloworld}HelloWorld-1.
+::message:: <?xml version="1.0" encoding="UTF-8"?>
+<message><TestPart><hello xmlns="http://tuscany.apache.org/implementation/bpel/example/helloworld.wsdl"/></TestPart></message>
+Status: RESPONSE
+Response: <?xml version="1.0" encoding="UTF-8"?>
+<message><TestPart><hello xmlns="http://tuscany.apache.org/implementation/bpel/example/helloworld.wsdl"> World</hello></TestPart></message>
+Stopping BPELHelloWorldComponent org.apache.tuscany.sca.core.assembly.RuntimeComponentImpl
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.031 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] [jar:jar]
+[INFO] Building jar: D:\dev\Opensource\Apache\Tuscany\source\java\sca\samples\helloworld-bpel\target\sample-helloworld-bpel.jar
+[INFO] [install:install]
+[INFO] Installing D:\dev\Opensource\Apache\Tuscany\source\java\sca\samples\helloworld-bpel\target\sample-helloworld-bpel.jar to C:\Documents and Settings\lresende\.m
+2\repository\org\apache\tuscany\sca\sample-helloworld-bpel\1.1-incubating-SNAPSHOT\sample-helloworld-bpel-1.1-incubating-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1 minute 3 seconds
+[INFO] Finished at: Tue Sep 18 10:19:41 PDT 2007
+[INFO] Final Memory: 24M/46M
+[INFO] ------------------------------------------------------------------------
+
+
+This shows that the Junit test cases have run successfully. 
