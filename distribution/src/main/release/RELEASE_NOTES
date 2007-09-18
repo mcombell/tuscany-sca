@@ -4,7 +4,7 @@ Apache Tuscany SCA 1.0 (incubating) September 2007 Release Notes
 Apache Tuscany provides a runtime based on the Service Component
 Architecture. SCA is a set of specifications aimed at simplifying SOA
 Application Development which are being standardized at OASIS as part
-of Open Composite Services Architecture (Open CSA).
+of Open Composite Services Architecture (Open CSA) - http://www.oasis-opencsa.org/.
 
 Overview
 --------
@@ -26,15 +26,33 @@ Overview
 
         - SCA bindings for Direct Web Remoting, RSS and ATOM Feeds, 
           HTTP resources, JSON-RPC, PUB/SUB Notifications, and RMI.
-        - SCA implementation types for OSGI, XQuery, and various 
+        - SCA implementation types for OSGI, XQuery, BPEL, and various 
           dynamic languages including Groovy, Javascript, Python and Ruby
         - Databindings for Service Data Objects (SDO), JAXB, XmlBeans, 
           Axis2's AXIOM, JSON, SAXON, DOM, SAX and StAX
 
-    Tuscany SCA supports running standalone, running with embedded Jetty or Tomcat,
-    running as a standard web application, or running as a module in Geronimo (experimental). 
-    The runtime can be configured as a single node SCA domain or with nodes distributed 
-    across multiple instances.
+    The Tuscany SCA Runtime can be configured as a single node SCA domain or 
+    as an SCA domain distributed across multiple nodes. 
+    In addition Tuscany SCA supports the following host-deployment options: -
+     - running standalone 
+     - running with distributed nodes across multiple JVMs
+     - running with embedded Jetty or Tomcat
+     - running as a standard web application                                     
+     - running as a module in Geronimo (experimental). 
+    Note: This release does not include support for WebApp host deployment for
+          a distributed SCA Domain
+     
+     
+    The Wepapp samples included in this release have been tried and tested on Tomcat, 
+    WebSphere.
+        
+    
+    The following are things that are part of this release, but yet to attain full 
+    support for, with work in progess : -
+     - BPEL implementation type, integrating with Apache ODE
+     - OSGI implementation type, integrating with Apache Felix
+     - XQuery implementation type
+    
 
 See the CHANGES file for a detailed list of the features in this release.
 
