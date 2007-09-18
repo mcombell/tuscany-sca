@@ -42,7 +42,10 @@ Changes With Apache Tuscany SCA 1.0 (incubating) September 2007
   loading an dependency management capabilities 
   
 
-- BPEL (what is the scope of this?)
+- A BPEL component implementation type experimental implementation
+based on SCA BPEL Client and Implementation V1.0. At the moment only
+supports BPEL process as services.
+	implementation-bpel
 
 
 - The distributed runtime implementation has been separated out 
