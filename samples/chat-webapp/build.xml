@@ -59,6 +59,7 @@
                 <include name="tuscany-assembly-1.0-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-assembly-xml-1.0-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-assembly-xsd-1.0-incubating-SNAPSHOT.jar"/>
+            	<include name="tuscany-binding-dwr-1.0-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-binding-feed-1.0-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-binding-jsonrpc-1.0-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-binding-sca-1.0-incubating-SNAPSHOT.jar"/>
@@ -119,6 +120,7 @@
                 <include name="commons-httpclient-3.0.1.jar"/>
                 <include name="commons-io-1.2.jar"/>
                 <include name="commons-logging-1.1.jar"/>
+            	<include name="dwr-2.0.1.jar"/>
                 <include name="ecore-2.2.3.jar"/>
                 <include name="ecore-change-2.2.3.jar"/>
                 <include name="ecore-xmi-2.2.3.jar"/>
