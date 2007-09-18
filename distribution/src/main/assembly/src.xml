@@ -112,6 +112,8 @@
              <exclude>samples/das-service/**/*</exclude>
              <exclude>samples/das-service-web</exclude>
              <exclude>samples/das-service-web/**/*</exclude>
+             <exclude>samples/domain-webapp</exclude>
+             <exclude>samples/domain-webapp/**/*</exclude>
              <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo</exclude>
              <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo/**/*</exclude>
              <exclude>samples/helloworld-dojo-webapp/src/main/webapp/dojo</exclude>
@@ -122,6 +124,8 @@
              <exclude>samples/helloworld-ws-sdo/work/**/*</exclude>
              <exclude>samples/helloworld-ws-service/work</exclude>
              <exclude>samples/helloworld-ws-service/work/**/*</exclude>
+             <exclude>samples/helloworld-ws-service-webapp</exclude>
+             <exclude>samples/helloworld-ws-service-webapp/**/*</exclude>
              <exclude>samples/osgi-supplychain/.felix</exclude>
              <exclude>samples/osgi-supplychain/.felix/**/*</exclude>
              <exclude>samples/quote-xquery</exclude>
