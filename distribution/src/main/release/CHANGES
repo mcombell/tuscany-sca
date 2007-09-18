@@ -68,8 +68,7 @@ supports BPEL process as services.
   simple store front application can be constructed 
         samples/store
         
-- The following features of this release are work in progress, yet to 
-  attain full support for: -
+- The following features of this release are still experimental:
      - BPEL implementation type, integrating with Apache ODE
      - OSGI implementation type, integrating with Apache Felix
      - XQuery implementation type
