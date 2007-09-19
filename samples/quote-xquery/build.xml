@@ -38,8 +38,8 @@
 			<arg value="-targetDirectory" />
 			<arg value="target/sdo-source" />
 			<arg value="-noNotification" />
-			<arg value="-noContainment" />
-			<arg value="-noUnsettable" />
+			<!-- Make sure the -noUnsettable is not used, otherwise, the SDO cannot be
+			properly transformed to Node as some properties are treated as unset -->
 			<arg value="src/main/resources/wsdl/Quote.xsd" />
 
 			<classpath refid="project.classpath" />
@@ -48,8 +48,8 @@
 			<arg value="-targetDirectory" />
 			<arg value="target/sdo-source" />
 			<arg value="-noNotification" />
-			<arg value="-noContainment" />
-			<arg value="-noUnsettable" />
+			<!-- Make sure the -noUnsettable is not used, otherwise, the SDO cannot be
+			properly transformed to Node as some properties are treated as unset -->
 			<arg value="src/main/resources/wsdl/AvailQuote.xsd" />
 
 			<classpath refid="project.classpath" />
@@ -58,8 +58,8 @@
 			<arg value="-targetDirectory" />
 			<arg value="target/sdo-source" />
 			<arg value="-noNotification" />
-			<arg value="-noContainment" />
-			<arg value="-noUnsettable" />
+			<!-- Make sure the -noUnsettable is not used, otherwise, the SDO cannot be
+			properly transformed to Node as some properties are treated as unset -->
 			<arg value="src/main/resources/wsdl/PriceQuote.xsd" />
 
 			<classpath refid="project.classpath" />
@@ -69,7 +69,9 @@
 
 
 	<target name="compile" depends="init, generate-sdo">
-		<javac srcdir="src/main/java" destdir="target/classes" debug="on" source="1.5" target="1.5">
+		<javac destdir="target/classes" debug="on" source="1.5" target="1.5">
+		    <src path="target/sdo-source"/>
+		    <src path="src/main/java"/>
 			<classpath refid="project.classpath" />
 		</javac>
 		<copy todir="target/classes">
