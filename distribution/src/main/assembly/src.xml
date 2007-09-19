@@ -143,8 +143,6 @@
              <exclude>samples/helloworld-ws-service-webapp/**/*</exclude>
              <exclude>samples/osgi-supplychain/.felix</exclude>
              <exclude>samples/osgi-supplychain/.felix/**/*</exclude>
-             <exclude>samples/quote-xquery</exclude>
-             <exclude>samples/quote-xquery/**/*</exclude>
              <exclude>samples/spi-implementation-pojo</exclude>
              <exclude>samples/spi-implementation-pojo/**/*</exclude>
              <exclude>samples/simple-callback-ws/work</exclude>
