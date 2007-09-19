@@ -94,7 +94,7 @@
 		</java>
 	</target>
 
-	<target name="run" depends="compile">
+	<target name="run">
 		<java classname="${test.class}" fork="true">
 			<classpath>
 				<pathelement path="target/${test.jar}" />
@@ -103,7 +103,7 @@
 		</java>
 	</target>
 
-	<target name="run-server" depends="compile">
+	<target name="run-server">
 		<java classname="${test.server.class}" fork="true">
 			<classpath>
 				<pathelement path="target/${test.jar}" />
