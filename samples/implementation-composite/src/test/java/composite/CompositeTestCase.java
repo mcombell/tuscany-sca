@@ -29,7 +29,7 @@ public class CompositeTestCase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        scaDomain = SCADomain.newInstance();
+        scaDomain = SCADomain.newInstance("OuterComposite.composite");
         source = scaDomain.getService(Source.class, "SourceComponent");
     }
     
