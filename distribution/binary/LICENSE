@@ -205,9 +205,10 @@
 
 Other components and dependencies under Apache Software License 2.0 : 
 
-   log4j-1.2.12.jar    - Apache Logging Services
-   derby 10.1.2.1.jar  - Apache Derby
+   log4j-1.2.14.jar    - Apache Logging Services
+   derby 10.2.2.0.jar  - Apache Derby
    stax-api-1.0.1.jar  - The Streaming API for XML (StAX)
+   wstx-asl-3.2.0.jar  - WoodStox StAX implementation
    standard-1.1.1.jar  - The Apache Jackarta Taglibs
    jstl-1.1.2.jar      - The Apache Jackarta Taglibs
    *.tld               - The Apache Jackarta Taglibs
@@ -223,7 +224,7 @@ separate copyright notices and license terms. Your use of the source
 code for the these subcomponents is subject to the terms and
 conditions of the following licenses.
 
-License for the Service Data Objects JavaDoc and Interface Definition files. (sdo-api-r2.0.1-1.0-incubator-M2.jar)
+License for the Service Data Objects JavaDoc and Interface Definition files. (sdo-api-r2.0.1-1.0-incubator.jar)
 
 Permission to copy, make derivative works of, and distribute the Service Data Objects 
 JavaDoc and Interface Definition Files files in any medium without fee or royalty as part 
@@ -254,13 +255,13 @@ No other rights are granted by implication, estoppel or otherwise.
 =================================================================================================================
 
 For the Eclipse EMF components
-(codegen-2.2.2.jar
-codegen-ecore-2.2.2.jar
-common-2.2.2.jar
-ecore-2.2.2.jar
-ecore-change-2.2.2.jar
-ecore-xmi-2.2.2.jar
-xsd-2.2.2.jar)
+(codegen-2.2.3.jar
+codegen-ecore-2.2.3.jar
+common-2.2.3.jar
+ecore-2.2.3.jar
+ecore-change-2.2.3.jar
+ecore-xmi-2.2.3.jar
+xsd-2.2.3.jar)
 
 Eclipse Public License - v 1.0
 
