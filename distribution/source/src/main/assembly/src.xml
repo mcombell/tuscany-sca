@@ -50,6 +50,7 @@
       <excludes>
          <exclude>**/ldap/**</exclude>
          <exclude>**/target/**</exclude>
+         <exclude>**/dastest/**</exclude>
          <exclude>**/.settings/**</exclude>
          <exclude>**/**.mdl</exclude>
          <exclude>**/derby.log</exclude>
