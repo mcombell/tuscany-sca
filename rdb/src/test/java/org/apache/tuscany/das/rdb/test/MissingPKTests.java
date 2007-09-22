@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.tuscany.das.rdb.test;
 
 import java.util.List;
@@ -26,11 +44,11 @@ public class MissingPKTests  extends DasTest {
         new OwnerData(getAutoConnection()).refresh();
         new OwnerDogData(getAutoConnection()).refresh();
         new OrderDetailsData(getAutoConnection()).refresh();
-        new OrderDetailsDescriptionData(getAutoConnection()).refresh(); 
+        new OrderDetailsDescriptionData(getAutoConnection()).refresh();
         new MultiSchemaData(getAutoConnection()).refresh();
         new BookData(getAutoConnection()).refresh();
         new SingerData(getAutoConnection()).refresh();
-        new SongData(getAutoConnection()).refresh();        
+        new SongData(getAutoConnection()).refresh();
     }
 
     protected void tearDown() throws Exception {
@@ -52,8 +70,8 @@ public class MissingPKTests  extends DasTest {
     		}
     	}
     }
-    
-    //join with both tables PKs present in SELECT, child row is complete null, outer join    
+
+    //join with both tables PKs present in SELECT, child row is complete null, outer join
     public void testOuterJoin() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
     	Command select = das.getCommand("testOuterJoin");
@@ -65,7 +83,7 @@ public class MissingPKTests  extends DasTest {
     	assertNotNull(songs);
     	assertEquals(0, songs.size());
     }
-    
+
     //join with both tables' PKs present in SELECT
     public void test11() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
@@ -81,7 +99,7 @@ public class MissingPKTests  extends DasTest {
     	assertEquals(3, owners.size());
     	assertEquals(3, dogs.size());
     }
-    
+
     //join with parent table's PK missing in SELECT
     public void test22() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
@@ -95,9 +113,9 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}    	
+    	}
     }
-    
+
     //join with child table's PK missing in SELECT
     public void test33() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
@@ -111,9 +129,9 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}       
+    	}
     }
-    
+
     //join with both tables' PK missing in SELECT
     public void test44() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
@@ -127,10 +145,10 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}        
+    	}
     }
-    
-    //join with both tables' PK present in SELECT (use relationship)    
+
+    //join with both tables' PK present in SELECT (use relationship)
     public void test11_rel() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("test11");
@@ -138,31 +156,31 @@ public class MissingPKTests  extends DasTest {
     	List owners = root.getList("OWNER");
     	assertNotNull(owners);
     	assertEquals(3, owners.size());
-    	
+
     	if(owners != null){
-    		for(int i=0; i<owners.size(); i++){        		
+    		for(int i=0; i<owners.size(); i++){
     			List dogs = ((DataObject)owners.get(i)).getList("owns"); //use relationship
     	    	assertNotNull(dogs);
-    	    	
+
     	    	if( (((DataObject)owners.get(i)).getInt("ID") == 1 ) &&
     	    			dogs.size()==1){
     	    		assertTrue(true);//expected
     	    	}
-    	    	
+
     	    	if( (((DataObject)owners.get(i)).getInt("ID") == 2 ) &&
     	    			dogs.size()==1){
     	    		assertTrue(true);//expected
     	    	}
-    	    	
+
     	    	if( (((DataObject)owners.get(i)).getInt("ID") == 3 ) &&
     	    			dogs.size()==1){
     	    		assertTrue(true);//expected
-    	    	}    	    	
+    	    	}
     		}
     	}
     }
-    
-    //join with parent table's PK missing in SELECT (use relationship)    
+
+    //join with parent table's PK missing in SELECT (use relationship)
     public void test22_rel() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("test22");
@@ -177,8 +195,8 @@ public class MissingPKTests  extends DasTest {
     		}
     	}
     }
-    
-    //join with child table's PK missing in SELECT (use relationship)    
+
+    //join with child table's PK missing in SELECT (use relationship)
     public void test33_rel() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("test33");
@@ -193,8 +211,8 @@ public class MissingPKTests  extends DasTest {
     		}
     	}
     }
-    
-    //join with both tables' PK missing in SELECT (use relationship)    
+
+    //join with both tables' PK missing in SELECT (use relationship)
     public void test44_rel() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("test44");
@@ -209,14 +227,14 @@ public class MissingPKTests  extends DasTest {
     		}
     	}
     }
-    
+
     public void testCompoundPks() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("compound_pks");
     	DataObject root = select.executeQuery();
     	assertEquals(4, root.getList("ORDERDETAILS").size());
     }
-    
+
     public void testCompoundPksFail() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("compound_pks_fail");
@@ -229,9 +247,9 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}   
+    	}
     }
-    
+
     public void testCompoundPksJoin() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("compound_pks_join");
@@ -244,21 +262,21 @@ public class MissingPKTests  extends DasTest {
     		if(curDO.getInt("ORDERID")==1 && curDO.getInt("PRODUCTID")==1 && ordDetDescList.size()==2){
     			assertTrue(true);//expected
     		}
-    		
+
     		if(curDO.getInt("ORDERID")==1 && curDO.getInt("PRODUCTID")==2 && ordDetDescList.size()==2){
     			assertTrue(true);//expected
     		}
-    		
+
     		if(curDO.getInt("ORDERID")==2 && curDO.getInt("PRODUCTID")==1 && ordDetDescList.size()==1){
     			assertTrue(true);//expected
     		}
-    		
+
     		if(curDO.getInt("ORDERID")==2 && curDO.getInt("PRODUCTID")==2 && ordDetDescList.size()==1){
     			assertTrue(true);//expected
-    		}    		
+    		}
     	}
     }
-    
+
     public void testCompoundPksJoinFail() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPKREL.xml"), getConnection());
     	Command select = das.getCommand("compound_pks_join_fail");
@@ -271,9 +289,9 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}    	
+    	}
     }
-    
+
     //case when no PK defined in Config but column ID is there in table and is not in SELECT clause
     //convention over configuration should assume it as PK and fail select
     public void testPartFail() throws Exception {
@@ -290,7 +308,7 @@ public class MissingPKTests  extends DasTest {
     		}
     	}
     }
-    
+
     public void testMultiSchemaPKMiss() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MultiSchemaDasConfig14.xml"), getConnection());
 
@@ -312,9 +330,9 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	} 
+    	}
     }
-    
+
     public void testTypePropsDifferent() throws Exception {
     	DAS das = DAS.FACTORY.createDAS(getConfig("MissingPK.xml"), getConnection());
     	Command select = das.getCommand("get all books");
@@ -327,6 +345,6 @@ public class MissingPKTests  extends DasTest {
     						"column or has null value in it, can not proceed!") >0){
     			assertTrue(true);//expected failure
     		}
-    	}     	
+    	}
     }
 }

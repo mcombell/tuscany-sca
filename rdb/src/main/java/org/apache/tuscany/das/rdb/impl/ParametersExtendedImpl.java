@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.tuscany.das.rdb.impl;
 
 import java.util.ArrayList;
@@ -17,11 +35,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
     private List inParams = new ArrayList();
 
     private List outParams = new ArrayList();
-    
+
     public ParametersExtendedImpl(){
-    	
+
     }
-    
+
     public ParametersExtendedImpl(List paramsList) {
     	if(this.parameter == null){
     		this.parameter = new ArrayList();
@@ -38,11 +56,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
 			}
     	}
     }
-    
+
     public ParametersExtendedImpl(Parameters params) {
     	this(params.getParameter());
     }
-    
+
     public List getOutParameters() {
         return outParams;
     }
@@ -50,11 +68,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
     public List getInParameters() {
         return inParams;
     }
-    
+
     public ParameterExtendedImpl getParameter(int index) {
     	if(this.getParameter() == null || this.getParameter().isEmpty())
     		return null;
-    	
+
 		Iterator itr = this.getParameter().iterator();
 		while(itr.hasNext()){
 			ParameterExtendedImpl curParam = (ParameterExtendedImpl)itr.next();
@@ -64,7 +82,7 @@ public class ParametersExtendedImpl extends ParametersImpl{
 		}
 		return null;
     }
-    
+
     public ParameterExtendedImpl getParameter(int index, String direction) {
     	if(direction.equals(ParameterExtendedImpl.IN)) {
     		Iterator itr = this.inParams.iterator();
@@ -74,7 +92,7 @@ public class ParametersExtendedImpl extends ParametersImpl{
     				return curParam;
     			}
     		}
-    	}    		
+    	}
     	else {
     		Iterator itr = this.outParams.iterator();
     		while(itr.hasNext()){
@@ -82,11 +100,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
     			if(curParam.getIndex() == index){
     				return curParam;
     			}
-    		}    		
+    		}
     	}
     	return null;
     }
-    
+
     private ParameterExtendedImpl getNamedParameter(List params, String name){
     	if(params == null)
     		return null;
@@ -95,20 +113,20 @@ public class ParametersExtendedImpl extends ParametersImpl{
     			return (ParameterExtendedImpl)params.get(i);
     		}
     	}
-    	return null;    	
+    	return null;
     }
-    
+
     public ParameterExtendedImpl getParameter(String name) {
     	return getNamedParameter(this.getParameter(), name);
     }
-    
+
     public ParameterExtendedImpl getParameter(String name, String direction) {
     	if(direction.equals(ParameterExtendedImpl.IN))
     		return getNamedParameter(this.inParams, name);
     	else
     		return getNamedParameter(this.outParams, name);
     }
-    
+
     public ParameterExtendedImpl findOrCreateParameterWithIndex(int index, String direction, Type sdoType) {
     	if(this.parameter == null){
     		this.parameter = new ArrayList();
@@ -137,11 +155,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
         else{
         	this.getInParameters().add(newParam);
         }
-        return newParam;    	
+        return newParam;
     }
 
     /**maintain compatibility with parameters="name1 name2 " from config
-     * 
+     *
      * @param parameters
      */
     public static ArrayList getParameters(String parameters) {
@@ -152,11 +170,11 @@ public class ParametersExtendedImpl extends ParametersImpl{
             p.setName(tokenizer.nextToken());
             p.setIndex(idx);
             p.setDirection(ParameterExtendedImpl.IN);
-            paramExtList.add(p);            
+            paramExtList.add(p);
         }
         return paramExtList;
     }
-    
+
     public void addParameters(List paramExtList){
     	for(int i=0; i<paramExtList.size(); i++){
     		ParameterExtendedImpl curParam = (ParameterExtendedImpl)paramExtList.get(i);
