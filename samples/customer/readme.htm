@@ -69,42 +69,48 @@ The sample will run and output the following:
 Buildfile: build.xml
 
 run:
-[java] connection info from config***************
-[java] dbName:jdbc:derby:target/dastest; create = true user: password:
-[java] ******************************************
-[java] Setting up for derby run!
-[java] Dropping tables
-[java] Dropping procedures
-[java] Creating tables
-[java] Creating procedures
-[java] Inserting data in tables
-[java] Database setup complete!
-[java] Result:select all customers
-[java] ID:1 LASTNAME:John ADDRESS:USA
-[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
-[java] ID:3 LASTNAME:Patrick ADDRESS:UK
-[java] ID:4 LASTNAME:Jane ADDRESS:UN
-[java] Result:insert new customer
-[java] ID:1 LASTNAME:John ADDRESS:USA
-[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
-[java] ID:3 LASTNAME:Patrick ADDRESS:UK
-[java] ID:4 LASTNAME:Jane ADDRESS:UN
-[java] ID:5 LASTNAME:Jenny ADDRESS:USA
-[java] Result:update first customer
-[java] ID:1 LASTNAME:BlueBerry ADDRESS:USA
-[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
-[java] ID:3 LASTNAME:Patrick ADDRESS:UK
-[java] ID:4 LASTNAME:Jane ADDRESS:UN
-[java] ID:5 LASTNAME:Jenny ADDRESS:USA
-[java] Result:delete last customer
-[java] Deleting customer named: Jenny
-[java] ID:1 LASTNAME:BlueBerry ADDRESS:USA
-[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
-[java] ID:3 LASTNAME:Patrick ADDRESS:UK
-[java] ID:4 LASTNAME:Jane ADDRESS:UN
+     [java] ************* Initializing database *************
+     [java] ** DB type  : derby
+     [java] ** Database : jdbc:derby:target/dastest; create = true
+     [java] ** User     :
+     [java] ** Password :
+     [java] ************************************************
+     [java] Setting up for derby run!
+     [java] Dropping tables
+     [java] Dropping procedures
+     [java] Creating tables
+     [java] Creating procedures
+     [java] Inserting data in tables
+     [java] Database setup complete!
+     [java]
+     [java] Result:select all customers
+     [java]    ID:1 LASTNAME:John ADDRESS:USA
+     [java]    ID:2 LASTNAME:Amita ADDRESS:INDIA
+     [java]    ID:3 LASTNAME:Patrick ADDRESS:UK
+     [java]    ID:4 LASTNAME:Jane ADDRESS:UN
+     [java]
+     [java] Result:insert new customer
+     [java]    ID:1 LASTNAME:John ADDRESS:USA
+     [java]    ID:2 LASTNAME:Amita ADDRESS:INDIA
+     [java]    ID:3 LASTNAME:Patrick ADDRESS:UK
+     [java]    ID:4 LASTNAME:Jane ADDRESS:UN
+     [java]    ID:5 LASTNAME:Jenny ADDRESS:USA
+     [java]
+     [java] Result:update first customer
+     [java]    ID:1 LASTNAME:BlueBerry ADDRESS:USA
+     [java]    ID:2 LASTNAME:Amita ADDRESS:INDIA
+     [java]    ID:3 LASTNAME:Patrick ADDRESS:UK
+     [java]    ID:4 LASTNAME:Jane ADDRESS:UN
+     [java]    ID:5 LASTNAME:Jenny ADDRESS:USA
+     [java]
+     [java] Result:delete last customer
+     [java] Deleting customer named: Jenny
+     [java]    ID:1 LASTNAME:BlueBerry ADDRESS:USA
+     [java]    ID:2 LASTNAME:Amita ADDRESS:INDIA
+     [java]    ID:3 LASTNAME:Patrick ADDRESS:UK
+     [java]    ID:4 LASTNAME:Jane ADDRESS:UN
 
 BUILD SUCCESSFUL
-
 </pre>
 </p>
 
