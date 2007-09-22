@@ -19,7 +19,7 @@
  -->
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Tuscany DAS Sample - Advanced webapp</title>
 
 <style>
@@ -31,16 +31,10 @@
 </style>
 
 </head>
-
-
-
-
 <body>
-
 
 <h1><center>Advanced DAS web application Sample</center></h1>
 
-<br>
 <br>
 
 <p>
@@ -94,7 +88,7 @@ These instructions assume that you have either :
 see the following link to more details steps on how to build DAS Sample applications <a href="http://incubator.apache.org/tuscany/das-java-developer-guide.html">http://incubator.apache.org/tuscany/das-java-developer-guide.html</a> .
 </p>
 
-<h3>Set Up</h3>
+<h3>Set Up - Derby</h3>
 
 <ul>
    <li>Download and install the most recent stable version of Tomcat 5.5 or Tomcat 6.  You can find it here: http://tomcat.apache.org/download-60.cgi</li>
@@ -113,9 +107,9 @@ see the following link to more details steps on how to build DAS Sample applicat
 
         <pre STYLE="{font-style:italic}">
         &lt;!-- Global Datasource for Derby ajaxdastest database --&gt;
-        &lt;Resource name="jdbc/ajaxdastest" 
+        &lt;Resource name="jdbc/ajaxdastest"
                   type="javax.sql.DataSource" auth="Container"
-                  description="Derby database for DAS Company sample"
+                  description="Derby database for DAS Advanced sample"
                   maxActive="100" maxIdle="30" maxWait="10000"
                   username="" password=""
                   driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
@@ -129,6 +123,48 @@ see the following link to more details steps on how to build DAS Sample applicat
    <li>Start tomcat and point your browser to: <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a></li>
 </ul>
 
+<h3>Set Up - MySQL</h3>
+
+<ul>
+   <li>Download and install the most recent stable version of Tomcat 5.5 or Tomcat 6.  You can find it here: http://tomcat.apache.org/download-60.cgi</li>
+   <li>Download the most recent official release of MySQL. The only file you'll need from this download is mysql(version).jar (e.g. mysql-connector-java-5.0.4.jar) </li>
+   <li>Stop Tomcat</li>
+   <li>Copy mysql(version).jar (from the MySQL distribution) to {Tomcat_Home}/common/lib (for Tomcat 5.5) or to {Tomcat_Home}/lib (for Tomcat 6) - e.g. mysql-connector-java-5.0.4.jar.</li>
+   <li>Add the sample war file to {Tomcat_Home}/webapps
+      <ul>
+         <li>sample-advanced-webapp.war</li>
+      </ul>
+   </li>
+   <li>Define a DataSource by adding a datasource definition to {Tomcat_Home}/conf/server.xml.
+      <ul>
+         <li>Find the end-of-section marker </GlobalNamingResources> and add the following lines just above it:</li>
+      </ul>
+
+        <pre STYLE="{font-style:italic}">
+        &lt;!-- Global Datasource for MySQL ajaxdastest database --&gt;
+        &lt;Resource name="jdbc/ajaxdastest"
+                  type="javax.sql.DataSource" auth="Container"
+                  description="MySQL database for DAS Advanced sample"
+                  maxActive="100" maxIdle="30" maxWait="10000"
+                  username="dastest" password="dastest"
+                  driverClassName="com.mysql.jdbc.Driver"
+                  url="jdbc:mysql://localhost/ajaxdastest?createDatabaseIfNotExist=true"/&gt;
+        </pre>
+
+	   <b>Requirement:</b> MySQL service should be up with configured port open for TCPIP communication.
+       <br>
+       <br>
+       As the new utility, dbConfig is embedded in this sample war, the MySQL database "dastest" will get created with
+       required tables and data when the web application gets loaded for the first time in tomcat. Please note that,
+       in the binary distribution, WEB-INF/classes/CompanyWebDBConfig.xml has SQL Table creation syntax for Derby.
+       To make it compatible to MySQL, simply replace GENERATED ALWAYS AS IDENTITY with AUTO_INCREMENT for all
+       table creation statements. (For this unjar the .war, change CompanyWebDBConfig.xml and jar the .war
+       back with changed CompanyWebDBConfig.xml)
+       <br>
+       <br>
+   </li>
+   <li>Start tomcat and point your browser to: <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a></li>
+</ul>
 
 
 <h2>Sample Architecture</h2>
@@ -160,9 +196,9 @@ see the following link to more details steps on how to build DAS Sample applicat
 <h4><u>Serverside files</u></h4>
 
 <ul>
-   <li><b>CommandServlet.java</b> and <b>ServiceProcessor.java</b> <br> 
+   <li><b>CommandServlet.java</b> and <b>ServiceProcessor.java</b> <br>
        Used for invoking required service and returning results back to ajax.js. These files are not DAS specific.</li>
 
    <li><b>DASQueryProcessor.java</b> <br>
        Specific to DAS sample, has logic to invoke required sample example.</li>
-</ul>       
+</ul>

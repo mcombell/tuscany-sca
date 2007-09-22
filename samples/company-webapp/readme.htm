@@ -1,587 +1,201 @@
-<html xmlns:v="urn:schemas-microsoft-com:vml"
-xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns="http://www.w3.org/TR/REC-html40">
-
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 10">
-<meta name=Originator content="Microsoft Word 10">
-<link rel=File-List href="readme_files/filelist.xml">
-<title>Tuscany RDB DAS Sample</title>
-<!--[if gte mso 9]><xml>
- <o:DocumentProperties>
-  <o:Author>IBM_USER</o:Author>
-  <o:LastAuthor>IBM_User</o:LastAuthor>
-  <o:Revision>32</o:Revision>
-  <o:TotalTime>72</o:TotalTime>
-  <o:Created>2006-10-19T16:54:00Z</o:Created>
-  <o:LastSaved>2007-07-11T06:22:00Z</o:LastSaved>
-  <o:Pages>1</o:Pages>
-  <o:Words>722</o:Words>
-  <o:Characters>4116</o:Characters>
-  <o:Company>IBM</o:Company>
-  <o:Lines>34</o:Lines>
-  <o:Paragraphs>9</o:Paragraphs>
-  <o:CharactersWithSpaces>4829</o:CharactersWithSpaces>
-  <o:Version>10.3501</o:Version>
- </o:DocumentProperties>
-</xml><![endif]--><!--[if gte mso 9]><xml>
- <w:WordDocument>
-  <w:Compatibility>
-   <w:ApplyBreakingRules/>
-   <w:UseFELayout/>
-  </w:Compatibility>
-  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
- </w:WordDocument>
-</xml><![endif]-->
-<style>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--
- /* Font Definitions */
- @font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;
-	mso-font-alt:\5B8B\4F53;
-	mso-font-charset:134;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:3 135135232 16 0 262145 0;}
-@font-face
-	{font-family:"\@SimSun";
-	panose-1:2 1 6 0 3 1 1 1 1 1;
-	mso-font-charset:134;
-	mso-generic-font-family:auto;
-	mso-font-pitch:variable;
-	mso-font-signature:3 135135232 16 0 262145 0;}
- /* Style Definitions */
- p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{mso-style-parent:"";
-	margin:0in;
-	margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:12.0pt;
-	font-family:"Times New Roman";
-	mso-fareast-font-family:"Times New Roman";}
-h1
-	{mso-style-next:Normal;
-	margin-top:12.0pt;
-	margin-right:0in;
-	margin-bottom:3.0pt;
-	margin-left:0in;
-	mso-pagination:widow-orphan;
-	page-break-after:avoid;
-	mso-outline-level:1;
-	font-size:16.0pt;
-	font-family:Arial;
-	mso-font-kerning:16.0pt;}
-h3
-	{mso-style-next:Normal;
-	margin-top:12.0pt;
-	margin-right:0in;
-	margin-bottom:3.0pt;
-	margin-left:0in;
-	mso-pagination:widow-orphan;
-	page-break-after:avoid;
-	mso-outline-level:3;
-	font-size:13.0pt;
-	font-family:Arial;}
-p.MsoFootnoteText, li.MsoFootnoteText, div.MsoFootnoteText
-	{mso-style-noshow:yes;
-	margin:0in;
-	margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:10.0pt;
-	font-family:"Times New Roman";
-	mso-fareast-font-family:"Times New Roman";}
-span.MsoFootnoteReference
-	{mso-style-noshow:yes;
-	vertical-align:super;}
-a:link, span.MsoHyperlink
-	{color:blue;
-	text-decoration:underline;
-	text-underline:single;}
-a:visited, span.MsoHyperlinkFollowed
-	{color:purple;
-	text-decoration:underline;
-	text-underline:single;}
-code
-	{font-family:"Courier New";
-	mso-ascii-font-family:"Courier New";
-	mso-fareast-font-family:"Times New Roman";
-	mso-hansi-font-family:"Courier New";
-	mso-bidi-font-family:"Courier New";}
-pre
-	{margin:0in;
-	margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:10.0pt;
-	font-family:"Courier New";
-	mso-fareast-font-family:"Times New Roman";}
-span.codefrag
-	{mso-style-name:codefrag;}
-@page Section1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.25in 1.0in 1.25in;
-	mso-header-margin:.5in;
-	mso-footer-margin:.5in;
-	mso-paper-source:0;}
-div.Section1
-	{page:Section1;}
- /* List Definitions */
- @list l0
-	{mso-list-id:602542409;
-	mso-list-template-ids:-1848619546;}
-@list l1
-	{mso-list-id:624233826;
-	mso-list-template-ids:333737702;}
-@list l1:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2
-	{mso-list-id:646667692;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-728441462 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
-@list l2:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l2:level2
-	{mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level3
-	{mso-level-tab-stop:1.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level4
-	{mso-level-tab-stop:2.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level5
-	{mso-level-tab-stop:2.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level6
-	{mso-level-tab-stop:3.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level7
-	{mso-level-tab-stop:3.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level8
-	{mso-level-tab-stop:4.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l2:level9
-	{mso-level-tab-stop:4.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3
-	{mso-list-id:975526902;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1435802096 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
-@list l3:level1
-	{mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level2
-	{mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level3
-	{mso-level-tab-stop:1.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level4
-	{mso-level-tab-stop:2.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level5
-	{mso-level-tab-stop:2.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level6
-	{mso-level-tab-stop:3.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level7
-	{mso-level-tab-stop:3.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level8
-	{mso-level-tab-stop:4.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l3:level9
-	{mso-level-tab-stop:4.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4
-	{mso-list-id:1305811547;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1677090400 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
-@list l4:level1
-	{mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:1.5in;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l4:level4
-	{mso-level-tab-stop:2.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level5
-	{mso-level-tab-stop:2.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level6
-	{mso-level-tab-stop:3.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level7
-	{mso-level-tab-stop:3.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level8
-	{mso-level-tab-stop:4.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l4:level9
-	{mso-level-tab-stop:4.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l5
-	{mso-list-id:1560482821;
-	mso-list-template-ids:-2008414866;}
-@list l6
-	{mso-list-id:1605966365;
-	mso-list-type:hybrid;
-	mso-list-template-ids:14685132 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
-@list l6:level1
-	{mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level2
-	{mso-level-tab-stop:1.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level3
-	{mso-level-tab-stop:1.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level4
-	{mso-level-tab-stop:2.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level5
-	{mso-level-tab-stop:2.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level6
-	{mso-level-tab-stop:3.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level7
-	{mso-level-tab-stop:3.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level8
-	{mso-level-tab-stop:4.0in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l6:level9
-	{mso-level-tab-stop:4.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l7
-	{mso-list-id:2013684599;
-	mso-list-template-ids:1094460612;}
-@list l7:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	mso-ansi-font-size:10.0pt;
-	font-family:Symbol;}
-@list l8
-	{mso-list-id:2049064462;
-	mso-list-template-ids:-1385928480;}
-@list l8:level1
-	{mso-level-start-at:7;
-	mso-level-tab-stop:.5in;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
--->
-</style>
-<!--[if gte mso 10]>
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tuscany DAS Sample - Company webapp</title>
+
 <style>
- /* Style Definitions */
- table.MsoNormalTable
-	{mso-style-name:"Table Normal";
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-noshow:yes;
-	mso-style-parent:"";
-	mso-padding-alt:0in 5.4pt 0in 5.4pt;
-	mso-para-margin:0in;
-	mso-para-margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:10.0pt;
-	font-family:"Times New Roman";}
+.code {font-size: 11px; color: #006699}
+.codebox {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px}
+.codebox2 {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px; width:85%}
+.codeboxW {border: 1px solid #6699CC; background-color: #FFFFFF;padding:15px}
+.codeboxB {background-color: #C9DBED;padding:1px 10px 10px 10px}
 </style>
-<![endif]--><!--[if gte mso 9]><xml>
- <u1:shapelayout u2:ext="edit">
-  <u1:idmap u2:ext="edit" data="1"/>
- </u1:shapelayout>
-</xml><![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="7170"/>
-</xml><![endif]--><!--[if gte mso 9]><xml>
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout></xml><![endif]-->
+
 </head>
 
-<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+<body>
 
-<div class=Section1><!--
+<h1><center>DAS Company web application Sample</center></h1>
 
+<br>
+<br>
 
-<p class=MsoNormal><span style="font-size: 9pt">&nbsp;</span></p>
-<pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-&quot;License&quot;); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+<p>
+This stand-alone sample demonstrates the SDO RDB Data Access Service in the context of a simple web application<br>
+<p>
+<p>
+The application starts with a database of Companies and their related Departments.Through the web page interface, a user can:<br>
+<br>
 
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.   </a></pre>
-<p class=MsoNormal><span style="font-size: 9pt"><br>
-&nbsp;</span></p>
-<p class=MsoNormal><span style='font-size:9.0pt'>
-<o:p>&nbsp;</o:p></span></p>
-
--->
-
-<h1>Tuscany RDB DAS Company web application Sample</h1>
-
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
-
-<p class=MsoNormal>This stand-alone sample demonstrates the SDO RDB Data Access
-Service in the context of a simple web application.<o:p></o:p></p>
-
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
-
-<p class=MsoNormal>The application starts with a database of Companies and
-their related Departments.<span style='mso-spacerun:yes'>  </span>Through the
-web page interface, a user can:<o:p></o:p></p>
-
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
-
-<ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>Display
-     all Companies in the database</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>Display
-     all Companies and related Departments</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>Add a
-     new Department to a Company</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>Delete
-     all Departments from a Company</li>
- <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>Change
-     the names of Departments in a Company<o:p></o:p></li>
+<ol start=1 type=1>
+ <li>Display all Companies in the database</li>
+ <li>Display all Companies and related Departments</li>
+ <li>Add a new Department to a Company</li>
+ <li>Delete all Departments from a Company</li>
+ <li>Change the names of Departments in a Company</li>
 </ol>
 
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
+<p>This simple application covers all CRUD operations as well as some relationship manipulation (adding a Department associates that
+Department with the Company).The sample runs on Tomcat 6.0 and employs a Derby database (default) accessed via a DataSource.</p>
 
-<p class=MsoNormal>So, this simple application covers all CRUD operations as
-well as some relationship manipulation (adding a Department associates that
-Department with the Company).<span style='mso-spacerun:yes'>  </span>The sample
-runs on Tomcat 6.0 and employs a Derby database accessed via a DataSource.</p>
+<h2>Running the sample</h2>
 
-<h1>Running the sample</h1>
+<p>There are two options for running this sample:</p>
 
-<p class=MsoNormal>There are two options for running this sample:<o:p></o:p></p>
-
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
-
-<ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l6 level1 lfo6;tab-stops:list .5in'>Run
-     from Tomcat configured by the build</li>
- <li class=MsoNormal style='mso-list:l6 level1 lfo6;tab-stops:list .5in'>Deploying
-     the Company-webapp WAR into a Tomcat you configure yourself</li>
+<ol start=1 type=1>
+ <li>Run from Tomcat configured by the build</li>
+ <li>Deploying the Company-webapp WAR into a Tomcat you configure yourself</li>
 </ol>
 
-<h3>Running from Tomcat configured by the build<u3:p></u3:p></h3>
+<h3>Running from Tomcat configured by the build</h3>
 
-<p class=MsoNormal>You need to download the Tuscany RDB DAS source distribution
-and run maven build to use this option. When you build using maven from the
-source root {SRC_ROOT} directory, the sample war file is created under
-{SRC_ROOT}/samples/company-webapp/target. This sample application is deployed to an
-instance of Tomcat as part of our automated sample testing.<span
-style='mso-spacerun:yes'>  </span>For this, follow readme.htm instructions from
-{SRC_ROOT}/samples/testing/tomcat. This will in-effect run the htmlunit tests
-on the sample. The sample deployed on Tomcat instance will be ready this way
-and you can just point your browser to <span class=MsoHyperlink><a
-href="http://localhost:8080/sample-company-webapp/">http://localhost:8080/sample-company-webapp/</a></span>
-to test further.</p>
+<p>
+You need to download the Tuscany RDB DAS source distribution and run maven build to use this option.
+When you build using maven from the source root {SRC_ROOT} directory, the sample war file is created
+under {SRC_ROOT}/samples/company-webapp/target. This sample application is deployed to an instance
+of Tomcat as part of our automated sample testing. For this, follow readme.htm instructions from
+{SRC_ROOT}/samples/testing/tomcat. This will in-effect run the htmlunit tests on the sample.
+The sample deployed on Tomcat instance will be ready this way and you can just point your browser
+to <a href="http://localhost:8080/sample-company-webapp/">http://localhost:8080/sample-company-webapp/</a>
+to test further.
+</p>
 
 <h3>Deploying the Company-webapp WAR into a Tomcat you configured yourself</h3>
 
-<p class=MsoNormal>Alternatively, you can deploy the sample to your own
-configured Tomcat installation by following the instructions below.<span
-style='mso-spacerun:yes'>  </span>These instructions assume that you have
-either 1) downloaded the Tuscany binary distribution or 2) Downloaded the
-Tuscany source and run maven build, see the following link for more details
-steps on how to build DAS Sample applications <a
-href="http://incubator.apache.org/tuscany/das-java-developer-guide.html">http://incubator.apache.org/tuscany/das-java-developer-guide.html</a>
-.</p>
+<p>
+Alternatively, you can deploy the sample to your own configured Tomcat installation by following
+the instructions below.These instructions assume that you have either 1) downloaded the Tuscany
+binary distribution or 2) Downloaded the Tuscany source and run maven build.See the following
+link for more details steps on how to build DAS Sample applications <a
+href="http://incubator.apache.org/tuscany/das-java-developer-guide.html">
+http://incubator.apache.org/tuscany/das-java-developer-guide.html</a>.
+</p>
 
-<h1><span style='font-size:12.0pt;mso-bidi-font-size:16.0pt;font-family:"Times New Roman";
-mso-bidi-font-family:Arial;mso-font-kerning:0pt'>Set Up<u3:p></u3:p></span></h1>
+<b>Set Up - Derby</b>
 
-<ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Download
-     and install the most recent stable version of Tomcat 6.0.<span
-     style='mso-spacerun:yes'>  </span>You can find it here: <a
-     href="http://tomcat.apache.org/download-60.cgi">http://tomcat.apache.org/download-60.cgi</a></li>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Download
-     the most recent official release of Derby from here: <a
-     href="http://db.apache.org/derby/index.html">http://db.apache.org/derby/index.html</a>.<span
-     style='mso-spacerun:yes'>  </span>The only file you’ll need from this
-     download is derby (version).jar</li>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Stop
-     Tomcat</li>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Copy
-     derby(version).jar (from the derby distribution) to {Tomcat_Home} /lib: -
-     derby-10.1.2.1.jar </li>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Add
-     the sample war file to {Tomcat_Home}/webapps</li>
- <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l4 level2 lfo9;tab-stops:list 1.0in'>sample-company-webapp.war</li>
- </ol>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Define
-     a DataSource by adding a datasource definition to {<span class=codefrag>Tomcat_Home}/conf/server.xml</span>.</li>
- <ol style='margin-top:0in' start=1 type=a>
-  <li class=MsoNormal style='mso-list:l4 level2 lfo9;tab-stops:list 1.0in'>Find
-      the end-of-section marker <span class=codefrag>&lt;/GlobalNamingResources&gt;</span>
-      and add the following lines just above it: <o:p></o:p></li>
- </ol>
-</ol>
+<ul>
+   <li>Download and install the most recent stable version of Tomcat 5.5 or Tomcat 6.  You can find it here: http://tomcat.apache.org/download-60.cgi</li>
+   <li>Download the most recent official release of Derby from here: http://db.apache.org/derby/index.html.  The only file you'll need from this download is derby(version).jar</li>
+   <li>Stop Tomcat</li>
+   <li>Copy derby(version).jar (from the derby distribution) to {Tomcat_Home}/common/lib (for Tomcat 5.5) or to {Tomcat_Home}/lib (for Tomcat 6) - e.g. derby-10.2.2.0.jar.</li>
+   <li>Add the sample war file to {Tomcat_Home}/webapps
+      <ul>
+         <li>sample-company-webapp.war</li>
+      </ul>
+   </li>
+   <li>Define a DataSource by adding a datasource definition to {Tomcat_Home}/conf/server.xml.
+      <ul>
+         <li>Find the end-of-section marker </GlobalNamingResources> and add the following lines just above it:</li>
+      </ul>
 
-<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
+        <pre STYLE="{font-style:italic}">
+        &lt;!-- Global Datasource for Derby dastest database --&gt;
+        &lt;Resource name="jdbc/dastest"
+                  type="javax.sql.DataSource" auth="Container"
+                  description="Derby database for DAS Company sample"
+                  maxActive="100" maxIdle="30" maxWait="10000"
+                  username="" password=""
+                  driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+                  url="jdbc:derby:{absolute path}Databases/dastest;create=true"/&gt;
+        </pre>
 
-<pre><span style='mso-spacerun:yes'>        </span><span style='font-size:9.0pt'>&lt;!-- Global Datasource for Derby dastest database --&gt;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>         </span>&lt;Resource name=&quot;jdbc/dastest&quot;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>type=&quot;javax.sql.DataSource&quot;<span style='mso-spacerun:yes'>  </span>auth=&quot;Container&quot;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>description=&quot;Derby database for DAS Company sample&quot;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>maxActive=&quot;100&quot; maxIdle=&quot;30&quot; maxWait=&quot;10000&quot;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>username=&quot;&quot; password=&quot;&quot; <u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>driverClassName=&quot;org.apache.derby.jdbc.EmbeddedDriver&quot;<u3:p></u3:p></span></pre><pre><span
-style='font-size:9.0pt'><span style='mso-spacerun:yes'>              </span>url=&quot;jdbc:derby:{absolute path}Databases/dastest<b>;create=true</b>&quot;/&gt;<u3:p></u3:p></span></pre>
-
-<p class=MsoNormal><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal style='margin-left:.5in'><span
-style='mso-spacerun:yes'> </span><b style='mso-bidi-font-weight:normal'>Requirement</b>:
-You must include the absolute path to the “Databases” directory in the above
-url attribute.<span style='mso-spacerun:yes'>  </span>Fore example:<o:p></o:p></p>
-
-<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
-
-<pre><span style='mso-spacerun:yes'>         </span>url=&quot;jdbc:derby:c:\apache-tomcat-6.0.13\Databases/dastest<b>;create=true</b>&quot;/&gt;<o:p></o:p></pre><u3:p></u3:p>
-
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal style='margin-left:.5in'>As the new utility, dbConfig is
-embedded in this sample war, the Derby database “dastest” will get created with
-required tables and data when the web application gets loaded for the first
-time in tomcat. </p>
-
-<p class=MsoNormal style='margin-left:.5in'><o:p>&nbsp;</o:p></p>
-
-<ol style='margin-top:0in' start=7 type=1>
- <li class=MsoNormal style='mso-list:l4 level1 lfo9;tab-stops:list .5in'>Start
-     tomcat and point your browser to: <a
-     href="http://localhost:8080/sample-company-webapp-%7bversion%20tag%7d/"><span
-     style='color:windowtext;text-decoration:none;text-underline:none'>http://localhost:8080/sample-company-webapp/</span></a></li>
-</ol>
-
-<p class=MsoNormal style='margin-left:1.5in'><o:p>&nbsp;</o:p></p>
-
-<p class=MsoNormal style='margin-left:1.5in'>example: <span class=MsoHyperlink>http://localhost:8080/sample-company-webapp/</span><o:p></o:p></p>
-
-<p class=MsoNormal style='margin-left:1.0in'><u3:p>&nbsp;</u3:p></p>
-
-<h1>Sample Architecture</h1>
-
-<p class=MsoNormal>This is a simple, single-page, web application.<span
-style='mso-spacerun:yes'>  </span>The main components of this application are:</p>
-
-<ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l2 level1 lfo14;tab-stops:list .5in'>The
-     RDB Data Access Service (DAS)</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo14;tab-stops:list .5in'>SDO</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo14;tab-stops:list .5in'>CompanyClient.java</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo14;tab-stops:list .5in'>Company.jsp</li>
+	   <b>Requirement:</b> You must include the absolute path to the <i>Databases</i> directory in the above url attribute. <br/>
+       Fore example: &lt;url="jdbc:derby:c:\apache-tomcat-6.0.13\Databases/ajaxdastest;create=true"/&gt;
+       <br><br>
+       As the new utility, dbConfig is embedded in this sample war, the Derby database "dastest" will get
+       created with required tables and data when the web application gets loaded for the first time in tomcat.
+       <br><br>
+   </li>
+   <li>Start tomcat and point your browser to: <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a></li>
 </ul>
 
-<p class=MsoNormal>&nbsp;<o:p></o:p></p>
 
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
+<b>Set Up - MySQL</b>
 
-<p class=MsoNormal>The <b style='mso-bidi-font-weight:normal'>CompanyClient</b>
-uses the <b style='mso-bidi-font-weight:normal'>DAS</b> directly and provides
-high-level services to the jsp such as:</p>
+<ul>
+   <li>Download and install the most recent stable version of Tomcat 5.5 or Tomcat 6.  You can find it here: http://tomcat.apache.org/download-60.cgi</li>
+   <li>Download the most recent official release of MySQL driver, e.g. mysql-connector-java-5.0.4.jar</li>
+   <li>Stop Tomcat</li>
+   <li>Copy mysql(version).jar (from the MySQL distribution) to {Tomcat_Home}/common/lib (for Tomcat 5.5) or to {Tomcat_Home}/lib (for Tomcat 6) - e.g. mysql-connector-java-5.0.4.jar.</li>
+   <li>Add the sample war file to {Tomcat_Home}/webapps
+      <ul>
+         <li>sample-company-webapp.war</li>
+      </ul>
+   </li>
+   <li>Define a DataSource by adding a datasource definition to {Tomcat_Home}/conf/server.xml.
+      <ul>
+         <li>Find the end-of-section marker </GlobalNamingResources> and add the following lines just above it:</li>
+      </ul>
 
-<p class=MsoNormal style='margin-left:.5in'>public final List getCompanies()</p>
+        <pre STYLE="{font-style:italic}">
+        &lt;!-- Global Datasource for MySQL dastest database --&gt;
+        &lt;Resource name="jdbc/dastest"
+                  type="javax.sql.DataSource" auth="Container"
+                  description="MySQL database for DAS Company sample"
+                  maxActive="100" maxIdle="30" maxWait="10000"
+                  username="dastest" password="dastest"
+                  driverClassName="com.mysql.jdbc.Driver"
+                  url="jdbc:mysql://localhost/dastest?createDatabaseIfNotExist=true"/&gt;
+        </pre>
 
-<p class=MsoNormal>This is a good place to look for how you might use the DAS
-in your own application.<o:p></o:p></p>
+	   <b>Requirement:</b>MySQL service should be up with configured port open for TCPIP communication.<br/>
+       <br><br>
+       As the new utility, dbConfig is embedded in this sample war, the MySQL database "dastest" will get created with
+       required tables and data when the web application gets loaded for the first time in tomcat. Please note that,
+       in the binary distribution, WEB-INF/classes/CompanyWebDBConfig.xml has SQL Table creation syntax for Derby.
+       To make it compatible to MySQL, simply replace GENERATED ALWAYS AS IDENTITY with AUTO_INCREMENT for all
+       table creation statements. (For this unjar the .war, change CompanyWebDBConfig.xml and jar the .war
+       back with changed CompanyWebDBConfig.xml)
+       <br>
+       <br>
+   </li>
+   <li>Start tomcat and point your browser to: <a href="http://localhost:8080/sample-advanced-webapp/">http://localhost:8080/sample-advanced-webapp/</a></li>
+</ul>
 
-<p class=MsoNormal style='margin-left:.5in'><u3:p>&nbsp;</u3:p></p>
 
-<p class=MsoNormal>The <b style='mso-bidi-font-weight:normal'>Company.jsp</b> responds
-to client interaction by invoking services of the CompanyClient.<span
-style='mso-spacerun:yes'>  </span>It receives data from the CompanyClient as
-SDO data graphs and manipulates SDOs directly to display data.<o:p></o:p></p>
+<h2>Sample Architecture</h2>
 
-<p class=MsoNormal><u3:p>&nbsp;</u3:p></p>
+<p>
+This is a simple, single-page, web application.The main components of this application are:
+</p>
 
-<p class=MsoNormal>The <b style='mso-bidi-font-weight:normal'>DAS</b> accepts
-directives (commands) from the <b style='mso-bidi-font-weight:normal'>CompanyClient
-</b>and reads and writes to the derby database instance appropriately.<b
-style='mso-bidi-font-weight:normal'> </b><o:p></o:p></p>
+<ul type=disc>
+ <li>The RDB Data Access Service (DAS)</li>
+ <li>SDO</li>
+ <li>CompanyClient.java</li>
+ <li>Company.jsp</li>
+</ul>
 
-</div>
+<p>The <b>CompanyClient</b> uses the <b>DAS</b> directly and provides high-level services to the jsp such as:</p>
+<p style='margin-left:.5in'>public final List getCompanies()</p>
 
-<u3:p></u3:p>
+<p>This is a good place to look for how you might use the DAS in your own application.</p>
+
+<p>The <b>Company.jsp</b> responds to client interaction by invoking services of the CompanyClient.It receives data
+from the CompanyClient as SDO data graphs and manipulates SDOs directly to display data.</p>
+
+<p>The <b>DAS</b> accepts directives (commands) from the <b>CompanyClient</b> and reads and writes to the derby
+database instance appropriately.</p>
+
 </body>
 
 </html>

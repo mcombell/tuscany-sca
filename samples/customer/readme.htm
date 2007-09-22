@@ -1,94 +1,150 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
-	<TITLE>Tuscany RDB DAS Sample</TITLE>
-	<META NAME="GENERATOR" CONTENT="BrOffice.org 2.0  (Win32)">
-	<META NAME="CREATED" CONTENT="20070704;1002817">
-	<META NAME="CHANGEDBY" CONTENT="a a">
-	<META NAME="CHANGED" CONTENT="20070704;2123396">
-	<!-- <pre><a name="header-text">Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-&quot;License&quot;); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+  http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.   </a></pre>
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
 
--->
-</HEAD>
-<BODY LANG="en-US" DIR="LTR">
-<H1 LANG="pt-BR">RDB DAS Customer Sample</H1>
-<H2 LANG="pt-BR">Introduction</H2>
-<P LANG="pt-BR">This stand-alone sample demonstrates the RDB Data
-Access Service in the context of a simple java application.</P>
-<H2 LANG="pt-BR">Building and Running</H2>
-<UL>
-	<LI><P LANG="pt-BR">Apache Ant latest version installed.</P>
-	<UL>
-		<UL>
-			<LI><P LANG="pt-BR">Download Apache Ant latest version on and
-			extract into folder &lt;apache_ant_folder&gt;. You can find it
-			here: <A HREF="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</A>.</P>
-			<LI><P LANG="pt-BR">Add &lt;apache_ant_folder&gt;/bin directory to
-			your OS path variable.</P>
-		</UL>
-	</UL>
-	<LI><P LANG="pt-BR">On console change the actual directory to
-	&lt;tuscany_das_java_distribution&gt;/samples/customer/ and execute
-	ant application:</P>
-	<UL>
-		<P LANG="pt-BR">&lt;tuscany_das_java_distribution&gt;/samples/customer/
-		&gt; ant</P>
-	</UL>
-</UL>
-<P LANG="pt-BR">The sample will run and output the following:</P>
-<P LANG="pt-BR" STYLE="margin-left: 2cm; margin-bottom: 0cm"><FONT SIZE=2>Buildfile:
-build.xml</FONT> <BR><BR><FONT SIZE=2>run:</FONT><BR><FONT SIZE=2>[java]
-connection info from config***************</FONT><BR><FONT SIZE=2>[java]
-dbName:jdbc:derby:target/dastest; create = true user:
-password:</FONT><BR><FONT SIZE=2>[java]
-******************************************</FONT><BR><FONT SIZE=2>[java]
-Setting up for derby run!</FONT><BR><FONT SIZE=2>[java] Dropping
-tables</FONT><BR><FONT SIZE=2>[java] Dropping procedures</FONT><BR><FONT SIZE=2>[java]
-Creating tables</FONT><BR><FONT SIZE=2>[java] Creating
-procedures</FONT><BR><FONT SIZE=2>[java] Inserting data in
-tables</FONT><BR><FONT SIZE=2>[java] Database setup complete!</FONT><BR><FONT SIZE=2>[java]
-Result:select all customers</FONT><BR><FONT SIZE=2>[java] ID:1
-LASTNAME:John ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2
-LASTNAME:Amita ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3
-LASTNAME:Patrick ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4
-LASTNAME:Jane ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] Result:insert
-new customer</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:John
-ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
-ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
-ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
-ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] ID:5 LASTNAME:Jenny
-ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] Result:update first
-customer</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:BlueBerry
-ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
-ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
-ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
-ADDRESS:UN</FONT><BR><FONT SIZE=2>[java] ID:5 LASTNAME:Jenny
-ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] Result:delete last
-customer</FONT><BR><FONT SIZE=2>[java] Deleting customer named:
-Jenny</FONT><BR><FONT SIZE=2>[java] ID:1 LASTNAME:BlueBerry
-ADDRESS:USA</FONT><BR><FONT SIZE=2>[java] ID:2 LASTNAME:Amita
-ADDRESS:INDIA</FONT><BR><FONT SIZE=2>[java] ID:3 LASTNAME:Patrick
-ADDRESS:UK</FONT><BR><FONT SIZE=2>[java] ID:4 LASTNAME:Jane
-ADDRESS:UN</FONT><BR><BR><FONT SIZE=2>BUILD SUCCESSFUL</FONT><BR><FONT SIZE=2>Total
-time: 29 seconds</FONT></P>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tuscany DAS Sample - Customer</title>
 
-<P LANG="pt-BR" STYLE="margin-bottom: 0cm"><FONT SIZE=3>Observation:
-The build.xml ant file only works on DAS Java binary distribution.</FONT></P>
+<style>
+.code {font-size: 11px; color: #006699}
+.codebox {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px}
+.codebox2 {border: 1px solid #6699CC; background-color: #F1F7FA;padding:15px; width:85%}
+.codeboxW {border: 1px solid #6699CC; background-color: #FFFFFF;padding:15px}
+.codeboxB {background-color: #C9DBED;padding:1px 10px 10px 10px}
+</style>
+
+</head>
+
+<h1><center>Customer J2SE sample application</center></h1>
+
+<br>
+
+<p>
+This stand-alone sample demonstrates the RDB Data Access Service in the context of a simple java application.
+</p>
+
+<br>
+
+<h2>Building and Running</h2>
+
+<ul>
+	<li>Apache Ant latest version installed.
+		<ul>
+			<li>Download Apache Ant latest version on and extract into folder &lt;apache_ant_folder&gt;. You can find it here: <a href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>.</li>
+			<li>Add &lt;apache_ant_folder&gt;/bin directory to your OS path variable.</p></li>
+		</ul>
+	</li>
+
+	<li>On console change the actual directory to &lt;tuscany_das_java_distribution&gt;/samples/customer/ and execute ant application:
+	  <ul>
+		<li>&lt;tuscany_das_java_distribution&gt;/samples/customer/&gt; ant</li>
+	  </ul>
+	</li>
+</ul>
+
+<p>
+The sample will run and output the following:
+</p>
+
+<p>
+<pre style="code">
+Buildfile: build.xml
+
+run:
+[java] connection info from config***************
+[java] dbName:jdbc:derby:target/dastest; create = true user: password:
+[java] ******************************************
+[java] Setting up for derby run!
+[java] Dropping tables
+[java] Dropping procedures
+[java] Creating tables
+[java] Creating procedures
+[java] Inserting data in tables
+[java] Database setup complete!
+[java] Result:select all customers
+[java] ID:1 LASTNAME:John ADDRESS:USA
+[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
+[java] ID:3 LASTNAME:Patrick ADDRESS:UK
+[java] ID:4 LASTNAME:Jane ADDRESS:UN
+[java] Result:insert new customer
+[java] ID:1 LASTNAME:John ADDRESS:USA
+[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
+[java] ID:3 LASTNAME:Patrick ADDRESS:UK
+[java] ID:4 LASTNAME:Jane ADDRESS:UN
+[java] ID:5 LASTNAME:Jenny ADDRESS:USA
+[java] Result:update first customer
+[java] ID:1 LASTNAME:BlueBerry ADDRESS:USA
+[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
+[java] ID:3 LASTNAME:Patrick ADDRESS:UK
+[java] ID:4 LASTNAME:Jane ADDRESS:UN
+[java] ID:5 LASTNAME:Jenny ADDRESS:USA
+[java] Result:delete last customer
+[java] Deleting customer named: Jenny
+[java] ID:1 LASTNAME:BlueBerry ADDRESS:USA
+[java] ID:2 LASTNAME:Amita ADDRESS:INDIA
+[java] ID:3 LASTNAME:Patrick ADDRESS:UK
+[java] ID:4 LASTNAME:Jane ADDRESS:UN
+
+BUILD SUCCESSFUL
+
+</pre>
+</p>
+
+<br>
+
+<p>
+<b>Observation:</b>The build.xml ant file only works on DAS Java binary distribution.
+</p>
+
+
+
+<h2>Running  Sample with MySQL</h2>
+<br>
+<p>
+The sample is pre-configured to run using an embedded Derby database.Follow below instructions to run the sample on another database (e.g MySQL).<br>
+</p>
+
+<ul>
+   <li>Expand sample-customer.jar under <tuscany_das_java_distribution>/samples/customer to access CustomersConfig.xml</li>
+   <li>Change CustomersConfig.xml - comment Derby connection info and uncomment MySQL connection info. Check for correct userName, password, and other configuration information </li>
+   <li>Change <tuscany_das_java_distribution>/samples/customer /build.xml to replace pathelement location from Derby jar to MySQL jar like -
+      <ul>
+         <li>&lt;pathelement location="mysql-connector-java-5.0.4.jar"/&gt;</li>
+      </ul>
+   </li>
+   <li>Create new sample-customer.jar to use the changed CustomersConfig.xml , replacing the one from binary distribution under <tuscany_das_java_distribution>/samples/customer.</li>
+   <li>Place required mysql jar (e.g. mysql-connector-java-5.0.4.jar) under <tuscany_das_java_distribution>/samples/customer.</li>
+   <li>From command prompt run the sample application using ant -
+      <ul>
+         <li>&lt;tuscany_das_java_distribution>/samples/customer/&gt; ant</li>
+      </ul>
+   </li>
+ </ul>
+
+<p>
+<b>Observations:</b>
+<ul>
+   <li>These instructions apply only for DAS Java binary distribution.</li>
+   <li>MySQL Database will be created and populated with necessary structure and data if not present</li>
+</ul>
+
 </BODY>
 </HTML>
