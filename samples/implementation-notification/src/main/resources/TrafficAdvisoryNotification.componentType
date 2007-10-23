@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="ASCII"?>
+<!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,34 +16,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- */
-package notification.consumer;
+-->
 
-import java.io.IOException;
+<componentType xmlns="http://www.osoa.org/xmlns/sca/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+     <service name="TrafficAdvisoryNotificationService">
+           <interface.java interface="notification.TrafficAdvisory"/>
+     </service>
 
-import org.apache.tuscany.sca.host.embedded.SCADomain;
-
-/**
- * @version $Rev$ $Date$
- */
-public class TrafficAdvisoryServer {
-
-    public static void main(String[] args) {
-        try {
-            SCADomain domain = SCADomain.newInstance("TrafficAdvisoryNotification.composite");
-
-            try {
-                if (args.length != 1 || !args[0].equals("end")) {
-                    System.out.println("TrafficAdvisoryServer, hit return to end");
-                    System.in.read();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            domain.close();
-        } catch(Throwable e) {
-            e.printStackTrace();
-        }
-    }
-}
+     <reference name="TrafficAdvisoryNotificationReference"
+                multiplicity="0..n">
+           <interface.java interface="notification.TrafficAdvisory"/>
+     </reference>
+</componentType>
