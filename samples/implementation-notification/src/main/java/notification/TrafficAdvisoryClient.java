@@ -16,33 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package notification.consumer;
+package notification;
 
-import java.io.IOException;
+import notification.TestCaseProducer;
 
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 
-/**
- * @version $Rev$ $Date$
- */
-public class TrafficAdvisoryServer {
-
-    public static void main(String[] args) {
+public class TrafficAdvisoryClient {
+    
+    public static void main(String[] args) throws Exception {
         try {
             SCADomain domain = SCADomain.newInstance("TrafficAdvisoryNotification.composite");
+            TestCaseProducer testCaseProducer = domain.getService(TestCaseProducer.class, "TrafficAdvisoryProducer");
 
-            try {
-                if (args.length != 1 || !args[0].equals("end")) {
-                    System.out.println("TrafficAdvisoryServer, hit return to end");
-                    System.in.read();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            testCaseProducer.produceTrafficNotification("Nothing to report today");
 
             domain.close();
         } catch(Throwable e) {
             e.printStackTrace();
+            if (e instanceof Exception) {
+                throw (Exception)e;
+            }
+            else {
+                throw new Exception(e);
+            }
         }
     }
 }
