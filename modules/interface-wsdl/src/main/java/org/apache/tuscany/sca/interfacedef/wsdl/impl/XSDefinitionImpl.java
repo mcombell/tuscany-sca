@@ -20,9 +20,19 @@
 package org.apache.tuscany.sca.interfacedef.wsdl.impl;
 
 import java.net.URI;
+import java.util.Iterator;
+
+import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
 import org.apache.ws.commons.schema.XmlSchema;
+import org.apache.ws.commons.schema.XmlSchemaCollection;
+import org.apache.ws.commons.schema.XmlSchemaElement;
+import org.apache.ws.commons.schema.XmlSchemaImport;
+import org.apache.ws.commons.schema.XmlSchemaInclude;
+import org.apache.ws.commons.schema.XmlSchemaObject;
+import org.apache.ws.commons.schema.XmlSchemaType;
+import org.w3c.dom.Document;
 
 /**
  * Represents a XML schema definition.
@@ -30,21 +40,22 @@ import org.apache.ws.commons.schema.XmlSchema;
  * @version $Rev$ $Date$
  */
 public class XSDefinitionImpl implements XSDefinition {
-    
-    private XmlSchema definition;
+    private XmlSchemaCollection schemaCollection = new XmlSchemaCollection();
+    private XmlSchema schema;
     private String namespace;
     private URI location;
+    private Document document;
     private boolean unresolved;
-    
+
     protected XSDefinitionImpl() {
     }
 
     public XmlSchema getSchema() {
-        return definition;
+        return schema;
     }
 
     public void setSchema(XmlSchema definition) {
-        this.definition = definition;
+        this.schema = definition;
     }
 
     public boolean isUnresolved() {
@@ -54,17 +65,17 @@ public class XSDefinitionImpl implements XSDefinition {
     public void setUnresolved(boolean undefined) {
         this.unresolved = undefined;
     }
-    
+
     public String getNamespace() {
         if (isUnresolved()) {
             return namespace;
-        } else if (definition != null) {
-            return definition.getTargetNamespace();
+        } else if (schema != null) {
+            return schema.getTargetNamespace();
         } else {
             return namespace;
         }
     }
-    
+
     public void setNamespace(String namespace) {
         if (!isUnresolved()) {
             throw new IllegalStateException();
@@ -72,7 +83,7 @@ public class XSDefinitionImpl implements XSDefinition {
             this.namespace = namespace;
         }
     }
-    
+
     /**
      * @return the location
      */
@@ -86,4 +97,126 @@ public class XSDefinitionImpl implements XSDefinition {
     public void setLocation(URI location) {
         this.location = location;
     }
+
+    /**
+     * @return the document
+     */
+    public Document getDocument() {
+        return document;
+    }
+
+    /**
+     * @param document the document to set
+     */
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
+    /**
+     * @return the schemaCollection
+     */
+    public XmlSchemaCollection getSchemaCollection() {
+        return schemaCollection;
+    }
+
+    /**
+     * @param schemaCollection the schemaCollection to set
+     */
+    public void setSchemaCollection(XmlSchemaCollection schemaCollection) {
+        this.schemaCollection = schemaCollection;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
+        result = prime * result + ((namespace == null) ? 0 : namespace.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof XSDefinitionImpl))
+            return false;
+        final XSDefinitionImpl other = (XSDefinitionImpl)obj;
+        if (location == null) {
+            if (other.location != null)
+                return false;
+        } else if (!location.equals(other.location))
+            return false;
+        if (namespace == null) {
+            if (other.namespace != null)
+                return false;
+        } else if (!namespace.equals(other.namespace))
+            return false;
+        return true;
+    }
+
+    public static <T extends XmlSchemaObject> T getXmlSchemaObject(XmlSchema schema, QName name, Class<T> type) {
+        if (schema != null) {
+            XmlSchemaObject object = null;
+            if (type == XmlSchemaElement.class) {
+                object = schema.getElementByName(name);
+            } else if (type == XmlSchemaType.class) {
+                object = schema.getTypeByName(name);
+            }
+            if (object != null) {
+                return type.cast(object);
+            }
+            for (Iterator i = schema.getIncludes().getIterator(); i.hasNext();) {
+                XmlSchemaObject obj = (XmlSchemaObject)i.next();
+                XmlSchema ext = null;
+                if (obj instanceof XmlSchemaInclude) {
+                    ext = ((XmlSchemaInclude)obj).getSchema();
+                }
+                if (obj instanceof XmlSchemaImport) {
+                    ext = ((XmlSchemaImport)obj).getSchema();
+                }
+                object = getXmlSchemaObject(ext, name, type);
+                if (object != null) {
+                    return type.cast(object);
+                }
+            }
+        }
+        return null;
+    }
+
+    public XmlSchemaElement getXmlSchemaElement(QName name) {
+        if (schema != null) {
+            XmlSchemaElement element = getXmlSchemaObject(schema, name, XmlSchemaElement.class);
+            if (element != null) {
+                return element;
+            }
+        }
+
+        if (schemaCollection != null) {
+            return schemaCollection.getElementByQName(name);
+        }
+        return null;
+    }
+
+    public XmlSchemaType getXmlSchemaType(QName name) {
+        if (schema != null) {
+            XmlSchemaType type = getXmlSchemaObject(schema, name, XmlSchemaType.class);
+            if (type != null) {
+                return type;
+            }
+        }
+        if (schemaCollection != null) {
+            return schemaCollection.getTypeByQName(name);
+        }
+        return null;
+    }
+
 }

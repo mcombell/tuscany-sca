@@ -22,9 +22,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
-import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
-import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -53,7 +51,7 @@ public class Axis2ServiceBindingProvider implements ServiceBindingProvider {
         }
 
         // Set to use the Axiom data binding
-        contract.getInterface().setDefaultDataBinding(OMElement.class.getName());
+        contract.getInterface().resetDataBinding(OMElement.class.getName());
 
         axisProvider = new Axis2ServiceProvider(component, service, wsBinding, servletHost, messageFactory);
     }

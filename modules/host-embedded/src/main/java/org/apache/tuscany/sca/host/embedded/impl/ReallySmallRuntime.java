@@ -48,7 +48,7 @@ import org.apache.tuscany.sca.core.invocation.MessageFactoryImpl;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
 import org.apache.tuscany.sca.core.scope.ScopeRegistry;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
-import org.apache.tuscany.sca.definitions.SCADefinitionsDocumentProcessor;
+import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.invocation.MessageFactory;
@@ -155,6 +155,7 @@ public class ReallySmallRuntime {
         //Create a composite builder
         compositeBuilder = ReallySmallRuntimeBuilder.createCompositeBuilder(assemblyFactory,
                                                                             scaBindingFactory,
+                                                                            intentAttachPointTypeFactory,
                                                                             mapper,
                                                                             domainPolicySets);
         if (logger.isLoggable(Level.FINE)) {

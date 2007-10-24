@@ -23,6 +23,7 @@
         <groupId>org.apache.tuscany</groupId>
         <artifactId>parent</artifactId>
         <version>2-incubating</version>
+        <relativePath>../pom/parent/pom.xml</relativePath>
     </parent>
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>tuscany-sca</artifactId>
@@ -85,6 +86,7 @@
                 <module>samples</module>
                 <module>itest</module>
                 <module>demos</module>
+                <module>tutorial</module>
                 <module>distribution</module>
             </modules>
         </profile>

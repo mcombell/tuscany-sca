@@ -44,6 +44,9 @@
                 <module>binding-ejb</module>
                 <module>binding-feed</module>
                 <module>binding-http</module>
+                <!--
+                <module>binding-jms</module>
+                -->
                 <module>binding-jsonrpc</module>
                 <module>binding-notification</module>
                 <module>binding-rmi</module>
@@ -74,16 +77,14 @@
                 <module>databinding-saxon</module>
                 <module>databinding-xmlbeans</module>
                 <!--
-                <module>discovery-jms</module>
+                <module>databinding-fastinfoset</module>
+                <module>data-engine-helper</module>
                 -->
                 <module>domain</module>
                 <module>domain-api</module>
                 <module>domain-impl</module>
                 <module>extension-helper</module>
                 <module>host-embedded</module>
-                <!--
-                <module>host-home</module>
-                -->
                 <module>host-http</module>
                 <module>host-rmi</module>
                 <module>host-webapp</module>
@@ -95,6 +96,10 @@
                 <module>interface-wsdl</module>
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
+                <!--
+                <module>implementation-das</module>
+                <module>implementation-data</module>
+                -->
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
                 <module>implementation-java-runtime</module>
@@ -104,26 +109,26 @@
                 <module>implementation-notification</module>
                 <module>implementation-osgi</module>
                 <module>osgi-runtime</module>
-
                 <module>implementation-resource</module>
                 <module>implementation-script</module>
                 <module>implementation-spring</module>
                 <module>implementation-xquery</module>
                 <module>java2wsdl</module>
-                <!--
-                <module>jmx</module>
-                -->
                 <module>maven-java2wsdl</module>
                 <module>maven-wsdl2java</module>
+                <!--
+                <module>maven-ant-generator</module>
+                -->
                 <module>node</module>
+                <module>node-api</module>
                 <module>node-impl</module>
                 <module>policy</module>
                 <module>policy-xml</module>
+                <module>policy-logging</module>
                 <module>policy-security</module>
                 <module>sca-api</module>
                 <module>definitions</module>
-                <module>topology</module>
-                <module>topology-xml</module>
+                <module>definitions-xml</module>
                 <module>wsdl2java</module>
             </modules>
         </profile>

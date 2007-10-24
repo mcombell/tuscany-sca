@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.assembly.xml;
+package org.apache.tuscany.sca.assembly.xml; 
 
 import java.net.URI;
 import java.net.URL;
@@ -39,8 +39,8 @@ import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProce
 import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
-import org.apache.tuscany.sca.definitions.SCADefinitionsDocumentProcessor;
-import org.apache.tuscany.sca.definitions.SCADefinitionsProcessor;
+import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
+import org.apache.tuscany.sca.definitions.xml.SCADefinitionsProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
@@ -87,10 +87,10 @@ public class ResolvePolicyTestCase extends TestCase {
         
         // Create document processors
         XMLInputFactory inputFactory = XMLInputFactory.newInstance(); 
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory, null));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory, null));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory, null));
-        scaDefnDocProcessor = new SCADefinitionsDocumentProcessor(staxProcessors, staxProcessor, inputFactory, policyFactory, null);
+        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
+        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
+        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
+        scaDefnDocProcessor = new SCADefinitionsDocumentProcessor(staxProcessors, staxProcessor, inputFactory, policyFactory);
         documentProcessors.addArtifactProcessor(scaDefnDocProcessor);
     }
 

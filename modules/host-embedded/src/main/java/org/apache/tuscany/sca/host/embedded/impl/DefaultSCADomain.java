@@ -39,7 +39,6 @@ import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
-import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
 import org.apache.tuscany.sca.assembly.xml.Constants;
@@ -58,6 +57,7 @@ import org.apache.tuscany.sca.host.embedded.management.ComponentListener;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
+import org.apache.tuscany.sca.policy.Policy;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentContext;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -96,6 +96,9 @@ public class DefaultSCADomain extends SCADomain {
         this.composites = composites;
 
         // Create and start the runtime
+        // System.out.println("Test " + ReallySmallRuntime.class.getCanonicalName());
+        // IntentAttachPointTypeFactory iaptf;
+        Policy policy;
         runtime = new ReallySmallRuntime(runtimeClassLoader);
         try {
             runtime.start();

@@ -42,10 +42,11 @@ import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProce
 import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
-import org.apache.tuscany.sca.definitions.SCADefinitionsDocumentProcessor;
-import org.apache.tuscany.sca.definitions.SCADefinitionsProcessor;
+import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
+import org.apache.tuscany.sca.definitions.xml.SCADefinitionsProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
+import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.IntentAttachPoint;
 import org.apache.tuscany.sca.policy.PolicyFactory;
@@ -73,11 +74,11 @@ public class BuildPolicyTestCase extends TestCase {
         PolicyFactory policyFactory = new DefaultPolicyFactory();
         InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
         resolver = new TestModelResolver();
-        compositeBuilder = new CompositeBuilderImpl(factory, new TestSCABindingFactoryImpl(), new InterfaceContractMapperImpl(), null, null);
+        compositeBuilder = new CompositeBuilderImpl(factory, new TestSCABindingFactoryImpl(), new DefaultIntentAttachPointTypeFactory(), new InterfaceContractMapperImpl(), null, null);
         URLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors); 
         
-        // Create Stax processors
+        // Create Stax processors 
         DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
         ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
         staxProcessors.addArtifactProcessor(new CompositeProcessor(new ContributionFactoryImpl(), factory, policyFactory, mapper, staxProcessor));
@@ -93,10 +94,10 @@ public class BuildPolicyTestCase extends TestCase {
         XMLInputFactory inputFactory = XMLInputFactory.newInstance(); 
         
         // Create document processors
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory, null));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory, null));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory, null));
-        scaDefnDocProcessor = new SCADefinitionsDocumentProcessor(staxProcessors, staxProcessor, inputFactory, policyFactory, null);
+        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
+        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
+        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
+        scaDefnDocProcessor = new SCADefinitionsDocumentProcessor(staxProcessors, staxProcessor, inputFactory, policyFactory);
         documentProcessors.addArtifactProcessor(scaDefnDocProcessor);
         
         URL url = getClass().getResource("CalculatorComponent.constrainingType");

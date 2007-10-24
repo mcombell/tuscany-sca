@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.binding.sca.DistributedSCABinding;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.domain.SCADomainService;
+import org.apache.tuscany.sca.domain.SCADomainSPI;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.osoa.sca.ServiceUnavailableException;
 
-/**
+/** 
  * The sca reference binding provider mediates between the twin requirements of 
  * local sca bindings and remote sca bindings. In the local case is does 
  * very little. When the sca binding model is set as being remote (because a 
@@ -99,10 +99,10 @@ public class RuntimeSCAReferenceBindingProvider implements ReferenceBindingProvi
             // at this node. The binding uri might be null here if the dynamic reference has been
             // fully configured yet. It won't have all of the information until invocation time
             if ((node != null) && (binding.getURI() != null)) {
-                SCADomainService serviceDiscovery = node.getDomainService();
+                SCADomainSPI domainProxy = (SCADomainSPI)node.getDomain();
 
                 String serviceUrl =
-                    serviceDiscovery.findServiceEndpoint(node.getDomainURI(),
+                    domainProxy.findServiceEndpoint(node.getDomain().getURI(),
                                                          binding.getURI(),
                                                          SCABinding.class.getName());
                 if ((serviceUrl == null) || serviceUrl.equals("")) {
