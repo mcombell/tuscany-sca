@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Created on 10-Apr-2006 by Adrian Colyer
  */
 package org.apache.tuscany.sca.implementation.spring;
-
-import org.w3c.dom.Element;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
 
 /**
  * Parser for the &lt;sca:service/&gt; element

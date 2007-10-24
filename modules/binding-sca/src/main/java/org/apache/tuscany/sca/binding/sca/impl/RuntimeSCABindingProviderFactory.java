@@ -47,7 +47,7 @@ public class RuntimeSCABindingProviderFactory implements BindingProviderFactory<
         NodeFactory domainFactory = factories.getFactory(NodeFactory.class);
         
         if (domainFactory != null) {
-        	node = domainFactory.getNode();
+        	node = domainFactory.getNode(); 
         }
         
     } 

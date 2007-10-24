@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.wsdl.Fault;
 import javax.wsdl.Input;
@@ -42,9 +44,9 @@ import org.apache.tuscany.sca.interfacedef.util.FaultException;
 import org.apache.tuscany.sca.interfacedef.util.TypeInfo;
 import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
+import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
 import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
-import org.apache.ws.commons.schema.XmlSchemaCollection;
 import org.apache.ws.commons.schema.XmlSchemaComplexType;
 import org.apache.ws.commons.schema.XmlSchemaElement;
 import org.apache.ws.commons.schema.XmlSchemaObject;
@@ -60,9 +62,11 @@ import org.apache.ws.commons.schema.XmlSchemaType;
  * @version $Rev$ $Date$
  */
 public class WSDLOperationIntrospectorImpl {
+    private static final Logger logger = Logger.getLogger(WSDLOperationIntrospectorImpl.class.getName());
+    
     private WSDLFactory wsdlFactory;
     private ModelResolver resolver;
-    private XmlSchemaCollection inlineSchemas;
+    private WSDLDefinition wsdlDefinition;
     private javax.wsdl.Operation operation;
     private Operation operationModel;
     private DataType<List<DataType>> inputType;
@@ -78,13 +82,13 @@ public class WSDLOperationIntrospectorImpl {
     public WSDLOperationIntrospectorImpl(
                          WSDLFactory wsdlFactory,
                          javax.wsdl.Operation operation,
-                         XmlSchemaCollection inlineSchemas,
+                         WSDLDefinition wsdlDefinition,
                          String dataBinding,
                          ModelResolver resolver) {
         super();
         this.wsdlFactory = wsdlFactory;
         this.operation = operation;
-        this.inlineSchemas = inlineSchemas;
+        this.wsdlDefinition = wsdlDefinition;
         this.resolver = resolver;
         this.dataBinding = dataBinding;
         this.wrapper = new Wrapper();
@@ -145,7 +149,10 @@ public class WSDLOperationIntrospectorImpl {
             if (outputParts != null && outputParts.size() > 0) {
                 if (outputParts.size() > 1) {
                     // We don't support output with multiple parts
-                    throw new InvalidWSDLException("Multi-part output is not supported");
+                	if(logger.isLoggable(Level.WARNING)) {
+                		logger.warning("Multi-part output is not supported, please use BARE parameter style.");
+                	}
+                    // throw new InvalidWSDLException("Multi-part output is not supported");
                 }
                 Part part = (Part)outputParts.get(0);
                 outputType = new WSDLPart(part, Object.class).getDataType();
@@ -216,7 +223,8 @@ public class WSDLOperationIntrospectorImpl {
     }
     
     private XmlSchemaElement getElement(QName elementName) {
-        XmlSchemaElement element = inlineSchemas.getElementByQName(elementName);
+        
+        XmlSchemaElement element = wsdlDefinition.getXmlSchemaElement(elementName);
         if (element == null) {
             XSDefinition definition = wsdlFactory.createXSDefinition();
             definition.setUnresolved(true);
@@ -230,7 +238,7 @@ public class WSDLOperationIntrospectorImpl {
     }
     
     private XmlSchemaType getType(QName typeName) {
-        XmlSchemaType type = inlineSchemas.getTypeByQName(typeName);
+        XmlSchemaType type = wsdlDefinition.getXmlSchemaType(typeName);
         if (type == null) {
             XSDefinition definition = wsdlFactory.createXSDefinition();
             definition.setNamespace(typeName.getNamespaceURI());
@@ -378,11 +386,16 @@ public class WSDLOperationIntrospectorImpl {
                 }
                 XmlSchemaElement childElement = (XmlSchemaElement)schemaObject;
                 if (childElement.getName() == null || childElement.getRefName() != null) {
-                    return null;
+                    // FIXME: [rfeng] Not very clear if the JAX-WS spec allows element-ref
+                    // return null;
                 }
                 // TODO: Do we support maxOccurs >1 ?
                 if (childElement.getMaxOccurs() > 1) {
-                    return null;
+                    // TODO: [rfeng] To be implemented
+                	if(logger.isLoggable(Level.WARNING)) {
+                		logger.warning("Support for elements with maxOccurs>1 is not implemented.");
+                	}
+                    // return null;
                 }
                 childElements.add(childElement);
             }
@@ -454,8 +467,7 @@ public class WSDLOperationIntrospectorImpl {
                     return null;
                 }
                 outputElements = getChildElements(outputWrapperElement);
-                // FIXME: Do we support multiple child elements for the
-                // response?
+                // FIXME: Do we support multiple child elements for the response?
                 return outputElements;
             } else {
                 return null;

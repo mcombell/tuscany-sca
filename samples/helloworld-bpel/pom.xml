@@ -59,14 +59,14 @@
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
-            <version>1.0.1-incubating-SNAPSHOT</version>
+            <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
-	<dependency>
-	    <groupId>xerces</groupId>
-	    <artifactId>xercesImpl</artifactId>
-	    <version>2.8.1</version>
-	</dependency>	
+		<dependency>
+		    <groupId>xerces</groupId>
+		    <artifactId>xercesImpl</artifactId>
+		    <version>2.8.0</version>
+		</dependency>	
 		        
         <dependency>
             <groupId>junit</groupId>
@@ -83,12 +83,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.2</version>
+                                <!-- http://jira.codehaus.org/browse/SUREFIRE-322 -->
+                                <version>2.3.1-SNAPSHOT</version>
 				<configuration>
 					<useFile>false</useFile>
 					<trimStackTrace>false</trimStackTrace>
-					<skip>true</skip>
-					<!--useSystemClassLoader>true</useSystemClassLoader-->
+					<useSystemClassLoader>true</useSystemClassLoader>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -119,7 +119,7 @@
 			<plugin>
 				<groupId>org.apache.tuscany.sdo</groupId>
 				<artifactId>tuscany-sdo-plugin</artifactId>
-				<version>1.0.1-incubating-SNAPSHOT</version>
+				<version>1.0-incubating-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<id>generate-bpel-helloworld</id>

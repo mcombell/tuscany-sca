@@ -35,6 +35,7 @@ import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.context.ComponentContextFactory;
 import org.apache.tuscany.sca.context.RequestContextFactory;
+import org.apache.tuscany.sca.core.context.ComponentContextImpl;
 import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 import org.apache.tuscany.sca.core.factory.ObjectFactory;
@@ -42,6 +43,8 @@ import org.apache.tuscany.sca.core.invocation.CallableReferenceObjectFactory;
 import org.apache.tuscany.sca.core.invocation.CallbackWireObjectFactory;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
 import org.apache.tuscany.sca.core.invocation.WireObjectFactory;
+import org.apache.tuscany.sca.core.scope.ScopeContainer;
+import org.apache.tuscany.sca.core.scope.TargetResolutionException;
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
 import org.apache.tuscany.sca.implementation.java.impl.JavaElementImpl;
 import org.apache.tuscany.sca.implementation.java.impl.JavaResourceImpl;
@@ -52,6 +55,9 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.JavaIntrospect
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.impl.JavaInterfaceUtil;
 import org.apache.tuscany.sca.invocation.Invoker;
+import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.policy.util.PolicyHandler;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
@@ -69,13 +75,15 @@ public class JavaComponentContextProvider {
     private RuntimeComponent component;
     private JavaInstanceFactoryProvider<?> instanceFactoryProvider;
     private ProxyFactory proxyFactory;
+    private Map<PolicySet, PolicyHandler> policyHandlers = null;
 
     public JavaComponentContextProvider(RuntimeComponent component,
                                         JavaInstanceFactoryProvider configuration,
                                         DataBindingExtensionPoint dataBindingExtensionPoint,
                                         JavaPropertyValueObjectFactory propertyValueObjectFactory,
                                         ComponentContextFactory componentContextFactory,
-                                        RequestContextFactory requestContextFactory) {
+                                        RequestContextFactory requestContextFactory,
+                                        Map<PolicySet, PolicyHandler> policyHandlers) {
         super();
         this.instanceFactoryProvider = configuration;
         this.proxyFactory = configuration.getProxyFactory();
@@ -87,6 +95,7 @@ public class JavaComponentContextProvider {
         this.component = component;
         this.dataBindingRegistry = dataBindingExtensionPoint;
         this.propertyValueFactory = propertyValueObjectFactory;
+        this.policyHandlers = policyHandlers;
     }
 
     InstanceWrapper<?> createInstanceWrapper() throws ObjectCreationException {
@@ -106,9 +115,9 @@ public class JavaComponentContextProvider {
         if (element != null && !(element.getAnchor() instanceof Constructor) && configuredProperty.getValue() != null) {
             instanceFactoryProvider.getInjectionSites().add(element);
 
-            Class propertyJavaType = JavaIntrospectionHelper.getBaseType(element.getType(), element.getGenericType());
+            //Class propertyJavaType = JavaIntrospectionHelper.getBaseType(element.getType(), element.getGenericType());
             ObjectFactory<?> propertyObjectFactory =
-                createPropertyValueFactory(configuredProperty, configuredProperty.getValue(), propertyJavaType);
+                createPropertyValueFactory(configuredProperty, configuredProperty.getValue(), element);
             instanceFactoryProvider.setObjectFactory(element, propertyObjectFactory);
         }
     }
@@ -183,10 +192,11 @@ public class JavaComponentContextProvider {
                                 JavaIntrospectionHelper.getBusinessInterface(baseType, callableRefType);
                             factory =
                                 new CallableReferenceObjectFactory(businessInterface, component,
-                                                                   (RuntimeComponentReference)wireList.get(i).getSource().getContract(),
-                                                                   wireList.get(i).getSource().getBinding());
+                                                                   (RuntimeComponentReference)wireList.get(i)
+                                                                       .getSource().getContract(), wireList.get(i)
+                                                                       .getSource().getBinding());
                         } else {
-                            factory = createWireFactory(baseType, wireList.get(i));
+                            factory = createObjectFactory(baseType, wireList.get(i));
                         }
                         factories.add(factory);
                     }
@@ -205,13 +215,21 @@ public class JavaComponentContextProvider {
                                 new CallableReferenceObjectFactory(businessInterface, component,
                                                                    (RuntimeComponentReference)componentReference, null);
                         } else {
-                            factory = createWireFactory(element.getType(), wireList.get(0));
+                            factory = createObjectFactory(element.getType(), wireList.get(0));
                         }
                         instanceFactoryProvider.setObjectFactory(element, factory);
                     }
                 }
             }
         }
+        
+        // We need to set the PropertyValueFactory on the ComponentContextImpl
+        // so the ComponentContext can "de-marshal" the property type to a value 
+        // when the getProperty() method is called
+        ComponentContextImpl ccImpl = (ComponentContextImpl) component.getComponentContext();
+        ccImpl.setPropertyValueFactory(propertyValueFactory);
+        
+        setUpPolicyHandlers();
     }
 
     void addResourceFactory(String name, ObjectFactory<?> factory) {
@@ -251,28 +269,99 @@ public class JavaComponentContextProvider {
     }
 
     void stop() {
+        cleanUpPolicyHandlers();
     }
 
     Invoker createInvoker(Operation operation) throws NoSuchMethodException {
         Class<?> implClass = instanceFactoryProvider.getImplementationClass();
 
         Method method = JavaInterfaceUtil.findMethod(implClass, operation);
-        return new JavaImplementationInvoker(operation, method, component);
+        
+        if ( component.getImplementation() instanceof PolicySetAttachPoint  &&
+              !((PolicySetAttachPoint)component.getImplementation()).getPolicySets().isEmpty() ) {
+            return new PoliciedJavaImplementationInvoker(operation, method, component, policyHandlers);
+        } else {
+            return new JavaImplementationInvoker(operation, method, component);
+        }
     }
 
-    private <B> WireObjectFactory<B> createWireFactory(Class<B> interfaze, RuntimeWire wire) {
+    private static class OptimizedObjectFactory<T> implements ObjectFactory<T> {
+        private ScopeContainer scopeContainer;
+
+        public OptimizedObjectFactory(ScopeContainer scopeContainer) {
+            super();
+            this.scopeContainer = scopeContainer;
+        }
+
+        public T getInstance() throws ObjectCreationException {
+            try {
+                return (T)scopeContainer.getWrapper(null).getInstance();
+            } catch (TargetResolutionException e) {
+                throw new ObjectCreationException(e);
+            }
+        }
+
+    }
+
+    private <B> ObjectFactory<B> createObjectFactory(Class<B> interfaze, RuntimeWire wire) {
+        // FIXME: [rfeng] Disable the optimization for new as it needs more discussions
+        /*
+        boolean conversational = wire.getSource().getInterfaceContract().getInterface().isConversational();
+        Binding binding = wire.getSource().getBinding();
+        // Check if it's wireable binding for optimization
+        if (!conversational && binding instanceof OptimizableBinding) {
+            OptimizableBinding optimizableBinding = (OptimizableBinding)binding;
+            Component component = optimizableBinding.getTargetComponent();
+            if (component != null) {
+                Implementation implementation = component.getImplementation();
+                // Check if the target component is java component
+                if (implementation instanceof JavaImplementation) {
+                    JavaImplementation javaImplementation = (JavaImplementation)implementation;
+                    if (interfaze.isAssignableFrom(javaImplementation.getJavaClass())) {
+                        ScopedRuntimeComponent scopedComponent = (ScopedRuntimeComponent)component;
+                        ScopeContainer scopeContainer = scopedComponent.getScopeContainer();
+                        Scope scope = scopeContainer.getScope();
+                        if (scope == Scope.COMPOSITE || scope == Scope.STATELESS || scope == Scope.SYSTEM) {
+                            boolean optimizable = true;
+                            for (InvocationChain chain : wire.getInvocationChains()) {
+                                if (chain.getHeadInvoker() != chain.getTailInvoker()) {
+                                    optimizable = false;
+                                    break;
+                                }
+                            }
+                            if (optimizable) {
+                                return new OptimizedObjectFactory<B>(scopeContainer);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
         return new WireObjectFactory<B>(interfaze, wire, proxyFactory);
     }
 
-    private ObjectFactory<?> createPropertyValueFactory(ComponentProperty property, Object propertyValue, Class javaType) {
-        return propertyValueFactory.createValueFactory(property, propertyValue, javaType);
-    }
+    private ObjectFactory<?> createPropertyValueFactory(ComponentProperty property, Object propertyValue, JavaElementImpl javaElement) {
+        return propertyValueFactory.createValueFactory(property, propertyValue, javaElement);
+    } 
 
     /**
      * @return the component
      */
     RuntimeComponent getComponent() {
         return component;
+    }
+    
+    private void setUpPolicyHandlers() {
+        for ( PolicyHandler policyHandler : policyHandlers.values() ) {
+            policyHandler.setUp(component.getImplementation());
+        }
+    }
+    
+    private void cleanUpPolicyHandlers() {
+        for ( PolicyHandler policyHandler : policyHandlers.values() ) {
+            policyHandler.cleanUp(this);
+        }
     }
 
 }

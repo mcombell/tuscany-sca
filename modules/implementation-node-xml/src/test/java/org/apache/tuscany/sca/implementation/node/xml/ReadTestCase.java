@@ -41,9 +41,9 @@ import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcesso
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.implementation.node.NodeImplementationFactory;
 import org.apache.tuscany.sca.implementation.node.impl.NodeImplementationFactoryImpl;
-import org.apache.tuscany.sca.implementation.node.xml.NodeImplementationProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
+import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
@@ -94,7 +94,7 @@ public class ReadTestCase extends TestCase {
         Composite composite = compositeProcessor.read(reader);
         assertNotNull(composite);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null, null);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, new DefaultIntentAttachPointTypeFactory(), mapper, null, null);
         compositeUtil.build(composite);
     }
 

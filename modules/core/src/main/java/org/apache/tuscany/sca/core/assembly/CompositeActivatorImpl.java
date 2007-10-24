@@ -29,11 +29,11 @@ import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.Implementation;
+import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.context.RequestContextFactory;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.core.context.ComponentContextHelper;
@@ -442,6 +442,10 @@ public class CompositeActivatorImpl implements CompositeActivator {
             logger.fine("Starting component: " + component.getURI());
         }
         RuntimeComponent runtimeComponent = ((RuntimeComponent)component);
+        if(runtimeComponent.isStarted()) {
+        	return;
+        }
+        
         configureComponentContext(runtimeComponent);
 
         for (ComponentReference reference : component.getReferences()) {
@@ -505,6 +509,9 @@ public class CompositeActivatorImpl implements CompositeActivator {
      * Stop a component
      */
     public void stop(Component component) {
+    	if (!((RuntimeComponent)component).isStarted()) {
+    		return;
+        }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Stopping component: " + component.getURI());
         }
@@ -543,7 +550,8 @@ public class CompositeActivatorImpl implements CompositeActivator {
 
         if (component instanceof ScopedRuntimeComponent) {
             ScopedRuntimeComponent runtimeComponent = (ScopedRuntimeComponent)component;
-            if (runtimeComponent.getScopeContainer() != null) {
+            if (runtimeComponent.getScopeContainer() != null && 
+            		runtimeComponent.getScopeContainer().getLifecycleState() != ScopeContainer.STOPPED) {
                 runtimeComponent.getScopeContainer().stop();
             }
         }

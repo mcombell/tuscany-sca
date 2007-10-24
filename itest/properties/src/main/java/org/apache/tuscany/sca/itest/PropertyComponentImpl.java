@@ -21,12 +21,17 @@ package org.apache.tuscany.sca.itest;
 
 import java.util.Collection;
 
+import org.osoa.sca.ComponentContext;
+import org.osoa.sca.annotations.Context;
 import org.osoa.sca.annotations.Property;
 
 import com.example.customer.sdo.impl.CustomerImpl;
 import commonj.sdo.DataObject;
 
 public class PropertyComponentImpl implements PropertyComponent {
+    
+    @Context
+    protected ComponentContext context;
     
     @Property
     protected CustomerImpl customerSdo;
@@ -47,13 +52,29 @@ public class PropertyComponentImpl implements PropertyComponent {
     protected Collection<ComplexPropertyBean> complexPropertyFour;
     
     @Property(name = "location")
-    protected String location = "RTP";
+    protected String location;
 
     @Property(name = "year")
-    protected String year = "2006";
+    protected String year;
+    
+    @Property(name = "daysOfTheWeek")
+    protected String[] daysOfTheWeek;
+    
+    @Property(name = "integerNumbers")
+    protected Integer[] integerNumbers;
+
+    @Property(name = "intNumbers")
+    protected int[] intNumbers;
+
+    @Property(name = "sdoArray")
+    protected DataObject[] sdoArray;
     
     public String getLocation(){
         return location;
+    }
+    
+    public String getLocationFromComponentContext() {
+        return context.getProperty(String.class, "location");
     }
     
     public String getYear(){
@@ -95,5 +116,37 @@ public class PropertyComponentImpl implements PropertyComponent {
 
     public void setCustomerSdo(CustomerImpl customerSdo) {
         this.customerSdo = customerSdo;
+    }
+    
+    /**
+     * This method is used to test injecting an Array
+     * @return The injected array
+     */
+    public String[] getDaysOfTheWeek() {
+        return daysOfTheWeek;
+    }
+    
+    /**
+     * This method is used to test injecting an Object Integer Array
+     * @return The injected array
+     */
+    public Integer[] getIntegerNumbers() {
+        return integerNumbers;
+    }
+    
+    /**
+     * This method is used to test injecting an int Array
+     * @return The injected array
+     */
+    public int[] getIntNumbers() {
+        return intNumbers;
+    }
+
+    /**
+     * This method is used to test injecting an Object Array
+     * @return The injected array
+     */
+    public DataObject[] getSdoArrayProperty() {
+        return sdoArray;
     }
 }

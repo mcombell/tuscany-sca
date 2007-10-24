@@ -19,16 +19,20 @@
 
 package org.apache.tuscany.sca.domain.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.tuscany.sca.domain.DomainManagerService;
-import org.apache.tuscany.sca.domain.NodeInfo;
-import org.apache.tuscany.sca.domain.SCADomainService;
-import org.osoa.sca.annotations.Reference;
+import org.apache.tuscany.sca.domain.DomainManagerInitService;
+import org.apache.tuscany.sca.domain.DomainManagerNodeEventService;
+import org.apache.tuscany.sca.domain.SCADomainSPI;
+import org.apache.tuscany.sca.domain.management.DomainInfo;
+import org.apache.tuscany.sca.domain.management.DomainManagementService;
+import org.apache.tuscany.sca.domain.management.NodeInfo;
+import org.apache.tuscany.sca.domain.management.impl.DomainInfoImpl;
+import org.apache.tuscany.sca.domain.management.impl.NodeInfoImpl;
+import org.apache.tuscany.sca.domain.model.Domain;
+import org.apache.tuscany.sca.domain.model.Node;
 import org.osoa.sca.annotations.Scope;
+import org.osoa.sca.annotations.Service;
 
 
 /**
@@ -37,58 +41,78 @@ import org.osoa.sca.annotations.Scope;
  * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
  */
 @Scope("COMPOSITE")
-public class DomainManagerServiceImpl implements DomainManagerService{
+@Service(interfaces = {DomainManagerNodeEventService.class, DomainManagerInitService.class, DomainManagementService.class})
+public class DomainManagerServiceImpl implements DomainManagerNodeEventService, DomainManagerInitService, DomainManagementService {
     
     private final static Logger logger = Logger.getLogger(DomainManagerServiceImpl.class.getName());
     
-    @Reference 
-    public SCADomainService scaDomainService;
-
-    List<NodeInfo> nodes = new ArrayList<NodeInfo>();
+    private SCADomainSPI scaDomain;
     
-    public String registerNode(String domainUri, String nodeUri){ 
-        // try and remove it first just in case it's already registered
-        removeNode(domainUri, nodeUri);
-        
-        NodeInfo nodeInfo = new NodeInfoImpl(domainUri, nodeUri);
-        nodes.add(nodeInfo);
-        logger.log(Level.INFO, "Registered node: " + nodeUri);
-        return nodeUri;
+    // DomainManagerInitService methods
+    
+    public void setDomain(SCADomainSPI scaDomain) {
+        this.scaDomain = scaDomain;
     }
     
-    public String removeNode(String domainUri, String nodeUri){ 
-        
-        List<NodeInfo> nodesToRemove = new ArrayList<NodeInfo>();
-        
-        for(NodeInfo node : nodes){
-            if ( node.match(domainUri, nodeUri)){
-                nodesToRemove.add(node);
-            }
-        }
+    // DomainManagerNodeEventService methods
+    
+    public String registerNode(String nodeURI, String nodeURL){ 
+        return scaDomain.addNode(nodeURI, nodeURL);
+    }
+    
+    public String removeNode(String nodeURI){ 
+        return scaDomain.removeNode(nodeURI);
+    }  
+    
+    public void registerContribution(String nodeURI, String contributionURI, String contributionURL) {
+        scaDomain.registerContribution(nodeURI, contributionURI, contributionURL);
+    }
+    
+    public void unregisterContribution(String contributionURI){
+        scaDomain.unregisterContribution(contributionURI);
+    }
+    
+    public String  registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
+        return scaDomain.registerServiceEndpoint(domainUri, nodeUri, serviceName, bindingName, URL);
+    }
+   
+    public String  removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName){
+        return scaDomain.removeServiceEndpoint(domainUri, nodeUri, serviceName, bindingName);
+    }
+   
 
-        for(NodeInfo nodeToRemove : nodesToRemove){
-            nodes.remove(nodeToRemove);
-            logger.log(Level.INFO, "Removed node: " + nodeUri);
-        }
-
-        
-        return nodeUri;
+    public String findServiceEndpoint(String domainUri, String serviceName, String bindingName){
+        return scaDomain.findServiceEndpoint(domainUri, serviceName, bindingName);
     }    
     
-    public List<NodeInfo> getNodeInfo(){
+    // DomainManagementService methods
+    
+    public DomainInfo getDomainDescription(){
         
-        // get the nodeManagerUrl for each node
-        for(NodeInfo node : nodes){
-            String url = scaDomainService.findServiceEndpoint(node.getDomainUri(), 
-                                                              node.getNodeUri() + "NodeManagerService",
-                                                              "");
-                                                 
-            if (url != null) {
-                node.setNodeManagerUrl(url);
-            }
-        }
+        DomainInfo domainInfo = new DomainInfoImpl();
+        Domain domain =  scaDomain.getDomainModel();
         
-        return nodes;
+        domainInfo.setDomainURI(domain.getDomainURI());
+        domainInfo.setDomainURL(domain.getDomainURL());
+        domainInfo.getNodes().addAll(domain.getNodes().keySet());
+        domainInfo.getContributions().addAll(domain.getContributions().keySet());
+        domainInfo.getDeployedComposites().addAll(domain.getDeployedComposites().keySet());
+        
+        return domainInfo;
     }
     
+    public NodeInfo getNodeDescription(String nodeURI){
+        
+        NodeInfo nodeInfo = new NodeInfoImpl();
+        Domain domain =  scaDomain.getDomainModel();
+        Node node = domain.getNodes().get(nodeURI);
+        
+        nodeInfo.setNodeURI(nodeURI);
+        nodeInfo.setNodeURL(node.getNodeURL());
+        nodeInfo.getContributions().addAll(node.getContributions().keySet());
+        nodeInfo.getDeployedComposites().addAll(node.getDeployedComposites().keySet());
+        nodeInfo.getServices().addAll(node.getServices().keySet());
+                
+        return nodeInfo;
+    }    
 }

@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.tuscany.sca.domain.DomainManagerService;
-import org.apache.tuscany.sca.domain.NodeInfo;
+import org.apache.tuscany.sca.domain.DomainManagerNodeEventService;
 import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
@@ -37,7 +36,7 @@ import org.osoa.sca.annotations.Scope;
  * @version $Rev: 552343 $ $Date: 2007-09-07 12:41:52 +0100 (Fri, 07 Sep 2007) $
  */
 @Scope("COMPOSITE")
-public class DomainManagerServiceImpl implements DomainManagerService{
+public class DomainManagerServiceImpl implements DomainManagerNodeEventService{
     
     private final static Logger logger = Logger.getLogger(DomainManagerServiceImpl.class.getName());    
     
@@ -48,21 +47,21 @@ public class DomainManagerServiceImpl implements DomainManagerService{
     protected int retryInterval = 5000; //ms    
     
     @Reference
-    protected DomainManagerService domainManager;
+    protected DomainManagerNodeEventService domainManager;
 
-    public String registerNode(String domainUri, String nodeUri) {
+    public String registerNode(String nodeURI, String nodeURL) {
         
         String returnValue = null;
         
         for (int i =0; i < retryCount; i++){
             try {        
-                returnValue =  domainManager.registerNode(domainUri, nodeUri);
+                returnValue =  domainManager.registerNode(nodeURI, nodeURL);
                 break;
             } catch(UndeclaredThrowableException ex) {
                 logger.log(Level.INFO, "Trying to regsiter node " + 
-                                       nodeUri + 
-                                       " with domain " +
-                                       domainUri);
+                                       nodeURI + 
+                                       " at endpoint " +
+                                       nodeURL);
           
             }
             
@@ -75,11 +74,93 @@ public class DomainManagerServiceImpl implements DomainManagerService{
         return returnValue;
     }
 
-    public String removeNode(String domainUri, String nodeUri) {
-        return domainManager.removeNode(domainUri, nodeUri);
+    public String removeNode(String nodeURI) {
+        return domainManager.removeNode(nodeURI);
     }
     
-    public List<NodeInfo> getNodeInfo(){
-        return domainManager.getNodeInfo();
+    public void registerContribution(String nodeURI, String contributionURI, String contributionURL){
+        domainManager.registerContribution(nodeURI, contributionURI, contributionURL);
     }
+    
+    public void unregisterContribution(String contributionURI){
+        domainManager.unregisterContribution(contributionURI);
+    }
+
+
+    public String registerServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName, String URL){
+     
+        String dummy = null; 
+        
+        for (int i =0; i < retryCount; i++){
+            try {
+                dummy = domainManager.registerServiceEndpoint(domainUri, nodeUri, serviceName, bindingName, URL);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to register service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
+        
+        return dummy;
+    }
+    
+    public String removeServiceEndpoint(String domainUri, String nodeUri, String serviceName, String bindingName){
+     
+        String dummy = null; 
+        
+        for (int i =0; i < retryCount; i++){
+            try {
+                dummy = domainManager.removeServiceEndpoint(domainUri, nodeUri, serviceName, bindingName);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to remove service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
+        
+        return dummy;
+    }    
+   
+    public String findServiceEndpoint(String domainUri, String serviceName, String bindingName){
+
+        
+        String url = null;
+        
+        for (int i =0; i < retryCount; i++){
+            try {
+                url =  domainManager.findServiceEndpoint(domainUri, serviceName, bindingName);
+                break;
+            } catch(UndeclaredThrowableException ex) {
+                logger.log(Level.INFO, "Trying to connect to domain " + 
+                                       domainUri + 
+                                       " to find service " +
+                                       serviceName);
+          
+            }
+            
+            try {
+                Thread.sleep(retryInterval);
+            } catch(InterruptedException ex) {
+            }
+         }
+        
+        return url;
+    }
+ 
 }
