@@ -120,6 +120,10 @@
                     <artifactId>axis2-xmlbeans</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2-adb-codegen</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>bouncycastle</groupId>
                     <artifactId>bcprov-jdk15</artifactId>
                 </exclusion>
