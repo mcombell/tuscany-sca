@@ -96,7 +96,6 @@ public class SCADomainImpl implements SCADomainSPI  {
      * Create a domain giving the URI for the domain. 
      * 
      * @param domainUri - identifies what host and port the domain service is running on, e.g. http://localhost:8081
-     * @param nodeUri - if this is a url it is assumed that this will be used as root url for management components, e.g. http://localhost:8082
      * @throws ActivationException
      */
     public SCADomainImpl(String domainURI) throws DomainException {
@@ -155,9 +154,15 @@ public class SCADomainImpl implements SCADomainSPI  {
                 contribution = domainManagementContributionService.contribute(domainModel.getDomainURI(), 
                                                                               contributionURL, 
                                                                               false);
+
+                Composite composite = null;
+                for (DeployedArtifact artifact: contribution.getArtifacts()) {
+                    if (domainCompositeName.equals(artifact.getURI())) {
+                        composite = (Composite)artifact.getModel();
+                    }
+                }
                 
-                if (contribution.getDeployables().size() != 0) {
-                    Composite composite = contribution.getDeployables().get(0);
+                if (composite != null) {
                 
                     domainManagementComposite.getIncludes().add(composite);
                     domainManagementRuntime.getCompositeBuilder().build(composite);
