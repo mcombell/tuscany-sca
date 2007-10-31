@@ -57,6 +57,7 @@
             	<include name="tuscany-core-spi-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-databinding-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-definitions-1.0.1-incubating-SNAPSHOT.jar"/>
+            	<include name="tuscany-definitions-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-domain-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-domain-api-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-host-embedded-1.0.1-incubating-SNAPSHOT.jar"/>
@@ -70,6 +71,7 @@
             	<include name="tuscany-interface-java-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-node-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-policy-1.0.1-incubating-SNAPSHOT.jar"/>
+                <include name="tuscany-policy-logging-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-policy-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             </zipfileset>
             <lib dir="../../lib">

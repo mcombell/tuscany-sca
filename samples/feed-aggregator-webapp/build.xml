@@ -91,6 +91,7 @@
                 <include name="tuscany-interface-wsdl-xml-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-node-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-policy-1.0.1-incubating-SNAPSHOT.jar"/>
+                <include name="tuscany-policy-logging-1.0.1-incubating-SNAPSHOT.jar"/>                
                 <include name="tuscany-policy-security-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-policy-xml-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-sca-api-1.0.1-incubating-SNAPSHOT.jar"/>

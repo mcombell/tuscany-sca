@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.apache.tuscany.das</groupId>
 			<artifactId>tuscany-das-rdb</artifactId>
-			<version>1.0.1-incubating-SNAPSHOT</version>
+			<version>1.0-incubating-beta2</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -89,7 +89,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.tuscany.samples.das.service.client.DASServiceClient</mainClass>
+							<mainClass>das.DASServiceClient</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
