@@ -144,8 +144,10 @@
             	<include name="tuscany-databinding-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-databinding-axiom-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-databinding-jaxb-1.0.1-incubating-SNAPSHOT.jar"/>
+                <include name="tuscany-databinding-json-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-databinding-sdo-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-definitions-1.0.1-incubating-SNAPSHOT.jar"/>
+            	<include name="tuscany-definitions-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-domain-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-domain-api-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-extension-helper-1.0.1-incubating-SNAPSHOT.jar"/>
@@ -162,6 +164,7 @@
             	<include name="tuscany-interface-wsdl-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-node-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-policy-1.0.1-incubating-SNAPSHOT.jar"/>
+            	<include name="tuscany-policy-logging-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-policy-security-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-policy-xml-1.0.1-incubating-SNAPSHOT.jar"/>
             	<include name="tuscany-sca-api-1.0.1-incubating-SNAPSHOT.jar"/>
@@ -202,6 +205,7 @@
             	<include name="jaxen-1.1.1.jar"/>
             	<include name="jaxws-api-2.1.jar"/>
             	<include name="jdom-1.0.jar"/>
+                <include name="jettison-1.0-RC2.jar"/>
             	<include name="json-rpc-1.0.jar"/>
             	<include name="jsr181-api-1.0-MR1.jar"/>
             	<include name="jsr250-api-1.0.jar"/>
