@@ -62,7 +62,7 @@
                 <include name="tuscany-databinding-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-databinding-axiom-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-databinding-jaxb-1.0.1-incubating-SNAPSHOT.jar"/>
-                <include name="tuscany-databinding-json-1.0.1-incubating.jar-SNAPSHOT.jar"/>                
+                <include name="tuscany-databinding-json-1.0.1-incubating-SNAPSHOT.jar"/>                
                 <include name="tuscany-databinding-sdo-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-definitions-1.0.1-incubating-SNAPSHOT.jar"/>
                 <include name="tuscany-definitions-xml-1.0.1-incubating-SNAPSHOT.jar"/>
