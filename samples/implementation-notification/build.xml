@@ -18,7 +18,7 @@
 -->
 <project name="implementation-notification" default="compile">
     <property name="test.class" value="notification.TrafficAdvisoryClient" />
-	<property name="test.jar"   value="sample-implementation-notification.jar" />
+	<property name="test.jar"   value="sample-implementation-notification-1.0.1-incubating-SNAPSHOT.jar" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>
