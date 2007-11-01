@@ -14,8 +14,6 @@ tuscany-sca-1.0.1-incubating
 
    /demos        - Demo applications showcasing the use of Apache Tuscany 
 
-   /doc          - Javadoc for the SCA APIs and the Tuscany SPIs
-
    /lib          - The tuscany-sca-all and tuscany-sca-manifest jars and all their dependencies
 
    /modules      - all of the individual Tuscany jars
