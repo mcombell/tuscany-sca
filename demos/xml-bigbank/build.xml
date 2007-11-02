@@ -18,8 +18,11 @@
  * under the License.    
 -->
 <project name="demo-xml-bigbank" default="compile">
+    <target name="init">
+        <mkdir dir="target/classes"/>
+    </target>
 
-    <target name="compile">
+    <target name="compile" depends="init">
         <javac srcdir="src/main/java" destdir="target/classes" debug="on" source="1.5" target="1.5">
             <classpath>
                 <fileset refid="tuscany.jars"/>
@@ -36,7 +39,7 @@
         </jar>
     </target>
 
-    <target name="run">
+    <target name="run" depends="compile">
         <java classname="bigbank.BigBankClient" fork="true">
             <classpath>
                 <pathelement location="target/demo-xml-bigbank.jar"/>
