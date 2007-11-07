@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0.1-incubating-SNAPSHOT</version>
+        <version>1.0.1-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-samples</artifactId>
@@ -58,7 +58,9 @@
                 <module>helloworld-ws-service</module>
                 <module>helloworld-ws-service-secure</module>
                 <module>helloworld-ws-reference</module>
+                <!--
                 <module>helloworld-ws-reference-jms</module>
+                -->
                 <module>helloworld-ws-reference-secure</module>
                 <module>helloworld-ws-sdo</module>
                 <module>helloworld-ws-sdo-webapp</module>
