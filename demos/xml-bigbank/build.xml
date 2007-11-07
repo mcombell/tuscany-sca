@@ -19,6 +19,10 @@
 -->
 <project name="demo-xml-bigbank" default="compile">
     <target name="init">
+        <get src="http://www.swanandmokashi.com/HomePage/WebServices/StockQuotes.asmx?WSDL"
+            dest="src/main/resources/wsdl/StockQuotes.wsdl"
+            verbose="true"
+            usetimestamp="true"/>
         <mkdir dir="target/classes"/>
     </target>
 

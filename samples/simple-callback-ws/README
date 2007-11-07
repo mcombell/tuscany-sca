@@ -16,11 +16,11 @@ ant run
 
 OR if you don't have ant, on Windows do
 
-java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-simple-callback.jar simplecallback.SimpleCallbackClient
+java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-simple-callback-ws.jar simplecallback.SimpleCallbackClient
 
 and on *nix do
 
-java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-simple-callback.jar simplecallback.SimpleCallbackClient
+java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-simple-callback-ws.jar simplecallback.SimpleCallbackClient
 
 
 Sample Overview

@@ -3,7 +3,7 @@ Changes With Apache Tuscany SCA 1.0.1 (incubating) November 2007
 
 The Tuscany SCA Java 1.0.1 is mainly a bug-fix release. It also comes with some improvements as listed below.
  
-- Fix the following JIRA issues:
+- Fix the following JIRA issues (http://issues.apache.org/jira/browse/TUSCANY):
   * TUSCANY-1848
   * TUSCANY-1857
   * TUSCANY-1859
