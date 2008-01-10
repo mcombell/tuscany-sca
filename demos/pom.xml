@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.1-incubating-SNAPSHOT</version>
+        <version>1.1-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-demos</artifactId>
@@ -42,6 +42,7 @@
                 <module>bigbank-stockquote</module>
                 <module>mortgage-creditcheck</module>
                 <module>mortgage-loanapproval</module>
+                <module>secure-bigbank</module>
                 <module>xml-bigbank</module>
             </modules>
         </profile>
