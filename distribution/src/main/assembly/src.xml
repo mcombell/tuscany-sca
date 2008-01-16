@@ -161,6 +161,8 @@
              <exclude>demos/alert-aggregator-webapp/src/main/webapp/dojo/**/*</exclude>
              <exclude>demos/bigbank-account/src/main/resources/web/dojo</exclude> 
              <exclude>demos/bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
+             <exclude>demos/secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo</exclude> 
+             <exclude>demos/secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
              <exclude>*/**/*.svg</exclude>
              <exclude>*/**/*.ruleset</exclude>
              <exclude>*/**/*.pmd</exclude>

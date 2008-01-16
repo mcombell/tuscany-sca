@@ -176,6 +176,8 @@
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>bigbank-account/src/main/resources/web/dojo</exclude> 
                 <exclude>bigbank-account/src/main/resources/web/dojo/**/*</exclude>
+                <exclude>secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo</exclude> 
+                <exclude>secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
                 <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck</exclude>
                 <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck/**/*</exclude>
                 <exclude>*/.classpath</exclude>
@@ -194,8 +196,26 @@
                 <exclude>*/**/*.ruleset</exclude>
                 <exclude>alert-aggregator-webapp/target</exclude>
                 <exclude>alert-aggregator-webapp/target/**/*</exclude>
+                <exclude>bigbank-account/target</exclude>
+                <exclude>bigbank-account/target/**/*</exclude>
+                <exclude>bigbank-calculator/target</exclude>
+                <exclude>bigbank-calculator/target/**/*</exclude>
+                <exclude>bigbank-stockquote/target</exclude>
+                <exclude>bigbank-stockquote/target/**/*</exclude>
                 <exclude>mortgage-creditcheck/target</exclude>
                 <exclude>mortgage-creditcheck/target/**/*</exclude>
+                <exclude>mortgage-loanapproval/target</exclude>
+                <exclude>mortgage-loanapproval/target/**/*</exclude>
+                <exclude>secure-bigbank/secure-bigbank-account/target</exclude>
+                <exclude>secure-bigbank/secure-bigbank-account/target/**/*</exclude>
+                <exclude>secure-bigbank/secure-bigbank-calculator/target</exclude>
+                <exclude>secure-bigbank/secure-bigbank-calculator/target/**/*</exclude>
+                <exclude>secure-bigbank/secure-bigbank-stockquote/target</exclude>
+                <exclude>secure-bigbank/secure-bigbank-stockquote/target/**/*</exclude>
+                <exclude>xml-bigbank/target</exclude>
+                <exclude>xml-bigbank/target/**/*</exclude>
+                <exclude>target</exclude>
+                <exclude>target/**/*</exclude>
             </excludes>
         </fileSet>
         <!-- Add the generated tuscany manifest classpath jar to the lib directory -->
