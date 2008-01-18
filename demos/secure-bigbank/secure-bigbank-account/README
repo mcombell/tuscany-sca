@@ -1,8 +1,41 @@
 Secure BigBank Demo
 ===================
 
-This application is a copy of the big bank demo but with various security policies 
-in force. For example, the wire between the AccountServiceComponent requires="tuscany:wsAuthentication"
+This is a copy of the big-bank demo with modifications to demonstrate the use of policies to enforce
+certain security aspects.  We hope to evolve this further adding more flavours of security.   Here
+is an overview of how this copy of the big-bank demo differs from the original...
+
+
+*) The AccountDataServiceComponent which used to return a customers savings, checkings and stock account
+data has been replaced with three independent components for savings, checkings and stock accounts.  These 
+components provide services related to obtaining a customer balance etc.  
+        -  Out of these three, the Checkings and  Stock service components are bound to the big-bank 
+        thro webservices while the Savings Account service component uses the SCA Binding.
+        -  The Chekings Account webservice enforces authentication as a security reqiurement.  Hence all
+        service requests between the bigbank and the Checkings Account service are authenticated
+        -  Additionally the Checkings Account Implementation enforce authorization checks that ensure that
+        only the owner of accounts access their details.  
+        - Here we demonstrate how the 'authenticated' user token credentials are passed from the CheckingsAccount
+        webservice over to the CheckingsAccount implementation for authorization checks.   
+        
+*) The StockQuote webservice is adorned with 'integrity' i.e. all communications between the bigbank and
+the StockQuote webservice and signed to ensure integrity of data exchanged. To honour this requirement the 
+StockQuote reference of the big-bank is also adorned with 'integrity' as a security requirement. 
+
+The overall picture is that when the Customer is requesting account details from the bigbank, the bigbank seeks
+the services of the Savings, Checkings and Stock Account Components. In seeking the service of the Checkings 
+Account compoent the the big-bank compoent authenticates itself.  The Checkings Account component further checks
+if the athenticated user token passed by the bigbank is authorized to access the account in question.  This is one 
+lap where security has been enforced.  Another lap is when the bigbank component refers to the StockQuote webservice
+to compute the stock value for a customer.  Here all communications are signed to ensure integrity of data exchanged
+between the bigbank and StockQuote webservice.
+
+When you run this demo you will observe various console messages that reflect the enforcement of authentication
+and authorization and integrity at varoius points of this application.
+
+
+Bigbank - General Information
+-----------------------------
 
 The application is made of 3 modules that represent the different aspects 
 of a fictitious banking application. Please see bigbank.png in the secure-bigbank-account 

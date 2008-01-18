@@ -24,14 +24,14 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-demos</artifactId>
-        <version>1.1-incubating-SNAPSHOT</version>
+        <version>1.1-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>demo-alert-aggregator-webapp</artifactId>
     <packaging>war</packaging>
-    <version>1.1-incubating-SNAPSHOT</version>
+    <version>1.1-incubating</version>
     <name>Apache Tuscany SCA Alert Aggregator Demo</name>
     <url>http://cwiki.apache.org/TUSCANY</url>
 
@@ -109,19 +109,19 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-webapp</artifactId>
-            <version>1.1-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-jsonrpc</artifactId>
-            <version>1.1-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-feed</artifactId>
-            <version>1.1-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -326,7 +326,7 @@
             <plugin>
                 <groupId>org.apache.tuscany.sca</groupId>
                 <artifactId>tuscany-maven-ant-generator</artifactId>
-                <version>1.1-incubating-SNAPSHOT</version>
+                <version>1.1-incubating</version>
                 <executions>
                     <execution>
                         <configuration>
