@@ -2030,3 +2030,35 @@ int sdotest::xsiTypeAbstract()
         return 0;
     }
 }
+
+int sdotest::nullExtendedPrimitive()
+{
+
+    try {
+        XSDHelperPtr xsh = HelperProvider::getXSDHelper();
+        XMLHelperPtr xmh = HelperProvider::getXMLHelper(xsh->getDataFactory());
+        xsh->defineFile("nullExtendedPrimitive.xsd");
+        unsigned int i,j;
+        if ((i = xsh->getErrorCount()) > 0)
+        {
+            cout << "nullExtendedPrimitive.xsd reported some errors: " <<endl;
+            for (j=0;j<i;j++)
+            {
+                cout << xsh->getErrorMessage(j) <<endl;
+            }
+        }
+        // SDOUtils::printTypes(cout, xsh->getDataFactory());
+
+        XMLDocumentPtr doc = xmh->loadFile("nullExtendedPrimitive.xml");
+
+        //cout << doc->getRootDataObject() <<endl;
+
+        
+       return 1;
+    }
+    catch (SDORuntimeException e)
+    {
+        cout << "Exception in nullExtendedPrimitive: " << e << endl;
+        return 0;
+    }
+}

@@ -46,6 +46,7 @@ int main (int argc, char** argv)
     int totaltests=0;
     int value = 0;
     try {
+
     //TEST (  sdotest::eBayTest() );
     // TEST ( sdotest::xhtml1() );
     TEST ( sdotest::scopetest() );
@@ -191,6 +192,7 @@ int main (int argc, char** argv)
     TEST (  sdotest::elementFormDefaultQualified() );
     TEST (  sdotest::elementFormDefaultQualifiedSequence() );
     TEST (  sdotest::xsiTypeAbstract() );
+    TEST ( sdotest::nullExtendedPrimitive() );
 
 
     } catch(...)

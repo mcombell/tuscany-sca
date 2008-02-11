@@ -223,8 +223,11 @@ namespace commonj {
                     else if (propertyType.isDataType())
                     {
                         printTabs(out, incr);
-                        out<< "Property Value: " 
-                            << dataObject->getCString(pl[i]) <<endl ; 
+                        out<< "Property Value: " ;
+                        if (dataObject->isNull(pl[i]))
+                            out << "NULL" << endl;
+                        else
+                            out << dataObject->getCString(pl[i]) <<endl ; 
                     }
             
                     //////////////////////////////////////////////////////////////////////

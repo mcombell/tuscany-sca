@@ -215,4 +215,5 @@ class sdotest {
         static int elementFormDefaultQualified();
         static int elementFormDefaultQualifiedSequence();
         static int xsiTypeAbstract();
+        static int nullExtendedPrimitive();
 };
