@@ -42,7 +42,7 @@ public abstract class SCANode2Factory {
         
         try {
             final ClassLoader classLoader = SCANode2Factory.class.getClassLoader();
-            String className =  "org.apache.tuscany.sca.node.impl.SCANode2FactoryImpl";  
+            String className =  "org.apache.tuscany.sca.node.impl.NodeFactoryImpl";  
                             
             Class<?> cls = Class.forName(className, true, classLoader);
             
@@ -71,6 +71,6 @@ public abstract class SCANode2Factory {
      * @param configurationURI the URI of the node configuration 
      * @return a new SCA node.
      */
-    public abstract SCANode2 createSCANode(String configurationURI) throws NodeException;
+    public abstract SCANode2 createSCANode(String configurationURI) throws Node2Exception;
 
 }

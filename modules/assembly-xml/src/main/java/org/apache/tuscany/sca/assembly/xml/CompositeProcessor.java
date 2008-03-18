@@ -31,6 +31,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Binding;
@@ -65,6 +68,8 @@ import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.policy.util.PolicyValidationException;
+import org.apache.tuscany.sca.policy.util.PolicyValidationUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -73,7 +78,9 @@ import org.w3c.dom.Document;
  * @version $Rev$ $Date$
  */
 public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArtifactProcessor<Composite> {
-
+    // FIXME: to be refactored
+    private XPathFactory xPathFactory = XPathFactory.newInstance();
+    
     /**
      * Construct a new composite processor
      * 
@@ -233,7 +240,33 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             // Read a <component><property>
                             componentProperty = assemblyFactory.createComponentProperty();
                             property = componentProperty;
-                            componentProperty.setSource(getString(reader, SOURCE));
+                            String source = getString(reader, SOURCE);
+                            if(source!=null) {
+                                source = source.trim();
+                            }
+                            componentProperty.setSource(source);
+                            if (source != null) {
+                                // $<name>/...
+                                if (source.charAt(0) == '$') {
+                                    int index = source.indexOf('/');
+                                    if (index == -1) {
+                                        // Tolerating $prop
+                                        source = source + "/";
+                                        index = source.length() - 1;
+                                    }
+                                    source = source.substring(index + 1);
+                                    if ("".equals(source)) {
+                                        source = ".";
+                                    }
+                                }
+                                XPath xpath = xPathFactory.newXPath();
+                                xpath.setNamespaceContext(reader.getNamespaceContext());
+                                try {
+                                    componentProperty.setSourceXPathExpression(xpath.compile(source));
+                                } catch (XPathExpressionException e) {
+                                    throw new ContributionReadException(e);
+                                }
+                            }
                             componentProperty.setFile(getString(reader, FILE));
                             policyProcessor.readPolicies(property, reader);
                             readAbstractProperty(componentProperty, reader);
@@ -535,6 +568,15 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                        new XAttr(AUTOWIRE, component.getAutowire()),
                        policyProcessor.writePolicies(component));
             
+            // Write the component implementation
+            Implementation implementation = component.getImplementation();
+            if (implementation instanceof Composite) {
+                writeStart(writer, IMPLEMENTATION_COMPOSITE, new XAttr(NAME, composite.getName()));
+                writeEnd(writer);
+            } else {
+                extensionProcessor.write(component.getImplementation(), writer);
+            }
+            
             // Write <service> elements
             for (ComponentService service : component.getServices()) {
                 writeStart(writer, SERVICE, new XAttr(NAME, service.getName()),
@@ -639,15 +681,6 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                 writeEnd(writer);
             }
     
-            // Write the component implementation
-            Implementation implementation = component.getImplementation();
-            if (implementation instanceof Composite) {
-                writeStart(writer, IMPLEMENTATION_COMPOSITE, new XAttr(NAME, composite.getName()));
-                writeEnd(writer);
-            } else {
-                extensionProcessor.write(component.getImplementation(), writer);
-            }
-            
             writeEnd(writer);
         }
 
@@ -825,33 +858,42 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
             //resolve component implemenation
             Implementation implementation = component.getImplementation();
             if (implementation != null) {
-                //resolve intents and policysets specified on this implementation
-                //before copying them over to the component.  Before that, from the component
-                //copy over the applicablePolicySets alone as it might have to be
-                //used to validate the policysets specified on the implementation
-                
-                resolveImplIntentsAndPolicySets(implementation, component.getApplicablePolicySets(), resolver);
-                
-                copyPoliciesToComponent(component, implementation, resolver, true);
-                
-                //now resolve the implementation so that even if there is a shared instance
-                //for this that is resolved, the specified intents and policysets are safe in the
-                //component and not lost
-                implementation = resolveImplementation(implementation, resolver);
-                
-                //resolved implementation may contain intents and policysets specified at 
-                //componentType (either in the componentType side file or in annotations if its a 
-                //java implementation).  This has to be consolidated in to the component.
-                copyPoliciesToComponent(component, implementation, resolver, false);
-                
-                component.setImplementation(implementation);
+                try {
+                    //resolve intents and policysets specified on this implementation
+                    //before copying them over to the component.  Before that, from the component
+                    //copy over the applicablePolicySets alone as it might have to be
+                    //used to validate the policysets specified on the implementation
+                    
+                    resolveImplIntentsAndPolicySets(implementation, 
+                                                    component.getApplicablePolicySets(), 
+                                                    resolver);
+                    
+                    copyPoliciesToComponent(component, implementation, resolver, true);
+                    
+                    //now resolve the implementation so that even if there is a shared instance
+                    //for this that is resolved, the specified intents and policysets are safe in the
+                    //component and not lost
+                    implementation = resolveImplementation(implementation, resolver);
+                    
+                    //resolved implementation may contain intents and policysets specified at 
+                    //componentType (either in the componentType side file or in annotations if its a 
+                    //java implementation).  This has to be consolidated in to the component.
+                    copyPoliciesToComponent(component, implementation, resolver, false);
+                    
+                    component.setImplementation(implementation);
+                } catch ( PolicyValidationException e ) {
+                    throw new ContributionResolveException("PolicyValidation exception when processing implementation of component '" 
+                                                           + component.getName() + "' due to " + e.getMessage(), e);
+                }
+            
             }
         }
     }
     
     private void resolveImplIntentsAndPolicySets(Implementation implementation,
                                                  List<PolicySet> inheritedApplicablePolicySets,
-                                                 ModelResolver resolver) throws ContributionResolveException
+                                                 ModelResolver resolver) throws ContributionResolveException,
+                                                                                 PolicyValidationException
                                                         {
         if ( implementation instanceof PolicySetAttachPoint ) {
             PolicySetAttachPoint policiedImpl = (PolicySetAttachPoint)implementation;
@@ -859,16 +901,29 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
             policiedImpl.getApplicablePolicySets().addAll(inheritedApplicablePolicySets);
             
             resolveIntents(policiedImpl.getRequiredIntents(), resolver);
+            PolicyValidationUtils.validateIntents(policiedImpl, policiedImpl.getType());
+            
             resolvePolicySets(policiedImpl.getPolicySets(), resolver);
             resolvePolicySets(policiedImpl.getApplicablePolicySets(), resolver);
-            validatePolicySets(policiedImpl);
+            
+            PolicyValidationUtils.validatePolicySets(policiedImpl);
             
             if ( implementation instanceof OperationsConfigurator ) {
                 for ( ConfiguredOperation implConfOp : ((OperationsConfigurator)implementation).getConfiguredOperations() ) {
                     resolveIntents(implConfOp.getRequiredIntents(), resolver);
+                    PolicyValidationUtils.validateIntents(implConfOp, policiedImpl.getType());
+                    
                     resolvePolicySets(implConfOp.getPolicySets(), resolver);
                     resolvePolicySets(implConfOp.getApplicablePolicySets(), resolver);
-                    validatePolicySets(implConfOp, policiedImpl.getApplicablePolicySets());
+                    //add the inherited applicablePolicysets
+                    addInheritedPolicySets(policiedImpl.getApplicablePolicySets(), implConfOp.getApplicablePolicySets());
+                    
+                    PolicyValidationUtils.validatePolicySets(implConfOp, policiedImpl.getType());
+                    
+                    addInheritedIntents(((PolicySetAttachPoint)implementation).getRequiredIntents(), 
+                                        implConfOp.getRequiredIntents());
+                    addInheritedPolicySets(((PolicySetAttachPoint)implementation).getPolicySets(), 
+                                           implConfOp.getPolicySets());
                 }
             }
         }

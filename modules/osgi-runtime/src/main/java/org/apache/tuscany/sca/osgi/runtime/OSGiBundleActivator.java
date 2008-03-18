@@ -40,7 +40,8 @@ public class OSGiBundleActivator implements BundleActivator, BundleListener {
 	public void stop(BundleContext bundleContext) throws Exception {
 		runtime.shutdown();
 		
-		Thread.currentThread().setContextClassLoader(origTCCL);
+        if (Thread.currentThread().getContextClassLoader() == threadContextClassLoader)
+            Thread.currentThread().setContextClassLoader(origTCCL);
 	}
 	
 	/**
@@ -173,40 +174,43 @@ public class OSGiBundleActivator implements BundleActivator, BundleListener {
 			    bundles.remove(bundle);
 		}
 		
+        
 		@Override
-		public Class<?> loadClass(String className) throws ClassNotFoundException {
-			Class<?> clazz = null;
-			for (Bundle bundle : bundles) {
-				try {
-					clazz = bundle.loadClass(className);
-					break;
-				} catch (ClassNotFoundException e) {
-				} catch (NoClassDefFoundError e) {
-				}
-				
-			}	
-			
-			if (clazz != null) {
-			    return clazz;
-			}
-			return super.loadClass(className);
-		}
-		
-		
+        protected Class<?> findClass(String className) throws ClassNotFoundException {
+            Class<?> clazz = null;
+            synchronized (this) {
+                for (Bundle bundle : bundles) {
+                    try {
+                        clazz = bundle.loadClass(className);
+                        break;
+                    } catch (ClassNotFoundException e) {
+                    } catch (NoClassDefFoundError e) {
+                    }
+
+                }
+            }           
+            if (clazz != null) {
+                return clazz;
+            }
+            return super.findClass(className);
+        }
+
 
 		@Override
 		@SuppressWarnings("unchecked")
 		public Enumeration<URL> getResources(String resName) throws IOException {
 			HashSet<URL> urlSet = new HashSet<URL>();
 			Enumeration<URL> urls = null;
-			for (Bundle bundle : bundles) {
-			    urls = bundle.getResources(resName);			    
-			    if (urls != null) {
-			    	while (urls.hasMoreElements()) {
-			    	    urlSet.add(urls.nextElement());
-			    	}
-			    }
-			}
+			synchronized (this) {
+				for (Bundle bundle : bundles) {
+					urls = bundle.getResources(resName);
+					if (urls != null) {
+						while (urls.hasMoreElements()) {
+							urlSet.add(urls.nextElement());
+						}
+					}
+				}
+			}			
 			if (urlSet.size() > 0)
 				return Collections.enumeration(urlSet);
 			return super.getResources(resName);
@@ -215,11 +219,13 @@ public class OSGiBundleActivator implements BundleActivator, BundleListener {
 		@Override
 		public URL getResource(String resName) {
 			URL url = null;
-			for (Bundle bundle : bundles) {
-			    url = bundle.getResource(resName);
-			    if (url != null)
-			    	return url;
-			}	
+			synchronized (this) {
+				for (Bundle bundle : bundles) {
+					url = bundle.getResource(resName);
+					if (url != null)
+						return url;
+				}
+			}			
 			return super.getResource(resName);
 		}
 

@@ -110,14 +110,14 @@ public class ReadTestCase extends TestCase {
         mapper = null;
     }
 
-    public void stestReadComposite() throws Exception {
+    public void testReadComposite() throws Exception {
         CompositeProcessor compositeProcessor = new CompositeProcessor(new DefaultContributionFactory(), assemblyFactory, policyFactory, staxProcessor);
         InputStream is = getClass().getResourceAsStream("Calculator.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
         Composite composite = compositeProcessor.read(reader);
         assertNotNull(composite);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, null, null);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, null);
         compositeUtil.build(composite);
 
     }
@@ -139,7 +139,7 @@ public class ReadTestCase extends TestCase {
         staxProcessor.resolve(scaDefns, resolver);
         staxProcessor.resolve(composite, resolver);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, scaDefns.getPolicySets(), null);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, null);
         compositeUtil.build(composite);
         
         //intents are computed and aggregate intents from ancestor elements
@@ -214,7 +214,7 @@ public class ReadTestCase extends TestCase {
         staxProcessor.resolve(scaDefns, resolver);
         staxProcessor.resolve(composite, resolver);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, scaDefns.getPolicySets(), null);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, mapper, null);
         compositeUtil.build(composite);
         
         //test for determination of policysets for implementation
@@ -246,10 +246,11 @@ public class ReadTestCase extends TestCase {
         }
         
         opConf = (OperationsConfigurator)composite.getComponents().get(6);
-        assertEquals(opConf.getConfiguredOperations().get(0).getPolicySets().size(), 3);
+        assertEquals(opConf.getConfiguredOperations().get(0).getPolicySets().size(), 4);
         for ( PolicySet policySet : opConf.getConfiguredOperations().get(0).getPolicySets() ) {
             String policySetName = policySet.getName().getLocalPart();
             if ( !(policySetName.equals("tuscanyPolicySet_1") || policySetName.equals("tuscanyPolicySet_2")
+                    || policySetName.equals("tuscanyPolicySet_3")
                     || policySetName.equals("tuscanyPolicySet_4")) ) {
                 fail();
             }

@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -53,6 +54,8 @@ import org.osoa.sca.annotations.Service;
 public class FileServiceImpl extends HttpServlet {
     private static final long serialVersionUID = -4560385595481971616L;
     
+    private final static Logger logger = Logger.getLogger(FileServiceImpl.class.getName());    
+
     @Property
     public String directoryName;
     
@@ -69,7 +72,7 @@ public class FileServiceImpl extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // Upload contributions
+        // Upload files
         try {
             for (FileItem item: (List<FileItem>)upload.parseRequest(request)) {
                 if (!item.isFormField()) {
@@ -80,6 +83,8 @@ public class FileServiceImpl extends HttpServlet {
                     item.write(new File(directory, item.getName()));
                 }
             }
+            
+            // Redirect to the admin page
             response.sendRedirect("/ui/files");
         }
         catch (Exception e) {
@@ -90,35 +95,28 @@ public class FileServiceImpl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        // Download a contribution file
+        // Download a file
         String requestURI = URLDecoder.decode(request.getRequestURI(), "UTF-8");
         String path = requestURI.substring(request.getServletPath().length());
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
         try {
+            
+            // Analyze the given path
             URI uri = URI.create(path);
-            
-            // Default to file protocol
-            if (uri.getScheme() == null) {
-                File directory = new File(directoryName);
-                uri = new File(directory, path).toURI();
-            }
-            
-            // Support the following syntaxes
-            // foo.jar!/file.txt
-            // directory!/file.txt
-            // directory/!/file.txt
-            String str = uri.toString();
-            int e = str.indexOf("!/"); 
-            if (e != -1) {
-                int s = str.lastIndexOf('/', e - 2) +1;
-                if (str.substring(s, e).contains(".")) {
-                    str = "jar:" + str;
-                } else {
-                    str = str.substring(0, e) + str.substring(e + 1);
-                }
-                uri = URI.create(str);
+            String scheme = uri.getScheme();
+            if (scheme == null) {
+
+                // If no scheme is specified then the path identifies file
+                // inside our directory
+                uri = new File(directoryName, path).toURI();
+                
+            } else if (!scheme.equals("file")) {
+                
+                // If the scheme does not identify a local file, just redirect to the server
+                // hosting the file
+                response.sendRedirect(path);
             }
             
             // Read the file and write to response 

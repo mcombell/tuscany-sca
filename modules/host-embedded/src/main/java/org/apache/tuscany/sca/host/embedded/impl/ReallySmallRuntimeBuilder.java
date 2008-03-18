@@ -37,7 +37,6 @@ import org.apache.tuscany.sca.assembly.xml.CompositeDocumentProcessor;
 import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
 import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeDocumentProcessor;
 import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
-import org.apache.tuscany.sca.binding.sca.xml.SCABindingProcessor;
 import org.apache.tuscany.sca.context.ContextFactoryExtensionPoint;
 import org.apache.tuscany.sca.context.RequestContextFactory;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
@@ -148,17 +147,15 @@ public class ReallySmallRuntimeBuilder {
     public static CompositeBuilder createCompositeBuilder(AssemblyFactory assemblyFactory,
                                                           SCABindingFactory scaBindingFactory,
                                                           IntentAttachPointTypeFactory intentAttachPointTypeFactory,
-                                                          InterfaceContractMapper interfaceContractMapper, 
-                                                          List<PolicySet> domainPolicySets) {
-        return new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, interfaceContractMapper, domainPolicySets, null);
+                                                          InterfaceContractMapper interfaceContractMapper) {
+        return new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, interfaceContractMapper, null);
     }
     
     public static DomainBuilder createDomainBuilder(AssemblyFactory assemblyFactory,
             SCABindingFactory scaBindingFactory,
             IntentAttachPointTypeFactory intentAttachPointTypeFactory,
-            InterfaceContractMapper interfaceContractMapper, 
-            List<PolicySet> domainPolicySets) {
-        return new DomainWireBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, interfaceContractMapper, domainPolicySets, null);
+            InterfaceContractMapper interfaceContractMapper) {
+        return new DomainWireBuilderImpl(assemblyFactory, scaBindingFactory, intentAttachPointTypeFactory, interfaceContractMapper, null);
     }     
 
     /**
@@ -172,7 +169,7 @@ public class ReallySmallRuntimeBuilder {
                                                                 AssemblyFactory assemblyFactory,
                                                                 PolicyFactory policyFactory,
                                                                 InterfaceContractMapper mapper,
-                                                                SCADefinitions scaDefinitions)
+                                                                List scaDefinitionsSink)
         throws ActivationException {
 
         // Create a new XML input factory
@@ -206,7 +203,7 @@ public class ReallySmallRuntimeBuilder {
             registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
 
         // Create and register document processors for SCA assembly XML
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, validatingInputFactory));
+        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, validatingInputFactory, scaDefinitionsSink));
         documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, validatingInputFactory));
         documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, validatingInputFactory));
 
@@ -247,8 +244,7 @@ public class ReallySmallRuntimeBuilder {
         ContributionService contributionService =
             new ContributionServiceImpl(repository, packageProcessor, documentProcessor, staxProcessor,
                                         contributionListener, domainModelResolver, modelResolvers, modelFactories,
-                                        assemblyFactory, contributionFactory, inputFactory,
-                                        scaDefinitions);
+                                        assemblyFactory, contributionFactory, inputFactory, scaDefinitionsSink);
         return contributionService;
     }
 

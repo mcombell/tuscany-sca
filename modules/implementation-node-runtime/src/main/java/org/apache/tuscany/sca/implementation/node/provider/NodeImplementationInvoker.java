@@ -24,7 +24,9 @@ import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 
 /**
- * Implements an invoker for resource component implementations.
+ * Implements an invoker for node component implementations.
+ * 
+ * @version $Rev$ $Date$
  */
 class NodeImplementationInvoker implements Invoker {
     private Composite composite;
@@ -34,7 +36,7 @@ class NodeImplementationInvoker implements Invoker {
     }
     
     public Message invoke(Message msg) {
-        //FIXME Implement
+        //FIXME Implement later
         msg.setBody(composite);
         return msg;
     }

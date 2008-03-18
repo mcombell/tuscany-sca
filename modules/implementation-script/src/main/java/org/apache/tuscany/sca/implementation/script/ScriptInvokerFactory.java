@@ -141,7 +141,20 @@ public class ScriptInvokerFactory implements InvokerFactory {
         if ("rb".equals(scriptExtn)) {
             return new TuscanyJRubyScriptEngine();
         } else {
+            if ("py".equals(scriptExtn)) {
+                pythonCachedir();
+            }
             return scriptEngineManager.getEngineByExtension(scriptExtn);
         }
+    }
+
+    /**
+     * If the python home isn't set then let Tuscany suppress messages other than errors
+     * See TUSCANY-1950
+     */
+    protected void pythonCachedir() {
+            if (System.getProperty("python.home") == null) {
+              System.setProperty("python.verbose", "error");
+            }
     }
 }

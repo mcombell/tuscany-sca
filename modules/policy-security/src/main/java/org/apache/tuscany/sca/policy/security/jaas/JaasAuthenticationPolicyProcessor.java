@@ -21,8 +21,6 @@ package org.apache.tuscany.sca.policy.security.jaas;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import java.util.logging.Level;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -31,6 +29,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -41,10 +40,12 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
  *
  */
 public class JaasAuthenticationPolicyProcessor implements StAXArtifactProcessor<JaasAuthenticationPolicy> {
-    private static final QName JAAS_AUTHENTICATION_POLICY_QNAME = new QName(Constants.SCA10_TUSCANY_NS, "jaasAuthentication");
+    private static final QName JAAS_AUTHENTICATION_POLICY_QNAME = JaasAuthenticationPolicy.NAME;
     private static final String callbackHandler = "callbackHandler";
     public static final QName CALLBACK_HANDLER_QNAME = new QName(Constants.SCA10_TUSCANY_NS,
                                                                callbackHandler);
+    public static final QName CONFIGURATION_QNAME = new QName(Constants.SCA10_TUSCANY_NS,
+                                                                 "configurationName");
     public QName getArtifactType() {
         return JAAS_AUTHENTICATION_POLICY_QNAME;
     }
@@ -63,10 +64,19 @@ public class JaasAuthenticationPolicyProcessor implements StAXArtifactProcessor<
             switch (event) {
                 case START_ELEMENT : {
                     name = reader.getName();
-                    if ( name.equals(CALLBACK_HANDLER_QNAME) ) {
+                    if (name.equals(CALLBACK_HANDLER_QNAME)) {
                         String callbackHandlerClassName = reader.getElementText();
-                        policy.setCallbackHandlerClassName(callbackHandlerClassName);
+                        if (callbackHandlerClassName != null) {
+                            policy.setCallbackHandlerClassName(callbackHandlerClassName.trim());
+                        }
+                    }
+                    if (name.equals(CONFIGURATION_QNAME)) {
+                        String configurationName = reader.getElementText();
+                        if (configurationName != null) {
+                            policy.setConfigurationName(configurationName.trim());
+                        }
                     } 
+
                     break;
                 }
             }
@@ -102,8 +112,17 @@ public class JaasAuthenticationPolicyProcessor implements StAXArtifactProcessor<
         return JaasAuthenticationPolicy.class;
     }
 
-    public void resolve(JaasAuthenticationPolicy arg0, ModelResolver arg1) throws ContributionResolveException {
+    public void resolve(JaasAuthenticationPolicy policy, ModelResolver resolver) throws ContributionResolveException {
 
+         if (policy.getCallbackHandlerClassName() != null) {
+             ClassReference classReference = new ClassReference(policy.getCallbackHandlerClassName());
+             classReference = resolver.resolveModel(ClassReference.class, classReference);
+             Class callbackClass = classReference.getJavaClass();
+             if (callbackClass == null) {
+                 throw new ContributionResolveException(new ClassNotFoundException(policy.getCallbackHandlerClassName()));
+             }
+             policy.setCallbackHandlerClass(callbackClass);
+         }
     }
     
 }

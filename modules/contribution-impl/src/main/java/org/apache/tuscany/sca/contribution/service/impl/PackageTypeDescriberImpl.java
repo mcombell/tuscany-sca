@@ -48,6 +48,7 @@ public class PackageTypeDescriberImpl implements TypeDescriber {
      */
     private void init() {
         contentTypeRegistry.put("JAR", PackageType.JAR);
+        contentTypeRegistry.put("WAR", PackageType.JAR);
     }
 
     protected String resolveContentyTypeByExtension(URL resourceURL) {
@@ -75,6 +76,8 @@ public class PackageTypeDescriberImpl implements TypeDescriber {
         if (resourceURL.getProtocol().equals("file") && FileHelper.toFile(resourceURL).isDirectory()) {
             // Special case : contribution is a folder
             contentType = PackageType.FOLDER;
+        } else if (resourceURL.getProtocol().equals("bundle")||resourceURL.getProtocol().equals("bundleresource")) {
+            contentType = PackageType.BUNDLE;
         } else {
             contentType = resolveContentyTypeByExtension(resourceURL);
             if (contentType == null) {

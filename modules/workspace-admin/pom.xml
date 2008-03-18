@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-workspace-admin</artifactId>
-    <name>Apache Tuscany SCA Workspace Administration</name>
+    <name>Apache Tuscany SCA Domain Workspace Administration</name>
 
     <dependencies>
         <dependency>
@@ -50,6 +50,12 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-node-xml</artifactId>
+            <version>1.2-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-node-runtime</artifactId>
             <version>1.2-incubating-SNAPSHOT</version>
         </dependency>
 
@@ -140,7 +146,7 @@
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-feed-atom</artifactId>
+            <artifactId>tuscany-binding-atom-abdera</artifactId>
             <version>1.2-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
@@ -152,12 +158,22 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-ws-axis2</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.apache.tuscany.sca.workspace.admin.main.DomainAdminMain</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

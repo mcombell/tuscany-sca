@@ -53,7 +53,7 @@ public class ServiceReferenceImpl<B> extends CallableReferenceImpl<B> implements
     /*
      * Public constructor for use by XMLStreamReader2CallableReference
      */
-    public ServiceReferenceImpl(XMLStreamReader xmlReader) {
+    public ServiceReferenceImpl(XMLStreamReader xmlReader) throws Exception {
         super(xmlReader);
     }
 
@@ -92,7 +92,8 @@ public class ServiceReferenceImpl<B> extends CallableReferenceImpl<B> implements
             this.conversationID = conversationID;
             this.conversation = null;
         } else {
-            throw new IllegalStateException("The state of the conversation " + conversation.getConversationID()
+            throw new IllegalStateException("Trying to set the conversationId on a service reference but the state of the conversation " 
+                + conversation.getConversationID()
                 + " is "
                 + conversation.getState());
         }

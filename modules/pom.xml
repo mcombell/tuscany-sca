@@ -42,8 +42,14 @@
                 <module>assembly-xsd</module>
                 <module>binding-dwr</module>
                 <module>binding-ejb</module>
+                <!-- obsolete -->
                 <module>binding-feed</module>
-                <module>binding-feed-atom</module>
+                <!-- new bindings -->
+                <module>binding-atom</module>
+                <module>binding-atom-abdera</module>
+                <module>binding-rss</module>
+                <module>binding-rss-rome</module>
+                <!-- -->
                 <module>binding-http</module>
                 <module>binding-jms</module>
                 <module>binding-jsonrpc</module>
@@ -125,6 +131,8 @@
                 <module>node2-api</module>
                 <module>node-impl</module>
                 <module>node2-impl</module>
+                <module>node2-launcher</module>
+                <module>node2-launcher-webapp</module>
                 <module>osgi-runtime</module>
                 <module>policy</module>
                 <module>policy-xml</module>

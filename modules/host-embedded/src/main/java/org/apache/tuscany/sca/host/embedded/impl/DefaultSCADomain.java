@@ -135,16 +135,21 @@ public class DefaultSCADomain extends SCADomain {
         }
 
         try {
-            File contributionFile = new File(contributionURL.toURI());
-            if (contributionFile.isDirectory()) {
-                String[] contributions = contributionFile.list(new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
-                        return name.endsWith(".jar");
-                    }
-                });
-                if (contributions != null && contributions.length > 0 && contributions.length == contributionFile.list().length) {
-                    for (String contribution : contributions) {
-                        addContribution(contributionService, new File(contributionFile, contribution).toURL());
+            String scheme = contributionURL.toURI().getScheme();
+            if (scheme == null || scheme.equalsIgnoreCase("file")) {
+                File contributionFile = new File(contributionURL.toURI());
+                if (contributionFile.isDirectory()) {
+                    String[] contributions = contributionFile.list(new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".jar");
+                        }
+                    });
+                    if (contributions != null && contributions.length > 0 && contributions.length == contributionFile.list().length) {
+                        for (String contribution : contributions) {
+                            addContribution(contributionService, new File(contributionFile, contribution).toURI().toURL());
+                        }
+                    } else {
+                        addContribution(contributionService, contributionURL);
                     }
                 } else {
                     addContribution(contributionService, contributionURL);
@@ -194,7 +199,7 @@ public class DefaultSCADomain extends SCADomain {
         //update the runtime for all SCA Definitions processed from the contribution..
         //so that the policyset determination done during 'build' has the all the defined
         //intents and policysets
-        runtime.updateSCADefinitions(contributionService.getContributionSCADefinitions());
+        //runtime.updateSCADefinitions(null);
 
         // Build the SCA composites
         for (Composite composite : domainComposite.getIncludes()) {
@@ -388,7 +393,13 @@ public class DefaultSCADomain extends SCADomain {
                 String location = url.substring(4, url.lastIndexOf("!/"));
                 // workaround for evil url/uri from maven
                 contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
-            }
+                
+            } else if (protocol != null && (protocol.equals("bundle")||protocol.equals("bundleresource"))){
+                contributionURL = new URL(contributionArtifactURL.getProtocol(), 
+                                          contributionArtifactURL.getHost(), 
+                                          contributionArtifactURL.getPort(), 
+                                          "/");
+            }          
         } catch (MalformedURLException mfe) {
             throw new IllegalArgumentException(mfe);
         }

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.UUID;
+
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tuscany.sca.assembly.Binding;
@@ -82,17 +83,18 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
     private transient XMLStreamReader xmlReader;
 
     /*
-     * Protected constructor for Externalizable serialization/deserialization
+     * Public constructor for Externalizable serialization/deserialization
      */
-    protected CallableReferenceImpl() {
+    public CallableReferenceImpl() {
         super();
     }
 
     /*
      * Public constructor for use by XMLStreamReader2CallableReference
      */
-    public CallableReferenceImpl(XMLStreamReader xmlReader) {
+    public CallableReferenceImpl(XMLStreamReader xmlReader) throws Exception {
         this.xmlReader = xmlReader;
+        resolve();
     }
 
     protected CallableReferenceImpl(Class<B> businessInterface,
@@ -130,10 +132,15 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
     }
 
     public RuntimeWire getRuntimeWire() {
-        if (reference != null) {
-            return reference.getRuntimeWire(binding);
-        } else {
-            return null;
+        try {
+            resolve();
+            if (reference != null) {
+                return reference.getRuntimeWire(binding);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
         }
     }
 
@@ -157,9 +164,9 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
 
     public B getProxy() throws ObjectCreationException {
         try {
-			if (proxy == null) {
+            if (proxy == null) {
                 proxy = createProxy(); 
-			}
+            }
             return businessInterface.cast(proxy);
         } catch (Exception e) {
             throw new ObjectCreationException(e);
@@ -184,22 +191,46 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
     }
 
     public Class<B> getBusinessInterface() {
-        return businessInterface;
+        try {
+            resolve();
+            return businessInterface;
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
+        }            
     }
 
     public boolean isConversational() {
-        return reference == null ? false : reference.getInterfaceContract().getInterface().isConversational();
+        try {
+            resolve();        
+            return reference == null ? false : reference.getInterfaceContract().getInterface().isConversational();
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
+        }
     }
 
     public Conversation getConversation() {
-        if (conversation == null || conversation.getState() == ConversationState.ENDED) {
-            conversation = null;
+        try {
+            // resolve from XML just in case this callable reference is the result of
+            // passing a callable reference as a parameter
+            resolve();
+            
+            if (conversation == null || conversation.getState() == ConversationState.ENDED) {
+                conversation = null;
+            }
+            return conversation;
+        
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
         }
-        return conversation;
     }
 
     public Object getCallbackID() {
-        return callbackID;
+        try {
+            resolve();        
+            return callbackID;
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
+        }        
     }
 
     /**
@@ -242,25 +273,38 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
                 if (parameters != null) {
                     refParams = parameters;
                     this.callbackID = parameters.getCallbackID();
-                    this.conversationID = parameters.getConversationID();
+                    
+                    if (parameters.getConversationID() != null){
+                        ExtendedConversation conversation = conversationManager.getConversation(parameters.getConversationID());
+                        
+                        if (conversation == null){
+                            conversation = conversationManager.startConversation(parameters.getConversationID());
+                        }
+                        this.conversation = conversation;
+                    } else {
+                        this.conversation = null;
+                    }
                 }
 
                 for (Binding binding : reference.getBindings()) {
                     if (binding instanceof OptimizableBinding) {
                         String targetURI = binding.getURI();
+                        if (targetURI.startsWith("/")) {
+                            targetURI = targetURI.substring(1);
+                        }
                         int index = targetURI.lastIndexOf('/');
                         String serviceName = "";
                         if (index > -1) {
                             serviceName = targetURI.substring(index + 1);
                             targetURI = targetURI.substring(0, index);
                         }
-                        Component targetComponet = compositeActivator.resolve(targetURI);
+                        Component targetComponent = compositeActivator.resolve(targetURI);
                         ComponentService targetService = null;
-                        if (targetComponet != null) {
+                        if (targetComponent != null) {
                             if ("".equals(serviceName)) {
-                                targetService = ComponentContextHelper.getSingleService(targetComponet);
+                                targetService = ComponentContextHelper.getSingleService(targetComponent);
                             } else {
-                                for (ComponentService service : targetComponet.getServices()) {
+                                for (ComponentService service : targetComponent.getServices()) {
                                     if (service.getName().equals(serviceName)) {
                                         targetService = service;
                                         break;
@@ -269,7 +313,7 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
                             }
                         }
                         OptimizableBinding optimizableBinding = (OptimizableBinding)binding;
-                        optimizableBinding.setTargetComponent(targetComponet);
+                        optimizableBinding.setTargetComponent(targetComponent);
                         optimizableBinding.setTargetComponentService(targetService);
                         if (targetService != null) {
                             for (Binding serviceBinding : targetService.getBindings()) {
@@ -311,7 +355,7 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
         try {
             out.writeUTF(toXMLString());
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             throw new IOException(e.getMessage());
         }
     }
@@ -327,10 +371,26 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
             }
             if (refParams == null) {
                 refParams = new ReferenceParametersImpl();
+               
+                // remove any existing reference parameters from the clone                
+                Object toRemove = null;
+                for (Object extension : clonedRef.getExtensions()){
+                    if (extension instanceof ReferenceParameters){
+                        toRemove = extension;
+                    }
+                }
+               
+                if (toRemove != null){
+                    clonedRef.getExtensions().remove(toRemove);
+                }
+                
+                // add the new reference parameter object
                 clonedRef.getExtensions().add(refParams);
             }
             refParams.setCallbackID(callbackID);
-            refParams.setConversationID(conversationID);
+            if (conversation != null){
+                refParams.setConversationID(conversation.getConversationID());
+            }
             return ((CompositeActivatorImpl)compositeActivator).getComponentContextHelper()
                     .toXML(component, clonedRef);
         } else { 
@@ -370,15 +430,21 @@ public class CallableReferenceImpl<B> implements CallableReference<B>, Externali
     }
 
     public EndpointReference getEndpointReference() {
-        // Use the interface contract of the reference on the component type
-        Reference componentTypeRef = reference.getReference();
-        InterfaceContract sourceContract =
-            componentTypeRef == null ? reference.getInterfaceContract() : componentTypeRef.getInterfaceContract();
-        sourceContract = sourceContract.makeUnidirectional(false);
-        EndpointReference epr = new EndpointReferenceImpl(component, reference, binding, sourceContract);
-        ReferenceParameters parameters = getReferenceParameters();
-        epr.setReferenceParameters(parameters);
-        return epr;
+        try {
+            resolve();  
+            
+            // Use the interface contract of the reference on the component type
+            Reference componentTypeRef = reference.getReference();
+            InterfaceContract sourceContract =
+                componentTypeRef == null ? reference.getInterfaceContract() : componentTypeRef.getInterfaceContract();
+            sourceContract = sourceContract.makeUnidirectional(false);
+            EndpointReference epr = new EndpointReferenceImpl(component, reference, binding, sourceContract);
+            ReferenceParameters parameters = getReferenceParameters();
+            epr.setReferenceParameters(parameters);
+            return epr;
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
+        }        
     }
 
     public XMLStreamReader getXMLReader() {

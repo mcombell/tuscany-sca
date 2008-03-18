@@ -53,6 +53,8 @@ import org.apache.tuscany.sca.core.invocation.MessageFactoryImpl;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
 import org.apache.tuscany.sca.core.scope.ScopeRegistry;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
+import org.apache.tuscany.sca.definitions.SCADefinitionsProvider;
+import org.apache.tuscany.sca.definitions.SCADefinitionsProviderExtensionPoint;
 import org.apache.tuscany.sca.definitions.impl.SCADefinitionsImpl;
 import org.apache.tuscany.sca.definitions.util.SCADefinitionsUtil;
 import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
@@ -63,8 +65,11 @@ import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.work.WorkScheduler;
 
 public class ReallySmallRuntime {
@@ -81,7 +86,7 @@ public class ReallySmallRuntime {
     private WorkScheduler workScheduler;
     private ScopeRegistry scopeRegistry;
     private ProxyFactory proxyFactory;
-    private SCADefinitions scaDefinitions = new SCADefinitionsImpl();
+    private List scaDefnsSink = new ArrayList();
 
     public ReallySmallRuntime(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -137,7 +142,7 @@ public class ReallySmallRuntime {
                                                                                   assemblyFactory,
                                                                                   policyFactory,
                                                                                   mapper,
-                                                                                  scaDefinitions);
+                                                                                  scaDefnsSink);
         
         // Create the ScopeRegistry
         scopeRegistry = ReallySmallRuntimeBuilder.createScopeRegistry(registry); 
@@ -196,19 +201,11 @@ public class ReallySmallRuntime {
         compositeBuilder = ReallySmallRuntimeBuilder.createCompositeBuilder(assemblyFactory,
                                                                             scaBindingFactory,
                                                                             intentAttachPointTypeFactory,
-                                                                            mapper,
-                                                                            scaDefinitions.getPolicySets());
+                                                                            mapper);
         compositeBuilder.build(composite);
         
     }
     
-    public void updateSCADefinitions(List<SCADefinitions> scaDefns) {
-        for ( SCADefinitions aDefn : scaDefns ) {
-            SCADefinitionsUtil.aggregateSCADefinitions(aDefn, scaDefinitions);
-        }
-        SCADefinitionsUtil.stripDuplicates(scaDefinitions);
-    }
-
     public ContributionService getContributionService() {
         return contributionService;
     }
@@ -236,37 +233,73 @@ public class ReallySmallRuntime {
             domainBuilder = ReallySmallRuntimeBuilder.createDomainBuilder(assemblyFactory,
                                                                           scaBindingFactory,
                                                                           intentAttachPointTypeFactory,
-                                                                          mapper,
-                                                                          scaDefinitions.getPolicySets());
+                                                                          mapper);
         }
         return domainBuilder;
     }
     
-    private SCADefinitions loadSCADefinitions(ExtensionPointRegistry registry) throws ActivationException {
-        URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+    private void  loadSCADefinitions(ExtensionPointRegistry registry) throws ActivationException {
+        try {
+            URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+            SCADefinitionsDocumentProcessor definitionsProcessor = (SCADefinitionsDocumentProcessor)documentProcessors.getProcessor(SCADefinitions.class);
+            SCADefinitionsProviderExtensionPoint scaDefnProviders = registry.getExtensionPoint(SCADefinitionsProviderExtensionPoint.class);
+            
+            SCADefinitions systemSCADefinitions = new SCADefinitionsImpl();
+            SCADefinitions aSCADefn = null;
+            for ( SCADefinitionsProvider aProvider : scaDefnProviders.getSCADefinitionsProviders() ) {
+               aSCADefn = aProvider.getSCADefinition(); 
+               SCADefinitionsUtil.aggregateSCADefinitions(aSCADefn, systemSCADefinitions);
+            }
+            
+            //we cannot expect that providers will add the intents and policysets into the resolver
+            //so we do this here explicitly
+            for ( Intent intent : systemSCADefinitions.getPolicyIntents() ) {
+                definitionsProcessor.getSCADefinitionsResolver().addModel(intent);
+            }
+            
+            for ( PolicySet policySet : systemSCADefinitions.getPolicySets() ) {
+                definitionsProcessor.getSCADefinitionsResolver().addModel(policySet);
+            }
+            
+            for ( IntentAttachPointType attachPoinType : systemSCADefinitions.getBindingTypes() ) {
+                definitionsProcessor.getSCADefinitionsResolver().addModel(attachPoinType);
+            }
+            
+            for ( IntentAttachPointType attachPoinType : systemSCADefinitions.getImplementationTypes() ) {
+                definitionsProcessor.getSCADefinitionsResolver().addModel(attachPoinType);
+            }
+            
+            //now that all system sca definitions have been read, lets resolve them rightaway
+            definitionsProcessor.resolve(systemSCADefinitions, 
+                                         definitionsProcessor.getSCADefinitionsResolver());
+        } catch ( Exception e ) {
+            throw new ActivationException(e);
+        }
+        
+        /*URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
         SCADefinitionsDocumentProcessor definitionsProcessor = (SCADefinitionsDocumentProcessor)documentProcessors.getProcessor(SCADefinitions.class);
         
         try {
             Map<ClassLoader, Set<URL>> scaDefinitionFiles = 
             ServiceDiscovery.getInstance().getServiceResources("definitions.xml");
             
+            SCADefinitions systemSCADefinitions = new SCADefinitionsImpl();
             for ( ClassLoader cl : scaDefinitionFiles.keySet() ) {
                 for ( URL scaDefnUrl : scaDefinitionFiles.get(cl) ) {
                     SCADefinitions defnSubset = definitionsProcessor.read(null, null, scaDefnUrl);
-                    SCADefinitionsUtil.aggregateSCADefinitions(defnSubset, scaDefinitions);
+                    SCADefinitionsUtil.aggregateSCADefinitions(defnSubset, systemSCADefinitions);
                 }
             }
             
-            definitionsProcessor.resolve(scaDefinitions, definitionsProcessor.getSCADefinitionsResolver());
+            definitionsProcessor.resolve(systemSCADefinitions, definitionsProcessor.getSCADefinitionsResolver());
+            scaDefnsSink.add(systemSCADefinitions);
         } catch ( ContributionReadException e ) {
             throw new ActivationException(e);
         } catch ( ContributionResolveException e ) {
             throw new ActivationException(e);
         } catch ( IOException e ) {
             throw new ActivationException(e);
-        }
-    
-        return scaDefinitions;
+        }*/
     }
     
     @SuppressWarnings("unchecked")

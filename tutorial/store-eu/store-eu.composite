@@ -22,39 +22,45 @@
 		targetNamespace="http://store"
 		name="store-eu">
 		
-    <component name="Store">
-        <t:implementation.widget location="uiservices/store.html"/>
+    <component name="StoreEU">
+        <t:implementation.widget location="uiservices/store-eu.html"/>
         <service name="Widget">
-        	<t:binding.http uri="http://localhost:8104/ui"/> 
+        	<t:binding.http uri="/ui"/> 
         </service>
-		<reference name="catalog" target="Catalog">
+		<reference name="catalog" target="StoreEUCatalog">
 		 	<t:binding.jsonrpc/>
 		 </reference>
-		 <reference name="shoppingCart" target="ShoppingCart/Cart">
+		 <reference name="shoppingCart" target="StoreEUShoppingCart/Cart">
 		 	<t:binding.atom/>
 		 </reference>
-		 <reference name="shoppingTotal" target="ShoppingCart/Total">
+		 <reference name="shoppingTotal" target="StoreEUShoppingCart/Total">
 		 	<t:binding.jsonrpc/>
 		 </reference>
     </component>
     
-	<component name="Catalog">
+	<component name="StoreEUCatalog">
 		<implementation.java class="services.merger.MergedCatalogImpl"/> 
 		<property name="currencyCode">EUR</property>
 		<service name="Catalog">
 			<t:binding.jsonrpc/>
-			<binding.ws uri="http://localhost:8104/CatalogWebService"/>
+			<binding.ws uri="/CatalogWebService"/>
    		</service>
-		<reference name="fruitsCatalog" target="CloudFruitsCatalog"/>	
-		<reference name="vegetablesCatalog" target="CloudVegetablesCatalog"/>	
-		<reference name="currencyConverter" target="CloudCurrencyConverter"/>	
+		<reference name="fruitsCatalog" target="CloudFruitsCatalog">
+			<binding.ws/>
+		</reference>	
+		<reference name="vegetablesCatalog" target="CloudVegetablesCatalog">
+			<binding.ws/>
+		</reference>	
+		<reference name="currencyConverter" target="CloudCurrencyConverter">
+			<binding.ws/>
+		</reference>	
 	</component>
  	
-	<component name="ShoppingCart">
+	<component name="StoreEUShoppingCart">
 		<implementation.java class="services.db.ShoppingCartTableImpl"/>
-		<property name="database">cart-eu-db</property>
+		<property name="database">../store-eu/target/cart-eu-db</property>
 		<service name="Cart">
-			<t:binding.atom/>
+			<t:binding.atom uri="/ShoppingCart/Cart"/>
 		</service>    	
 		<service name="Total">
 			<t:binding.jsonrpc/>
