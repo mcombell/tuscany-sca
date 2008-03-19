@@ -138,7 +138,7 @@ public class CompositeWireBuilderImpl {
                             break;
                         }
                     }
-                    if (!promoted) {
+                    if (!promoted && !componentReference.isCallback()) {
                         warning("No targets for reference: " + componentReference.getName(), composite);
                     }
                 } else {
