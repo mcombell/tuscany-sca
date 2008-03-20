@@ -123,10 +123,13 @@ public class FelixRuntime extends OSGiRuntime implements BundleActivator {
             Constructor felixConstructor = felixClass.getConstructor(Map.class, List.class);
             List<BundleActivator> activators = new ArrayList<BundleActivator>();
 
+            //FIXME this is broken after we switch for Felix 1.0.1 release (classNotFound AutoActivator)
+            /*
             Class<?> autoActivatorClass = cl.loadClass("org.apache.felix.main.AutoActivator");
             Constructor autoActivatorConstructor = autoActivatorClass.getConstructor(Map.class);
             BundleActivator autoActivator = (BundleActivator)autoActivatorConstructor.newInstance(props);            
             activators.add(autoActivator);
+            */
 
             felix = felixConstructor.newInstance(props, activators);
             ((Bundle)felix).start();
