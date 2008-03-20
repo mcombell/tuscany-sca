@@ -648,9 +648,9 @@
                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.policy.util.PolicyHandler</resource>
                                 </transformer>
-                               <transformer implementation="org.apache.tuscany.sca.tools.maven.plugin.shade.transformer.SCADefinitionsAppendingTransformer">
-                                    <resource>META-INF/services/definitions.xml</resource> 
-                               </transformer>
+                               <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.definitions.SCADefinitionsProvider</resource> 
+                                </transformer>
                             </transformers>
                         </configuration>
                     </execution>
