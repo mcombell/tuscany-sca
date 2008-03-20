@@ -108,6 +108,11 @@
                     <groupId>stax</groupId>
                     <artifactId>stax-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <!-- exclude felix since we are using a later version -->
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.main</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
     </dependencies>

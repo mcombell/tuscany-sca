@@ -311,9 +311,9 @@ The following components come under Apache Software License 2.0
  openjpa-all-0.9.7-incubating.jar
  openjpa-persistence-0.9.7-incubating.jar
  opensaml-1.1.jar
- org.apache.felix.bundlerepository-1.0.0.jar
- org.apache.felix.framework-1.0.1.jar
- org.apache.felix.main-1.0.1.jar
+ org.apache.felix.bundlerepository-1.0.2.jar
+ org.apache.felix.framework-1.0.3.jar
+ org.apache.felix.main-1.0.3.jar
  org.apache.felix.shell-1.0.0.jar
  org.apache.felix.shell.tui-1.0.0.jar
  plexus-container-default-1.0-alpha-9.jar
