@@ -43,15 +43,4 @@ public class ImplementationTypeProcessor extends IntentAttachPointTypeProcessor 
     public QName getArtifactType() {
         return IMPLEMENTATION_TYPE_QNAME;
     }
-    
-    @Override
-    public IntentAttachPointType resolveExtensionType(IntentAttachPointType extnType, ModelResolver resolver) throws ContributionResolveException {
-        if ( extnType instanceof ImplementationTypeImpl ) {
-            ImplementationTypeImpl implType = (ImplementationTypeImpl)extnType;
-            return resolver.resolveModel(ImplementationTypeImpl.class, implType);
-        } else {
-            return extnType;
-        }
-        
-    }
 }

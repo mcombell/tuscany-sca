@@ -42,15 +42,4 @@ public class BindingTypeProcessor extends IntentAttachPointTypeProcessor {
     public QName getArtifactType() {
         return BINDING_TYPE_QNAME;
     }
-
-    @Override
-    public IntentAttachPointType resolveExtensionType(IntentAttachPointType extnType, ModelResolver resolver) throws ContributionResolveException {
-        if ( extnType instanceof BindingTypeImpl ) {
-            BindingTypeImpl bindingType = (BindingTypeImpl)extnType;
-            return resolver.resolveModel(BindingTypeImpl.class, bindingType);
-        } else {
-            return extnType;
-        }
-        
-    }
 }

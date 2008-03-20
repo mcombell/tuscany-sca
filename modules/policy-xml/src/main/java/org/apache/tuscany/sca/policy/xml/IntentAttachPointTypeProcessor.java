@@ -50,8 +50,6 @@ public abstract class IntentAttachPointTypeProcessor extends BaseStAXArtifactPro
     private IntentAttachPointTypeFactory attachPointTypeFactory;
     private PolicyFactory policyFactory; 
     
-    public abstract IntentAttachPointType resolveExtensionType(IntentAttachPointType extnType, ModelResolver resolver) throws ContributionResolveException;
-
     public IntentAttachPointTypeProcessor(PolicyFactory policyFactory, IntentAttachPointTypeFactory attachPointTypeFactory, StAXArtifactProcessor<Object> extensionProcessor) {
         this.policyFactory = policyFactory;
         this.attachPointTypeFactory = attachPointTypeFactory;
@@ -64,7 +62,7 @@ public abstract class IntentAttachPointTypeProcessor extends BaseStAXArtifactPro
             if ( type.getLocalPart().startsWith(BINDING) ) {
                 IntentAttachPointType bindingType = attachPointTypeFactory.createBindingType();
                 bindingType.setName(type);
-                bindingType.setUnresolved(false);
+                bindingType.setUnresolved(true);
                 
                 readAlwaysProvidedIntents(bindingType, reader);
                 readMayProvideIntents(bindingType, reader);
@@ -72,7 +70,7 @@ public abstract class IntentAttachPointTypeProcessor extends BaseStAXArtifactPro
             } else if ( type.getLocalPart().startsWith(IMPLEMENTATION) ) {
                 IntentAttachPointType implType = attachPointTypeFactory.createImplementationType();
                 implType.setName(type);
-                implType.setUnresolved(false);
+                implType.setUnresolved(true);
                 
                 readAlwaysProvidedIntents(implType, reader);
                 readMayProvideIntents(implType, reader);
@@ -157,64 +155,61 @@ public abstract class IntentAttachPointTypeProcessor extends BaseStAXArtifactPro
     public void resolve(IntentAttachPointType extnType, ModelResolver resolver) throws ContributionResolveException {
         resolveAlwaysProvidedIntents(extnType, resolver);
         resolveMayProvideIntents(extnType, resolver);
-        resolveExtensionType(extnType, resolver);
-        
-/*        if ( !extnType.isUnresolved() ) {
-             resolver.addModel(extnType);
-        }*/
+        extnType.setUnresolved(false);
     }
 
-    private void resolveAlwaysProvidedIntents(IntentAttachPointType extensionType,
-                                              ModelResolver resolver) throws ContributionResolveException {
-        if (extensionType != null) {
-            // resolve all provided intents
-            List<Intent> alwaysProvided = new ArrayList<Intent>();
-            for (Intent providedIntent : extensionType.getAlwaysProvidedIntents()) {
-                if (providedIntent.isUnresolved()) {
-                    Intent resolvedProvidedIntent = resolver.resolveModel(Intent.class, providedIntent);
-                    if (resolvedProvidedIntent != null) {
-                        alwaysProvided.add(resolvedProvidedIntent);
-                    } else {
-                        throw new ContributionResolveException(
-                                                                 "Always Provided Intent - " + providedIntent
-                                                                     + " not found for ExtensionType "
-                                                                     + extensionType);
+    private void resolveAlwaysProvidedIntents(
+			IntentAttachPointType extensionType, ModelResolver resolver)
+			throws ContributionResolveException {
+		if (extensionType != null) {
+			// resolve all provided intents
+			List<Intent> alwaysProvided = new ArrayList<Intent>();
+			for (Intent providedIntent : extensionType.getAlwaysProvidedIntents()) {
+				if (providedIntent.isUnresolved()) {
+					providedIntent = resolver.resolveModel(Intent.class, providedIntent);
+					if (!providedIntent.isUnresolved()) {
+						alwaysProvided.add(providedIntent);
+					} else {
+						throw new ContributionResolveException(
+								"Always Provided Intent - " + providedIntent
+										+ " not found for ExtensionType "
+										+ extensionType);
 
-                    }
-                } else {
-                    alwaysProvided.add(providedIntent);
-                }
-            }
-            extensionType.getAlwaysProvidedIntents().clear();
-            extensionType.getAlwaysProvidedIntents().addAll(alwaysProvided);
-        }
-    }
+					}
+				} else {
+					alwaysProvided.add(providedIntent);
+				}
+			}
+			extensionType.getAlwaysProvidedIntents().clear();
+			extensionType.getAlwaysProvidedIntents().addAll(alwaysProvided);
+		}
+	}
     
     private void resolveMayProvideIntents(IntentAttachPointType extensionType,
-                                            ModelResolver resolver) throws ContributionResolveException {
-        if (extensionType != null) {
-            // resolve all provided intents
-            List<Intent> mayProvide = new ArrayList<Intent>();
-            for (Intent providedIntent : extensionType.getMayProvideIntents()) {
-                if (providedIntent.isUnresolved()) {
-                    Intent resolvedProvidedIntent = resolver.resolveModel(Intent.class, providedIntent);
-                    if (resolvedProvidedIntent != null) {
-                        mayProvide.add(resolvedProvidedIntent);
-                    } else {
-                        throw new ContributionResolveException(
-                                                                 "May Provide Intent - " + providedIntent
-                                                                     + " not found for ExtensionType "
-                                                                     + extensionType);
+			ModelResolver resolver) throws ContributionResolveException {
+		if (extensionType != null) {
+			// resolve all provided intents
+			List<Intent> mayProvide = new ArrayList<Intent>();
+			for (Intent providedIntent : extensionType.getMayProvideIntents()) {
+				if (providedIntent.isUnresolved()) {
+					providedIntent = resolver.resolveModel(Intent.class, providedIntent);
+					if (!providedIntent.isUnresolved()) {
+						mayProvide.add(providedIntent);
+					} else {
+						throw new ContributionResolveException(
+								"May Provide Intent - " + providedIntent
+										+ " not found for ExtensionType "
+										+ extensionType);
 
-                    }
-                } else {
-                    mayProvide.add(providedIntent);
-                }
-            }
-            extensionType.getMayProvideIntents().clear();
-            extensionType.getMayProvideIntents().addAll(mayProvide);
-        }
-    }
+					}
+				} else {
+					mayProvide.add(providedIntent);
+				}
+			}
+			extensionType.getMayProvideIntents().clear();
+			extensionType.getMayProvideIntents().addAll(mayProvide);
+		}
+	}
     
     public Class<IntentAttachPointType> getModelType() {
         return IntentAttachPointType.class;
