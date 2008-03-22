@@ -85,10 +85,24 @@
         </dependency>    
         
         <dependency>
-        	<groupId>org.apache.abdera</groupId>
-      		<artifactId>abdera-parser</artifactId>
-      		<version>0.3.0-incubating</version>
-	    </dependency>           
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-parser</artifactId>
+            <version>0.3.0-incubating</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xom</groupId>
+                    <artifactId>xom</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uk.org.mygrid.resources</groupId>
+                    <artifactId>icu4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>           
                 
         <dependency>
             <groupId>javax.servlet</groupId>
