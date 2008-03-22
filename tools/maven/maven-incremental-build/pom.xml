@@ -97,7 +97,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>LATEST</version>
+                <version>2.3</version>
                 <configuration>
                     <goalPrefix>incremental</goalPrefix>
                 </configuration>
