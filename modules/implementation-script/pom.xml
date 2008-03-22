@@ -162,13 +162,11 @@
             <version>2.2</version>
             <scope>compile</scope>
          </dependency>
-         <dependency>
-            <groupId>groovy</groupId>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all-minimal</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-         </dependency>
-
+            <version>1.5.4</version>
+        </dependency>
     </dependencies>
 
 </project>
