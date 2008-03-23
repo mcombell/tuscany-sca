@@ -25,7 +25,7 @@
         <version>1.2-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>tuscany-itest-admin</artifactId>
+    <artifactId>itest-admin</artifactId>
     <name>Apache Tuscany Admin Tests</name>
 
     <dependencies>
