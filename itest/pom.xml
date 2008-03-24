@@ -81,11 +81,6 @@
                 <module>exceptions-cross-binding-ws</module>
                 <module>exceptions-simple-ws</module>
                 <module>extended-api</module>
-                <!--
-                <module>interop-soap-client</module>
-                <module>interop-soap-round2-client</module>
-                <module>interop-soap-service</module>
-                -->
                 <module>jms</module>
                 <module>large-sdo-ws</module>
                 <module>oneway</module>

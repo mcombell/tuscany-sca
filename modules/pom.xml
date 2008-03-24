@@ -42,14 +42,11 @@
                 <module>assembly-xsd</module>
                 <module>binding-dwr</module>
                 <module>binding-ejb</module>
-                <!-- obsolete -->
                 <module>binding-feed</module>
-                <!-- new bindings -->
                 <module>binding-atom</module>
                 <module>binding-atom-abdera</module>
                 <module>binding-rss</module>
                 <module>binding-rss-rome</module>
-                <!-- -->
                 <module>binding-http</module>
                 <module>binding-jms</module>
                 <module>binding-jsonrpc</module>
@@ -87,7 +84,6 @@
                 <module>databinding-fastinfoset</module>
                 <module>databinding-xstream</module>
                 <module>saxon</module>
-                <module>data-engine-helper</module>
                 <module>domain</module>
                 <module>domain-api</module>
                 <module>domain-impl</module>
@@ -108,9 +104,7 @@
                 <module>interface-wsdl-java2wsdl</module>
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
-                <module>implementation-das</module>
                 <module>implementation-data-api</module>
-                <module>implementation-data-xml</module>
                 <module>implementation-ejb</module>
                 <module>implementation-ejb-xml</module>
                 <module>implementation-java</module>
