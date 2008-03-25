@@ -109,6 +109,8 @@
                 <exclude>domain-webapp/**/*</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp/**/*</exclude>
+                <exclude>helloworld-bpel/target</exclude>
+                <exclude>helloworld-bpel/target/**/*</exclude>
                 <exclude>helloworld-dojo-webapp/src/main/webapp/dojo</exclude>
                 <exclude>helloworld-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
                 <exclude>helloworld-dojo-webapp/target/sample-helloworld-dojo-webapp</exclude>
