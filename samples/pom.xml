@@ -82,6 +82,7 @@
                 <module>implementation-crud</module>
                 <module>implementation-crud-extension</module>
                 <module>implementation-notification</module>
+                <module>implementation-pojo</module>
                 <module>implementation-pojo-extension</module>
                 <module>loanapplication</module>
                 <module>osgi-supplychain</module>

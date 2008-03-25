@@ -106,13 +106,15 @@ sample.
 
 implementation-crud-extension - Shows how to build new implementation type 
                                 extensions
-implementation-crud        - A sample application that exercises the new 
-                             implementation extensions
-binding-echo-extension     - Shows how to build new binding extensions
-binding-echo               - A sample application that exercises the new 
-                             binding extension
-implementation-notifiaction- Illustrates the use of <implementation.notification/>
+implementation-crud           - A sample application that exercises the new 
+                                implementation extensions
+binding-echo-extension        - Shows how to build new binding extensions
+binding-echo                  - A sample application that exercises the new 
+                                binding extension
+implementation-notifiaction   - Illustrates the use of <implementation.notification/>
 implementation-pojo-extension - shows how new implementation types are constructed 
+implementation-pojo           - A sample application that exercises the new 
+                                implementation type
 
 Sample Layout
 -------------

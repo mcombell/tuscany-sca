@@ -1,0 +1,72 @@
+Implementation POJO Sample
+==========================
+This sample demonstrates how to use the new implementation type
+implementation-pojo. 
+
+The README in the samples directory (the directory above this) provides 
+general instructions about building and running samples. Take a look there 
+first. 
+
+Sample Overview
+---------------
+This sample contains a POJO implementation type as an example of how to create
+new implementation types.
+
+implementation-pojo-extension/
+  src/
+    main/
+      java/
+        helloworld/            - client application artifacts
+      resources/
+        helloworld.composite   - the SCA assembly used during unit testing
+
+    test/
+      java/
+        helloworld/
+          HelloWorldTestCase.java - JUnit test case
+
+  build.xml                    - the Ant build file
+  pom.xml                      - the Maven build file
+  
+Building And Running The Sample Using Ant
+-----------------------------------------
+With the binary distribution the sample extension can be built using Ant as 
+follows
+
+cd implementation-pojo
+ant compile
+ant run
+
+Building And Running The Sample Using Maven 
+-------------------------------------------
+With either the binary or source distributions the sample can be built 
+using Maven as follows. 
+
+cd implementation-pojo
+mvn
+
+Maven will also test that the sample extension built properly. You should see 
+the following output from the test phase.
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running helloworld.HelloWorldTestCase
+Initializing POJO
+Initializing POJO
+Executing POJO sayHello
+Destroying POJO
+Destroying POJO
+Initializing POJO
+Initializing POJO
+Executing POJO sayHello
+Destroying POJO
+Destroying POJO
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.463 sec
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+
+This shows that the Junit test cases have run successfully. 
