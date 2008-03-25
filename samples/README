@@ -79,6 +79,8 @@ implementation-composite           - Shows how SCA composites are used
 osgi-supplychain                   - SCA asynchronous API with OSGi and Java 
                                      implementation types
 
+quote-xquery                       - Demonstrate SCA components using XQuery
+
 simple-bigbank                     - A banking application built with java components 
                                      and local wire
 simple-bigbank-spring              - A banking application showing how SCA works with Spring
@@ -92,7 +94,6 @@ supplychain                        - shows how asynchronous callbacks can be use
 
 web-resource                       - Demonstrates using an SCA Web resource component
 
-quote-xquery                       - Demonstrate SCA components using XQuery
 
 Samples for building extensions
 -------------------------------
