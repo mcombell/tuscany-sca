@@ -52,11 +52,11 @@ public class JaasAuthenticationImplementationPolicyProvider implements PolicyPro
             OperationsConfigurator operationsConfigurator = (OperationsConfigurator)implementation;
             for (ConfiguredOperation cop : operationsConfigurator.getConfiguredOperations()) {
                 if (cop.getName().equals(op.getName())) {
-                    cop.getApplicablePolicySets();
+                    cop.getPolicySets();
                 }
             }
         }
-        List<PolicySet> policySets = component.getApplicablePolicySets();
+        List<PolicySet> policySets = component.getPolicySets();
         for (PolicySet ps : policySets) {
             for (Object p : ps.getPolicies()) {
                 if (JaasAuthenticationPolicy.class.isInstance(p)) {
@@ -77,6 +77,6 @@ public class JaasAuthenticationImplementationPolicyProvider implements PolicyPro
     }
 
     public String getPhase() {
-        return Phase.SERVICE_POLICY;
+        return Phase.IMPLEMENTATION_POLICY;
     }
 }

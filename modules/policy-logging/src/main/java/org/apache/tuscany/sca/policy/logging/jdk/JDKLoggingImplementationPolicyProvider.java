@@ -19,7 +19,9 @@
 
 package org.apache.tuscany.sca.policy.logging.jdk;
 
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.Implementation;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Phase;
@@ -44,14 +46,29 @@ public class JDKLoggingImplementationPolicyProvider implements PolicyProvider {
         return "component.implementation: " + component.getURI() + "(" + implementation.getClass().getName() + ")";
     }
 
-    private PolicySet findPolicySet() {
-        for (PolicySet ps : component.getApplicablePolicySets()) {
+    private PolicySet findPolicySet(Operation operation) {
+        for (PolicySet ps : component.getPolicySets()) {
             for (Object p : ps.getPolicies()) {
                 if (JDKLoggingPolicy.class.isInstance(p)) {
                     return ps;
                 }
             }
         }
+        
+        if ( component instanceof OperationsConfigurator ) {
+        	for ( ConfiguredOperation confOp : ((OperationsConfigurator)component).getConfiguredOperations() ) {
+        		if ( confOp.getName().equals(operation.getName())) {
+        			for (PolicySet ps : confOp.getPolicySets()) {
+        	            for (Object p : ps.getPolicies()) {
+        	                if (JDKLoggingPolicy.class.isInstance(p)) {
+        	                    return ps;
+        	                }
+        	            }
+        	        }
+        		}
+        	}
+        }
+        
         return null;
     }
 
@@ -59,7 +76,7 @@ public class JDKLoggingImplementationPolicyProvider implements PolicyProvider {
      * @see org.apache.tuscany.sca.provider.PolicyProvider#createInterceptor(org.apache.tuscany.sca.interfacedef.Operation)
      */
     public Interceptor createInterceptor(Operation operation) {
-        PolicySet ps = findPolicySet();
+        PolicySet ps = findPolicySet(operation);
         return ps == null ? null : new JDKLoggingPolicyInterceptor(getContext(), operation, ps);
     }
 
@@ -67,7 +84,7 @@ public class JDKLoggingImplementationPolicyProvider implements PolicyProvider {
      * @see org.apache.tuscany.sca.provider.PolicyProvider#getPhase()
      */
     public String getPhase() {
-        return Phase.SERVICE_POLICY;
+        return Phase.IMPLEMENTATION_POLICY;
     }
 
 }
