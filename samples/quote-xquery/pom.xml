@@ -28,13 +28,6 @@
     <artifactId>sample-quote-xquery</artifactId>
     <name>Apache Tuscany SCA XQuery Quote Implementation Sample</name>
 
-    <repositories>
-        <repository>
-            <id>apache.incubator</id>
-            <url>http://people.apache.org/repo/m2-incubating-repository</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
@@ -78,7 +71,7 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>9.0.0.2</version>
+            <version>8.7</version>
         </dependency>
 
         <dependency>

@@ -30,13 +30,6 @@
     <name>Apache Tuscany SCA XML BigBank Demo</name>
     <description>Apache Tuscany SCA XML BigBank Demo</description>
 
-    <repositories>
-       <repository>
-          <id>apache.incubator</id>
-          <url>http://svn.apache.org/repos/asf/incubator/tuscany/maven</url>
-       </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>

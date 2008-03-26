@@ -29,13 +29,6 @@
     <artifactId>tuscany-implementation-xquery</artifactId>
     <name>Apache Tuscany SCA XQuery Implementation Extension</name>
 
-    <repositories>
-       <repository>
-          <id>apache.incubator</id>
-          <url>http://svn.apache.org/repos/asf/incubator/tuscany/maven</url>
-       </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
