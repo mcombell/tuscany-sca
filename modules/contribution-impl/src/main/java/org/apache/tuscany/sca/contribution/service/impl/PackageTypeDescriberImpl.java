@@ -83,6 +83,7 @@ public class PackageTypeDescriberImpl implements TypeDescriber {
             if (contentType == null) {
                 try {
                     connection = resourceURL.openConnection();
+                    connection.setUseCaches(false);
                     contentType = connection.getContentType();
     
                     if (contentType == null || contentType.equals("content/unknown")) {
