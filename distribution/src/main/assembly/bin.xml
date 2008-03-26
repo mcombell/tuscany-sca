@@ -259,8 +259,10 @@
                 <exclude>*/**/*.ruleset</exclude>
                 <exclude>target</exclude>
                 <exclude>target/**/*</exclude>
-                <exclude>catalog-webapp/target</exclude>
-                <exclude>catalog-webapp/target/**/*</exclude>
+                <exclude>catalog-webapp/target/war</exclude>
+                <exclude>catalog-webapp/target/war/**/*</exclude>
+                <exclude>catalog-webapp/target/tutorial-catalog-webapp</exclude>
+                <exclude>catalog-webapp/target/tutorial-catalog-webapp/**/*</exclude>
             </excludes>
         </fileSet>
         <!-- Add the generated tuscany manifest classpath jar to the lib directory -->
