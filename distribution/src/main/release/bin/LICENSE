@@ -1334,7 +1334,7 @@ EXHIBIT A -Mozilla Public License.
 
 
 ===============================================================================
-Groovy:
+Groovy (groovy-all-minimal-1.5.4.jar):
 
 /*
  $Id: LICENSE.txt 156 2003-09-26 17:36:37Z jstrachan $
@@ -1384,7 +1384,7 @@ Groovy:
 
 ===============================================================================
 
-Jython:
+Jython (jython-2.2.jar):
 
 A. HISTORY OF THE SOFTWARE
 =======================
@@ -1531,8 +1531,19 @@ JPython version 1.1.x
 
 ===============================================================================
 
-The jars; activation-1.1, jaxb-api-2.1, jaxb-impl-2.1.4, jaxb-xjc-2.1.4, jaxb2-reflection-2.1.4,
-jsr181-api, jsr250-api, jaxws-api-2.1, mail, saaj-api, servlet-api-2.5.jar, stax-api-1.0.2.jar:
+The jars; 
+activation-1.1.jar, 
+jaxb-api-2.1.jar, 
+jaxb-impl-2.1.4.jar, 
+jaxb-xjc-2.1.4.jar, 
+jaxb2-reflection-2.1.4.jar,
+jsr181-api-1.0-MR1.jar, 
+jsr250-api-1.0.jar, 
+jaxws-api-2.1.jar, 
+mail-1.4.jar, 
+saaj-api-1.3.jar, 
+servlet-api-2.5.jar, 
+stax-api-1.0.2.jar:
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
@@ -1921,7 +1932,7 @@ COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
 ===============================================================================
 
-JRuby (jruby-complete-1.0.jar), wsdl4j:
+JRuby (jruby-complete-1.0.jar), wsdl4j (wsdl4j-1.6.2.jar):
 
 Common Public License - v 1.0
 
@@ -2012,7 +2023,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
 ===============================================================================
 
-backport-util-concurrent:
+backport-util-concurrent-2.2.jar:
 
 The software comprising backport-util-concurrent is based in large
 part on the code from JSR166, and the package dl.util.concurrent.
@@ -2228,7 +2239,7 @@ BSD license:
 
 ================================================================================
 
-The serp jar is distributed under the BSD license with the following copyright:
+The serp-1.12.0.jar is distributed under the BSD license with the following copyright:
 
  Copyright (c) 2002, A. Abram White
  All rights reserved.
@@ -2266,7 +2277,7 @@ BSD license:
  DAMAGE. 
 
 ================================================================================
-The axion, javacc, and howl are distributed under the BSD license:
+The axion, javacc-3.2.jar, and howl-1.0.1-1.jar are distributed under the BSD license:
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
