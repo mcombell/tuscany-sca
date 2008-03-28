@@ -72,6 +72,8 @@ Changes With Apache Tuscany SCA 1.2 (incubating) January 2008
     - Refactoring of rss-rome binding
   * Other Extensions
     - Binding JMS
+      - greatly simplified the use of the JMS binding, support locating JMS resources from JNDI, and better compliance with the SCA JMS binding spec
+      - see the doc page for more details: http://incubator.apache.org/tuscany/sca-java-bindingjms.html
     - Enhancements to Binding RMI
       - Support shared RMI registry and use 999x as the ports in test case to avoid 1099 conflict
     - Enhancements to Groovy extension
