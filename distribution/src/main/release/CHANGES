@@ -52,7 +52,6 @@ Changes With Apache Tuscany SCA 1.2 (incubating) January 2008
       - Pass-by-reference SPI to allow interceptors to indicate if they support pass-by-reference
       - PolicyProvider SPIs to allow extensions to plugin policy interceptors
     - Support for JAXWS annotations and mapping of faults to Java exceptions according to JAXWS specification
-    - Support for Relax WS Interfaces
     - Improvement of contribution service to allow it to be used outside of the runtime environment 
     - Support for Contribution Import/Export resource
     - Enhanced Distributed Domain story using Workspace
