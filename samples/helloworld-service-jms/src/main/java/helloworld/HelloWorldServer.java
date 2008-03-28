@@ -20,6 +20,7 @@ package helloworld;
 
 import java.io.IOException;
 
+import org.apache.activemq.broker.BrokerService;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 /**
@@ -29,19 +30,31 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 public class HelloWorldServer {
 
     public static void main(String[] args) {
+    	SCADomain scaDomain = null;
+    	try {
+			BrokerService broker = new BrokerService();
+			broker.setPersistent(false);
+			broker.setUseJmx(false);
+			broker.addConnector("tcp://localhost:61619");
+			broker.start();
 
-    	// ActiveMQModuleActivator.startBroker();
-        SCADomain scaDomain = SCADomain.newInstance("helloworldjmsservice.composite");
+			// ActiveMQModuleActivator.startBroker();
+			scaDomain = SCADomain.newInstance("helloworldjmsservice.composite");
 
-        try {
-            System.out.println("HelloWorld server started (press enter to shutdown)");
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			try {
+				System.out
+						.println("HelloWorld server started (press enter to shutdown)");
+				System.in.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
         scaDomain.close();
         System.out.println("HelloWorld server stopped");
+        
     }
 
 }
