@@ -114,9 +114,6 @@
         <copy todir="target/classes">
             <fileset dir="src/main/resources"/>
         </copy>
-    </target>	
-	
-    <target name="package" depends="compile">
         <ant antfile="./build-dojo.xml" target="install-dojo-nomaven">
           <property name="localRepository" value="${settings.localRepository}"/>
         </ant>
@@ -138,7 +135,9 @@
           <property name="localRepository" value="${settings.localRepository}"/>
           <property name="artifactId" value="${artifactId}"/>
         </ant> 
-     </target>
+    </target>	
+	
+    <target name="package" depends="compile"/>
 		
     <target name="clean">
         <delete quiet="true" includeemptydirs="true">
