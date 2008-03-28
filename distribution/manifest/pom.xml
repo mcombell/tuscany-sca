@@ -86,6 +86,37 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>apache-activemq</artifactId>
+            <version>4.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-console</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-optional</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-web-demo</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-jaas</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>  
+        <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-jsonrpc</artifactId>
             <version>${pom.version}</version>
@@ -444,6 +475,8 @@
             <version>1.0-incubating</version>
         </dependency>
      </dependencies>
+   
+
 
     <build>
         <resources>
