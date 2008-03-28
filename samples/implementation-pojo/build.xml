@@ -17,6 +17,7 @@
  * under the License.    
 -->
 <project name="implementation-pojo-extension" default="compile">
+	<property name="test.class" value="helloworld.HelloWorldClient" />
 	<property name="test.jar"   value="sample-implementation-pojo-extension.jar" />
 	
     <target name="init">
@@ -42,7 +43,29 @@
             </manifest>
         </jar>    	
     </target>	
-		
+	
+    <target name="run-classes">
+        <java classname="${test.class}"
+              fork="true">
+            <classpath>
+                <pathelement path="target/classes"/>
+                <pathelement location="../implementation-pojo-extension/target/sample-implementation-pojo-extension.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            </classpath>
+        </java>
+    </target>
+	
+    <target name="run">
+        <java classname="${test.class}"
+              fork="true">
+            <classpath>
+                <pathelement location="target/${test.jar}"/>
+                <pathelement location="../implementation-pojo-extension/target/sample-implementation-pojo-extension.jar"/>
+                <pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            </classpath>
+        </java>    	
+    </target>	
+			
     <target name="clean">
         <delete quiet="true" includeemptydirs="true">
             <fileset dir="target"/>
