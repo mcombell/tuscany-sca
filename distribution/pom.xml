@@ -120,6 +120,11 @@
             <artifactId>apache-activemq</artifactId>
             <version>4.1.1</version>
             <exclusions>
+                <!-- TUSCANY-2168 -->
+                <exclusion>
+                    <groupId>commons-httpclient</groupId>
+                    <artifactId>commons-httpclient</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.apache.activemq</groupId>
                     <artifactId>activemq-console</artifactId>
