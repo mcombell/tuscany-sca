@@ -38,7 +38,7 @@ public class NodeMain {
                 NodeLauncher.main(args);
             }
         } else {
-            NodeDaemon.main(args);
+            NodeDaemonLauncher.main(args);
         }
     }
 }

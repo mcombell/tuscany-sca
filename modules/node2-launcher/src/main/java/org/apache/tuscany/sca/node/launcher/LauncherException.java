@@ -6,37 +6,50 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
-
-package org.apache.tuscany.sca.node;
-
+package org.apache.tuscany.sca.node.launcher;
 
 
 /**
- * Represents an SCA processing node.
- * A node is loaded with an SCA composites. It can start and stop that composite. 
- * 
+ * Denotes an error launching an SCA domain manager or node.
+ *
  * @version $Rev$ $Date$
  */
-public interface SCANode2 {
+public class LauncherException extends Exception {
+    private static final long serialVersionUID = 4581189418849190567L;
+
+    public LauncherException() {
+        super();
+    }
 
     /**
-     * Start the composite loaded in the node.
+     * @param message
+     * @param cause
      */
-    void start();
+    public LauncherException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
     /**
-     * Stop the composite loaded in the node.
+     * @param message
      */
-    void stop();
+    public LauncherException(String message) {
+        super(message);
+    }
 
+    /**
+     * @param cause
+     */
+    public LauncherException(Throwable cause) {
+        super(cause);
+    }
 }
