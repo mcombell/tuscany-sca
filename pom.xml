@@ -77,6 +77,8 @@
                 <module>tools</module>
                 <module>samples</module>
                 <module>itest</module>
+                <module>demos</module>
+                <module>tutorial</module>
                 <module>distribution</module>
             </modules>
         </profile>
