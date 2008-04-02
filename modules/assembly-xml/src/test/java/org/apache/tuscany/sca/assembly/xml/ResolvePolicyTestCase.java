@@ -43,8 +43,6 @@ import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensi
 import org.apache.tuscany.sca.definitions.SCADefinitions;
 import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
 import org.apache.tuscany.sca.definitions.xml.SCADefinitionsProcessor;
-import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
@@ -52,6 +50,7 @@ import org.apache.tuscany.sca.policy.xml.PolicySetProcessor;
 import org.apache.tuscany.sca.policy.xml.ProfileIntentProcessor;
 import org.apache.tuscany.sca.policy.xml.QualifiedIntentProcessor;
 import org.apache.tuscany.sca.policy.xml.SimpleIntentProcessor;
+import org.apache.tuscany.sca.policy.xml.WSPolicyProcessor;
 
 /**
  * Test reading SCA XML assembly documents.
@@ -85,6 +84,7 @@ public class ResolvePolicyTestCase extends TestCase {
         staxProcessors.addArtifactProcessor(new ProfileIntentProcessor(policyFactory, staxProcessor));
         staxProcessors.addArtifactProcessor(new QualifiedIntentProcessor(policyFactory, staxProcessor));
         staxProcessors.addArtifactProcessor(new PolicySetProcessor(policyFactory, staxProcessor));
+        staxProcessors.addArtifactProcessor(new WSPolicyProcessor());
         staxProcessors.addArtifactProcessor(new MockPolicyProcessor());
         
         // Create document processors

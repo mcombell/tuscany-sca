@@ -22,7 +22,6 @@ package org.apache.tuscany.sca.policy.security;
 import java.net.URI;
 import java.net.URL;
 
-import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
@@ -47,9 +46,7 @@ public class SecurityPolicyDefinitionsProvider implements SCADefinitionsProvider
         Object scaDefn = null;
         try {
             URI uri = new URI(definitionsFile);
-            return (SCADefinitions)urlArtifactProcessor.read(null, 
-                                                             uri, 
-                                                             defintionsFileUrl);
+            return (SCADefinitions)urlArtifactProcessor.read(null, uri, defintionsFileUrl);
         } catch ( Exception e ) {
             throw new SCADefinitionsProviderException(e);
         }
