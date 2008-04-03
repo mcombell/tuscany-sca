@@ -52,11 +52,11 @@ public class WSPolicyProcessor extends BaseStAXArtifactProcessor implements StAX
     public final static QName WS_POLICY_QNAME =new QName(WS_POLICY_NS, WS_POLICY);
 
     public WSPolicyProcessor() {
-    	System.out.println(">>>Initializing WSPolicyProcessor");
+    	
     }
     
     public WSPolicyProcessor(ModelFactoryExtensionPoint modelFactories) {
-    	System.out.println(">>>Initializing WSPolicyProcessor");
+    	
     }
     
     public QName getArtifactType() {
