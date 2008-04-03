@@ -137,6 +137,16 @@
 	        <artifactId>httpunit</artifactId>
 	        <version>1.6.1</version>
 	        <scope>test</scope>
+			<exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>				
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>				
         </dependency>
 
     </dependencies>

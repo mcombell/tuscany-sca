@@ -104,6 +104,10 @@
                     <artifactId>xmlParserAPIs</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>uk.org.mygrid.resources</groupId>
                     <artifactId>icu4j</artifactId>
                 </exclusion>
