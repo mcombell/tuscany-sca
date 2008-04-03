@@ -60,7 +60,7 @@ import org.osoa.sca.ServiceReference;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
- * A local representation of the sca domain running on a single node
+ * A local representation of the SCADomain running on a single node
  * 
  * @version $Rev$ $Date$
  */
@@ -71,7 +71,7 @@ public class NodeImpl implements SCANode2, SCAClient {
     // The node configuration name, used for logging
     private String configurationName;
     
-    // The tuscany runtime that does the hard work
+    // The Tuscany runtime that does the hard work
     private ReallySmallRuntime runtime;
     private CompositeActivator compositeActivator;
     private XMLInputFactory inputFactory;
@@ -144,6 +144,7 @@ public class NodeImpl implements SCANode2, SCAClient {
             Composite composite = assemblyFactory.createComposite();
             composite.setURI(compositeURI);
             composite.setUnresolved(true);
+            configuration.setComposite(composite);
             
             // Create contribution models
             ContributionFactory contributionFactory = modelFactories.getFactory(ContributionFactory.class);
@@ -377,17 +378,20 @@ public class NodeImpl implements SCANode2, SCAClient {
         
         // Collect JARs from the URLClassLoader's classpath
         if (cl instanceof URLClassLoader) {
-            for (URL jarURL: ((URLClassLoader)cl).getURLs()) {
-                String file =jarURL.getPath();
-                int i = file.lastIndexOf('/');
-                if (i != -1 && i < file.length() -1 ) {
-                    file = file.substring(i +1);
-                    urls.put(file, jarURL);
+            URL[] jarURLs = ((URLClassLoader)cl).getURLs();
+            if (jarURLs != null) {
+                for (URL jarURL: jarURLs) {
+                    String file =jarURL.getPath();
+                    int i = file.lastIndexOf('/');
+                    if (i != -1 && i < file.length() -1 ) {
+                        file = file.substring(i +1);
+                        urls.put(file, jarURL);
+                    }
                 }
             }
         }
         
-        // Collect JARs from the parent classloader
+        // Collect JARs from the parent ClassLoader
         collectJARs(urls, cl.getParent());
     }
 }
