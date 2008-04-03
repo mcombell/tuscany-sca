@@ -102,6 +102,7 @@
                 <module>modules</module>
                 <module>samples</module>
                 <module>demos</module>
+                <module>tutorial</module>
             </modules>
             <build>
                 <plugins>
