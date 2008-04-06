@@ -23,10 +23,10 @@
     name="FeedAggregator">
 
 	<service name="rssSample" promote="RssAggregator">
-		<tuscany:binding.atom uri="http://localhost:8083/rssAggregator"/>
+		<tuscany:binding.atom uri="http://localhost:8080/rssAggregator"/>
 	</service>
 	<service name="atomSample" promote="AtomAggregator">
-		<tuscany:binding.atom  uri="http://localhost:8083/atomAggregator"/>
+		<tuscany:binding.atom  uri="http://localhost:8080/atomAggregator"/>
 	</service>	
 
     <component name="RssAggregator">
