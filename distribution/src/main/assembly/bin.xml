@@ -196,6 +196,8 @@
                 <exclude>*/target/surefire-reports/**/*</exclude>
                 <exclude>*/**/*.svg</exclude>
                 <exclude>*/**/*.ruleset</exclude>
+                <exclude>alert-aggregator-webapp/bin</exclude>
+                <exclude>alert-aggregator-webapp/bin/**/*</exclude>
                 <exclude>alert-aggregator-webapp/src/main/webapp/dojo</exclude>
                 <exclude>alert-aggregator-webapp/src/main/webapp/dojo/**/*</exclude>
                 <exclude>alert-aggregator-webapp/target/demo-alert-aggregator</exclude>
