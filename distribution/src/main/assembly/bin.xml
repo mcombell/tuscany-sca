@@ -73,6 +73,7 @@
                 <exclude>*/.externalToolBuilders/**/*</exclude>
                 <exclude>*/work</exclude>
                 <exclude>*/work/**/*</exclude>
+                <exclude>**/derby.log</exclude>
                 <exclude>**/target/war/**</exclude>
                 <exclude>*/target/mvn-eclipse-cache.properties</exclude>
                 <exclude>*/target/classes</exclude>
@@ -194,6 +195,8 @@
                 <exclude>*/target/test-classes/**/*</exclude>
                 <exclude>*/target/surefire-reports</exclude>
                 <exclude>*/target/surefire-reports/**/*</exclude>
+                <exclude>**/derby.log</exclude>
+                <exclude>*/**/derby.log</exclude>
                 <exclude>*/**/*.svg</exclude>
                 <exclude>*/**/*.ruleset</exclude>
                 <exclude>alert-aggregator-webapp/bin</exclude>
@@ -263,6 +266,7 @@
                 <exclude>*/target/surefire-reports/**/*</exclude>
                 <exclude>*/target/war</exclude>
                 <exclude>*/target/war/**/*</exclude>
+                <exclude>**/derby.log</exclude>
                 <exclude>*/**/derby.log</exclude>
                 <exclude>*/**/*.svg</exclude>
                 <exclude>*/**/*.ruleset</exclude>
