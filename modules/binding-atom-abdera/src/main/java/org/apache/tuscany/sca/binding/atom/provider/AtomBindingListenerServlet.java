@@ -147,7 +147,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         // No authentication required for a get request
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(getPath(request), "UTF-8");
 
         logger.info(">>> FeedEndPointServlet " + request.getRequestURI());
 
@@ -320,7 +320,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(getPath(request), "UTF-8");
 
         if (path == null || path.length() == 0 || path.equals("/")) {
             org.apache.abdera.model.Entry createdFeedEntry = null;
@@ -426,7 +426,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = request.getRequestURI().substring(request.getServletPath().length());
+        String path = URLDecoder.decode(getPath(request), "UTF-8");
 
         if (path != null && path.startsWith("/")) {
             String id = path.substring(1);
@@ -512,7 +512,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(getPath(request), "UTF-8");
 
         String id;
         if (path != null && path.startsWith("/")) {
@@ -533,6 +533,31 @@ class AtomBindingListenerServlet extends HttpServlet {
                 throw new ServletException((Throwable)responseMessage.getBody());
             }
         }
+    }
+    
+    /**
+     * Retrieve the path considering embedded container and/or webapp container
+     * @param request
+     * @return
+     */
+    private String getPath(HttpServletRequest request) {
+    	String path = null;
+
+    	String requestURI = request.getRequestURI();
+    	if(! requestURI.endsWith("/")) {
+    		requestURI += "/";
+    	}
+    	
+    	if(request.getContextPath() == null || request.getContextPath().length() == 0) {
+    		//embedded container
+    		path = request.getRequestURI().substring(request.getServletPath().length());
+    	} else {
+    		//web-container case... 
+    		path = request.getRequestURI().substring(request.getContextPath().length() + request.getServletPath().length());    		
+    	}
+    	
+    	return path;
+    	
     }
 
     /**
