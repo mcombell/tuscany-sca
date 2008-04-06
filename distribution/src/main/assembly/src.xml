@@ -107,10 +107,6 @@
                 <exclude>modules/implementation-das/**/*</exclude>
                 <exclude>modules/implementation-data</exclude>
                 <exclude>modules/implementation-data/**/*</exclude>
-                <exclude>modules/implementation-ejb</exclude>
-                <exclude>modules/implementation-ejb/**/*</exclude>
-                <exclude>modules/implementation-ejb-xml</exclude>
-                <exclude>modules/implementation-ejb-xml/**/*</exclude>
                 <exclude>modules/implementation-osgi/.felix</exclude>
                 <exclude>modules/implementation-osgi/.felix/**/*</exclude>
                 <exclude>samples/old</exclude>
