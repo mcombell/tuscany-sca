@@ -1,0 +1,14 @@
+Tuscany Eclipse Plugin Updatesite
+=================================
+
+The Tuscany Eclipse plugin helps you simplify your application development usig Tuscany and SCA. 
+It provides the following capabilities :
+
+- Define a Tuscany User Library containing all the Tuscany JARs 
+  to make it easier to add them to my project buildpath.
+
+- Associate .composite files with the XML editor and register 
+  the SCA and Tuscany XML schemas to get code-assist in the editor
+  and validation of my composite files.
+
+- Enable right-click on the .composite and select a Run As / Tuscany...
