@@ -80,8 +80,6 @@
     		<exclude>**/var/journal</exclude>
     		<exclude>**/build.out*</exclude>
     		<exclude>velocity.log</exclude>
-                <exclude>**/work</exclude>
-                <exclude>**/work/**/*</exclude>
     		<exclude>distribution/target-last-successful</exclude>
     		<exclude>distribution/target-last-successful/**/*</exclude>
     		<exclude>itest/velocity.log</exclude>
