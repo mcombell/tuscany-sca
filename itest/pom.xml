@@ -82,7 +82,7 @@
                 <module>exceptions-simple-ws</module>
                 <module>extended-api</module>
                 <module>jms</module>
-                <module>large-sdo-ws</module>
+                <!--module>large-sdo-ws</module-->
                 <module>oneway</module>
                 <module>operation-overloading</module>
                 <!--

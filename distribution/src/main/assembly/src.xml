@@ -100,8 +100,8 @@
                 <exclude>itest/domain/work/**/*</exclude>
                 <exclude>itest/exceptions-simple-ws/work</exclude>
                 <exclude>itest/exceptions-simple-ws/work/**/*</exclude>
-                <exclude>itest/large-sdo-ws/work</exclude>
-                <exclude>itest/large-sdo-ws/work/**/*</exclude>
+                <exclude>itest/large-sdo-ws/</exclude>
+                <exclude>itest/large-sdo-ws/**/*</exclude>
                 <exclude>itest/policy/work</exclude>
                 <exclude>itest/policy/work/**/*</exclude>
                 <exclude>itest/ws-void-args-return/work</exclude>
