@@ -33,6 +33,10 @@ License: Public Domain
 
 This product includes/uses JSON-RPC-Java (http://oss.metaparadigm.com/jsonrpc/)
 
+This product includes/uses JSON-RPC JavaScript client (jsonrpc.js) 
+ Copyright (c) 2003-2004 Jan-Klaas Kollhof
+ Copyright (c) 2005 Michael Clark, Metaparadigm Pte Ltd
+
 This product includes software from the GlassFish project (https://glassfish.dev.java.net/)
     Copyright (c) 2006, Sun Microsystems, Inc.
     
