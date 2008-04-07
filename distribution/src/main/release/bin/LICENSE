@@ -215,7 +215,6 @@ conditions of the following licenses.
 
 The following components come under Apache Software License 1.1
 
- commons-cli-1.0.jar
  commons-discovery-0.2.jar
  commons-primitives-1.0.jar
 
@@ -227,7 +226,6 @@ The following components come under Apache Software License 2.0
  activeio-2.0-r118.jar
  activeio-core-3.0.0-incubator.jar
  apache-activemq-4.1.1.jar
- activemq-core-4.1.1.jar
  addressing-1.3.mar
  annogen-0.1.0.jar
  annotations-api-6.0.14.jar
@@ -236,7 +234,6 @@ The following components come under Apache Software License 2.0
  axiom-dom-1.2.5.jar
  axiom-impl-1.2.5.jar
  axis2-adb-1.3.jar
- axis2-adb-codegen-1.3.jar
  axis2-codegen-1.3.jar
  axis2-java2wsdl-1.3.jar
  axis2-kernel-1.3.jar
@@ -289,14 +286,6 @@ The following components come under Apache Software License 2.0
  juli-6.0.14.jar
  log4j-1.2.12.jar
  logkit-1.0.1.jar
- maven-artifact-2.0.2.jar
- maven-artifact-manager-2.0.2.jar
- maven-error-diagnostics-2.0.2.jar
- maven-model-2.0.2.jar
- maven-profile-2.0.2.jar
- maven-project-2.0.2.jar
- maven-repository-metadata-2.0.2.jar
- maven-settings-2.0.2.jar
  neethi-2.0.2.jar
  ode-bpel-api-1.1.jar
  ode-bpel-compiler-1.1.jar
@@ -314,7 +303,6 @@ The following components come under Apache Software License 2.0
  ode-utils-1.1.jar
  openjpa-all-0.9.7-incubating.jar
  openjpa-persistence-0.9.7-incubating.jar
- opensaml-1.1.jar
  org.apache.felix.bundlerepository-1.0.2.jar
  org.apache.felix.framework-1.0.3.jar
  org.apache.felix.main-1.0.3.jar
@@ -332,19 +320,14 @@ The following components come under Apache Software License 2.0
  tuscany-sdo-impl-1.0-incubating.jar
  tuscany-sdo-lib-1.0-incubating.jar
  tuscany-sdo-tools-1.0-incubating.jar
- wagon-file-1.0-alpha-7.jar
- wagon-http-lightweight-1.0-alpha-6.jar
- wagon-provider-api-1.0-alpha-6.jar
  woden-1.0-incubating-M7b.jar
  wss4j-1.5.3.jar
  wstx-asl-3.2.1.jar
  xalan-2.7.0.jar
- xbean-2.1.0.jar
  xbean-naming-2.7.jar
  xercesImpl-2.8.1.jar
  xml-apis-1.3.03.jar
  xmlbeans-2.3.0.jar
- xmlParserAPIs-2.6.2.jar
  xml-resolver-1.1.jar
  xmlsec-1.4.0.jar
  XmlSchema-1.3.2.jar
@@ -448,39 +431,6 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
-
-===============================================================================
-
-jaxen-1.1-1.jar:
-
- Copyright 2003-2006 The Werken Company. All Rights Reserved.
- 
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are
- met:
-
-  * Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-
-  * Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
-
-  * Neither the name of the Jaxen Project nor the names of its
-    contributors may be used to endorse or promote products derived 
-    from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 
@@ -1544,7 +1494,7 @@ jaxws-api-2.1.jar,
 mail-1.4.jar, 
 saaj-api-1.3.jar, 
 servlet-api-2.5.jar, 
-stax-api-1.0.2.jar
+stax-api-1.0-commons-cli-1.0.jar2.jar
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
