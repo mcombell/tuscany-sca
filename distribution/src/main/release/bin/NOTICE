@@ -79,14 +79,11 @@ This product includes/uses Serp (http://serp.sourceforge.net/) under the BSD lic
 
 This product also includes software under the BSD license
 with the following copyright:
-
-   Copyright (c) 2006, Sun Microsystems, Inc.
-   All rights reserved.
+ Copyright (c) 2006, Sun Microsystems, Inc. All rights reserved.
 
 This product includes software under the Service Component Architecture JavaDoc, 
-Interface Definition files and XSD files license, with the following copyright:
-
-(c) Copyright SCA Collaboration 2006, 2007
+Interface Definition files and XSD files license.
+  (c) Copyright SCA Collaboration 2006, 2007
 
 This product includes software under the Service Data Objects JavaDoc and 
 Interface Definition file license
