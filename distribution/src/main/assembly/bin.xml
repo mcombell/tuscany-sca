@@ -282,6 +282,8 @@
                 <exclude>store-eu/target/cart-eu-db/**/*</exclude>
                 <exclude>store-supplier/target/cart-db/</exclude>
                 <exclude>store-supplier/target/cart-db/**/*</exclude>
+                <!-- war files to exclude -->
+                <exclude>catalog-webapp/target/tutorial-catalog-webapp.war</exclude>
             </excludes>
         </fileSet>
         <!-- Add the generated tuscany manifest classpath jar to the lib directory -->
