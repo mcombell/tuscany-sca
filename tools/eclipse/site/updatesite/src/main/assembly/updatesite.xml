@@ -32,6 +32,7 @@
                 <include>DISCLAIMER</include>
                 <include>LICENSE</include>
                 <include>NOTICE</include>
+                <include>README</include>
                 <include>site.xml</include>
             </includes>
         </fileSet>
