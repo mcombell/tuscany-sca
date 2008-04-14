@@ -30,13 +30,18 @@
     <packaging>pom</packaging>
     <name>Apache Tuscany SCA Implementation Project</name>
     <url>http://incubator.apache.org/tuscany/</url>
-    <version>1.2-incubating-SNAPSHOT</version>
+    <version>1.2-incubating</version>
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/tuscany/java/sca</developerConnection>
         <url>http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</url>
     </scm>
+
+    <properties>
+        <maven.compile.source>1.5</maven.compile.source>
+        <maven.compile.target>1.5</maven.compile.target>
+    </properties>
 
     <repositories>
        <repository>
@@ -53,6 +58,14 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>indiana</id>
+            <url>http://ftp.ussg.iu.edu/eclipse/modeling/emf/emf/maven2/</url>
+        </repository>
+        <repository>
+            <id>osuosl.org</id>
+            <url>http://ftp.osuosl.org/pub/eclipse/tools/emf/maven2</url>
         </repository>
     </repositories>
 
@@ -102,13 +115,14 @@
                 <module>modules</module>
                 <module>samples</module>
                 <module>demos</module>
+                <module>tutorial</module>
             </modules>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.tuscany.sca</groupId>
                         <artifactId>tuscany-maven-dependency-lister</artifactId>
-                        <version>1.2-incubating-SNAPSHOT</version>
+                        <version>1.2-incubating</version>
                         <executions>
                             <execution>
                                 <phase>process-resources</phase>
@@ -198,6 +212,8 @@
                                 <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
                                 <Implementation-Vendor>The Apache Software Foundation</Implementation-Vendor>
                                 <Implementation-Version>${version}</Implementation-Version>
+                                <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
                             </manifestEntries>
                          </archive>
                     </configuration>

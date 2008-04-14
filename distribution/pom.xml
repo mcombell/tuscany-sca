@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.2-incubating-SNAPSHOT</version>
+        <version>1.2-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-webapp</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
         </dependency>
         <!--don't put two servlet hosts in the classpath TUSCANY-1954 -->
         <!--include tomcat here so it is shipped in modules/ but not  -->
@@ -91,7 +91,7 @@
         <dependency> 
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-tomcat</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
@@ -126,6 +126,14 @@
                     <artifactId>commons-httpclient</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>commons-fileupload</groupId>
+                    <artifactId>commons-fileupload</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.apache.activemq</groupId>
                     <artifactId>activemq-console</artifactId>
                 </exclusion>
@@ -150,8 +158,76 @@
                     <artifactId>activemq-jaas</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-jacc_1.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jms_1.1_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jsp_2.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-management_1.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>servlet-api-2.5</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>backport-util-concurrent</groupId>
+                    <artifactId>backport-util-concurrent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>activesoap</groupId>
+                    <artifactId>jaxp-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>activemq</groupId>
+                    <artifactId>jmdns</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jrms</groupId>
+                    <artifactId>jrms</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xmlpull</groupId>
+                    <artifactId>xmlpull</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mx4j</groupId>
+                    <artifactId>mx4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mx4j</groupId>
+                    <artifactId>mx4j-remote</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>  
@@ -316,8 +392,8 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <copy file="${basedir}/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.zip" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.2-incubating-SNAPSHOT.zip" overwrite="yes"/>
-                                <copy file="${basedir}/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.tar.gz" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.2-incubating-SNAPSHOT.tar.gz" overwrite="yes"/>
+                                <copy file="${basedir}/target/apache-tuscany-sca-1.2-incubating.zip" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.2-incubating.zip" overwrite="yes"/>
+                                <copy file="${basedir}/target/apache-tuscany-sca-1.2-incubating.tar.gz" tofile="${basedir}/target-last-successful/apache-tuscany-sca-1.2-incubating.tar.gz" overwrite="yes"/>
                             </tasks>
                         </configuration>
                         <goals>

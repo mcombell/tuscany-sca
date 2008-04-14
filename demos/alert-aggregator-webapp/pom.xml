@@ -24,30 +24,18 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-demos</artifactId>
-        <version>1.2-incubating-SNAPSHOT</version>
+        <version>1.2-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>demo-alert-aggregator-webapp</artifactId>
     <packaging>war</packaging>
-    <version>1.2-incubating-SNAPSHOT</version>
+    <version>1.2-incubating</version>
     <name>Apache Tuscany SCA Alert Aggregator Demo</name>
     <url>http://cwiki.apache.org/TUSCANY</url>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>httpunit</groupId>
-            <artifactId>httpunit</artifactId>
-            <version>1.6.1</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-api-r2.1</artifactId>
@@ -109,24 +97,24 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-webapp</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-jsonrpc</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-atom-abdera</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-rss-rome</artifactId>
-            <version>1.2-incubating-SNAPSHOT</version>
+            <version>1.2-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
@@ -134,7 +122,26 @@
             <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>  
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>httpunit</groupId>
+            <artifactId>httpunit</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+			<exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>			
+        </dependency>
     </dependencies>
+
 
     <build>
         <finalName>demo-alert-aggregator-webapp</finalName>
@@ -326,7 +333,7 @@
             <plugin>
                 <groupId>org.apache.tuscany.sca</groupId>
                 <artifactId>tuscany-maven-ant-generator</artifactId>
-                <version>1.2-incubating-SNAPSHOT</version>
+                <version>1.2-incubating</version>
                 <executions>
                     <execution>
                         <configuration>

@@ -3,46 +3,39 @@ XML BigBank Demo
 
 This demo showcases the integration with XML technolgies in the service assembly.
 
-Note: To build the project with maven or other IDEs, please download the WSDL from http://www.swanandmokashi.com/HomePage/WebServices/StockQuotes.asmx?WSDL and save the file as src/main/resources/wsdl/StockQuotes.wsdl.
-
 Note: The live stock quote web service is not always running. Sometimes empty response is returned and the stock value is 0.
 
-To run the demo, type "ant run" and it will produce the following output.
+To run the demo, type "ant compile run" and it will produce the following output.
 
 Buildfile: build.xml
 
-init:
-      [get] Getting: http://www.swanandmokashi.com/HomePage/WebServices/StockQuotes.asmx?WSDL
-      [get] To: C:\Apache\tuscany-sca-1.0.1-incubating\demos\xml-bigbank\src\main\resources\wsdl\StockQuotes.wsdl
-      [get] local file date : Tue Nov 06 15:50:37 PST 2007
-      [get] .
-      [get] last modified = Wed Dec 31 16:00:00 PST 1969 - using current time instead
-    [mkdir] Created dir: C:\Apache\tuscany-sca-1.0.1-incubating\demos\xml-bigbank\target\classes
+clean:
 
 compile:
-    [javac] Compiling 11 source files to C:\Apache\tuscany-sca-1.0.1-incubating\demos\xml-bigbank\target\classes
-     [copy] Copying 6 files to C:\Apache\tuscany-sca-1.0.1-incubating\demos\xml-bigbank\target\classes
-      [jar] Building jar: C:\Apache\tuscany-sca-1.0.1-incubating\demos\xml-bigbank\target\demo-xml-bigbank.jar
+    [mkdir] Created dir: /home/lresende/apache/tuscany/java-sca-1.2/distribution/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.dir/tuscany-sca-1.2-incubating-SNAPSHOT/demos/xml-bigbank/target/classes
+    [javac] Compiling 11 source files to /home/lresende/apache/tuscany/java-sca-1.2/distribution/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.dir/tuscany-sca-1.2-incubating-SNAPSHOT/demos/xml-bigbank/target/classes
+     [copy] Copying 5 files to /home/lresende/apache/tuscany/java-sca-1.2/distribution/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.dir/tuscany-sca-1.2-incubating-SNAPSHOT/demos/xml-bigbank/target/classes
+      [jar] Building jar: /home/lresende/apache/tuscany/java-sca-1.2/distribution/target/apache-tuscany-sca-1.2-incubating-SNAPSHOT.dir/tuscany-sca-1.2-incubating-SNAPSHOT/demos/xml-bigbank/target/demo-xml-bigbank.jar
 
 run:
-     [java] Nov 6, 2007 3:52:28 PM org.apache.axis2.deployment.DeploymentEngine loadFromClassPath
-     [java] INFO: Module validation failed: The system is attempting to engage a module that is not available: rampart
      [java] Retrieving exchange rate...
-     [java] Nov 6, 2007 3:52:29 PM org.apache.tuscany.sca.binding.feed.provider.RSSBindingInvoker invoke
-     [java] INFO: >>> RSSBindingInvoker (rss_2.0) http://ansuz.sooke.bc.ca/rippy/exchange/?M=R&B=USD&F=CAD,CNY,EUR&T=F&S=O&I=S
-     [java] Exchange rate: USD 1.0=EUR 0.68705
+     [java] Apr 14, 2008 12:01:16 AM org.apache.tuscany.sca.binding.rss.provider.RSSBindingInvoker invoke
+     [java] INFO: >>> RSSBindingInvoker (null) http://ansuz.sooke.bc.ca/rippy/exchange/?M=R&B=USD&F=CAD,CNY,EUR&T=F&S=O&I=S
+     [java] Exchange rate: USD 1.0=EUR 0.63306
      [java] Loading account data...
      [java] Getting stock quote...
-     [java] Nov 6, 2007 3:52:30 PM org.apache.commons.httpclient.HttpMethodBase readResponse
-     [java] INFO: Discarding unexpected response: HTTP/1.1 100 Continue
+     [java] <StockQuotes><Stock><Symbol>IBM</Symbol><Last>116.00</Last><Date>4/11/2008</Date><Time>4:02pm</Time><Change>-2.78</Change><Open>117.31</Open><High>117.80</High><Low>115.51</Low><Volume>9561275</Volume><MktCap>160.6B</MktCap><PreviousClose>118.78</PreviousClose><PercentageChange>-2.34%</PercentageChange><AnnRange>93.91 - 121.46</AnnRange><Earns>7.182</Earns><P-E>16.54</P-E><Name>INTL BUSINESS MAC</Name></Stock><Stock><Symbol>GOOG</Symbol><Last>457.45</Last><Date>4/11/2008</Date><Time>4:00pm</Time><Change>-11.63</Change><Open>464.07</Open><High>467.26</High><Low>455.01</Low><Volume>4169662</Volume><MktCap>143.4B</MktCap><PreviousClose>469.08</PreviousClose><PercentageChange>-2.48%</PercentageChange><AnnRange>412.11 - 747.24</AnnRange><Earns>13.294</Earns><P-E>35.29</P-E><Name>GOOGLE</Name></Stock><Stock><Symbol>MSFT</Symbol><Last>28.28</Last><Date>4/11/2008</Date><Time>4:00pm</Time><Change>-0.83</Change><Open>28.84</Open><High>29.01</High><Low>28.21</Low><Volume>54373624</Volume><MktCap>263.2B</MktCap><PreviousClose>29.11</PreviousClose><PercentageChange>-2.85%</PercentageChange><AnnRange>26.87 - 37.50</AnnRange><Earns>1.758</Earns><P-E>16.56</P-E><Name>MICROSOFT CP</Name></Stock></StockQuotes>
      [java] Calculating total value...
      [java] Checking Balance: xs:double: 1000
      [java] Saving Blance: xs:double: 20000
-     [java] Stock Value: xs:integer: 0
-     [java] Total Value [1]: xs:double: 21000
-     [java] Total Value=USD 21000.0
-     [java] EUR: 14428.050000000001
+     [java] Stock Price [1]: xs:double: 116
+     [java] Quantity: xs:double: 500
+     [java] Stock Price [1]: xs:double: 28.28
+     [java] Quantity: xs:double: 200
+     [java] Stock Value: xs:double: 63656
+     [java] Total Value [1]: xs:double: 84656
+     [java] Total Value=USD 84656.0
+     [java] EUR: 53592.327359999996
 
 BUILD SUCCESSFUL
-Total time: 7 seconds
-
+Total time: 8 seconds
