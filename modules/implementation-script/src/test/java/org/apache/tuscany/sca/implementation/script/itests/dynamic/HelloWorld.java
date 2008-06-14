@@ -19,9 +19,13 @@
 
 package org.apache.tuscany.sca.implementation.script.itests.dynamic;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public interface HelloWorld {
-    
-    public String sayHello(String s);
-    public String sayHelloFrom(String s);
+
+    String sayHello(String s);
+    String sayHelloFrom(String s);
 
 }

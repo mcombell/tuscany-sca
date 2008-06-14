@@ -19,7 +19,6 @@
 
 package org.apache.tuscany.sca.binding.feed;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.tuscany.sca.binding.feed.collection.Collection;
 import org.osoa.sca.annotations.Scope;
 
 import com.sun.syndication.feed.atom.Content;
@@ -36,7 +36,7 @@ import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 
 @Scope("COMPOSITE")
-public class CustomerCollectionImpl implements EditableCollection {
+public class CustomerCollectionImpl implements Collection {
 
     private Map<String, Entry> entries = new HashMap<String, Entry>();
 
@@ -108,12 +108,11 @@ public class CustomerCollectionImpl implements EditableCollection {
         return entries.get(id);
     }
 
-    public Entry put(String id, Entry entry) {
+    public void put(String id, Entry entry) {
         System.out.println(">>> ResourceCollectionImpl.put id=" + id + " entry=" + entry.getTitle());
 
         entry.setUpdated(new Date());
         entries.put(id, entry);
-        return entry;
     }
 
     public void delete(String id) {
@@ -134,11 +133,4 @@ public class CustomerCollectionImpl implements EditableCollection {
         return feed;
     }
 
-    public Entry postMedia(String title, String slug, String contentType, InputStream media) {
-        return null;
-    }
-
-    public Entry putMedia(String id, String contentType, InputStream media) throws NotFoundException {
-        return null;
-    }
 }

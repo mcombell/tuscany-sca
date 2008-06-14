@@ -20,12 +20,14 @@ package org.apache.tuscany.sca.interfacedef.java.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.java.JavaOperation;
 
 /**
  * Contains methods for mapping between an operation in a
@@ -48,16 +50,36 @@ public final class JavaInterfaceUtil {
      * @throws NoSuchMethodException if no such method exists
      * @Deprecated
      */
-    public static  Method findMethod(Class<?> implClass, Operation operation) throws NoSuchMethodException {
+    public static Method findMethod(Class<?> implClass, Operation operation) throws NoSuchMethodException {
         String name = operation.getName();
+        if (operation instanceof JavaOperation) {
+            name = ((JavaOperation)operation).getJavaMethod().getName();
+        }
         Interface interface1 = operation.getInterface();
-        if(interface1!=null && interface1.isRemotable()) {
-            for(Method m: implClass.getMethods()) {
-                if(m.getName().equals(name)) {
-                    return m;
+        int numParams = operation.getInputType().getLogical().size();
+        if (interface1 != null && interface1.isRemotable()) {
+            List<Method> matchingMethods = new ArrayList<Method>();
+            for (Method m : implClass.getMethods()) {
+                if (m.getName().equals(name) && m.getParameterTypes().length == numParams) {
+                    matchingMethods.add(m);
                 }
             }
-            throw new NoSuchMethodException(name);
+            
+            // TUSCANY-2180 If there is only one method then we just match on the name 
+            // (this is the same as the existing behaviour)
+            if (matchingMethods.size() == 1) {
+                return matchingMethods.get(0);
+            }
+            if (matchingMethods.size() > 1) {
+                // TUSCANY-2180 We need to check the parameter types too
+                Class<?>[] paramTypes = getPhysicalTypes(operation);
+                return implClass.getMethod(name, paramTypes);
+            }
+            
+            // No matching method found
+            throw new NoSuchMethodException("No matching method for operation " + operation.getName()
+                + " is found on "
+                + implClass);
         }
         Class<?>[] paramTypes = getPhysicalTypes(operation);
         return implClass.getMethod(name, paramTypes);
@@ -66,9 +88,9 @@ public final class JavaInterfaceUtil {
     /**
      * @Deprecated
      */
-    private static  Class<?>[] getPhysicalTypes(Operation operation) {
+    private static Class<?>[] getPhysicalTypes(Operation operation) {
         DataType<List<DataType>> inputType = operation.getInputType();
-        if(inputType==null) {
+        if (inputType == null) {
             return new Class<?>[] {};
         }
         List<DataType> types = inputType.getLogical();
@@ -76,7 +98,7 @@ public final class JavaInterfaceUtil {
         for (int i = 0; i < javaTypes.length; i++) {
             Type physical = types.get(i).getPhysical();
             if (physical instanceof Class<?>) {
-                javaTypes[i] = (Class<?>) physical;
+                javaTypes[i] = (Class<?>)physical;
             } else {
                 throw new UnsupportedOperationException();
             }
@@ -106,7 +128,7 @@ public final class JavaInterfaceUtil {
      * 
      * @return true if the operation matches, false if does not
      */
-    private static  boolean match(Operation operation, Method method) {
+    private static boolean match(Operation operation, Method method) {
         Class<?>[] params = method.getParameterTypes();
         DataType<List<DataType>> inputType = operation.getInputType();
         List<DataType> types = inputType.getLogical();
@@ -124,6 +146,22 @@ public final class JavaInterfaceUtil {
         return found;
 
     }
-
+    
+    public static String getNamespace(Class<?> cls) {
+        Package pkg = cls.getPackage();
+        if (pkg == null) {
+            return "";
+        }
+        StringBuffer ns = new StringBuffer("http://");
+        String[] names = pkg.getName().split("\\.");
+        for (int i = names.length - 1; i >= 0; i--) {
+            ns.append(names[i]);
+            if (i != 0) {
+                ns.append('.');
+            }
+        }
+        ns.append('/');
+        return ns.toString();
+    }
 
 }

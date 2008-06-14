@@ -31,12 +31,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.tuscany.sca.assembly.Composite;
-import org.apache.tuscany.sca.contribution.resolver.impl.ModelResolverImpl;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
+import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
-import org.apache.tuscany.sca.core.runtime.ActivationException;
+import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.osoa.sca.CallableReference;
@@ -48,19 +50,21 @@ import org.osoa.sca.ServiceRuntimeException;
  * SCA contribution jars. All contribution jars found in a repository
  * directory will be contributed to the SCA domain. Any changes to the
  * contributions in that repository will be automatically detected and
- * the sca domain updated accordingly.
+ * the SCADomain updated accordingly.
  * 
- *  TODO: find how to properly add/remove contributions and start/activate the doamain
+ *  TODO: find how to properly add/remove contributions and start/activate the SCADomain
  *  TODO: support contributions that are folders as well as jar's
- *  TODO: needs to restart the entire scadomain when a contribution changes
+ *  TODO: needs to restart the entire SCADomain when a contribution changes
  *        as the domain classpath includes all the contribution jar's, would
  *        be nice to find a way to avoid this
  *  TODO: hot update requires copying contribution jars to a temp location
  *        to avoid the classpath lock preventing updating the contribution
  *        jars, would be nice to find a way to avoid that
+ *
+ * @version $Rev$ $Date$
  */
 public class HotUpdatableSCADomain extends SCADomain {
-
+    private static final Logger logger = Logger.getLogger(HotUpdatableSCADomain.class.getName());
     protected String domainURI;
     protected File contributionRepository;
     
@@ -89,7 +93,7 @@ public class HotUpdatableSCADomain extends SCADomain {
             activateHotUpdate();
             for (URL url : existingContributions.keySet()) {
                 File f = new File(url.toURI());
-                System.out.println("added contribution: " + f.getName());
+                logger.info("added contribution: " + f.getName());
             }
         } catch (ActivationException e) {
             throw new ServiceRuntimeException(e);
@@ -163,13 +167,13 @@ public class HotUpdatableSCADomain extends SCADomain {
      *       and ContributionService APIs should make all this easier?
      */
     protected void initContributions(EmbeddedSCADomain scaDomain,  ClassLoader cl, URL[] contributionJars) {
-        ModelResolverImpl modelResolver = new ModelResolverImpl(cl);
+    	Contribution contribution = null;
         ContributionService contributionService = scaDomain.getContributionService();
         for (URL jar : contributionJars) {
             InputStream is = null;
             try {
                 is = jar.openStream();
-                contributionService.contribute(jar.toString(), jar, is , modelResolver);
+                contribution = contributionService.contribute(jar.toString(), jar, is);
             } catch (Exception e) {
                 System.err.println("exception adding contribution: " + jar);
                 e.printStackTrace();
@@ -183,30 +187,24 @@ public class HotUpdatableSCADomain extends SCADomain {
             }
         }
         
-        EmbeddedSCADomain.DomainCompositeHelper domainHelper = scaDomain.getDomainCompositeHelper();
+        if (contribution != null ) {
+            try {
 
-        try {
-
-            for (Object m : modelResolver.getModels()) {
-                if (m instanceof Composite) {
-                    domainHelper.addComposite((Composite)m);
+                for (Composite composite : contribution.getDeployables()) {
+                    scaDomain.getDomainComposite().getIncludes().add(composite);
+                    scaDomain.getCompositeBuilder().build(composite);
+                    scaDomain.getCompositeActivator().activate(composite);
                 }
-            }
 
-            domainHelper.activateDomain();
+                for (Composite composite : contribution.getDeployables()) {
+                     scaDomain.getCompositeActivator().start(composite);
+                }
 
-//            for (Object m : modelResolver.getModels()) {
-//                if (m instanceof Composite) {
-//                    domainHelper.startComposite((Composite)m);
-//                }
-//            }
-
-            for (String componentName : domainHelper.getComponentNames()) {
-                domainHelper.startComponent(domainHelper.getComponent(componentName));
-            }
-
-        } catch (ActivationException e) {
-            throw new RuntimeException(e);
+            } catch (ActivationException e) {
+                throw new RuntimeException(e);
+            } catch (CompositeBuilderException e) {
+                throw new RuntimeException(e);
+            }        	
         }
         
     }
@@ -266,7 +264,7 @@ public class HotUpdatableSCADomain extends SCADomain {
 
         Runnable runable = new Runnable() {
             public void run() {
-                System.out.println("Tuscany contribution hotupdate running");
+                logger.info("Tuscany contribution hotupdate running");
                 while (hotUpdateActive) {
                     try {
                         Thread.sleep(hotUpdateInterval);
@@ -276,7 +274,7 @@ public class HotUpdatableSCADomain extends SCADomain {
                         checkForUpdates();
                     }
                 }
-                System.out.println("Tuscany contribution hotupdate stopped");
+                logger.info("Tuscany contribution hotupdate stopped");
             }
         };
         hotUpdateThread = new Thread(runable, "TuscanyHotUpdate");
@@ -286,10 +284,10 @@ public class HotUpdatableSCADomain extends SCADomain {
 
 
     /**
-     * Checks if any of the contributions have been updated and if so restarts the sca domain
+     * Checks if any of the contributions have been updated and if so restarts the SCADomain
      * TODO: Ideally just the altered contribution would be restarted but thats not possible
-     *       as the classloader used by the SCADomain includes the old contribution so need
-     *       to restart the entire domain to use a new ClassLoader. Should there be seperate 
+     *       as the ClassLoader used by the SCADomain includes the old contribution so need
+     *       to restart the entire domain to use a new ClassLoader. Should there be separate 
      *       ClassLoader per contribution? But then have all the issues with sharing classes
      *       across contributions.
      */
@@ -331,7 +329,7 @@ public class HotUpdatableSCADomain extends SCADomain {
                 File curentFile = new File(url.toURI());
                 if (curentFile.lastModified() != existingContributions.get(url)) {
                     urls.add(url);
-                    System.out.println("updated contribution: " + curentFile.getName());
+                    logger.info("updated contribution: " + curentFile.getName());
                 }
             }
         }
@@ -347,7 +345,7 @@ public class HotUpdatableSCADomain extends SCADomain {
             }
         }
         for (URL url : urls) {
-            System.out.println("removed contributions: " + new File(url.toURI()).getName());
+            logger.info("removed contributions: " + new File(url.toURI()).getName());
         }
         return urls;
     }
@@ -357,7 +355,7 @@ public class HotUpdatableSCADomain extends SCADomain {
         for (URL url : currentContrabutions) {
             if (!existingContributions.containsKey(url)) {
                 urls.add(url);
-                System.out.println("added contribution: " + new File(url.toURI()).getName());
+                logger.info("added contribution: " + new File(url.toURI()).getName());
             }
         }
         return urls;
@@ -383,6 +381,7 @@ public class HotUpdatableSCADomain extends SCADomain {
         return domainURI;
     }
 
+    @Override
     public ComponentManager getComponentManager(){
         return  scaDomain.getComponentManager();
     }

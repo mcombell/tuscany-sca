@@ -21,16 +21,22 @@ package org.apache.tuscany.sca.binding.rmi;
 
 import java.lang.reflect.Method;
 
+import org.apache.tuscany.sca.extension.helper.InvokerFactory;
+import org.apache.tuscany.sca.host.rmi.RMIHost;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.impl.JavaInterfaceUtil;
 import org.apache.tuscany.sca.invocation.Invoker;
-import org.apache.tuscany.sca.rmi.RMIHost;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
-import org.apache.tuscany.sca.spi.InvokerFactory;
 import org.osoa.sca.ServiceRuntimeException;
 
+/**
+ * InvokerFactory that creates RMIReferenceInvoker instances for the
+ * RMIBinding.
+ *
+ * @version $Rev$ $Date$
+ */
 public class RMIReferenceInvokerFactory implements InvokerFactory {
 
     RuntimeComponentReference reference;

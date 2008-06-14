@@ -32,7 +32,8 @@ import org.apache.tuscany.sca.interfacedef.util.TypeInfo;
 import org.easymock.EasyMock;
 
 /**
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class SimpleTypeMapperExtensionTestCase extends TestCase {
 
@@ -81,6 +82,7 @@ public class SimpleTypeMapperExtensionTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }

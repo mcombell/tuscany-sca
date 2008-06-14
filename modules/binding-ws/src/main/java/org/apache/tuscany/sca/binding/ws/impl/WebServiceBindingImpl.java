@@ -27,27 +27,35 @@ import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
+import org.apache.tuscany.sca.assembly.Extensible;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterface;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.w3c.dom.Element;
 
 /**
  * Represents a WebService binding.
  *
  * @version $Rev$ $Date$
  */
-public class WebServiceBindingImpl implements WebServiceBinding {
+class WebServiceBindingImpl implements WebServiceBinding, PolicySetAttachPoint, Extensible, OperationsConfigurator {
     private String name;
     private String uri;
-    private boolean isCallback;
-    private List<PolicySet> policySets = new ArrayList<PolicySet>();
-    private List<Intent> requiredIntents = new ArrayList<Intent>();
     private boolean unresolved;
     private List<Object> extensions = new ArrayList<Object>();
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType intentAttachPointType;
+    private List<ConfiguredOperation>  configuredOperations = new ArrayList<ConfiguredOperation>();
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
     
     private String location;
     private Binding binding;
@@ -61,6 +69,7 @@ public class WebServiceBindingImpl implements WebServiceBinding {
     private WSDLDefinition wsdlDefinition;
     private String wsdlNamespace;
     private InterfaceContract bindingInterfaceContract;
+    private Element endPointReference;
     
     protected WebServiceBindingImpl() {
     }
@@ -81,22 +90,6 @@ public class WebServiceBindingImpl implements WebServiceBinding {
         this.uri = uri;
     }
 
-    public boolean isCallback() {
-        return isCallback;
-    }
-
-    public void setCallback(boolean isCallback) {
-        this.isCallback = isCallback;
-    }
-
-    public List<Intent> getRequiredIntents() {
-        return requiredIntents;
-    }
-
-    public List<PolicySet> getPolicySets() {
-        return policySets;
-    }
-    
     public boolean isUnresolved() {
         return unresolved;
     }
@@ -105,6 +98,10 @@ public class WebServiceBindingImpl implements WebServiceBinding {
         this.unresolved = unresolved;
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    } 
+    
     public List<Object> getExtensions() {
         return extensions;
     }
@@ -118,6 +115,11 @@ public class WebServiceBindingImpl implements WebServiceBinding {
     }
 
     public Binding getBinding() {
+        if (binding == null) {
+            if (getWSDLDefinition() != null && wsdlDefinition.getBinding() != null) {
+                binding = wsdlDefinition.getBinding();
+            }
+        }
         return binding;
     }
 
@@ -247,5 +249,48 @@ public class WebServiceBindingImpl implements WebServiceBinding {
     public void setBindingInterfaceContract(InterfaceContract bindingInterfaceContract) {
         this.bindingInterfaceContract = bindingInterfaceContract;
     }
+    
+    public List<PolicySet> getPolicySets() {
+        return policySets;
+    }
+    
+    public List<Intent> getRequiredIntents() {
+        return requiredIntents;
+    }
 
+    public IntentAttachPointType getType() {
+        return intentAttachPointType;
+    }
+    
+    public void setType(IntentAttachPointType intentAttachPointType) {
+        this.intentAttachPointType = intentAttachPointType;
+    }
+
+    public Element getEndPointReference() {
+        return endPointReference;
+    }
+
+    public void setEndPointReference(Element epr) {
+        this.endPointReference = epr;
+    }
+    
+    public void setPolicySets(List<PolicySet> policySets) {
+        this.policySets = policySets; 
+    }
+
+    public void setRequiredIntents(List<Intent> intents) {
+        this.requiredIntents = intents;
+    }
+    
+    public List<ConfiguredOperation> getConfiguredOperations() {
+        return configuredOperations;
+    }
+
+    public void setConfiguredOperations(List<ConfiguredOperation> configuredOperations) {
+        this.configuredOperations = configuredOperations;
+    }
+
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
 }

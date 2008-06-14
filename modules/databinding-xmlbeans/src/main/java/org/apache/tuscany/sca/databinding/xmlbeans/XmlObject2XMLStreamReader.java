@@ -25,6 +25,11 @@ import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 import org.apache.xmlbeans.XmlObject;
 
+/**
+ * Transforms an XML Object to an XMLStreamReader.
+ *
+ * @version $Rev$ $Date$
+ */
 public class XmlObject2XMLStreamReader extends BaseTransformer<XmlObject, XMLStreamReader> implements PullTransformer<XmlObject, XMLStreamReader> {
     // private XmlOptions options;
     
@@ -32,14 +37,17 @@ public class XmlObject2XMLStreamReader extends BaseTransformer<XmlObject, XMLStr
         return source.newXMLStreamReader();
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XmlObject> getSourceType() {
         return XmlObject.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<XMLStreamReader> getTargetType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 10;
     }

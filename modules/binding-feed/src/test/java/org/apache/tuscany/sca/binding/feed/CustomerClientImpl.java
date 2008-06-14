@@ -22,6 +22,7 @@ package org.apache.tuscany.sca.binding.feed;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.sca.binding.feed.collection.Collection;
 import org.osoa.sca.annotations.Reference;
 
 import com.sun.syndication.feed.atom.Content;
@@ -31,7 +32,7 @@ import com.sun.syndication.feed.atom.Feed;
 public class CustomerClientImpl implements CustomerClient {
 
     @Reference
-    public EditableCollection resourceCollection;
+    public Collection resourceCollection;
 
     public void testCustomerCollection() throws Exception {
 
@@ -50,7 +51,7 @@ public class CustomerClientImpl implements CustomerClient {
         System.out.println("<<< get id=" + entry.getId() + " entry=" + entry.getTitle());
 
         System.out.println(">>> put id=" + newEntry.getId() + " entry=" + entry.getTitle());
-        entry = resourceCollection.put(entry.getId(), updateEntry(entry, "James Bond"));
+        resourceCollection.put(entry.getId(), updateEntry(entry, "James Bond"));
         System.out.println("<<< put id=" + entry.getId() + " entry=" + entry.getTitle());
 
         System.out.println(">>> delete id=" + entry.getId());

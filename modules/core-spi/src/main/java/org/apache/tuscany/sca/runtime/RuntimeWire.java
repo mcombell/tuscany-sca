@@ -19,11 +19,12 @@
 
 package org.apache.tuscany.sca.runtime;
 
-import java.util.IdentityHashMap;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.InvocationChain;
+import org.apache.tuscany.sca.invocation.Message;
 
 /**
  * The runtime wire interface that connects a component reference to a 
@@ -31,7 +32,7 @@ import org.apache.tuscany.sca.invocation.InvocationChain;
  * 
  * @version $Rev$ $Date$
  */
-public interface RuntimeWire {
+public interface RuntimeWire extends Cloneable {
 
     /**
      * Get the source of the wire
@@ -48,6 +49,17 @@ public interface RuntimeWire {
     EndpointReference getTarget();
 
     /**
+     * Rebind the runtime wire with the given target
+     * @param target The target endpoint reference
+     */
+    void setTarget(EndpointReference target);
+    
+    /**
+     * Force the invocation chains to be rebuilt
+     */
+    void rebuild();
+
+    /**
      * Returns the invocation chains for service operations associated with the
      * wire
      * 
@@ -55,30 +67,35 @@ public interface RuntimeWire {
      *         wire
      */
     List<InvocationChain> getInvocationChains();
+    
+    /**
+     * Lookup the invocation chain by operation
+     * @param operation The operation
+     * @return The invocation chain for the given operation
+     */
+    InvocationChain getInvocationChain(Operation operation);
+    
+    /**
+     * Invoke an operation with given arguments
+     * @param operation The operation
+     * @param args The arguments
+     * @return The result
+     * @throws InvocationTargetException
+     */
+    Object invoke(Operation operation, Object[] args) throws InvocationTargetException;
 
     /**
-     * Returns the invocation chains for callback service operations associated
-     * with the wire
-     * 
-     * @return the invocation chains for callback service operations associated
-     *         with the wire
+     * Invoke an operation with a context message
+     * @param operation The operation
+     * @param msg The message
+     * @return The result
+     * @throws InvocationTargetException
      */
-    List<InvocationChain> getCallbackInvocationChains();
-   
+    Object invoke(Operation operation, Message msg) throws InvocationTargetException;
+
     /**
-     * Add an invocation chain for a callback service operation associated
-     * with the wire
-     * 
-     * @param chain an invocation chain
+     * @return a clone of the runtime wire
+     * @throws CloneNotSupportedException
      */
-    void addCallbackInvocationChain(InvocationChain chain);
-   
-    /**
-     * Get a map of invocation chains for callback service operations associated
-     * with the wire
-     * 
-     * @return a map of invocation chains
-     */
-    IdentityHashMap<Operation, InvocationChain> getCallbackInvocationMap();
-   
+    Object clone() throws CloneNotSupportedException;
 }

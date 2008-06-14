@@ -18,17 +18,15 @@
  */
 package org.apache.tuscany.sca.databinding.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import org.apache.tuscany.sca.databinding.DataBinding;
-import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
-import org.apache.tuscany.sca.databinding.ExceptionHandler;
 import org.apache.tuscany.sca.databinding.SimpleTypeMapper;
 import org.apache.tuscany.sca.databinding.WrapperHandler;
+import org.apache.tuscany.sca.databinding.XMLTypeHelper;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
 /**
  * Base Implementation of DataBinding
@@ -37,12 +35,10 @@ import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
  */
 public abstract class BaseDataBinding implements DataBinding {
 
-    protected DataBindingExtensionPoint registry;
+    private Class<?> baseType;
 
-    protected Class<?> baseType;
-
-    protected String name;
-    protected String[] aliases; 
+    private String name;
+    private String[] aliases;
 
     /**
      * Create a databinding with the base java type whose name will be used as
@@ -65,7 +61,7 @@ public abstract class BaseDataBinding implements DataBinding {
     protected BaseDataBinding(String name, Class<?> baseType) {
         this(name, null, baseType);
     }
-    
+
     /**
      * Create a databinding with the name and base java type
      * 
@@ -78,40 +74,28 @@ public abstract class BaseDataBinding implements DataBinding {
         this.name = name;
         this.baseType = baseType;
         this.aliases = aliases;
-    }    
-
-    public void setDataBindingRegistry(DataBindingExtensionPoint registry) {
-        this.registry = registry;
-    }
-
-    public void init() {
-        registry.addDataBinding(this);
     }
 
     @SuppressWarnings("unchecked")
-    public boolean introspect(DataType type, Annotation[] annotations) {
+    public boolean introspect(DataType type, Operation operation) {
         assert type != null;
-        Type physical = type.getPhysical();
-        if (physical instanceof ParameterizedType) {
-            physical = ((ParameterizedType)physical).getRawType();
-        }
-        if (physical instanceof Class) {
-            Class cls = (Class)physical;
-            if (baseType != null && baseType.isAssignableFrom(cls)) {
-                type.setDataBinding(getName());
-                type.setLogical(baseType);
-                return true;
+        Class cls = type.getPhysical();
+        if (baseType != null && baseType.isAssignableFrom(cls)) {
+            type.setDataBinding(getName());
+            if (type.getLogical() == null) {
+                type.setLogical(XMLType.UNKNOWN);
             }
+            return true;
         }
         return false;
     }
-    
-    public DataType introspect(Object value) {
+
+    public DataType introspect(Object value, Operation operation) {
         if (value == null) {
             return null;
         } else {
             DataType<Class> dataType = new DataTypeImpl<Class>(value.getClass(), value.getClass());
-            if (introspect(dataType, null)) {
+            if (introspect(dataType, (Operation) null)) {
                 return dataType;
             } else {
                 return null;
@@ -130,16 +114,16 @@ public abstract class BaseDataBinding implements DataBinding {
         return null;
     }
 
-    public ExceptionHandler getExceptionHandler() {
-        return null;
-    }
-
-    public Object copy(Object object) {
+    public Object copy(Object object, DataType dataType, Operation operation) {
         return object;
     }
 
     public SimpleTypeMapper getSimpleTypeMapper() {
         return new SimpleTypeMapperImpl();
+    }
+
+    public XMLTypeHelper getXMLTypeHelper() {
+        return null;
     }
 
     public String[] getAliases() {

@@ -27,10 +27,11 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.tuscany.sca.binding.feed.NotFoundException;
+import org.apache.tuscany.sca.binding.feed.collection.NotFoundException;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
+import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 import org.osoa.sca.ServiceRuntimeException;
 
 import com.sun.syndication.feed.atom.Entry;
@@ -40,15 +41,19 @@ import com.sun.syndication.io.XmlReader;
 
 /**
  * Invoker for the Atom binding.
+ * 
+ * @version $Rev$ $Date$
  */
-public class AtomBindingInvoker implements Invoker {
+class AtomBindingInvoker implements Invoker, DataExchangeSemantics {
 
     Operation operation;
     String uri;
     HttpClient httpClient;
     String authorizationHeader;
+    
+    //FIXME Support conversion to/from data api entries 
 
-    public AtomBindingInvoker(Operation operation, String uri, HttpClient httpClient, String authorizationHeader) {
+    AtomBindingInvoker(Operation operation, String uri, HttpClient httpClient, String authorizationHeader) {
         this.operation = operation;
         this.uri = uri;
         this.httpClient = httpClient;
@@ -61,11 +66,13 @@ public class AtomBindingInvoker implements Invoker {
         // by specific invoker subclasses
         throw new UnsupportedOperationException(operation.getName());
     }
+    
+    public boolean allowsPassByReference() {
+        return true;
+    }
 
     /**
      * Get operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class GetInvoker extends AtomBindingInvoker {
 
@@ -88,9 +95,9 @@ public class AtomBindingInvoker implements Invoker {
 
                 // Read the Atom entry
                 if (status == 200) {
-                    Entry entry =
-                        AtomEntryUtil.readEntry("atom_1.0", new InputStreamReader(getMethod.getResponseBodyAsStream()));
-                    msg.setBody(entry);
+                    Entry feedEntry =
+                        AtomFeedEntryUtil.readFeedEntry("atom_1.0", new InputStreamReader(getMethod.getResponseBodyAsStream()));
+                    msg.setBody(feedEntry);
 
                 } else if (status == 404) {
                     msg.setFaultBody(new NotFoundException());
@@ -110,8 +117,6 @@ public class AtomBindingInvoker implements Invoker {
 
     /**
      * Post operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class PostInvoker extends AtomBindingInvoker {
 
@@ -123,7 +128,7 @@ public class AtomBindingInvoker implements Invoker {
         public Message invoke(Message msg) {
 
             // Post an entry
-            Entry entry = (Entry)((Object[])msg.getBody())[0];
+            Entry feedEntry = (Entry)((Object[])msg.getBody())[0];
 
             // Send an HTTP POST
             PostMethod postMethod = new PostMethod(uri);
@@ -132,7 +137,7 @@ public class AtomBindingInvoker implements Invoker {
 
                 // Write the Atom entry
                 StringWriter writer = new StringWriter();
-                AtomEntryUtil.writeEntry(entry, "atom_1.0", writer);
+                AtomFeedEntryUtil.writeFeedEntry(feedEntry, "atom_1.0", writer);
                 postMethod.setRequestHeader("Content-type", "application/atom+xml; charset=utf-8");
                 postMethod.setRequestEntity(new StringRequestEntity(writer.toString()));
 
@@ -142,8 +147,8 @@ public class AtomBindingInvoker implements Invoker {
                 // Read the Atom entry
                 if (status == 200 || status == 201) {
                     Entry createdEntry =
-                        AtomEntryUtil
-                            .readEntry("atom_1.0", new InputStreamReader(postMethod.getResponseBodyAsStream()));
+                        AtomFeedEntryUtil
+                            .readFeedEntry("atom_1.0", new InputStreamReader(postMethod.getResponseBodyAsStream()));
                     msg.setBody(createdEntry);
 
                 } else if (status == 404) {
@@ -164,8 +169,6 @@ public class AtomBindingInvoker implements Invoker {
 
     /**
      * Put operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class PutInvoker extends AtomBindingInvoker {
 
@@ -179,7 +182,7 @@ public class AtomBindingInvoker implements Invoker {
             // Put an entry
             Object[] args = (Object[])msg.getBody();
             String id = (String)args[0];
-            Entry entry = (Entry)args[1];
+            Entry feedEntry = (Entry)args[1];
 
             // Send an HTTP PUT
             PutMethod putMethod = new PutMethod(uri + "/" + id);
@@ -188,7 +191,7 @@ public class AtomBindingInvoker implements Invoker {
 
                 // Write the Atom entry
                 StringWriter writer = new StringWriter();
-                AtomEntryUtil.writeEntry(entry, "atom_1.0", writer);
+                AtomFeedEntryUtil.writeFeedEntry(feedEntry, "atom_1.0", writer);
                 putMethod.setRequestHeader("Content-type", "application/atom+xml; charset=utf-8");
                 putMethod.setRequestEntity(new StringRequestEntity(writer.toString()));
 
@@ -199,7 +202,7 @@ public class AtomBindingInvoker implements Invoker {
                 if (status == 200 || status == 201) {
                     try {
                         Entry updatedEntry =
-                            AtomEntryUtil.readEntry("atom_1.0", new InputStreamReader(putMethod
+                            AtomFeedEntryUtil.readFeedEntry("atom_1.0", new InputStreamReader(putMethod
                                 .getResponseBodyAsStream()));
                         msg.setBody(updatedEntry);
                     } catch (Exception e) {
@@ -224,8 +227,6 @@ public class AtomBindingInvoker implements Invoker {
 
     /**
      * Delete operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class DeleteInvoker extends AtomBindingInvoker {
 
@@ -267,13 +268,11 @@ public class AtomBindingInvoker implements Invoker {
     }
 
     /**
-     * GetCollection operation invoker
-     * 
-     * @version $Rev$ $Date$
+     * GetAll operation invoker
      */
-    public static class GetCollectionInvoker extends AtomBindingInvoker {
+    public static class GetAllInvoker extends AtomBindingInvoker {
 
-        public GetCollectionInvoker(Operation operation, String uri, HttpClient httpClient, String authorizationHeader) {
+        public GetAllInvoker(Operation operation, String uri, HttpClient httpClient, String authorizationHeader) {
             super(operation, uri, httpClient, authorizationHeader);
         }
 
@@ -313,8 +312,6 @@ public class AtomBindingInvoker implements Invoker {
 
     /**
      * PostMedia operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class PostMediaInvoker extends AtomBindingInvoker {
 
@@ -331,8 +328,6 @@ public class AtomBindingInvoker implements Invoker {
 
     /**
      * PutMedia operation invoker
-     * 
-     * @version $Rev$ $Date$
      */
     public static class PutMediaInvoker extends AtomBindingInvoker {
 

@@ -17,12 +17,15 @@
  * under the License.    
  */
 package org.apache.tuscany.sca.itest.scopes;
+import org.osoa.sca.annotations.Destroy;
+import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Scope;
 
-// Test request scope
+/**
+ * Test request scope
+ */
 @Scope("REQUEST")
 public class RequestScopeStateVerifierImpl implements StateVerifier {
-
     // State data for this request thread.
     int requestState;
 
@@ -32,6 +35,16 @@ public class RequestScopeStateVerifierImpl implements StateVerifier {
 
     public boolean checkState(int i) {
       return (requestState == i);
+    }
+    
+    @Init
+    public void init() {
+        requestState = 0;
+    }
+    
+    @Destroy
+    public void destroy() {
+        requestState = -1; 
     }
 
 }

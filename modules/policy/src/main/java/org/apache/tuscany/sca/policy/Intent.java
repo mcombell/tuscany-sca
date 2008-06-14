@@ -22,11 +22,11 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.interfacedef.Operation;
-
 /**
  * Represents a policy intent. See the Policy Framework specification for a
  * description of this element.
+ *
+ * @version $Rev$ $Date$
  */
 public interface Intent {
 
@@ -45,11 +45,23 @@ public interface Intent {
     void setName(QName name);
 
     /**
+     * Get the intent domain (the root intent name before any qualifiers)
+     * @return the domain
+     */
+    String getDomain();
+
+    /**
+     * Get the intent qualifiers
+     * @return the domain
+     */
+    String[] getQualifiedNames();
+
+    /**
      * Returns the list of operations that this intent applies to.
      * 
      * @return
      */
-    List<Operation> getOperations();
+    //List<Operation> getOperations();
 
     /**
      * Returns the list of SCA constructs that this intent is meant to
@@ -60,11 +72,18 @@ public interface Intent {
     List<QName> getConstrains();
 
     /**
+     * Returns the list of intents which are mutually exclusive with this intent.
+     * 
+     * @return the list of mutually exclusive intents.
+     */
+    List<Intent> getExcludedIntents();
+
+    /**
      * Returns the list of children qualified intents.
      * 
      * @return the list of children qualified intents.
      */
-    //List<Intent> getQualifiedIntents();
+    List<Intent> getQualifiedIntents();
 
     /**
      * Returns the intent description.

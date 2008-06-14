@@ -50,7 +50,7 @@ import org.apache.tuscany.sca.binding.notification.util.IOUtils.IOUtilsException
 import org.apache.tuscany.sca.binding.notification.util.IOUtils.Writeable;
 import org.apache.tuscany.sca.binding.notification.util.NotificationServlet.NotificationServletStreamHandler;
 import org.apache.tuscany.sca.core.invocation.MessageImpl;
-import org.apache.tuscany.sca.http.ServletHost;
+import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -62,7 +62,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
- * The runtime representaion of the local service binding
+ * The runtime representation of the local service binding
  *
  * @version $Rev$ $Date$
  */
@@ -105,8 +105,7 @@ public class NotificationServiceBindingProvider
             if (ntmAddress != null && notificationType != null) {
                 remoteNtmUrl = new URL(ntmAddress + notificationTypePath);
             }
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
         this.started = false;
@@ -116,7 +115,7 @@ public class NotificationServiceBindingProvider
         URI uri = URI.create(component.getURI() + "/" + notificationBinding.getName());
         notificationBinding.setURI(uri.toString());
         Interface interfaze = service.getInterfaceContract().getInterface();
-        interfaze.setDefaultDataBinding(OMElement.class.getName());
+        interfaze.resetDataBinding(OMElement.class.getName());
         for (Operation operation : interfaze.getOperations()) {
             operation.setNonBlocking(false);
         }
@@ -137,6 +136,10 @@ public class NotificationServiceBindingProvider
     public InterfaceContract getBindingInterfaceContract() {
         return service.getInterfaceContract();
     }
+    
+    public boolean supportsOneWayInvocation() {
+        return false;
+    }
 
     public void start() {
         if (started) {
@@ -145,6 +148,10 @@ public class NotificationServiceBindingProvider
         
         RuntimeComponentService componentService = (RuntimeComponentService) service;
         wire = componentService.getRuntimeWire(notificationBinding);
+        
+        for (InvocationChain ch : wire.getInvocationChains()) {
+            ch.setAllowsPassByReference(true);
+        }
         
         brokerManager.serviceProviderStarted(notificationType, this, remoteNtmUrl);
         started = true;
@@ -161,8 +168,7 @@ public class NotificationServiceBindingProvider
             for (URL producerUrl : producerList) {
                 subscribeWithProducer(producerUrl, null, ws);
             }
-        }
-        else if (Constants.BrokerProducers.equals(sequenceType)) {
+        } else if (Constants.BrokerProducers.equals(sequenceType)) {
             // Pick a broker producer, for now the first one
             URL producerUrl = producerList.get(0);
             subscribeWithProducer(producerUrl, null, ws);
@@ -231,8 +237,7 @@ public class NotificationServiceBindingProvider
         byte[] payload = null;
         try {
             payload = IOUtils.readFully(istream, contentLength);
-        }
-        catch(IOException e) {
+        } catch(IOException e) {
             throw new RuntimeException(e);
         }
         Object[] args = getArgsFromByteArray(payload, incomingBrokerID);
@@ -246,9 +251,8 @@ public class NotificationServiceBindingProvider
         try {
             StAXOMBuilder builder = new StAXOMBuilder(new ByteArrayInputStream(payload));
             OMElement element = builder.getDocumentElement();
-            return new Object[] { element, payload, incomingBrokerID };
-        }
-        catch(Exception e) {
+            return new Object[] { element };
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
     }

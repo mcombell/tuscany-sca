@@ -22,24 +22,31 @@ package org.apache.tuscany.sca.assembly.xml;
 import java.net.URI;
 import java.net.URL;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.ValidatorHandler;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.DefaultURLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.DefaultValidatingXMLInputFactory;
+import org.apache.tuscany.sca.contribution.processor.DefaultValidationSchemaExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.contribution.processor.ValidationSchemaExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Test reading SCA XML assembly documents.
@@ -48,38 +55,119 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  */
 public class ReadDocumentTestCase extends TestCase {
 
-    private ExtensibleURLArtifactProcessor documentProcessor;
-    private TestModelResolver resolver; 
+    private URLArtifactProcessor<Object> documentProcessor;
+    private ModelResolver resolver;
+    private XMLInputFactory inputFactory;
+    private StAXArtifactProcessor<Object> staxProcessor; 
 
+    @Override
     public void setUp() throws Exception {
-        AssemblyFactory factory = new DefaultAssemblyFactory();
-        PolicyFactory policyFactory = new DefaultPolicyFactory();
-        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        URLArtifactProcessorExtensionPoint documentProcessors = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+        documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors, null); 
         
-        URLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint();
-        documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors); 
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        inputFactory = XMLInputFactory.newInstance();
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, null, null);
         
-        // Create Stax processors
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(factory, policyFactory, mapper, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(factory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(factory, policyFactory, staxProcessor));
-        
-        // Create document processors
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance(); 
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
-
-        resolver = new TestModelResolver(getClass().getClassLoader());
+        resolver = new DefaultModelResolver();
     }
 
-    public void tearDown() throws Exception {
-        documentProcessor = null;
-        resolver = null;
+    public void testValidateAssembly() throws Exception {
+        
+        SchemaFactory schemaFactory;
+        try {
+            schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        } catch (Error e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        } catch (Exception e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        }
+        Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd"));
+        ValidatorHandler handler = schema.newValidatorHandler();
+        
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        URL url = getClass().getResource("Calculator.composite");
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setContentHandler(handler);
+        reader.parse(new InputSource(url.openStream()));
     }
 
+    public void testValidateImplementation() throws Exception {
+        
+        SchemaFactory schemaFactory;
+        try {
+            schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        } catch (Error e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        } catch (Exception e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        }
+        Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd"));
+        ValidatorHandler handler = schema.newValidatorHandler();
+        
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        URL url = getClass().getResource("JavaScriptReference.composite");
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setContentHandler(handler);
+        reader.parse(new InputSource(url.openStream()));
+    }
+        
+    public void testReadImplementation() throws Exception { 
+        
+        ValidationSchemaExtensionPoint schemas = new DefaultValidationSchemaExtensionPoint();
+        schemas.addSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd").toString());
+        XMLInputFactory validatingInputFactory = new DefaultValidatingXMLInputFactory(inputFactory, schemas, null);
+        CompositeDocumentProcessor compositeDocumentProcessor = new CompositeDocumentProcessor(staxProcessor, validatingInputFactory, null, null);
+        
+        URL url = getClass().getResource("JavaScriptReference.composite");
+        URI uri = URI.create("JavaScriptReference.composite");
+        Composite composite = (Composite)compositeDocumentProcessor.read(null, uri, url);
+        assertNotNull(composite);
+    }
+        
+    public void testValidateBinding() throws Exception {
+        
+        SchemaFactory schemaFactory;
+        try {
+            schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        } catch (Error e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        } catch (Exception e) {
+            // Some old JDKs don't support XMLSchema validation
+            return;
+        }
+        Schema schema = schemaFactory.newSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd"));
+        ValidatorHandler handler = schema.newValidatorHandler();
+        
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        URL url = getClass().getResource("RMIBindingTest.composite");
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setContentHandler(handler);
+        reader.parse(new InputSource(url.openStream()));
+    }
+        
+    public void testReadBinding() throws Exception {
+        
+        ValidationSchemaExtensionPoint schemas = new DefaultValidationSchemaExtensionPoint();
+        schemas.addSchema(getClass().getClassLoader().getResource("tuscany-sca.xsd").toString());
+        XMLInputFactory validatingInputFactory = new DefaultValidatingXMLInputFactory(inputFactory, schemas, null);
+        CompositeDocumentProcessor compositeDocumentProcessor = new CompositeDocumentProcessor(staxProcessor, validatingInputFactory, null, null);
+        
+        URL url = getClass().getResource("RMIBindingTest.composite");
+        URI uri = URI.create("RMIBindingTest.composite");
+        Composite composite = (Composite)compositeDocumentProcessor.read(null, uri, url);
+        assertNotNull(composite);
+    }
+        
     public void testResolveConstrainingType() throws Exception {
         
         URL url = getClass().getResource("CalculatorComponent.constrainingType");

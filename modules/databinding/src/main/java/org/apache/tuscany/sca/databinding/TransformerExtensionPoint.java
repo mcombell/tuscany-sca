@@ -22,6 +22,8 @@ import java.util.List;
 
 /**
  * An extension point for data transformer extensions.
+ *
+ * @version $Rev$ $Date$
  */
 public interface TransformerExtensionPoint {
 
@@ -32,18 +34,21 @@ public interface TransformerExtensionPoint {
      * @param targetDataBinding
      * @param weight
      * @param transformer
+     * @param publicTransformer TODO
      */
     void addTransformer(String sourceDataBinding,
-                             String targetDataBinding,
-                             int weight,
-                             Transformer transformer);
+                        String targetDataBinding,
+                        int weight,
+                        Transformer transformer,
+                        boolean publicTransformer);
 
     /**
      * Register a transformer
      * 
      * @param transformer
+     * @param publicTransformer TODO
      */
-    void addTransformer(Transformer transformer);
+    void addTransformer(Transformer transformer, boolean publicTransformer);
 
     /**
      * Unregister a transformer

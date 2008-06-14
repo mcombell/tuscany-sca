@@ -21,9 +21,9 @@ package org.apache.tuscany.sca.implementation.java.context;
 import static org.easymock.EasyMock.createMock;
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.implementation.java.injection.EventInvoker;
-import org.apache.tuscany.sca.scope.TargetDestructionException;
-import org.apache.tuscany.sca.scope.TargetInitializationException;
+import org.apache.tuscany.sca.core.scope.TargetDestructionException;
+import org.apache.tuscany.sca.core.scope.TargetInitializationException;
+import org.apache.tuscany.sca.implementation.java.invocation.EventInvoker;
 import org.easymock.EasyMock;
 
 /**
@@ -73,6 +73,7 @@ public class ReflectiveInstanceWrapperTestCase extends TestCase {
         EasyMock.verify(destroyInvoker);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected void setUp() throws Exception {
         super.setUp();

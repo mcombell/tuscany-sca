@@ -32,6 +32,8 @@ import javax.xml.stream.XMLStreamReader;
  * org.apache.axis2.util.StreamWrapper</a>. It's used wrap a XMLStreamReader to
  * create a XMLStreamReader representing a document and it will produce
  * START_DOCUMENT, END_DOCUMENT events.
+ *
+ * @version $Rev$ $Date$
  */
 public class XMLDocumentStreamReader implements XMLStreamReader {
     private static final int STATE_COMPLETE_AT_NEXT = 2; // The wrapper
@@ -47,6 +49,8 @@ public class XMLDocumentStreamReader implements XMLStreamReader {
     // produce events
 
     private XMLStreamReader realReader;
+    private boolean fragment;
+    private int level = 0;
 
     private int state = STATE_INIT;
 
@@ -64,6 +68,7 @@ public class XMLDocumentStreamReader implements XMLStreamReader {
         // If the real reader is positioned at START_DOCUMENT, always use
         // the real reader
         if (realReader.getEventType() == START_DOCUMENT) {
+            fragment = false;
             state = STATE_SWITCHED;
         }
     }
@@ -407,11 +412,26 @@ public class XMLDocumentStreamReader implements XMLStreamReader {
                     state = STATE_COMPLETED;
                 } else if (!realReader.hasNext()) {
                     state = STATE_COMPLETE_AT_NEXT;
+                } 
+                if (fragment && returnEvent == END_ELEMENT) {
+                    level--;
+                    if (level == 0) {
+                        // We are now at the end of the top-level element in the fragment
+                        state = STATE_COMPLETE_AT_NEXT;
+                    }
+                }
+                if (fragment && returnEvent == START_ELEMENT) {
+                    level++;
                 }
                 break;
             case STATE_INIT:
                 state = STATE_SWITCHED;
                 returnEvent = realReader.getEventType();
+                if (returnEvent == START_ELEMENT) {
+                    // The real reader is positioned at the top-level element in the fragment
+                    level = 0;
+                    fragment = true;
+                }
                 break;
             case STATE_COMPLETE_AT_NEXT:
                 state = STATE_COMPLETED;
@@ -429,7 +449,18 @@ public class XMLDocumentStreamReader implements XMLStreamReader {
 
     public int nextTag() throws XMLStreamException {
         if (isDelegating()) {
-            return realReader.nextTag();
+            int returnEvent = realReader.nextTag();
+            if (fragment && returnEvent == END_ELEMENT) {
+                level--;
+                if (level == 0) {
+                    // We are now at the end of the top-level element in the fragment
+                    state = STATE_COMPLETE_AT_NEXT;
+                }
+            }
+            if (fragment && returnEvent == START_ELEMENT) {
+                level++;
+            }
+            return returnEvent;
         } else {
             throw new XMLStreamException();
         }

@@ -19,52 +19,65 @@
 
 package org.apache.tuscany.sca.assembly.xml;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.contribution.Contribution;
-import org.apache.tuscany.sca.contribution.ContributionImport;
-import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.Import;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.namespace.NamespaceImport;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 
 /**
- * An Model Resolver for Composite artifact types.
+ * A Model Resolver for Composite models.
  *
- * @version $Rev: 557916 $ $Date: 2007-07-20 01:04:40 -0700 (Fri, 20 Jul 2007) $
+ * @version $Rev$ $Date$
  */
-public class CompositeModelResolver extends DefaultModelResolver {
+public class CompositeModelResolver implements ModelResolver {
 
-    public CompositeModelResolver(ClassLoader cl, Contribution contribution) {
-        super(cl,contribution);
+    private Contribution contribution;
+    private Map<QName, Composite> map = new HashMap<QName, Composite>();
+    
+    public CompositeModelResolver(Contribution contribution, ModelFactoryExtensionPoint modelFactories) {
+        this.contribution = contribution;
     }
 
-    private Composite resolveImportedModel(Composite unresolved) {
-        Composite resolved = unresolved;
-        String namespace = unresolved.getName().getNamespaceURI();
-        if (namespace != null && namespace.length() > 0) {
-            for (ContributionImport contributionImport : this.contribution.getImports()) {
-                if (contributionImport.getNamespace().equals(namespace)) {
+    public void addModel(Object resolved) {
+        Composite composite = (Composite)resolved;
+        map.put(composite.getName(), composite);
+    }
+    
+    public Object removeModel(Object resolved) {
+        return map.remove(((Composite)resolved).getName());
+    }
+    
+    public <T> T resolveModel(Class<T> modelClass, T unresolved) {
+        
+        // Lookup a definition for the given namespace
+        QName qname = ((Composite)unresolved).getName();
+        Composite resolved = (Composite) map.get(qname);
+        if (resolved != null) {
+            return modelClass.cast(resolved);
+        }
+        
+        // No definition found, delegate the resolution to the imports
+        for (Import import_ : this.contribution.getImports()) {
+            if (import_ instanceof NamespaceImport) {
+                NamespaceImport namespaceImport = (NamespaceImport)import_;
+                if (namespaceImport.getNamespace().equals(qname.getNamespaceURI())) {
                     
                     // Delegate the resolution to the import resolver
-                    resolved = contributionImport.getModelResolver().resolveModel(Composite.class, unresolved);
-                    
-                    // If resolved... then we are done
-                    if(unresolved.isUnresolved() == false) {
-                        break;
+                    resolved = namespaceImport.getModelResolver().resolveModel(Composite.class, (Composite)unresolved);
+                    if (!resolved.isUnresolved()) {
+                        return modelClass.cast(resolved);
                     }
                 }
             }
         }
-        return resolved;
+        return (T)unresolved;
     }
-    
-    @Override
-    public <T> T resolveModel(Class<T> modelClass, T unresolved) {
-        Composite resolved = (Composite) super.resolveModel(modelClass, unresolved);
-
-        if (resolved.isUnresolved()) {
-            resolved = resolveImportedModel(resolved);
-        }
-        
-        return (T)resolved;
-    }
-    
     
 }

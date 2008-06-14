@@ -22,16 +22,18 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
+import org.apache.tuscany.sca.policy.util.PolicyHandlerTuple;
 
 /**
  * A component type specialization for POJO implementations
  *
- * @version $$Rev$$ $$Date$$
+ * @version $Rev$ $Date$
  */
 public class JavaImplementationImpl extends BaseJavaImplementationImpl implements JavaImplementation {
     private JavaConstructorImpl<?> constructorDefinition;
@@ -41,7 +43,7 @@ public class JavaImplementationImpl extends BaseJavaImplementationImpl implement
     private final Map<String, JavaResourceImpl> resources = new HashMap<String, JavaResourceImpl>();
     private final Map<String, JavaElementImpl> propertyMembers = new HashMap<String, JavaElementImpl>();
     private final Map<String, JavaElementImpl> referenceMembers = new HashMap<String, JavaElementImpl>();
-    private final Map<String, JavaElementImpl> callbackMembers = new HashMap<String, JavaElementImpl>();
+    private final Map<String, Collection<JavaElementImpl>> callbackMembers = new HashMap<String, Collection<JavaElementImpl>>();
     private List<Member> conversationIDMember = new ArrayList<Member>();
     private boolean eagerInit;
     private boolean allowsPassByReference;
@@ -49,7 +51,8 @@ public class JavaImplementationImpl extends BaseJavaImplementationImpl implement
     private long maxAge = -1;
     private long maxIdleTime = -1;
     private JavaScopeImpl scope = JavaScopeImpl.STATELESS;
-
+    private Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames = null;
+    
     protected JavaImplementationImpl() {
         super();
     }    
@@ -118,7 +121,7 @@ public class JavaImplementationImpl extends BaseJavaImplementationImpl implement
         this.eagerInit = eagerInit;
     }
 
-    public Map<String, JavaElementImpl> getCallbackMembers() {
+    public Map<String, Collection<JavaElementImpl>> getCallbackMembers() {
         return callbackMembers;
     }
 
@@ -153,4 +156,13 @@ public class JavaImplementationImpl extends BaseJavaImplementationImpl implement
     public void setMaxIdleTime(long maxIdleTime) {
         this.maxIdleTime = maxIdleTime;
     }
+
+    public Map<ClassLoader, List<PolicyHandlerTuple>> getPolicyHandlerClassNames() {
+        return policyHandlerClassNames;
+    }
+
+    public void setPolicyHandlerClassNames(Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames) {
+        this.policyHandlerClassNames = policyHandlerClassNames;
+    }
+ 
 }

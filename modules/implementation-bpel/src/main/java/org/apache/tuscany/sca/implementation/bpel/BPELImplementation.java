@@ -18,10 +18,10 @@
  */
 package org.apache.tuscany.sca.implementation.bpel;
 
-import org.apache.tuscany.sca.assembly.Implementation;
-import org.apache.ode.bpel.iapi.ProcessConf;
-
 import javax.xml.namespace.QName;
+
+import org.apache.tuscany.sca.assembly.ComponentType;
+import org.apache.tuscany.sca.assembly.Implementation;
 
 /**
  * The model representing the BPEL implementation in an SCA assembly model.
@@ -31,20 +31,36 @@ import javax.xml.namespace.QName;
 public interface BPELImplementation extends Implementation {
 
     /**
-     * Builds the process configuration used by ODE to get deployment and configuration
-     * level information about a process.
-     * @return
+     * Get the BPEL process Name
      */
-    ProcessConf getProcessConf();
-
+    QName getProcess();
+    
     /**
-     * Sets the implementation compiled process bytes
-     * @param compiledProcess serialized compiled process
-     */
-    void setCompiledProcess(byte[] compiledProcess);
-
-    /**
+     * Set the BPEL process Name
      * @param processName process QName
      */
-    void setProcessName(QName processName);
+    void setProcess(QName processName);
+    
+    /**
+     * Get the BPEL process definition
+     * @return
+     */
+    BPELProcessDefinition getProcessDefinition();
+    
+    /**
+     * Set the BPEL process definition
+     * @param processDefinition
+     */
+    void setProcessDefinition(BPELProcessDefinition processDefinition);
+    
+    /** 
+     * Returns the componentType for this Spring implementation 
+     */
+    public ComponentType getComponentType(); 
+
+    /**
+     * Sets the componentType for this Spring implementation
+     * @parma componentType the component type to set
+     */
+    public void setComponentType(ComponentType componentType); 
 }

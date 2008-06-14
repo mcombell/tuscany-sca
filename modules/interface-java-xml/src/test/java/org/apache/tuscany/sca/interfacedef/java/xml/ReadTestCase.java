@@ -31,25 +31,19 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.interfacedef.java.DefaultJavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.DefaultJavaInterfaceIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.interfacedef.java.introspect.ExtensibleJavaInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 
 /**
  * Test reading Java interfaces.
@@ -58,69 +52,49 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  */
 public class ReadTestCase extends TestCase {
 
-    XMLInputFactory inputFactory;
-    DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
-    ExtensibleStAXArtifactProcessor staxProcessor;
-    private AssemblyFactory assemblyFactory;
-    private SCABindingFactory scaBindingFactory;
-    private PolicyFactory policyFactory;
-    private InterfaceContractMapper mapper;
-    private JavaInterfaceFactory javaFactory;
+    private XMLInputFactory inputFactory;
+    private XMLOutputFactory outputFactory;
+    private StAXArtifactProcessor<Object> staxProcessor;
+    private CompositeBuilder compositeBuilder;
 
+    @Override
     public void setUp() throws Exception {
-        assemblyFactory = new DefaultAssemblyFactory();
-        scaBindingFactory = new DefaultSCABindingFactory();
-        policyFactory = new DefaultPolicyFactory();
-        mapper = new InterfaceContractMapperImpl();
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
         inputFactory = XMLInputFactory.newInstance();
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        javaFactory = new DefaultJavaInterfaceFactory();
-
-        JavaInterfaceIntrospectorExtensionPoint visitors = new DefaultJavaInterfaceIntrospectorExtensionPoint();
-        JavaInterfaceIntrospector introspector = new ExtensibleJavaInterfaceIntrospector(javaFactory, visitors);
-        JavaInterfaceProcessor javaProcessor = new JavaInterfaceProcessor(javaFactory, introspector);
-        staxProcessors.addArtifactProcessor(javaProcessor);
-    }
-
-    public void tearDown() throws Exception {
-        inputFactory = null;
-        staxProcessors = null;
-        policyFactory = null;
-        assemblyFactory = null;
-        mapper = null;
+        outputFactory = XMLOutputFactory.newInstance();
+        StAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(extensionPoints);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, outputFactory, null);
+        
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        SCABindingFactory scaBindingFactory = modelFactories.getFactory(SCABindingFactory.class);
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        IntentAttachPointTypeFactory attachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
+        compositeBuilder = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, attachPointTypeFactory, mapper, null);
     }
 
     public void testReadComponentType() throws Exception {
-        ComponentTypeProcessor componentTypeReader = new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor);
         InputStream is = getClass().getResourceAsStream("CalculatorImpl.componentType");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        ComponentType componentType = componentTypeReader.read(reader);
+        ComponentType componentType = (ComponentType)staxProcessor.read(reader);
         assertNotNull(componentType);
-
-        //new PrintUtil(System.out).print(componentType);
     }
 
     public void testReadConstrainingType() throws Exception {
-        ConstrainingTypeProcessor constrainingTypeProcessor = new ConstrainingTypeProcessor(assemblyFactory, policyFactory, staxProcessor);
         InputStream is = getClass().getResourceAsStream("CalculatorComponent.constrainingType");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        ConstrainingType constrainingType = constrainingTypeProcessor.read(reader);
+        ConstrainingType constrainingType = (ConstrainingType)staxProcessor.read(reader);
         assertNotNull(constrainingType);
-
-        //new PrintUtil(System.out).print(constrainingType);
     }
 
     public void testReadComposite() throws Exception {
-        CompositeProcessor compositeProcessor = new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor);
         InputStream is = getClass().getResourceAsStream("Calculator.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        Composite composite = compositeProcessor.read(reader);
+        Composite composite = (Composite)staxProcessor.read(reader);
         assertNotNull(composite);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null);
-        compositeUtil.build(composite);
-
+        compositeBuilder.build(composite);
     }
 
 }

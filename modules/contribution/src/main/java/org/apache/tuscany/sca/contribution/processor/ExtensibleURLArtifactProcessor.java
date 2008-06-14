@@ -21,13 +21,20 @@ package org.apache.tuscany.sca.contribution.processor;
 import java.net.URI;
 import java.net.URL;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
- * The default implementation of a URL artifact processor.
+ * Implementation of an extensible URL artifact processor.
+ * 
+ * Takes a URLArtifactProcessorExtensionPoint and delegates to the proper URLArtifactProcessor
+ * by either fileName or fileExtention
  * 
  * @version $Rev$ $Date$
  */
@@ -35,14 +42,30 @@ public class ExtensibleURLArtifactProcessor
     implements URLArtifactProcessor<Object> {
     
     private URLArtifactProcessorExtensionPoint processors;
+    private Monitor monitor;
 
     /**
-     * Constructs a new URL artifact processor.
+     * Constructs a new ExtensibleURLArtifactProcessor.
      * 
      * @param processors
      */
-    public ExtensibleURLArtifactProcessor(URLArtifactProcessorExtensionPoint processors) {
+    public ExtensibleURLArtifactProcessor(URLArtifactProcessorExtensionPoint processors, Monitor monitor) {
         this.processors = processors;
+        this.monitor = monitor;
+    }
+    
+    /**
+     * Report a error.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
     }
 
     @SuppressWarnings("unchecked")
@@ -50,13 +73,23 @@ public class ExtensibleURLArtifactProcessor
         URLArtifactProcessor<Object> processor = null;
         
         // Delegate to the processor associated with file extension
-        String extension = sourceURL.getFile();
-        int extensionStart = extension.lastIndexOf('.');
-        //handle files without extension (e.g NOTICE)
-        if (extensionStart > 0) {
-            extension = extension.substring(extensionStart);
-            processor = (URLArtifactProcessor<Object>)processors.getProcessor(extension);            
+        String fileName = getFileName(sourceURL);
+        
+        //try to retrieve a processor for the specific filename
+        processor = (URLArtifactProcessor<Object>)processors.getProcessor(fileName);
+        
+        if (processor == null) {
+            //try to find my file type (extension)
+            String extension = sourceURL.getPath();
+            
+            int extensionStart = extension.lastIndexOf('.');
+            //handle files without extension (e.g NOTICE)
+            if (extensionStart > 0) {
+                extension = extension.substring(extensionStart);
+                processor = (URLArtifactProcessor<Object>)processors.getProcessor(extension);            
+            }
         }
+        
         if (processor == null) {
             return null;
         }
@@ -75,7 +108,7 @@ public class ExtensibleURLArtifactProcessor
         }
     }
     
-    public <MO> MO read(URL contributionURL, URI artifactURI, URL artifactUrl, Class<MO> type) 
+    public <M> M read(URL contributionURL, URI artifactURI, URL artifactUrl, Class<M> type) 
         throws ContributionReadException {
         Object mo = read(contributionURL, artifactURI, artifactUrl);
         if (type.isInstance(mo)) {
@@ -83,6 +116,7 @@ public class ExtensibleURLArtifactProcessor
         } else {
             UnrecognizedElementException e = new UnrecognizedElementException(null);
             e.setResourceURI(artifactURI.toString());
+            error("UnrecognizedElementException", processors, artifactURI.toString());
             throw e;
         }
     }
@@ -95,4 +129,15 @@ public class ExtensibleURLArtifactProcessor
         return null;
     }
 
+    /**
+     * Returns the file name from a URL.
+     * @param url
+     * @return
+     */
+    private static String getFileName(URL url){
+        String fileName = url.getPath();
+        int pos = fileName.lastIndexOf("/");
+        
+        return fileName.substring(pos +1);
+    }
 }

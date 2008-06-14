@@ -21,26 +21,25 @@ package org.apache.tuscany.sca.implementation.osgi;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.ComponentProperty;
+import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.Implementation;
-import org.apache.tuscany.sca.scope.Scope;
 
 /**
- * 
+ *
  * The model representing an OSGi implementation in an SCA assembly model.
  *
+ * @version $Rev$ $Date$
  */
-public interface OSGiImplementationInterface extends Implementation {
-    
-    public String getBundleName();
-    
-    public String getBundleLocation();
-    
-    public String[] getImports();
-    
-    public Scope getScope();
-    
-    public List<ComponentProperty> getReferenceProperties(String referenceName);
-    
-    public List<ComponentProperty> getServiceProperties(String serviceName);
+public interface OSGiImplementationInterface extends Implementation, Extensible {
+
+    String getBundleSymbolicName();
+
+    String getBundleVersion();
+
+    String[] getImports();
+
+    List<ComponentProperty> getReferenceProperties(String referenceName);
+
+    List<ComponentProperty> getServiceProperties(String serviceName);
 
 }

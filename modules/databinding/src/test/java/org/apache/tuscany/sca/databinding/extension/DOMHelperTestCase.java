@@ -29,7 +29,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class DOMHelperTestCase extends TestCase {
     private static final QName FOO_NAME = new QName("http://foo", "foo");
@@ -37,6 +38,7 @@ public class DOMHelperTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }

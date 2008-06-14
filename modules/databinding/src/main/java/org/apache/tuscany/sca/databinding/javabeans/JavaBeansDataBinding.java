@@ -30,9 +30,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * DataBinding for JavaBeans
+ *
+ * @version $Rev$ $Date$
  */
 public class JavaBeansDataBinding extends BaseDataBinding {
     /**
@@ -40,13 +44,18 @@ public class JavaBeansDataBinding extends BaseDataBinding {
      * up by other paths unless it's the only available path
      */
     public static final int HEAVY_WEIGHT = 10000;
-    public static final String NAME = Object.class.getName();
+    public static final String NAME = "java:complexType";
 
     public JavaBeansDataBinding() {
         super(NAME, Object.class);
     }
+
+    protected JavaBeansDataBinding(String name, Class<?> baseType) {
+        super(name, baseType);
+    }
     
-    public Object copy(Object arg) {
+    @Override
+    public Object copy(Object arg, DataType dataType, Operation operation) {
         if (arg == null) {
             return null;
         }
@@ -67,15 +76,31 @@ public class JavaBeansDataBinding extends BaseDataBinding {
                 oos.close();
                 bos.close();
 
+                // Work out which ClassLoader to use for deserializing arg
+                // We want to use:
+                //   * The ClassLoader of arg if it is not the System ClassLoader
+                //   * The ThreadContext ClassLoader if the ClassLoader of arg is the System ClassLoader
+                //     because Collection classes are loaded by the System ClassLoader but their contents
+                //     may be loaded from another ClassLoader
+                // 
+                ClassLoader classLoaderToUse = clazz.getClassLoader();
+                if (classLoaderToUse == null)
+                {
+                    // ClassLoader of arg is the System ClassLoader so we will use the ThreadContext ClassLoader
+                    // instead
+                    classLoaderToUse = Thread.currentThread().getContextClassLoader();
+                }
+                
                 ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-                ObjectInputStream ois = getObjectInputStream(bis, clazz.getClassLoader());
+                ObjectInputStream ois = getObjectInputStream(bis, classLoaderToUse);
                 Object objectCopy = ois.readObject();
                 ois.close();
                 bis.close();
                 return objectCopy;
             } else {
                 // return arg;
-                throw new IllegalArgumentException("Pass-by-value is not supported for the given object");
+                throw new IllegalArgumentException("Argument type '" + arg.getClass().getCanonicalName() + "' is not Serializable. " + 
+                                                   " Pass-by-value cannot be performed on this argument");
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Pass-by-value is not supported for the given object", e);
@@ -93,6 +118,16 @@ public class JavaBeansDataBinding extends BaseDataBinding {
                 try {
                     return Class.forName(desc.getName(), false, cl);
                 } catch (ClassNotFoundException e) {
+                    try {
+                        // For OSGi, use context ClassLoader if the bundle ClassLoader cannot load the class
+                        if (cl != Thread.currentThread().getContextClassLoader()) {
+                            return Class.forName(desc.getName(), false, Thread.currentThread().getContextClassLoader());
+                        }
+                    } catch (ClassNotFoundException e1) {
+                        // ignore
+                    } catch (NoClassDefFoundError e1) {
+                        // ignore
+                    }
                     return super.resolveClass(desc);
                 }
             }

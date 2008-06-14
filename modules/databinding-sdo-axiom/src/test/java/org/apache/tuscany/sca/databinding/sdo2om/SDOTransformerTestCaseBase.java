@@ -36,6 +36,8 @@ import commonj.sdo.impl.HelperProvider;
 
 /**
  * The base class for SDO-related test cases
+ *
+ * @version $Rev$ $Date$
  */
 public abstract class SDOTransformerTestCaseBase extends TestCase {
     protected static final QName ORDER_QNAME = new QName("http://www.example.com/IPO", "purchaseOrder");
@@ -49,6 +51,7 @@ public abstract class SDOTransformerTestCaseBase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         helperContext = HelperProvider.getDefaultContext();

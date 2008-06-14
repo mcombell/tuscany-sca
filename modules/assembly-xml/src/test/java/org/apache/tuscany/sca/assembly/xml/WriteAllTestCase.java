@@ -15,13 +15,17 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- */
+ */ 
 
 package org.apache.tuscany.sca.assembly.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 
@@ -31,16 +35,25 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.definitions.SCADefinitions;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorFactoryImpl;
+import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 
 /**
  * Test writing SCA XML assemblies.
@@ -48,50 +61,73 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  * @version $Rev$ $Date$
  */
 public class WriteAllTestCase extends TestCase {
-    private DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
+    private XMLInputFactory inputFactory;
+    private XMLOutputFactory outputFactory;
     private ExtensibleStAXArtifactProcessor staxProcessor;
-    private TestModelResolver resolver; 
-    private AssemblyFactory assemblyFactory;
-    private SCABindingFactory scaBindingFactory;
-    private PolicyFactory policyFactory;
-    private InterfaceContractMapper mapper;
-    private CompositeBuilderImpl compositeUtil;
+    private ModelResolver resolver; 
+    private CompositeBuilder compositeBuilder;
+    private URLArtifactProcessor<SCADefinitions> policyDefinitionsProcessor;
+    private Monitor monitor;
 
-
+    @Override
     public void setUp() throws Exception {
-        assemblyFactory = new DefaultAssemblyFactory();
-        scaBindingFactory = new DefaultSCABindingFactory();
-        policyFactory = new DefaultPolicyFactory();
-        mapper = new InterfaceContractMapperImpl();
-        compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null);
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        resolver = new TestModelResolver(getClass().getClassLoader());
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        inputFactory = XMLInputFactory.newInstance();
+        outputFactory = XMLOutputFactory.newInstance();
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, outputFactory, null);
+        resolver = new DefaultModelResolver();
+        
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        SCABindingFactory scaBindingFactory = new TestSCABindingFactoryImpl();
+        IntentAttachPointTypeFactory attachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
+
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        
+        MonitorFactory monitorFactory = new DefaultMonitorFactoryImpl();
+        monitor = monitorFactory.createMonitor();
+        
+        compositeBuilder = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, attachPointTypeFactory, mapper, monitor);
+
+        URLArtifactProcessorExtensionPoint documentProcessors = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+        policyDefinitionsProcessor = documentProcessors.getProcessor(SCADefinitions.class);
     }
 
+    @Override
     public void tearDown() throws Exception {
-        staxProcessors = null;
-        resolver = null;
-        policyFactory = null;
-        assemblyFactory = null;
-        mapper = null;
     }
 
     public void testReadWriteComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("TestAllCalculator.composite");
         Composite composite = staxProcessor.read(is, Composite.class);
+        
+        verifyComposite(composite);
+        
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         staxProcessor.write(composite, bos);
+        bos.close();
+        
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+        composite = staxProcessor.read(bis, Composite.class);
+        
+        verifyComposite(composite);
+        
     }
 
     public void testReadWireWriteComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("TestAllCalculator.composite");
         Composite composite = staxProcessor.read(is, Composite.class);
+        
+        URL url = getClass().getResource("test_definitions.xml");
+        URI uri = URI.create("test_definitions.xml");
+        SCADefinitions scaDefns = (SCADefinitions)policyDefinitionsProcessor.read(null, uri, url);
+        assertNotNull(scaDefns);
+        policyDefinitionsProcessor.resolve(scaDefns, resolver);
+        
         staxProcessor.resolve(composite, resolver);
-        compositeUtil.build(composite);
+        compositeBuilder.build(composite);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         staxProcessor.write(composite, bos);
     }
@@ -110,6 +146,15 @@ public class WriteAllTestCase extends TestCase {
         staxProcessor.resolve(constrainingType, resolver);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         staxProcessor.write(constrainingType, bos);
+    }
+    
+    private void verifyComposite(Composite composite) {
+        assertEquals(composite.getProperties().get(0).getName(),"prop1");
+        assertEquals(composite.getProperties().get(0).isMany(), true);
+        assertEquals(composite.getProperties().get(1).getName(),"prop2");
+        assertEquals(composite.getProperties().get(1).isMustSupply(), true);
+        assertEquals(composite.getProperties().get(0).getXSDType(), new QName("http://foo", "MyComplexType"));
+        assertEquals(composite.getProperties().get(1).getXSDElement(), new QName("http://www.osoa.org/xmlns/sca/1.0", "MyComplexPropertyValue1"));
     }
 
 }

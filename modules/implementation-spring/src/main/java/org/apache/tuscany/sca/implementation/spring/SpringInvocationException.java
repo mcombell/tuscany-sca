@@ -18,12 +18,23 @@
  */
 package org.apache.tuscany.sca.implementation.spring;
 
+/**
+ * @version $Rev$ $Date$
+ */
 public class SpringInvocationException extends Exception {
-	
+
     private static final long serialVersionUID = -1157790036638157513L;
-	
-	public SpringInvocationException( String msg ) {
-		super( msg );
-	}
+
+    public SpringInvocationException(String msg) {
+        super(msg);
+    }
+    
+    public SpringInvocationException(Throwable e) {
+        super(e);
+    }
+    
+    public SpringInvocationException(String msg,Throwable e) {
+        super(msg,e);
+    }
 
 }

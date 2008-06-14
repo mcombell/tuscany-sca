@@ -18,11 +18,15 @@
  */
 package org.apache.tuscany.sca.interfacedef.wsdl.impl;
 
+import javax.wsdl.PortType;
+
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterface;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract;
-import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
 
 /**
  * A factory for the WSDL model.
@@ -30,9 +34,30 @@ import org.apache.tuscany.sca.interfacedef.wsdl.XSDefinition;
  * @version $Rev$ $Date$
  */
 public abstract class WSDLFactoryImpl implements WSDLFactory {
+    
+    private WSDLInterfaceIntrospectorImpl introspector;
+    
+    public WSDLFactoryImpl(ModelFactoryExtensionPoint modelFactories) {
+        introspector = new WSDLInterfaceIntrospectorImpl(modelFactories);
+    }
 
     public WSDLInterface createWSDLInterface() {
         return new WSDLInterfaceImpl();
+    }
+    
+    public WSDLInterface createWSDLInterface(PortType portType,
+                                             WSDLDefinition wsdlDefinition,
+                                             ModelResolver resolver) throws InvalidInterfaceException {
+        WSDLInterface wsdlInterface = createWSDLInterface();
+        introspector.introspectPortType(wsdlInterface, portType, wsdlDefinition, resolver);
+        return wsdlInterface;
+    }
+    
+    public void createWSDLInterface(WSDLInterface wsdlInterface,
+                                    PortType portType,
+                                    WSDLDefinition wsdlDefinition,
+                                    ModelResolver resolver) throws InvalidInterfaceException {
+        introspector.introspectPortType(wsdlInterface, portType, wsdlDefinition, resolver);
     }
     
     public WSDLDefinition createWSDLDefinition() {
@@ -42,9 +67,9 @@ public abstract class WSDLFactoryImpl implements WSDLFactory {
     public WSDLInterfaceContract createWSDLInterfaceContract() {
         return new WSDLInterfaceContractImpl();
     }
-    
-    public XSDefinition createXSDefinition() {
-        return new XSDefinitionImpl();
+
+    public WSDLInterfaceIntrospectorImpl getWSDLInterfaceIntrospector() {
+        return introspector;
     }
 
 }

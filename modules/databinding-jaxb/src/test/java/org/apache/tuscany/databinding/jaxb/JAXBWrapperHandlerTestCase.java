@@ -19,53 +19,72 @@
 
 package org.apache.tuscany.databinding.jaxb;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.apache.tuscany.sca.databinding.jaxb.JAXBDataBinding;
 import org.apache.tuscany.sca.databinding.jaxb.JAXBWrapperHandler;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
+import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
+import org.apache.tuscany.sca.interfacedef.util.ElementInfo;
+import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
-import com.example.ipo.jaxb.ObjectFactory;
-import com.example.ipo.jaxb.PurchaseOrderType;
+import com.example.stock.StockQuoteOffer;
 
 /**
  * Test case for JAXBExceptionHandler
+ *
+ * @version $Rev$ $Date$
  */
 public class JAXBWrapperHandlerTestCase extends TestCase {
-    // private static final QName ELEMENT = new QName("http://www.example.com/IPO", "purchaseOrder");
+    private static final QName ELEMENT = new QName("http://www.example.com/stock", "stockQuoteOffer");
+    private static final QName INPUT = new QName("", "input");
     private JAXBWrapperHandler handler;
 
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         this.handler = new JAXBWrapperHandler();
     }
 
     public void testCreate() {
-        // ElementInfo element = new ElementInfo(ELEMENT, null);
-        // JAXBElement<?> jaxbElement = handler.create(element, null);
+        ElementInfo element = new ElementInfo(ELEMENT, null);
+        Operation op = new OperationImpl();
+        WrapperInfo wrapperInfo = new WrapperInfo(JAXBDataBinding.NAME, element, null, null, null);
+        wrapperInfo.setInputWrapperType(new DataTypeImpl<XMLType>(JAXBDataBinding.NAME, StockQuoteOffer.class,
+                                                                  XMLType.UNKNOWN));
+        op.setWrapper(wrapperInfo);
+        Object offer = handler.create(op, true);
+        Assert.assertTrue(offer instanceof StockQuoteOffer);
     }
 
     public void testSetChild() {
-        ObjectFactory factory = new ObjectFactory();
-        PurchaseOrderType po = factory.createPurchaseOrderType();
-        JAXBElement<PurchaseOrderType> wrapper = factory.createPurchaseOrder(po);
-        handler.setChild(wrapper, 2, null, "Comment");
+        StockQuoteOffer wrapper = new StockQuoteOffer();
+        handler.setChild(wrapper, 0, new ElementInfo(INPUT, null), "IBM");
+        Assert.assertEquals("IBM", wrapper.getInput());
     }
 
     public void testGetChildren() {
-        ObjectFactory factory = new ObjectFactory();
-        PurchaseOrderType po = factory.createPurchaseOrderType();
-        po.setComment("Comment");
-        JAXBElement<PurchaseOrderType> wrapper = factory.createPurchaseOrder(po);
-        List children = handler.getChildren(wrapper);
+        StockQuoteOffer wrapper = new StockQuoteOffer();
+        wrapper.setInput("IBM");
+        List<ElementInfo> elements = new ArrayList<ElementInfo>();
+        elements.add(new ElementInfo(INPUT, null));
+        WrapperInfo wrapperInfo = new WrapperInfo(JAXBDataBinding.NAME, null, null, elements, null);
+        Operation op = new OperationImpl();
+        op.setWrapper(wrapperInfo);
+        List children = handler.getChildren(wrapper, op, true);
         assertNotNull(children);
-        assertEquals(4, children.size());
-        assertEquals("Comment", children.get(2));
-        assertNull(children.get(0));
+        assertEquals(1, children.size());
+        assertEquals("IBM", children.get(0));
     }
 }

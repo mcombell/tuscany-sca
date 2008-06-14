@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.tuscany.sca.assembly.Property;
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
 import org.apache.tuscany.sca.databinding.Mediator;
 import org.apache.tuscany.sca.databinding.SimpleTypeMapper;
 import org.apache.tuscany.sca.databinding.impl.SimpleTypeMapperImpl;
@@ -32,8 +34,6 @@ import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.TypeInfo;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
-import org.apache.tuscany.sca.factory.ObjectCreationException;
-import org.apache.tuscany.sca.factory.ObjectFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -44,6 +44,7 @@ import org.w3c.dom.Node;
  * 
  * This code has been copied from the Java implementation to avoid dependencies on the Java implementation.
  *
+ * @version $Rev$ $Date$
  */
 public class OSGiPropertyValueObjectFactory {
     protected SimpleTypeMapper simpleTypeMapper = new SimpleTypeMapperImpl();
@@ -109,7 +110,7 @@ public class OSGiPropertyValueObjectFactory {
                 Document doc = (Document)property;
                 Element element = doc.getDocumentElement(); 
                 if (element.getChildNodes().getLength() == 1 && 
-                    element.getChildNodes().item(0).getNodeType() == Element.TEXT_NODE) {
+                    element.getChildNodes().item(0).getNodeType() == Node.TEXT_NODE) {
                     return true;
                 }
             }
@@ -139,7 +140,7 @@ public class OSGiPropertyValueObjectFactory {
         Element rootElement = document.getDocumentElement();
         List<Node> propValues = new ArrayList<Node>();
         for (int count = 0 ; count < rootElement.getChildNodes().getLength() ; ++count) {
-            if (rootElement.getChildNodes().item(count).getNodeType() == Document.ELEMENT_NODE) {
+            if (rootElement.getChildNodes().item(count).getNodeType() == Node.ELEMENT_NODE) {
                 propValues.add(rootElement.getChildNodes().item(count));
             }
         }

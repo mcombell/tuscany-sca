@@ -34,14 +34,14 @@ import echo.server.EchoServiceListener;
 /**
  * Implementation of the Echo binding provider.
  */
-public class EchoServiceBindingProvider implements ServiceBindingProvider {
+class EchoServiceBindingProvider implements ServiceBindingProvider {
     
     private RuntimeComponent component;
     private RuntimeComponentService service;  
     private EchoBinding binding;
     private MessageFactory messageFactory;
     
-    public EchoServiceBindingProvider(RuntimeComponent component,
+    EchoServiceBindingProvider(RuntimeComponent component,
                                       RuntimeComponentService service, EchoBinding binding, MessageFactory messageFactory) {
         this.component = component;
         this.service = service;
@@ -52,6 +52,10 @@ public class EchoServiceBindingProvider implements ServiceBindingProvider {
     public InterfaceContract getBindingInterfaceContract() {
         return service.getInterfaceContract();
     }
+    
+    public boolean supportsOneWayInvocation() {
+        return false;
+    }
 
     public void start() {
 
@@ -61,9 +65,6 @@ public class EchoServiceBindingProvider implements ServiceBindingProvider {
         
         // Register with the hosting server
         String uri = binding.getURI();
-        if (uri == null) {
-            uri = component.getURI() + "/" + binding.getName();
-        }
         EchoServer.getServer().register(uri, new EchoServiceListener(chain.getHeadInvoker(), messageFactory));
     }
 

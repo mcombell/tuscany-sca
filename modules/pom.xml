@@ -22,12 +22,16 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-modules</artifactId>
     <packaging>pom</packaging>
     <name>Apache Tuscany SCA Implementation Modules</name>
+
+    <properties>
+        <tuscany.version>2.0</tuscany.version>
+    </properties>
 
     <profiles>
         <profile>
@@ -39,69 +43,121 @@
                 <module>assembly</module>
                 <module>assembly-java-dsl</module>
                 <module>assembly-xml</module>
-                <module>binding-jms</module>
-                <module>binding-ajax</module>
+                <module>assembly-xsd</module>
+                <module>binding-corba</module>
+                <module>binding-dwr</module>
                 <module>binding-ejb</module>
+                <module>binding-ejb-runtime</module>
+                <!-- obsolete -->
                 <module>binding-feed</module>
+                <!-- new bindings -->
+                <module>binding-atom</module>
+                <module>binding-atom-abdera</module>
+                <module>binding-rss</module>
+                <module>binding-rss-rome</module>
+                <module>binding-http</module>
+                <module>binding-http-runtime</module>
+                <module>binding-jms</module>
                 <module>binding-jsonrpc</module>
+                <module>binding-jsonrpc-runtime</module>
+                <module>binding-notification</module>
                 <module>binding-rmi</module>
                 <module>binding-sca</module>
+                <module>binding-sca-axis2</module>
+                <module>binding-sca-xml</module>
                 <module>binding-ws</module>
                 <module>binding-ws-axis2</module>
                 <module>binding-ws-xml</module>
-                <module>commonj-api</module>
                 <module>contribution</module>
+                <module>contribution-groovy</module>
+                <module>contribution-namespace</module>
+                <module>contribution-java</module>
                 <module>contribution-impl</module>
+                <module>contribution-osgi</module>
+                <module>contribution-resource</module>
+                <module>contribution-xml</module>
                 <module>core</module>
                 <module>core-databinding</module>
                 <module>core-spi</module>
                 <module>core-spring</module>
+                <module>data-api</module>
                 <module>databinding</module>
                 <module>databinding-axiom</module>
                 <module>databinding-jaxb</module>
+                <module>databinding-jaxb-axiom</module>
                 <module>databinding-sdo</module>
                 <module>databinding-sdo-axiom</module>
                 <module>databinding-json</module>
+                <module>databinding-saxon</module>
                 <module>databinding-xmlbeans</module>
-                <!--
-                <module>discovery-jms</module>
-                -->
-                <module>distributed</module>
+                <module>databinding-fastinfoset</module>
+                <module>databinding-xstream</module>
+                <module>data-engine-helper</module>
+                <module>definitions</module>
+                <module>definitions-xml</module>
+                <module>domain-manager</module>
+                <module>endpoint</module>
+                <module>extensibility</module>
                 <module>extension-helper</module>
+                <module>host-ejb</module>
                 <module>host-embedded</module>
                 <module>host-http</module>
+                <module>host-openejb</module>
                 <module>host-rmi</module>
                 <module>host-webapp</module>
-                <module>http-jetty</module>
-                <module>http-tomcat</module>
+                <module>host-webapp-junit</module>
+                <module>host-jetty</module>
+                <module>host-tomcat</module>
                 <module>interface</module>
                 <module>interface-java</module>
+                <module>interface-java-jaxws</module>
                 <module>interface-java-xml</module>
-                <module>interface-java-runtime</module>
                 <module>interface-wsdl</module>
+                <module>interface-wsdl-java2wsdl</module>
                 <module>interface-wsdl-xml</module>
-                <module>interface-wsdl-runtime</module>
                 <module>implementation-bpel</module>
+                <module>implementation-bpel-ode</module>
                 <module>implementation-das</module>
-                <module>implementation-data</module>
+                <module>implementation-data-xml</module>
+                <module>implementation-ejb</module>
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
                 <module>implementation-java-runtime</module>
+                <module>implementation-node</module>
+                <module>implementation-node-runtime</module>
+                <module>implementation-notification</module>
                 <module>implementation-osgi</module>
                 <module>implementation-resource</module>
+                <module>implementation-resource-runtime</module>
                 <module>implementation-script</module>
                 <module>implementation-spring</module>
-                <module>java2wsdl</module>
-                <!--
-                <module>jmx</module>
-                -->
-                <module>maven-java2wsdl</module>
-                <module>maven-wsdl2java</module>
+                <module>implementation-widget</module>
+                <module>implementation-widget-runtime</module>
+                <module>implementation-xquery</module>
+                <module>monitor</module>
+                <module>monitor-logging</module>
+                <module>node2-api</module>
+                <module>node2-impl</module>
+                <module>node2-launcher</module>
+                <module>node2-launcher-webapp</module>
+                <module>osgi-runtime</module>
                 <module>policy</module>
+                <module>policy-xml</module>
+                <module>policy-xml-ws</module>
+                <module>policy-logging</module>
+                <module>policy-security</module>
+                <module>policy-security-jsr250</module>
+                <module>policy-security-ws</module>
+                <module>policy-transaction</module>
+                <!--module>runtime</module-->
+                <module>runtime-tomcat</module>
+                <!--module>runtime-war</module-->
                 <module>sca-api</module>
-                <module>topology</module>
-                <module>topology-xml</module>
-                <module>wsdl2java</module>
+                <module>workspace</module>
+                <module>workspace-impl</module>
+                <module>workspace-xml</module>
+                <module>xsd</module>
+                <module>xsd-xml</module>
             </modules>
         </profile>
 
@@ -122,5 +178,36 @@
             <scope>test</scope>
         </dependency>        
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>
+                            ${project.build.outputDirectory}/META-INF/MANIFEST.MF
+                        </manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.4.0</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>

@@ -22,37 +22,115 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-assembly-xml</artifactId>
-    <name>Apache Tuscany SCA XML Assembly Support</name>
+    <name>Apache Tuscany SCA XML Assembly Model</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-assembly</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>
+                
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-definitions</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-policy</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-namespace</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-java</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>        
 
         <dependency>
             <groupId>stax</groupId>
             <artifactId>stax-api</artifactId>
             <version>1.0.1</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>
+        
+		<!-- Test Dependencies -->        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-definitions-xml</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-policy-xml</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+		
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-policy-xml-ws</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+       
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-assembly-xsd</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-contribution-impl</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
+                <configuration>
+                    <instructions>
+                        <Bundle-Version>${tuscany.version}</Bundle-Version>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.assembly.xml</Bundle-SymbolicName>
+                        <Bundle-Description>${pom.name}</Bundle-Description>
+                        <Export-Package>org.apache.tuscany.sca.assembly.xml*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

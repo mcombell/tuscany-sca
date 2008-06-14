@@ -33,6 +33,8 @@ import org.xml.sax.InputSource;
 
 /**
  * Push DOM InputSource to Node
+ *
+ * @version $Rev$ $Date$
  */
 public class InputStream2Node extends BaseTransformer<InputStream, Node> implements
     PullTransformer<InputStream, Node> {
@@ -49,14 +51,17 @@ public class InputStream2Node extends BaseTransformer<InputStream, Node> impleme
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    public Class<InputStream> getSourceType() {
         return InputStream.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    public Class<Node> getTargetType() {
         return Node.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

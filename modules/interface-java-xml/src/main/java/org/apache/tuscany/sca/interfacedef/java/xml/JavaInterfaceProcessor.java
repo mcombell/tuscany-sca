@@ -26,7 +26,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -37,17 +39,51 @@ import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfaceContract>, JavaConstants {
 
     private JavaInterfaceFactory javaFactory;
-    private JavaInterfaceIntrospector introspector;
+    private Monitor monitor;
 
-    public JavaInterfaceProcessor(JavaInterfaceFactory javaFactory, JavaInterfaceIntrospector introspector) {
-        this.javaFactory = javaFactory;
-        this.introspector = introspector;
+    public JavaInterfaceProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        this.javaFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+        this.monitor = monitor;
     }
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "interface-javaxml-validation-messages", Severity.ERROR, model, message, ex);
+    	     monitor.problem(problem);
+    	 }        
+     }
+     
+     /**
+      * Report a error.
+      * 
+      * @param problems
+      * @param message
+      * @param model
+      */
+     private void error(String message, Object model, Object... messageParameters) {
+     	 if (monitor != null) {
+     		 Problem problem = new ProblemImpl(this.getClass().getName(), "interface-javaxml-validation-messages", Severity.ERROR, model, message,(Object[])messageParameters);
+     	     monitor.problem(problem);
+     	 }        
+     }
     
     private JavaInterface createJavaInterface(String interfaceName) {
         JavaInterface javaInterface = javaFactory.createJavaInterface();
@@ -56,52 +92,47 @@ public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfa
         return javaInterface;
     }
 
-    public JavaInterfaceContract read(XMLStreamReader reader) throws ContributionReadException {
-        try {
-            // Read an <interface.java>
-            JavaInterfaceContract javaInterfaceContract = javaFactory.createJavaInterfaceContract();
-            String interfaceName = reader.getAttributeValue(null, INTERFACE);
-            if (interfaceName != null) {
-                JavaInterface javaInterface = createJavaInterface(interfaceName);
-                javaInterfaceContract.setInterface(javaInterface);
-            }
-
-            String callbackInterfaceName = reader.getAttributeValue(null, CALLBACK_INTERFACE);
-            if (callbackInterfaceName != null) {
-                JavaInterface javaCallbackInterface = createJavaInterface(callbackInterfaceName);
-                javaInterfaceContract.setCallbackInterface(javaCallbackInterface);
-            }
-    
-            // Skip to end element
-            while (reader.hasNext()) {
-                if (reader.next() == END_ELEMENT && INTERFACE_JAVA_QNAME.equals(reader.getName())) {
-                    break;
-                }
-            }
-            return javaInterfaceContract;
-            
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+    public JavaInterfaceContract read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
+        
+        // Read an <interface.java>
+        JavaInterfaceContract javaInterfaceContract = javaFactory.createJavaInterfaceContract();
+        String interfaceName = reader.getAttributeValue(null, INTERFACE);
+        if (interfaceName != null) {
+            JavaInterface javaInterface = createJavaInterface(interfaceName);
+            javaInterfaceContract.setInterface(javaInterface);
         }
+
+        String callbackInterfaceName = reader.getAttributeValue(null, CALLBACK_INTERFACE);
+        if (callbackInterfaceName != null) {
+            JavaInterface javaCallbackInterface = createJavaInterface(callbackInterfaceName);
+            javaInterfaceContract.setCallbackInterface(javaCallbackInterface);
+        }
+
+        // Skip to end element
+        while (reader.hasNext()) {
+            if (reader.next() == END_ELEMENT && INTERFACE_JAVA_QNAME.equals(reader.getName())) {
+                break;
+            }
+        }
+        return javaInterfaceContract;
     }
     
-    public void write(JavaInterfaceContract javaInterfaceContract, XMLStreamWriter writer) throws ContributionWriteException {
-        try {
-            // Write an <interface.java>
-            writer.writeStartElement(Constants.SCA10_NS, INTERFACE_JAVA);
-            JavaInterface javaInterface = (JavaInterface)javaInterfaceContract.getInterface();
-            if (javaInterface != null && javaInterface.getName() != null) {
-                writer.writeAttribute(INTERFACE, javaInterface.getName());
-            }
-            JavaInterface javaCallbackInterface = (JavaInterface)javaInterfaceContract.getCallbackInterface();
-            if (javaCallbackInterface != null && javaCallbackInterface.getName() != null) {
-                writer.writeAttribute(CALLBACK_INTERFACE, javaCallbackInterface.getName());
-            }
-            writer.writeEndElement();
-            
-        } catch (XMLStreamException e) {
-            throw new ContributionWriteException(e);
+    public void write(JavaInterfaceContract javaInterfaceContract, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
+        
+        // Write an <interface.java>
+        writer.writeStartElement(Constants.SCA10_NS, INTERFACE_JAVA);
+        JavaInterface javaInterface = (JavaInterface)javaInterfaceContract.getInterface();
+        
+        if (javaInterface != null && javaInterface.getName() != null) {
+            writer.writeAttribute(INTERFACE, javaInterface.getName());
         }
+        
+        JavaInterface javaCallbackInterface = (JavaInterface)javaInterfaceContract.getCallbackInterface();
+        if (javaCallbackInterface != null && javaCallbackInterface.getName() != null) {
+            writer.writeAttribute(CALLBACK_INTERFACE, javaCallbackInterface.getName());
+        }
+        
+        writer.writeEndElement();
     }
     
     private JavaInterface resolveJavaInterface(JavaInterface javaInterface, ModelResolver resolver) throws ContributionResolveException {
@@ -117,16 +148,21 @@ public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfa
                 classReference = resolver.resolveModel(ClassReference.class, classReference);
                 Class javaClass = classReference.getJavaClass();
                 if (javaClass == null) {
-                    throw new ContributionResolveException(new ClassNotFoundException(javaInterface.getName()));
+                    error("ClassNotFoundException", resolver, javaInterface.getName());
+                    return javaInterface;
+                    //throw new ContributionResolveException(new ClassNotFoundException(javaInterface.getName()));
                 }
-                try {
-                        
+                
+                try {                        
                     // Introspect the Java interface and populate the interface and
                     // operations
-                    javaInterface = introspector.introspect(javaClass);
+                    javaFactory.createJavaInterface(javaInterface, javaClass);
                 
                 } catch (InvalidInterfaceException e) {
-                    throw new ContributionResolveException(e);
+                	ContributionResolveException ce = new ContributionResolveException(e);
+                	error("ContributionResolveException", javaFactory, ce);
+                    return javaInterface;
+                	//throw ce;
                 }
 
                 // Cache the resolved interface

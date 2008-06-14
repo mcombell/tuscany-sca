@@ -1,3 +1,22 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.    
+ */
+
 package org.apache.tuscany.sca.databinding.json;
 
 import java.io.StringReader;
@@ -15,14 +34,12 @@ import junit.framework.TestCase;
 import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.impl.TransformationContextImpl;
-import org.apache.tuscany.sca.databinding.json.JSON2XMLStreamReader;
-import org.apache.tuscany.sca.databinding.json.XMLStreamReader2JSON;
-import org.apache.tuscany.sca.databinding.json.XMLStreamSerializer;
 import org.apache.tuscany.sca.databinding.json.axiom.JSON2OMElement;
+import org.apache.tuscany.sca.databinding.xml.XMLStreamSerializer;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 
 public class JSONTransformerTestCase extends TestCase {
     private static final String IPO_XML = "<?xml version=\"1.0\"?>" + "<ipo:purchaseOrder"
@@ -59,10 +76,10 @@ public class JSONTransformerTestCase extends TestCase {
     public void testXML2JSON() throws Exception {
         XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new StringReader(IPO_XML));
         XMLStreamReader2JSON t1 = new XMLStreamReader2JSON();
-        JSONObject json = t1.transform(reader, null);
+        JSONObject json = (JSONObject) t1.transform(reader, null);
         Assert.assertNotNull(json);
 
-        // Cannot round-trip as we hit a bug in Jettison
+        // Cannot round-trip as we hit a bug in Jettison: http://jira.codehaus.org/browse/JETTISON-37
         /*
          JSON2XMLStreamReader t2 = new JSON2XMLStreamReader();
          XMLStreamReader reader2 = t2.transform(json, null);
@@ -100,11 +117,12 @@ public class JSONTransformerTestCase extends TestCase {
     public void testString2JSON() throws Exception {
         String json = "{\"name\":\"John\",\"age\":25}";
         String2JSON t1 = new String2JSON();
-        JSONObject jsonObject = t1.transform(json, null);
+        JSONObject jsonObject = (JSONObject) t1.transform(json, null);
         assertEquals(jsonObject.getString("name"), "John");
         assertEquals(jsonObject.getInt("age"), 25);
         JSON2String t2 = new JSON2String();
         String str = t2.transform(jsonObject, null);
-        assertEquals(json, str);
+        assertTrue(str.contains("\"name\":\"John\""));
+        assertTrue(str.contains("\"age\":25"));
     }
 }

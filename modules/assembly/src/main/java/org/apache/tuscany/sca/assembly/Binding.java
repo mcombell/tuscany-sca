@@ -18,27 +18,25 @@
  */
 package org.apache.tuscany.sca.assembly;
 
-import org.apache.tuscany.sca.policy.IntentAttachPoint;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Represents a binding.
  * 
  * @version $Rev$ $Date$
  */
-public interface Binding extends Base, IntentAttachPoint, PolicySetAttachPoint {
+public interface Binding extends Base, Cloneable {
 
     /**
      * Returns the binding URI.
      * 
-     * @return the binding uri
+     * @return the binding URI
      */
     String getURI();
 
     /**
      * Sets the binding URI.
      * 
-     * @param uri the binding uri
+     * @param uri the binding URI
      */
     void setURI(String uri);
 
@@ -55,4 +53,11 @@ public interface Binding extends Base, IntentAttachPoint, PolicySetAttachPoint {
      * @param name the binding name
      */
     void setName(String name);
+    
+    /**
+     * Clone the binding
+     * 
+     * @return
+     */
+    Object clone() throws CloneNotSupportedException;   
 }

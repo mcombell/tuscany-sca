@@ -38,11 +38,6 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
 
     private UnChecked theUgly;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.tuscany.sca.test.exceptions.impl.ExceptionHandler#testing()
-     */
     public void testing() {
 
         assert exceptionThrower != null : "'exceptionThrower' never wired";

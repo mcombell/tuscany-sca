@@ -16,52 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="calculator" default="compile">
-    <property name="test.class" value="calculator.CalculatorNodeExe" />
-	<property name="test.jar"   value="sample-calculator.jar" />
+<project name="calculator" default="runDomain">
+	<property name="test.jar"   value="sample-calculator-distributed.jar" />
 	
-	<!-- a classpath so I can test without building the distribution jars -->
-	<property name="m2.repo"   value="C:\Documents and Settings\simon\.m2\repository" />
-    <path id="test.classpath">
-        <!--pathelement location="${classpath}"/-->
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/distributed-changes/1.0-incubating-SNAPSHOT/distributed-changes-1.0-incubating-SNAPSHOT.jar"/>    	
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-java-xml/1.0-incubating-SNAPSHOT/tuscany-interface-java-xml-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-java-runtime/1.0-incubating-SNAPSHOT/tuscany-interface-java-runtime-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/wsdl4j/wsdl4j/1.6.2/wsdl4j-1.6.2.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-implementation-java-xml/1.0-incubating-SNAPSHOT/tuscany-implementation-java-xml-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/codehaus/woodstox/wstx-asl/3.2.0/wstx-asl-3.2.0.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-wsdl/1.0-incubating-SNAPSHOT/tuscany-interface-wsdl-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-core-spi/1.0-incubating-SNAPSHOT/tuscany-core-spi-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-implementation-java/1.0-incubating-SNAPSHOT/tuscany-implementation-java-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-core-databinding/1.0-incubating-SNAPSHOT/tuscany-core-databinding-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-contribution-impl/1.0-incubating-SNAPSHOT/tuscany-contribution-impl-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/junit/junit/4.2/junit-4.2.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface/1.0-incubating-SNAPSHOT/tuscany-interface-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-java/1.0-incubating-SNAPSHOT/tuscany-interface-java-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/sca-api/1.0-incubating-SNAPSHOT/sca-api-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-implementation-java-runtime/1.0-incubating-SNAPSHOT/tuscany-implementation-java-runtime-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-wsdl-runtime/1.0-incubating-SNAPSHOT/tuscany-interface-wsdl-runtime-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-core/1.0-incubating-SNAPSHOT/tuscany-core-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-assembly-xml/1.0-incubating-SNAPSHOT/tuscany-assembly-xml-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-assembly/1.0-incubating-SNAPSHOT/tuscany-assembly-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/ws/commons/schema/XmlSchema/1.3.1/XmlSchema-1.3.1.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-policy/1.0-incubating-SNAPSHOT/tuscany-policy-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-interface-wsdl-xml/1.0-incubating-SNAPSHOT/tuscany-interface-wsdl-xml-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/commonj-api/1.0-incubating-SNAPSHOT/commonj-api-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-contribution/1.0-incubating-SNAPSHOT/tuscany-contribution-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-databinding/1.0-incubating-SNAPSHOT/tuscany-databinding-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-host-embedded/1.0-incubating-SNAPSHOT/tuscany-host-embedded-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-binding-jms/1.0-incubating-SNAPSHOT/tuscany-binding-jms-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/activemq/apache-activemq/4.1.1/apache-activemq-4.1.1.jar"/>
-    	<!--pathelement location="${m2.repo}/org/apache/activemq/apache-activemq/4.2-SNAPSHOT/apache-activemq-4.2-SNAPSHOT.jar"/-->
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-binding-sca/1.0-incubating-SNAPSHOT/tuscany-binding-sca-1.0-incubating-SNAPSHOT.jar"/>    	
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-distributed/1.0-incubating-SNAPSHOT/tuscany-distributed-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-topology/1.0-incubating-SNAPSHOT/tuscany-topology-1.0-incubating-SNAPSHOT.jar"/>
-    	<pathelement location="${m2.repo}/org/apache/tuscany/sca/tuscany-topology-xml/1.0-incubating-SNAPSHOT/tuscany-topology-xml-1.0-incubating-SNAPSHOT.jar"/>    	
-    	<pathelement location="target/classes"/>    	
-    </path>	
-    		
     <target name="init">
         <mkdir dir="target/classes"/>
     </target>
@@ -73,7 +30,9 @@
                source="1.5"
                target="1.5">
             <classpath>
-            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            	<pathelement location="../../modules/tuscany-sca-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-launcher-2.0-incubating-SNAPSHOT.jar"/>
             </classpath>
         </javac> 
         <copy todir="target/classes">
@@ -84,41 +43,61 @@
                 <attribute name="Main-Class" value="${test.class}" /> 
             </manifest>
         </jar>    	
-    </target>	
+    </target>
 	
-    <target name="runA">
-        <java classname="${test.class}"
+    <target name="runDomain">
+        <java classname="node.LaunchDomain"
               fork="true">
             <classpath>
-                <!--pathelement path="target/classes"/-->
-            	<!--pathelement location="../../lib/tuscany-sca-manifest.jar"/-->
-            	<path refid="test.classpath"/>
-            </classpath>
-        	<arg value="nodeA"/>        	        	
+            	<pathelement path="src/main/resources"/>
+                <pathelement path="target/classes"/>
+            	<pathelement path="target/${test.jar}"/>
+            	<pathelement location="../../modules/tuscany-sca-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-launcher-2.0-incubating-SNAPSHOT.jar"/>
+            </classpath>    	        	
         </java>
     </target>
 	
-    <target name="runB">
-        <java classname="${test.class}"
+    <target name="runNodeA">
+        <java classname="node.LaunchCalculatorNodeA"
               fork="true">
             <classpath>
-                <!--pathelement path="target/classes"/-->
-            	<!--pathelement location="../../lib/tuscany-sca-manifest.jar"/-->
-            	<path refid="test.classpath"/>
-            </classpath>
-        	<arg value="nodeB"/>        	
+            	<pathelement path="src/main/resources"/>
+                <pathelement path="target/classes"/>
+            	<pathelement path="target/${test.jar}"/>
+            	<pathelement location="../../modules/tuscany-sca-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-launcher-2.0-incubating-SNAPSHOT.jar"/>
+            </classpath>     	        	
+        </java>
+    </target>
+	
+    <target name="runNodeB">
+        <java classname="node.LaunchCalculatorNodeB"
+              fork="true">
+            <classpath>
+            	<pathelement path="src/main/resources"/>
+                <pathelement path="target/classes"/>
+            	<pathelement path="target/${test.jar}"/>
+            	<pathelement location="../../modules/tuscany-sca-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-launcher-2.0-incubating-SNAPSHOT.jar"/>
+            </classpath>      	
         </java>
     </target>	
 	
-    <target name="runC">
-        <java classname="${test.class}"
+    <target name="runNodeC">
+        <java classname="node.LaunchCalculatorNodeC"
               fork="true">
             <classpath>
-                <!--pathelement path="target/classes"/-->
-            	<!--pathelement location="../../lib/tuscany-sca-manifest.jar"/-->
-            	<path refid="test.classpath"/>
-            </classpath>
-        	<arg value="nodeC"/>        	
+            	<pathelement path="src/main/resources"/>
+                <pathelement path="target/classes"/>
+            	<pathelement path="target/${test.jar}"/>
+            	<pathelement location="../../modules/tuscany-sca-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-api-2.0-incubating-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node2-launcher-2.0-incubating-SNAPSHOT.jar"/>
+            </classpath>      	
         </java>
     </target>	
 	
@@ -126,5 +105,7 @@
         <delete quiet="true" includeemptydirs="true">
             <fileset dir="target"/>
         </delete>
-    </target>
+    </target>	
+	
+	
 </project>

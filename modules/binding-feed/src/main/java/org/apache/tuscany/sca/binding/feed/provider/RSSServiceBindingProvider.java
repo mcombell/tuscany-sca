@@ -20,7 +20,8 @@
 package org.apache.tuscany.sca.binding.feed.provider;
 
 import org.apache.tuscany.sca.binding.feed.RSSBinding;
-import org.apache.tuscany.sca.http.ServletHost;
+import org.apache.tuscany.sca.databinding.Mediator;
+import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -30,34 +31,37 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
  * Implementation of the RSS binding provider.
+ *
+ * @version $Rev$ $Date$
  */
-public class RSSServiceBindingProvider implements ServiceBindingProvider {
+class RSSServiceBindingProvider implements ServiceBindingProvider {
 
-    private RuntimeComponent component;
     private RuntimeComponentService service;
     private RSSBinding binding;
     private ServletHost servletHost;
     private MessageFactory messageFactory;
-    private String uri;
+    private String servletMapping;
+    private Mediator mediator;
 
-    public RSSServiceBindingProvider(RuntimeComponent component,
+    RSSServiceBindingProvider(RuntimeComponent component,
                                      RuntimeComponentService service,
                                      RSSBinding binding,
                                      ServletHost servletHost,
-                                     MessageFactory messageFactory) {
-        this.component = component;
+                                     MessageFactory messageFactory,
+                                     Mediator mediator) {
         this.service = service;
         this.binding = binding;
         this.servletHost = servletHost;
         this.messageFactory = messageFactory;
-        uri = binding.getURI();
-        if (uri == null) {
-            uri = "/" + this.component.getName();
-        }
+        this.mediator = mediator;
     }
 
     public InterfaceContract getBindingInterfaceContract() {
         return service.getInterfaceContract();
+    }
+    
+    public boolean supportsOneWayInvocation() {
+        return false;
     }
 
     public void start() {
@@ -65,13 +69,17 @@ public class RSSServiceBindingProvider implements ServiceBindingProvider {
         RuntimeWire wire = componentService.getRuntimeWire(binding);
 
         FeedBindingListenerServlet servlet =
-            new FeedBindingListenerServlet(wire, messageFactory, "rss_2.0");
+            new FeedBindingListenerServlet(wire, messageFactory, mediator, "rss_2.0");
 
-        servletHost.addServletMapping(uri, servlet);
+        servletMapping = binding.getURI();
+        servletHost.addServletMapping(servletMapping, servlet);
+        
+        // Save the actual binding URI in the binding
+        binding.setURI(servletHost.getURLMapping(binding.getURI()).toString());
     }
 
     public void stop() {
-        servletHost.removeServletMapping(uri);
+        servletHost.removeServletMapping(servletMapping);
     }
 
 }

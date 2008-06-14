@@ -29,6 +29,10 @@ import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class Reader2JAXB extends BaseTransformer<Reader, Object> implements
     PullTransformer<Reader, Object> {
 
@@ -40,21 +44,24 @@ public class Reader2JAXB extends BaseTransformer<Reader, Object> implements
             JAXBContext jaxbContext = JAXBContextHelper.createJAXBContext(context, false);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             StreamSource streamSource = new StreamSource(source);
-            Object result = unmarshaller.unmarshal(streamSource);
-            return JAXBContextHelper.createReturnValue(context.getTargetDataType(), result);
+            Object result = unmarshaller.unmarshal(streamSource, JAXBContextHelper.getJavaType(context.getTargetDataType()));
+            return JAXBContextHelper.createReturnValue(jaxbContext, context.getTargetDataType(), result);
         } catch (Exception e) {
             throw new TransformationException(e);
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Reader> getSourceType() {
         return Reader.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 
+    @Override
     public int getWeight() {
         return 30;
     }

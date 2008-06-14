@@ -23,19 +23,25 @@ import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public abstract class AbstractSCATestCase<T> extends TestCase {
 
     protected SCADomain domain;
     protected T service;
 
+    @Override
     @SuppressWarnings("unchecked")
     protected void setUp() throws Exception {
         domain = SCADomain.newInstance(getCompositeName());
         service = (T) domain.getService(getServiceClass(), "ClientComponent");
     }
     
-    abstract protected Class getServiceClass();
+    protected abstract Class getServiceClass();
 
+    @Override
     protected void tearDown() throws Exception {
         domain.close();
     }

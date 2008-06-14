@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.interfacedef.java.impl;
 
+import javax.xml.namespace.QName;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceImpl;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 
@@ -31,6 +32,7 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
     private String className;
     private Class<?> javaClass;
     private Class<?> callbackClass;
+    private QName qname;
     
     protected JavaInterfaceImpl() {
     }
@@ -52,6 +54,14 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
         this.className = className;
     }
 
+    public QName getQName() {
+        return qname;
+    }
+
+    public void setQName(QName interfacename) {
+        qname = interfacename;
+    }
+
     public Class<?> getJavaClass() {
         return javaClass;
     }
@@ -68,6 +78,7 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
         this.callbackClass = callbackClass;
     }
     
+    @Override
     public String toString() {
         return getName();
     }
@@ -93,8 +104,8 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
     }
 
     @Override
-    public JavaInterfaceImpl clone() throws CloneNotSupportedException {
-        return (JavaInterfaceImpl) super.clone();
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 }

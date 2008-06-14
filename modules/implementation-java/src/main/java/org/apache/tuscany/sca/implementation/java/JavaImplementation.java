@@ -22,6 +22,7 @@ package org.apache.tuscany.sca.implementation.java;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import org.apache.tuscany.sca.implementation.java.impl.JavaConstructorImpl;
 import org.apache.tuscany.sca.implementation.java.impl.JavaElementImpl;
 import org.apache.tuscany.sca.implementation.java.impl.JavaResourceImpl;
 import org.apache.tuscany.sca.implementation.java.impl.JavaScopeImpl;
+import org.apache.tuscany.sca.policy.util.PolicyHandlerTuple;
 
 /**
  * Represents a Java implementation.
@@ -42,145 +44,155 @@ public interface JavaImplementation extends BaseJavaImplementation {
      *
      * @return the constructor used to instantiate implementation instances
      */
-    public JavaConstructorImpl<?> getConstructor();
+    JavaConstructorImpl<?> getConstructor();
 
     /**
      * Sets the constructor used to instantiate implementation instances
      *
      * @param definition the constructor used to instantiate implementation instances
      */
-    public void setConstructor(JavaConstructorImpl<?> definition);
+    void setConstructor(JavaConstructorImpl<?> definition);
 
     /**
      * Returns the component initializer method.
      *
      * @return the component initializer method
      */
-    public Method getInitMethod();
+    Method getInitMethod();
 
     /**
      * Sets the component initializer method.
      *
      * @param initMethod the component initializer method
      */
-    public void setInitMethod(Method initMethod);
+    void setInitMethod(Method initMethod);
 
     /**
      * Returns the component destructor method.
      *
      * @return the component destructor method
      */
-    public Method getDestroyMethod();
+    Method getDestroyMethod();
 
     /**
      * Sets the component destructor method.
      *
      * @param destroyMethod the component destructor method
      */
-    public void setDestroyMethod(Method destroyMethod);
+    void setDestroyMethod(Method destroyMethod);
 
     /**
      * Returns the resources injected into this implementation.
-     * 
+     *
      * @return
      */
-    public Map<String, JavaResourceImpl> getResources();
+    Map<String, JavaResourceImpl> getResources();
 
     /**
      * Returns the Java member used to inject a conversation ID.
-     * 
+     *
      * @return
      */
-    public List<Member> getConversationIDMembers();
+    List<Member> getConversationIDMembers();
 
     /**
      * Sets the Java member used to inject a conversation ID.
-     * 
+     *
      * @param conversationIDMember
      */
-    public void addConversationIDMember(Member conversationIDMember);
+    void addConversationIDMember(Member conversationIDMember);
 
     /**
      * Returns true if AllowsPassReference is set.
-     *  
+     *
      * @return true if AllowsPassByReference is set
      */
-    public boolean isAllowsPassByReference();
+    boolean isAllowsPassByReference();
 
     /**
      * @param allowsPassByReference the allowsPassByReference to set
      */
-    public void setAllowsPassByReference(boolean allowsPassByReference);
+    void setAllowsPassByReference(boolean allowsPassByReference);
 
     /**
      * @return the allowsPassByReferenceMethods
      */
-    public List<Method> getAllowsPassByReferenceMethods();
-    
+    List<Method> getAllowsPassByReferenceMethods();
+
     /**
      * @param method
      * @return
      */
-    public boolean isAllowsPassByReference(Method method);
+    boolean isAllowsPassByReference(Method method);
 
     /**
      * @return the constructors
      */
-    public Map<Constructor, JavaConstructorImpl> getConstructors();
+    Map<Constructor, JavaConstructorImpl> getConstructors();
 
     /**
      * @return the eagerInit
      */
-    public boolean isEagerInit();
+    boolean isEagerInit();
 
     /**
      * @param eagerInit the eagerInit to set
      */
-    public void setEagerInit(boolean eagerInit);
+    void setEagerInit(boolean eagerInit);
 
     /**
      * @return the callbacks
      */
-    public Map<String, JavaElementImpl> getCallbackMembers();
+    Map<String, Collection<JavaElementImpl>> getCallbackMembers();
 
     /**
      * @return the properties
      */
-    public Map<String, JavaElementImpl> getPropertyMembers();
+    Map<String, JavaElementImpl> getPropertyMembers();
 
     /**
      * @return the references
      */
-    public Map<String, JavaElementImpl> getReferenceMembers();
+    Map<String, JavaElementImpl> getReferenceMembers();
 
     /**
      * @return the scope
      */
-    public JavaScopeImpl getJavaScope();
+    JavaScopeImpl getJavaScope();
 
     /**
      * @param scope the scope to set
      */
-    public void setJavaScope(JavaScopeImpl scope);
+    void setJavaScope(JavaScopeImpl scope);
 
     /**
      * @return the maxAge
      */
-    public long getMaxAge();
+    long getMaxAge();
 
     /**
      * @param maxAge the maxAge to set
      */
-    public void setMaxAge(long maxAge);
+    void setMaxAge(long maxAge);
 
     /**
      * @return the maxIdleTime
      */
-    public long getMaxIdleTime();
+    long getMaxIdleTime();
 
     /**
      * @param maxIdleTime the maxIdleTime to set
      */
-    public void setMaxIdleTime(long maxIdleTime);
+    void setMaxIdleTime(long maxIdleTime);
+
+    /**
+     * @return the map of a policy handler class names
+     */
+    Map<ClassLoader, List<PolicyHandlerTuple>> getPolicyHandlerClassNames();
+
+    /**
+     * @param policyHandlerClassNames Map of policyhandler class names
+     */
+    void setPolicyHandlerClassNames(Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames);
 
 }

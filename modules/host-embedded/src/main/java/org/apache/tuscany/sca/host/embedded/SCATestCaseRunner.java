@@ -23,6 +23,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  * A helper class that can be used to run an SCA JUnit test case. The test case will run in an isolated class loader.
@@ -52,42 +54,65 @@ public class SCATestCaseRunner {
      */
     public SCATestCaseRunner(Class testClass) {
         try {
-            classLoader = (URLClassLoader)testClass.getClassLoader();
+            ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+            classLoader = testClass.getClassLoader();
             if (classLoader instanceof URLClassLoader) {
                 URL[] urls = ((URLClassLoader)classLoader).getURLs();
                 classLoader = new URLClassLoader(urls, classLoader.getParent());
-            } else {
+            } else if (classLoader == tccl || classLoader.getParent() == tccl) {
                 classLoader = new URLClassLoader(new URL[0], classLoader);
+            } else {
+                classLoader = tccl;
             }
 
-            ClassLoader tccl = Thread.currentThread().getContextClassLoader();
             try {
-                Thread.currentThread().setContextClassLoader(classLoader);
-
+                // Thread.currentThread().setContextClassLoader(classLoader);
+                // Allow privileged access to set class loader. Requires RuntimePermission
+                // setContextClassLoader in security policy.
+                final ClassLoader finalClassLoader = classLoader;
+                AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        Thread.currentThread().setContextClassLoader(finalClassLoader);
+                        return null;
+                    }
+                });                     
+                
                 testCaseClass = Class.forName(testClass.getName(), true, classLoader);
                 testCase = testCaseClass.newInstance();
+                ClassLoader testClassLoader = testCaseClass.getClassLoader();
 
-                junit3TestCaseClass = Class.forName("junit.framework.TestCase", true, classLoader);
+                junit3TestCaseClass = Class.forName("junit.framework.TestCase", true, testClassLoader);
 
-                testSuiteClass = Class.forName("junit.framework.TestSuite", true, classLoader);
+                testSuiteClass = Class.forName("junit.framework.TestSuite", true, testClassLoader);
                 Constructor testSuiteConstructor = testSuiteClass.getConstructor(Class.class);
                 testSuite = testSuiteConstructor.newInstance(testCaseClass);
 
-                testResultClass = Class.forName("junit.framework.TestResult", true, classLoader);
+                testResultClass = Class.forName("junit.framework.TestResult", true, testClassLoader);
 
                 try {
-                    beforeAnnotation = Class.forName("org.junit.Before", true, classLoader);
-                    afterAnnotation = Class.forName("org.junit.After", true, classLoader);
-                    beforeClassAnnotation = Class.forName("org.junit.BeforeClass", true, classLoader);
-                    afterClassAnnotation = Class.forName("org.junit.AfterClass", true, classLoader);
-                    junit4AdapterClass = Class.forName("junit.framework.JUnit4TestAdapter", true, classLoader);
+                    beforeAnnotation = Class.forName("org.junit.Before", true, testClassLoader);
+                    afterAnnotation = Class.forName("org.junit.After", true, testClassLoader);
+                    beforeClassAnnotation = Class.forName("org.junit.BeforeClass", true, testClassLoader);
+                    afterClassAnnotation = Class.forName("org.junit.AfterClass", true, testClassLoader);
+                    junit4AdapterClass = Class.forName("junit.framework.JUnit4TestAdapter", true, testClassLoader);
                 } catch (Exception e) {
                     // Unexpected
                     throw new AssertionError(e);
                 }
-
+            } catch (Throwable e) {
+                System.out.println( "DOB: Caught bad throwable");
+                e.printStackTrace();
             } finally {
-                Thread.currentThread().setContextClassLoader(tccl);
+                // Thread.currentThread().setContextClassLoader(tccl);
+                // Allow privileged access to set class loader. Requires RuntimePermission
+                // setContextClassLoader in security policy.
+                final ClassLoader finaltccl = tccl;
+                AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        Thread.currentThread().setContextClassLoader(finaltccl);
+                        return null;
+                    }
+                });
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -100,7 +125,16 @@ public class SCATestCaseRunner {
     public void run() {
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(classLoader);
+            // Thread.currentThread().setContextClassLoader(classLoader);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finalClassLoader = classLoader;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finalClassLoader);
+                    return null;
+                }
+            });                     
 
             if (junit3TestCaseClass.isAssignableFrom(testCaseClass)) {
                 Object testResult = testResultClass.newInstance();
@@ -115,7 +149,16 @@ public class SCATestCaseRunner {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            Thread.currentThread().setContextClassLoader(tccl);
+            // Thread.currentThread().setContextClassLoader(tccl);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finaltccl = tccl;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finaltccl);
+                    return null;
+                }
+            });
         }
     }
 
@@ -177,7 +220,16 @@ public class SCATestCaseRunner {
         }
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(classLoader);
+            // Thread.currentThread().setContextClassLoader(classLoader);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finalClassLoader = classLoader;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finalClassLoader);
+                    return null;
+                }
+            });                     
 
             for (Method method : testCaseClass.getDeclaredMethods()) {
                 for (Annotation annotation : method.getAnnotations()) {
@@ -189,7 +241,16 @@ public class SCATestCaseRunner {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            Thread.currentThread().setContextClassLoader(tccl);
+            // Thread.currentThread().setContextClassLoader(tccl);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finaltccl = tccl;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finaltccl);
+                    return null;
+                }
+            });
         }
     }
 
@@ -199,14 +260,32 @@ public class SCATestCaseRunner {
     private void execute(String methodName) {
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(classLoader);
+            // Thread.currentThread().setContextClassLoader(classLoader);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finalClassLoader = classLoader;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finalClassLoader);
+                    return null;
+                }
+            });                     
             Method setUpMethod = testCaseClass.getDeclaredMethod(methodName);
             setUpMethod.setAccessible(true);
             setUpMethod.invoke(testCase);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            Thread.currentThread().setContextClassLoader(tccl);
+            // Thread.currentThread().setContextClassLoader(tccl);
+            // Allow privileged access to set class loader. Requires RuntimePermission
+            // setContextClassLoader in security policy.
+            final ClassLoader finaltccl = tccl;
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    Thread.currentThread().setContextClassLoader(finaltccl);
+                    return null;
+                }
+            });
         }
     }
 

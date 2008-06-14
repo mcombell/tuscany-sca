@@ -30,18 +30,20 @@ public class EchoReferenceTestCase extends TestCase {
     private SCADomain scaDomain;
     private Echo service;
 
+    @Override
     protected void setUp() throws Exception {
         scaDomain = SCADomain.newInstance("EchoBinding.composite");
         service = scaDomain.getService(Echo.class, "EchoComponent");
     }
     
+    @Override
     protected void tearDown() throws Exception {
         scaDomain.close();
     }
 
     public void testEchoBinding() {
         String result = service.echo("foo");
-        assertEquals(result, "foo");
+        assertEquals(result, "oof");
     }
 
 

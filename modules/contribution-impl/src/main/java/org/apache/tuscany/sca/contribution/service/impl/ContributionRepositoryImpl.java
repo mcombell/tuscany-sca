@@ -33,9 +33,13 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +48,14 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.service.ContributionRepository;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * The default implementation of ContributionRepository
@@ -57,18 +66,66 @@ public class ContributionRepositoryImpl implements ContributionRepository {
     private static final String NS = "http://tuscany.apache.org/xmlns/1.0-SNAPSHOT";
     private static final String DOMAIN_INDEX_FILENAME = "sca-domain.xml";
     private final File rootFile;
-    private Map<String, String> contributionMap = new HashMap<String, String>();
+    private Map<String, String> contributionLocations = new HashMap<String, String>();
+    
+    private Map<String, Contribution> contributionMap = new HashMap<String, Contribution>();
+    private List<Contribution> contributions = new ArrayList<Contribution>();
 
     private URI domain;
     private XMLInputFactory factory;
+    private Monitor monitor;
+    
+    /**
+     * Marshals warnings into the monitor
+     * 
+     * @param message
+     * @param model
+     * @param messageParameters
+     */
+    protected void warning(String message, Object model, String... messageParameters) {
+        if (monitor != null){
+            Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
+    }
+    
+    /**
+     * Marshals errors into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
+    }
+    
+    /**
+     * Marshals exceptions into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Exception ex) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.ERROR, model, message, ex);
+	        monitor.problem(problem);
+    	}
+    }
 
     /**
      * Constructor with repository root
      * 
      * @param repository
+     * @param factory
      */
-    public ContributionRepositoryImpl(final String repository) throws IOException {
-        String root = repository;
+    public ContributionRepositoryImpl(final String repository, XMLInputFactory factory, Monitor monitor) throws IOException {
+        this.monitor = monitor;
+    	String root = repository;
         if (repository == null) {
             root = AccessController.doPrivileged(new PrivilegedAction<String>() {
                 public String run() {
@@ -79,13 +136,46 @@ public class ContributionRepositoryImpl implements ContributionRepository {
                 }
             });
         }
-        this.rootFile = new File(root);
-        this.domain = rootFile.toURI();
-        FileHelper.forceMkdir(rootFile);
-        if (!rootFile.exists() || !rootFile.isDirectory() || !rootFile.canRead()) {
+
+        // Allow privileged access to File. Requires FilePermission in security policy file.
+        final String finalRoot = root;
+        this.rootFile = AccessController.doPrivileged(new PrivilegedAction<File>() {
+            public File run() {
+                return new File(finalRoot);
+            }
+        });           
+
+        // Allow privileged access to File. Requires FilePermission in security policy file.
+        this.domain = AccessController.doPrivileged(new PrivilegedAction<URI>() {
+            public URI run() {
+                return rootFile.toURI();
+            }
+        });           
+
+        // Allow privileged access to mkdir. Requires FilePermission in security policy file.
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                public Object run() throws IOException {
+                    FileHelper.forceMkdir(rootFile);
+                    return null;
+                }
+            });
+        } catch (PrivilegedActionException e) {
+        	error("PrivilegedActionException", rootFile, (IOException)e.getException());
+            throw (IOException)e.getException();
+        }
+            
+        // Allow privileged access to test file. Requires FilePermissions in security policy file.
+        Boolean notDirectory = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+            public Boolean run() {
+                return (!rootFile.exists() || !rootFile.isDirectory() || !rootFile.canRead());
+            }
+        });           
+        if (notDirectory) {
+        	error("RootNotDirectory", rootFile, repository);
             throw new IOException("The root is not a directory: " + repository);
         }
-        factory = XMLInputFactory.newInstance("javax.xml.stream.XMLInputFactory", getClass().getClassLoader());
+        this.factory = factory;
     }
 
     public URI getDomain() {
@@ -105,7 +195,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
     }
 
     /**
-     * Write a specific source inputstream to a file on disk
+     * Write a specific source InputStream to a file on disk
      * 
      * @param source contents of the file to be written to disk
      * @param target file to be written
@@ -125,17 +215,29 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         }
     }
 
-    public URL store(String contribution, URL sourceURL, InputStream contributionStream) throws IOException {
+    public URL store(final String contribution, URL sourceURL, InputStream contributionStream) throws IOException {
         // where the file should be stored in the repository
-        File location = mapToFile(sourceURL);
+        final File location = mapToFile(sourceURL);
         FileHelper.forceMkdir(location.getParentFile());
 
         copy(contributionStream, location);
 
         // add contribution to repositoryContent
-        URL contributionURL = location.toURL();
-        URI relative = rootFile.toURI().relativize(location.toURI());
-        contributionMap.put(contribution, relative.toString());
+        // Allow ability to read user.dir property. Requires PropertyPermission in security policy.
+        URL contributionURL;
+        try {
+            contributionURL= AccessController.doPrivileged(new PrivilegedExceptionAction<URL>() {
+                public URL run() throws IOException {
+                    URL contributionURL = location.toURL();
+                    URI relative = rootFile.toURI().relativize(location.toURI());
+                    contributionLocations.put(contribution, relative.toString());
+                    return contributionURL;
+                }
+            });
+        } catch (PrivilegedActionException e) {
+        	error("PrivilegedActionException", location, (IOException)e.getException());
+            throw (IOException)e.getException();
+        }
         saveMap();
 
         return contributionURL;
@@ -146,7 +248,9 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         File location = mapToFile(sourceURL);
         File source = FileHelper.toFile(sourceURL);
         if (source == null || source.isFile()) {
-            InputStream is = sourceURL.openStream();
+            URLConnection connection = sourceURL.openConnection();
+            connection.setUseCaches(false);
+            InputStream is = connection.getInputStream();
             try {
                 return store(contribution, sourceURL, is);
             } finally {
@@ -159,7 +263,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
 
         // add contribution to repositoryContent
         URI relative = rootFile.toURI().relativize(location.toURI());
-        contributionMap.put(contribution, relative.toString());
+        contributionLocations.put(contribution, relative.toString());
         saveMap();
 
         return location.toURL();
@@ -169,7 +273,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         if (contribution == null) {
             return null;
         }
-        String location = contributionMap.get(contribution);
+        String location = contributionLocations.get(contribution);
         if (location == null) {
             return null;
         }
@@ -177,6 +281,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             return new File(rootFile, location).toURL();
         } catch (MalformedURLException e) {
             // Should not happen
+        	error("MalformedURLException", location, new AssertionError(e));
             throw new AssertionError(e);
         }
     }
@@ -187,7 +292,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             // remove
             try {
                 FileHelper.forceDelete(FileHelper.toFile(contributionURL));
-                this.contributionMap.remove(contribution);
+                this.contributionLocations.remove(contribution);
                 saveMap();
             } catch (IOException ioe) {
                 // handle file could not be removed
@@ -196,7 +301,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
     }
 
     public List<String> list() {
-        return new ArrayList<String>(contributionMap.keySet());
+        return new ArrayList<String>(contributionLocations.keySet());
     }
 
     public void init() {
@@ -208,6 +313,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         try {
             is = new FileInputStream(domainFile);
         } catch (FileNotFoundException e) {
+        	warning("DomainFileNotFound", domainFile, domainFile.getAbsolutePath());
             return;
         }
         try {
@@ -225,7 +331,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
                         if ("contribution".equals(name)) {
                             String uri = reader.getAttributeValue(null, "uri");
                             String location = reader.getAttributeValue(null, "location");
-                            contributionMap.put(uri, location);
+                            contributionLocations.put(uri, location);
                         }
                         break;
                     default:
@@ -248,13 +354,15 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writer.println("<domain uri=\"" + getDomain() + "\" xmlns=\"" + NS + "\">");
-            for (Map.Entry<String, String> e : contributionMap.entrySet()) {
+            for (Map.Entry<String, String> e : contributionLocations.entrySet()) {
                 writer.println("    <contribution uri=\"" + e.getKey() + "\" location=\"" + e.getValue() + "\"/>");
             }
             writer.println("</domain>");
             writer.flush();
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+        	IllegalArgumentException ae = new IllegalArgumentException(e);
+        	error("IllegalArgumentException", os, ae);
+            throw ae;
         } finally {
             IOHelper.closeQuietly(os);
         }
@@ -262,5 +370,30 @@ public class ContributionRepositoryImpl implements ContributionRepository {
 
     public void destroy() {
     }
-
+    
+    public void addContribution(Contribution contribution) {
+        contributionMap.put(contribution.getURI(), contribution);
+        contributions.add(contribution);
+    }
+    
+    public void removeContribution(Contribution contribution) {
+        contributionMap.remove(contribution.getURI());
+        contributions.remove(contribution);
+    }
+    
+    public void updateContribution(Contribution contribution) {
+        Contribution oldContribution = contributionMap.remove(contribution.getURI());
+        contributions.remove(oldContribution);
+        contributionMap.put(contribution.getURI(), contribution);
+        contributions.add(contribution);
+    }
+    
+    public Contribution getContribution(String uri) {
+        return contributionMap.get(uri);
+    }
+    
+    public List<Contribution> getContributions() {
+        return Collections.unmodifiableList(contributions);
+    }
+    
 }

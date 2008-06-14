@@ -18,7 +18,10 @@
  */
 package org.apache.tuscany.sca.core.invocation;
 
-import org.apache.tuscany.sca.interfacedef.ConversationSequence;
+import java.util.Hashtable;
+import java.util.Map;
+
+import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.EndpointReference;
@@ -26,53 +29,31 @@ import org.apache.tuscany.sca.runtime.EndpointReference;
 /**
  * The default implementation of a message flowed through a wire during an invocation
  *
- * @version $Rev $Date
+ * @version $Rev $Date$
  */
-public class MessageImpl implements Message {
+public class MessageImpl implements Message { 
     private Object body;
     private Object messageID;
-    private Object correlationID;
     private boolean isFault;
-    private ConversationSequence conversationSequence;
-    private String conversationId;
-    private Operation op;
-    
+    private Operation operation;
+    private Map<String, Object> qosContext = new Hashtable<String, Object>();
+
     private EndpointReference from;
     private EndpointReference to;
 
-    public MessageImpl(String conversationId, ConversationSequence conversationSequence, Object body) {
-        this.conversationId = conversationId;
-        this.conversationSequence = conversationSequence;
-        this.body = body;
-    }
-
     public MessageImpl() {
+        this.from = new EndpointReferenceImpl("/");
+        this.to = new EndpointReferenceImpl("/");
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getBody() {
-        return (T) body;
+        return (T)body;
     }
 
     public <T> void setBody(T body) {
         this.isFault = false;
         this.body = body;
-    }
-
-    public String getConversationID() {
-        return conversationId;
-    }
-
-    public void setConversationID(String conversationId) {
-        this.conversationId = conversationId;
-    }
-    
-    public ConversationSequence getConversationSequence() {
-        return conversationSequence;
-    }
-
-    public void setConversationSequence(ConversationSequence conversationSequence) {
-        this.conversationSequence = conversationSequence;
     }
 
     public Object getMessageID() {
@@ -81,14 +62,6 @@ public class MessageImpl implements Message {
 
     public void setMessageID(Object messageId) {
         this.messageID = messageId;
-    }
-
-    public Object getCorrelationID() {
-        return correlationID;
-    }
-
-    public void setCorrelationID(Object correlationId) {
-        this.correlationID = correlationId;
     }
 
     public boolean isFault() {
@@ -117,10 +90,15 @@ public class MessageImpl implements Message {
     }
 
     public Operation getOperation() {
-        return op;
+        return operation;
     }
 
     public void setOperation(Operation op) {
-        this.op = op;
+        this.operation = op;
     }
+
+    public Map<String, Object> getQoSContext() {
+        return qosContext;
+    }
+
 }

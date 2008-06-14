@@ -19,9 +19,18 @@
 
 package org.apache.tuscany.sca.interfacedef.wsdl;
 
-import javax.wsdl.Definition;
+import java.net.URI;
+import java.util.List;
 
-import org.apache.ws.commons.schema.XmlSchemaCollection;
+import javax.wsdl.Binding;
+import javax.wsdl.Definition;
+import javax.wsdl.WSDLElement;
+import javax.xml.namespace.QName;
+
+import org.apache.tuscany.sca.assembly.Base;
+import org.apache.tuscany.sca.xsd.XSDefinition;
+import org.apache.ws.commons.schema.XmlSchemaElement;
+import org.apache.ws.commons.schema.XmlSchemaType;
 
 /**
  * Represents a WSDL definition.
@@ -29,26 +38,23 @@ import org.apache.ws.commons.schema.XmlSchemaCollection;
  *
  * @version $Rev$ $Date$
  */
-public interface WSDLDefinition {
-    
+public interface WSDLDefinition extends Base {
+
     /**
-     * Returns the WSDL definition model
+     * Returns the WSDL definition model, if there are more than one WSDL definition under the 
+     * same namespace, the definition will be a facade which imports all the physical WSDL 
+     * definitions
+     * 
      * @return the WSDL definition model
      */
     Definition getDefinition();
-    
+
     /**
      * Sets the WSDL definition model
      * @param definition the WSDL definition model
      */
     void setDefinition(Definition definition);
-    
-    /**
-     * Returns a list of XML schemas inlined in this WSDL definition.
-     * @return
-     */
-    XmlSchemaCollection getInlinedSchemas();
-    
+
     /**
      * Returns the namespace of this WSDL definition.
      * @return the namespace of this WSDL definition
@@ -62,17 +68,73 @@ public interface WSDLDefinition {
     void setNamespace(String namespace);
 
     /**
-     * Returns true if the model element is unresolved.
-     * 
-     * @return true if the model element is unresolved.
+     * Get a list of inline XML schema definitions
+     * @return A list of inline XML schema definitions
      */
-    boolean isUnresolved();
+    List<XSDefinition> getXmlSchemas();
 
     /**
-     * Sets whether the model element is unresolved.
-     * 
-     * @param unresolved whether the model element is unresolved
+     * Get the location of the WSDL file
+     * @return The location of the WSDL file
      */
-    void setUnresolved(boolean unresolved);
+    URI getLocation();
 
+    /**
+     * Set the location of the WSDL file
+     * @param url
+     */
+    void setLocation(URI url);
+
+    /**
+     * Get the contribution artifact URI of the WSDL document
+     * @return The URI of the WSDL document
+     */
+    URI getURI();
+
+    /**
+     * Set the contribution artifact URI of the WSDL document
+     * @param uri
+     */
+    void setURI(URI uri);
+
+    /**
+     * Get the WSDL definitions imported by this definition
+     * @return A list of imported WSDL definitions
+     */
+    List<WSDLDefinition> getImportedDefinitions();
+
+    /**
+     * Get an XSD element by QName
+     * @param name
+     * @return
+     */
+    XmlSchemaElement getXmlSchemaElement(QName name);
+
+    /**
+     * Get an XSD type by QName
+     * @param name
+     * @return
+     */
+    XmlSchemaType getXmlSchemaType(QName name);
+    
+    /**
+     * Get the WSDL object by type and name
+     * @param <T>
+     * @param type javax.wsdl.Service/PortType/Binding/Message.class
+     * @param name The QName of the object
+     * @return WSDLObject
+     */
+    <T extends WSDLElement> WSDLObject<T> getWSDLObject(Class<T> type, QName name);
+
+    /**
+     * Get the generated binding for a WSDLDefinition
+     * @return the WSDL binding
+     */
+    Binding getBinding();
+
+    /**
+     * Set the generated binding for a WSDLDefinition
+     * @param binding the WSDL binding
+     */
+    void setBinding(Binding binding);
 }

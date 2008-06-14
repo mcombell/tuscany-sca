@@ -22,56 +22,105 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-databinding-json</artifactId>
-    <name>Apache Tuscany Data Binding for JSON</name>
-    <description>Tuscany JSON Data Binding</description>
+    <name>Apache Tuscany SCA Data Binding for JSON</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-core-spi</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-databinding</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
+            <groupId>com.metaparadigm</groupId>
+            <artifactId>json-rpc</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
-            <version>1.0-RC1</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-api</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>xerces</groupId>
                     <artifactId>xercesImpl</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>                 
             </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-impl</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.1</version>
+            <version>4.2</version>
         </dependency>
+        
+        <dependency>
+           <groupId>commons-logging</groupId>
+           <artifactId>commons-logging</artifactId>
+           <version>1.1</version>
+           <exclusions>
+               <exclusion>
+                   <groupId>commons-logging</groupId>
+                   <artifactId>commons-logging</artifactId>
+               </exclusion>
+               <exclusion>
+                   <groupId>javax.servlet</groupId>
+                   <artifactId>servlet-api</artifactId>
+               </exclusion>
+           </exclusions>
+        </dependency>          
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
+                <configuration>
+                    <instructions>
+                        <Bundle-Version>${tuscany.version}</Bundle-Version>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.databinding.json</Bundle-SymbolicName>
+                        <Bundle-Description>${pom.name}</Bundle-Description>
+                        <Export-Package>org.apache.tuscany.sca.databinding.json*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.implementation.das.provider;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.tuscany.sca.data.engine.DataAccessEngine;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
@@ -31,7 +32,7 @@ import org.apache.tuscany.sca.invocation.Message;
  * 
  * The target invoker is responsible for dispatching invocations to the particular
  * component implementation logic. The current component implementation will
- * dispatch calls to the DAS apis to retrieve the requested data from the backend store
+ * dispatch calls to the DAS APIs to retrieve the requested data from the back-end store
  * 
  * @version $Rev$ $Date$
  */
@@ -56,6 +57,15 @@ public class DASInvoker implements Invoker {
     }
 
     public Object doTheWork(Object[] args) throws InvocationTargetException {
+        //check annotation
+//        try {
+//            Method methodDeclaration = this.getClass().getMethod(operation.getName(), null);
+//            methodDeclaration.getAnnotation(org.apache.tuscany.sca.implementation.das.annotations.Command.class);
+//        } catch (Exception e) {
+//            //ignore
+//        }
+        
+        //check if static way
         if (operation.getName().equals("executeCommand")) {
             String commandName, xPath;
             
@@ -69,8 +79,9 @@ public class DASInvoker implements Invoker {
                 
                 return this.dataAccessEngine.executeCommand(commandName, xPath);
             }
-        } else {
-            return null;
+        } else { // dynamic mapping to command
+            
+            return this.dataAccessEngine.executeCommand(operation.getName());
         }
     }
 }

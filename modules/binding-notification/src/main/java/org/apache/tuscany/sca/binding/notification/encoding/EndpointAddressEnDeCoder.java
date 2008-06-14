@@ -63,8 +63,7 @@ public class EndpointAddressEnDeCoder extends AbstractEnDeCoder<EndpointAddress>
                         if (reader.hasText()) {
                             String address = reader.getText();
                             endpointAddressElement.setAddress(address);
-                        }
-                        else {
+                        } else {
                             throw new EncodingException("Endpoint address is missing address");
                         }
                         break;
@@ -77,12 +76,14 @@ public class EndpointAddressEnDeCoder extends AbstractEnDeCoder<EndpointAddress>
         }
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         
         return QNAME;
     }
 
-    protected Class<EndpointAddress> getEncodingObjectType() {
+    
+	public Class<EndpointAddress> getEncodingObjectType() {
         
         return EndpointAddress.class;
     }

@@ -24,13 +24,18 @@ import supplychain.SupplyChainTestCase;
  * OSGi test program - declarative with scopes other than composites which use OSGi service factories
  */
 public class FactoryTestCase extends SupplyChainTestCase {
+    /**
+     * This constant defines the time period (in milliseconds) for which we are prepared to wait for
+     * the @OneWay notifyShipment() callback to run. 
+     */
+    private static final long MAX_WAIT_TIME_FOR_CALLBACK = 10000;
 
     public FactoryTestCase() {
-        super("sca/factory-test.composite");
+        super("factory-test.composite", "factory");
     }
     
-    protected FactoryTestCase(String compositeName) {
-        super(compositeName);
+    protected FactoryTestCase(String compositeName, String contributionLocation) {
+        super(compositeName, contributionLocation);
     }
     
     
@@ -39,14 +44,29 @@ public class FactoryTestCase extends SupplyChainTestCase {
         
         System.out.println("Main thread " + Thread.currentThread());
         customer.purchaseBooks();
+        waitForOrderShipmentNotification();                // TUSCANY-2198 notifyShipment() callback is @OneWay 
         assertFalse(customer.hasOutstandingOrders());
         
         customer.purchaseGames();       
+        waitForOrderShipmentNotification();                // TUSCANY-2198 notifyShipment() callback is @OneWay 
         assertFalse(customer.hasOutstandingOrders());
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         System.out.println("Test complete");
         
     }
-    
+
+    /**
+     * Since the notifyShipment() callback on the Customer is @OneWay, we need to allow
+     * some time for it to complete as it is runs asynchronously.
+     *
+     * This is for TUSCANY-2198
+     */
+    private void waitForOrderShipmentNotification() throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        while (customer.hasOutstandingOrders()
+                && System.currentTimeMillis() - startTime < MAX_WAIT_TIME_FOR_CALLBACK) {
+            Thread.sleep(100);
+        }
+    }
 }

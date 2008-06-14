@@ -27,40 +27,27 @@ import javax.wsdl.PortType;
 import javax.xml.namespace.QName;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-import org.apache.tuscany.sca.interfacedef.wsdl.DefaultWSDLFactory;
+import org.apache.tuscany.sca.interfacedef.wsdl.AbstractWSDLTestCase;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
-import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.xml.WSDLDocumentProcessor;
+import org.apache.tuscany.sca.interfacedef.wsdl.impl.WSDLOperationIntrospectorImpl;
 
 /**
- * Test case for WSDLOperation
+ * Test case for WSDLOperation.
+ *
+ * @version $Rev$ $Date$
  */
-public class WrapperStyleOperationTestCase extends TestCase {
+public class WrapperStyleOperationTestCase extends AbstractWSDLTestCase {
     private static final QName PORTTYPE_NAME = new QName("http://example.com/stockquote.wsdl", "StockQuotePortType");
-
-    private WSDLDocumentProcessor registry;
-    private ModelResolver resolver;
-    private WSDLFactory wsdlFactory;
-
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        registry = new WSDLDocumentProcessor(new DefaultWSDLFactory(), null);
-        resolver = new TestModelResolver(getClass().getClassLoader());
-        wsdlFactory = new DefaultWSDLFactory();
-    }
 
     public final void testWrappedOperation() throws Exception {
         URL url = getClass().getResource("../xml/stockquote.wsdl");
-        WSDLDefinition definition = registry.read(null, new URI("stockquote.wsdl"), url);
+        WSDLDefinition definition = (WSDLDefinition)documentProcessor.read(null, new URI("stockquote.wsdl"), url);
+        resolver.addModel(definition);
+        definition = resolver.resolveModel(WSDLDefinition.class, definition);
         PortType portType = definition.getDefinition().getPortType(PORTTYPE_NAME);
         Operation operation = portType.getOperation("getLastTradePrice", null, null);
-        WSDLOperation op = new WSDLOperation(wsdlFactory, operation, definition.getInlinedSchemas(), "org.w3c.dom.Node", resolver);
+        WSDLOperationIntrospectorImpl op = new WSDLOperationIntrospectorImpl(xsdFactory, operation, definition, "org.w3c.dom.Node", resolver);
         Assert.assertTrue(op.isWrapperStyle());
         Assert.assertEquals(1, op.getWrapper().getInputChildElements().size());
         Assert.assertEquals(1, op.getWrapper().getOutputChildElements().size());
@@ -68,13 +55,15 @@ public class WrapperStyleOperationTestCase extends TestCase {
 
     public final void testUnwrappedOperation() throws Exception {
         URL url = getClass().getResource("../xml/unwrapped-stockquote.wsdl");
-        WSDLDefinition definition = registry.read(null, new URI("unwrapped-stockquote.wsdl"), url);
+        WSDLDefinition definition = (WSDLDefinition)documentProcessor.read(null, new URI("unwrapped-stockquote.wsdl"), url);
+        resolver.addModel(definition);
+        definition = resolver.resolveModel(WSDLDefinition.class, definition);
         PortType portType = definition.getDefinition().getPortType(PORTTYPE_NAME);
         Operation operation = portType.getOperation("getLastTradePrice1", null, null);
-        WSDLOperation op = new WSDLOperation(wsdlFactory, operation, definition.getInlinedSchemas(), "org.w3c.dom.Node", resolver);
+        WSDLOperationIntrospectorImpl op = new WSDLOperationIntrospectorImpl(xsdFactory, operation, definition, "org.w3c.dom.Node", resolver);
         Assert.assertFalse(op.isWrapperStyle());
         operation = portType.getOperation("getLastTradePrice2", null, null);
-        op = new WSDLOperation(wsdlFactory, operation, definition.getInlinedSchemas(), "org.w3c.dom.Node", resolver);
+        op = new WSDLOperationIntrospectorImpl(xsdFactory, operation, definition, "org.w3c.dom.Node", resolver);
         Assert.assertFalse(op.isWrapperStyle());
     }
 

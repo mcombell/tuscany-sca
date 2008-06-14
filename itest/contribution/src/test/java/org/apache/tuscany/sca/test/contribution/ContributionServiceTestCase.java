@@ -20,58 +20,27 @@
 package org.apache.tuscany.sca.test.contribution;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeDocumentProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
+import org.apache.tuscany.sca.contribution.Artifact;
 import org.apache.tuscany.sca.contribution.Contribution;
-import org.apache.tuscany.sca.contribution.DeployedArtifact;
-import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
-import org.apache.tuscany.sca.contribution.processor.ContributionPostProcessor;
-import org.apache.tuscany.sca.contribution.processor.DefaultContributionPostProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.DefaultPackageProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.DefaultURLArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.ExtensibleContributionPostProcessor;
-import org.apache.tuscany.sca.contribution.processor.ExtensiblePackageProcessor;
-import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
-import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
-import org.apache.tuscany.sca.contribution.processor.PackageProcessor;
-import org.apache.tuscany.sca.contribution.processor.PackageProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.impl.FolderContributionProcessor;
-import org.apache.tuscany.sca.contribution.processor.impl.JarContributionProcessor;
-import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolverExtensionPoint;
-import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-import org.apache.tuscany.sca.contribution.resolver.ModelResolverExtensionPoint;
-import org.apache.tuscany.sca.contribution.resolver.impl.ModelResolverImpl;
-import org.apache.tuscany.sca.contribution.service.ContributionRepository;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
-import org.apache.tuscany.sca.contribution.service.impl.ContributionRepositoryImpl;
-import org.apache.tuscany.sca.contribution.service.impl.ContributionServiceImpl;
-import org.apache.tuscany.sca.contribution.service.impl.PackageTypeDescriberImpl;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
-import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
-import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.host.embedded.impl.EmbeddedSCADomain;
 
 /**
  * This is more intended to be a integration test then a unit test. *
@@ -82,82 +51,50 @@ public class ContributionServiceTestCase extends TestCase {
     private static final String JAR_CONTRIBUTION = "/repository/sample-calculator.jar";
     private static final String FOLDER_CONTRIBUTION = "target/classes/";
 
+    private ClassLoader cl;
+    private EmbeddedSCADomain domain;
     private ContributionService contributionService;
 
+    /**
+     * setUp() is a method in JUnit Frame Work which is executed before all others methods in the class extending
+     * unit.framework.TestCase. So this method is used to create a test Embedded SCA Domain, to start the SCA Domain and
+     * to get a reference to the contribution service
+     */
+
+    @Override
     protected void setUp() throws Exception {
+        //Create a test embedded SCA domain
+        cl = getClass().getClassLoader();
+        domain = new EmbeddedSCADomain(cl, "http://localhost");
 
-        // Create default factories
-        AssemblyFactory assemblyFactory = new DefaultAssemblyFactory();
-        PolicyFactory policyFactory = new DefaultPolicyFactory();
-        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
+        //Start the domain
+        domain.start();
 
-        // Create an extension point registry
-        ExtensionPointRegistry extensionRegistry = new DefaultExtensionPointRegistry();
-
-        // Add artifact processor extension points
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        extensionRegistry.addExtensionPoint(staxProcessors);
-        ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        DefaultURLArtifactProcessorExtensionPoint documentProcessors = new DefaultURLArtifactProcessorExtensionPoint();
-        extensionRegistry.addExtensionPoint(documentProcessors);
-        ExtensibleURLArtifactProcessor documentProcessor = new ExtensibleURLArtifactProcessor(documentProcessors);
-
-        // Register base artifact processors
-        staxProcessors.addArtifactProcessor(new CompositeProcessor(assemblyFactory, policyFactory, mapper,
-                                                                   staxProcessor));
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(assemblyFactory, policyFactory,
-                                                                          staxProcessor));
-
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        documentProcessors.addArtifactProcessor(new CompositeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ComponentTypeDocumentProcessor(staxProcessor, inputFactory));
-        documentProcessors.addArtifactProcessor(new ConstrainingTypeDocumentProcessor(staxProcessor, inputFactory));
-
-        // Create package processor extension point
-        PackageTypeDescriberImpl describer = new PackageTypeDescriberImpl();
-        PackageProcessorExtensionPoint packageProcessors = new DefaultPackageProcessorExtensionPoint();
-        PackageProcessor packageProcessor = new ExtensiblePackageProcessor(packageProcessors, describer);
-        extensionRegistry.addExtensionPoint(packageProcessors);
-
-        // Register base package processors
-        packageProcessors.addPackageProcessor(new JarContributionProcessor());
-        packageProcessors.addPackageProcessor(new FolderContributionProcessor());
-        
-        //Create Contribution Model Resolver extension point
-        ModelResolverExtensionPoint modelResolverExtensionPoint = new DefaultModelResolverExtensionPoint();
-        
-        
-        //Create contribution postProcessor extension point
-        DefaultContributionPostProcessorExtensionPoint contributionPostProcessors = new DefaultContributionPostProcessorExtensionPoint();
-        ContributionPostProcessor postProcessor = new ExtensibleContributionPostProcessor(contributionPostProcessors);
-        extensionRegistry.addExtensionPoint(contributionPostProcessors);
-
-
-        // Create a repository
-        ContributionRepository repository = new ContributionRepositoryImpl("target");
-
-        // Create an artifact resolver and contribution service
-        this.contributionService = new ContributionServiceImpl(repository, packageProcessor, documentProcessor, 
-                                                               postProcessor, modelResolverExtensionPoint, assemblyFactory,
-                                                               new ContributionFactoryImpl(),
-                                                               XMLInputFactory.newInstance());
+        //get a reference to the contribution service
+        contributionService = domain.getContributionService();
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contrututionId with the value retrieved from the SCA runtime.
+     */
     public void testContributeJAR() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         //URL contributionLocation = new URL("file:/D:/dev/Opensource/Apache/Tuscany/source/java/sca/samples/calculator/target/sample-calculator.jar");
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-        contributionService.contribute(contributionId, contributionLocation, resolver, false);
+        contributionService.contribute(contributionId, contributionLocation, false);
         assertNotNull(contributionService.getContribution(contributionId));
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contrututionId with the value retrieved from the SCA runtime using
+     * contributionService.
+     */
     public void testStoreContributionPackageInRepository() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-        contributionService.contribute(contributionId, contributionLocation, resolver, true);
+        contributionService.contribute(contributionId, contributionLocation, true);
 
         assertTrue(FileHelper.toFile(new URL(contributionService.getContribution(contributionId).getLocation()))
             .exists());
@@ -170,14 +107,18 @@ public class ContributionServiceTestCase extends TestCase {
         assertTrue(contributionFile.exists());
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contrututionId with the value retrieved from the SCA runtime using
+     * contributionService.
+     */
     public void testStoreContributionStreamInRepository() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
 
         InputStream contributionStream = contributionLocation.openStream();
         try {
-            ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-            contributionService.contribute(contributionId, contributionLocation, contributionStream, resolver);
+            contributionService.contribute(contributionId, contributionLocation, contributionStream);
         } finally {
             IOHelper.closeQuietly(contributionStream);
         }
@@ -193,38 +134,61 @@ public class ContributionServiceTestCase extends TestCase {
         assertTrue(contributionFile.exists());
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contributionId1,contributionId2 with the value retrieved from the SCA
+     * runtime using contributionService.
+     */
     public void testStoreDuplicatedContributionInRepository() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId1 = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-        contributionService.contribute(contributionId1, contributionLocation, resolver, true);
+        contributionService.contribute(contributionId1, contributionLocation, true);
         assertNotNull(contributionService.getContribution(contributionId1));
         String contributionId2 = CONTRIBUTION_002_ID;
-        ModelResolver resolver2 = new ModelResolverImpl(getClass().getClassLoader());
-        contributionService.contribute(contributionId2, contributionLocation, resolver2, true);
+        contributionService.contribute(contributionId2, contributionLocation, true);
         assertNotNull(contributionService.getContribution(contributionId2));
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contributionId with the value retrieved from the SCA runtime using
+     * contributionService.
+     */
     public void testContributeFolder() throws Exception {
-         File rootContributionFolder = new File(FOLDER_CONTRIBUTION);
-         String contributionId = CONTRIBUTION_001_ID; 
-         //first rename the sca-contribution metadata file 
-         //File calculatorMetadataFile = new File("target/classes/calculator/sca-contribution.xml"); 
-         //File metadataDirectory = new File("target/classes/META-INF/"); 
-         //if (!metadataDirectory.exists()) {
-         //    FileHelper.forceMkdir(metadataDirectory); 
-         //}
-         //FileHelper.copyFileToDirectory(calculatorMetadataFile, metadataDirectory); 
-         ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-         contributionService.contribute(contributionId, rootContributionFolder.toURL(), resolver, false);
-         assertNotNull(contributionService.getContribution(contributionId));
+        final File rootContributionFolder = new File(FOLDER_CONTRIBUTION);
+        String contributionId = CONTRIBUTION_001_ID;
+        //first rename the sca-contribution metadata file 
+        //File calculatorMetadataFile = new File("target/classes/calculator/sca-contribution.xml"); 
+        //File metadataDirectory = new File("target/classes/META-INF/"); 
+        //if (!metadataDirectory.exists()) {
+        //    FileHelper.forceMkdir(metadataDirectory); 
+        //}
+        //FileHelper.copyFileToDirectory(calculatorMetadataFile, metadataDirectory);
+
+        // Requires permission to read user.dir property. Requires PropertyPermision in security policy.
+        URL contributionFolderURL;
+        try {
+            contributionFolderURL = AccessController.doPrivileged(new PrivilegedExceptionAction<URL>() {
+                public URL run() throws IOException {
+                    return rootContributionFolder.toURL();
+                }
+            });
+        } catch (PrivilegedActionException e) {
+            throw (IOException)e.getException();
+        }        
+        contributionService.contribute(contributionId, contributionFolderURL, false);
+        assertNotNull(contributionService.getContribution(contributionId));
     }
 
+    /**
+     * Method prefixed with 'test' is a test method where testing logic is written using various assert methods. This
+     * test verifies the string assigned to contributionId, artifactId with the value retrieved from the SCA runtime
+     * using contributionService.
+     */
     public void testAddDeploymentComposites() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
-        ModelResolver resolver = new ModelResolverImpl(getClass().getClassLoader());
-        Contribution contribution = contributionService.contribute(contributionId, contributionLocation, resolver, false);
+        Contribution contribution = contributionService.contribute(contributionId, contributionLocation, false);
         assertNotNull(contributionService.getContribution(contributionId));
 
         String artifactId = "contributionComposite.composite";
@@ -238,10 +202,10 @@ public class ContributionServiceTestCase extends TestCase {
         Composite composite1 = (Composite)deployables.get(deployables.size() - 1);
         assertEquals("contributionComposite", composite1.getName().toString());
 
-        DeployedArtifact artifact = null;
+        Artifact artifact = null;
         contribution = contributionService.getContribution(contributionId);
         String id = artifactId.toString();
-        for (DeployedArtifact a : contribution.getArtifacts()) {
+        for (Artifact a : contribution.getArtifacts()) {
             if (id.equals(a.getURI())) {
                 artifact = a;
                 break;

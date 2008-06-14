@@ -22,38 +22,38 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-databinding-sdo</artifactId>
-    <name>Apache Tuscany Data Binding for SDO</name>
+    <name>Apache Tuscany SCA Data Binding for SDO</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-core-spi</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-databinding</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
         <!-- FIXME: We might want to create a separate module to host the processor -->
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-xml</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-lib</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
         </dependency>                    
         <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
         </dependency>
     </dependencies>
 
@@ -81,7 +81,7 @@
             <plugin>
                 <groupId>org.apache.tuscany.sdo</groupId>
                 <artifactId>tuscany-sdo-plugin</artifactId>
-                <version>1.0-incubating-SNAPSHOT</version>
+                <version>1.1-incubating</version>
                 <executions>
                     <execution>
                         <id>generate-po-sdo</id>
@@ -113,6 +113,20 @@
                         </goals>
                     </execution>                    
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
+                <configuration>
+                    <instructions>
+                        <Bundle-Version>${tuscany.version}</Bundle-Version>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.databinding.sdo</Bundle-SymbolicName>
+                        <Bundle-Description>${pom.name}</Bundle-Description>
+                        <Export-Package>org.apache.tuscany.sca.databinding.sdo*</Export-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.sca.implementation.resource.impl;
 
@@ -28,8 +28,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.assembly.xml.Constants;
+import org.apache.tuscany.sca.contribution.Artifact;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
-import org.apache.tuscany.sca.contribution.DeployedArtifact;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
@@ -37,24 +40,59 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.implementation.resource.ResourceImplementation;
 import org.apache.tuscany.sca.implementation.resource.ResourceImplementationFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 
 /**
- * Implements a STAX artifact processor for resource implementations.
+ * Implements a StAX artifact processor for resource implementations.
+ *
+ * @version $Rev$ $Date$
  */
 public class ResourceImplementationProcessor implements StAXArtifactProcessor<ResourceImplementation> {
-    private static final QName IMPLEMENTATION_RESOURCE = new QName("http://www.osoa.org/xmlns/sca/1.0", "implementation.resource");
+    private static final QName IMPLEMENTATION_RESOURCE = new QName(Constants.SCA10_TUSCANY_NS, "implementation.resource");
     
-    private ResourceImplementationFactory resourceFactory;
     private ContributionFactory contributionFactory;
-    
-    public ResourceImplementationProcessor(ResourceImplementationFactory resourceFactory, ContributionFactory contributionFactory) {
-        this.resourceFactory = resourceFactory;
-        this.contributionFactory = contributionFactory;
+    private ResourceImplementationFactory implementationFactory;
+    private Monitor monitor;
+
+    public ResourceImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        contributionFactory = modelFactories.getFactory(ContributionFactory.class);
+        implementationFactory = modelFactories.getFactory(ResourceImplementationFactory.class);
+        this.monitor = monitor;
+    }
+
+    /**
+     * Report a exception.
+     *
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "impl-resource-validation-messages", Severity.ERROR, model, message, ex);
+	        monitor.problem(problem);
+    	 }
+    }
+
+    /**
+     * Report a error.
+     *
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+        if (monitor != null) {
+            Problem problem = new ProblemImpl(this.getClass().getName(), "impl-resource-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
     }
 
     public QName getArtifactType() {
-        // Returns the qname of the XML element processed by this processor
+        // Returns the QName of the XML element processed by this processor
         return IMPLEMENTATION_RESOURCE;
     }
 
@@ -63,49 +101,67 @@ public class ResourceImplementationProcessor implements StAXArtifactProcessor<Re
         return ResourceImplementation.class;
     }
 
-    public ResourceImplementation read(XMLStreamReader reader) throws ContributionReadException {
-        assert IMPLEMENTATION_RESOURCE.equals(reader.getName());
-        
-        // Read an <implementation.resource> element
-        try {
-            // Read the directory attribute. This is where the sample
-            // CRUD implementation will persist resources.
-            String location = reader.getAttributeValue(null, "location");
+    public ResourceImplementation read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
 
-            // Create an initialize the resource implementationmodel
-            ResourceImplementation implementation = resourceFactory.createResourceImplementation();
+        // Read an <implementation.resource> element
+
+        // Create and initialize the resource implementation model
+        ResourceImplementation implementation = null;
+
+        // Read the location attribute specifying the location of the resources
+        String location = reader.getAttributeValue(null, "location");
+        if (location != null) {
+            implementation = implementationFactory.createResourceImplementation();
             implementation.setLocation(location);
             implementation.setUnresolved(true);
-            
-            // Skip to end element
-            while (reader.hasNext()) {
-                if (reader.next() == END_ELEMENT && IMPLEMENTATION_RESOURCE.equals(reader.getName())) {
-                    break;
-                }
-            }
-            
-            return implementation;
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+        } else {
+            error("LocationAttributeMissing", reader);
+            //throw new ContributionReadException(MSG_LOCATION_MISSING);
         }
+
+        // Skip to end element
+        while (reader.hasNext()) {
+            if (reader.next() == END_ELEMENT && IMPLEMENTATION_RESOURCE.equals(reader.getName())) {
+                break;
+            }
+        }
+
+        return implementation;
     }
 
-    public void resolve(ResourceImplementation impl, ModelResolver resolver) throws ContributionResolveException {
-        
+    public void resolve(ResourceImplementation implementation, ModelResolver resolver) throws ContributionResolveException {
+    	
+    	if (implementation == null)
+    		return;
+    	
         // Resolve the resource directory location
-        DeployedArtifact artifact = contributionFactory.createDeployedArtifact();
-        artifact.setURI(impl.getLocation());
-        DeployedArtifact resolved = resolver.resolveModel(DeployedArtifact.class, artifact);
+        Artifact artifact = contributionFactory.createArtifact();
+        artifact.setURI(implementation.getLocation());
+        Artifact resolved = resolver.resolveModel(Artifact.class, artifact);
         if (resolved.getLocation() != null) {
             try {
-                impl.setLocationURL(new URL(resolved.getLocation()));
-                impl.setUnresolved(false);
+                implementation.setLocationURL(new URL(resolved.getLocation()));
+                implementation.setUnresolved(false);
             } catch (IOException e) {
-                throw new ContributionResolveException(e);
+            	ContributionResolveException ce = new ContributionResolveException(e);
+            	error("ContributionResolveException", resolver, ce);
+                //throw ce;
             }
+        } else {
+            error("CouldNotResolveLocation", resolver, implementation.getLocation());
+            //throw new ContributionResolveException("Could not resolve implementation.resource location: " + implementation.getLocation());
         }
     }
 
-    public void write(ResourceImplementation model, XMLStreamWriter outputSource) throws ContributionWriteException {
+    public void write(ResourceImplementation implementation, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
+
+        // Write <implementation.resource>
+        writer.writeStartElement(IMPLEMENTATION_RESOURCE.getNamespaceURI(), IMPLEMENTATION_RESOURCE.getLocalPart());
+
+        if (implementation.getLocation() != null) {
+            writer.writeAttribute("location", implementation.getLocation());
+        }
+
+        writer.writeEndElement();
     }
 }

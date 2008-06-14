@@ -38,6 +38,10 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class NotificationServlet extends HttpServlet {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private NotificationServletHandler handler;
     private NotificationServletStreamHandler servletStreamHandler;
     
@@ -51,6 +55,7 @@ public class NotificationServlet extends HttpServlet {
         this.servletStreamHandler = servletStreamHandler;
     }
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HashMap<String, String> headers = new HashMap<String, String>();
         Enumeration headerNames = request.getHeaderNames();
@@ -65,22 +70,20 @@ public class NotificationServlet extends HttpServlet {
                 response.getOutputStream().write(handlersResponse);
                 response.getOutputStream().flush();
             }
-        }
-        else {
+        } else {
             try {
                 servletStreamHandler.handle(headers, request.getInputStream(), request.getContentLength(), response.getOutputStream());
-            }
-            catch(RuntimeException e) {
+            } catch(RuntimeException e) {
                 e.printStackTrace();
             }
         }
     }
     
     public interface NotificationServletHandler {
-        public byte[] handle(Map<String, String> headers, byte[] payload);
+        byte[] handle(Map<String, String> headers, byte[] payload);
     }
     
     public interface NotificationServletStreamHandler {
-        public void handle(Map<String, String> headers, ServletInputStream istream, int contentLength, ServletOutputStream ostream);
+        void handle(Map<String, String> headers, ServletInputStream istream, int contentLength, ServletOutputStream ostream);
     }
 }

@@ -23,42 +23,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
-import javax.wsdl.Binding;
-import javax.wsdl.BindingOperation;
 import javax.wsdl.Definition;
-import javax.wsdl.Fault;
 import javax.wsdl.Import;
-import javax.wsdl.Message;
-import javax.wsdl.Operation;
-import javax.wsdl.Port;
-import javax.wsdl.PortType;
-import javax.wsdl.Service;
-import javax.wsdl.Types;
-import javax.wsdl.WSDLException;
-import javax.wsdl.extensions.ExtensionRegistry;
-import javax.wsdl.extensions.schema.Schema;
-import javax.wsdl.xml.WSDLLocator;
-import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
-import org.apache.tuscany.sca.contribution.service.ContributionRuntimeException;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.xml.XMLDocumentHelper.URIResolverImpl;
-import org.apache.ws.commons.schema.XmlSchemaCollection;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
+import org.apache.tuscany.sca.xsd.XSDefinition;
+import org.apache.tuscany.sca.xsd.XSDFactory;
 
 /**
  * An ArtifactProcessor for WSDL documents.
@@ -67,152 +54,52 @@ import org.xml.sax.InputSource;
  */
 public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinition> {
 
-    private javax.wsdl.factory.WSDLFactory wsdlFactory;
-    private ExtensionRegistry wsdlExtensionRegistry;
+    public static final QName WSDL11 = new QName("http://schemas.xmlsoap.org/wsdl/", "definitions");
+    public static final QName WSDL11_IMPORT = new QName("http://schemas.xmlsoap.org/wsdl/", "import");
+    public static final QName XSD = new QName("http://www.w3.org/2001/XMLSchema", "schema");
+
+    private static final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+
     private WSDLFactory factory;
+    private XSDFactory xsdFactory;
+    private Monitor monitor;
 
-    private Map<String, WSDLDefinition> loadedDefinitions = new Hashtable<String, WSDLDefinition>();
-
+    public WSDLDocumentProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        this.factory = modelFactories.getFactory(WSDLFactory.class);
+        this.xsdFactory = modelFactories.getFactory(XSDFactory.class);
+        this.monitor = monitor;
+    }
+    
     /**
-     * Implementation of a WSDL locator.
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
      */
-    private class WSDLLocatorImpl implements WSDLLocator {
-        private InputStream inputStream;
-        private URL base;
-        private String latestImportURI;
+     private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "interface-wsdlxml-validation-messages", Severity.ERROR, model, message, ex);
+    	     monitor.problem(problem);
+    	 }        
+     }
 
-        public WSDLLocatorImpl(URL base, InputStream is) {
-            this.base = base;
-            this.inputStream = is;
-        }
-
-        public void close() {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                // Ignore
-            }
-        }
-
-        public InputSource getBaseInputSource() {
-            try {
-                return XMLDocumentHelper.getInputSource(base, inputStream);
-            } catch (IOException e) {
-                throw new IllegalArgumentException(e);
-            }
-        }
-
-        public String getBaseURI() {
-            return base.toString();
-        }
-
-        public InputSource getImportInputSource(String parentLocation, String importLocation) {
-            try {
-                if (importLocation == null || importLocation.startsWith("/")) {
-                    return null;
-                }
-                URL url = new URL(new URL(parentLocation), importLocation);
-                latestImportURI = url.toString();
-                return XMLDocumentHelper.getInputSource(url);
-            } catch (Exception e) {
-                throw new ContributionRuntimeException(e);
-            }
-        }
-
-        public String getLatestImportURI() {
-            return latestImportURI;
-        }
-
-    }
-
-    public WSDLDocumentProcessor(WSDLFactory factory, javax.wsdl.factory.WSDLFactory wsdlFactory) {
-        this.factory = factory;
-
-        if (wsdlFactory != null) {
-            this.wsdlFactory = wsdlFactory;
-        } else {
-            try {
-                this.wsdlFactory = javax.wsdl.factory.WSDLFactory.newInstance();
-            } catch (WSDLException e) {
-                throw new ContributionRuntimeException(e);
-            }
-        }
-
-        wsdlExtensionRegistry = this.wsdlFactory.newPopulatedExtensionRegistry();
-    }
-
-    private void readInlineSchemas(Definition definition, WSDLDefinition wsdlDefinition) {
-        Types types = definition.getTypes();
-        if (types != null) {
-            wsdlDefinition.getInlinedSchemas().setSchemaResolver(new URIResolverImpl());
-            for (Object ext : types.getExtensibilityElements()) {
-                if (ext instanceof Schema) {
-                    Element element = ((Schema)ext).getElement();
-
-                    XmlSchemaCollection schemaCollection = wsdlDefinition.getInlinedSchemas();
-                    schemaCollection.setBaseUri(((Schema)ext).getDocumentBaseURI());
-
-                    wsdlDefinition.getInlinedSchemas().read(element, element.getBaseURI());
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public WSDLDefinition read(URL contributionURL, URI artifactURI, URL artifactURL) throws ContributionReadException {
         try {
-
-            // Read a WSDL document
-            InputStream is = artifactURL.openStream();
-            WSDLReader reader = wsdlFactory.newWSDLReader();
-            reader.setFeature("javax.wsdl.verbose", false);
-            reader.setFeature("javax.wsdl.importDocuments", true);
-            // FIXME: We need to decide if we should disable the import processing by WSDL4J
-            // reader.setFeature("javax.wsdl.importDocuments", false);
-            reader.setExtensionRegistry(wsdlExtensionRegistry);
-
-            WSDLLocatorImpl locator = new WSDLLocatorImpl(artifactURL, is);
-            Definition definition = reader.readWSDL(locator);
-
-            WSDLDefinition wsdlDefinition = loadedDefinitions.get(definition.getTargetNamespace());
-            if (wsdlDefinition != null) {
-                merge(wsdlDefinition.getDefinition(), definition);
-            } else {
-                wsdlDefinition = factory.createWSDLDefinition();
-                wsdlDefinition.setDefinition(definition);
-                loadedDefinitions.put(definition.getTargetNamespace(), wsdlDefinition);
-            }
-
-            //Read inline schemas 
-            readInlineSchemas(definition, wsdlDefinition);
-
-            //read the inline schemas for wsdl imports
-            if (definition.getImports().size() > 0) {
-                Iterator<Vector<Import>> importsIterator = definition.getImports().values().iterator();
-                Vector<Import> imports = null;
-                Import anImport = null;
-                while (importsIterator.hasNext()) {
-                    imports = importsIterator.next();
-                    for (int count = 0; count < imports.size(); ++count) {
-                        anImport = imports.elementAt(count);
-                        // Read inline schemas 
-                        if (anImport.getDefinition() != null) {
-                            readInlineSchemas(anImport.getDefinition(), wsdlDefinition);
-                        }
-                    }
-                }
-            }
-
-            return wsdlDefinition;
-
-        } catch (WSDLException e) {
-            throw new ContributionReadException(e);
-        } catch (IOException e) {
-            throw new ContributionReadException(e);
+            WSDLDefinition definition = indexRead(artifactURL);
+            definition.setURI(artifactURI);
+            return definition;
+        } catch (Exception e) {
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", artifactURL, ce);
+            //throw ce;
+        	return null;
         }
     }
 
     public void resolve(WSDLDefinition model, ModelResolver resolver) throws ContributionResolveException {
+        if (model == null) return;
+    	
         Definition definition = model.getDefinition();
         if (definition != null) {
             for (Object imports : definition.getImports().values()) {
@@ -223,6 +110,7 @@ public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinitio
                         continue;
                     }
                     if (imp.getLocationURI() == null) {
+                        // FIXME: [rfeng] By the WSDL 1.1 Specification, the location attribute is required
                         // We need to resolve it by QName
                         WSDLDefinition proxy = factory.createWSDLDefinition();
                         proxy.setUnresolved(true);
@@ -230,6 +118,9 @@ public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinitio
                         WSDLDefinition resolved = resolver.resolveModel(WSDLDefinition.class, proxy);
                         if (resolved != null && !resolved.isUnresolved()) {
                             imp.setDefinition(resolved.getDefinition());
+                            if (!model.getImportedDefinitions().contains(resolved)) {
+                                model.getImportedDefinitions().add(resolved);
+                            }
                         }
                     } else {
                         String location = imp.getLocationURI();
@@ -239,8 +130,13 @@ public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinitio
                             try {
                                 resolved = read(null, uri, uri.toURL());
                                 imp.setDefinition(resolved.getDefinition());
+                                if (!model.getImportedDefinitions().contains(resolved)) {
+                                    model.getImportedDefinitions().add(resolved);
+                                }
                             } catch (Exception e) {
-                                throw new ContributionResolveException(e);
+                            	ContributionResolveException ce = new ContributionResolveException(e);
+                            	error("ContributionResolveException", resolver, ce);
+                                //throw ce;
                             }
                         } else {
                             if (location.startsWith("/")) {
@@ -255,8 +151,13 @@ public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinitio
                                 try {
                                     resolved = read(null, locationURI, locationURI.toURL());
                                     imp.setDefinition(resolved.getDefinition());
+                                    if (!model.getImportedDefinitions().contains(resolved)) {
+                                        model.getImportedDefinitions().add(resolved);
+                                    }
                                 } catch (Exception e) {
-                                    throw new ContributionResolveException(e);
+                                	ContributionResolveException ce = new ContributionResolveException(e);
+                                	error("ContributionResolveException", resolver, ce);
+                                    //throw ce;
                                 }
                             }
                         }
@@ -275,209 +176,55 @@ public class WSDLDocumentProcessor implements URLArtifactProcessor<WSDLDefinitio
     }
 
     /**
-     * Merge a set of WSDLs into a facade Definition
+     * Read the namespace for the WSDL definition and inline schemas
      * 
-     * @param definitions
+     * @param doc
      * @return
+     * @throws IOException
+     * @throws XMLStreamException
      */
-    private Definition merge(Definition target, Definition source) {
-        for (Iterator j = source.getImports().values().iterator(); j.hasNext();) {
-            List list = (List)j.next();
-            for (Iterator k = list.iterator(); k.hasNext();)
-                target.addImport((Import)k.next());
-        }
+    protected WSDLDefinition indexRead(URL doc) throws Exception {
+        WSDLDefinition wsdlDefinition = factory.createWSDLDefinition();
+        wsdlDefinition.setUnresolved(true);
+        wsdlDefinition.setLocation(doc.toURI());
 
-        for (Iterator k = source.getBindings().values().iterator(); k.hasNext();) {
-            Binding binding = (Binding)k.next();
-            if (!binding.isUndefined())
-                target.getBindings().put(binding.getQName(), binding);
-        }
-
-        target.getExtensibilityElements().addAll(source.getExtensibilityElements());
-
-        for (Iterator k = source.getMessages().values().iterator(); k.hasNext();) {
-            Message msg = (Message)k.next();
-            if (!msg.isUndefined())
-                target.getMessages().put(msg.getQName(), msg);
-        }
-
-        target.getNamespaces().putAll(source.getNamespaces());
-
-        for (Iterator k = source.getPortTypes().values().iterator(); k.hasNext();) {
-            PortType portType = (PortType)k.next();
-            if (!portType.isUndefined())
-                target.getPortTypes().put(portType.getQName(), portType);
-        }
-
-        target.getServices().putAll(source.getServices());
-
-        if (target.getTypes() == null) {
-            target.setTypes(target.createTypes());
-        }
-        if (source.getTypes() != null)
-            target.getTypes().getExtensibilityElements().addAll(source.getTypes().getExtensibilityElements());
-        return target;
-
-    }
-
-    /**
-     * Resolve a definition by QName
-     * 
-     * @param name
-     * @return
-     */
-    private Definition resolveDefinition(QName name) {
-        return null;
-    }
-
-    /**
-     * Resolve the undefined elements in the WSDL definition
-     * 
-     * @param definition
-     */
-    private void resolveDefinition(Definition definition) {
-        if (definition == null)
-            return;
-        for (Iterator i = definition.getMessages().values().iterator(); i.hasNext();) {
-            resolveElement(definition, i.next());
-        }
-        for (Iterator i = definition.getPortTypes().values().iterator(); i.hasNext();) {
-            resolveElement(definition, i.next());
-        }
-        for (Iterator i = definition.getBindings().values().iterator(); i.hasNext();) {
-            resolveElement(definition, i.next());
-        }
-        for (Iterator i = definition.getServices().values().iterator(); i.hasNext();) {
-            resolveElement(definition, i.next());
-        }
-    }
-
-    /**
-     * @param elements
-     * @param location
-     */
-    private Object resolveElement(Definition definition, Object element) {
-        if (element == null)
-            return null;
-        QName name = null;
-        if (element instanceof Binding) {
-            Binding binding = (Binding)element;
-            if (binding.isUndefined()) {
-                name = binding.getQName();
-                Definition resolvedDefinition = resolveDefinition(name);
-                if (resolvedDefinition != null && resolvedDefinition != definition) {
-                    Binding resovledBinding = resolvedDefinition.getBinding(name);
-                    if (resovledBinding != null && resovledBinding != binding) {
-                        binding = resovledBinding;
-                        if (definition != null) {
-                            definition.getBindings().put(name, binding);
-                        }
+        InputStream is = doc.openStream();
+        try {
+            XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+            int eventType = reader.getEventType();
+            int index = 0;
+            while (true) {
+                if (eventType == XMLStreamConstants.START_ELEMENT) {
+                    if (WSDL11.equals(reader.getName())) {
+                        String tns = reader.getAttributeValue(null, "targetNamespace");
+                        wsdlDefinition.setNamespace(tns);
+                        // The definition is marked as resolved but not loaded
+                        wsdlDefinition.setUnresolved(false);
+                        wsdlDefinition.setDefinition(null);
+                    }
+                    if (XSD.equals(reader.getName())) {
+                        String tns = reader.getAttributeValue(null, "targetNamespace");
+                        XSDefinition xsd = xsdFactory.createXSDefinition();
+                        xsd.setUnresolved(true);
+                        xsd.setNamespace(tns);
+                        xsd.setLocation(URI.create(doc.toURI() + "#" + index));
+                        index++;
+                        // The definition is marked as resolved but not loaded
+                        xsd.setUnresolved(false);
+                        xsd.setSchema(null);
+                        wsdlDefinition.getXmlSchemas().add(xsd);
                     }
                 }
-            }
-            PortType portType = binding.getPortType();
-            PortType resolvedPortType = (PortType)resolveElement(null, portType);
-            if (resolvedPortType != null && resolvedPortType != portType) {
-                portType = resolvedPortType;
-                binding.setPortType(portType);
-            }
-
-            for (Iterator i = binding.getBindingOperations().iterator(); i.hasNext();) {
-                BindingOperation bindingOperation = (BindingOperation)i.next();
-                Operation operation = bindingOperation.getOperation();
-                if (operation != null && operation.isUndefined()) {
-                    String inputName =
-                        bindingOperation.getBindingInput() == null ? null : bindingOperation.getBindingInput()
-                            .getName();
-                    String outputName =
-                        bindingOperation.getBindingOutput() == null ? null : bindingOperation.getBindingOutput()
-                            .getName();
-                    Operation resolvedOperation =
-                        (Operation)portType.getOperation(operation.getName(), inputName, outputName);
-                    if (resolvedOperation != null && operation != resolvedOperation)
-                        bindingOperation.setOperation(resolvedOperation);
+                if (reader.hasNext()) {
+                    eventType = reader.next();
+                } else {
+                    break;
                 }
             }
-            return binding;
-        } else if (element instanceof Message) {
-            Message message = (Message)element;
-            if (message.isUndefined()) {
-                name = message.getQName();
-                Definition resolvedDefinition = resolveDefinition(name);
-                if (resolvedDefinition != null && resolvedDefinition != definition) {
-                    Message resolvedMessage = resolvedDefinition.getMessage(name);
-                    if (resolvedMessage != null && resolvedMessage != message) {
-                        message = resolvedMessage;
-                        if (definition != null)
-                            definition.getMessages().put(name, message);
-                    }
-                }
-            }
-            return message;
-        } else if (element instanceof PortType) {
-            PortType portType = (PortType)element;
-            if (portType.isUndefined()) {
-                name = portType.getQName();
-                Definition resolvedDefinition = resolveDefinition(name);
-                if (resolvedDefinition != null && resolvedDefinition != definition) {
-                    PortType resolvedPortType = resolvedDefinition.getPortType(name);
-                    if (resolvedPortType != null && resolvedPortType != portType) {
-                        portType = resolvedPortType;
-                        if (definition != null)
-                            definition.getPortTypes().put(name, portType);
-                    }
-                }
-            }
-            List operations = new ArrayList(portType.getOperations());
-            for (Iterator i = operations.iterator(); i.hasNext();) {
-                Operation operation = (Operation)i.next();
-                Operation resolvedOperation = (Operation)resolveElement(null, operation);
-                if (resolvedOperation != null && resolvedOperation != operation) {
-                    int index = portType.getOperations().indexOf(operation);
-                    portType.getOperations().set(index, resolvedOperation);
-                }
-            }
-            return portType;
-        } else if (element instanceof Service) {
-            Service service = (Service)element;
-            name = service.getQName();
-            for (Iterator j = service.getPorts().values().iterator(); j.hasNext();) {
-                Port port = (Port)j.next();
-                Binding binding = port.getBinding();
-                Binding resolvedBinding = (Binding)resolveElement(null, binding);
-                if (resolvedBinding != null && resolvedBinding != binding) {
-                    port.setBinding(resolvedBinding);
-                }
-            }
-            return service;
-        } else if (element instanceof Operation) {
-            Operation operation = (Operation)element;
-            if (operation.getInput() != null) {
-                Message message = operation.getInput().getMessage();
-                Message resolvedMessage = (Message)resolveElement(null, message);
-                if (resolvedMessage != null && resolvedMessage != message)
-                    operation.getInput().setMessage(resolvedMessage);
-            }
-            if (operation.getOutput() != null) {
-                Message message = operation.getOutput().getMessage();
-                Message resolvedMessage = (Message)resolveElement(null, message);
-                if (resolvedMessage != null && resolvedMessage != message)
-                    operation.getOutput().setMessage(resolvedMessage);
-            }
-            for (Iterator j = operation.getFaults().values().iterator(); j.hasNext();) {
-                Fault fault = (Fault)j.next();
-                Message message = fault.getMessage();
-                Message resolvedMessage = (Message)resolveElement(null, message);
-                if (resolvedMessage != null && resolvedMessage != message)
-                    fault.setMessage(resolvedMessage);
-            }
-            if (operation.isUndefined())
-                operation.setUndefined(false);
-            return operation;
-        } else {
-            return element;
+            return wsdlDefinition;
+        } finally {
+            is.close();
         }
-
     }
 
 }

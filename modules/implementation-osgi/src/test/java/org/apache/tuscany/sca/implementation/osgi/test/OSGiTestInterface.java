@@ -20,12 +20,13 @@
 package org.apache.tuscany.sca.implementation.osgi.test;
 
 /**
- * 
+ *
  * Test class - Interface for an OSGi service
  *
+ * @version $Rev$ $Date$
  */
 public interface OSGiTestInterface {
-    
-    public String testService() throws Exception ;
+
+    String testService() throws Exception ;
 
 }

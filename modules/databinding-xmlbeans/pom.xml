@@ -22,23 +22,22 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-databinding-xmlbeans</artifactId>
-    <name>Apache Tuscany Data Binding for XmlBeans</name>
-    <description>Tuscany XmlBeans Data Binding</description>
+    <name>Apache Tuscany SCA Data Binding for XmlBeans</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-core-spi</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-databinding</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -89,7 +88,7 @@
                 <executions>
                     <execution>
                         <id>generate-xmlbeans</id>
-                        <phase>generate-test-sources</phase>
+                        <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
                                 <taskdef name="xmlbean" classname="org.apache.xmlbeans.impl.tool.XMLBean"
@@ -105,6 +104,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
+                <configuration>
+                    <instructions>
+                        <Bundle-Version>${tuscany.version}</Bundle-Version>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.databinding.xmlbeans</Bundle-SymbolicName>
+                        <Bundle-Description>${pom.name}</Bundle-Description>
+                        <Export-Package>org.apache.tuscany.sca.databinding.xmlbeans*</Export-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>

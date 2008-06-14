@@ -32,12 +32,14 @@ public class NewBrokerEnDeCoder extends AbstractBrokerEnDeCoder<NewBroker> {
         super(registry);
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         
         return QNAME;
     }
 
-    protected Class<NewBroker> getEncodingObjectType() {
+    
+	public Class<NewBroker> getEncodingObjectType() {
         
         return NewBroker.class;
     }

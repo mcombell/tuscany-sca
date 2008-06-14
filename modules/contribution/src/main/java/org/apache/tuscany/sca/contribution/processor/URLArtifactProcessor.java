@@ -25,15 +25,14 @@ import java.net.URL;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 
 /**
- * An artifact processor that can read models from an InputStream.
+ * An artifact processor that can read models from a URL.
  * 
  * @version $Rev$ $Date$
  */
 public interface URLArtifactProcessor<M> extends ArtifactProcessor<M> {
 
     /**
-     * Reads a model from an input source. Examples of input 
-     * sources are: a URI, a DOM node, an XML reader.
+     * Reads a model from a URL.
      * 
      * @param contributionURL Contribution location URL
      * @param artifactURI Artifact URI

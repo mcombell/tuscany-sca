@@ -22,8 +22,9 @@ package org.apache.tuscany.sca.binding.feed;
 import org.apache.tuscany.sca.assembly.Binding;
 
 /**
- * A model for the Atom binding.
+ * Atom binding model.
+ *
+ * @version $Rev$ $Date$
  */
 public interface AtomBinding extends Binding {
-
 }

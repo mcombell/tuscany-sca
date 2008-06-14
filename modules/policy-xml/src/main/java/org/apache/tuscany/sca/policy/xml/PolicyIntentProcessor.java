@@ -31,200 +31,289 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.ProfileIntent;
 import org.apache.tuscany.sca.policy.QualifiedIntent;
 
-public class PolicyIntentProcessor implements StAXArtifactProcessor<Intent>, PolicyConstants {
+/**
+ * Processor for handling XML models of PolicyIntent definitions
+ *
+ * @version $Rev$ $Date$
+ */
+abstract class PolicyIntentProcessor<T extends Intent> extends BaseStAXArtifactProcessor implements StAXArtifactProcessor<T>, PolicyConstants {
 
     private PolicyFactory policyFactory;
+    private Monitor monitor;
 
-    public PolicyIntentProcessor(PolicyFactory policyFactory) {
+    public PolicyIntentProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
+        this.monitor = monitor;
+    }
+    
+    public PolicyIntentProcessor(PolicyFactory policyFactory, Monitor monitor) {
         this.policyFactory = policyFactory;
+        this.monitor = monitor;
+    }
+    
+    /**
+     * Report a error.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "policy-xml-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+    	     monitor.problem(problem);
+    	 }        
     }
 
-    public Intent read(XMLStreamReader reader) throws ContributionReadException {
-        try {
-            Intent policyIntent = null;
-            String policyIntentName = reader.getAttributeValue(null, NAME);
-            // Read an <sca:intent>
-            if (reader.getAttributeValue(null, REQUIRES) != null) {
-                policyIntent = policyFactory.createProfileIntent();
-            } else if ( policyIntentName != null && policyIntentName.indexOf(QUALIFIER) != -1) {
-                policyIntent = policyFactory.createQualifiedIntent();
-                
-                int qualifierIndex = policyIntentName.lastIndexOf(QUALIFIER);
-                Intent qualifiableIntent = policyFactory.createIntent();
-                qualifiableIntent.setName(getQNameValue(reader, 
-                                                        policyIntentName.substring(0, qualifierIndex)));
-                
-                ((QualifiedIntent)policyIntent).setQualifiableIntent(qualifiableIntent);
-            } else {
-                policyIntent = policyFactory.createIntent();
-            }
-            policyIntent.setName(getQNameValue(reader, policyIntentName));
+    public T read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
+        Intent policyIntent = null;
+        String policyIntentName = reader.getAttributeValue(null, NAME);
+        // Read an <sca:intent>
+        if (reader.getAttributeValue(null, REQUIRES) != null) {
+            policyIntent = policyFactory.createProfileIntent();
+        } else if ( policyIntentName != null && policyIntentName.indexOf(QUALIFIER) != -1) {
+            policyIntent = policyFactory.createQualifiedIntent();
             
-            if ( policyIntent instanceof ProfileIntent ) {
-                readRequiredIntents((ProfileIntent)policyIntent, reader);
-            }
+            int qualifierIndex = policyIntentName.lastIndexOf(QUALIFIER);
+            Intent qualifiableIntent = policyFactory.createIntent();
+            qualifiableIntent.setUnresolved(true);
+            qualifiableIntent.setName(new QName(policyIntentName.substring(0, qualifierIndex)));
             
-            readConstrainedArtifacts(policyIntent, reader);
-            
-            int event = reader.getEventType();
-            QName name = null;
-            while (reader.hasNext()) {
-                event = reader.getEventType();
-                switch (event) {
-                    case START_ELEMENT : {
-                        name = reader.getName();
-                        if (DESCRIPTION_QNAME.equals(name)) {
-                            policyIntent.setDescription(reader.getElementText());
-                        }
-                        break;
+            ((QualifiedIntent)policyIntent).setQualifiableIntent(qualifiableIntent);
+        } else {
+            policyIntent = policyFactory.createIntent();
+        }
+        policyIntent.setName(new QName(policyIntentName));
+        
+        if ( policyIntent instanceof ProfileIntent ) {
+            readRequiredIntents((ProfileIntent)policyIntent, reader);
+        }
+        else {
+            readExcludedIntents(policyIntent, reader);
+        }
+        
+        readConstrainedArtifacts(policyIntent, reader);
+
+        int event = reader.getEventType();
+        QName name = null;
+        while (reader.hasNext()) {
+            event = reader.getEventType();
+            switch (event) {
+                case START_ELEMENT : {
+                    name = reader.getName();
+                    if (DESCRIPTION_QNAME.equals(name)) {
+                        policyIntent.setDescription(reader.getElementText());
                     }
-                }
-                if (event == END_ELEMENT && POLICY_INTENT_QNAME.equals(reader.getName())) {
                     break;
                 }
-                
-                //Read the next element
-                if (reader.hasNext()) {
-                    reader.next();
-                }
             }
-            return policyIntent;
+            if (event == END_ELEMENT && POLICY_INTENT_QNAME.equals(reader.getName())) {
+                break;
+            }
             
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+            //Read the next element
+            if (reader.hasNext()) {
+                reader.next();
+            }
         }
+        return (T)policyIntent;
     }
     
-    public void write(Intent policyIntent, XMLStreamWriter writer) throws ContributionWriteException {
-        try {
-            // Write an <sca:intent>
-            writer.writeStartElement(PolicyConstants.SCA10_NS, INTENT);
-            if (policyIntent instanceof ProfileIntent) {
-                ProfileIntent profileIntent = (ProfileIntent)policyIntent;
-                if (profileIntent.getRequiredIntents() != null && 
-                    profileIntent.getRequiredIntents().size() > 0) {
-                    StringBuffer sb = new StringBuffer();
-                    for (Intent requiredIntents : profileIntent.getRequiredIntents()) {
-                        sb.append(requiredIntents.getName());
-                        sb.append(" ");
-                    }
-                    writer.writeAttribute(PolicyConstants.REQUIRES, sb.toString());
+    public void write(T policyIntent, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
+        // Write an <sca:intent>
+        writer.writeStartElement(PolicyConstants.SCA10_NS, INTENT);
+        writer.writeNamespace(policyIntent.getName().getPrefix(), policyIntent.getName().getNamespaceURI());
+        writer.writeAttribute(PolicyConstants.NAME, 
+                              policyIntent.getName().getPrefix() + COLON + policyIntent.getName().getLocalPart());
+        if (policyIntent instanceof ProfileIntent) {
+            ProfileIntent profileIntent = (ProfileIntent)policyIntent;
+            if (profileIntent.getRequiredIntents() != null && 
+                profileIntent.getRequiredIntents().size() > 0) {
+                StringBuffer sb = new StringBuffer();
+                for (Intent requiredIntents : profileIntent.getRequiredIntents()) {
+                    sb.append(requiredIntents.getName());
+                    sb.append(" ");
                 }
+                writer.writeAttribute(PolicyConstants.REQUIRES, sb.toString());
             }
-            
-            if (!(policyIntent instanceof QualifiedIntent) ) {
-                if (policyIntent.getConstrains() != null && 
-                    policyIntent.getConstrains().size() > 0) {
-                    StringBuffer sb = new StringBuffer();
-                    for (QName contrainedArtifact : policyIntent.getConstrains()) {
-                        sb.append(contrainedArtifact.toString());
-                        sb.append(" ");
-                    }
-                    writer.writeAttribute(CONSTRAINS, sb.toString());
-                } else {
-                    throw new ContributionWriteException("Contrains attribute missing from " +
-                                    "Policy Intent Definition" + policyIntent.getName());
+        }
+        else {
+            if (policyIntent.getExcludedIntents() != null && 
+                policyIntent.getExcludedIntents().size() > 0) {
+                StringBuffer sb = new StringBuffer();
+                for (Intent excludedIntents : policyIntent.getExcludedIntents()) {
+                    sb.append(excludedIntents.getName());
+                    sb.append(" ");
                 }
+                writer.writeAttribute(PolicyConstants.EXCLUDES, sb.toString());
             }
-            
-            if ( policyIntent.getDescription() != null && policyIntent.getDescription().length() > 0) {
-                writer.writeStartElement(PolicyConstants.SCA10_NS, DESCRIPTION);
-                writer.writeCData(policyIntent.getDescription());
-                writer.writeEndElement();
+        }
+        
+        if (!(policyIntent instanceof QualifiedIntent) ) {
+            if (policyIntent.getConstrains() != null && 
+                policyIntent.getConstrains().size() > 0) {
+                StringBuffer sb = new StringBuffer();
+                for (QName contrainedArtifact : policyIntent.getConstrains()) {
+                    sb.append(contrainedArtifact.toString());
+                    sb.append(" ");
+                }
+                writer.writeAttribute(CONSTRAINS, sb.toString());
+            } else {
+            	error("ContrainsAttributeMissing", policyIntent, policyIntent.getName());
+                //throw new ContributionWriteException("Contrains attribute missing from " +
+                                        //"Policy Intent Definition" + policyIntent.getName());
             }
-            
+        }
+        
+        if ( policyIntent.getDescription() != null && policyIntent.getDescription().length() > 0) {
+            writer.writeStartElement(PolicyConstants.SCA10_NS, DESCRIPTION);
+            writer.writeCData(policyIntent.getDescription());
             writer.writeEndElement();
-            
-        } catch (XMLStreamException e) {
-            throw new ContributionWriteException(e);
         }
+        
+        writer.writeEndElement();
+    }
+
+    //FIXME This method is never used
+//    private Intent resolveRequiredIntents(ProfileIntent policyIntent, ModelResolver resolver) throws ContributionResolveException {
+//        boolean isUnresolved = false;
+//        //FIXME: Need to check for cyclic references first i.e an A requiring B and then B requiring A... 
+//        if (policyIntent != null && policyIntent.isUnresolved()) {
+//            
+//            //resolve all required intents
+//            List<Intent> requiredIntents = new ArrayList<Intent>(); 
+//            for (Intent requiredIntent : policyIntent.getRequiredIntents()) {
+//                if ( requiredIntent.isUnresolved() ) {
+//                    //policyIntent.getRequiredIntents().remove(requiredIntent);
+//                    requiredIntent = resolver.resolveModel(Intent.class, requiredIntent);
+//                    requiredIntents.add(requiredIntent);
+//                    if (requiredIntent.isUnresolved()) {
+//                        isUnresolved = true;
+//                    }
+//                }
+//            }
+//            policyIntent.getRequiredIntents().clear();
+//            policyIntent.getRequiredIntents().addAll(requiredIntents);
+//        }
+//        policyIntent.setUnresolved(isUnresolved);
+//        
+//        return policyIntent;
+//    }
+    
+    //FIXME This method is never used
+//    private Intent resolveQualifiableIntent(QualifiedIntent policyIntent, ModelResolver resolver) throws ContributionResolveException {
+//        boolean isUnresolved = false;
+//
+//        if (policyIntent != null && policyIntent.isUnresolved()) {
+//            //resolve the qualifiable intent
+//            Intent qualifiableIntent = 
+//                resolver.resolveModel(Intent.class, policyIntent.getQualifiableIntent());
+//            policyIntent.setQualifiableIntent(qualifiableIntent);
+//            isUnresolved = qualifiableIntent.isUnresolved();
+//        }
+//        policyIntent.setUnresolved(isUnresolved);
+//        
+//        return policyIntent;
+//    }
+    
+    private void resolveContrainedArtifacts(Intent policyIntent, ModelResolver resolver) {
+        //FIXME : need to figure out this resolution. 
+        policyIntent.setUnresolved(false);
     }
     
-    private Intent resolveRequiredIntents(ProfileIntent policyIntent, ModelResolver resolver) throws ContributionResolveException {
-        boolean isUnresolved = false;
-        //FIXME: Need to check for cyclic references first i.e an A requiring B and then B requiring A... 
-        if (policyIntent != null && policyIntent.isUnresolved()) {
-            
-            //resolve all required intents
-            List<Intent> requiredIntents = new ArrayList<Intent>(); 
+    private void resolveProfileIntent(ProfileIntent policyIntent, ModelResolver resolver)
+        throws ContributionResolveException {
+        // FIXME: Need to check for cyclic references first i.e an A requiring B
+        // and then B requiring A...
+        if (policyIntent != null) {
+            // resolve all required intents
+            List<Intent> requiredIntents = new ArrayList<Intent>();
             for (Intent requiredIntent : policyIntent.getRequiredIntents()) {
-                if ( requiredIntent.isUnresolved() ) {
-                    //policyIntent.getRequiredIntents().remove(requiredIntent);
-                    requiredIntent = resolver.resolveModel(Intent.class, requiredIntent);
-                    requiredIntents.add(requiredIntent);
-                    if (requiredIntent.isUnresolved()) {
-                        isUnresolved = true;
+                if (requiredIntent.isUnresolved()) {
+                    Intent resolvedRequiredIntent = resolver.resolveModel(Intent.class, requiredIntent);
+                    if (resolvedRequiredIntent != null) {
+                        requiredIntents.add(resolvedRequiredIntent);
+                    } else {
+                    	error("RequiredIntentNotFound", resolver, requiredIntent, policyIntent);
+                        //throw new ContributionResolveException("Required Intent - " + requiredIntent
+                                                    //+ " not found for ProfileIntent " + policyIntent);
                     }
+                } else {
+                    requiredIntents.add(requiredIntent);
                 }
             }
             policyIntent.getRequiredIntents().clear();
             policyIntent.getRequiredIntents().addAll(requiredIntents);
         }
-        policyIntent.setUnresolved(isUnresolved);
-        
-        return policyIntent;
     }
-    
-    private Intent resolveQualifiableIntent(QualifiedIntent policyIntent, ModelResolver resolver) throws ContributionResolveException {
-        boolean isUnresolved = false;
 
-        if (policyIntent != null && policyIntent.isUnresolved()) {
+    private void resolveQualifiedIntent(QualifiedIntent policyIntent, ModelResolver resolver)
+        throws ContributionResolveException {
+        if (policyIntent != null) {
             //resolve the qualifiable intent
-            Intent qualifiableIntent = 
-                resolver.resolveModel(Intent.class, policyIntent.getQualifiableIntent());
-            policyIntent.setQualifiableIntent(qualifiableIntent);
-            isUnresolved = qualifiableIntent.isUnresolved();
+            Intent qualifiableIntent = policyIntent.getQualifiableIntent();
+            if (qualifiableIntent.isUnresolved()) {
+                Intent resolvedQualifiableIntent = resolver.resolveModel(Intent.class, qualifiableIntent);
+    
+                if (resolvedQualifiableIntent != null) {
+                    policyIntent.setQualifiableIntent(resolvedQualifiableIntent);
+                } else {
+                	error("QualifiableIntentNotFound", resolver, qualifiableIntent, policyIntent);
+                    //throw new ContributionResolveException("Qualifiable Intent - " + qualifiableIntent
+                                                    //+ " not found for QualifiedIntent " + policyIntent);
+                }
+    
+            }
         }
-        policyIntent.setUnresolved(isUnresolved);
-        
-        return policyIntent;
     }
     
-    protected void resolveContrainedArtifacts(Intent policyIntent, ModelResolver resolver) {
-        //FIXME : need to figure out this resolution. 
-        policyIntent.setUnresolved(false);
-    }
-    
-    public void resolve(Intent policyIntent, ModelResolver resolver) throws ContributionResolveException {
-        if ( policyIntent instanceof ProfileIntent ) {
-            resolveRequiredIntents((ProfileIntent)policyIntent, resolver);
-        } 
-        
-        if ( policyIntent instanceof QualifiedIntent ) {
-            resolveQualifiableIntent((QualifiedIntent)policyIntent, resolver);
+    public void resolve(T policyIntent, ModelResolver resolver) throws ContributionResolveException {
+        if (policyIntent instanceof ProfileIntent) {
+            resolveProfileIntent((ProfileIntent)policyIntent, resolver);
+        }
+        else {
+            resolveExcludedIntents(policyIntent, resolver);
+        }
+
+        if (policyIntent instanceof QualifiedIntent) {
+            resolveQualifiedIntent((QualifiedIntent)policyIntent, resolver);
         }
         
         resolveContrainedArtifacts(policyIntent, resolver);
-        
+
+        /* This is too late in the processing
         if ( !policyIntent.isUnresolved() ) {
             resolver.addModel(policyIntent);
         }
+        */
     }
     
     public QName getArtifactType() {
         return POLICY_INTENT_QNAME;
     }
     
-    public Class<Intent> getModelType() {
-        return Intent.class;
-    }
-    
-    protected void readConstrainedArtifacts(Intent policyIntent, XMLStreamReader reader) throws ContributionReadException {
+    private void readConstrainedArtifacts(Intent policyIntent, XMLStreamReader reader) throws ContributionReadException {
         String value = reader.getAttributeValue(null, CONSTRAINS);
         if ( policyIntent instanceof QualifiedIntent && value != null) {
-            String errorMsg = 
-                "Error in PolicyIntent Definition - " + policyIntent.getName() + QUALIFIED_INTENT_CONSTRAINS_ERROR;
-            throw new ContributionReadException(errorMsg);
+        	error("ErrorInPolicyIntentDefinition", policyIntent, policyIntent.getName(), QUALIFIED_INTENT_CONSTRAINS_ERROR);
+            //String errorMsg = "Error in PolicyIntent Definition - " + policyIntent.getName() + QUALIFIED_INTENT_CONSTRAINS_ERROR;
+            //throw new ContributionReadException(errorMsg);
         } else {
             if (value != null) {
                 List<QName> constrainedArtifacts = policyIntent.getConstrains();
@@ -236,7 +325,7 @@ public class PolicyIntentProcessor implements StAXArtifactProcessor<Intent>, Pol
         }
     }
     
-    protected void readRequiredIntents(ProfileIntent policyIntent, XMLStreamReader reader) {
+    private void readRequiredIntents(ProfileIntent policyIntent, XMLStreamReader reader) {
         String value = reader.getAttributeValue(null, REQUIRES);
         if (value != null) {
             List<Intent> requiredIntents = policyIntent.getRequiredIntents();
@@ -244,23 +333,48 @@ public class PolicyIntentProcessor implements StAXArtifactProcessor<Intent>, Pol
                 QName qname = getQNameValue(reader, tokens.nextToken());
                 Intent intent = policyFactory.createIntent();
                 intent.setName(qname);
+                intent.setUnresolved(true);
                 requiredIntents.add(intent);
             }
         }
     }
-    
-    protected QName getQNameValue(XMLStreamReader reader, String value) {
+
+    private void readExcludedIntents(Intent policyIntent, XMLStreamReader reader) {
+        String value = reader.getAttributeValue(null, "excludes");
         if (value != null) {
-            int index = value.indexOf(':');
-            String prefix = index == -1 ? "" : value.substring(0, index);
-            String localName = index == -1 ? value : value.substring(index + 1);
-            String ns = reader.getNamespaceContext().getNamespaceURI(prefix);
-            if (ns == null) {
-                ns = "";
+            List<Intent> excludedIntents = policyIntent.getExcludedIntents();
+            for (StringTokenizer tokens = new StringTokenizer(value); tokens.hasMoreTokens();) {
+                QName qname = getQNameValue(reader, tokens.nextToken());
+                Intent intent = policyFactory.createIntent();
+                intent.setName(qname);
+                intent.setUnresolved(true);
+                excludedIntents.add(intent);
             }
-            return new QName(ns, localName, prefix);
-        } else {
-            return null;
         }
     }
+
+    private void resolveExcludedIntents(Intent policyIntent, ModelResolver resolver)
+        throws ContributionResolveException {
+        if (policyIntent != null) {
+            // resolve all excluded intents
+            List<Intent> excludedIntents = new ArrayList<Intent>();
+            for (Intent excludedIntent : policyIntent.getExcludedIntents()) {
+                if (excludedIntent.isUnresolved()) {
+                    Intent resolvedExcludedIntent = resolver.resolveModel(Intent.class, excludedIntent);
+                    if (resolvedExcludedIntent != null) {
+                        excludedIntents.add(resolvedExcludedIntent);
+                    } else {
+                    	error("ExcludedIntentNotFound", resolver, excludedIntent, policyIntent);
+                        //throw new ContributionResolveException("Excluded Intent " + excludedIntent
+                                                         //+ " not found for intent " + policyIntent);
+                    }
+                } else {
+                    excludedIntents.add(excludedIntent);
+                }
+            }
+            policyIntent.getExcludedIntents().clear();
+            policyIntent.getExcludedIntents().addAll(excludedIntents);
+        }
+    }
+
 }

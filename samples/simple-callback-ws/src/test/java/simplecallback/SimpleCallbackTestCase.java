@@ -30,11 +30,13 @@ public class SimpleCallbackTestCase extends TestCase {
     private SCADomain scaDomain;
     private MyClient myClient;
 
+    @Override
     protected void setUp() throws Exception {
         scaDomain = SCADomain.newInstance("simplecallback.composite");
         myClient = scaDomain.getService(MyClient.class, "MyClientComponent");
     }
     
+    @Override
     protected void tearDown() throws Exception {
         scaDomain.close();
     }
@@ -43,8 +45,9 @@ public class SimpleCallbackTestCase extends TestCase {
         System.out.println("Main thread " + Thread.currentThread());
         myClient.aClientMethod();
         System.out.println("Sleeping ...");
-        Thread.sleep(300);
+        Thread.sleep(2000);
         assertEquals("-> someMethod -> receiveResult", MyClientImpl.result);
     }
 }
+
 

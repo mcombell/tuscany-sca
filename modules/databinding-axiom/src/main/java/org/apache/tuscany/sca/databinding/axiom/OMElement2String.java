@@ -30,6 +30,8 @@ import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
 /**
  * Transformer to convert data from an OMElement to XML String
+ *
+ * @version $Rev$ $Date$
  */
 public class OMElement2String extends BaseTransformer<OMElement, String> implements PullTransformer<OMElement, String> {
     // private XmlOptions options;
@@ -44,14 +46,17 @@ public class OMElement2String extends BaseTransformer<OMElement, String> impleme
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<OMElement> getSourceType() {
         return OMElement.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<String> getTargetType() {
         return String.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

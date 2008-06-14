@@ -31,8 +31,11 @@ public class String2DataObject extends BaseTransformer<String, DataObject> imple
     PullTransformer<String, DataObject> {
 
     public DataObject transform(String source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, false);
             XMLHelper xmlHelper = helperContext.getXMLHelper();
             return xmlHelper.load(source).getRootObject();
         } catch (Exception e) {
@@ -40,14 +43,17 @@ public class String2DataObject extends BaseTransformer<String, DataObject> imple
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<String> getSourceType() {
         return String.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<DataObject> getTargetType() {
         return DataObject.class;
     }
 
+    @Override
     public int getWeight() {
         return 50;
     }

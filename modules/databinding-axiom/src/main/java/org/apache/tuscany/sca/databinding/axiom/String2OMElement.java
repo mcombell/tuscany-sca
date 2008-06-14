@@ -27,6 +27,10 @@ import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class String2OMElement extends BaseTransformer<String, OMElement> implements
     PullTransformer<String, OMElement> {
 
@@ -42,14 +46,17 @@ public class String2OMElement extends BaseTransformer<String, OMElement> impleme
         }
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<OMElement> getTargetType() {
         return OMElement.class;
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<String> getSourceType() {
         return String.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

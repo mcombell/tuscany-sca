@@ -30,17 +30,15 @@ import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
 import crud.CRUD;
-import crud.model.CRUDImplementation;
+import crud.CRUDImplementation;
+
 
 /**
  * The model representing a sample CRUD implementation in an SCA assembly model.
  */
-public class CRUDImplementationImpl implements CRUDImplementation {
+class CRUDImplementationImpl implements CRUDImplementation {
 
     private Service crudService;
     private String directory;
@@ -48,9 +46,8 @@ public class CRUDImplementationImpl implements CRUDImplementation {
     /**
      * Constructs a new CRUD implementation.
      */
-    public CRUDImplementationImpl(AssemblyFactory assemblyFactory,
-                              JavaInterfaceFactory javaFactory,
-                              JavaInterfaceIntrospector introspector) {
+    CRUDImplementationImpl(AssemblyFactory assemblyFactory,
+                              JavaInterfaceFactory javaFactory) {
 
         // CRUD implementation always provide a single service exposing
         // the CRUD interface, and have no references and properties
@@ -58,7 +55,7 @@ public class CRUDImplementationImpl implements CRUDImplementation {
         crudService.setName("CRUD");
         JavaInterface javaInterface;
         try {
-            javaInterface = introspector.introspect(CRUD.class);
+            javaInterface = javaFactory.createJavaInterface(CRUD.class);
         } catch (InvalidInterfaceException e) {
             throw new IllegalArgumentException(e);
         }
@@ -106,21 +103,6 @@ public class CRUDImplementationImpl implements CRUDImplementation {
 
     public void setURI(String uri) {
         // The sample CRUD implementation does not have a URI
-    }
-
-    public List<PolicySet> getPolicySets() {
-        // The sample CRUD implementation does not support policy sets
-        return Collections.emptyList();
-    }
-
-    public List<Intent> getRequiredIntents() {
-        // The sample CRUD implementation does not support intents
-        return Collections.emptyList();
-    }
-
-    public List<Object> getExtensions() {
-        // The sample CRUD implementation does not support extensions
-        return Collections.emptyList();
     }
 
     public boolean isUnresolved() {

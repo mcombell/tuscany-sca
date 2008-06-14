@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.factory.ObjectCreationException;
-import org.apache.tuscany.sca.factory.ObjectFactory;
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -55,6 +55,7 @@ public class MethodInjectorTestCase extends TestCase {
         }
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         fooMethod = Foo.class.getMethod("foo", String.class);

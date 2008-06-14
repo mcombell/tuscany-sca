@@ -20,14 +20,16 @@
 package org.apache.tuscany.sca.binding.feed;
 
 /**
- * A factory for the Atom binding model.
+ * Factory for the Atom binding
+ *
+ * @version $Rev$ $Date$
  */
 public interface AtomBindingFactory {
 
     /**
      * Creates a new Atom binding.
-     * 
-     * @return a new Atom binding
+     * @return the new Atom binding
      */
     AtomBinding createAtomBinding();
+
 }

@@ -19,72 +19,101 @@
 
 package org.apache.tuscany.sca.databinding.sdo;
 
-import java.lang.annotation.Annotation;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.databinding.ExceptionHandler;
 import org.apache.tuscany.sca.databinding.SimpleTypeMapper;
 import org.apache.tuscany.sca.databinding.WrapperHandler;
+import org.apache.tuscany.sca.databinding.XMLTypeHelper;
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
+import org.apache.tuscany.sdo.api.SDOUtil;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 import commonj.sdo.helper.CopyHelper;
 import commonj.sdo.helper.HelperContext;
 import commonj.sdo.helper.XMLDocument;
-import commonj.sdo.impl.HelperProvider;
 
 /**
  * SDO Databinding
  * 
- * @version $Reve$ $Date$
+ * @version $Rev$ $Date$
  */
 public class SDODataBinding extends BaseDataBinding {
     public static final String NAME = DataObject.class.getName();
     public static final String[] ALIASES = new String[] {"sdo"};
-    
+
     public static final String ROOT_NAMESPACE = "commonj.sdo";
     public static final QName ROOT_ELEMENT = new QName(ROOT_NAMESPACE, "dataObject");
 
     private WrapperHandler<Object> wrapperHandler;
+    private XMLTypeHelper xmlTypeHelper;
 
     public SDODataBinding() {
         super(NAME, ALIASES, DataObject.class);
         wrapperHandler = new SDOWrapperHandler();
+        xmlTypeHelper = new SDOTypeHelper();
     }
 
     @Override
-    public boolean introspect(DataType dataType, Annotation[] annotations) {
-        Object physical = dataType.getPhysical();
-        if (!(physical instanceof Class)) {
-            return false;
-        }
-        Class javaType = (Class)physical;
-        HelperContext context = HelperProvider.getDefaultContext();
-        // FIXME: Need a better to test dynamic SDO
-        if (DataObject.class.isAssignableFrom(javaType)) {
-            // Dynamic SDO
-            dataType.setDataBinding(getName());
-            dataType.setLogical(XMLType.UNKNOWN);
-            return true;
-        }
-        // FIXME: We need to access HelperContext
+    public boolean introspect(DataType dataType, final Operation operation) {
+        final Class javaType = dataType.getPhysical();
+        // Allow privileged access to read system properties. Requires PropertyPermission
+        // java.specification.version read in security policy.
+        final HelperContext context = AccessController.doPrivileged(new PrivilegedAction<HelperContext>() {
+            public HelperContext run() {
+                return SDOContextHelper.getHelperContext(operation);
+            }
+        });
+
         Type type = context.getTypeHelper().getType(javaType);
         if (type == null) {
+            // FIXME: Need a better to test dynamic SDO
+            if (DataObject.class.isAssignableFrom(javaType)) {
+                // Dynamic SDO
+                dataType.setDataBinding(getName());
+                if (dataType.getLogical() == null) {
+                    dataType.setLogical(XMLType.UNKNOWN);
+                }
+                return true;
+            }
             return false;
-        }
+        } 
         if (type.isDataType()) {
             // FIXME: Ignore simple types?
             return false;
         }
+
+        // Found a SDO type, replace the default context with a private one
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            public Object run() {
+                if (context == SDOContextHelper.getDefaultHelperContext()) {
+                    HelperContext newContext = SDOUtil.createHelperContext();
+                    SDOContextHelper.register(newContext, javaType);
+                    if (operation != null) {
+                        operation.getInputType().setMetaData(HelperContext.class, newContext);
+                    }
+                }
+                return null;
+            }
+        });
+
         String namespace = type.getURI();
         String name = context.getXSDHelper().getLocalName(type);
         QName xmlType = new QName(namespace, name);
         dataType.setDataBinding(getName());
-        dataType.setLogical(new XMLType(null, xmlType));
+        QName elementName = null;
+        Object logical = dataType.getLogical();
+        if (logical instanceof XMLType) {
+            elementName = ((XMLType)logical).getElementName();
+        }
+        dataType.setLogical(new XMLType(elementName, xmlType));
+
         return true;
     }
 
@@ -93,13 +122,20 @@ public class SDODataBinding extends BaseDataBinding {
         return wrapperHandler;
     }
 
+    @Override
     public SimpleTypeMapper getSimpleTypeMapper() {
         return new SDOSimpleTypeMapper();
     }
 
     @Override
-    public Object copy(Object arg) {
-        HelperContext context = HelperProvider.getDefaultContext();
+    public XMLTypeHelper getXMLTypeHelper() {
+        // return new SDOTypeHelper();
+        return xmlTypeHelper;
+    }
+
+    @Override
+    public Object copy(Object arg, DataType dataType, Operation operation) {
+        HelperContext context = SDOContextHelper.getHelperContext(operation);
         CopyHelper copyHelper = context.getCopyHelper();
         if (arg instanceof XMLDocument) {
             XMLDocument document = (XMLDocument)arg;
@@ -110,13 +146,8 @@ public class SDODataBinding extends BaseDataBinding {
         } else if (arg instanceof DataObject) {
             return context.getCopyHelper().copy((DataObject)arg);
         } else {
-            return super.copy(arg);
+            return super.copy(arg, dataType, operation);
         }
-    }
-
-    @Override
-    public ExceptionHandler getExceptionHandler() {
-        return new SDOExceptionHandler();
     }
 
 }

@@ -19,15 +19,14 @@
 
 package org.apache.tuscany.sca.test.exceptions.sdohandgen;
 
-import javax.xml.namespace.QName;
+import javax.xml.ws.WebFault;
 
 /**
  * 
  */
+@WebFault(name="MarketClosedFault", targetNamespace="http://scatesttool.stockexceptiontestservice")
 public class MarketClosedSDOException extends Exception {
-    public static final QName FAULT_ELEMENT =
-               new QName("http://scatesttool.stockexceptiontestservice", "MarketClosedFault");
-
+    private static final long serialVersionUID = 7652466275656958031L;
 
     /**
      * Java type that goes as soapenv:Fault detail element.

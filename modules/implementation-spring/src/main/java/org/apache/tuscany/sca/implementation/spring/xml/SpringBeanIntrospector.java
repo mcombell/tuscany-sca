@@ -18,22 +18,16 @@
  */
 package org.apache.tuscany.sca.implementation.spring.xml;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
-import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.implementation.java.DefaultJavaImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.apache.tuscany.sca.implementation.java.impl.JavaElementImpl;
-import org.apache.tuscany.sca.implementation.java.introspect.DefaultJavaClassIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.implementation.java.introspect.ExtensibleJavaClassIntrospector;
-import org.apache.tuscany.sca.implementation.java.introspect.IntrospectionException;
-import org.apache.tuscany.sca.implementation.java.introspect.JavaClassIntrospector;
-import org.apache.tuscany.sca.implementation.java.introspect.JavaClassIntrospectorExtensionPoint;
 import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.AllowsPassByReferenceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.BaseJavaClassVisitor;
@@ -52,7 +46,6 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.ResourceProces
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ScopeProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ServiceProcessor;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
 /**
@@ -63,50 +56,46 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  */
 public class SpringBeanIntrospector {
 
-	private JavaClassIntrospector classIntrospector;
-    private JavaClassIntrospectorExtensionPoint classVisitors = 
-    	new DefaultJavaClassIntrospectorExtensionPoint();
     private JavaImplementationFactory javaImplementationFactory;
 
-	/**
-	 * The constructor sets up the various visitor elements that will be used to inrospect
-	 * the Spring bean and extract SCA information
-	 * @param assemblyFactory - an AssemblyFactory
-	 * @param interfaceIntrospector - an Java InterfaceIntrospector
-	 * @param javaFactory - a Java Interface Factory
-	 */
-    public SpringBeanIntrospector( AssemblyFactory assemblyFactory,
-			 JavaInterfaceIntrospector interfaceIntrospector,
-			 JavaInterfaceFactory javaFactory,
-			 PolicyFactory 		  policyFactory ) {
-    	
-        // Create the list of class visitors
-    	BaseJavaClassVisitor[] extensions = new BaseJavaClassVisitor[] {
-                new ConstructorProcessor(assemblyFactory),
-                new AllowsPassByReferenceProcessor(assemblyFactory),
-                new ComponentNameProcessor(assemblyFactory),
-                new ContextProcessor(assemblyFactory),
-                new ConversationProcessor(assemblyFactory),
-                new DestroyProcessor(assemblyFactory),
-                new EagerInitProcessor(assemblyFactory),
-                new InitProcessor(assemblyFactory),
-                new PropertyProcessor(assemblyFactory),
-                new ReferenceProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
-                new ResourceProcessor(assemblyFactory),
-                new ScopeProcessor(assemblyFactory),
-                new ServiceProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
-                new HeuristicPojoProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
-                new PolicyProcessor(assemblyFactory, policyFactory)
-            };
-        for (JavaClassVisitor extension : extensions) {
-            classVisitors.addClassVisitor(extension);
-        }
-        this.classIntrospector = new ExtensibleJavaClassIntrospector(classVisitors);
-        
+    /**
+     * The constructor sets up the various visitor elements that will be used to introspect
+     * the Spring bean and extract SCA information.
+     *
+     * @param assemblyFactory The Assembly Factory to use
+     * @param javaFactory The Java Interface Factory to use
+     * @param policyFactory The Policy Factory to use.
+     */
+    public SpringBeanIntrospector(AssemblyFactory assemblyFactory,
+                                  JavaInterfaceFactory javaFactory,
+                                  PolicyFactory policyFactory) {
+
         javaImplementationFactory = new DefaultJavaImplementationFactory();
+        
+        // Create the list of class visitors
+        BaseJavaClassVisitor[] extensions =
+            new BaseJavaClassVisitor[] {
+                                        new ConstructorProcessor(assemblyFactory),
+                                        new AllowsPassByReferenceProcessor(assemblyFactory),
+                                        new ComponentNameProcessor(assemblyFactory),
+                                        new ContextProcessor(assemblyFactory),
+                                        new ConversationProcessor(assemblyFactory),
+                                        new DestroyProcessor(assemblyFactory),
+                                        new EagerInitProcessor(assemblyFactory),
+                                        new InitProcessor(assemblyFactory),
+                                        new PropertyProcessor(assemblyFactory),
+                                        new ReferenceProcessor(assemblyFactory, javaFactory),
+                                        new ResourceProcessor(assemblyFactory),
+                                        new ScopeProcessor(assemblyFactory),
+                                        new ServiceProcessor(assemblyFactory, javaFactory),
+                                        new HeuristicPojoProcessor(assemblyFactory, javaFactory),
+                                        new PolicyProcessor(assemblyFactory, policyFactory)};
+        for (JavaClassVisitor extension : extensions) {
+            javaImplementationFactory.addClassVisitor(extension);
+        }
 
     } // end constructor 
-    
+
     /**
      * Introspect a Spring Bean and extract the features important to SCA
      * @param beanClass the Spring Bean class to introspect
@@ -117,38 +106,36 @@ public class SpringBeanIntrospector {
      * Spring Bean or its componentType
      *
      */
-    public Map<String, JavaElementImpl> introspectBean( Class<?> beanClass, ComponentType componentType ) 
-    	throws ContributionResolveException {
-    	
-    	if( componentType == null ) throw new ContributionResolveException( 
-    			"Introspect Spring bean: supplied componentType is null" );
-        
-    	// Create a Java implementation ready for the introspection
-    	JavaImplementation javaImplementation = javaImplementationFactory.createJavaImplementation();
-    	
-    	try {
-    		// Introspect the bean...the results of the introspection are placed into the Java implementation
-            classIntrospector.introspect( beanClass, javaImplementation);
-            
+    public Map<String, JavaElementImpl> introspectBean(Class<?> beanClass, ComponentType componentType)
+        throws ContributionResolveException {
+
+        if (componentType == null)
+            throw new ContributionResolveException("Introspect Spring bean: supplied componentType is null");
+
+        // Create a Java implementation ready for the introspection
+        JavaImplementation javaImplementation = javaImplementationFactory.createJavaImplementation();
+
+        try {
+            // Introspect the bean...the results of the introspection are placed into the Java implementation
+            javaImplementationFactory.createJavaImplementation(javaImplementation, beanClass);
+
             // Extract the services, references & properties found through introspection
             // put the services, references and properties into the component type
-            componentType.getServices().addAll( javaImplementation.getServices() );
-            componentType.getReferences().addAll( javaImplementation.getReferences() );
-            componentType.getProperties().addAll( javaImplementation.getProperties() );
+            componentType.getServices().addAll(javaImplementation.getServices());
+            componentType.getReferences().addAll(javaImplementation.getReferences());
+            componentType.getProperties().addAll(javaImplementation.getProperties());
         } catch (IntrospectionException e) {
             throw new ContributionResolveException(e);
         } // end try
-        
-        List<Service> services = javaImplementation.getServices();
-        for ( Service service : services ) {
-        	String name = service.getName();
-        	//System.out.println("Spring Bean: found service with name: " + name);
-        } // end for
-        
+
+        //List<Service> services = javaImplementation.getServices();
+        //for (Service service : services) {
+            //String name = service.getName();
+            //System.out.println("Spring Bean: found service with name: " + name);
+        //} // end for
+
         return javaImplementation.getPropertyMembers();
 
     } // end method introspectBean
-    
-  
-    
+
 } // end class SpringBeanIntrospector

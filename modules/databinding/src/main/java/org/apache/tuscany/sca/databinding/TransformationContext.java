@@ -25,15 +25,31 @@ import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * Context for data transformation
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public interface TransformationContext {
-    
+
+    /**
+     * @return
+     */
     Operation getSourceOperation();
+
+    /**
+     * @param sourceOperation
+     */
     void setSourceOperation(Operation sourceOperation);
+
+    /**
+     * @return
+     */
     Operation getTargetOperation();
+
+    /**
+     * @param targetOperation
+     */
     void setTargetOperation(Operation targetOperation);
-    
+
     /**
      * Get the source data type
      * 
@@ -63,16 +79,16 @@ public interface TransformationContext {
     void setTargetDataType(DataType targetDataType);
 
     /**
-     * Get the classloader
+     * Get the ClassLoader
      * 
-     * @return
+     * @return Returns the ClassLoader
      */
     ClassLoader getClassLoader();
 
     /**
      * Get a map of metadata
      * 
-     * @return
+     * @return Returns a map of the metadata
      */
     Map<String, Object> getMetadata();
 

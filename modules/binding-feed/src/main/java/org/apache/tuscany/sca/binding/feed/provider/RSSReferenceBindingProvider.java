@@ -29,31 +29,33 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 
 /**
  * Implementation of the RSS binding provider.
+ *
+ * @version $Rev$ $Date$
  */
-public class RSSReferenceBindingProvider implements ReferenceBindingProvider {
+class RSSReferenceBindingProvider implements ReferenceBindingProvider {
 
     private RuntimeComponentReference reference;
     private RSSBinding binding;
 
-    public RSSReferenceBindingProvider(RuntimeComponent component,
+    RSSReferenceBindingProvider(RuntimeComponent component,
                                        RuntimeComponentReference reference,
                                        RSSBinding binding) {
         this.reference = reference;
         this.binding = binding;
     }
 
-    public Invoker createInvoker(Operation operation, boolean isCallback) {
-        if (isCallback) {
-            throw new UnsupportedOperationException();
-        } else {
-            return new RSSBindingInvoker(binding.getURI(), "rss_2.0");
-        }
+    public Invoker createInvoker(Operation operation) {
+        return new RSSBindingInvoker(binding.getURI(), "rss_2.0");
+    }
+
+    public boolean supportsOneWayInvocation() {
+        return false;
     }
 
     public InterfaceContract getBindingInterfaceContract() {
         return reference.getInterfaceContract();
     }
-
+    
     public void start() {
     }
 

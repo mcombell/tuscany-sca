@@ -25,8 +25,8 @@ import org.apache.tuscany.sca.databinding.PullTransformer;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
-import org.apache.tuscany.sdo.api.XMLStreamHelper;
 import org.apache.tuscany.sdo.api.SDOUtil;
+import org.apache.tuscany.sdo.api.XMLStreamHelper;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.helper.HelperContext;
@@ -35,10 +35,13 @@ public class XMLStreamReader2DataObject extends BaseTransformer<XMLStreamReader,
     PullTransformer<XMLStreamReader, DataObject> {
 
     public DataObject transform(XMLStreamReader source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
-            XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext.getTypeHelper());
-            // The XMLStreamHelper requires that the reader is posistioned at
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, false);
+            XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext);
+            // The XMLStreamHelper requires that the reader is positioned at
             // START_ELEMENT
             while (source.getEventType() != XMLStreamConstants.START_ELEMENT && source.hasNext()) {
                 source.next();
@@ -51,14 +54,17 @@ public class XMLStreamReader2DataObject extends BaseTransformer<XMLStreamReader,
         }
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<DataObject> getTargetType() {
         return DataObject.class;
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLStreamReader> getSourceType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 15;
     }

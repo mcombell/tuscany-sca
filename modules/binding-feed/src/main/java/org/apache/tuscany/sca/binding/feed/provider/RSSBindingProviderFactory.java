@@ -20,7 +20,14 @@
 package org.apache.tuscany.sca.binding.feed.provider;
 
 import org.apache.tuscany.sca.binding.feed.RSSBinding;
-import org.apache.tuscany.sca.http.ServletHost;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
+import org.apache.tuscany.sca.databinding.Mediator;
+import org.apache.tuscany.sca.databinding.TransformerExtensionPoint;
+import org.apache.tuscany.sca.databinding.impl.MediatorImpl;
+import org.apache.tuscany.sca.host.http.ServletHost;
+import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
@@ -31,15 +38,22 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 
 /**
  * Implementation of the RSS binding provider factory.
+ *
+ * @version $Rev$ $Date$
  */
 public class RSSBindingProviderFactory implements BindingProviderFactory<RSSBinding> {
 
-    MessageFactory messageFactory;
-    ServletHost servletHost;
+    private MessageFactory messageFactory;
+    private Mediator mediator;
+    private ServletHost servletHost;
 
-    public RSSBindingProviderFactory(ServletHost servletHost, MessageFactory messageFactory) {
-        this.servletHost = servletHost;
-        this.messageFactory = messageFactory;
+    public RSSBindingProviderFactory(ExtensionPointRegistry extensionPoints) {
+        ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
+        this.servletHost = servletHosts.getServletHosts().get(0);
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        this.messageFactory = modelFactories.getFactory(MessageFactory.class);
+        this.mediator = new MediatorImpl(extensionPoints.getExtensionPoint(DataBindingExtensionPoint.class),
+                                         extensionPoints.getExtensionPoint(TransformerExtensionPoint.class));
     }
 
     public ReferenceBindingProvider createReferenceBindingProvider(RuntimeComponent component,
@@ -51,7 +65,7 @@ public class RSSBindingProviderFactory implements BindingProviderFactory<RSSBind
     public ServiceBindingProvider createServiceBindingProvider(RuntimeComponent component,
                                                                RuntimeComponentService service,
                                                                RSSBinding binding) {
-        return new RSSServiceBindingProvider(component, service, binding, servletHost, messageFactory);
+        return new RSSServiceBindingProvider(component, service, binding, servletHost, messageFactory, mediator);
     }
 
     public Class<RSSBinding> getModelType() {

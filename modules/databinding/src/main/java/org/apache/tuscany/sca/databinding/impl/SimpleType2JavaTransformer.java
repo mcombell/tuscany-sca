@@ -29,6 +29,8 @@ import org.apache.tuscany.sca.interfacedef.util.XMLType;
 /**
  * Transformer to convert data from a databinding's representation of simple
  * types to Java Objects
+ *
+ * @version $Rev$ $Date$
  */
 public abstract class SimpleType2JavaTransformer<T> extends BaseTransformer<T, Object> implements
     PullTransformer<T, Object> {
@@ -50,15 +52,19 @@ public abstract class SimpleType2JavaTransformer<T> extends BaseTransformer<T, O
             xmlType = (XMLType)context.getTargetDataType().getLogical();
             type = (xmlType != null) ? xmlType.getTypeName() : null;
         }
-        return mapper.toJavaObject(type, getText(source), context);
+        Object result = mapper.toJavaObject(type, getText(source), context);
+        close(source);
+        return result;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 
+    @Override
     public int getWeight() {
-        // Cannot be used for imtermediate
+        // Cannot be used for intermediate
         return 10000;
     }
 
@@ -68,6 +74,13 @@ public abstract class SimpleType2JavaTransformer<T> extends BaseTransformer<T, O
      * @return A string
      */
     protected abstract String getText(T source);
+    
+    /**
+     * To be overrided by the subclass
+     * @param source
+     */
+    protected void close(T source) {
+    }
 
     @Override
     public String getTargetDataBinding() {

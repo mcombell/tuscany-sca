@@ -28,6 +28,8 @@ import org.w3c.dom.Node;
 
 /**
  * Transform DOM Node to XML String
+ *
+ * @version $Rev$ $Date$
  */
 public class Node2String extends BaseTransformer<Node, String> implements PullTransformer<Node, String> {
     private static final Node2Writer TRANSFORMER = new Node2Writer();
@@ -42,14 +44,17 @@ public class Node2String extends BaseTransformer<Node, String> implements PullTr
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    public Class<Node> getSourceType() {
         return Node.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    public Class<String> getTargetType() {
         return String.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

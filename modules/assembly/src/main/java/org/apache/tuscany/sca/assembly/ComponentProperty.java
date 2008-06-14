@@ -18,12 +18,14 @@
  */
 package org.apache.tuscany.sca.assembly;
 
+import javax.xml.xpath.XPathExpression;
+
 /**
  * Represents a configured property of a component.
  * 
  * @version $Rev$ $Date$
  */
-public interface ComponentProperty extends Property, Cloneable {
+public interface ComponentProperty extends Property {
 
     /**
      * Returns the property defined by the component implementation.
@@ -33,29 +35,41 @@ public interface ComponentProperty extends Property, Cloneable {
     Property getProperty();
 
     /**
-     * Sets the property type that defines this property.
+     * Sets the property defined by this component implementation.
      * 
-     * @param type the property that defines this property
+     * @param property the property defined by this component implementation
      */
     void setProperty(Property property);
 
     /**
-     * Returns an xpath expression referencing a property of the enclosing
+     * Returns an XPath expression referencing a property of the enclosing
      * composite.
      * 
-     * @return an xpath expression referencing a property of the enclosing
+     * @return an XPath expression referencing a property of the enclosing
      *         composite
      */
     String getSource();
 
     /**
-     * Sets an xpath expression referencing a property of the enclosing
+     * Sets an XPath expression referencing a property of the enclosing
      * composite.
      * 
-     * @param source an xpath expression referencing a property of the enclosing
+     * @param source an XPath expression referencing a property of the enclosing
      *            composite
      */
     void setSource(String source);
+    
+    /**
+     * Get the XPath expression for the source attribute
+     * @return the XPath expression for the source attribute
+     */
+    XPathExpression getSourceXPathExpression();
+    
+    /**
+     * Set the XPath expression for the source attribute
+     * @param sourceXPathExpression the XPath expression for the source attribute
+     */
+    void setSourceXPathExpression(XPathExpression sourceXPathExpression);
 
     /**
      * Returns a URI to a file containing the property value.
@@ -71,10 +85,4 @@ public interface ComponentProperty extends Property, Cloneable {
      */
     void setFile(String file);
     
-    /**
-     * Clone the component property.
-     * 
-     * @return a clone of the component property
-     */
-    Object clone() throws CloneNotSupportedException;
 }

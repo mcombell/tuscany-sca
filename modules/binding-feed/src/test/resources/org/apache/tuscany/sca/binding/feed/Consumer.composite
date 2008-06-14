@@ -18,13 +18,14 @@
  * under the License.    
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-	targetNamespace="http://customer"
-	name="Consumer">
+           xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+	   targetNamespace="http://customer"
+	   name="Consumer">
     
     <component name="CustomerClient">
         <implementation.java class="org.apache.tuscany.sca.binding.feed.CustomerClientImpl"/>
         <reference name="resourceCollection">
-        	<binding.atom uri="http://localhost:8084/customer"/>
+        	<tuscany:binding.atom uri="http://localhost:8084/customer"/>
         </reference>
     </component>
 

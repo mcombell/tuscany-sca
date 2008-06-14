@@ -19,24 +19,17 @@
 package org.apache.tuscany.sca.binding.notification;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.tuscany.sca.assembly.impl.BaseImpl;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * @version $Rev$ $Date$
  */
-public class NotificationBindingImpl extends BaseImpl implements NotificationBinding {
+public class NotificationBindingImpl implements NotificationBinding {
     private String name;
     private String uri;
-    private List<PolicySet> policySets = new ArrayList<PolicySet>();
-    private List<Intent> requiredIntents = new ArrayList<Intent>();
     protected String ntmAddress;
     protected URI notificationType;
     
+    @Override
     public Object clone() {
         return this;
     }
@@ -57,14 +50,6 @@ public class NotificationBindingImpl extends BaseImpl implements NotificationBin
         this.uri = uri;
     }
 
-    public List<Intent> getRequiredIntents() {
-        return requiredIntents;
-    }
-
-    public List<PolicySet> getPolicySets() {
-        return policySets;
-    }
-    
     public String getNtmAddress() {
         return ntmAddress;
     }
@@ -79,5 +64,12 @@ public class NotificationBindingImpl extends BaseImpl implements NotificationBin
     
     public void setNotificationType(URI notificationType) {
         this.notificationType = notificationType;
+    }
+    
+    public void setUnresolved(boolean unresolved) {
+    }
+    
+    public boolean isUnresolved() {
+        return false;
     }
 }

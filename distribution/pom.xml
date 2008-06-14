@@ -22,12 +22,12 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>tuscany-distribution</artifactId>
-    <name>Apache Tuscany Distribution</name>
+    <name>Apache Tuscany SCA Distribution</name>
     <packaging>pom</packaging>
 
     <properties>
@@ -38,6 +38,7 @@
     <modules>
         <module>bundle</module>
         <module>manifest</module>
+        <!--module>webapp</module-->
     </modules>
 
     <dependencies>
@@ -72,13 +73,164 @@
                     <groupId>jline</groupId>
                     <artifactId>jline</artifactId>
                 </exclusion>
+                <exclusion>
+                    <!-- exclude stax 1.0.1 as we're also pulling in javax\xml\stream\stax-api\1.0-2 -->
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
             </exclusions>
        </dependency>
         <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-webapp</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <!--don't put two servlet hosts in the classpath TUSCANY-1954 -->
+        <!--include tomcat here so it is shipped in modules/ but not  -->
+        <!--in the all jar                                            -->
+        <!-- dependency> 
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-host-tomcat</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency -->
+        <dependency>
             <groupId>org.apache.tuscany.sdo</groupId>
             <artifactId>tuscany-sdo-impl</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>1.1-incubating</version>
+            <exclusions>
+                <exclusion>
+                    <!-- sdo 1.0 uses 3.2.0 but sca uses 3.2.1 -->
+                    <groupId>org.codehaus.woodstox</groupId>
+                    <artifactId>wstx-asl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- exclude stax 1.0.1 as we're also pulling in javax\xml\stream\stax-api\1.0-2 -->
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- exclude felix since we are using a later version -->
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.main</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>apache-activemq</artifactId>
+            <version>4.1.1</version>
+            <exclusions>
+                <!-- TUSCANY-2168 -->
+                <exclusion>
+                    <groupId>commons-httpclient</groupId>
+                    <artifactId>commons-httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-fileupload</groupId>
+                    <artifactId>commons-fileupload</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-console</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-optional</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-web-demo</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-jaas</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-jacc_1.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jms_1.1_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jsp_2.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-management_1.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>servlet-api-2.5</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>backport-util-concurrent</groupId>
+                    <artifactId>backport-util-concurrent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>activesoap</groupId>
+                    <artifactId>jaxp-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>activemq</groupId>
+                    <artifactId>jmdns</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jrms</groupId>
+                    <artifactId>jrms</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xmlpull</groupId>
+                    <artifactId>xmlpull</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mx4j</groupId>
+                    <artifactId>mx4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mx4j</groupId>
+                    <artifactId>mx4j-remote</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>  
     </dependencies>
 
     <build>
@@ -110,7 +262,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.apache.tuscany.sca</groupId>
-                                    <artifactId>sca-api</artifactId>
+                                    <artifactId>tuscany-sca-api</artifactId>
                                     <classifier>javadoc</classifier>
                                     <version>${pom.version}</version>
                                 </artifactItem>
@@ -127,12 +279,13 @@
             </plugin>
             -->
 
+	    <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ant-plugin</artifactId>
-                <!--
+                ####
                 <version>1.1</version>
-                -->
+                ####
                 <executions>
                     <execution>
                         <id>generate-sources</id>
@@ -143,6 +296,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -157,9 +311,7 @@
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/bin.xml</descriptor>
-                                <!--
                                 <descriptor>src/main/assembly/src.xml</descriptor>
-                                -->
                             </descriptors>
                             <tarLongFileMode>gnu</tarLongFileMode>
                             <finalName>apache-tuscany-sca-${pom.version}</finalName>
@@ -221,6 +373,7 @@
                 </executions>
             </plugin>
             -->
+
         </plugins>
 
     </build>

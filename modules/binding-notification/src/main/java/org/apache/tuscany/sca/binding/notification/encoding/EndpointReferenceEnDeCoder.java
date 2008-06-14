@@ -66,12 +66,10 @@ public class EndpointReferenceEnDeCoder extends AbstractEnDeCoder<EndpointRefere
                         if (encodingObject instanceof EndpointAddress && !haveEPA) {
                             endpointReferenceElement.setEndpointAddress((EndpointAddress)encodingObject);
                             haveEPA = true;
-                        }
-                        else if(encodingObject instanceof ReferenceProperties && !haveRP) {
+                        } else if(encodingObject instanceof ReferenceProperties && !haveRP) {
                             endpointReferenceElement.setReferenceProperties((ReferenceProperties)encodingObject);
                             haveRP = true;
-                        }
-                        else {
+                        } else {
                             throw new EncodingException("Invalid encoding object");
                         }
                         break;
@@ -87,12 +85,14 @@ public class EndpointReferenceEnDeCoder extends AbstractEnDeCoder<EndpointRefere
         }
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         
         return QNAME;
     }
 
-    protected Class<EndpointReference> getEncodingObjectType() {
+    
+	public Class<EndpointReference> getEncodingObjectType() {
         
         return EndpointReference.class;
     }

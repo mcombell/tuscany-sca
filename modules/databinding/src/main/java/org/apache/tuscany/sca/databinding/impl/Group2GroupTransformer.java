@@ -27,6 +27,8 @@ import org.apache.tuscany.sca.interfacedef.DataType;
 /**
  * This is a special transformer to transform the output from one IDL to the
  * other one
+ *
+ * @version $Rev$ $Date$
  */
 public class Group2GroupTransformer extends BaseTransformer<Object, Object> implements
     PullTransformer<Object, Object> {
@@ -61,7 +63,7 @@ public class Group2GroupTransformer extends BaseTransformer<Object, Object> impl
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getSourceType()
      */
     @Override
-    protected Class getSourceType() {
+    protected Class<Object> getSourceType() {
         return Object.class;
     }
 
@@ -69,13 +71,14 @@ public class Group2GroupTransformer extends BaseTransformer<Object, Object> impl
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getTargetType()
      */
     @Override
-    protected Class getTargetType() {
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 
     /**
      * @see org.apache.tuscany.sca.databinding.Transformer#getWeight()
      */
+    @Override
     public int getWeight() {
         return 10;
     }

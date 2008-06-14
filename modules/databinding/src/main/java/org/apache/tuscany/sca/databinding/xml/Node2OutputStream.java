@@ -33,6 +33,8 @@ import org.w3c.dom.Node;
 
 /**
  * Push DOM Node to OutputStream
+ *
+ * @version $Rev$ $Date$
  */
 public class Node2OutputStream extends BaseTransformer<Node, OutputStream> implements
     PushTransformer<Node, OutputStream> {
@@ -48,14 +50,17 @@ public class Node2OutputStream extends BaseTransformer<Node, OutputStream> imple
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Node> getSourceType() {
         return Node.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<OutputStream> getTargetType() {
         return OutputStream.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

@@ -22,11 +22,11 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-helloworld-ws-service</artifactId>
-    <name>Apache Tuscany HelloWorld Web Service Sample</name>
+    <name>Apache Tuscany SCA HelloWorld Web Service Sample</name>
 
     <repositories>
        <repository>
@@ -39,29 +39,30 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>compile</scope>            
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-ws-axis2</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-http-tomcat</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <artifactId>tuscany-host-tomcat</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>    
 
         <dependency>
             <groupId>junit</groupId>
@@ -69,7 +70,6 @@
             <version>4.2</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     
     <build>

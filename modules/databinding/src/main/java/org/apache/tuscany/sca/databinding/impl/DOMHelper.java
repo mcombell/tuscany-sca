@@ -23,18 +23,22 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.tuscany.sca.databinding.TransformationContext;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * Helper for DOM
+ *
+ * @version $Rev$ $Date$
  */
 public final class DOMHelper {
-    private static final DocumentBuilderFactory FACTORY = DocumentBuilderFactory.newInstance();
-    static {
-        FACTORY.setNamespaceAware(true);
-    }
+    private static DocumentBuilderFactory FACTORY;
 
     private DOMHelper() {
     }
@@ -44,7 +48,18 @@ public final class DOMHelper {
     }
 
     public static DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+        init();
         return FACTORY.newDocumentBuilder();
+    }
+
+    /**
+     * 
+     */
+    private static synchronized void init() {
+        if (FACTORY == null) {
+            FACTORY = DocumentBuilderFactory.newInstance();
+            FACTORY.setNamespaceAware(true);
+        }
     }
 
     public static QName getQName(Node node) {
@@ -61,9 +76,88 @@ public final class DOMHelper {
     public static Element createElement(Document document, QName name) {
         String prefix = name.getPrefix();
         String qname =
-            (prefix != null && prefix.length() > 0) ? prefix + ":" + name.getLocalPart() : name
-                .getLocalPart();
+            (prefix != null && prefix.length() > 0) ? prefix + ":" + name.getLocalPart() : name.getLocalPart();
         return document.createElementNS(name.getNamespaceURI(), qname);
+    }
+
+    /**
+     * Wrap an element as a DOM document
+     * @param node
+     * @return
+     */
+    public static Document promote(Node node) {
+        if (node instanceof Document) {
+            return (Document)node;
+        }
+        Element element = (Element)node;
+        Document doc = element.getOwnerDocument();
+        if (doc.getDocumentElement() == element) {
+            return doc;
+        }
+        doc = (Document)element.getOwnerDocument().cloneNode(false);
+        Element schema = (Element)doc.importNode(element, true);
+        doc.appendChild(schema);
+        Node parent = element.getParentNode();
+        while (parent instanceof Element) {
+            Element root = (Element)parent;
+            NamedNodeMap nodeMap = root.getAttributes();
+            for (int i = 0; i < nodeMap.getLength(); i++) {
+                Attr attr = (Attr)nodeMap.item(i);
+                String name = attr.getName();
+                if ("xmlns".equals(name) || name.startsWith("xmlns:")) {
+                    if (schema.getAttributeNode(name) == null) {
+                        schema.setAttributeNodeNS((Attr)doc.importNode(attr, true));
+                    }
+                }
+            }
+            parent = parent.getParentNode();
+        }
+        return doc;
+    }
+
+    /**
+     * @param context
+     * @param element
+     */
+    public static Element adjustElementName(TransformationContext context, Element element) {
+        if (context != null) {
+            DataType dataType = context.getTargetDataType();
+            Object logical = dataType == null ? null : dataType.getLogical();
+            if (!(logical instanceof XMLType)) {
+                return element;
+            }
+            XMLType xmlType = (XMLType)logical;
+            QName name = new QName(element.getNamespaceURI(), element.getLocalName());
+            if (xmlType.isElement() && !xmlType.getElementName().equals(name)) {
+                QName newName = xmlType.getElementName();
+                String prefix = newName.getPrefix();
+                String qname = newName.getLocalPart();
+                if (prefix != null && !prefix.equals("")) {
+                    qname = prefix + ":" + qname;
+                }
+                Document doc = element.getOwnerDocument();
+                Element newElement = doc.createElementNS(newName.getNamespaceURI(), qname);
+                // Copy the attributes to the new element
+                NamedNodeMap attrs = element.getAttributes();
+                for (int i = 0; i < attrs.getLength(); i++) {
+                    Attr attr = (Attr)doc.importNode(attrs.item(i), true);
+                    newElement.getAttributes().setNamedItem(attr);
+                }
+
+                // Move all the children
+                while (element.hasChildNodes()) {
+                    newElement.appendChild(element.getFirstChild());
+                }
+
+                // Replace the old node with the new node
+                if (element.getParentNode() != null) {
+                    element.getParentNode().replaceChild(newElement, element);
+                }
+
+                return newElement;
+            }
+        }
+        return element;
     }
 
 }

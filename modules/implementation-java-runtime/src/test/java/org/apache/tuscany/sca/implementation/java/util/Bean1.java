@@ -19,6 +19,10 @@
 package org.apache.tuscany.sca.implementation.java.util;
 
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class Bean1 extends SuperBean {
 
     public static final int ALL_BEAN1_FIELDS = 6 + ALL_SUPER_FIELDS;
@@ -34,6 +38,7 @@ public class Bean1 extends SuperBean {
     public void setMethod1(int param) {
     }
 
+    @Override
     public void override(String param) throws Exception {
     }
 

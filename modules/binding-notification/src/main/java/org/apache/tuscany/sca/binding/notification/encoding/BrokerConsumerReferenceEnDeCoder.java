@@ -32,11 +32,13 @@ public class BrokerConsumerReferenceEnDeCoder extends EndpointReferenceWrapperEn
         super(registry);
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         return QNAME;
     }
 
-    protected Class<BrokerConsumerReference> getEncodingObjectType() {
+    
+	public Class<BrokerConsumerReference> getEncodingObjectType() {
         return BrokerConsumerReference.class;
     }
 }

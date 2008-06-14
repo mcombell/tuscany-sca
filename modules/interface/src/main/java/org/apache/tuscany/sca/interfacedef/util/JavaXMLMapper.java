@@ -24,6 +24,11 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+/**
+ * Utility class that can be used to map XSD types to Java classes and Java classes to XSD types.
+ *
+ * @version $Rev$ $Date$
+ */
 public final class JavaXMLMapper {
     public static final String URI_2001_SCHEMA_XSD = "http://www.w3.org/2001/XMLSchema";
     private static final Map<Class, QName> JAVA2XML = new HashMap<Class, QName>();
@@ -110,6 +115,23 @@ public final class JavaXMLMapper {
 
     public static QName getXMLType(Class javaType) {
         return JAVA2XML.get(javaType);
+    }
+    
+    public static String getNamespace(Class<?> cls) {
+        Package pkg = cls.getPackage();
+        if (pkg == null) {
+            return "";
+        }
+        StringBuffer ns = new StringBuffer("http://");
+        String[] names = pkg.getName().split("\\.");
+        for (int i = names.length - 1; i >= 0; i--) {
+            ns.append(names[i]);
+            if (i != 0) {
+                ns.append('.');
+            }
+        }
+        ns.append('/');
+        return ns.toString();
     }
 
 }

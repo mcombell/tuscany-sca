@@ -21,8 +21,11 @@ package org.apache.tuscany.sca.implementation.osgi.xml;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.tuscany.sca.assembly.ComponentType;
+import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 
@@ -30,6 +33,7 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 /**
  * A default implementation of an artifact resolver, based on a map.
  *
+ * @version $Rev$ $Date$
  */
 public class TestModelResolver implements ModelResolver {
     private static final long serialVersionUID = -7826976465762296634L;
@@ -45,6 +49,20 @@ public class TestModelResolver implements ModelResolver {
     public <T> T resolveModel(Class<T> modelClass, T unresolved) {
         Object resolved = map.get(unresolved);
         if (resolved != null) {
+            
+            if (unresolved instanceof OSGiImplementation && !(resolved instanceof OSGiImplementation)) {
+                
+                OSGiImplementation impl = ((OSGiImplementation)unresolved);
+                ComponentType componentType = (ComponentType)resolved;
+                
+                List<Property> properties = componentType.getProperties();
+                for (Property property : properties) {
+                    impl.getProperties().add(property);
+                }
+                impl.setUnresolved(false);
+                return unresolved;
+            }
+                
             
             // Return the resolved object
             return modelClass.cast(resolved);
@@ -62,13 +80,13 @@ public class TestModelResolver implements ModelResolver {
                 return unresolved;
             }
             
-            // Store a new ClassReference wrappering the loaded class
+            // Store a new ClassReference wrapping the loaded class
             resolved = new ClassReference(clazz);
             map.put(resolved, resolved);
             
             // Return the resolved ClassReference
             return modelClass.cast(resolved);
-                
+           
         } else {
             
             // Return the unresolved object

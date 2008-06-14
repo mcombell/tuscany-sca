@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,11 +41,11 @@ public class InterfaceContractTestCase {
         contract = new MockInterfaceContract();
         Interface i1 = new MockInterface();
         contract.setInterface(i1);
-        Operation op1 = new OperationImpl("op1");
+        Operation op1 = newOperation("op1");
         i1.getOperations().add(op1);
         Interface i2 = new MockInterface();
         contract.setCallbackInterface(i2);
-        Operation callbackOp1 = new OperationImpl("callbackOp1");
+        Operation callbackOp1 = newOperation("callbackOp1");
         i2.getOperations().add(callbackOp1);
     }
     
@@ -56,17 +55,15 @@ public class InterfaceContractTestCase {
         Assert.assertEquals(contract, copy);
     }
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
-    
     private static class MockInterfaceContract extends InterfaceContractImpl implements InterfaceContract {
     }
 
     private static class MockInterface extends InterfaceImpl implements Interface {
     }
 
+    private static Operation newOperation(String name) {
+        Operation operation = new OperationImpl();
+        operation.setName(name);
+        return operation;
+    }
 }

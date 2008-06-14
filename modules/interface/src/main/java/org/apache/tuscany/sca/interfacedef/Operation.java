@@ -19,13 +19,20 @@
 package org.apache.tuscany.sca.interfacedef;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Represents an operation on a service interface.
+ *
+ * @version $Rev$ $Date$
  */
-public interface Operation extends Cloneable {
+public interface Operation extends Cloneable, PolicySetAttachPoint {
     /**
      * Returns the name of the operation.
      * 
@@ -147,15 +154,19 @@ public interface Operation extends Cloneable {
     void setWrapperStyle(boolean wrapperStyle);
     
     /**
+     * @deprecated This should be the WrapperInfo.getDataBinding()
      * Get the databinding for the operation
      * @return
      */
+    @Deprecated
     String getDataBinding();
     
     /**
+     * @deprecated This should be the WrapperInfo.setDataBinding()
      * Set the databinding for the operation
      * @param dataBinding
      */
+    @Deprecated
     void setDataBinding(String dataBinding);
     
     /**
@@ -172,7 +183,21 @@ public interface Operation extends Cloneable {
     void setDynamic(boolean b);
 
     /**
+     * Get the synthesized fault beans for this operation
+     * 
+     * @return the fault beans
+     */
+    Map<QName, List<DataType<XMLType>>> getFaultBeans();
+    
+    /**
+     * Set the synthesized fault beans for this operation
+     * @param faultBeans
+     */
+    void setFaultBeans(Map<QName, List<DataType<XMLType>>> faultBeans);
+
+    /**
      * Implementations must support cloning.
      */
     Object clone() throws CloneNotSupportedException;
+    
 }

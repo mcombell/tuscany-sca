@@ -31,12 +31,9 @@ public class PolicyFactoryTestCase extends TestCase {
 
     PolicyFactory factory;
 
+    @Override
     public void setUp() throws Exception {
         factory = new DefaultPolicyFactory();
-    }
-
-    public void tearDown() throws Exception {
-        factory = null;
     }
 
     public void testCreateIntent() {

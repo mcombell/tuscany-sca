@@ -23,13 +23,14 @@
         <groupId>org.apache.tuscany</groupId>
         <artifactId>parent</artifactId>
         <version>2-incubating</version>
+        <relativePath>../pom/parent/pom.xml</relativePath>
     </parent>
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>tuscany-sca</artifactId>
     <packaging>pom</packaging>
     <name>Apache Tuscany SCA Implementation Project</name>
     <url>http://incubator.apache.org/tuscany/</url>
-    <version>1.0-incubating-SNAPSHOT</version>
+    <version>2.0-incubating-SNAPSHOT</version>
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/tuscany/java/sca</connection>
@@ -42,6 +43,25 @@
           <id>apache.incubator</id>
           <url>http://people.apache.org/repo/m2-incubating-repository</url>
        </repository>
+        <repository>
+            <id>apache.ws.zone</id>
+            <name>Apache WS Zone Repository</name>
+            <url>http://ws.zones.apache.org/repository2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>indiana</id>
+            <url>http://ftp.ussg.iu.edu/eclipse/modeling/emf/emf/maven2/</url>
+        </repository>
+        <repository>
+            <id>osuosl.org</id>
+            <url>http://ftp.osuosl.org/pub/eclipse/tools/emf/maven2</url>
+        </repository>        
     </repositories>
 
     <profiles>
@@ -52,8 +72,11 @@
             </activation>
             <modules>
                 <module>modules</module>
+                <module>tools</module>
                 <module>samples</module>
                 <module>itest</module>
+                <module>vtest</module>
+                <module>tutorial</module>
             </modules>
         </profile>
 
@@ -61,8 +84,12 @@
             <id>distribution</id>
             <modules>
                 <module>modules</module>
+                <module>tools</module>
                 <module>samples</module>
                 <module>itest</module>
+                <module>vtest</module>
+                <module>tutorial</module>
+                <module>demos</module>
                 <module>distribution</module>
             </modules>
         </profile>
@@ -71,12 +98,80 @@
             <id>eclipse</id>
             <modules>
                 <module>modules</module>
+                <module>tools</module>
                 <module>samples</module>
                 <module>itest</module>
+                <module>vtest</module>
+                <module>tutorial</module>
                 <module>demos</module>
+                <module>distribution</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>dependencies</id>
+            <modules>
+                <module>modules</module>
+                <module>samples</module>
+                <module>tutorial</module>
+                <module>demos</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tuscany.sca</groupId>
+                        <artifactId>tuscany-maven-dependency-lister</artifactId>
+                        <version>2.0-incubating-SNAPSHOT</version>
+                        <executions>
+                            <execution>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>           
+                </plugins>         
+            </build>
+        </profile>
+        
+        <profile>
+            <id>security</id>
+            <modules>
+                <!-- <module>demos</module> -->
+                <module>itest</module>
+                <module>vtest</module>
+            </modules>
+            <activation>
+                <property>
+                    <name>tuscany.policy.file</name>
+                </property>
+            </activation>
+            <properties>
+                <tuscany.policy.file>file:///${java.home}/lib/security/tuscany.policy</tuscany.policy.file>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.3.1</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*TestCase.java</include>
+                            </includes>
+                            <reportFormat>brief</reportFormat>
+                            <useFile>false</useFile>
+                            <forkMode>once</forkMode>
+                            <!-- Place tuscany.policy in your Java home security directory. Alternatively, hardcode the file location here. -->
+                            <argLine>-Djava.security.manager -Djava.security.policy=${tuscany.policy.file} -Dpolicy.allowSystemProperty=true -Djava.security.debug=policy</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>         
+            </build>
+        </profile>
     </profiles>
+ 
 
     <build>
         <defaultGoal>install</defaultGoal>
@@ -106,16 +201,25 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.0.2</version>
                     <configuration>
+<!--                        <compilerId>eclipse</compilerId> -->
                         <source>1.5</source>
                         <target>1.5</target>
                     </configuration>
+<!--
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-compiler-eclipse</artifactId>
+                        </dependency>
+                    </dependencies>
+-->
                 </plugin>
 
                 <!-- surefire plugin configuration -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.3.1</version>
                     <configuration>
                         <includes>
                             <include>**/*TestCase.java</include>
@@ -123,7 +227,7 @@
                         <reportFormat>brief</reportFormat>
                         <useFile>false</useFile>
                         <forkMode>once</forkMode>
-                        <argLine>-ea -Xmx512m</argLine>
+                        <argLine>-ea -Xmx256m</argLine>
                     </configuration>
                 </plugin>
 
@@ -131,6 +235,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.1</version>
                     <configuration>
                         <archive>
                             <manifestEntries>
@@ -145,62 +250,6 @@
                             </manifestEntries>
                          </archive>
                     </configuration>
-                    <version>2.1</version>
-                </plugin>
-
-                <!-- source code style check plugin configuration -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.1</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.tuscany</groupId>
-                            <artifactId>buildtools</artifactId>
-                            <version>2-incubating</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <id>process-sources</id>
-                            <phase>process-sources</phase>
-                            <configuration>
-                                <configLocation>tuscany-checkstyle.xml</configLocation>
-                                <suppressionsLocation>tuscany-suppressions.xml</suppressionsLocation>
-                                <consoleOutput>true</consoleOutput>
-                                <failsOnError>true</failsOnError>
-                                <linkXRef>false</linkXRef>
-                                <sourceDirectory>${basedir}/src</sourceDirectory>
-                                <propertyExpansion>${checkstyle.properties}</propertyExpansion>
-                            </configuration>
-                            <goals>
-                                <goal>checkstyle</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <!-- code semantic check plugin configuration -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>2.1</version>
-                    <configuration>
-                        <rulesets>
-                            <ruleset>${basedir}/.ruleset</ruleset>
-                        </rulesets>
-                        <linkXRef>false</linkXRef>
-                        <targetJdk>1.5</targetJdk>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>process-sources</id>
-                            <phase>process-sources</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
 
                 <!-- code coverage check plugin configuration -->

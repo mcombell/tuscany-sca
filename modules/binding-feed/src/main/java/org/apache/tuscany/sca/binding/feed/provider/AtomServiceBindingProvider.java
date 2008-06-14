@@ -20,7 +20,8 @@
 package org.apache.tuscany.sca.binding.feed.provider;
 
 import org.apache.tuscany.sca.binding.feed.AtomBinding;
-import org.apache.tuscany.sca.http.ServletHost;
+import org.apache.tuscany.sca.databinding.Mediator;
+import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -30,34 +31,37 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
  * Implementation of the Atom binding provider.
+ *
+ * @version $Rev$ $Date$
  */
-public class AtomServiceBindingProvider implements ServiceBindingProvider {
+class AtomServiceBindingProvider implements ServiceBindingProvider {
 
-    private RuntimeComponent component;
     private RuntimeComponentService service;
     private AtomBinding binding;
     private ServletHost servletHost;
     private MessageFactory messageFactory;
-    private String uri;
+    private String servletMapping;
+    private Mediator mediator;
 
-    public AtomServiceBindingProvider(RuntimeComponent component,
+    AtomServiceBindingProvider(RuntimeComponent component,
                                       RuntimeComponentService service,
                                       AtomBinding binding,
                                       ServletHost servletHost,
-                                      MessageFactory messageFactory) {
-        this.component = component;
+                                      MessageFactory messageFactory,
+                                      Mediator mediator) {
         this.service = service;
         this.binding = binding;
         this.servletHost = servletHost;
         this.messageFactory = messageFactory;
-        uri = binding.getURI();
-        if (uri == null) {
-            uri = "/" + this.component.getName();
-        }
+        this.mediator = mediator;
     }
 
     public InterfaceContract getBindingInterfaceContract() {
         return service.getInterfaceContract();
+    }
+    
+    public boolean supportsOneWayInvocation() {
+        return false;
     }
 
     public void start() {
@@ -65,19 +69,22 @@ public class AtomServiceBindingProvider implements ServiceBindingProvider {
         RuntimeWire wire = componentService.getRuntimeWire(binding);
 
         FeedBindingListenerServlet servlet =
-            new FeedBindingListenerServlet(wire, messageFactory, "atom_1.0");
+            new FeedBindingListenerServlet(wire, messageFactory, mediator, "atom_1.0");
 
-        String mapping = uri;
-        if (!mapping.endsWith("/")) {
-            mapping += "/";
+        servletMapping = binding.getURI();
+        if (!servletMapping.endsWith("/")) {
+            servletMapping += "/";
         }
-        if (!mapping.endsWith("*")) {
-            mapping += "*";
+        if (!servletMapping.endsWith("*")) {
+            servletMapping += "*";
         }
-        servletHost.addServletMapping(mapping, servlet);
+        servletHost.addServletMapping(servletMapping, servlet);
+        
+        // Save the actual binding URI in the binding
+        binding.setURI(servletHost.getURLMapping(binding.getURI()).toString());
     }
 
     public void stop() {
-        servletHost.removeServletMapping(uri);
+        servletHost.removeServletMapping(servletMapping);
     }
 }

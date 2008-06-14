@@ -23,14 +23,15 @@ package org.apache.tuscany.sca.implementation.spring.itests.helloworld;
  * A simple proxy Java class which implements the HelloWorld interface but which uses
  * a reference "delegate" to actually provide the HelloWorld service
  *
+ * @version $Rev$ $Date$
  */
 public class HelloWorldImpl implements HelloWorld {
 
-	static String hello = "Hello ";
+    static String hello = "Hello ";
 
     public String sayHello(String s) {
-    	// Simply call the reference to satisfy the service request...
-    	System.out.println("HelloWorldImpl - sayHello called");
+        // Simply call the reference to satisfy the service request...
+        System.out.println("HelloWorldImpl - sayHello called");
         return (hello + s);
     }
 

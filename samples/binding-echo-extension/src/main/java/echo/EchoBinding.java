@@ -25,4 +25,5 @@ import org.apache.tuscany.sca.assembly.Binding;
  * A model for the sample Echo binding.
  */
 public interface EchoBinding extends Binding {
+    
 }

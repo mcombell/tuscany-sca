@@ -38,15 +38,17 @@ public class DASTestCase extends TestCase {
     /**
      * @throws java.lang.Exception
      */
+    @Override
     protected void setUp() throws Exception {
         scaDomain = SCADomain.newInstance("das.composite");
-        dasService = scaDomain.getService(DAS.class, "DASServiceComponent");
+        dasService = scaDomain.getService(DAS.class, "DASServiceComponent/DAS");
 
     }
 
     /**
      * @throws java.lang.Exception
      */
+    @Override
     protected void tearDown() throws Exception {
         scaDomain.close();
     }

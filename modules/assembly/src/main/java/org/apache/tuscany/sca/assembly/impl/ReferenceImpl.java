@@ -39,6 +39,11 @@ public class ReferenceImpl extends AbstractReferenceImpl implements Reference, C
     private List<PolicySet> policySets = new ArrayList<PolicySet>();
     private List<ComponentService> targets = new ArrayList<ComponentService>();
     private Callback callback;
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
 
     /**
      * Constructs a new reference.
@@ -103,4 +108,9 @@ public class ReferenceImpl extends AbstractReferenceImpl implements Reference, C
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
+    
+    public void setPolicySets(List<PolicySet> policySets) {
+        this.policySets = policySets; 
+    }
+
 }

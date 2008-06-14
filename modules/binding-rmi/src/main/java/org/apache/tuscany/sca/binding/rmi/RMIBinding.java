@@ -18,10 +18,12 @@
  */
 package org.apache.tuscany.sca.binding.rmi;
 
-import org.apache.tuscany.sca.spi.utils.AbstractBinding;
+import org.apache.tuscany.sca.extension.helper.utils.AbstractBinding;
 
 /**
  * Represents a binding to an RMI service.
+ *
+ * @version $Rev$ $Date$
  */
 public class RMIBinding extends AbstractBinding {
 

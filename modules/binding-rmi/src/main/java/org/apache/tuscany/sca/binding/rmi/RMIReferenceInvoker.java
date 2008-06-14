@@ -22,11 +22,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.Remote;
 
+import org.apache.tuscany.sca.host.rmi.RMIHost;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.rmi.RMIHost;
+import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 
-public class RMIReferenceInvoker implements Invoker {
+/**
+ * Invoker for RMI References.
+ *
+ * @version $Rev$ $Date$
+ */
+public class RMIReferenceInvoker implements Invoker, DataExchangeSemantics {
 
     private RMIHost rmiHost;
     private String host;
@@ -72,6 +78,11 @@ public class RMIReferenceInvoker implements Invoker {
         } else {
             return remoteMethod.invoke(proxy, (Object[])payload);
         }
+    }
+
+    public boolean allowsPassByReference() {
+        // RMI always pass by value
+        return true;
     }
 
 }

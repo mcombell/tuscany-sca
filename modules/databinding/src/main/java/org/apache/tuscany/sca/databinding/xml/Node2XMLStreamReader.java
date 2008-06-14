@@ -28,27 +28,35 @@ import org.w3c.dom.Node;
 
 /**
  * Transform DOM Node to XML XMLStreamReader
+ *
+ * @version $Rev$ $Date$
  */
 public class Node2XMLStreamReader extends BaseTransformer<Node, XMLStreamReader> implements
     PullTransformer<Node, XMLStreamReader> {
 
     public XMLStreamReader transform(Node source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
             DOMXMLStreamReader reader = new DOMXMLStreamReader(source);
-            return new XMLDocumentStreamReader(reader);
+            return reader;
         } catch (Exception e) {
             throw new TransformationException(e);
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Node> getSourceType() {
         return Node.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<XMLStreamReader> getTargetType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

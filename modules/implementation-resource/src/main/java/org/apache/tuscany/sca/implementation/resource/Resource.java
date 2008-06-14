@@ -19,20 +19,16 @@
 
 package org.apache.tuscany.sca.implementation.resource;
 
-import java.net.URL;
+import java.io.InputStream;
+
+import org.apache.tuscany.sca.data.collection.Collection;
 
 /**
- * The service interface of resource implementations.
+ * The service interface of resource implementations. This is not an API for application
+ * developers. Application developers should use the data collection API to invoke
+ * resource components.
  * 
- * @version $Rev$ $Date$
+ * @version $Rev: 548609 $ $Date: 2007-06-18 23:31:03 -0700 (Mon, 18 Jun 2007) $
  */
-public interface Resource {
-    
-    /**
-     * Returns the resource location URL.
-     * 
-     * @return
-     */
-    public URL getLocationURL();
-
+public interface Resource extends Collection<String, InputStream> {
 }

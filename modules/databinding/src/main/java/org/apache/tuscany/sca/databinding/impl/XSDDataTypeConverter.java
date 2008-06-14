@@ -39,6 +39,8 @@ import javax.xml.namespace.QName;
 
 /**
  * Utility class for XSD data type conversions
+ *
+ * @version $Rev$ $Date$
  */
 public class XSDDataTypeConverter {
     public static final class Base64Binary {
@@ -438,6 +440,7 @@ public class XSDDataTypeConverter {
             pBuffer.append(s);
         }
 
+        @Override
         public StringBuffer format(Object pCalendar, StringBuffer pBuffer, FieldPosition pPos) {
             assert pCalendar != null : "The Calendar argument must not be null.";
             assert pBuffer != null : "The StringBuffer argument must not be null.";
@@ -512,6 +515,7 @@ public class XSDDataTypeConverter {
             return pOffset;
         }
 
+        @Override
         public Object parseObject(String pString, ParsePosition pParsePosition) {
             assert pString != null : "The String argument must not be null.";
             assert pParsePosition != null : "The ParsePosition argument must not be null.";

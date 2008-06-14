@@ -27,7 +27,6 @@ import org.osoa.sca.ServiceReference;
 import org.osoa.sca.annotations.Context;
 import org.osoa.sca.annotations.ConversationAttributes;
 import org.osoa.sca.annotations.Destroy;
-import org.osoa.sca.annotations.EndsConversation;
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
@@ -53,7 +52,10 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
     @Reference 
     protected ConversationalService conversationalService;
     
-    // @Reference - not yet
+    @Reference 
+    protected ConversationalService conversationalService2;
+    
+    @Reference
     protected ConversationalReferenceClient conversationalReferenceClient;
       
     private int clientCount = 0;
@@ -73,6 +75,24 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
 	    
 	    return clientCount;
 	}
+    public int runConversationFromInjectedReference2(){
+        calls.append("runConversationFromInjectedReference2,");
+               
+        conversationalService2.initializeCount(1);
+        conversationalService2.incrementCount();
+        
+        // stick in a call to the first reference to 
+        // make sure the two references don't clash
+        conversationalService.initializeCount(1);
+        
+        clientCount = conversationalService2.retrieveCount();
+        conversationalService2.endConversation();
+        
+        // end the conversation through the first reference
+        conversationalService.endConversation();
+        
+        return clientCount;
+    }	
     public int runConversationFromServiceReference(){
         calls.append("runConversationFromServiceReference,");
         ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
@@ -84,7 +104,7 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
         clientCount = callableReference.retrieveCount();
         callableReference.endConversation();
         
-        serviceReference.getConversation().end();
+        // serviceReference.getConversation().end();
         
         return clientCount;
     }	
@@ -92,7 +112,7 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
         calls.append("runConversationWithUserDefinedConversationId,");
         ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
                                                                                                         "conversationalService");
-        serviceReference.setConversationID("MyConversation");
+        serviceReference.setConversationID("MyConversation1");
         
         ConversationalService callableReference = serviceReference.getService();
         
@@ -101,10 +121,34 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
         clientCount = callableReference.retrieveCount();
         callableReference.endConversation();
         
-        serviceReference.getConversation().end();
+        // serviceReference.getConversation().end();
         
         return clientCount;
     }    
+    public String runConversationCheckUserDefinedConversationId(){
+        calls.append("runConversationCheckUserDefinedConversationId,");
+        ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
+                                                                                                        "conversationalService");
+        serviceReference.setConversationID("MyConversation2");
+        
+        ConversationalService callableReference = serviceReference.getService();
+        
+        callableReference.initializeCount(1);
+        callableReference.incrementCount();
+        clientCount = callableReference.retrieveCount();
+        
+        String clientConversationId = serviceReference.getConversationID().toString();
+        String serverConversationId = callableReference.endConversation();
+        
+        if (clientConversationId.equals("MyConversation2") &&
+            serverConversationId.equals("MyConversation2") ) {
+            return clientConversationId;
+        } else {
+            return "client = " + clientConversationId +
+                   "server = " + serverConversationId;
+        }  
+              
+    }      
     public int runConversationCheckingScope(){
         calls.append("runConversationCheckingScope,");
         // run a conversation
@@ -123,24 +167,117 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
         
         return clientCount;
     } 
-	public int runConversationHavingPassedReference(){
-	    calls.append("runConversationHavingPassedReference,");
+    public int runConversationHavingPassedReference(){
+        calls.append("runConversationHavingPassedReference,");
+        ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
+                                                                                                        "conversationalService");       
+        ConversationalService callableReference = serviceReference.getService();
+        
+        callableReference.initializeCount(1);
+        callableReference.incrementCount();
+        conversationalReferenceClient.incrementCount(serviceReference);
+        clientCount = callableReference.retrieveCount();
+        callableReference.endConversation();
+        
+        serviceReference.getConversation().end();
+        
         return clientCount;
     }
-	public int runConversationError(){
-	    calls.append("runConversationError,");
-        return clientCount;
+    public String runConversationBusinessException(){
+        calls.append("runConversationbusinessException,");      
+        try {
+            conversationalService.initializeCount(1);
+            conversationalService.businessException();
+            clientCount = conversationalService.retrieveCount();
+            conversationalService.endConversation();
+        } catch(Exception ex) {
+            return ex.getMessage();
+        }
+         
+        return "No Exception Returned";
     }
+    
+    public String runConversationBusinessExceptionCallback(){
+        calls.append("runConversationbusinessExceptionCallback,");
+        try {
+            conversationalService.initializeCountCallback(1);
+            conversationalService.businessExceptionCallback();
+            clientCount = conversationalService.retrieveCountCallback();
+            conversationalService.endConversationCallback();
+        } catch(Exception ex) {
+            return ex.getMessage();
+        }
+         
+        return "No Exception Returned";
+    }   
+    
+    public int runConversationCallingEndedConversation(){
+        calls.append("runConversationCallingEndedConversation,");
+        conversationalService.initializeCount(1);
+        conversationalService.endConversation();
+        return conversationalService.retrieveCount();
+    }       
+    
+    public int runConversationCallingEndedConversationCallback(){
+        calls.append("runConversationCallingEndedConversationCallback,");
+        conversationalService.initializeCountCallback(1);
+        conversationalService.endConversationCallback();
+        return conversationalService.retrieveCountCallback();
+    } 
+     
+    public String runConversationCallingEndedConversationCheckConversationId(){
+        calls.append("runConversationCallingEndedConversationCheckConversationId,");
+        ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
+                                                                                                        "conversationalService");
+        serviceReference.setConversationID("MyConversation3");
+        
+        ConversationalService callableReference = serviceReference.getService();
+        
+        callableReference.initializeCount(1);
+        callableReference.incrementCount();
+        clientCount = callableReference.retrieveCount();
+        callableReference.endConversation();
+        
+        if (serviceReference.getConversation() ==null ) {
+            return null;
+        } else {
+            return serviceReference.getConversation().getConversationID().toString();
+        }
+    }    
+    
+    public String runConversationCallingEndedConversationCallbackCheckConversationId(){
+        calls.append("runConversationCallingEndedConversationCallbackCheckConversationId,");
+        ServiceReference<ConversationalService> serviceReference = componentContext.getServiceReference(ConversationalService.class, 
+                                                                                                        "conversationalService");
+        serviceReference.setConversationID("MyConversation3");
+        
+        ConversationalService callableReference = serviceReference.getService();
+        
+        callableReference.initializeCount(1);
+        callableReference.incrementCount();
+        clientCount = callableReference.retrieveCount();
+        callableReference.endConversationCallback();
+        
+        if (serviceReference.getConversation() ==null ) {
+            return null;
+        } else {
+            return serviceReference.getConversation().getConversationID().toString();
+        }
+    }    
+    
     public int runConversationAgeTimeout(){
         calls.append("runConversationAgeTimeout,");
+        // done in other testing
         return clientCount;
     }
     public int runConversationIdleTimeout(){
         calls.append("runConversationIdleTimeout,");
+        // done in other testing
         return clientCount;
     }
     public int runConversationPrincipleError(){
         calls.append("runConversationPrincipleError,");
+        // TODO - when policy framework is done
         return clientCount;
     }
     
@@ -149,13 +286,11 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
     @Init
     public void init(){
         calls.append("init,");
-
     }
     
     @Destroy
     public void destroy(){
-        calls.append("destroy,");
-        
+        calls.append("destroy,"); 
     }
     
     public void initializeCount(int count){
@@ -173,9 +308,14 @@ public class ConversationalClientStatefulImpl implements ConversationalClient, C
         return  callbackCount;
     }
     
-    public void endConversation(){
+    public void businessException() throws Exception {
+        throw new Exception("Business Exception");
+    }     
+    
+    public String endConversation(){
         calls.append("endConversation,");
-        
+        callbackCount = 0;
+        return null;
     }
 
 }

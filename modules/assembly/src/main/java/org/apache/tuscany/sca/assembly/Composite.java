@@ -22,13 +22,15 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+
 
 /**
  * Represents a composite.
  * 
  * @version $Rev$ $Date$
  */
-public interface Composite extends Implementation, Visitable {
+public interface Composite extends Implementation, Extensible, Cloneable, PolicySetAttachPoint {
 
     /**
      * Returns the name of the composite.
@@ -84,18 +86,18 @@ public interface Composite extends Implementation, Visitable {
     void setLocal(boolean local);
 
     /**
-     * Returns true if autowiring is enabled in the composite.
-     * 
-     * @return true if autowiring is enabled in the composite
+     * Return the Boolean value of autowire
+     * @return null/TRUE/FALSE
      */
-    boolean isAutowire();
+    Boolean getAutowire();
 
     /**
-     * Sets whether autowiring is enabled in the composite.
+     * Sets whether component references should be autowired.
      * 
-     * @param autowire whether autowiring is enabled in the composite
+     * @param autowire whether component references should be autowired
      */
-    void setAutowire(boolean autowire);
+    void setAutowire(Boolean autowire);
+
 
     /**
      * Returns a clone of the component type.

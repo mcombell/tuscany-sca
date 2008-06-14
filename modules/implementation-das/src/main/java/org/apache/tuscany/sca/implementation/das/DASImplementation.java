@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.implementation.das;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,13 +28,11 @@ import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.data.engine.config.ConnectionInfo;
 import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
 
 /**
@@ -43,32 +42,40 @@ import org.apache.tuscany.sca.policy.PolicySet;
  */
 public class DASImplementation implements Implementation {
 
-    private Service dasService;
     private String dasConfig;
     private String dataAccessType;
+    
+    private ConnectionInfo connectionInfo;
+    
+    private boolean unresolved;
+    private List<Service> services = new ArrayList<Service>();
 
     /**
      * Constructs a new DAS implementation.
      */
     public DASImplementation(AssemblyFactory assemblyFactory,
-                              JavaInterfaceFactory javaFactory,
-                              JavaInterfaceIntrospector introspector) {
+                              JavaInterfaceFactory javaFactory) {
 
         // DAS implementation always provide a single service exposing
         // the DAS interface, and have no references and properties
+        Service dasService = null;
         dasService = assemblyFactory.createService();
         dasService.setName("DAS");
         JavaInterface javaInterface;
         try {
-            javaInterface = introspector.introspect(DAS.class);
+            javaInterface = javaFactory.createJavaInterface(DAS.class);
         } catch (InvalidInterfaceException e) {
             throw new IllegalArgumentException(e);
         }
         JavaInterfaceContract interfaceContract = javaFactory.createJavaInterfaceContract();
         interfaceContract.setInterface(javaInterface);
         dasService.setInterfaceContract(interfaceContract);
+        
+        services.add(dasService);
     }
 
+    /* DAS Model Information */
+    
     public String getConfig() {
         return this.dasConfig;
     }
@@ -84,62 +91,56 @@ public class DASImplementation implements Implementation {
     public void setDataAccessType (String dataAccessType) {
         this.dataAccessType = dataAccessType;
     }
-
-    public ConstrainingType getConstrainingType() {
-        // The sample DAS implementation does not support constrainingTypes
-        return null;
+    
+    public ConnectionInfo getConnectionInfo() {
+        return this.connectionInfo;
     }
 
-    public List<Property> getProperties() {
-        // The sample DAS implementation does not support properties
+    public void setConnectionInfo(ConnectionInfo connectionInfo) {
+        this.connectionInfo = connectionInfo;
+    }
+
+    /* SCA Model Information */
+
+	public ConstrainingType getConstrainingType() {
+		// DAS implementation does not support constrainingTypes
+		return null;
+	}
+
+	public List<Property> getProperties() {
+		// DAS implementation does not support properties
         return Collections.emptyList();
+	}
+
+	public List<Reference> getReferences() {
+		// DAS implementation does not support references
+        return Collections.emptyList();
+	}
+
+	public List<Service> getServices() {
+        return services;
+	}
+
+	public String getURI() {
+		// DAS implementation does not have a URI
+        return null;
+	}
+	
+	public boolean isUnresolved() {
+        return unresolved;
     }
 
-    public List<Service> getServices() {
-        // The sample DAS implementation provides a single fixed CRUD service
-        return Collections.singletonList(dasService);
+	public void setConstrainingType(ConstrainingType constrainingType) {
+		// DAS implementation does not support constrainingTypes
+	}
+
+	public void setURI(String uri) {
+		// DAS implementation does not have a URI
+		
+	}
+
+	public void setUnresolved(boolean undefined) {
+        this.unresolved = undefined;
     }
     
-    public List<Reference> getReferences() {
-        // The sample DAS implementation does not support properties
-        return Collections.emptyList();
-    }
-
-    public String getURI() {
-        // The sample DAS implementation does not have a URI
-        return null;
-    }
-
-    public void setConstrainingType(ConstrainingType constrainingType) {
-        // The sample DAS implementation does not support constrainingTypes
-    }
-
-    public void setURI(String uri) {
-        // The sample DAS implementation does not have a URI
-    }
-
-    public List<PolicySet> getPolicySets() {
-        // The sample DAS implementation does not support policy sets
-        return Collections.emptyList();
-    }
-
-    public List<Intent> getRequiredIntents() {
-        // The sample DAS implementation does not support intents
-        return Collections.emptyList();
-    }
-
-    public List<Object> getExtensions() {
-        // The sample DAS implementation does not support extensions
-        return Collections.emptyList();
-    }
-
-    public boolean isUnresolved() {
-        // The sample DAS implementation is always resolved
-        return false;
-    }
-
-    public void setUnresolved(boolean unresolved) {
-        // The sample DAS implementation is always resolved
-    }
-
 }

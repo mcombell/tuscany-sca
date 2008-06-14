@@ -26,14 +26,10 @@ implementation-crud-extension/
         crud/                  - implementation model interfaces
           backend/             - fake component implementation
           impl/                - implementations of the model interfaces
-          module/              - gets the implementation-crud module registered
-                                 with the SCA runtime
           provider/            - runtime implementation
       resources/
         META-INF/
-          services/
-            org.apache.sca.tuscany.sca.core.ModuleActivator - specifies the
-                                 module activation class to call
+          services/            - declares the extension
     test/
       java/
         crud/

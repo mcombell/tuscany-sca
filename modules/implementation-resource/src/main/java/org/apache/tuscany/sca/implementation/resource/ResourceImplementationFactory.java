@@ -19,9 +19,10 @@
 
 package org.apache.tuscany.sca.implementation.resource;
 
-
 /**
- * A factory for the resource implementation model.
+ * Factory for the resource implementation model.
+ *
+ * @version $Rev$ $Date$
  */
 public interface ResourceImplementationFactory {
     

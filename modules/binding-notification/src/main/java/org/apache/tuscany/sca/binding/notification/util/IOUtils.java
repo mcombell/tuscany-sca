@@ -33,9 +33,10 @@ import java.util.Map;
  */
 public class IOUtils {
 
-    public static final String  Notification_Source    = "Notification-Source";
-    public static final String  Notification_Target    = "Notification-Target";
-    public static final String  Notification_Operation = "Notification-Operation";
+    // FIXME: For some reason, tomcat converts the header names to be lower case, see TUSCANY-1791
+    public static final String  Notification_Source    = "notification-source";
+    public static final String  Notification_Target    = "notification-target";
+    public static final String  Notification_Operation = "notification-operation";
 
     public static final int DEF_BLOCK_SIZE = 512;
 
@@ -83,8 +84,7 @@ public class IOUtils {
             if (wbody != null) {
                 OutputStream ost = con.getOutputStream();
                 wbody.write(ost);
-            }
-            else {
+            } else {
                 throw new IOUtilsException("Missing writeable body");
             }
             final int rc = con.getResponseCode();
@@ -100,9 +100,7 @@ public class IOUtils {
                 default:
                     throw new RuntimeException("Unexpected response code: " + rc);
             }
-        }
-        finally
-        {
+        } finally {
             con.disconnect();
         }
         return response;
@@ -119,6 +117,11 @@ public class IOUtils {
     @SuppressWarnings("serial")
     public static class IOUtilsException extends Exception {
         
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         public IOUtilsException(String message) {
             super(message);
         }
@@ -158,8 +161,7 @@ public class IOUtils {
                 final int cbRead = ist.read(block, 0, cbToRead);
                 if (cbRead == -1) {
                     done = true;
-                }
-                else {
+                } else {
                     ost.write(block, 0, cbRead);
                     cbCopied += cbRead;
                     done = cbCopied == length;

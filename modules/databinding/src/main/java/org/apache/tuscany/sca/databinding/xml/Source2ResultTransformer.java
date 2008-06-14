@@ -29,6 +29,8 @@ import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
 /**
  * Transform TrAX Source to Result
+ *
+ * @version $Rev$ $Date$
  */
 public class Source2ResultTransformer extends BaseTransformer<Source, Result> implements
     PushTransformer<Source, Result> {
@@ -43,14 +45,17 @@ public class Source2ResultTransformer extends BaseTransformer<Source, Result> im
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Source> getSourceType() {
         return Source.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Result> getTargetType() {
         return Result.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

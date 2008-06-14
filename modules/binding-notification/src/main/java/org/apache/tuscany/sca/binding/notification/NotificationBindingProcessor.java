@@ -32,7 +32,6 @@ import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
-import org.apache.tuscany.sca.contribution.service.ContributionWireException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
@@ -41,8 +40,7 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  */
 public class NotificationBindingProcessor implements StAXArtifactProcessor<NotificationBinding> {
 
-    protected static final QName BINDING_NOTIFICATION =
-        new QName(Constants.SCA10_NS, "binding.notification");
+    protected static final QName BINDING_NOTIFICATION = new QName(Constants.SCA10_TUSCANY_NS, "binding.notification");
     
     private NotificationBindingFactory bindingFactory;
 
@@ -63,10 +61,14 @@ public class NotificationBindingProcessor implements StAXArtifactProcessor<Notif
     public NotificationBinding read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         assert BINDING_NOTIFICATION.equals(reader.getName());
         String bindingUri = reader.getAttributeValue(null, "uri");
+        String name = reader.getAttributeValue(null, "name");
         String ntm = reader.getAttributeValue(null, "ntm");
         String notificationType = reader.getAttributeValue(null, "notificationType");
 
         NotificationBinding binding = bindingFactory.createNotificationBinding();
+        if (name != null) {
+            binding.setName(name);
+        }
         if (bindingUri != null) {
             binding.setURI(bindingUri);
         }
@@ -85,11 +87,11 @@ public class NotificationBindingProcessor implements StAXArtifactProcessor<Notif
 
     public void write(NotificationBinding notificationBinding, XMLStreamWriter writer)
             throws ContributionWriteException, XMLStreamException {
+        
+        //FIXME Implement this method
     }
 
     public void resolve(NotificationBinding notificationBinding, ModelResolver resolver) throws ContributionResolveException {
     }
 
-    public void wire(NotificationBinding notificationBinding) throws ContributionWireException {
-    }
 }

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-demos</artifactId>
@@ -36,12 +36,14 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>alert-aggregator</module>
+                <module>alert-aggregator-webapp</module>
+		<module>bigbank</module>
                 <module>bigbank-account</module>
                 <module>bigbank-calculator</module>
                 <module>bigbank-stockquote</module>
                 <module>mortgage-creditcheck</module>
                 <module>mortgage-loanapproval</module>
+                <module>xml-bigbank</module>
             </modules>
         </profile>
 

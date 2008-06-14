@@ -25,21 +25,42 @@ Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
   <display-name>Apache Tuscany WebApp Runtime</display-name>
 
   <listener>
-    <listener-class>org.apache.tuscany.sca.webapp.HotUpdateContextListener</listener-class>
+    <listener-class>org.apache.tuscany.sca.webapp.WarContextListener</listener-class>
   </listener>
 
-  <servlet>
-     <servlet-name>TuscanyServlet</servlet-name>
-     <servlet-class>org.apache.tuscany.sca.webapp.TuscanyServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-     <servlet-name>TuscanyServlet</servlet-name>
-     <url-pattern>/sca/*</url-pattern>
-  </servlet-mapping>
+  <context-param>
+     <param-name>repositoryFolder</param-name>
+     <param-value>/TuscanyRepository</param-value>
+  </context-param>
 
-  <welcome-file-list id="WelcomeFileList">
-    <welcome-file>scaDomainInfo.jsp</welcome-file>
-  </welcome-file-list>
+  <!-- context-param>
+     <param-name>domainName</param-name>
+     <param-value>http://localhost:8877/</param-value>
+  </context-param -->
+
+  <context-param>
+     <param-name>nodeName</param-name>
+     <param-value>http://localhost:8080/</param-value>
+  </context-param>
+
+  <context-param>
+     <param-name>hotDeployInterval</param-name>
+     <param-value>2000</param-value>
+  </context-param>
+
+  <context-param>
+     <param-name>hotUpdate</param-name>
+     <param-value>no</param-value>
+  </context-param>
+
+  <filter>
+    <filter-name>tuscany</filter-name> 
+    <filter-class>org.apache.tuscany.sca.host.webapp.TuscanyServletFilter</filter-class> 
+  </filter>
+
+  <filter-mapping>
+    <filter-name>tuscany</filter-name> 
+    <url-pattern>/*</url-pattern> 
+  </filter-mapping>
 
 </web-app>

@@ -19,10 +19,10 @@
 
 package org.apache.tuscany.sca.databinding.xml;
 
-import java.lang.annotation.Annotation;
 
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
 /**
@@ -39,9 +39,9 @@ public class XMLStringDataBinding extends BaseDataBinding {
     }
 
     @Override
-    public boolean introspect(DataType type, Annotation[] annotations) {
-        if (registry.getDataBinding(type.getDataBinding()) == this) {
-            type.setDataBinding(getName());
+    public boolean introspect(DataType type, Operation operation) {
+        if (type.getPhysical() == String.class && NAME.equals(type.getDataBinding()) || ALIASES[0].equals(type.getDataBinding())) {
+            type.setDataBinding(NAME);
             type.setLogical(XMLType.UNKNOWN);
             return true;
         } else {

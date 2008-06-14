@@ -22,6 +22,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.xml.Constants;
 
+/**
+ * Constants for the Web Services Binding.
+ *
+ * @version $Rev$ $Date$
+ */
 public interface WebServiceConstants {
 
     String BINDING_WS = "binding.ws";
@@ -31,5 +36,9 @@ public interface WebServiceConstants {
     String WSDL_LOCATION = "wsdlLocation";
     String WSDLI_NS = "http://www.w3.org/2004/08/wsdl-instance";
     QName WSDL_LOCATION_QNAME = new QName(WSDLI_NS, WSDL_LOCATION); 
+    String NAME = "name"; 
+    String URI = "uri"; 
+    String END_POINT_REFERENCE = "EndpointReference";
+    
 
 }

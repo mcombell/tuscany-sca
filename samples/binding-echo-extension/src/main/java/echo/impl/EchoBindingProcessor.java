@@ -19,15 +19,26 @@
 
 package echo.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.xml.PolicyAttachPointProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
+import org.apache.tuscany.sca.policy.impl.IntentAttachPointTypeFactoryImpl;
 
 import echo.EchoBinding;
 import echo.EchoBindingFactory;
@@ -40,9 +51,11 @@ public class EchoBindingProcessor implements StAXArtifactProcessor<EchoBinding> 
     private QName BINDING_ECHO = new QName("http://echo", "binding.echo");
     
     private final EchoBindingFactory factory;
+    private PolicyAttachPointProcessor policyProcessor;
 
-    public EchoBindingProcessor(EchoBindingFactory factory) {
+    public EchoBindingProcessor(EchoBindingFactory factory, PolicyFactory policyFactory) {
         this.factory = factory;
+        this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
     }
 
     public QName getArtifactType() {
@@ -53,19 +66,63 @@ public class EchoBindingProcessor implements StAXArtifactProcessor<EchoBinding> 
         return EchoBinding.class;
     }
 
-    public EchoBinding read(XMLStreamReader reader) throws ContributionReadException {
-        String uri = reader.getAttributeValue(null, "uri");
+    public EchoBinding read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         EchoBinding echoBinding = factory.createEchoBinding();
-        if (uri != null) {
-            echoBinding.setURI(uri.trim());
+                IntentAttachPointType bindingType = new IntentAttachPointTypeFactoryImpl().createBindingType();
+        bindingType.setName(getArtifactType());
+        bindingType.setUnresolved(true);
+        ((PolicySetAttachPoint)echoBinding).setType(bindingType);
+
+        String name = reader.getAttributeValue(null, "name");
+        if (name != null) {
+            echoBinding.setName(name);
         }
+
+        String uri = reader.getAttributeValue(null, "uri");
+        if (uri != null) {
+            echoBinding.setURI(uri);
+        }
+        
+        policyProcessor.readPolicies(echoBinding, reader);
+
         return echoBinding;
     }
+    
+    public void write(EchoBinding echoBinding, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
 
-    public void write(EchoBinding echoBinding, XMLStreamWriter writer) throws ContributionWriteException {
+        policyProcessor.writePolicyPrefixes(echoBinding, writer);
+        writer.writeStartElement(BINDING_ECHO.getNamespaceURI(), BINDING_ECHO.getLocalPart());
+        policyProcessor.writePolicyAttributes(echoBinding, writer);
+        
+        if (echoBinding.getName() != null) {
+            writer.writeAttribute("name", echoBinding.getName());
+        }
+        
+        if (echoBinding.getURI() != null) {
+            writer.writeAttribute("uri", echoBinding.getURI());
+        }
+        
+        writer.writeEndElement();
     }
 
     public void resolve(EchoBinding echoBinding, ModelResolver resolver) throws ContributionResolveException {
+        PolicySetAttachPoint policySetAttachPoint = (PolicySetAttachPoint)echoBinding;
+        List<Intent> requiredIntents = new ArrayList<Intent>();
+        Intent resolvedIntent = null;
+        for ( Intent intent : policySetAttachPoint.getRequiredIntents() ) {
+            resolvedIntent = resolver.resolveModel(Intent.class, intent);
+            requiredIntents.add(resolvedIntent);
+        }
+        policySetAttachPoint.getRequiredIntents().clear();
+        policySetAttachPoint.getRequiredIntents().addAll(requiredIntents);
+        
+        List<PolicySet> resolvedPolicySets = new ArrayList<PolicySet>();
+        PolicySet resolvedPolicySet = null;
+        for ( PolicySet policySet : policySetAttachPoint.getPolicySets() ) {
+            resolvedPolicySet = resolver.resolveModel(PolicySet.class, policySet);
+            resolvedPolicySets.add(resolvedPolicySet);
+        }
+        policySetAttachPoint.getPolicySets().clear();
+        policySetAttachPoint.getPolicySets().addAll(resolvedPolicySets);
     }
-
 }

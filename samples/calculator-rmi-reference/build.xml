@@ -16,9 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="calculator-rmi-reference-client" default="compile">
-    <property name="test.class" value="calculator.CalculatorClient" />
-	<property name="test.jar"   value="sample-calculator-rmi-reference.jar" />
+<project name="calculator-rmi-reference" default="compile">
+    <property name="test.class"   value="calculator.CalculatorClient" />
+    <property name="test.jar"     value="sample-calculator-rmi-reference.jar" />
+    <property name="manifest.jar" value="../../lib/tuscany-sca-manifest.jar" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>
@@ -31,7 +32,7 @@
                source="1.5"
                target="1.5">
             <classpath>
-            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            	<pathelement location="${manifest.jar}"/>
             </classpath>
         </javac> 
         <copy todir="target/classes">
@@ -41,7 +42,7 @@
             <manifest>
                 <attribute name="Main-Class" value="${test.class}" /> 
             </manifest>
-        </jar>     	
+        </jar>    	
     </target>	
 	
     <target name="run-classes">
@@ -49,7 +50,7 @@
               fork="true">
             <classpath>
                 <pathelement path="target/classes"/>
-            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            	<pathelement location="${manifest.jar}"/>
             </classpath>
         </java>
     </target>
@@ -59,10 +60,10 @@
               fork="true">
             <classpath>
                 <pathelement path="target/${test.jar}"/>
-            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+            	<pathelement location="${manifest.jar}"/>
             </classpath>
         </java>    	
-    </target>	
+    </target>
 	
     <target name="clean">
         <delete quiet="true" includeemptydirs="true">

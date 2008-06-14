@@ -27,6 +27,10 @@ import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 import org.w3c.dom.Node;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class Node2JAXB extends BaseTransformer<Node, Object> implements PullTransformer<Node, Object> {
 
     public Node2JAXB() {
@@ -39,21 +43,24 @@ public class Node2JAXB extends BaseTransformer<Node, Object> implements PullTran
         try {
             JAXBContext jaxbContext = JAXBContextHelper.createJAXBContext(context, false);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Object result = unmarshaller.unmarshal(source);
-            return JAXBContextHelper.createReturnValue(context.getTargetDataType(), result);
+            Object result = unmarshaller.unmarshal(source, JAXBContextHelper.getJavaType(context.getTargetDataType()));
+            return JAXBContextHelper.createReturnValue(jaxbContext, context.getTargetDataType(), result);
         } catch (Exception e) {
             throw new TransformationException(e);
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Node> getSourceType() {
         return Node.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 
+    @Override
     public int getWeight() {
         return 30;
     }

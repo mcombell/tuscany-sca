@@ -18,12 +18,10 @@
  */
 package org.apache.tuscany.sca.core.scope;
 
+import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.core.event.HttpSessionEnd;
 import org.apache.tuscany.sca.event.Event;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
-import org.apache.tuscany.sca.scope.InstanceWrapper;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.scope.TargetResolutionException;
 
 /**
  * A scope context which manages atomic component instances keyed on HTTP
@@ -37,14 +35,17 @@ public class HttpSessionScopeContainer extends AbstractScopeContainer<Object> {
         super(Scope.SESSION, component);
     }
 
+    @Override
     public void onEvent(Event event) {
         checkInit();
         if (event instanceof HttpSessionEnd) {
-            Object key = ((HttpSessionEnd)event).getSessionID();
+            //FIXME key is not used
+            //Object key = ((HttpSessionEnd)event).getSessionID();
             // FIXME: Remove the session id
         }
     }
 
+    @Override
     public synchronized void start() {
         if (lifecycleState != UNINITIALIZED && lifecycleState != STOPPED) {
             throw new IllegalStateException("Scope must be in UNINITIALIZED or STOPPED state [" + lifecycleState + "]");
@@ -52,6 +53,7 @@ public class HttpSessionScopeContainer extends AbstractScopeContainer<Object> {
         lifecycleState = RUNNING;
     }
 
+    @Override
     public synchronized void stop() {
         lifecycleState = STOPPED;
     }

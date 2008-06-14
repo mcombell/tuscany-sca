@@ -20,40 +20,54 @@ package org.apache.tuscany.sca.databinding.xml;
 
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tuscany.sca.databinding.DataPipe;
 import org.apache.tuscany.sca.databinding.PullTransformer;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
+import org.apache.tuscany.sca.databinding.impl.DOMHelper;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.ContentHandler;
 
 /**
  * Transform DOM Node to XML XMLStreamReader
+ *
+ * @version $Rev$ $Date$
  */
 public class XMLStreamReader2Node extends BaseTransformer<XMLStreamReader, Node> implements
     PullTransformer<XMLStreamReader, Node> {
-    private SAX2DOMPipe pipe = new SAX2DOMPipe();
 
     private XMLStreamReader2SAX stax2sax = new XMLStreamReader2SAX();
 
     public Node transform(XMLStreamReader source, TransformationContext context) {
         try {
+            DataPipe<ContentHandler, Node> pipe = new SAX2DOMPipe().newInstance();
             stax2sax.transform(source, pipe.getSink(), context);
             Node node = pipe.getResult();
             source.close();
-            return node;
+            if (node instanceof Document) {
+                Document doc = (Document)node;
+                return DOMHelper.adjustElementName(context, doc.getDocumentElement());
+            } else {
+                return node;
+            }
         } catch (Exception e) {
             throw new TransformationException(e);
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLStreamReader> getSourceType() {
         return XMLStreamReader.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Node> getTargetType() {
         return Node.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

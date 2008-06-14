@@ -24,5 +24,4 @@ package org.apache.tuscany.sca.assembly;
  * @version $Rev$ $Date$
  */
 public interface Implementation extends ComponentType {
-
 }

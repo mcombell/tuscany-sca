@@ -19,12 +19,14 @@
 
 package org.apache.tuscany.sca.databinding;
 
-import java.lang.annotation.Annotation;
 
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * DataBinding represents a data representation, for example, SDO, JAXB and AXIOM
+ *
+ * @version $Rev$ $Date$
  */
 public interface DataBinding {
     /**
@@ -56,19 +58,20 @@ public interface DataBinding {
     /**
      * Introspect and populate information to a DataType model
      * 
-     * @param javaType The java class or interface to be introspected
-     * @param annotations The java annotations
+     * @param dataType The data type to be introspected
+     * @param operation The operation
      * @return true if the databinding has recognized the given data type
      */
-    boolean introspect(DataType dataType, Annotation[] annotations);
+    boolean introspect(DataType dataType, Operation operation);
 
     /**
      * Introspect the data to figure out the corresponding data type
      * 
      * @param value The object to be checked
+     * @param operation The operation
      * @return The DataType or null if the java type is not supported by this databinding
      */
-    DataType introspect(Object value);
+    DataType introspect(Object value, Operation operation);
 
     /**
      * Provide a WrapperHandler for this databinding
@@ -77,11 +80,14 @@ public interface DataBinding {
     WrapperHandler getWrapperHandler();
 
     /**
-     * Make a copy of the object for "pass-by-value" semantics
-     * @param source object to copy 
+     * Make a copy of the object for "pass-by-value" semantics.
+     *
+     * @param object source object to copy 
+     * @param dataType The data type
+     * @param operation The operation
      * @return copy of the object passed in as argument
      */
-    Object copy(Object object);
+    Object copy(Object object, DataType dataType, Operation operation);
     
     /**
      * Get the type mapper for simple types
@@ -90,10 +96,9 @@ public interface DataBinding {
     SimpleTypeMapper getSimpleTypeMapper();
     
     /**
-     * Get the handler that can handle exceptions/faults in the
-     * databinding-specific way
-     * 
-     * @return An instance of the exception handler
+     * Get the XML type helper for Java types
+     * @return The databinding-specific XML type helper class
      */
-    ExceptionHandler getExceptionHandler();
+    XMLTypeHelper getXMLTypeHelper();
+
 }

@@ -56,11 +56,19 @@ public class WrapperInfo {
 
     private List<ElementInfo> outputChildElements;
 
+    // The data type of the unwrapped input child elements 
     private DataType<List<DataType>> unwrappedInputType;
 
+    // The data type of the unwrapped output child element (we only supports one child)
     private DataType<XMLType> unwrappedOutputType;
 
+    // The data for the input/output wrappers
     private String dataBinding;
+
+    // The data type for the input (request) wrapper bean
+    private DataType<XMLType> inputWrapperType;
+    // The data type for the output (response) wrapper bean
+    private DataType<XMLType> outputWrapperType;
 
     public WrapperInfo(String dataBinding,
                        ElementInfo inputWrapperElement,
@@ -110,13 +118,23 @@ public class WrapperInfo {
         if (unwrappedInputType == null) {
             List<DataType> childTypes = new ArrayList<DataType>();
             for (ElementInfo element : getInputChildElements()) {
-                DataType<XMLType> type = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+                DataType type = getDataType(element);
                 childTypes.add(type);
             }
-            unwrappedInputType = new DataTypeImpl<List<DataType>>("idl:unwrapped.input", Object[].class,
-                                                                           childTypes);
+            unwrappedInputType = new DataTypeImpl<List<DataType>>("idl:unwrapped.input", Object[].class, childTypes);
         }
         return unwrappedInputType;
+    }
+
+    private DataType getDataType(ElementInfo element) {
+        DataType type = null;
+        if (element.isMany()) {
+            DataType logical = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+            type = new DataTypeImpl<DataType>("java:array", Object[].class, logical);
+        } else {
+            type = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+        }
+        return type;
     }
 
     /**
@@ -128,13 +146,45 @@ public class WrapperInfo {
             if (elements != null && elements.size() > 0) {
                 if (elements.size() > 1) {
                     // We don't support output with multiple parts
-                    throw new IllegalArgumentException("Multi-part output is not supported");
+                    // throw new IllegalArgumentException("Multi-part output is not supported");
                 }
                 ElementInfo element = elements.get(0);
 
-                unwrappedOutputType = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+                unwrappedOutputType = getDataType(element);
             }
         }
         return unwrappedOutputType;
+    }
+
+    public Class<?> getInputWrapperClass() {
+        return inputWrapperType == null ? null : inputWrapperType.getPhysical();
+    }
+
+    public Class<?> getOutputWrapperClass() {
+        return outputWrapperType == null ? null : outputWrapperType.getPhysical();
+    }
+
+    public String getDataBinding() {
+        return dataBinding;
+    }
+
+    public void setDataBinding(String dataBinding) {
+        this.dataBinding = dataBinding;
+    }
+
+    public DataType<XMLType> getInputWrapperType() {
+        return inputWrapperType;
+    }
+
+    public void setInputWrapperType(DataType<XMLType> inputWrapperType) {
+        this.inputWrapperType = inputWrapperType;
+    }
+
+    public DataType<XMLType> getOutputWrapperType() {
+        return outputWrapperType;
+    }
+
+    public void setOutputWrapperType(DataType<XMLType> outputWrapperType) {
+        this.outputWrapperType = outputWrapperType;
     }
 }

@@ -19,32 +19,22 @@
 package org.apache.tuscany.sca.databinding.impl;
 
 import org.apache.tuscany.sca.databinding.Transformer;
-import org.apache.tuscany.sca.databinding.TransformerExtensionPoint;
 
 /**
- * Base Implementation of Transformer which provides the registration to the transformer registry
- *
+ * Base Implementation of Transformer which provides the registration to the
+ * transformer registry
+ * 
  * @version $Rev$ $Date$
  */
 public abstract class BaseTransformer<S, T> implements Transformer {
-
-    protected TransformerExtensionPoint registry;
 
     protected BaseTransformer() {
         super();
     }
 
-    public void setTransformerRegistry(TransformerExtensionPoint registry) {
-        this.registry = registry;
-    }
+    protected abstract Class<S> getSourceType();
 
-    public void init() {
-        registry.addTransformer(this);
-    }
-
-    protected abstract Class getSourceType();
-
-    protected abstract Class getTargetType();
+    protected abstract Class<T> getTargetType();
 
     public String getSourceDataBinding() {
         return getSourceType().getName();

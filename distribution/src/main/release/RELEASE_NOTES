@@ -1,36 +1,49 @@
-Apache Tuscany SCA 0.90 (incubating) June 2007 Release Notes
+Apache Tuscany SCA 1.2 (incubating) April 2008 Release Notes
 ============================================================
+
+Apache Tuscany provides a runtime based on the Service Component
+Architecture. SCA is a set of specifications aimed at simplifying SOA
+Application Development which are being standardized at OASIS as part
+of Open Composite Services Architecture (Open CSA) - http://www.oasis-opencsa.org/.
 
 Overview
 --------
 
-This 0.90 release of Apache Tuscany SCA represents a significant
-milestone on the road to 1.0.
+     The Apache Tuscany SCA 1.2 release includes implementations of the
+     main SCA specifications including:
 
-This release includes a substantial redesign and rewrite of parts
-of the Tuscany SCA runtime which has significantly improved usability
-compared with previous releases. 
+        SCA Assembly Model V1.0
+        SCA Policy Framework V1.0
+        SCA Java Common Annotations and APIs V1.0
+        SCA Java Component Implementation V1.0
+        SCA Spring Component Implementation V1.0
+        SCA BPEL Client and Implementation V1.0
+        SCA Web Services Binding V1.0
+        SCA EJB Session Bean Binding V1.0
 
-Key features include:
+    It also includes implementations of many features not yet defined
+    by SCA specifications, including:
 
-- now based on the final OSOA (http://www.osoa.org) 1.0 specifications;
+        - SCA bindings for Direct Web Remoting, RSS and ATOM Feeds, 
+          HTTP resources, JSON-RPC, PUB/SUB Notifications, and RMI.
+        - SCA implementation types for OSGI, XQuery, BPEL, Widget and various 
+          dynamic languages including Groovy, Javascript, Python and Ruby
+        - Databindings for Service Data Objects (SDO), JAXB, XmlBeans, 
+          Axis2's AXIOM, JSON, SAXON, DOM, SAX and StAX
 
-- clear, simple and stable SPI's to aid embedding and extending the runtime;
-
-- lightweight and modular, allowing users to pick and choose Tuscany modules
-  as required for their particular environments.
-
-The result of these improvements is that the Tuscany SCA runtime can now be
-used easily in any environment - standalone, within webapps, embedded in any
-application server, or even running inside an IDE.
- 
-No special tools, packaging, or plugins are required to create SCA
-applications using Tuscany SCA. The standard Ant or Maven build tools,
-or the simple JDK command line tools, are all that is required to
-develop and use Tuscany SCA applications.
-
-The modular nature of Tuscany now enables a complete runtime for SCA assembly 
-to be put together with less than 1MB of Tuscany code.
+    The Tuscany SCA Runtime can be configured as a single node SCA domain or 
+    as an SCA domain distributed across multiple nodes. 
+    In addition Tuscany SCA supports the following host-deployment options: -
+        - running standalone 
+        - running with distributed nodes across multiple JVMs
+        - running with embedded Jetty or Tomcat
+        - running as part of a standard web application                                     
+     
+    The Wepapp samples included in this release have been tried and tested on 
+        - Tomcat 5.5.20 and Tomcat 6.0.14
+        - Jetty 6.1.3
+        - Geronimo 2.0.2 Tomcat6 jee5
+        - WebSphere 6.1 fix pack 9
 
 See the CHANGES file for a detailed list of the features in this release.
 
@@ -44,7 +57,7 @@ For more information on Apache Tuscany visit the website at:
 Any issues with this release can be reported to Apache Tuscany
 using the mailing lists or in the JIRA issue tracker.
 
-    Mailing lists:
+    Mailing list archives:
 
        http://mail-archives.apache.org/mod_mbox/ws-tuscany-user/
        http://mail-archives.apache.org/mod_mbox/ws-tuscany-dev/
@@ -53,6 +66,18 @@ using the mailing lists or in the JIRA issue tracker.
 
        http://issues.apache.org/jira/browse/TUSCANY
 
+To join the project's mailing lists follow the instructions at:
+
+    http://incubator.apache.org/tuscany/mailing-lists.html
+
+To find out more about OASIS Open CSA go to: 
+
+    http://www.oasis-opencsa.org.
+
+Apache Tuscany welcomes your help. Any contribution, including code,
+testing, improving the documentation, or bug reporting is always
+appreciated. 
+
 Thank you for using Apache Tuscany!
 
-The Tuscany Team.
+- The Tuscany Team.

@@ -41,9 +41,19 @@ public interface ComponentService extends Service {
     void setService(Service service);
 
     /**
-     * Clone the component service.
+     * Returns the callback reference created internally as a source endpoint
+     * for callbacks from this service.
      * 
-     * @return a clone of the component service
+     * @return the callback reference
      */
-    Object clone() throws CloneNotSupportedException;
+    ComponentReference getCallbackReference();
+
+    /**
+     * Sets the callback reference created internally as a source endpoint
+     * for callbacks from this service.
+     * 
+     * @param callbackReference the callback reference
+     */
+    void setCallbackReference(ComponentReference callbackReference);
+
 }

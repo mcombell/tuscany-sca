@@ -20,11 +20,15 @@
 package org.apache.tuscany.sca.implementation.script;
 
 import org.apache.tuscany.sca.assembly.ComponentType;
+import org.apache.tuscany.sca.extension.helper.ImplementationActivator;
+import org.apache.tuscany.sca.extension.helper.InvokerFactory;
+import org.apache.tuscany.sca.extension.helper.utils.PropertyValueObjectFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
-import org.apache.tuscany.sca.spi.ImplementationActivator;
-import org.apache.tuscany.sca.spi.InvokerFactory;
-import org.apache.tuscany.sca.spi.utils.PropertyValueObjectFactory;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class ScriptImplementationActivator implements ImplementationActivator<ScriptImplementation> {
 
     // TODO: seems wrong to need PropertyValueObjectFactory, could it be on Property somehow? 

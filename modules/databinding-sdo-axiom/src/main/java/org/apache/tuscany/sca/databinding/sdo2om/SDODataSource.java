@@ -32,13 +32,17 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.axiom.om.OMDataSource;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.impl.serialize.StreamingOMSerializer;
-import org.apache.tuscany.sdo.api.XMLStreamHelper;
 import org.apache.tuscany.sdo.api.SDOUtil;
+import org.apache.tuscany.sdo.api.XMLStreamHelper;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.helper.HelperContext;
 import commonj.sdo.helper.XMLDocument;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class SDODataSource implements OMDataSource {
     private HelperContext helperContext;
     private XMLDocument sourceDocument;
@@ -57,7 +61,7 @@ public class SDODataSource implements OMDataSource {
     }
 
     public XMLStreamReader getReader() throws XMLStreamException {
-        XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext.getTypeHelper());
+        XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext);
         return streamHelper.createXMLStreamReader(sourceDocument);
     }
 

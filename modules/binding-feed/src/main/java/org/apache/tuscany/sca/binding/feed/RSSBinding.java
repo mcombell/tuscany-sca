@@ -22,8 +22,9 @@ package org.apache.tuscany.sca.binding.feed;
 import org.apache.tuscany.sca.assembly.Binding;
 
 /**
- * A model for the RSS binding.
+ * RSS Feed binding model.
+ *
+ * @version $Rev$ $Date$
  */
 public interface RSSBinding extends Binding {
-
 }

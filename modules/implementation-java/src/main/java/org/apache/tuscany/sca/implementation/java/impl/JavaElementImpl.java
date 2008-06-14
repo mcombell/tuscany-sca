@@ -135,7 +135,7 @@ public class JavaElementImpl {
     public Annotation[] getAnnotations() {
         if (elementType == ElementType.PARAMETER) {
             if (anchor instanceof Method) {
-                // We only care about the method-level annotaions
+                // We only care about the method-level annotations
                 return ((Method)anchor).getAnnotations();
             }
             if (anchor instanceof Constructor) {
@@ -154,6 +154,7 @@ public class JavaElementImpl {
         return null;
     }
 
+    @Override
     public String toString() {
         return anchor.toString() + (elementType == ElementType.PARAMETER ? "[" + index + "]" : "");
     }
@@ -207,14 +208,14 @@ public class JavaElementImpl {
     }
 
     /**
-     * @return the classifer
+     * @return the classifier
      */
     public Class<? extends Annotation> getClassifer() {
         return classifer;
     }
 
     /**
-     * @param classifer the classifer to set
+     * @param classifer the classifier to set
      */
     public void setClassifer(Class<? extends Annotation> classifer) {
         this.classifer = classifer;

@@ -19,12 +19,14 @@
 
 package org.apache.tuscany.sca.contribution;
 
+
 /**
- * Contribution model object factory
+ * A factory for the contribution model.
  * 
  * @version $Rev$ $Date$
  */
 public interface ContributionFactory {
+    
     /**
      * Create a contribution model object
      * 
@@ -33,23 +35,39 @@ public interface ContributionFactory {
     Contribution createContribution();
         
     /**
+     * Create a contribution metadata model object
+     * 
+     * @return The new contribution metadata model object
+     */
+    ContributionMetadata createContributionMetadata();
+        
+    /**
      * Create a deployedArtifact model object
      * 
      * @return The new deployedArtifact model object
      */
-    DeployedArtifact createDeployedArtifact();
-    
+    @Deprecated
+    DeployedArtifact createDeployedArtifact();   
+
     /**
-     * Create a contribution import model
+     * Create an artifact model object
      * 
-     * @return The new ContributionImport model object
+     * @return The new artifact model object
      */
-    ContributionImport createContributionImport();
-    
+    Artifact createArtifact();
+
     /**
-     * Create a contribution import model
+     * Create a default import model object.
      * 
-     * @return The new ContributoinExport object
+     * @return the new default import model object
      */
-    ContributionExport createContributionExport();
+    DefaultImport createDefaultImport();
+
+    /**
+     * Create a default export model object.
+     * 
+     * @return the new default export model object
+     */
+    DefaultExport createDefaultExport();
+    
 }

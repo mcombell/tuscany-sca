@@ -24,10 +24,14 @@ import org.apache.tuscany.sca.invocation.Message;
 /**
  * Invoker for the sample echo binding.
  */
-public class EchoBindingInvoker implements Invoker {
+class EchoBindingInvoker implements Invoker {
+    
+    EchoBindingInvoker() {
+    }
 
     public Message invoke(Message msg) {
         try {
+            System.out.println("Passing thro invoker...");
             Object[] args = msg.getBody();
 
             // echo back the first parameter, a real binding would invoke some API for flowing the request

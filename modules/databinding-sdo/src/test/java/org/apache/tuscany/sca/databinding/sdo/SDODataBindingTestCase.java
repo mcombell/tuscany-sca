@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
@@ -36,7 +37,8 @@ import commonj.sdo.helper.XMLDocument;
 import commonj.sdo.impl.HelperProvider;
 
 /**
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class SDODataBindingTestCase extends TestCase {
     protected static final QName ORDER_QNAME = new QName("http://www.example.com/IPO", "purchaseOrder");
@@ -46,6 +48,7 @@ public class SDODataBindingTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         binding = new SDODataBinding();
@@ -54,19 +57,20 @@ public class SDODataBindingTestCase extends TestCase {
     }
 
     public final void testIntrospect() {
+        Operation op = null;
         DataType dataType = new DataTypeImpl<Class>(DataObject.class, null);
-        boolean yes = binding.introspect(dataType, null);
+        boolean yes = binding.introspect(dataType, op);
         assertTrue(yes);
         assertTrue(dataType.getDataBinding().equals(binding.getName()));
         assertTrue(dataType.getPhysical() == DataObject.class && dataType.getLogical() == XMLType.UNKNOWN);
         dataType = new DataTypeImpl<Class>(PurchaseOrderType.class, null);
-        yes = binding.introspect(dataType, null);
+        yes = binding.introspect(dataType, op);
         assertTrue(yes);
         assertEquals(PurchaseOrderType.class, dataType.getPhysical());
         assertEquals(new QName("http://www.example.com/IPO", "PurchaseOrderType"), ((XMLType)dataType.getLogical())
             .getTypeName());
         dataType = new DataTypeImpl<Class>(USAddress.class, null);
-        yes = binding.introspect(dataType, null);
+        yes = binding.introspect(dataType, op);
         assertTrue(yes);
         assertEquals(USAddress.class, dataType.getPhysical());
         assertEquals(new QName("http://www.example.com/IPO", "USAddress"), ((XMLType)dataType.getLogical())
@@ -76,7 +80,7 @@ public class SDODataBindingTestCase extends TestCase {
     public final void testCopyRoot() {
         PurchaseOrderType po = SdoFactory.INSTANCE.createPurchaseOrderType();
         po.setComment("Comment");
-        Object copy = binding.copy(po);
+        Object copy = binding.copy(po, null, null);
         assertTrue(copy instanceof PurchaseOrderType);
         assertTrue(po != copy);
         assertTrue(context.getEqualityHelper().equal((DataObject)po, (DataObject)copy));
@@ -86,7 +90,7 @@ public class SDODataBindingTestCase extends TestCase {
     public final void testCopyNonRoot() {
         USAddress address = SdoFactory.INSTANCE.createUSAddress();
         address.setCity("San Jose");
-        Object copy = binding.copy(address);
+        Object copy = binding.copy(address, null, null);
         assertTrue(copy instanceof USAddress);
         assertTrue(address != copy);
         assertTrue(context.getEqualityHelper().equal((DataObject)address, (DataObject)copy));
@@ -100,7 +104,7 @@ public class SDODataBindingTestCase extends TestCase {
             context.getXMLHelper().createDocument((DataObject)po,
                                                   ORDER_QNAME.getNamespaceURI(),
                                                   ORDER_QNAME.getLocalPart());
-        Object copy = binding.copy(doc);
+        Object copy = binding.copy(doc, null, null);
         assertTrue(copy instanceof XMLDocument);
         XMLDocument docCopy = (XMLDocument)copy;
         assertTrue(doc != copy);

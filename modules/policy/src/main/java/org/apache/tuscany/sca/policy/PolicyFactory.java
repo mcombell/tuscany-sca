@@ -20,6 +20,8 @@ package org.apache.tuscany.sca.policy;
 
 /**
  * A factory for the policy model.
+ *
+ * @version $Rev$ $Date$
  */
 public interface PolicyFactory {
 
@@ -57,4 +59,11 @@ public interface PolicyFactory {
      * @return a QualifiedIntent instance
      */
     QualifiedIntent createQualifiedIntent();
+    
+    /**
+     * create a new PolicySetReference
+     * 
+     * @return a PolicySetReference instance
+     */
+    PolicySetReference createPolicySetReference();
 }

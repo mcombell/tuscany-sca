@@ -26,30 +26,28 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tuscany.sca.contribution.ContentType;
+import org.apache.tuscany.sca.contribution.PackageType;
 import org.apache.tuscany.sca.contribution.processor.PackageProcessor;
 import org.apache.tuscany.sca.contribution.service.ContributionException;
-import org.apache.tuscany.sca.contribution.service.util.FileHelper;
+import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 
 /**
- * Folder contribution package processor
+ * Folder contribution package processor.
  * 
  * @version $Rev$ $Date$
  */
 public class FolderContributionProcessor implements PackageProcessor {
-    /**
-     * Package-type that this package processor can handle
-     */
-    public static final String PACKAGE_TYPE = ContentType.FOLDER;
 
     public FolderContributionProcessor() {
     }
 
     public String getPackageType() {
-        return PACKAGE_TYPE;
+        return PackageType.FOLDER;
     }
 
     /**
@@ -57,25 +55,54 @@ public class FolderContributionProcessor implements PackageProcessor {
      * 
      * @param fileList
      * @param file
+     * @param root
      * @throws IOException
      */
-    private void traverse(List<URI> fileList, File file, File root) throws IOException {
-        if (file.isFile()) {
-            fileList.add(root.toURI().relativize(file.toURI()));
-            
-        } else if (file.isDirectory()) {
-            // FIXME: Maybe we should externalize it as a property
-            // Regular expression to exclude .xxx files
-            
-            String uri = root.toURI().relativize(file.toURI()).toString();
-            if (uri.endsWith("/")) {
-                uri = uri.substring(0, uri.length() - 1);
+    private static void traverse(List<URI> fileList, final File file, final File root) throws IOException {
+        // Allow privileged access to test file. Requires FilePermissions in security policy file.
+        Boolean isFile = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+            public Boolean run() {
+                return file.isFile();
             }
-            fileList.add(URI.create(uri));
-            
-            File[] files = file.listFiles(FileHelper.getFileFilter("[^\u002e].*", true));
-            for (int i = 0; i < files.length; i++) {
-                traverse(fileList, files[i], root);
+        });
+        if (isFile) {
+            fileList.add(AccessController.doPrivileged(new PrivilegedAction<URI>() {
+                public URI run() {
+                    return root.toURI().relativize(file.toURI());
+                }
+            }));
+        } else {
+            // Allow privileged access to test file. Requires FilePermissions in security policy
+            // file.
+            Boolean isDirectory = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+                public Boolean run() {
+                    return file.isDirectory();
+                }
+            });
+            if (isDirectory) {
+                String uri = AccessController.doPrivileged(new PrivilegedAction<URI>() {
+                    public URI run() {
+                        return root.toURI().relativize(file.toURI());
+                    }
+                }).toString();
+
+                if (uri.endsWith("/")) {
+                    uri = uri.substring(0, uri.length() - 1);
+                }
+                fileList.add(URI.create(uri));
+
+                // Allow privileged access to list files. Requires FilePermission in security
+                // policy.
+                File[] files = AccessController.doPrivileged(new PrivilegedAction<File[]>() {
+                    public File[] run() {
+                        return file.listFiles();
+                    }
+                });
+                for (File f : files) {
+                    if (!f.getName().startsWith(".")) {
+                        traverse(fileList, f, root);
+                    }
+                }
             }
         }
     }
@@ -84,12 +111,6 @@ public class FolderContributionProcessor implements PackageProcessor {
         return new URL(sourceURL, artifact.toString());
     }
 
-    /**
-     * Get a list of artifact URI from the folder
-     * 
-     * @return The list of artifact URI for the folder
-     * @throws IOException
-     */
     public List<URI> getArtifacts(URL packageSourceURL, InputStream inputStream) throws ContributionException,
         IOException {
         if (packageSourceURL == null) {
@@ -98,21 +119,36 @@ public class FolderContributionProcessor implements PackageProcessor {
 
         List<URI> artifacts = new ArrayList<URI>();
 
-        // Assume the root is a jar file
-        File rootFolder;
-
         try {
-            rootFolder = new File(packageSourceURL.toURI());
-            if (rootFolder.isDirectory()) {
-                if (!rootFolder.exists()) {
-                    throw new InvalidFolderContributionException(rootFolder.getAbsolutePath());
+            // Assume the root is a jar file
+            final File rootFolder = new File(packageSourceURL.toURI());
+            // Allow privileged access to test file. Requires FilePermissions in security policy
+            // file.
+            Boolean isDirectory = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+                public Boolean run() {
+                    return rootFolder.isDirectory();
+                }
+            });
+            if (isDirectory) {
+                // Allow privileged access to test file. Requires FilePermissions in security policy
+                // file.
+                Boolean folderExists = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+                    public Boolean run() {
+                        return rootFolder.exists();
+                    }
+                });
+                if (!folderExists) {
+                    throw new ContributionReadException(rootFolder.getAbsolutePath());
                 }
 
-                this.traverse(artifacts, rootFolder, rootFolder);
+                // Security consideration. This method gathers URIs of enclosed
+                // artifacts. The URIs are protected by the policy when a user
+                // yries to open those URLs.
+                traverse(artifacts, rootFolder, rootFolder);
             }
 
         } catch (URISyntaxException e) {
-            throw new InvalidFolderContributionURIException(packageSourceURL.toExternalForm(), e);
+            throw new ContributionReadException(packageSourceURL.toExternalForm(), e);
         }
 
         return artifacts;

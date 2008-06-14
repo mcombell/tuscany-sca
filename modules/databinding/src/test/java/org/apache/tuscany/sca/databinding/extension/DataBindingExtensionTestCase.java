@@ -30,13 +30,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class DataBindingExtensionTestCase extends TestCase {
 
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
@@ -56,8 +58,6 @@ public class DataBindingExtensionTestCase extends TestCase {
         EasyMock.expect(registry.getDataBinding(Node.class.getName())).andReturn(binding1);
         EasyMock.replay(registry);
         
-        binding1.setDataBindingRegistry(registry);
-        binding1.init();
         assertNotNull(registry.getDataBinding(Node.class.getName()));
 
         DataBinding1 binding2 = new DataBinding1("dom", Node.class);

@@ -21,9 +21,11 @@ package org.apache.tuscany.sca.binding.feed.provider;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
+import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -34,20 +36,23 @@ import com.sun.syndication.io.XmlReader;
 
 /**
  * Invoker for the RSS binding.
+ *
+ * @version $Rev$ $Date$
  */
-public class RSSBindingInvoker implements Invoker {
-
+class RSSBindingInvoker implements Invoker, DataExchangeSemantics {
+    private static final Logger logger = Logger.getLogger(RSSBindingInvoker.class.getName());
+    
     private String feedType;
     private String uri;
 
-    public RSSBindingInvoker(String uri, String feedType) {
+    RSSBindingInvoker(String uri, String feedType) {
         this.uri = uri;
         this.feedType = feedType;
     }
 
     public Message invoke(Message msg) {
         try {
-            System.out.println(">>> RSSBindingInvoker (" + feedType + ") " + uri);
+            logger.info(">>> RSSBindingInvoker (" + feedType + ") " + uri);
 
             // Read the configured feed URI into a Feed object
             Feed feed;
@@ -63,6 +68,9 @@ public class RSSBindingInvoker implements Invoker {
                 SyndFeed syndFeed = input.build(new XmlReader(new URL(uri)));
                 feed = (Feed)syndFeed.createWireFeed("atom_1.0");
             }
+            
+            //FIXME Support conversion to data-api entries
+            
             msg.setBody(feed);
 
         } catch (MalformedURLException e) {
@@ -77,4 +85,7 @@ public class RSSBindingInvoker implements Invoker {
         return msg;
     }
 
+    public boolean allowsPassByReference() {
+        return true;
+    }
 }

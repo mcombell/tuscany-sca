@@ -18,15 +18,15 @@
     * under the License.    
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-	   targetNamespace="http://web"
-           name="WebResource">
+	xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+	targetNamespace="http://web"
+	name="WebResource">
 
-	<service name="WebResource" promote="WebResourceComponent">
-		<binding.resource uri="http://localhost:8083/myWeb"/>
-	</service>
-
-    <component name="WebResourceComponent">
-        <implementation.resource location="myContent"/>
+    <component name="myWeb">
+       <tuscany:implementation.resource location="myContent"/>
+        <service name="Resource">
+            <tuscany:binding.http/>
+        </service>
     </component>      
 
 </composite>

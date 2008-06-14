@@ -20,12 +20,15 @@
 package org.apache.tuscany.sca.databinding.axiom;
 
 import org.apache.axiom.om.OMElement;
-import org.apache.tuscany.sca.databinding.ExceptionHandler;
 import org.apache.tuscany.sca.databinding.WrapperHandler;
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * DataBinding for AXIOM
+ *
+ * @version $Rev$ $Date$
  */
 public class AxiomDataBinding extends BaseDataBinding {
     
@@ -44,7 +47,8 @@ public class AxiomDataBinding extends BaseDataBinding {
         return new OMElementWrapperHandler();
     }
 
-    public Object copy(Object source) {
+    @Override
+    public Object copy(Object source, DataType dataType, Operation operation) {
         if ( OMElement.class.isAssignableFrom(source.getClass()) ) {
             try {
                 OMElement sourceElement = (OMElement)source;
@@ -53,12 +57,7 @@ public class AxiomDataBinding extends BaseDataBinding {
                 throw new IllegalArgumentException(e);
             }
         }
-        return super.copy(source);
+        return super.copy(source, dataType, operation);
     }
-    
-    @Override
-    public ExceptionHandler getExceptionHandler() {
-        return new AxiomExceptionHandler();
-    }    
 
 }

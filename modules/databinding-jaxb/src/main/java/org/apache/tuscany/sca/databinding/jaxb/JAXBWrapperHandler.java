@@ -20,74 +20,93 @@
 package org.apache.tuscany.sca.databinding.jaxb;
 
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
-import javax.xml.bind.annotation.XmlRegistry;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
-
-import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.WrapperHandler;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.ElementInfo;
+import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
 
 /**
  * JAXB WrapperHandler implementation
+ *
+ * @version $Rev$ $Date$
  */
-public class JAXBWrapperHandler implements WrapperHandler<JAXBElement<?>> {
+public class JAXBWrapperHandler implements WrapperHandler<Object> {
+    private JAXBWrapperHelper helper = new JAXBWrapperHelper();
 
-    public JAXBElement<?> create(ElementInfo element, TransformationContext context) {
+    public Object create(Operation operation, boolean input) {
+        WrapperInfo wrapperInfo = operation.getWrapper();
+        ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
+        final Class<?> wrapperClass = input ? wrapperInfo.getInputWrapperClass() : wrapperInfo.getOutputWrapperClass();
         try {
-            // FIXME: How do we map the global element to a factory?
-            String packageName = null;
-            String factoryClassName = packageName + ".ObjectFactory";
-            ClassLoader classLoader = context != null ? context.getClassLoader() : null;
-            if (classLoader == null) {
-                classLoader = Thread.currentThread().getContextClassLoader();
+            if (wrapperClass == null) {
+                return null;
             }
-            Class<?> factoryClass = Class.forName(factoryClassName, true, classLoader);
-            assert factoryClass.isAnnotationPresent(XmlRegistry.class);
-            Object factory = factoryClass.newInstance();
-            QName elementName = element.getQName();
-            Method method = null;
-            for (Method m : factoryClass.getMethods()) {
-                XmlElementDecl xmlElement = m.getAnnotation(XmlElementDecl.class);
-                QName name = new QName(xmlElement.namespace(), xmlElement.name());
-                if (xmlElement != null && name.equals(elementName)) {
-                    method = m;
-                    break;
+            return AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                public Object run() throws Exception {
+                    return wrapperClass.newInstance();
                 }
-            }
-            if (method != null) {
-                Class typeClass = method.getParameterTypes()[0];
-                Object value = typeClass.newInstance();
-                return (JAXBElement<?>)method.invoke(factory, new Object[] {value});
-            } else {
-                throw new TransformationException("ObjectFactory cannot be resolved.");
-            }
-        } catch (Exception e) {
+            });
+        } catch (PrivilegedActionException e) {
             throw new TransformationException(e);
         }
     }
 
-    public void setChild(JAXBElement<?> wrapper, int i, ElementInfo childElement, Object value) {
-        Object wrapperValue = wrapper.getValue();
+    public void setChildren(Object wrapper, Object[] childObjects, Operation operation, boolean input) {
+        List<ElementInfo> childElements =
+            input ? operation.getWrapper().getInputChildElements() : operation.getWrapper().getOutputChildElements();
+        List<String> childNames = new ArrayList<String>();
+        Map<String, Object> values = new HashMap<String, Object>();
+        for (int i = 0; i < childElements.size(); i++) {
+            ElementInfo e = childElements.get(i);
+            String name = e.getQName().getLocalPart();
+            childNames.add(name);
+            values.put(name, childObjects[i]);
+        }
+        // Get the property descriptor map
+        Map<String, JAXBPropertyDescriptor> pdMap = null;
+        try {
+            pdMap = XMLRootElementUtil.createPropertyDescriptorMap(wrapper.getClass());
+        } catch (Throwable t) {
+            throw new JAXBWrapperException(t);
+        }
+        helper.wrap(wrapper, childNames, values, pdMap);
+    }
+
+    public void setChild(Object wrapper, int i, ElementInfo childElement, Object value) {
+        Object wrapperValue = wrapper;
         Class<?> wrapperClass = wrapperValue.getClass();
 
-        XmlType xmlType = wrapperClass.getAnnotation(XmlType.class);
-        String[] properties = xmlType.propOrder();
-        String property = properties[i];
-
+        // FIXME: We probably should use the jaxb-reflection to handle the properties
         try {
+            String prop = childElement.getQName().getLocalPart();
+            boolean collection = (value instanceof Collection);
+            Method getter = null;
             for (Method m : wrapperClass.getMethods()) {
-                if (m.getName().equals("set" + capitalize(property))) {
+                Class<?>[] paramTypes = m.getParameterTypes();
+                if (paramTypes.length == 1 && m.getName().equals("set" + capitalize(prop))) {
                     m.invoke(wrapperValue, new Object[] {value});
                     return;
                 }
+                if (collection && paramTypes.length == 0 && m.getName().equals("get" + capitalize(prop))) {
+                    getter = m;
+                }
             }
+            if (getter != null && Collection.class.isAssignableFrom(getter.getReturnType())) {
+                ((Collection)getter.invoke(wrapperValue)).addAll((Collection)value);
+            }
+
         } catch (Throwable e) {
             throw new TransformationException(e);
         }
@@ -99,25 +118,34 @@ public class JAXBWrapperHandler implements WrapperHandler<JAXBElement<?>> {
     }
 
     /**
-     * @see org.apache.tuscany.sca.databinding.WrapperHandler#getChildren(java.lang.Object)
+     * @see org.apache.tuscany.sca.databinding.WrapperHandler#getChildren(java.lang.Object, Operation, boolean)
      */
-    public List getChildren(JAXBElement<?> wrapper) {
-        Object wrapperValue = wrapper.getValue();
-        Class<?> wrapperClass = wrapperValue.getClass();
+    public List getChildren(Object wrapper, Operation operation, boolean input) {
+        List<ElementInfo> childElements = input? operation.getWrapper().getInputChildElements():
+            operation.getWrapper().getOutputChildElements();
 
-        XmlType xmlType = wrapperClass.getAnnotation(XmlType.class);
-        String[] properties = xmlType.propOrder();
-        List<Object> elements = new ArrayList<Object>();
-        for (String p : properties) {
-            try {
-                Method method = wrapperClass.getMethod("get" + capitalize(p), (Class[])null);
-                Object value = method.invoke(wrapperValue, (Object[])null);
-                elements.add(value);
-            } catch (Throwable e) {
-                throw new TransformationException(e);
-            }
+        List<String> childNames = new ArrayList<String>();
+        for (ElementInfo e : childElements) {
+            childNames.add(e.getQName().getLocalPart());
         }
-        return elements;
+        return Arrays.asList(helper.unwrap(wrapper, childNames));
     }
 
+    /**
+     * @see org.apache.tuscany.sca.databinding.WrapperHandler#getWrapperType(Operation, boolean)
+     */
+    public DataType getWrapperType(Operation operation, boolean input) {
+        WrapperInfo wrapper = operation.getWrapper();
+        DataType dt = input ? wrapper.getInputWrapperType() : wrapper.getOutputWrapperType();
+        return dt;
+    }
+
+    /**
+     * @see org.apache.tuscany.sca.databinding.WrapperHandler#isInstance(java.lang.Object, Operation, boolean)
+     */
+    public boolean isInstance(Object wrapper, Operation operation, boolean input) {
+        Class<?> wrapperClass =
+            input ? operation.getWrapper().getInputWrapperClass() : operation.getWrapper().getOutputWrapperClass();
+        return wrapperClass == null ? false : wrapperClass.isInstance(wrapper);
+    }
 }

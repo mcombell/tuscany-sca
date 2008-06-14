@@ -19,33 +19,111 @@
 
 package org.apache.tuscany.sca.contribution.processor;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.tuscany.sca.contribution.service.ContributionException;
+import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
+import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 
 /**
- * Default implementation of ContributionProcessorRegistry
+ * Default implementation of a package processor extension point.
  * 
  * @version $Rev$ $Date$
  */
 public class DefaultPackageProcessorExtensionPoint implements PackageProcessorExtensionPoint {
 
-    /**
-     * Processor registry
-     */
-    private Map<String, PackageProcessor> registry = new HashMap<String, PackageProcessor>();
+    private Map<String, PackageProcessor> processors = new HashMap<String, PackageProcessor>();
+    private boolean loaded;
 
     public DefaultPackageProcessorExtensionPoint() {
     }
 
     public void addPackageProcessor(PackageProcessor processor) {
-        registry.put(processor.getPackageType(), processor);
+        processors.put(processor.getPackageType(), processor);
     }
 
     public void removePackageProcessor(PackageProcessor processor) {
-        registry.remove(processor.getPackageType());
+        processors.remove(processor.getPackageType());
     }
 
     public PackageProcessor getPackageProcessor(String contentType) {
-        return registry.get(contentType);
+        loadProcessors();
+        return processors.get(contentType);
+    }
+
+    private void loadProcessors() {
+        if (loaded)
+            return;
+
+        // Get the processor service declarations
+        Set<ServiceDeclaration> processorDeclarations; 
+        try {
+            processorDeclarations = ServiceDiscovery.getInstance().getServiceDeclarations(PackageProcessor.class);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        
+        for (ServiceDeclaration processorDeclaration: processorDeclarations) {
+            Map<String, String> attributes = processorDeclaration.getAttributes();
+            
+            // Load a URL artifact processor
+            String packageType = attributes.get("type");
+            
+            // Create a processor wrapper and register it
+            PackageProcessor processor = new LazyPackageProcessor(packageType, processorDeclaration);
+            addPackageProcessor(processor);
+        }
+        
+        loaded = true;
+    }
+
+    /**
+     * A facade for package processors.
+     */
+    private static class LazyPackageProcessor implements PackageProcessor {
+        
+        private ServiceDeclaration processorDeclaration;
+        private String packageType;
+        private PackageProcessor processor;
+        
+        private LazyPackageProcessor(String packageType, ServiceDeclaration processorDeclaration) {
+            this.processorDeclaration = processorDeclaration;
+            this.packageType = packageType;
+        }
+
+        public URL getArtifactURL(URL packageSourceURL, URI artifact) throws MalformedURLException {
+            return getProcessor().getArtifactURL(packageSourceURL, artifact);
+        }
+
+        public List<URI> getArtifacts(URL packageSourceURL, InputStream inputStream) throws ContributionException, IOException {
+            return getProcessor().getArtifacts(packageSourceURL, inputStream);
+        }
+
+        public String getPackageType() {
+            return packageType;
+        }
+        
+        @SuppressWarnings("unchecked")
+        private PackageProcessor getProcessor() {
+            if (processor == null) {
+                try {
+                    Class<PackageProcessor> processorClass = (Class<PackageProcessor>)processorDeclaration.loadClass();
+                    Constructor<PackageProcessor> constructor = processorClass.getConstructor();
+                    processor = constructor.newInstance();
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+            return processor;
+        }
     }
 }

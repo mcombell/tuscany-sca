@@ -21,6 +21,11 @@ package org.apache.tuscany.sca.assembly.builder;
 
 import org.apache.tuscany.sca.assembly.Component;
 
+/**
+ * Interface for Component Pre Processors.
+ *
+ * @version $Rev$ $Date$
+ */
 public interface ComponentPreProcessor {
 
     void preProcess(Component component);

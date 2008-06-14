@@ -22,43 +22,78 @@
 	name="ConversationalITest">
  	      
     <component name="ConversationalStatelessClientStatelessService">
-		<implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatelessImpl"/>
-        <!--reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/-->		
+	    <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatelessImpl"/>
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>		
 		<reference name="conversationalService" target="ConversationalServiceStatelessSL"/>
+		<reference name="conversationalService2" target="ConversationalServiceStatelessSL"/>
     </component>   
     
     <component name="ConversationalStatelessClientStatefulService">
         <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatelessImpl"/>
-        <!--reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/-->       
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>       
         <reference name="conversationalService" target="ConversationalServiceStateful"/>
+        <reference name="conversationalService2" target="ConversationalServiceStateful"/>        
     </component>     
     
     <component name="ConversationalStatefulClientStatelessService">
         <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatefulImpl"/>
-        <!--reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/-->       
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>       
         <reference name="conversationalService" target="ConversationalServiceStatelessSL"/>
+        <reference name="conversationalService2" target="ConversationalServiceStatelessSL"/>        
     </component>   
     
     <component name="ConversationalStatefulClientStatefulService">
         <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatefulImpl"/>
-        <!--reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/-->       
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>       
         <reference name="conversationalService" target="ConversationalServiceStateful"/>
-    </component>   
+        <reference name="conversationalService2" target="ConversationalServiceStateful"/>        
+    </component>  
     
-    <!--component name="ConversationalReferenceClient">
-        <implementation.java class="org.apache.tuscany.sca.test.AnotherServiceImpl"/>
-    </component-->    
+    <component name="ConversationalStatelessClientRequestService">
+	    <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatelessImpl"/>
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>		
+		<reference name="conversationalService" target="ConversationalServiceRequest"/>
+		<reference name="conversationalService2" target="ConversationalServiceRequest"/>
+    </component> 
+    
+    <component name="ConversationalStatefulClientNonConversationalCallbackStatefulService">
+        <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalClientStatefulNonConversationalCallbackImpl"/>
+        <reference name="conversationalReferenceClient" target="ConversationalReferenceClient"/>       
+        <reference name="conversationalService" target="ConversationalServiceStatefulNonConversationalCallback"/>
+        <reference name="conversationalService2" target="ConversationalServiceStatefulNonConversationalCallback"/>        
+    </component>     
+    
+    <component name="ConversationalReferenceClient">
+        <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalReferenceClientImpl"/>
+    </component>    
         
     <component name="ConversationalServiceStateful">
 		<implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceStatefulImpl"/>
 	</component>       
    
     <component name="ConversationalServiceStateless">
-		<implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceStatelessScope"/>
+		<implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceStatelessScopeImpl"/>
 	</component>  
 	
-	<component name="ConversationalServiceStatelessSL">
+    <component name="ConversationalServiceStatelessSL">
         <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceStatelessImpl"/>
     </component> 
+
+    <component name="ConversationalServiceRequest">
+        <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceRequestImpl"/>
+    </component> 
+    
+    <component name="ConversationalServiceStatefulNonConversationalCallback">
+		<implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.ConversationalServiceStatefulNonConversationalCallbackImpl"/>
+	</component>
+
+    <component name="ConversationalAComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.AServiceImpl"/>
+        <reference name="b" target="ConversationalBComponent" />
+    </component>
+
+    <component name="ConversationalBComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.conversational.impl.BServiceImpl"/>
+    </component>
 
 </composite>

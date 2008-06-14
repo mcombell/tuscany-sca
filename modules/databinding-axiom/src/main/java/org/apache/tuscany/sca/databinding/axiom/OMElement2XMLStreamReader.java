@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.databinding.axiom;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMElement;
@@ -25,21 +26,39 @@ import org.apache.tuscany.sca.databinding.PullTransformer;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
-public class OMElement2XMLStreamReader extends BaseTransformer<OMElement, XMLStreamReader> implements PullTransformer<OMElement, XMLStreamReader> {
+/**
+ *
+ * @version $Rev$ $Date$
+ */
+public class OMElement2XMLStreamReader extends BaseTransformer<OMElement, XMLStreamReader> implements
+    PullTransformer<OMElement, XMLStreamReader> {
     // private XmlOptions options;
-    
+
+    public static final QName QNAME_NIL = new QName("http://www.w3.org/2001/XMLSchema-instance", "nil");
+
     public XMLStreamReader transform(OMElement source, TransformationContext context) {
-        return source.getXMLStreamReader();
+        if (source == null) {
+            return null;
+        } else {
+            if ("true".equals(source.getAttributeValue(QNAME_NIL))) {
+                return null;
+            } else {
+                return source.getXMLStreamReader();
+            }
+        }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<OMElement> getSourceType() {
         return OMElement.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<XMLStreamReader> getTargetType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 10;
     }

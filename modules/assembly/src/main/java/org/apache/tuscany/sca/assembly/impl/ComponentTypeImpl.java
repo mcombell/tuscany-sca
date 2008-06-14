@@ -26,53 +26,47 @@ import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.assembly.Visitor;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
-/**
+/** 
  * Represents a component type.
  * 
  * @version $Rev$ $Date$
  */
-public class ComponentTypeImpl extends BaseImpl implements ComponentType, Cloneable {
+public class ComponentTypeImpl extends ExtensibleImpl implements ComponentType, Cloneable {
     private String uri;
     private ConstrainingType constrainingType;
     private List<Property> properties = new ArrayList<Property>();
     private List<Reference> references = new ArrayList<Reference>();
     private List<Service> services = new ArrayList<Service>();
-    private List<Intent> requiredIntents = new ArrayList<Intent>();
-    private List<PolicySet> policySets = new ArrayList<PolicySet>();
-    
     /**
      * Constructs a new component type.
      */
     protected ComponentTypeImpl() {
     }
-    
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         ComponentTypeImpl clone = (ComponentTypeImpl)super.clone();
-        
+
         clone.services = new ArrayList<Service>();
-        for (Service service: getServices()) {
+        for (Service service : getServices()) {
             clone.services.add((Service)service.clone());
         }
         clone.references = new ArrayList<Reference>();
-        for (Reference reference: getReferences()) {
+        for (Reference reference : getReferences()) {
             clone.references.add((Reference)reference.clone());
         }
         clone.properties = new ArrayList<Property>();
-        for (Property property: getProperties()) {
+        for (Property property : getProperties()) {
             clone.properties.add((Property)property.clone());
         }
         return clone;
     }
-    
+
     public String getURI() {
         return uri;
     }
-    
+
     public void setURI(String uri) {
         this.uri = uri;
     }
@@ -97,41 +91,11 @@ public class ComponentTypeImpl extends BaseImpl implements ComponentType, Clonea
         this.constrainingType = constrainingType;
     }
 
-    public List<Intent> getRequiredIntents() {
-        return requiredIntents;
-    }
-
-    public List<PolicySet> getPolicySets() {
-        return policySets;
-    }
-
-    public boolean accept(Visitor visitor) {
-        if (!super.accept(visitor)) {
-            return false;
-        }
-        for (Property property : properties) {
-            if (!visitor.visit(property)) {
-                return false;
-            }
-        }
-        for (Reference reference : references) {
-            if (!visitor.visit(reference)) {
-                return false;
-            }
-        }
-        for (Service service : services) {
-            if (!visitor.visit(service)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     public int hashCode() {
         return String.valueOf(getURI()).hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

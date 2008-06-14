@@ -19,13 +19,12 @@
 package org.apache.tuscany.sca.databinding.xml;
 
 
-import java.lang.annotation.Annotation;
-
 import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.databinding.WrapperHandler;
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.w3c.dom.Node;
 
@@ -50,18 +49,22 @@ public class DOMDataBinding extends BaseDataBinding {
         return new DOMWrapperHandler();
     }
 
-    public Object copy(Object source) {
+    @Override
+    public Object copy(Object source, DataType dataType, Operation operation) {
         if (Node.class.isAssignableFrom(source.getClass())) {
-            Node nodeSource = (Node) source;
+            Node nodeSource = (Node)source;
             return nodeSource.cloneNode(true);
         }
-        return super.copy(source);
+        return super.copy(source, dataType, operation);
     }
 
     @Override
-    public boolean introspect(DataType type, Annotation[] annotations) {
-        if(Node.class.isAssignableFrom(type.getPhysical())) {
-            type.setLogical(new XMLType(ROOT_ELEMENT, null));
+    public boolean introspect(DataType type, Operation operation) {
+        if (Node.class.isAssignableFrom(type.getPhysical())) {
+            if (type.getLogical() == null) {
+                type.setLogical(new XMLType(ROOT_ELEMENT, null));
+            }
+            type.setDataBinding(NAME);
             return true;
         }
         return false;

@@ -22,15 +22,11 @@ binding-echo-extension/
       java/
         echo/                    - The binding interfaces
           impl/                  - The bindings model classes
-          module/                - The activator that loads the binding into the 
-                                   SCA runtime
           provider/              - The bindings runtime classes
           server/                - A dummy server that the binding is plugged into
       resources/
         META-INF/
-          services/
-            org.apache.sca.tuscany.sca.core.ModuleActivator - specifies the
-                                 module activation class to call
+          services/              - The extension declaration
     test/
       java/
         echo/                    - test code
@@ -63,15 +59,16 @@ the following output from the test phase.
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running echo.EchoReferenceTestCase
-Returned message: foo
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.111 sec
 Running echo.EchoServiceTestCase
-Returned message: foo
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.121 sec
+Returned message: oof
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.011 sec
+Running echo.EchoReferenceTestCase
+Returned message: oof
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.06 sec
 
 Results :
 
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 
+    
 
 This shows that the Junit test cases have run successfully. 

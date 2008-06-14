@@ -25,8 +25,8 @@ import org.apache.tuscany.sca.databinding.PullTransformer;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
-import org.apache.tuscany.sdo.api.XMLStreamHelper;
 import org.apache.tuscany.sdo.api.SDOUtil;
+import org.apache.tuscany.sdo.api.XMLStreamHelper;
 
 import commonj.sdo.helper.HelperContext;
 import commonj.sdo.helper.XMLDocument;
@@ -39,23 +39,29 @@ public class XMLDocument2XMLStreamReader extends BaseTransformer<XMLDocument, XM
      * @return
      */
     public XMLStreamReader transform(XMLDocument source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
-            XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext.getTypeHelper());
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, true);
+            XMLStreamHelper streamHelper = SDOUtil.createXMLStreamHelper(helperContext);
             return streamHelper.createXMLStreamReader(source);
         } catch (XMLStreamException e) {
             throw new TransformationException(e);
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLDocument> getSourceType() {
         return XMLDocument.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<XMLStreamReader> getTargetType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 10;
     }

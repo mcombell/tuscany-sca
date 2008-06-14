@@ -22,7 +22,6 @@ package org.apache.tuscany.sca.binding.ws.xml;
 import java.io.InputStream;
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
@@ -30,24 +29,21 @@ import junit.framework.TestCase;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
-import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.binding.ws.DefaultWebServiceBindingFactory;
-import org.apache.tuscany.sca.binding.ws.WebServiceBindingFactory;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.service.ContributionReadException;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.interfacedef.wsdl.DefaultWSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.WSDLFactory;
-import org.apache.tuscany.sca.interfacedef.wsdl.introspect.DefaultWSDLInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.wsdl.introspect.WSDLInterfaceIntrospector;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 
 /**
  * Test reading WSDL interfaces.
@@ -56,66 +52,76 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  */
 public class ReadTestCase extends TestCase {
 
-    XMLInputFactory inputFactory;
-    DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
-    ExtensibleStAXArtifactProcessor staxProcessor;
-    private AssemblyFactory assemblyFactory;
-    private SCABindingFactory scaBindingFactory;
-    private PolicyFactory policyFactory;
-    private InterfaceContractMapper mapper;
-    private WebServiceBindingFactory wsFactory;
-    private WSDLInterfaceIntrospector introspector;
-    private WSDLFactory wsdlFactory;
+    private XMLInputFactory inputFactory;
+    private StAXArtifactProcessor<Object> staxProcessor;
+    private CompositeBuilder compositeBuilder;
 
+    @Override
     public void setUp() throws Exception {
-        assemblyFactory = new DefaultAssemblyFactory();
-        scaBindingFactory = new DefaultSCABindingFactory();
-        policyFactory = new DefaultPolicyFactory();
-        mapper = new InterfaceContractMapperImpl();
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
         inputFactory = XMLInputFactory.newInstance();
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        wsFactory = new DefaultWebServiceBindingFactory();
-        wsdlFactory = new DefaultWSDLFactory();
+        StAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(extensionPoints);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, null, null);
         
-        introspector = new DefaultWSDLInterfaceIntrospector(wsdlFactory);
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        SCABindingFactory scaBindingFactory = modelFactories.getFactory(SCABindingFactory.class);
 
-        WebServiceBindingProcessor wsdlProcessor = new WebServiceBindingProcessor(
-                                                                                  assemblyFactory, policyFactory, wsFactory,
-                                                                                  wsdlFactory, introspector);
-        staxProcessors.addArtifactProcessor(wsdlProcessor);
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        
+        IntentAttachPointTypeFactory attachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
+        compositeBuilder = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, attachPointTypeFactory, mapper, null);
     }
 
+    @Override
     public void tearDown() throws Exception {
-        inputFactory = null;
-        staxProcessors = null;
-        staxProcessor = null;
-        policyFactory = null;
-        assemblyFactory = null;
-        mapper = null;
     }
 
     public void testReadComponentType() throws Exception {
-        ComponentTypeProcessor componentTypeProcessor = new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor);
         InputStream is = getClass().getResourceAsStream("CalculatorImpl.componentType");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        ComponentType componentType = componentTypeProcessor.read(reader);
+        ComponentType componentType = (ComponentType)staxProcessor.read(reader);
         assertNotNull(componentType);
-
-        //new PrintUtil(System.out).print(componentType);
     }
 
     public void testReadComposite() throws Exception {
-        CompositeProcessor compositeProcessor = new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor);
         InputStream is = getClass().getResourceAsStream("Calculator.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        Composite composite = compositeProcessor.read(reader);
+        Composite composite = (Composite)staxProcessor.read(reader);
         assertNotNull(composite);
 
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null);
-        compositeUtil.build(composite);
+        compositeBuilder.build(composite);
+    }
+    
+    public void testReadPolicies() throws Exception {
+        InputStream is = getClass().getResourceAsStream("PoliciedCalculator.composite");
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+        Composite composite = (Composite)staxProcessor.read(reader);
+        assertNotNull(composite);
 
-        //new PrintUtil(System.out).print(composite);
+        compositeBuilder.build(composite);
+
+        assertEquals(((OperationsConfigurator)composite.getServices().get(0).getBindings().get(0))
+            .getConfiguredOperations().get(0).getRequiredIntents().size(), 2);
     }
 
+    /**
+     * This test makes sure that an exception is thrown when a bad wsdlElement is present along with EndpointReference.
+     *
+     * Ref: Web Service Binding Specification v1.0 - Sec 2.1 - Lines 61 to 65.
+     * When an EndpointReference is present along with the wsdlElement attribute on the parent element, the wsdlElement attribute value MUST
+     * be of the 'Binding' form.
+     */
+    public void testReadBadWsdlElement() throws Exception {
+        InputStream is = getClass().getResourceAsStream("Calculator-bad-wsdlElement.composite");
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+        try {
+            staxProcessor.read(reader);
+            fail("ContributionReadException expected.");
+        } catch(ContributionReadException e) {
+            // Expected
+            assertNotSame(-1, e.getMessage().indexOf("must use wsdl.binding when using wsa:EndpointReference"));
+        }
+    }
 }

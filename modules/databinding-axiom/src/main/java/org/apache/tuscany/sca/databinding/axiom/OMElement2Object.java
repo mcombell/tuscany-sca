@@ -22,15 +22,28 @@ import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.databinding.impl.SimpleType2JavaTransformer;
 
 /**
- * Transformer to convert data from a simple java bject to OMElement
+ * Transformer to convert data from a simple java Object to OMElement.
+ *
+ * @version $Rev$ $Date$
  */
 public class OMElement2Object extends SimpleType2JavaTransformer<OMElement> {
+
+    /**
+     * @see org.apache.tuscany.sca.databinding.impl.SimpleType2JavaTransformer#close(java.lang.Object)
+     */
+    @Override
+    protected void close(OMElement source) {
+        if (source != null) {
+            AxiomHelper.completeAndClose(source);
+        }
+    }
 
     @Override
     protected String getText(OMElement source) {
         return source.getText();
     }
 
+    @Override
     public Class getSourceType() {
         return OMElement.class;
     }

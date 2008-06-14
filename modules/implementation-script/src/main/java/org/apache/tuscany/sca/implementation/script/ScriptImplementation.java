@@ -18,15 +18,24 @@
  */
 package org.apache.tuscany.sca.implementation.script;
 
-import org.apache.tuscany.sca.spi.utils.DynamicImplementation;
-import org.apache.tuscany.sca.spi.utils.ResourceHelper;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.tuscany.sca.contribution.Artifact;
+import org.apache.tuscany.sca.contribution.ContributionFactory;
+import org.apache.tuscany.sca.contribution.DefaultContributionFactory;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.extension.helper.utils.ResourceHelper;
 
 /**
  * Represents a Script implementation.
+ *
+ * @version $Rev$ $Date$
  */
 public class ScriptImplementation {
 
     protected String scriptName;
+    protected URL scriptURL;
     protected String scriptSrc;
     protected String scriptLanguage;
 
@@ -61,10 +70,30 @@ public class ScriptImplementation {
             if (scriptName == null) {
                 throw new IllegalArgumentException("script name is null and no inline source used");
             }
+            if (scriptURL == null) {
+                throw new RuntimeException("No script: " + scriptName);
+            }
 
-            // TODO: how should resources be read? Soould this use the contrabution sevrice?
-            scriptSrc = ResourceHelper.readResource(scriptName);
+            scriptSrc = ResourceHelper.readResource(scriptURL);
         }
         return scriptSrc;
+    }
+    
+    public void resolve(ModelResolver resolver) {
+    	
+    	if (scriptName != null) {
+    	    //FIXME The contribution factory should be injected
+    	    ContributionFactory contributionFactory = new DefaultContributionFactory();
+            Artifact artifact = contributionFactory.createArtifact();
+            artifact.setURI(scriptName);
+            artifact = resolver.resolveModel(Artifact.class, artifact);
+            if (artifact.getLocation() != null) {
+                try {
+                    scriptURL = new URL(artifact.getLocation());
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+    	}
     }
 }

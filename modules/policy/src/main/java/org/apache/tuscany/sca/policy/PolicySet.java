@@ -19,14 +19,16 @@
 package org.apache.tuscany.sca.policy;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
-
-import org.apache.tuscany.sca.interfacedef.Operation;
+import javax.xml.xpath.XPathExpression;
 
 /**
  * Represents a policy set. See the Policy Framework specification for a
  * description of this element.
+ *
+ * @version $Rev$ $Date$
  */
 public interface PolicySet {
 
@@ -49,8 +51,7 @@ public interface PolicySet {
      * 
      * @return
      */
-    List<Operation> getOperations();
-
+    //List<Operation> getOperations();
     /**
      * Returns the list of
      * 
@@ -64,15 +65,6 @@ public interface PolicySet {
      * @return
      */
     List<Intent> getProvidedIntents();
-
-    /**
-     * Returns the list of SCA constructs that this policy set is meant to
-     * configure.
-     * 
-     * @return the list of SCA constructs that this policy set is meant to
-     *         configure
-     */
-    List<QName> getAppliesTo();
 
     /**
      * Returns the list of concrete policies, either WS-Policy policy
@@ -96,5 +88,68 @@ public interface PolicySet {
      * @param unresolved whether the model element is unresolved
      */
     void setUnresolved(boolean unresolved);
+
+    /**
+     * Returns the XPath expression that is to be used to evaluate
+     * if this PolicySet applies to specific attachment point
+     * 
+     * @return the XPath expression
+     */
+    String getAppliesTo();
+
+    /**
+     * Sets the XPath expression that is to be used to evaluate
+     * if this PolicySet applies to specific attachment point
+     * 
+     */
+    void setAppliesTo(String xpath);
+
+    /**
+     * Returns the policies / policy attachments provided thro intent maps
+     * 
+     * @return
+     */
+    Map<Intent, List<Object>> getMappedPolicies();
+
+    /**
+     * Gets the XPath expression that is to be used to evaluate
+     * the SCA Artifacts that this policyset will always apply to
+     * immaterial of an intent declared on the SCA Artifact
+     * 
+     * @return the XPath expression
+     */
+    String getAlwaysAppliesTo();
+
+    /**
+     * Sets the XPath expression that is to be used to evaluate
+     * the SCA Artifacts that this policyset will always apply to
+     * immaterial of an intent declared on the SCA Artifact
+     * 
+     */
+    void setAlwaysAppliesTo(String xpath);
+
+    /**
+     * Get the XPath expression for the appliesTo attribute
+     * @return the XPath expression for the appliesTo attribute
+     */
+    XPathExpression getAppliesToXPathExpression();
+
+    /**
+     * Set the XPath expression for the appliesTo attribute
+     * @param xpathExpression the XPath expression for the appliesTo attribute
+     */
+    void setAppliesToXPathExpression(XPathExpression xpathExpression);
+
+    /**
+     * Get the XPath expression for the alwaysAppliesTo attribute
+     * @return the XPath expression for the alwaysAppliesTo attribute
+     */
+    XPathExpression getAlwaysAppliesToXPathExpression();
+
+    /**
+     * Set the XPath expression for the alwaysAppliesTo attribute
+     * @param xpathExpression the XPath expression for the alwaysAppliesTo attribute
+     */
+    void setAlwaysAppliesToXPathExpression(XPathExpression xpathExpression);
 
 }

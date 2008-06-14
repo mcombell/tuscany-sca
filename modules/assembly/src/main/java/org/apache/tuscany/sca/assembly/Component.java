@@ -20,7 +20,6 @@ package org.apache.tuscany.sca.assembly;
 
 import java.util.List;
 
-import org.apache.tuscany.sca.policy.IntentAttachPoint;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
@@ -29,7 +28,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * 
  * @version $Rev$ $Date$
  */
-public interface Component extends Base, IntentAttachPoint, PolicySetAttachPoint, Visitable {
+public interface Component extends Base, Extensible, PolicySetAttachPoint, Cloneable {
     
     /**
      * Returns the URI of the component.
@@ -109,18 +108,18 @@ public interface Component extends Base, IntentAttachPoint, PolicySetAttachPoint
     void setConstrainingType(ConstrainingType constrainingType);
 
     /**
-     * Returns true if the component references should be autowired.
-     * 
-     * @return whether component references should be autowired.
+     * Return the Boolean value of autowire
+     * @return null/TRUE/FALSE
      */
-    boolean isAutowire();
+    Boolean getAutowire();
 
     /**
      * Sets whether component references should be autowired.
      * 
      * @param autowire whether component references should be autowired
      */
-    void setAutowire(boolean autowire);
+    void setAutowire(Boolean autowire);
+    
 
     /**
      * Returns a clone of the component.

@@ -20,8 +20,8 @@ package org.apache.tuscany.sca.core.invocation;
 
 import java.util.List;
 
-import org.apache.tuscany.sca.factory.ObjectCreationException;
-import org.apache.tuscany.sca.factory.ObjectFactory;
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
@@ -29,19 +29,19 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
  *
  * @version $Rev$ $Date$
  */
-public class CallbackWireObjectFactory implements ObjectFactory {
+public class CallbackWireObjectFactory<B> implements ObjectFactory<B> {
+    private Class<B> businessInterface;
     private ProxyFactory proxyFactory;
-    private Class<?> interfaze;
     private List<RuntimeWire> wires;
 
-    public CallbackWireObjectFactory(Class<?> interfaze, ProxyFactory proxyService, List<RuntimeWire> wires) {
-        this.interfaze = interfaze;
-        this.proxyFactory = proxyService;
+    public CallbackWireObjectFactory(Class<B> interfaze, ProxyFactory proxyFactory, List<RuntimeWire> wires) {
+        this.businessInterface = interfaze;
+        this.proxyFactory = proxyFactory;
         this.wires = wires;
     }
 
-    public Object getInstance() throws ObjectCreationException {
-        return proxyFactory.createCallbackProxy(interfaze, wires);
+    public B getInstance() throws ObjectCreationException {
+        return proxyFactory.createCallbackProxy(businessInterface, wires);
     }
 
 }

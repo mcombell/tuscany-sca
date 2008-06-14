@@ -20,20 +20,25 @@
 package org.apache.tuscany.sca.databinding.xmlbeans;
 
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.xmlbeans.XmlObject;
 
 /**
  * XMLBeans DataBinding
+ *
+ * @version $Rev$ $Date$
  */
 public class XMLBeansDataBinding extends BaseDataBinding {
     public static final String NAME = XmlObject.class.getName();
+    public static final String[] ALIASES = { "xmlbeans" };
     
     public XMLBeansDataBinding() {
         super(NAME, XmlObject.class);
     }
 
     @Override
-    public Object copy(Object object) {
+    public Object copy(Object object, DataType dataType, Operation operation) {
         return ((XmlObject) object).copy();
     }
 

@@ -37,6 +37,7 @@ public class TransformationContextImpl implements TransformationContext {
 
     public TransformationContextImpl() {
         super();
+        // This is used only for testing
         setClassLoader(Thread.currentThread().getContextClassLoader());
     }
 

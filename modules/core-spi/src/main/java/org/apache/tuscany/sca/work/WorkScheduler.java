@@ -19,16 +19,17 @@
 package org.apache.tuscany.sca.work;
 
 /**
- * Defines the contract for scheduling asychronous units of work.
+ * Defines the contract for scheduling asynchronous units of work.
  * 
  * <p>
  * Units of work can be scheduled with an optional <code>NotificationListener</code>.
  * If a notification listener is specified, the caller will be notified regarding the 
  * status of the work. The unit of work can either be completed, rejected or completed 
- * with an error. If the work completed with an error, the caller is notfied with the 
+ * with an error. If the work completed with an error, the caller is notified with the 
  * error details.
  * </p>
  *
+ * @version $Rev$ $Date$
  */
 public interface WorkScheduler {
     
@@ -48,5 +49,10 @@ public interface WorkScheduler {
      * @param work The unit of work that needs to be asynchronously executed.
      */
     <T extends Runnable>void scheduleWork(T work);
+
+    /**
+     * Destroys the work scheduler
+     */
+    void destroy();
 
 }

@@ -31,14 +31,13 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.CompositeService;
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
-import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.Wire;
-import org.apache.tuscany.sca.interfacedef.Operation;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 
 /**
@@ -48,88 +47,88 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
  *  @version $Rev$ $Date$
  */
 public class BeanAssemblyFactory implements AssemblyFactory {
-	
-	private AssemblyFactory defaultFactory;
-	private BeanDefinitionRegistry beanRegistry;
-	
-	public BeanAssemblyFactory(AssemblyFactory defaultFactory, BeanDefinitionRegistry beanRegistry) {
-		this.defaultFactory = defaultFactory;
-		this.beanRegistry = beanRegistry;
-	}
+    private AssemblyFactory defaultFactory;
+    private BeanDefinitionRegistry beanRegistry;
 
-        public BeanAssemblyFactory(BeanDefinitionRegistry beanRegistry) {
-            this(new DefaultAssemblyFactory(), beanRegistry);
-        }
+    public BeanAssemblyFactory(AssemblyFactory defaultFactory, BeanDefinitionRegistry beanRegistry) {
+        this.defaultFactory = defaultFactory;
+        this.beanRegistry = beanRegistry;
+    }
 
-	public AbstractProperty createAbstractProperty() {
-		return defaultFactory.createAbstractProperty();
-	}
+    public BeanAssemblyFactory(BeanDefinitionRegistry beanRegistry) {
+        this(new DefaultAssemblyFactory(), beanRegistry);
+    }
 
-	public AbstractReference createAbstractReference() {
-		return defaultFactory.createAbstractReference();
-	}
+    public AbstractProperty createAbstractProperty() {
+        return defaultFactory.createAbstractProperty();
+    }
 
-	public AbstractService createAbstractService() {
-		return defaultFactory.createAbstractService();
-	}
+    public AbstractReference createAbstractReference() {
+        return defaultFactory.createAbstractReference();
+    }
 
-	public Callback createCallback() {
-		return defaultFactory.createCallback();
-	}
+    public AbstractService createAbstractService() {
+        return defaultFactory.createAbstractService();
+    }
 
-	public Component createComponent() {
-		return new BeanComponentImpl(beanRegistry);
-	}
+    public Callback createCallback() {
+        return defaultFactory.createCallback();
+    }
 
-	public ComponentProperty createComponentProperty() {
-		return defaultFactory.createComponentProperty();
-	}
+    public Component createComponent() {
+        return new BeanComponentImpl(beanRegistry);
+    }
 
-	public ComponentReference createComponentReference() {
-		return defaultFactory.createComponentReference();
-	}
+    public ComponentProperty createComponentProperty() {
+        return defaultFactory.createComponentProperty();
+    }
 
-	public ComponentService createComponentService() {
-		return defaultFactory.createComponentService();
-	}
+    public ComponentReference createComponentReference() {
+        return defaultFactory.createComponentReference();
+    }
 
-	public ComponentType createComponentType() {
-		return defaultFactory.createComponentType();
-	}
+    public ComponentService createComponentService() {
+        return defaultFactory.createComponentService();
+    }
 
-	public Composite createComposite() {
-		return defaultFactory.createComposite();
-	}
+    public ComponentType createComponentType() {
+        return defaultFactory.createComponentType();
+    }
 
-	public CompositeReference createCompositeReference() {
-		return defaultFactory.createCompositeReference();
-	}
+    public Composite createComposite() {
+        return defaultFactory.createComposite();
+    }
 
-	public CompositeService createCompositeService() {
-		return defaultFactory.createCompositeService();
-	}
+    public CompositeReference createCompositeReference() {
+        return defaultFactory.createCompositeReference();
+    }
 
-	public ConstrainingType createConstrainingType() {
-		return defaultFactory.createConstrainingType();
-	}
+    public CompositeService createCompositeService() {
+        return defaultFactory.createCompositeService();
+    }
 
-	public Property createProperty() {
-		return defaultFactory.createProperty();
-	}
+    public ConstrainingType createConstrainingType() {
+        return defaultFactory.createConstrainingType();
+    }
 
-	public Reference createReference() {
-		return defaultFactory.createReference();
-	}
+    public Property createProperty() {
+        return defaultFactory.createProperty();
+    }
 
-	public Service createService() {
-		return defaultFactory.createService();
-	}
+    public Reference createReference() {
+        return defaultFactory.createReference();
+    }
 
-	public Wire createWire() {
-		return defaultFactory.createWire();
-	}
+    public Service createService() {
+        return defaultFactory.createService();
+    }
 
-	public Operation createOperation() {
-		return defaultFactory.createOperation();
-	}
+    public Wire createWire() {
+        return defaultFactory.createWire();
+    }
+
+    public ConfiguredOperation createConfiguredOperation() {
+        return defaultFactory.createConfiguredOperation();
+    }
+    
 }

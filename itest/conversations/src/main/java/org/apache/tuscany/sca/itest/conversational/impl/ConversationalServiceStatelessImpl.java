@@ -21,20 +21,11 @@ package org.apache.tuscany.sca.itest.conversational.impl;
 import java.util.HashMap;
 
 import org.apache.tuscany.sca.itest.conversational.ConversationalCallback;
-import org.apache.tuscany.sca.itest.conversational.ConversationalClient;
 import org.apache.tuscany.sca.itest.conversational.ConversationalService;
-import org.osoa.sca.ComponentContext;
-import org.osoa.sca.Conversation;
-import org.osoa.sca.ServiceReference;
 import org.osoa.sca.annotations.Callback;
-import org.osoa.sca.annotations.Context;
-import org.osoa.sca.annotations.ConversationAttributes;
 import org.osoa.sca.annotations.ConversationID;
-import org.osoa.sca.annotations.Conversational;
 import org.osoa.sca.annotations.Destroy;
-import org.osoa.sca.annotations.EndsConversation;
 import org.osoa.sca.annotations.Init;
-import org.osoa.sca.annotations.Remotable;
 import org.osoa.sca.annotations.Scope;
 import org.osoa.sca.annotations.Service;
 
@@ -45,6 +36,7 @@ import org.osoa.sca.annotations.Service;
  * @version $Rev: 537240 $ $Date: 2007-05-11 18:35:03 +0100 (Fri, 11 May 2007) $
  */
 @Service(ConversationalService.class)
+@Scope("STATELESS")
 public class ConversationalServiceStatelessImpl implements ConversationalService {
     
     @ConversationID
@@ -84,8 +76,17 @@ public class ConversationalServiceStatelessImpl implements ConversationalService
     
     public int retrieveCount(){
         calls.append("retrieveCount,");
-        return conversationalState.get(conversationId).intValue();
+        Integer count = conversationalState.get(conversationId);
+        if (count != null){
+            return count.intValue();
+        } else {
+            return -999;
+        }
     }
+    
+    public void businessException() throws Exception {
+        throw new Exception("Business Exception");
+    }    
     
     public void initializeCountCallback(int count){
         calls.append("initializeCountCallback,");
@@ -104,13 +105,19 @@ public class ConversationalServiceStatelessImpl implements ConversationalService
         return conversationalCallback.retrieveCount();
     }
     
-    public void endConversation(){
-        calls.append("endConversation,");
-        conversationalState.remove(conversationId);
+    public void businessExceptionCallback() throws Exception {
+        calls.append("businessExceptionCallback,");        
+        conversationalCallback.businessException();
     }
     
-    public void endConversationCallback(){
+    public String endConversation(){
+        calls.append("endConversation,");
+        conversationalState.remove(conversationId);
+        return conversationId;
+    }
+    
+    public String endConversationCallback(){
         calls.append("endConversationCallback,");       
-        conversationalCallback.endConversation();
+        return conversationalCallback.endConversation();
     }   
 }

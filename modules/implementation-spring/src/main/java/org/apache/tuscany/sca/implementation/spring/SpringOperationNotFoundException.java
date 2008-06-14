@@ -18,13 +18,23 @@
  */
 package org.apache.tuscany.sca.implementation.spring;
 
+/**
+ * @version $Rev$ $Date$
+ */
 public class SpringOperationNotFoundException extends Exception {
-	
-    private static final long serialVersionUID = -1157790036638157554L;
-	
-	public SpringOperationNotFoundException( String msg ) {
-		super( msg );
-	}
 
+    private static final long serialVersionUID = -1157790036638157554L;
+
+    public SpringOperationNotFoundException(String msg) {
+        super(msg);
+    }
+    
+    public SpringOperationNotFoundException(Throwable e) {
+        super(e);
+    }
+    
+    public SpringOperationNotFoundException(String msg,Throwable e) {
+        super(msg,e);
+    }
 
 }

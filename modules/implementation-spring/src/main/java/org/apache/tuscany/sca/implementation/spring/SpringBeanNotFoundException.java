@@ -18,12 +18,22 @@
  */
 package org.apache.tuscany.sca.implementation.spring;
 
+/**
+ * @version $Rev$ $Date$
+ */
 public class SpringBeanNotFoundException extends Exception {
 
     private static final long serialVersionUID = -1157790036638157553L;
-	
-	public SpringBeanNotFoundException( String msg ) {
-		super( msg );
-	}
 
+    public SpringBeanNotFoundException(String msg) {
+        super(msg);
+    }
+    
+    public SpringBeanNotFoundException(Throwable e) {
+        super(e);
+    }
+    
+    public SpringBeanNotFoundException(String msg, Throwable e) {
+        super(msg,e);
+    }
 }

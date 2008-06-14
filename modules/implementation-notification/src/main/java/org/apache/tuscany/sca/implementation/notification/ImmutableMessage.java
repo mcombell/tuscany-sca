@@ -18,7 +18,8 @@
  */
 package org.apache.tuscany.sca.implementation.notification;
 
-import org.apache.tuscany.sca.interfacedef.ConversationSequence;
+import java.util.Map;
+
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.EndpointReference;
@@ -30,18 +31,6 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 public class ImmutableMessage implements Message {
 
     public <T> T getBody() {
-        return null;
-    }
-
-    public String getConversationID() {
-        return null;
-    }
-
-    public ConversationSequence getConversationSequence() {
-        return null;
-    }
-
-    public Object getCorrelationID() {
         return null;
     }
 
@@ -66,30 +55,23 @@ public class ImmutableMessage implements Message {
     }
 
     public <T> void setBody(T arg0) {
-    }
-
-    public void setConversationID(String arg0) {
-    }
-
-    public void setConversationSequence(ConversationSequence arg0) {
-    }
-
-    public void setCorrelationID(Object arg0) {
+        throw new UnsupportedOperationException();
     }
 
     public <T> void setFaultBody(T arg0) {
+        throw new UnsupportedOperationException();
     }
 
     public void setFrom(EndpointReference arg0) {
+        throw new UnsupportedOperationException();
     }
 
     public void setMessageID(Object arg0) {
+        throw new UnsupportedOperationException();
     }
 
     public void setTo(EndpointReference arg0) {
-    }
-
-    public void setWire(RuntimeWire arg0) {
+        throw new UnsupportedOperationException();
     }
 
     public Operation getOperation() {
@@ -97,5 +79,19 @@ public class ImmutableMessage implements Message {
     }
 
     public void setOperation(Operation op) {
+        throw new UnsupportedOperationException();
     }
+
+    /**
+     * @see org.apache.tuscany.sca.invocation.Message#getReplyTo()
+     */
+    public EndpointReference getReplyTo() {
+        return null;
+    }
+
+    public Map<String, Object> getQoSContext() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

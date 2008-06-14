@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.assembly.Composite;
 public interface CompositeBuilder {
     
     /**
-     * Build, configure and wire a composite.
+     * Build a composite.
      * 
      * @param composite
      * @throws CompositeBuilderException

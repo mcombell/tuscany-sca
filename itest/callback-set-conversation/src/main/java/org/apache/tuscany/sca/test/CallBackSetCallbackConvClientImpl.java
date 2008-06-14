@@ -20,8 +20,9 @@ package org.apache.tuscany.sca.test;
 
 import junit.framework.Assert;
 
-import org.osoa.sca.NoRegisteredCallbackException;
+import org.osoa.sca.ComponentContext;
 import org.osoa.sca.ServiceReference;
+import org.osoa.sca.annotations.Context;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Scope;
 import org.osoa.sca.annotations.Service;
@@ -30,10 +31,13 @@ import org.osoa.sca.annotations.Service;
 @Scope("CONVERSATION")
 public class CallBackSetCallbackConvClientImpl implements CallBackSetCallbackConvClient {
 
+    @Context
+    protected ComponentContext componentContext;
+
     @Reference
     protected CallBackSetCallbackConvService aCallBackService;
+
     private CallBackSetCallbackConvObjectCallback aCallbackObject = null;
-    private Object monitor = new Object();
 
     public void run() {
 
@@ -56,7 +60,7 @@ public class CallBackSetCallbackConvClientImpl implements CallBackSetCallbackCon
 
         /*
          * test9 The client calls setCallback() with an object that is not
-         * serializable. Verify an appropriate exception is thrown. This
+         * Serializable. Verify an appropriate exception is thrown. This
          * requires a STATEFUL callback interface. Move from the stateless test
          * case.
          */
@@ -70,30 +74,17 @@ public class CallBackSetCallbackConvClientImpl implements CallBackSetCallbackCon
         //
         // This test is to specify an Object that is not a service reference
         // that does implement
-        // the callback interface and is Serializeable. Verify successful
+        // the callback interface and is Serializable. Verify successful
         // execution.
         //	
 
         aCallbackObject = new CallBackSetCallbackConvObjectCallback();
         aCallbackObject.incrementCallBackCount();
-        aCallbackObject.setMonitor(monitor);
 
-        ((ServiceReference)aCallBackService).setCallback(aCallbackObject);
-        aCallBackService.knockKnock("Knock Knock");
-
-        // Lets give the callback a little time to complete....
-
-        int count = 0;
-
-        synchronized (monitor) {
-            while (aCallbackObject.getCount() != 2 && count++ < 30) {
-                try {
-                    monitor.wait(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        ServiceReference<CallBackSetCallbackConvService> aCallBackServiceRef
+                = componentContext.cast(aCallBackService);
+        aCallBackServiceRef.setCallback(aCallbackObject);
+        aCallBackService.knockKnock("Knock Knock 7");
 
         Assert.assertEquals("CallBackSetCallbackConv - Test7", 2, aCallbackObject.getCount());
 
@@ -105,25 +96,25 @@ public class CallBackSetCallbackConvClientImpl implements CallBackSetCallbackCon
 
         //
         // This test is to specify an Object that is not a service reference
-        // that does not impliment
+        // that does not implement
         // the callback interface. The expected result is an appropriate
         // exception.
         //
 
         try {
-            ((ServiceReference)aCallBackService).setCallback(new CallBackSetCallbackConvBadCallback());
-            aCallBackService.knockKnock("Knock Knock");
+            ServiceReference<CallBackSetCallbackConvService> aCallBackServiceRef
+                    = componentContext.cast(aCallBackService);
+            aCallBackServiceRef.setCallback(new CallBackSetCallbackConvBadCallback());
+            aCallBackService.knockKnock("Knock Knock 8");
         }
 
         //
         // This should catch an appropriate exception.
         // 
 
-        catch (NoRegisteredCallbackException NotRegEx) // This needs to be
-                                                        // changed to proper
-                                                        // exception once we
-                                                        // know what it is ;-)
+        catch (IllegalArgumentException goodEx)
         {
+            System.out.println("correct exception " + goodEx);
             correctException = true;
         }
 
@@ -142,25 +133,24 @@ public class CallBackSetCallbackConvClientImpl implements CallBackSetCallbackCon
 
         //
         // This test is to specify an Object that is not a service reference
-        // that does impliment
-        // the callback interface but does not implement Serializeable. Verify
+        // that does implement
+        // the callback interface but does not implement Serializable. Verify
         // an appropriate exception
         // is thrown.
         //
 
         try {
-            ((ServiceReference)aCallBackService).setCallback(new CallBackSetCallbackConvNonSerCallback());
-            aCallBackService.knockKnock("Knock Knock");
+            ServiceReference<CallBackSetCallbackConvService> aCallBackServiceRef
+                    = componentContext.cast(aCallBackService);
+            aCallBackServiceRef.setCallback(new CallBackSetCallbackConvNonSerCallback());
+            aCallBackService.knockKnock("Knock Knock 9");
         }
         //
         // This should catch an appropriate exception.
         //
-        catch (NoRegisteredCallbackException NotRegEx) // This needs to be
-                                                        // changed to
-                                                        // appropriate exception
-                                                        // when we know what it
-                                                        // is ;-)
+        catch (IllegalArgumentException goodEx)
         {
+            System.out.println("correct exception " + goodEx);
             correctException = true;
         } catch (Exception ex) {
             ex.printStackTrace();

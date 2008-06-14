@@ -29,29 +29,22 @@ import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
-import org.apache.tuscany.sca.assembly.SCABindingFactory;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 
+/**
+ * Test the CompositeBuilder.
+ *
+ * @version $Rev$ $Date$
+ */
 public class CompositeBuilderTestCase extends TestCase {
     
-    private CompositeBuilderImpl compositeUtil;
     private AssemblyFactory assemblyFactory;
-    private SCABindingFactory scaBindingFactory;
     
+    @Override
     protected void setUp() throws Exception {
         assemblyFactory = new DefaultAssemblyFactory();
-        scaBindingFactory = new DefaultSCABindingFactory();
-        
-        compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, new InterfaceContractMapperImpl(), null);
     }
     
-    protected void tearDown() throws Exception {
-        compositeUtil = null;
-        assemblyFactory = null;
-    }
-    
-    public void testFuseIncludes() {
+    public void testFuseIncludes() throws Exception {
         Composite c1 = assemblyFactory.createComposite();
         c1.setName(new QName("http://foo", "C1"));
         Component a = assemblyFactory.createComponent();
@@ -75,7 +68,7 @@ public class CompositeBuilderTestCase extends TestCase {
         c.setName(new QName("http://foo", "C"));
         c.getIncludes().add(c1);
         
-        compositeUtil.fuseIncludes(c);
+        new CompositeIncludeBuilderImpl(null).build(c);
         
         assertTrue(c.getComponents().get(0).getName().equals("a"));
         assertTrue(c.getComponents().get(1).getName().equals("b"));
@@ -83,7 +76,7 @@ public class CompositeBuilderTestCase extends TestCase {
         assertTrue(c.getReferences().get(0).getName().equals("r"));
     }
     
-    public void testExpandComposites() {
+    public void testExpandComposites() throws Exception {
         Composite c1 = assemblyFactory.createComposite();
         c1.setName(new QName("http://foo", "C1"));
         Component a = assemblyFactory.createComponent();
@@ -117,7 +110,7 @@ public class CompositeBuilderTestCase extends TestCase {
         z.setImplementation(c1);
         c.getComponents().add(z);
         
-        compositeUtil.expandComposites(c);
+        new CompositeCloneBuilderImpl(null).build(c);
         
         assertTrue(c.getComponents().get(0).getImplementation() != c1);
         assertTrue(c.getComponents().get(1).getImplementation() != c2);

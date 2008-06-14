@@ -35,14 +35,17 @@ public class EndConsumersEnDeCoder extends EndpointReferenceSequenceEnDeCoder<En
         super(registry);
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         return QNAME;
     }
 
-    protected Class<EndConsumers> getEncodingObjectType() {
+    
+	public Class<EndConsumers> getEncodingObjectType() {
         return EndConsumers.class;
     }
 
+    @Override
     protected void encodeSequenceTypeAttribute(EndConsumers encodingObject, XMLStreamWriter writer) throws EncodingException {
         try {
             writer.writeAttribute(Constants.ConsumerSequenceType, encodingObject.getSequenceType());
@@ -51,6 +54,7 @@ public class EndConsumersEnDeCoder extends EndpointReferenceSequenceEnDeCoder<En
         }
     }
     
+    @Override
     protected String decodeSequenceTypeAttribute(XMLStreamReader reader) {
         return reader.getAttributeValue(null, Constants.ConsumerSequenceType);
     }

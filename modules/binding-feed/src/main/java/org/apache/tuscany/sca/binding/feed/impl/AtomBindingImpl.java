@@ -19,20 +19,36 @@
 
 package org.apache.tuscany.sca.binding.feed.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentService;
+import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.binding.feed.AtomBinding;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
- * Implementation of the Atom binding model.
+ * Implementation of the Atom Feed binding model.
+ *
+ * @version $Rev$ $Date$
  */
-public class AtomBindingImpl implements AtomBinding {
+class AtomBindingImpl implements AtomBinding, OptimizableBinding, PolicySetAttachPoint {
 
     private String name;
     private String uri;
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType intentAttachPointType;
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
 
     public String getName() {
         return name;
@@ -50,20 +66,6 @@ public class AtomBindingImpl implements AtomBinding {
         this.uri = uri;
     }
 
-    public List<PolicySet> getPolicySets() {
-        // The binding does not support policies
-        return Collections.emptyList();
-    }
-
-    public List<Intent> getRequiredIntents() {
-        // The binding does not support policies
-        return Collections.emptyList();
-    }
-
-    public List<Object> getExtensions() {
-        // The binding does not support extensions
-        return Collections.emptyList();
-    }
 
     public boolean isUnresolved() {
         // The binding is always resolved
@@ -72,5 +74,64 @@ public class AtomBindingImpl implements AtomBinding {
 
     public void setUnresolved(boolean unresolved) {
         // The binding is always resolved
+    }
+
+    public List<PolicySet> getPolicySets() {
+        return policySets;
+    }
+    
+    public List<Intent> getRequiredIntents() {
+        return requiredIntents;
+    }
+
+    public IntentAttachPointType getType() {
+        return intentAttachPointType;
+    }
+    
+    public void setType(IntentAttachPointType intentAttachPointType) {
+        this.intentAttachPointType = intentAttachPointType;
+    }
+
+    //FIXME Temporary to get access to the target binding information
+    // To be removed when the distributed domain supports wiring of other
+    // bindings than the SCA binding
+    private Binding targetBinding; 
+    private Component targetComponent; 
+    private ComponentService targetComponentService; 
+    
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+    
+    public Binding getTargetBinding() {
+        return targetBinding;
+    }
+    
+    public void setTargetBinding(Binding binding) {
+        this.targetBinding = binding;
+    }
+    
+    public Component getTargetComponent() {
+        return targetComponent;
+    }
+    
+    public void setTargetComponent(Component component) {
+        this.targetComponent = component;
+    }
+    
+    public ComponentService getTargetComponentService() {
+        return targetComponentService;
+    }
+    
+    public void setTargetComponentService(ComponentService service) {
+        this.targetComponentService = service; 
+    }
+
+    public void setPolicySets(List<PolicySet> policySets) {
+        this.policySets = policySets; 
+    }
+
+    public void setRequiredIntents(List<Intent> intents) {
+        this.requiredIntents = intents;
     }
 }

@@ -56,14 +56,22 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
             return true;
         }
 
+        if (source.isDynamic() || target.isDynamic()) {
+            return true;
+        }
+
         // Check name
         if (!source.getName().equals(target.getName())) {
             return false;
         }
-        
+
         if (source.getInterface().isRemotable() != target.getInterface().isRemotable()) {
             return false;
         }
+
+        //        if (source.getInterface().isRemotable()) {
+        //            return true;
+        //        }
 
         // FIXME: We need to deal with wrapped<-->unwrapped conversion
 
@@ -77,15 +85,22 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
             return false;
         }
 
+        boolean checkSourceWrapper = true;
         List<DataType> sourceInputType = source.getInputType().getLogical();
-        if (source.isWrapperStyle()) {
+        if (source.isWrapperStyle() && source.getWrapper() != null) {
             sourceInputType = source.getWrapper().getUnwrappedInputType().getLogical();
+            checkSourceWrapper = false;
         }
+        boolean checkTargetWrapper = true;
         List<DataType> targetInputType = target.getInputType().getLogical();
-        if (target.isWrapperStyle()) {
+        if (target.isWrapperStyle() && target.getWrapper() != null) {
             targetInputType = target.getWrapper().getUnwrappedInputType().getLogical();
+            checkTargetWrapper = false;
         }
 
+        if (checkSourceWrapper != checkTargetWrapper) {
+            return true;
+        }
         if (sourceInputType.size() != targetInputType.size()) {
             return false;
         }
@@ -140,7 +155,7 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
         if (source.getInterface().isDynamic() || target.getInterface().isDynamic()) {
             return true;
         }
-        
+
         if (source.getInterface().isRemotable() != target.getInterface().isRemotable()) {
             if (!silent) {
                 throw new IncompatibleInterfaceContractException("Remotable settings do not match", source, target);
@@ -194,7 +209,8 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
         }
 
         for (Operation operation : source.getCallbackInterface().getOperations()) {
-            Operation targetOperation = getOperation(target.getCallbackInterface().getOperations(), operation.getName());
+            Operation targetOperation =
+                getOperation(target.getCallbackInterface().getOperations(), operation.getName());
             if (targetOperation == null) {
                 if (!silent) {
                     throw new IncompatibleInterfaceContractException("Callback operation not found on target", source,
@@ -226,11 +242,11 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
         if (source == null || target == null) {
             return false;
         }
-        
+
         if (source.isDynamic() || target.isDynamic()) {
             return true;
         }
-        
+
         if (source.isRemotable() != target.isRemotable()) {
             return false;
         }
@@ -243,7 +259,7 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
             if (targetOperation == null) {
                 return false;
             }
-            if (!operation.equals(targetOperation)) {
+            if (!isCompatible(operation, targetOperation, source.isRemotable())) {
                 return false;
             }
         }
@@ -252,7 +268,7 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
 
     public boolean isCompatible(InterfaceContract source, InterfaceContract target) {
         try {
-            return checkCompatibility(source, target, false, true);
+            return checkCompatibility(source, target, false, false);
         } catch (IncompatibleInterfaceContractException e) {
             return false;
         }
@@ -263,7 +279,8 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
      *      org.apache.tuscany.sca.interfacedef.Operation)
      */
     public Operation map(Interface target, Operation source) {
-        if (target.isDynamic()) {
+        // TODO: How to handle the case that source operation is dynamic?
+        if (target == null || target.isDynamic()) {
             return source;
         } else if (target.isRemotable()) {
             for (Operation op : target.getOperations()) {

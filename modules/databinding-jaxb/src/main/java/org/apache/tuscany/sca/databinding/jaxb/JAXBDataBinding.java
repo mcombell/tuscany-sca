@@ -19,7 +19,6 @@
 
 package org.apache.tuscany.sca.databinding.jaxb;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -27,15 +26,20 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.databinding.ExceptionHandler;
+import org.apache.tuscany.sca.databinding.WrapperHandler;
+import org.apache.tuscany.sca.databinding.XMLTypeHelper;
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
 import org.apache.tuscany.sca.databinding.impl.DOMHelper;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.w3c.dom.Document;
 
 /**
  * JAXB DataBinding
+ *
+ * @version $Rev$ $Date$
  */
 public class JAXBDataBinding extends BaseDataBinding {
     public static final String NAME = JAXBElement.class.getName();
@@ -43,18 +47,19 @@ public class JAXBDataBinding extends BaseDataBinding {
 
     public static final String ROOT_NAMESPACE = "http://tuscany.apache.org/xmlns/sca/databinding/jaxb/1.0";
     public static final QName ROOT_ELEMENT = new QName(ROOT_NAMESPACE, "root");
-
+    
+    private JAXBWrapperHandler wrapperHandler;
+    private JAXBTypeHelper xmlTypeHelper;
+    
     public JAXBDataBinding() {
         super(NAME, ALIASES, JAXBElement.class);
+        this.wrapperHandler = new JAXBWrapperHandler();
+        this.xmlTypeHelper = new JAXBTypeHelper();
     }
 
     @Override
-    public boolean introspect(DataType dataType, Annotation[] annotations) {
-        Object physical = dataType.getPhysical();
-        if (!(physical instanceof Class)) {
-            return false;
-        }
-        Class javaType = (Class)physical;
+    public boolean introspect(DataType dataType, Operation operation) {
+        Class javaType = dataType.getPhysical();
         if (JAXBElement.class.isAssignableFrom(javaType)) {
             Type type = javaType.getGenericSuperclass();
             if (type instanceof ParameterizedType) {
@@ -65,13 +70,15 @@ public class JAXBDataBinding extends BaseDataBinding {
                     if (actualType instanceof Class) {
                         XMLType xmlType = JAXBContextHelper.getXmlTypeName((Class)actualType);
                         dataType.setLogical(xmlType);
-                        dataType.setDataBinding(getName());
+                        dataType.setDataBinding(NAME);
                         return true;
                     }
                 }
             }
-            dataType.setLogical(XMLType.UNKNOWN);
-            dataType.setDataBinding(getName());
+            if (dataType.getLogical() == null) {
+                dataType.setLogical(XMLType.UNKNOWN);
+            }
+            dataType.setDataBinding(NAME);
             return true;
         }
 
@@ -80,35 +87,46 @@ public class JAXBDataBinding extends BaseDataBinding {
             return false;
         }
         dataType.setLogical(xmlType);
-        dataType.setDataBinding(getName());
+        dataType.setDataBinding(NAME);
         return true;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object copy(Object arg) {
+    public Object copy(Object arg, DataType dataType, Operation operation) {
         try {
             boolean isElement = false;
-            Class cls = arg.getClass();
-            if (arg instanceof JAXBElement) {
-                isElement = true;
-                cls = ((JAXBElement)arg).getDeclaredType();
-            } else {
-                arg = new JAXBElement(ROOT_ELEMENT, Object.class, arg);
+            if (dataType == null) {
+                Class cls = arg.getClass();
+                if (arg instanceof JAXBElement) {
+                    isElement = true;
+                    cls = ((JAXBElement)arg).getDeclaredType();
+                }
+                dataType = new DataTypeImpl<XMLType>(NAME, cls, XMLType.UNKNOWN);
             }
-            JAXBContext context = JAXBContext.newInstance(cls);
+            JAXBContext context = JAXBContextHelper.createJAXBContext(dataType);
+            arg = JAXBContextHelper.createJAXBElement(context, dataType, arg);
             Document doc = DOMHelper.newDocument();
             context.createMarshaller().marshal(arg, doc);
-            JAXBElement<?> element = context.createUnmarshaller().unmarshal(doc, cls);
-            return isElement ? element : element.getValue();
+            Object value = context.createUnmarshaller().unmarshal(doc, dataType.getPhysical());
+            if (isElement && value instanceof JAXBElement) {
+                return value;
+            }
+            return JAXBContextHelper.createReturnValue(context, dataType, value);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
 
     @Override
-    public ExceptionHandler getExceptionHandler() {
-        return new JAXBExceptionHandler();
+    public WrapperHandler getWrapperHandler() {
+        return wrapperHandler;
+    }
+
+    @Override
+    public XMLTypeHelper getXMLTypeHelper() {
+        return new JAXBTypeHelper();
+        // return xmlTypeHelper;
     }
 
 }

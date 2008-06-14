@@ -18,7 +18,7 @@
  */
 package org.apache.tuscany.sca.implementation.java.impl;
 
-import org.apache.tuscany.sca.assembly.impl.ComponentTypeImpl;
+import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 import org.apache.tuscany.sca.implementation.java.BaseJavaImplementation;
 
 /**
@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.implementation.java.BaseJavaImplementation;
  * 
  * @version $Rev$ $Date$
  */
-public abstract class BaseJavaImplementationImpl extends ComponentTypeImpl implements BaseJavaImplementation {
+abstract class BaseJavaImplementationImpl extends ImplementationImpl implements BaseJavaImplementation {
 
     private String className;
     private Class<?> javaClass;
@@ -60,6 +60,11 @@ public abstract class BaseJavaImplementationImpl extends ComponentTypeImpl imple
         if (this.className == null) {
             this.className = javaClass.getName();
         }
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     @Override

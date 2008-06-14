@@ -23,9 +23,11 @@ import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.assembly.Endpoint;
+import org.apache.tuscany.sca.endpointresolver.EndpointResolver;
 import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
+import org.apache.tuscany.sca.provider.PolicyProvider;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 
 /**
@@ -69,6 +71,37 @@ public interface RuntimeComponentReference extends ComponentReference {
      */
     void setBindingProvider(Binding binding, ReferenceBindingProvider bindingProvider);
     
+    /**
+     * Returns the endpoint resolver associated with this
+     * component reference and the given endpoint.
+     * 
+     * @param endpont The assembly model endpoint 
+     * @return The enpoint resolver
+     */
+    EndpointResolver getEndpointResolver(Endpoint endpoint);
+    
+    /**
+     * Sets the endpoint resolver associated with this
+     * component reference and the given endpoint.
+     * 
+     * @param binding The assembly model binding 
+     * @param bindingProvider The runtime reference binding provider
+     */
+    void setEndpointResolver(Endpoint endpoint, EndpointResolver endpointResolver);    
+    
+    /**
+     * Add a policy provider for the given binding to the reference
+     * @param binding The assembly model binding
+     * @param policyProvider The policy handler
+     */
+    void addPolicyProvider(Binding binding, PolicyProvider policyProvider);
+    
+    /**
+     * Get a list of policy providers for the given binding
+     * @param binding The assembly model binding
+     * @return A list of policy providers for the given binding
+     */
+    List<PolicyProvider> getPolicyProviders(Binding binding);    
     
     /**
      * Get the invoker for the given binding and operation
@@ -76,14 +109,11 @@ public interface RuntimeComponentReference extends ComponentReference {
      * @param operation The assembly model operation
      * @return The runtime Invoker
      */
-    Invoker getInvoker(Binding binding, Operation operation);
+    Invoker getInvoker(Binding binding, Operation operation); 
     
     /**
-     * Get the callback invocation chain for the given binding and operation
-     * @param binding The assembly model binding 
-     * @param operation The assembly model operation
-     * @return The runtime callback invocation chain
+     * Set the owning component
+     * @param component
      */
-    InvocationChain getCallbackInvocationChain(Binding binding, Operation operation);    
-    
+    void setComponent(RuntimeComponent component);
 }

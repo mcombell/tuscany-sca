@@ -26,22 +26,23 @@ import java.util.Map;
 
 import org.apache.tuscany.sca.databinding.DataBinding;
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
-import org.apache.tuscany.sca.implementation.osgi.xml.OSGiImplementation;
+import org.apache.tuscany.sca.implementation.osgi.context.OSGiAnnotations;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 
 /**
  * An interceptor to enforce pass-by-value semantics for remotable interfaces
- * 
+ *
+ * @version $Rev$ $Date$
  */
-public class OSGiRemotableInvoker extends OSGiTargetInvoker {
-    
+public class OSGiRemotableInvoker extends OSGiTargetInvoker implements DataExchangeSemantics {
+
     private DataBindingExtensionPoint registry;
     private Operation operation;
-    private OSGiImplementation osgiImplementation;
+    private OSGiAnnotations osgiAnnotations;
 
     /**
      * @param registry
@@ -49,26 +50,24 @@ public class OSGiRemotableInvoker extends OSGiTargetInvoker {
      * @param method
      * @param component
      */
-    public OSGiRemotableInvoker(OSGiImplementation osgiImplementation,
-                              DataBindingExtensionPoint registry,
-                              Operation operation,
-                              RuntimeComponent component,
-                              RuntimeComponentService service) {
-        super(operation, component, service);
-        this.osgiImplementation = osgiImplementation;
+    public OSGiRemotableInvoker(OSGiAnnotations osgiAnnotations,
+                                DataBindingExtensionPoint registry,
+                                Operation operation,
+                                OSGiImplementationProvider provider,
+                                RuntimeComponentService service) {
+        super(operation, provider, service);
+        this.osgiAnnotations = osgiAnnotations;
         this.registry = registry;
         this.operation = operation;
     }
 
     @Override
-    public Object invokeMethod(Object targetObject, Method m, Message msg) 
-        throws InvocationTargetException {
-        
+    public Object invokeMethod(Object targetObject, Method m, Message msg) throws InvocationTargetException {
+
         Object result;
-        if (osgiImplementation.isAllowsPassByReference(m)) {
+        if (osgiAnnotations.isAllowsPassByReference(targetObject, m)) {
             result = super.invokeMethod(targetObject, m, msg);
-        }
-        else {
+        } else {
             Object obj = msg.getBody();
             msg.setBody(copy((Object[])obj));
 
@@ -77,7 +76,7 @@ public class OSGiRemotableInvoker extends OSGiTargetInvoker {
             if (operation.getOutputType() != null) {
                 String dataBindingId = operation.getOutputType().getDataBinding();
                 DataBinding dataBinding = registry.getDataBinding(dataBindingId);
-                result = copy(result, dataBinding);
+                result = copy(result, operation.getOutputType(), dataBinding);
             }
         }
         return result;
@@ -97,9 +96,10 @@ public class OSGiRemotableInvoker extends OSGiTargetInvoker {
                 if (copiedArg != null) {
                     copiedArgs[i] = copiedArg;
                 } else {
-                    String dataBindingId = operation.getInputType().getLogical().get(i).getDataBinding();
+                    DataType dt = operation.getInputType().getLogical().get(i);
+                    String dataBindingId = dt.getDataBinding();
                     DataBinding dataBinding = registry.getDataBinding(dataBindingId);
-                    copiedArg = copy(args[i], dataBinding);
+                    copiedArg = copy(args[i], dt, dataBinding);
                     map.put(args[i], copiedArg);
                     copiedArgs[i] = copiedArg;
                 }
@@ -108,25 +108,32 @@ public class OSGiRemotableInvoker extends OSGiTargetInvoker {
         return copiedArgs;
     }
 
-    public Object copy(Object arg, DataBinding argDataBinding) {
+    public Object copy(Object arg, DataType dataType, DataBinding argDataBinding) {
         if (arg == null) {
             return null;
         }
         Object copiedArg;
         if (argDataBinding != null) {
-            copiedArg = argDataBinding.copy(arg);
+            copiedArg = argDataBinding.copy(arg, dataType, operation);
         } else {
             copiedArg = arg;
-            DataType<?> dataType = registry.introspectType(arg);
+            dataType = registry.introspectType(arg, operation);
             if (dataType != null) {
                 DataBinding binding = registry.getDataBinding(dataType.getDataBinding());
                 if (binding != null) {
-                    copiedArg = binding.copy(arg);
+                    copiedArg = binding.copy(arg, dataType, operation);
                 }
             }
             // FIXME: What to do if it's not recognized?
         }
         return copiedArg;
+    }
+
+    /**
+     * @see org.apache.tuscany.sca.invocation.PassByValueAware#allowsPassByReference()
+     */
+    public boolean allowsPassByReference() {
+        return true;
     }
 
 }

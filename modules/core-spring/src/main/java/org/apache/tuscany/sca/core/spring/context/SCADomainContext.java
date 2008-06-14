@@ -23,30 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
-import org.apache.tuscany.sca.assembly.builder.CompositeBuilderMonitor;
-import org.apache.tuscany.sca.assembly.builder.Problem;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
-import org.apache.tuscany.sca.assembly.xml.ComponentTypeProcessor;
-import org.apache.tuscany.sca.assembly.xml.CompositeProcessor;
-import org.apache.tuscany.sca.assembly.xml.ConstrainingTypeProcessor;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.service.ContributionException;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.core.spring.assembly.impl.BeanAssemblyFactory;
 import org.apache.tuscany.sca.core.spring.implementation.java.impl.BeanJavaImplementationFactory;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
-import org.apache.tuscany.sca.implementation.java.introspect.DefaultJavaClassIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.implementation.java.introspect.ExtensibleJavaClassIntrospector;
-import org.apache.tuscany.sca.implementation.java.introspect.JavaClassIntrospector;
-import org.apache.tuscany.sca.implementation.java.introspect.JavaClassIntrospectorExtensionPoint;
 import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.AllowsPassByReferenceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.BaseJavaClassVisitor;
@@ -64,22 +58,16 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.ReferenceProce
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ResourceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ScopeProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ServiceProcessor;
-import org.apache.tuscany.sca.implementation.java.xml.JavaImplementationProcessor;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.interfacedef.java.DefaultJavaInterfaceFactory;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.DefaultJavaInterfaceIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.interfacedef.java.introspect.ExtensibleJavaInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospectorExtensionPoint;
-import org.apache.tuscany.sca.interfacedef.java.xml.JavaInterfaceProcessor;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 /**
- * A mini test runtime that uses the SCA assembly model variant implementation
+ * A mini test runtime that uses the SCA assembly model variant implementation 
  * backed by Spring bean definitions.
  * 
  * @version $Rev$ $Date$
@@ -94,16 +82,18 @@ public class SCADomainContext {
         beanFactory = new DefaultListableBeanFactory();
 
         // Create SCA assembly and SCA Java factories
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
         AssemblyFactory assemblyFactory = new BeanAssemblyFactory(new DefaultAssemblyFactory(), beanFactory);
-        SCABindingFactory scaBindingFactory = new DefaultSCABindingFactory();
-        PolicyFactory policyFactory = new DefaultPolicyFactory();
-        InterfaceContractMapper interfaceContractMapper = new InterfaceContractMapperImpl();
-        JavaInterfaceFactory javaFactory = new DefaultJavaInterfaceFactory();
-        JavaInterfaceIntrospectorExtensionPoint interfaceVisitors = new DefaultJavaInterfaceIntrospectorExtensionPoint();
+        modelFactories.addFactory(assemblyFactory);
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        JavaInterfaceFactory javaFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+        PolicyFactory policyFactory = modelFactories.getFactory(PolicyFactory.class);
+        SCABindingFactory scaBindingFactory = modelFactories.getFactory(SCABindingFactory.class);
+        modelFactories.addFactory(javaFactory);
         JavaImplementationFactory javaImplementationFactory = new BeanJavaImplementationFactory(beanFactory);
-        JavaClassIntrospectorExtensionPoint classVisitors = new DefaultJavaClassIntrospectorExtensionPoint();
-        
-        JavaInterfaceIntrospector interfaceIntrospector = new ExtensibleJavaInterfaceIntrospector(javaFactory, interfaceVisitors);
+        modelFactories.addFactory(javaImplementationFactory);
         
         BaseJavaClassVisitor[] extensions = new BaseJavaClassVisitor[] {
             new ConstructorProcessor(assemblyFactory),
@@ -115,40 +105,35 @@ public class SCADomainContext {
             new EagerInitProcessor(assemblyFactory),
             new InitProcessor(assemblyFactory),
             new PropertyProcessor(assemblyFactory),
-            new ReferenceProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
+            new ReferenceProcessor(assemblyFactory, javaFactory),
             new ResourceProcessor(assemblyFactory),
             new ScopeProcessor(assemblyFactory),
-            new ServiceProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
-            new HeuristicPojoProcessor(assemblyFactory, javaFactory, interfaceIntrospector),
+            new ServiceProcessor(assemblyFactory, javaFactory),
+            new HeuristicPojoProcessor(assemblyFactory, javaFactory),
             new PolicyProcessor(assemblyFactory, policyFactory)
         };
         for (JavaClassVisitor e : extensions) {
-            classVisitors.addClassVisitor(e);
+            javaImplementationFactory.addClassVisitor(e);
         }
-        JavaClassIntrospector classIntrospector = new ExtensibleJavaClassIntrospector(classVisitors);
 
         // Populate ArtifactProcessor registry
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        ExtensibleStAXArtifactProcessor staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        CompositeProcessor compositeProcessor = new CompositeProcessor(assemblyFactory, policyFactory,
-                                                                       interfaceContractMapper, staxProcessor);
-        staxProcessors.addArtifactProcessor(compositeProcessor);
-        staxProcessors.addArtifactProcessor(new ComponentTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ConstrainingTypeProcessor(assemblyFactory, policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new JavaInterfaceProcessor(javaFactory, interfaceIntrospector));
-        staxProcessors.addArtifactProcessor(new JavaImplementationProcessor(assemblyFactory, policyFactory, javaImplementationFactory, classIntrospector));
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        StAXArtifactProcessor<Composite> compositeProcessor = staxProcessors.getProcessor(Composite.class);
         
         // Create a resolver
+        //FIXME The ClassLoader should be passed in 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ModelResolverImpl resolver = new ModelResolverImpl(classLoader);
 
         try {
+            XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             
             // Read the composite files
             List<Composite> composites = new ArrayList<Composite>();
             for (String compositeFile: compositeFiles) {
                 InputStream is = classLoader.getResourceAsStream(compositeFile);
-                Composite composite = staxProcessor.read(is, Composite.class);
+                XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+                Composite composite = compositeProcessor.read(reader);
                 resolver.addModel(composite);
                 composites.add(composite);
             }
@@ -160,31 +145,32 @@ public class SCADomainContext {
             }
             
             // Wire the top level component's composite
-            buildComposite(composites.get(0), assemblyFactory, scaBindingFactory, interfaceContractMapper);
+            buildComposite(composites.get(0), assemblyFactory, scaBindingFactory, mapper);
             
         } catch (ContributionException e) {
             throw new RuntimeException(e);
         } catch (CompositeBuilderException e) {
             throw new RuntimeException(e);
-        }
+        } catch (XMLStreamException e) {
+            throw new RuntimeException(e);
+        } 
     }
     
     private void buildComposite(Composite composite, AssemblyFactory assemblyFactory,
                                 SCABindingFactory scaBindingFactory, InterfaceContractMapper interfaceContractMapper) throws CompositeBuilderException {
 
-        CompositeBuilderMonitor monitor = new CompositeBuilderMonitor() {
+        Monitor monitor = new Monitor() {
 
             public void problem(Problem problem) {
-                // Uncommenting the following two lines can be useful to detect
-                // and troubleshoot SCA assembly XML composite configuration
-                // problems.
-
-                System.out.println("Composite assembly problem: " + problem.getMessage());
+                System.out.println("Composite assembly problem: " + problem.toString());
+            }
+            public List<Problem> getProblems() {
+                return null;
             }
         };
 
         // Configure and wire the composite
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, interfaceContractMapper, monitor);
+        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, new DefaultIntentAttachPointTypeFactory(), interfaceContractMapper, monitor);
         compositeUtil.build(composite);
 
     }

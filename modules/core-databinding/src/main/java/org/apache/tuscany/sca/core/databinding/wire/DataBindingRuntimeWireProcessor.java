@@ -21,11 +21,16 @@ package org.apache.tuscany.sca.core.databinding.wire;
 
 import java.util.List;
 
+import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
 import org.apache.tuscany.sca.databinding.Mediator;
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.FaultExceptionMapper;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.InvocationChain;
+import org.apache.tuscany.sca.invocation.Phase;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.apache.tuscany.sca.runtime.RuntimeWireProcessor;
 
@@ -37,10 +42,16 @@ import org.apache.tuscany.sca.runtime.RuntimeWireProcessor;
  */
 public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
     private Mediator mediator;
+    private DataBindingExtensionPoint dataBindings;
+    private FaultExceptionMapper faultExceptionMapper;
 
-    public DataBindingRuntimeWireProcessor(Mediator mediator) {
+    public DataBindingRuntimeWireProcessor(Mediator mediator,
+                                           DataBindingExtensionPoint dataBindings,
+                                           FaultExceptionMapper faultExceptionMapper) {
         super();
         this.mediator = mediator;
+        this.dataBindings = dataBindings;
+        this.faultExceptionMapper = faultExceptionMapper;
     }
 
     public boolean isTransformationRequired(DataType source, DataType target) {
@@ -50,7 +61,7 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
         if (source == target) {
             return false;
         }
-        
+
         // Output type can be null
         if (source == null && target == null) {
             return false;
@@ -74,6 +85,10 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
             return false;
         }
 
+        if (source.isWrapperStyle() != target.isWrapperStyle()) {
+            return true;
+        }
+
         // Check output type
         DataType sourceOutputType = source.getOutputType();
         DataType targetOutputType = target.getOutputType();
@@ -88,6 +103,10 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
         List<DataType> targetInputType = target.getInputType().getLogical();
 
         int size = sourceInputType.size();
+        if (size != targetInputType.size()) {
+            // TUSCANY-1682: The wrapper style may have different arguments
+            return true;
+        }
         for (int i = 0; i < size; i++) {
             if (isTransformationRequired(sourceInputType.get(i), targetInputType.get(i))) {
                 return true;
@@ -116,7 +135,8 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
         if (targetContract == null) {
             targetContract = sourceContract;
         }
-        if (sourceContract == targetContract) {
+
+        if (!sourceContract.getInterface().isRemotable()) {
             return;
         }
         List<InvocationChain> chains = wire.getInvocationChains();
@@ -124,38 +144,43 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
             Operation sourceOperation = chain.getSourceOperation();
             Operation targetOperation = chain.getTargetOperation();
 
+            Interceptor interceptor = null;
             if (isTransformationRequired(sourceContract, sourceOperation, targetContract, targetOperation)) {
                 // Add the interceptor to the source side because multiple
-                // references can be wired
-                // to the same service
-                DataTransformationInteceptor interceptor = new DataTransformationInteceptor(wire, sourceOperation,
-                                                                              targetOperation);
-                interceptor.setMediator(mediator);
-                chain.addInterceptor(0, interceptor);
+                // references can be wired to the same service
+                interceptor =
+                    new DataTransformationInterceptor(wire, sourceOperation, targetOperation, mediator,
+                                                      faultExceptionMapper);
+            } else {
+                // assume pass-by-values copies are required if interfaces are remotable and there is no data binding
+                // transformation, i.e. a transformation will result in a copy so another pass-by-value copy is unnecessary
+                if (isRemotable(chain, sourceOperation, targetOperation)) {
+                    interceptor =
+                        new PassByValueInterceptor(dataBindings, faultExceptionMapper, chain, targetOperation);
+                }
+            }
+            if (interceptor != null) {
+                String phase =
+                    (wire.getSource().getContract() instanceof ComponentReference) ? Phase.REFERENCE_INTERFACE
+                        : Phase.SERVICE_INTERFACE;
+                chain.addInterceptor(phase, interceptor);
             }
         }
 
-        // Object targetAddress = UriHelper.getBaseName(source.getUri());
-        List<InvocationChain> callbackChains = wire.getCallbackInvocationChains();
-        if (callbackChains == null) {
-            // callback chains could be null
-            return;
-        }
+    }
 
-        for (InvocationChain chain : callbackChains) {
-            Operation sourceOperation = chain.getSourceOperation();
-            Operation targetOperation = chain.getTargetOperation();
-            if (isTransformationRequired(sourceContract, sourceOperation, targetContract, targetOperation)) {
-
-                // Add the interceptor to the source side because multiple
-                // references can be wired
-                // to the same service
-                DataTransformationInteceptor interceptor = new DataTransformationInteceptor(wire, sourceOperation,
-                                                                              targetOperation);
-                interceptor.setMediator(mediator);
-                chain.addInterceptor(0, interceptor);
-            }
+    /**
+     * Pass-by-value copies are required if the interfaces are remotable unless the
+     * implementation uses the @AllowsPassByReference annotation.
+     */
+    protected boolean isRemotable(InvocationChain chain, Operation sourceOperation, Operation targetOperation) {
+        if (!sourceOperation.getInterface().isRemotable()) {
+            return false;
         }
+        if (!targetOperation.getInterface().isRemotable()) {
+            return false;
+        }
+        return true;
     }
 
 }

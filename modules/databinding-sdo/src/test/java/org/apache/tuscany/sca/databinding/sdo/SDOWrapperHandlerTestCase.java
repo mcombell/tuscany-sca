@@ -20,14 +20,22 @@ package org.apache.tuscany.sca.databinding.sdo;
 
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import junit.framework.TestCase;
 
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
+import org.apache.tuscany.sca.interfacedef.util.ElementInfo;
+import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
 import org.apache.tuscany.sdo.api.SDOUtil;
 
+import commonj.sdo.DataObject;
 import commonj.sdo.helper.HelperContext;
 import commonj.sdo.helper.XMLDocument;
 import commonj.sdo.helper.XMLHelper;
 import commonj.sdo.helper.XSDHelper;
+import commonj.sdo.impl.HelperProvider;
 
 /**
  * @version $Rev$ $Date$
@@ -36,6 +44,7 @@ public class SDOWrapperHandlerTestCase extends TestCase {
     private HelperContext context;
     private SDOWrapperHandler handler;
 
+    @Override
     public void setUp() throws Exception {
         context = SDOUtil.createHelperContext();
         handler = new SDOWrapperHandler();
@@ -44,7 +53,8 @@ public class SDOWrapperHandlerTestCase extends TestCase {
     public void testWrapperAnyType() throws Exception {
         XMLHelper xmlHelper = context.getXMLHelper();
         XMLDocument document = xmlHelper.load(getClass().getResourceAsStream("/wrapper.xml"));
-        List children = handler.getChildren(document);
+        Operation op = new OperationImpl();
+        List children = handler.getChildren(document, op, true);
         assertEquals(5, children.size());
     }
 
@@ -53,8 +63,21 @@ public class SDOWrapperHandlerTestCase extends TestCase {
         xsdHelper.define(getClass().getResourceAsStream("/wrapper.xsd"), null);
         XMLHelper xmlHelper = context.getXMLHelper();
         XMLDocument document = xmlHelper.load(getClass().getResourceAsStream("/wrapper.xml"));
-        List children = handler.getChildren(document);
+        Operation op = new OperationImpl();
+        List children = handler.getChildren(document, op, true);
         assertEquals(5, children.size());
+    }
+    
+    public void testCreate() {
+        HelperContext context = HelperProvider.getDefaultContext();
+        XSDHelper xsdHelper = context.getXSDHelper();
+        xsdHelper.define(getClass().getResourceAsStream("/wrapper.xsd"), null);
+        ElementInfo element = new ElementInfo(new QName("http://www.example.com/wrapper", "op"), null);
+        Operation op = new OperationImpl();
+        WrapperInfo wrapperInfo = new WrapperInfo(SDODataBinding.NAME, element, null, null, null);
+        op.setWrapper(wrapperInfo);
+        DataObject wrapper = (DataObject) handler.create(op, true);
+        assertNotNull(wrapper);
     }
 
 }

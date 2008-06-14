@@ -19,13 +19,16 @@
 package org.apache.tuscany.sca.databinding.sdo;
 
 import java.io.StringReader;
-import java.net.URI;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
+
+import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.ClassReference;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 
 import com.example.ipo.sdo.SdoFactory;
 
@@ -58,14 +61,15 @@ public class ImportSDOProcessorTestCase extends TestCase {
         assertFalse(inited);
         ImportSDO importSDO = loader.read(reader);
         assertNotNull(importSDO);
-        loader.resolve(importSDO, new TestModelResolver(getClass().getClassLoader()));
+        ModelResolver resolver = new TestModelResolver();
+        resolver.addModel(new ClassReference(MockFactory.class));
+        loader.resolve(importSDO, resolver);
         assertTrue(inited);
     }
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
-        URI id = URI.create("/composite1/");
-        loader = new ImportSDOProcessor(new HelperContextRegistryImpl());
+        loader = new ImportSDOProcessor(new DefaultModelFactoryExtensionPoint(), null);
         xmlFactory = XMLInputFactory.newInstance();
     }
 

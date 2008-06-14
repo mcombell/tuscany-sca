@@ -20,9 +20,10 @@
 package org.apache.tuscany.sca.assembly.xml;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
@@ -30,16 +31,26 @@ import junit.framework.TestCase;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
-import org.apache.tuscany.sca.assembly.DefaultSCABindingFactory;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.definitions.SCADefinitions;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorFactoryImpl;
+import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 
 /**
  * Test the wiring of SCA XML assemblies.
@@ -49,53 +60,59 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
 public class WireTestCase extends TestCase {
 
     private XMLInputFactory inputFactory;
-    private DefaultStAXArtifactProcessorExtensionPoint staxProcessors;
-    private ExtensibleStAXArtifactProcessor staxProcessor; 
-    private TestModelResolver resolver; 
-    private AssemblyFactory assemblyFactory;
-    private SCABindingFactory scaBindingFactory;
-    private PolicyFactory policyFactory;
-    private InterfaceContractMapper mapper;
+    private StAXArtifactProcessor<Object> staxProcessor;
+    private ModelResolver resolver; 
+    private URLArtifactProcessor<SCADefinitions> policyDefinitionsProcessor;
+    private CompositeBuilder compositeBuilder;
+    private Monitor monitor;
 
+    @Override
     public void setUp() throws Exception {
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
         inputFactory = XMLInputFactory.newInstance();
-        staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint();
-        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        resolver = new TestModelResolver(getClass().getClassLoader());
-        assemblyFactory = new DefaultAssemblyFactory();
-        scaBindingFactory = new DefaultSCABindingFactory();
-        policyFactory = new DefaultPolicyFactory();
-        mapper = new InterfaceContractMapperImpl();
-    }
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, null, null);
+        resolver = new DefaultModelResolver();
+        
+        MonitorFactory monitorFactory = new DefaultMonitorFactoryImpl();
+        monitor = monitorFactory.createMonitor();
+        
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        SCABindingFactory scaBindingFactory = new TestSCABindingFactoryImpl();
+        IntentAttachPointTypeFactory attachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
 
-    public void tearDown() throws Exception {
-        inputFactory = null;
-        staxProcessors = null;
-        resolver = null;
-        policyFactory = null;
-        assemblyFactory = null;
-        mapper = null;
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        compositeBuilder = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, attachPointTypeFactory, mapper, monitor);
+
+        URLArtifactProcessorExtensionPoint documentProcessors = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
+        policyDefinitionsProcessor = documentProcessors.getProcessor(SCADefinitions.class);
     }
 
     public void testResolveConstrainingType() throws Exception {
         InputStream is = getClass().getResourceAsStream("CalculatorComponent.constrainingType");
-        ConstrainingTypeProcessor constrainingTypeReader = new ConstrainingTypeProcessor(assemblyFactory, policyFactory, staxProcessor);
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        ConstrainingType constrainingType = constrainingTypeReader.read(reader);
+        ConstrainingType constrainingType = (ConstrainingType)staxProcessor.read(reader);
         is.close();
         assertNotNull(constrainingType);
         resolver.addModel(constrainingType);
 
         is = getClass().getResourceAsStream("TestAllCalculator.composite");
-        CompositeProcessor compositeReader = new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor);
         reader = inputFactory.createXMLStreamReader(is);
-        Composite composite = compositeReader.read(reader);
+        Composite composite = (Composite)staxProcessor.read(reader);
         is.close();
         assertNotNull(composite);
         
-        compositeReader.resolve(composite, resolver);
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null);
-        compositeUtil.build(composite);
+        URL url = getClass().getResource("test_definitions.xml");
+        URI uri = URI.create("test_definitions.xml");
+        SCADefinitions scaDefns = (SCADefinitions)policyDefinitionsProcessor.read(null, uri, url);
+        assertNotNull(scaDefns);
+        
+        policyDefinitionsProcessor.resolve(scaDefns, resolver);
+        
+        staxProcessor.resolve(composite, resolver);
+        compositeBuilder.build(composite);
         
         assertEquals(composite.getConstrainingType(), constrainingType);
         assertEquals(composite.getComponents().get(0).getConstrainingType(), constrainingType);
@@ -103,22 +120,26 @@ public class WireTestCase extends TestCase {
 
     public void testResolveComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("Calculator.composite");
-        CompositeProcessor compositeReader = new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor);
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
-        Composite nestedComposite = compositeReader.read(reader);
+        Composite nestedComposite = (Composite)staxProcessor.read(reader);
         is.close();
         assertNotNull(nestedComposite);
         resolver.addModel(nestedComposite);
 
         is = getClass().getResourceAsStream("TestAllCalculator.composite");
-        compositeReader = new CompositeProcessor(assemblyFactory, policyFactory, mapper, staxProcessor);
         reader = inputFactory.createXMLStreamReader(is);
-        Composite composite = compositeReader.read(reader);
+        Composite composite = (Composite)staxProcessor.read(reader);
         is.close();
         
-        compositeReader.resolve(composite, resolver);
-        CompositeBuilderImpl compositeUtil = new CompositeBuilderImpl(assemblyFactory, scaBindingFactory, mapper, null);
-        compositeUtil.build(composite);
+        URL url = getClass().getResource("test_definitions.xml");
+        URI uri = URI.create("test_definitions.xml");
+        SCADefinitions scaDefns = (SCADefinitions)policyDefinitionsProcessor.read(null, uri, url);
+        assertNotNull(scaDefns);
+        
+        policyDefinitionsProcessor.resolve(scaDefns, resolver);
+        
+        staxProcessor.resolve(composite, resolver);
+        compositeBuilder.build(composite);
         
         assertEquals(composite.getComponents().get(2).getImplementation(), nestedComposite);
     }

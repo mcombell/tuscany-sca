@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.CompositeReference;
+import org.apache.tuscany.sca.assembly.Endpoint;
 import org.apache.tuscany.sca.assembly.Reference;
 
 /**
@@ -33,8 +35,10 @@ import org.apache.tuscany.sca.assembly.Reference;
  */
 public class ComponentReferenceImpl extends ReferenceImpl implements ComponentReference, Cloneable {
     private Reference reference;
-    private boolean autowire;
+    private Boolean autowire;
     private List<CompositeReference> promotedAs = new ArrayList<CompositeReference>();
+    private ComponentService callbackService;
+    private List<Endpoint> endpoints = new ArrayList<Endpoint>();
 
     /**
      * Constructs a new component reference.
@@ -58,15 +62,30 @@ public class ComponentReferenceImpl extends ReferenceImpl implements ComponentRe
     }
 
     public boolean isAutowire() {
-        return autowire;
+        return (autowire == null) ? false : autowire.booleanValue();
     }
 
-    public void setAutowire(boolean autowire) {
+    public void setAutowire(Boolean autowire) {
         this.autowire = autowire;
+    }
+    
+    public Boolean getAutowire() {
+        return autowire;
     }
 
     public List<CompositeReference> promotedAs() {
         return promotedAs;
     }
+
+    public ComponentService getCallbackService() {
+        return callbackService;
+    }
+
+    public void setCallbackService(ComponentService callbackService) {
+        this.callbackService = callbackService;
+    }
     
+    public List<Endpoint> getEndpoints(){
+        return endpoints;
+    }
 }

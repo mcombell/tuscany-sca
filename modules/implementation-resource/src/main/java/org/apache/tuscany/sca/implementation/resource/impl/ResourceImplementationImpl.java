@@ -27,22 +27,20 @@ import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.binding.resource.HTTPResourceBindingFactory;
 import org.apache.tuscany.sca.implementation.resource.Resource;
 import org.apache.tuscany.sca.implementation.resource.ResourceImplementation;
 import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.PolicySet;
 
 
 /**
  * The model representing a resource implementation in an SCA assembly model.
+ *
+ * @version $Rev$ $Date$
  */
-public class ResourceImplementationImpl implements ResourceImplementation {
+class ResourceImplementationImpl implements ResourceImplementation {
 
     private Service resourceService;
     
@@ -53,10 +51,8 @@ public class ResourceImplementationImpl implements ResourceImplementation {
     /**
      * Constructs a new resource implementation.
      */
-    public ResourceImplementationImpl(AssemblyFactory assemblyFactory,
-                                  JavaInterfaceFactory javaFactory,
-                                  JavaInterfaceIntrospector introspector,
-                                  HTTPResourceBindingFactory bindingFactory) {
+    ResourceImplementationImpl(AssemblyFactory assemblyFactory,
+                                  JavaInterfaceFactory javaFactory) {
 
         // Resource implementation always provide a single service exposing
         // the Resource interface, and have no references and properties
@@ -66,7 +62,7 @@ public class ResourceImplementationImpl implements ResourceImplementation {
         // Create the Java interface contract for the Resource service
         JavaInterface javaInterface;
         try {
-            javaInterface = introspector.introspect(Resource.class);
+            javaInterface = javaFactory.createJavaInterface(Resource.class);
         } catch (InvalidInterfaceException e) {
             throw new IllegalArgumentException(e);
         }
@@ -123,20 +119,6 @@ public class ResourceImplementationImpl implements ResourceImplementation {
         this.location = uri;
     }
 
-    public List<PolicySet> getPolicySets() {
-        // The resource implementation does not support policy sets
-        return Collections.emptyList();
-    }
-
-    public List<Intent> getRequiredIntents() {
-        // The resource implementation does not support intents
-        return Collections.emptyList();
-    }
-
-    public List<Object> getExtensions() {
-        // The resource implementation does not support extensions
-        return Collections.emptyList();
-    }
 
     public boolean isUnresolved() {
         return unresolved;
@@ -144,6 +126,5 @@ public class ResourceImplementationImpl implements ResourceImplementation {
 
     public void setUnresolved(boolean unresolved) {
         this.unresolved = unresolved;
-    }
-
+    }    
 }

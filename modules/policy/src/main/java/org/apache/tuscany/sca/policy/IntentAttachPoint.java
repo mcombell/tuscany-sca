@@ -23,6 +23,8 @@ import java.util.List;
 /**
  * Base interface for all assembly model objects that can be have policy intents
  * attached to them.
+ *
+ * @version $Rev$ $Date$
  */
 public interface IntentAttachPoint {
 
@@ -33,5 +35,18 @@ public interface IntentAttachPoint {
      * @return a list of policy intents.
      */
     List<Intent> getRequiredIntents();
-
+    
+   
+    /**
+     * Returns the type of the attach point such as a BindingType or an ImplementationType and so on
+     * @return
+     */
+    IntentAttachPointType getType();
+    
+    /**
+     * 
+     * Sets the type of the attach point such as a BindingType or an ImplementationType and so on
+     * @param type
+     */
+    void setType(IntentAttachPointType type);
 }

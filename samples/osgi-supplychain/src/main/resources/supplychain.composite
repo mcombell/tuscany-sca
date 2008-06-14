@@ -18,16 +18,15 @@
  * under the License.    
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
 	targetNamespace="http://supplychain"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:sp="http://supplychain"
 	name="supplychain">
 	
     <component name="CustomerComponent">
-        <implementation.osgi 
-            bundle="Customer" 
-            bundleLocation="file:target/Customer.jar" 
-            scope="COMPOSITE"
+        <tuscany:implementation.osgi 
+            bundleSymbolicName="supplychain.customer.Customer"          
         />
             
         <!--implementation.java class="supplychain.customer.JavaCustomerComponentImpl" -->
@@ -37,8 +36,7 @@
     <component name="RetailerComponent">
         <implementation.java class="supplychain.retailer.JavaRetailerComponentImpl" />
         <!--implementation.osgi
-            bundle="Retailer" 
-            bundleLocation="file:target/Retailer.jar" 
+            bundleSymbolicName="supplychain.retailer.Retailer" 
         /-->
         <reference name="warehouse" target="WarehouseComponent"/>
     </component>
@@ -46,16 +44,14 @@
     <component name="WarehouseComponent">
         <implementation.java class="supplychain.warehouse.JavaWarehouseComponentImpl" />
         <!--implementation.osgi
-            bundle="Warehouse" 
-            bundleLocation="file:target/Warehouse.jar" 
+            bundleSymbolicName="supplychain.warehouse.Warehouse" 
         /-->
         <reference name="shipper" target="ShipperComponent" />
     </component>
 
     <component name="ShipperComponent">
-        <implementation.osgi
-            bundle="Shipper" 
-            bundleLocation="file:target/Shipper.jar" 
+        <tuscany:implementation.osgi
+            bundleSymbolicName="supplychain.shipper.Shipper"   
         />
         <!--implementation.java class="supplychain.shipper.JavaShipperComponentImpl" /-->
         <reference name="customer" target="CustomerComponent" />

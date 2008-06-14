@@ -32,11 +32,13 @@ public class ConsumerReferenceEnDeCoder extends EndpointReferenceWrapperEnDeCode
         super(registry);
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         return QNAME;
     }
 
-    protected Class<ConsumerReference> getEncodingObjectType() {
+    
+	public Class<ConsumerReference> getEncodingObjectType() {
         return ConsumerReference.class;
     }
 }

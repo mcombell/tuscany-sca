@@ -22,38 +22,33 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.apache.tuscany.sca</groupId>
-    <artifactId>sca-api</artifactId>
+    <artifactId>tuscany-sca-api</artifactId>
     <name>Apache Tuscany SCA API</name>
 
+    <description>API classes for the Service Component Architecture</description>
+    <packaging>jar</packaging>
+ 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
                 <configuration>
-                    <attach>true</attach>
-                    <quiet>true</quiet>
-                    <bottom>Apache Tuscany is an effort undergoing incubation at the Apache Software Foundation(ASF) and sponsored by the Apache WS PMC.</bottom>
-                    <header>Apache Tuscany OSOA SCA API</header>
-                    <footer>Apache Tuscany OSOA SCA API</footer>
-                    <sourcepath>${basedir}/src/main/java${path.separator}${basedir}/target/generated/src/main/java</sourcepath>
-                    <subpackages>org.osoa.sca</subpackages>
+                    <instructions>
+                        <Bundle-Version>2.0</Bundle-Version>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.api</Bundle-SymbolicName>
+                        <Bundle-Description>${pom.description}</Bundle-Description>
+                        <Export-Package>org.osoa.sca*</Export-Package>
+                    </instructions>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 
 </project>

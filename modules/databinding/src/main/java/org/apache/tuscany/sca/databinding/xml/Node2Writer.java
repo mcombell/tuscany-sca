@@ -33,6 +33,8 @@ import org.w3c.dom.Node;
 
 /**
  * Push DOM Node to Writer
+ *
+ * @version $Rev$ $Date$
  */
 public class Node2Writer extends BaseTransformer<Node, Writer> implements PushTransformer<Node, Writer> {
     private static final Source2ResultTransformer TRANSFORMER = new Source2ResultTransformer();
@@ -47,14 +49,17 @@ public class Node2Writer extends BaseTransformer<Node, Writer> implements PushTr
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Node> getSourceType() {
         return Node.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Writer> getTargetType() {
         return Writer.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

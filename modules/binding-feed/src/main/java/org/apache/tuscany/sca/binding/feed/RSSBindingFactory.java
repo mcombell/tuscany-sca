@@ -20,14 +20,16 @@
 package org.apache.tuscany.sca.binding.feed;
 
 /**
- * A factory for the RSS binding model.
+ * Factory for the RSS binding
+ *
+ * @version $Rev$ $Date$
  */
 public interface RSSBindingFactory {
 
     /**
      * Creates a new RSS binding.
-     * 
-     * @return a new RSS binding
+     * @return the new RSS binding
      */
     RSSBinding createRSSBinding();
+
 }

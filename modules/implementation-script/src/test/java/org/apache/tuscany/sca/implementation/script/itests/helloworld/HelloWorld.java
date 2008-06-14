@@ -19,8 +19,12 @@
 
 package org.apache.tuscany.sca.implementation.script.itests.helloworld;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public interface HelloWorld {
-    
-    public String sayHello(String s);
+
+    String sayHello(String s);
 
 }

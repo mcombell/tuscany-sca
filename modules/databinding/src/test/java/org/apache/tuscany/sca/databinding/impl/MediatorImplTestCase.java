@@ -41,6 +41,8 @@ import org.w3c.dom.Node;
 
 /**
  * Test case for MediatorImpl
+ *
+ * @version $Rev$ $Date$
  */
 public class MediatorImplTestCase extends TestCase {
     private static final String IPO_XML =
@@ -75,16 +77,17 @@ public class MediatorImplTestCase extends TestCase {
 
     private MediatorImpl mediator;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         DataBindingExtensionPoint dataBindingRegistry = new DefaultDataBindingExtensionPoint();
-        TransformerExtensionPoint registry = new DefaultTransformerExtensionPoint(dataBindingRegistry);
+        TransformerExtensionPoint registry = new DefaultTransformerExtensionPoint();
 
-        registry.addTransformer(new String2SAX());
-        registry.addTransformer(new SAX2DOMPipe());
-        registry.addTransformer(new Node2String());
-        registry.addTransformer(new Node2Writer());
+        registry.addTransformer(new String2SAX(), true);
+        registry.addTransformer(new SAX2DOMPipe(), true);
+        registry.addTransformer(new Node2String(), true);
+        registry.addTransformer(new Node2Writer(), true);
 
         mediator = new MediatorImpl(dataBindingRegistry, registry);
     }

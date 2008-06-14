@@ -21,73 +21,141 @@ package org.apache.tuscany.sca.contribution.processor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
- * The default implementation of a StAX artifact processor registry.
+ * Implementation of an extensible StAX artifact processor.
+ * 
+ * Takes a StAXArtifactProcessorExtensionPoint and delegates to the proper
+ * StAXArtifactProcessor by element QName
  * 
  * @version $Rev$ $Date$
  */
 public class ExtensibleStAXArtifactProcessor
     implements StAXArtifactProcessor<Object> {
 
+    private static final Logger logger = Logger.getLogger(ExtensibleStAXArtifactProcessor.class.getName()); 
     private XMLInputFactory inputFactory;
     private XMLOutputFactory outputFactory;
     private StAXArtifactProcessorExtensionPoint processors;
+    private Monitor monitor;
 
     /**
-     * Constructs a new loader registry.
+     * Constructs a new ExtensibleStAXArtifactProcessor.
+     * @param processors
      * @param inputFactory
      * @param outputFactory
      */
-    public ExtensibleStAXArtifactProcessor(StAXArtifactProcessorExtensionPoint processors, XMLInputFactory inputFactory, XMLOutputFactory outputFactory) {
+    public ExtensibleStAXArtifactProcessor(StAXArtifactProcessorExtensionPoint processors, 
+    									   XMLInputFactory inputFactory, 
+    									   XMLOutputFactory outputFactory,
+    									   Monitor monitor) {
         super();
         this.processors = processors;
         this.inputFactory = inputFactory;
         this.outputFactory = outputFactory;
-        this.outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.TRUE);
+        if (this.outputFactory != null) {
+            this.outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.TRUE);
+        }
+        this.monitor = monitor;
     }
+    
+    /**
+     * Report a warning.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+     private void warning(String message, Object model, Object... messageParameters) {
+    	 if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	 }
+     }
+     
+     /**
+      * Report a error.
+      * 
+      * @param problems
+      * @param message
+      * @param model
+      */
+     private void error(String message, Object model, Object... messageParameters) {
+     	if (monitor != null) {
+ 	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+ 	        monitor.problem(problem);
+     	}
+     }
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+     private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
+    	     monitor.problem(problem);
+    	 }        
+     }
 
-    public Object read(XMLStreamReader source) throws ContributionReadException {
+
+    public Object read(XMLStreamReader source) throws ContributionReadException, XMLStreamException {
         
-        // Delegate to the processor associated with the element qname
+        // Delegate to the processor associated with the element QName
+        int event = source.getEventType();
+        if (event == XMLStreamConstants.START_DOCUMENT) {
+            source.nextTag();
+        }
         QName name = source.getName();
         StAXArtifactProcessor<?> processor = (StAXArtifactProcessor<?>)processors.getProcessor(name);
         if (processor == null) {
+        	Location location = source.getLocation();
+            if (logger.isLoggable(Level.WARNING)) {                
+                logger.warning("Element " + name + " cannot be processed. (" + location + ")");
+            }
+            warning("ElementCannotBeProcessed", processors, name, location);
             return null;
         }
-        try {
-            return processor.read(source);
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
-        }
+        return processor.read(source);
     }
     
     @SuppressWarnings("unchecked")
-    public void write(Object model, XMLStreamWriter outputSource) throws ContributionWriteException {
+    public void write(Object model, XMLStreamWriter outputSource) throws ContributionWriteException, XMLStreamException {
         
         // Delegate to the processor associated with the model type
         if (model != null) {
             StAXArtifactProcessor processor = processors.getProcessor(model.getClass());
             if (processor != null) {
-                try {
-                    processor.write(model, outputSource);
-                } catch (XMLStreamException e) {
-                    throw new ContributionWriteException(e);
+                processor.write(model, outputSource);
+            } else {
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning("No StAX processor is configured to handle " + model.getClass());
                 }
+                warning("NoStaxProcessor", processors, model.getClass());
             }
         }
     }
@@ -105,13 +173,13 @@ public class ExtensibleStAXArtifactProcessor
     }
     
     /**
-     * Read a model from an input stream.
-     * @param is The artifact inputstream
+     * Read a model from an InputStream.
+     * @param is The artifact InputStream
      * @param type Model type
      * @return The model
      * @throws ContributionReadException
      */
-    public <MO> MO read(InputStream is, Class<MO> type) throws ContributionReadException {
+    public <M> M read(InputStream is, Class<M> type) throws ContributionReadException {
         try {
             XMLStreamReader reader;
             try {
@@ -123,13 +191,15 @@ public class ExtensibleStAXArtifactProcessor
                     if (type.isInstance(mo)) {
                         return type.cast(mo);
                     } else {
-                        UnrecognizedElementException e = new UnrecognizedElementException(name);
+                    	error("UnrecognizedElementException", reader, name);
+                        UnrecognizedElementException e = new UnrecognizedElementException(name);                        
                         throw e;
                     }
                 } catch (ContributionReadException e) {
                     Location location = reader.getLocation();
                     e.setLine(location.getLineNumber());
                     e.setColumn(location.getColumnNumber());
+                    error("ContributionReadException", reader, e);
                     throw e;
                 } finally {
                     try {
@@ -147,12 +217,13 @@ public class ExtensibleStAXArtifactProcessor
             }
         } catch (XMLStreamException e) {
             ContributionReadException ce = new ContributionReadException(e);
+            error("ContributionReadException", inputFactory, ce);
             throw ce;
         }
     }
 
     /**
-     * Write a model to an ouput stream.
+     * Write a model to an OutputStream.
      * @param model
      * @param os
      * @throws ContributionWriteException
@@ -164,7 +235,9 @@ public class ExtensibleStAXArtifactProcessor
             writer.flush();
             writer.close();
         } catch (XMLStreamException e) {
-            throw new ContributionWriteException(e);
+        	ContributionWriteException cw = new ContributionWriteException(e);
+        	error("ContributionWriteException", outputFactory, cw);
+            throw cw;
         }
     }
 

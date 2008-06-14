@@ -48,8 +48,6 @@ public class OSGiBundleImpl implements ServiceListener, BundleActivator {
     
     public OSGiBundleImpl(String serviceName, String... references) {
         
-        System.out.println("Created " + this.getClass().getSimpleName());
-        
         myClass = this.getClass();
         this.name = this.getClass().getSimpleName();
         this.serviceName = serviceName;
@@ -72,7 +70,7 @@ public class OSGiBundleImpl implements ServiceListener, BundleActivator {
     
     public void start(BundleContext bc) {
     	
-    	System.out.println("Started bundle " + name);
+    	System.out.println("Started OSGi bundle with activator " + name);
     	
     	this.bundleContext = bc;
     	
@@ -97,7 +95,7 @@ public class OSGiBundleImpl implements ServiceListener, BundleActivator {
     }
     
     public void stop(BundleContext bc)  {
-        System.out.println("Stop bundle " + name);
+        System.out.println("Stop OSGi bundle with activator " + name);
 
     }
     

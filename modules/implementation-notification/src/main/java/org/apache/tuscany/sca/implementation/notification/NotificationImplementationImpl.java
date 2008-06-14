@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.assembly.impl.ComponentTypeImpl;
+import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 
 
 /**
@@ -32,11 +32,12 @@ import org.apache.tuscany.sca.assembly.impl.ComponentTypeImpl;
  * 
  * @version $Rev$ $Date$
  */
-public class NotificationImplementationImpl extends ComponentTypeImpl implements Implementation {
+public class NotificationImplementationImpl extends ImplementationImpl implements Implementation {
 
     private String componentTypeName;
     private String implementationType;
     private ComponentType componentType;
+
     
     public NotificationImplementationImpl() {
         // Without this, the loader's resolve is not called
@@ -67,10 +68,12 @@ public class NotificationImplementationImpl extends ComponentTypeImpl implements
         this.componentType = componentType;
     }
 
+    @Override
     public List<Service> getServices() {
         return componentType.getServices();
     }
 
+    @Override
     public List<Reference> getReferences() {
         return componentType.getReferences();
     }

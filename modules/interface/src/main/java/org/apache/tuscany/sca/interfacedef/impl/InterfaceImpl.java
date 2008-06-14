@@ -26,6 +26,9 @@ import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
+import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * Represents a service interface.
@@ -38,6 +41,12 @@ public class InterfaceImpl implements Interface {
     private boolean conversational;
     private OperationList operations = new OperationList();
     private boolean unresolved;
+
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType type;
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+
 
     public boolean isRemotable() {
         return remotable;
@@ -112,6 +121,7 @@ public class InterfaceImpl implements Interface {
 
     }
 
+    @Deprecated
     public void setDefaultDataBinding(String dataBinding) {
         for (Operation op : getOperations()) {
             if (op.getDataBinding() == null) {
@@ -134,6 +144,11 @@ public class InterfaceImpl implements Interface {
                         if (d.getDataBinding() == null) {
                             d.setDataBinding(dataBinding);
                         }
+                        DataType ft = (DataType) d.getLogical();
+                        if (ft.getDataBinding() == null) {
+                            ft.setDataBinding(dataBinding);
+                        }
+
                     }
                 }
                 if (op.isWrapperStyle()) {
@@ -157,16 +172,82 @@ public class InterfaceImpl implements Interface {
         }
     }
 
+    private void setDataBinding(DataType dataType, String dataBinding) {
+        if ("java:array".equals(dataType.getDataBinding())) {
+            setDataBinding((DataType)dataType.getLogical(), dataBinding);
+        } else {
+            dataType.setDataBinding(dataBinding);
+        }
+    }
+
+    public void resetDataBinding(String dataBinding) {
+        for (Operation op : getOperations()) {
+            op.setDataBinding(dataBinding);
+            DataType<List<DataType>> inputType = op.getInputType();
+            if (inputType != null) {
+                for (DataType d : inputType.getLogical()) {
+                    setDataBinding(d, dataBinding);
+                }
+            }
+            DataType outputType = op.getOutputType();
+            if (outputType != null) {
+                setDataBinding(outputType, dataBinding);
+            }
+            List<DataType> faultTypes = op.getFaultTypes();
+            if (faultTypes != null) {
+                for (DataType d : faultTypes) {
+                    setDataBinding(d, dataBinding);
+                    setDataBinding((DataType) d.getLogical(), dataBinding);
+                }
+            }
+            if (op.isWrapperStyle()) {
+                WrapperInfo wrapper = op.getWrapper();
+                if (wrapper != null) {
+                    DataType<List<DataType>> unwrappedInputType = wrapper.getUnwrappedInputType();
+                    if (unwrappedInputType != null) {
+                        for (DataType d : unwrappedInputType.getLogical()) {
+                            setDataBinding(d, dataBinding);
+                        }
+                    }
+                    DataType unwrappedOutputType = wrapper.getUnwrappedOutputType();
+                    if (unwrappedOutputType != null) {
+                        setDataBinding(unwrappedOutputType, dataBinding);
+                    }
+                }
+            }
+        }
+    }
+
     public boolean isDynamic() {
         return false;
     }
+    
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
+
+    public List<PolicySet> getPolicySets() {
+        return policySets;
+    }
+
+    public List<Intent> getRequiredIntents() {
+        return requiredIntents;
+    }
+
+    public IntentAttachPointType getType() {
+        return type;
+    }
+
+    public void setType(IntentAttachPointType type) {
+        this.type = type;
+    }
 
     @Override
-    public InterfaceImpl clone() throws CloneNotSupportedException {
-        InterfaceImpl copy = (InterfaceImpl) super.clone();
+    public Object clone() throws CloneNotSupportedException {
+        InterfaceImpl copy = (InterfaceImpl)super.clone();
         copy.operations = new OperationList();
         for (Operation operation : this.operations) {
-            Operation clonedOperation = (Operation) operation.clone();
+            Operation clonedOperation = (Operation)operation.clone();
             copy.operations.add(clonedOperation);
         }
         return copy;

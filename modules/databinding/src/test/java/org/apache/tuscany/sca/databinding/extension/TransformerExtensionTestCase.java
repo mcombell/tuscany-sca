@@ -31,12 +31,15 @@ import org.w3c.dom.Node;
 
 /**
  * Test case for TransformerExtension
+ *
+ * @version $Rev$ $Date$
  */
 public class TransformerExtensionTestCase extends TestCase {
 
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
@@ -47,13 +50,12 @@ public class TransformerExtensionTestCase extends TestCase {
         assertEquals(XMLStreamReader.class.getName(), transformer.getTargetDataBinding());
         assertEquals(50, transformer.getWeight());
         TransformerExtensionPoint registry = EasyMock.createMock(TransformerExtensionPoint.class);
-        registry.addTransformer(EasyMock.isA(Transformer.class));
+        registry.addTransformer(EasyMock.isA(Transformer.class), EasyMock.eq(true));
         EasyMock
                 .expect(registry.getTransformer(transformer.getSourceDataBinding(), transformer.getTargetDataBinding()))
                 .andReturn(transformer);
         EasyMock.replay(registry);
-        transformer.setTransformerRegistry(registry);
-        transformer.init();
+        registry.addTransformer(transformer, true);
         assertSame(transformer, registry.getTransformer(transformer.getSourceDataBinding(), transformer
                 .getTargetDataBinding()));
     }
@@ -61,12 +63,12 @@ public class TransformerExtensionTestCase extends TestCase {
     private static class MyTransformer extends BaseTransformer<Node, XMLStreamReader> {
 
         @Override
-        protected Class getSourceType() {
+        protected Class<Node> getSourceType() {
             return Node.class;
         }
 
         @Override
-        protected Class getTargetType() {
+        protected Class<XMLStreamReader> getTargetType() {
             return XMLStreamReader.class;
         }
 

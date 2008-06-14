@@ -19,12 +19,6 @@
 
 package org.apache.tuscany.sca.host.embedded.impl;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
@@ -33,14 +27,23 @@ import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.SCABinding;
+import org.apache.tuscany.sca.assembly.SCABindingFactory;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
+import org.apache.tuscany.sca.assembly.xml.Constants;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
-import org.apache.tuscany.sca.core.runtime.ActivationException;
-import org.apache.tuscany.sca.core.runtime.CompositeActivator;
+import org.apache.tuscany.sca.core.assembly.ActivationException;
+import org.apache.tuscany.sca.core.assembly.CompositeActivator;
+import org.apache.tuscany.sca.core.context.ServiceReferenceImpl;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
+import org.apache.tuscany.sca.interfacedef.InterfaceContract;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.runtime.RuntimeComponentContext;
+import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.osoa.sca.CallableReference;
-import org.osoa.sca.ComponentContext;
-import org.osoa.sca.Constants;
 import org.osoa.sca.ServiceReference;
 import org.osoa.sca.ServiceRuntimeException;
 
@@ -54,120 +57,8 @@ public class EmbeddedSCADomain extends SCADomain {
     private String uri;
     private Composite domainComposite;
     private ReallySmallRuntime runtime;
-    private Map<String, Component> components = new HashMap<String, Component>();
-    private DomainCompositeHelper domainCompositeHelper;
     private ComponentManagerImpl componentManager = new ComponentManagerImpl(this);
     
-    public class DomainCompositeHelper {
-        
-        /**
-         * Add a composite to the domain
-         * @param composite
-         * @return
-         */
-        public Composite addComposite(Composite composite) throws ActivationException {
-            domainComposite.getIncludes().add(composite);
-            //CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            //compositeActivator.activate(composite);
-            //for (Component component : composite.getComponents()) {
-            //    components.put(component.getName(), component);
-            //}
-            return composite;
-        }
-
-        /**
-         * Remove a composite from the domain
-         * @param composite
-         * @throws ActivationException
-         */
-        public void removeComposite(Composite composite) throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.deactivate(composite);
-            domainComposite.getIncludes().remove(composite);
-            for (Component component : composite.getComponents()) {
-                components.remove(component.getName());
-            }
-        }
-        
-        /**
-         * Start a composite
-         * @deprecated
-         * @param composite
-         * @throws ActivationException
-         */
-        public void startComposite(Composite composite) throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.start(composite);
-        }
-        
-        /**
-         * Stop a composite
-         * @deprecated
-         * @param composite
-         * @throws ActivationException
-         */
-        public void stopComposite(Composite composite) throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.stop(composite);
-        }
-
-        public Set<String> getComponentNames(){
-            return  Collections.unmodifiableSet(components.keySet());
-        }
-
-        /**
-         * Get a reference to a component by name
-         * @param componentName
-         * @return
-         */
-        public Component getComponent(String componentName){
-            return (Component) components.get(componentName);
-        }
-        
-        /**
-         * Returns the list of components in the domain.
-         * @return
-         */
-        public List<Component> getComponents() {
-            return domainComposite.getComponents();
-        }
-        
-        /**
-         * Start a component
-         * @param component
-         * @throws ActivationException
-         */
-        public void startComponent(Component component) throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.start(component);
-            componentManager.notifyComponentStarted(component.getName());
-        }
-        
-        /**
-         * Stop a component
-         * @param component
-         * @throws ActivationException
-         */
-        public void stopComponent(Component component) throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.stop(component);
-            componentManager.notifyComponentStopped(component.getName());
-        }        
-        
-        /**
-         * Activate SCA Domain
-         * @throws ActivationException
-         */
-        public void activateDomain() throws ActivationException {
-            CompositeActivator compositeActivator = runtime.getCompositeActivator();
-            compositeActivator.activate(domainComposite);
-            for (Component component : domainComposite.getComponents()) {
-                components.put(component.getName(), component);
-            }
-
-        }
-    }
-
     /**
      * Constructs a new domain facade.
      *
@@ -190,11 +81,11 @@ public class EmbeddedSCADomain extends SCADomain {
         // Create an in-memory domain level composite
         AssemblyFactory assemblyFactory = runtime.getAssemblyFactory();
         domainComposite = assemblyFactory.createComposite();
-        domainComposite.setName(new QName(Constants.SCA_NS, "domain"));
+        domainComposite.setName(new QName(Constants.SCA10_NS, "domain"));
         domainComposite.setURI(uri);
-
-        // Create a domain composite helper
-        domainCompositeHelper = new DomainCompositeHelper();
+        
+        getCompositeActivator().setDomainComposite(domainComposite);
+        
     }
 
     public void stop() throws ActivationException {
@@ -204,18 +95,26 @@ public class EmbeddedSCADomain extends SCADomain {
         
         // Cleanup
         domainComposite = null;
-        domainCompositeHelper = null;
+    }
+    
+    public void buildComposite(Composite composite) throws CompositeBuilderException {
+        runtime.buildComposite(composite);
     }
 
     public ContributionService getContributionService() {
         return runtime.getContributionService();
     }
     
-    public DomainCompositeHelper getDomainCompositeHelper() {
-        if (domainCompositeHelper == null) {
-            throw new IllegalStateException("domain not started");
-        }
-        return domainCompositeHelper;
+    public CompositeBuilder getCompositeBuilder() {
+        return runtime.getCompositeBuilder();
+    }
+    
+    public CompositeActivator getCompositeActivator() {
+        return runtime.getCompositeActivator();
+    }
+    
+    public Composite getDomainComposite() {
+        return domainComposite;
     }
     
     @Override
@@ -230,8 +129,7 @@ public class EmbeddedSCADomain extends SCADomain {
 
     @Override
     public <B, R extends CallableReference<B>> R cast(B target) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-        return null;
+        return (R)runtime.getProxyFactory().cast(target);
     }
 
     @Override
@@ -243,6 +141,36 @@ public class EmbeddedSCADomain extends SCADomain {
         return serviceReference.getService();
     }
 
+    private <B> ServiceReference<B> createServiceReference(Class<B> businessInterface, String targetURI) {
+        try {
+            AssemblyFactory assemblyFactory = runtime.getAssemblyFactory();
+            Composite composite = assemblyFactory.createComposite();
+            composite.setName(new QName(Constants.SCA10_TUSCANY_NS, "default"));
+            RuntimeComponent component = (RuntimeComponent)assemblyFactory.createComponent();
+            component.setName("default");
+            component.setURI("default");
+            runtime.getCompositeActivator().configureComponentContext(component);
+            composite.getComponents().add(component);
+            RuntimeComponentReference reference = (RuntimeComponentReference)assemblyFactory.createComponentReference();
+            reference.setName("default");
+            ModelFactoryExtensionPoint factories =
+                runtime.getExtensionPointRegistry().getExtensionPoint(ModelFactoryExtensionPoint.class);
+            JavaInterfaceFactory javaInterfaceFactory = factories.getFactory(JavaInterfaceFactory.class);
+            InterfaceContract interfaceContract = javaInterfaceFactory.createJavaInterfaceContract();
+            interfaceContract.setInterface(javaInterfaceFactory.createJavaInterface(businessInterface));
+            reference.setInterfaceContract(interfaceContract);
+            component.getReferences().add(reference);
+            reference.setComponent(component);
+            SCABindingFactory scaBindingFactory = factories.getFactory(SCABindingFactory.class);
+            SCABinding binding = scaBindingFactory.createSCABinding();
+            binding.setURI(targetURI);
+            reference.getBindings().add(binding);
+            return new ServiceReferenceImpl<B>(businessInterface, component, reference, binding, runtime
+                .getProxyFactory(), runtime.getCompositeActivator());
+        } catch (Exception e) {
+            throw new ServiceRuntimeException(e);
+        }
+    }
     @Override
     public <B> ServiceReference<B> getServiceReference(Class<B> businessInterface, String name) {
 
@@ -260,49 +188,41 @@ public class EmbeddedSCADomain extends SCADomain {
         }
 
         // Lookup the component in the domain
-        Component component = components.get(componentName);
+        Component component = componentManager.getComponent(componentName);
         if (component == null) {
-            throw new ServiceRuntimeException("Component not found: " + componentName);
+            // The component is not local in the partition, try to create a remote service ref
+            return createServiceReference(businessInterface, name);
         }
-        ComponentContext componentContext = null;
+        RuntimeComponentContext componentContext = null;
 
         // If the component is a composite, then we need to find the
-        // non-composite
-        // component that provides the requested service
+        // non-composite component that provides the requested service
         if (component.getImplementation() instanceof Composite) {
-            ComponentService promotedService = null;
             for (ComponentService componentService : component.getServices()) {
                 if (serviceName == null || serviceName.equals(componentService.getName())) {
-
                     CompositeService compositeService = (CompositeService)componentService.getService();
                     if (compositeService != null) {
-                        promotedService = compositeService.getPromotedService();
-                        SCABinding scaBinding = promotedService.getBinding(SCABinding.class);
-                        if (scaBinding != null) {
-                            Component promotedComponent = scaBinding.getComponent();
-                            if (serviceName != null) {
-                                serviceName = "$promoted$." + serviceName;
-                            }
-                            componentContext = (ComponentContext)promotedComponent;
+                        if (serviceName != null) {
+                            serviceName = "$promoted$." + serviceName;
                         }
+                        componentContext =
+                            ((RuntimeComponent)compositeService.getPromotedComponent()).getComponentContext();
+                        return componentContext.createSelfReference(businessInterface, compositeService
+                            .getPromotedService());
                     }
                     break;
                 }
             }
-            if (componentContext == null) {
-                throw new ServiceRuntimeException("Composite service not found: " + name);
+            // No matching service is found
+            throw new ServiceRuntimeException("Composite service not found: " + name);
+        } else {
+            componentContext = ((RuntimeComponent)component).getComponentContext();
+            if (serviceName != null) {
+                return componentContext.createSelfReference(businessInterface, serviceName);
+            } else {
+                return componentContext.createSelfReference(businessInterface);
             }
-        } else {
-            componentContext = (ComponentContext)component;
         }
-
-        ServiceReference<B> serviceReference;
-        if (serviceName != null) {
-            serviceReference = componentContext.createSelfReference(businessInterface, serviceName);
-        } else {
-            serviceReference = componentContext.createSelfReference(businessInterface);
-        }
-        return serviceReference;
 
     }
 

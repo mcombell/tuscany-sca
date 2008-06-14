@@ -19,28 +19,20 @@
 
 package org.apache.tuscany.sca.contribution.resolver;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.tuscany.sca.contribution.Contribution;
 
 /**
- * A default implementation of an artifact resolver, based on a map.
+ * A default implementation of a model resolver based on a map.
  *
- * @version $Rev: 548560 $ $Date: 2007-06-18 19:25:19 -0700 (Mon, 18 Jun 2007) $
+ * @version $Rev$ $Date$
  */
 public class DefaultModelResolver implements ModelResolver {
-    private static final long serialVersionUID = -7826976465762296634L;
     
     private Map<Object, Object> map = new HashMap<Object, Object>();
     
-    protected WeakReference<ClassLoader> classLoader;
-    protected Contribution contribution;
-    
-    public DefaultModelResolver(ClassLoader classLoader, Contribution contribution) {
-        this.classLoader = new WeakReference<ClassLoader>(classLoader);
-        this.contribution = contribution;
+    public DefaultModelResolver() {
     }
     
     public <T> T resolveModel(Class<T> modelClass, T unresolved) {
@@ -50,26 +42,6 @@ public class DefaultModelResolver implements ModelResolver {
             // Return the resolved object
             return modelClass.cast(resolved);
             
-        } else if (unresolved instanceof ClassReference) {
-            
-            // Load a class on demand
-            ClassReference classReference = (ClassReference)unresolved;
-            Class clazz;
-            try {
-                clazz = Class.forName(classReference.getClassName(), true, classLoader.get());
-            } catch (ClassNotFoundException e) {
-                
-                // Return the unresolved object
-                return unresolved;
-            }
-            
-            // Store a new ClassReference wrappering the loaded class
-            resolved = new ClassReference(clazz);
-            map.put(resolved, resolved);
-            
-            // Return the resolved ClassReference
-            return modelClass.cast(resolved);
-                
         } else {
             
             // Return the unresolved object

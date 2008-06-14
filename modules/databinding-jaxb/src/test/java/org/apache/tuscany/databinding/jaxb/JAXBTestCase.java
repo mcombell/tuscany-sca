@@ -41,6 +41,10 @@ import org.w3c.dom.Node;
 import com.example.ipo.jaxb.ObjectFactory;
 import com.example.ipo.jaxb.PurchaseOrderType;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class JAXBTestCase extends TestCase {
     private static final String IPO_XML =
         "<?xml version=\"1.0\"?>" + "<ipo:purchaseOrder"
@@ -72,8 +76,7 @@ public class JAXBTestCase extends TestCase {
             + "  </items>"
             + "</ipo:purchaseOrder>";
 
-    private String contextPath = "com.example.ipo.jaxb";
-
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
@@ -85,6 +88,7 @@ public class JAXBTestCase extends TestCase {
 
         TransformationContext tContext = createMock(TransformationContext.class);
         expect(tContext.getTargetDataType()).andReturn(targetDataType).anyTimes();
+        expect(tContext.getTargetOperation()).andReturn(null).anyTimes();
         replay(tContext);
 
         Object object1 = t0.transform(new StringReader(IPO_XML), tContext);
@@ -93,6 +97,9 @@ public class JAXBTestCase extends TestCase {
 
         TransformationContext tContext1 = createMock(TransformationContext.class);
         expect(tContext1.getSourceDataType()).andReturn(sourceDataType).anyTimes();
+        expect(tContext1.getTargetDataType()).andReturn(null).anyTimes();
+        expect(tContext1.getSourceOperation()).andReturn(null).anyTimes();
+        expect(tContext1.getTargetOperation()).andReturn(null).anyTimes();
         replay(tContext1);
 
         JAXB2Node t1 = new JAXB2Node();
@@ -115,6 +122,7 @@ public class JAXBTestCase extends TestCase {
 
         TransformationContext tContext = createMock(TransformationContext.class);
         expect(tContext.getTargetDataType()).andReturn(targetDataType).anyTimes();
+        expect(tContext.getTargetOperation()).andReturn(null).anyTimes();
         replay(tContext);
 
         Object object1 = t0.transform(new StringReader(IPO_XML), tContext);
@@ -124,6 +132,9 @@ public class JAXBTestCase extends TestCase {
 
         TransformationContext tContext1 = createMock(TransformationContext.class);
         expect(tContext1.getSourceDataType()).andReturn(sourceDataType).anyTimes();
+        expect(tContext1.getTargetDataType()).andReturn(null).anyTimes();
+        expect(tContext1.getSourceOperation()).andReturn(null).anyTimes();
+        expect(tContext1.getTargetOperation()).andReturn(null).anyTimes();
         replay(tContext1);
 
         JAXB2Node t1 = new JAXB2Node();
@@ -143,6 +154,9 @@ public class JAXBTestCase extends TestCase {
 
         TransformationContext tContext1 = createMock(TransformationContext.class);
         expect(tContext1.getSourceDataType()).andReturn(sourceDataType).anyTimes();
+        expect(tContext1.getTargetDataType()).andReturn(null).anyTimes();
+        expect(tContext1.getSourceOperation()).andReturn(null).anyTimes();
+        expect(tContext1.getTargetOperation()).andReturn(null).anyTimes();
         replay(tContext1);
 
         JAXB2Node t1 = new JAXB2Node();
@@ -153,6 +167,7 @@ public class JAXBTestCase extends TestCase {
 
     }
     
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }

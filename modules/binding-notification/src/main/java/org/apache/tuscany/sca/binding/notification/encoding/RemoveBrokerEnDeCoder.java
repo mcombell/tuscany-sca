@@ -66,12 +66,10 @@ public class RemoveBrokerEnDeCoder extends AbstractEnDeCoder<RemoveBroker> {
                         if (encodingObject instanceof BrokerConsumerReference && !haveBCR) {
                             removeBrokerElement.setBrokerConsumerReference((BrokerConsumerReference)encodingObject);
                             haveBCR = true;
-                        }
-                        else if(encodingObject instanceof NeighborBrokerConsumers && !haveNBC) {
+                        } else if(encodingObject instanceof NeighborBrokerConsumers && !haveNBC) {
                             removeBrokerElement.setNeighborBrokerConsumers((NeighborBrokerConsumers)encodingObject);
                             haveNBC = true;
-                        }
-                        else {
+                        } else {
                             throw new EncodingException("Invalid encoding object");
                         }
                         break;
@@ -87,12 +85,14 @@ public class RemoveBrokerEnDeCoder extends AbstractEnDeCoder<RemoveBroker> {
         }
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         
         return QNAME;
     }
 
-    protected Class<RemoveBroker> getEncodingObjectType() {
+    
+	public Class<RemoveBroker> getEncodingObjectType() {
         
         return RemoveBroker.class;
     }

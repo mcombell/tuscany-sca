@@ -27,15 +27,17 @@ import javax.xml.stream.XMLStreamWriter;
 
 /**
  * The XMLStreamSerializer pulls events from the XMLStreamReader and dumps into the XMLStreamWriter
+ *
+ * @version $Rev$ $Date$
  */
 public class XMLStreamSerializer implements XMLStreamConstants {
     public static final String NAMESPACE_PREFIX = "ns";
     private static int namespaceSuffix;
 
     /*
-     * The behavior of the serializer is such that it returns when it encounters the starting element for the second
-     * time. The depth variable tracks the depth of the serilizer and tells it when to return. Note that it is assumed
-     * that this serialization starts on an Element.
+     * The behavior of the Serializer is such that it returns when it encounters the starting element for the second
+     * time. The depth variable tracks the depth of the Serializer and tells it when to return. Note that it is assumed
+     * that this Serialization starts on an Element.
      */
 
     /**
@@ -86,13 +88,13 @@ public class XMLStreamSerializer implements XMLStreamConstants {
             /*
              * Due to parser implementations returning null as the namespace URI (for the empty namespace) we need to
              * make sure that we deal with a namespace name that is not null. The best way to work around this issue is
-             * to set the namespace uri to "" if it is null
+             * to set the namespace URI to "" if it is null
              */
             if (namespaceName == null) {
                 namespaceName = "";
             }
 
-            writerPrefix = writer.getNamespaceContext().getPrefix(namespaceName);
+            writerPrefix = writer.getPrefix(namespaceName);
 
             if (!"".equals(namespaceName)) {
                 // prefix has already being declared but this particular
@@ -105,7 +107,7 @@ public class XMLStreamSerializer implements XMLStreamConstants {
 
                     // writer prefix is available but different from the
                     // current
-                    // prefix of the attrib. We should be decalring the new
+                    // prefix of the attrib. We should be declaring the new
                     // prefix
                     // as a namespace declaration
                 } else if (prefix != null && !"".equals(prefix) && !prefix.equals(writerPrefix)) {
@@ -173,7 +175,7 @@ public class XMLStreamSerializer implements XMLStreamConstants {
                 if (prefix != null) {
                     writer.writeStartElement(prefix, reader.getLocalName(), nameSpaceName);
                     writer.writeNamespace(prefix, nameSpaceName);
-                    writer.setPrefix(prefix, nameSpaceName);
+                    // writer.setPrefix(prefix, nameSpaceName);
                 } else {
                     // [rfeng] We need to set default NS 1st before calling writeStateElement
                     writer.setDefaultNamespace(nameSpaceName);
@@ -225,7 +227,7 @@ public class XMLStreamSerializer implements XMLStreamConstants {
         String prefix1 = writer.getPrefix(uri);
         if (prefix1 == null) {
             writer.writeNamespace(prefix, uri);
-            writer.setPrefix(prefix, uri);
+            // writer.setPrefix(prefix, uri);
         }
     }
 

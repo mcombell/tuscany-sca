@@ -18,11 +18,8 @@
  */
 package org.apache.tuscany.sca.core.scope;
 
+import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
-import org.apache.tuscany.sca.scope.InstanceWrapper;
-import org.apache.tuscany.sca.scope.Scope;
-import org.apache.tuscany.sca.scope.TargetNotFoundException;
-import org.apache.tuscany.sca.scope.TargetResolutionException;
 
 /**
  * A scope context which manages atomic component instances keyed by composite
@@ -36,11 +33,20 @@ public class CompositeScopeContainer<KEY> extends AbstractScopeContainer<KEY> {
         super(Scope.COMPOSITE, component);
     }
 
+    @Override
     public synchronized void stop() {
         super.stop();
+        if (wrapper != null) {
+            try {
+                wrapper.stop();
+            } catch (TargetDestructionException e) {
+                throw new IllegalStateException(e);
+            }
+        }
         wrapper = null;
     }
 
+    @Override
     public synchronized InstanceWrapper getWrapper(KEY contextId) throws TargetResolutionException {
         if (wrapper == null) {
             wrapper = createInstanceWrapper();
@@ -49,6 +55,7 @@ public class CompositeScopeContainer<KEY> extends AbstractScopeContainer<KEY> {
         return wrapper;
     }
 
+    @Override
     public InstanceWrapper getAssociatedWrapper(KEY contextId) throws TargetResolutionException {
         if (wrapper == null) {
             throw new TargetNotFoundException(component.getURI());
@@ -59,7 +66,7 @@ public class CompositeScopeContainer<KEY> extends AbstractScopeContainer<KEY> {
     @Override
     public synchronized void start() {
         super.start();
-        if(isEagerInit()) {
+        if (isEagerInit()) {
             try {
                 getWrapper(null);
             } catch (TargetResolutionException e) {

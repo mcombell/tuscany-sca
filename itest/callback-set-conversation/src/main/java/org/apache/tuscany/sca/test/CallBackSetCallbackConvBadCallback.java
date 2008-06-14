@@ -34,7 +34,6 @@ public class CallBackSetCallbackConvBadCallback implements Serializable {
         //
         System.out.println("CallBackSetCallbackBadCallback: callback called");
         Assert.fail("CallBackSetCallbackConvBadCallback: callback called");
-        return;
     }
 
 }

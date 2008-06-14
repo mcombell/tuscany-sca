@@ -32,11 +32,13 @@ public class NewProducerEnDeCoder extends EndpointReferenceWrapperEnDeCoder<NewP
         super(registry);
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         return QNAME;
     }
 
-    protected Class<NewProducer> getEncodingObjectType() {
+    
+	public Class<NewProducer> getEncodingObjectType() {
         return NewProducer.class;
     }
 }

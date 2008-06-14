@@ -30,11 +30,13 @@ public class CalculatorTestCase extends TestCase {
     private CalculatorService calculatorService;
     private SCADomain scaDomain;
 
+    @Override
     protected void setUp() throws Exception {
         scaDomain = SCADomain.newInstance("Calculator.composite");
         calculatorService = scaDomain.getService(CalculatorService.class, "CalculatorServiceComponent");
     }
 
+    @Override
     protected void tearDown() throws Exception {
         scaDomain.close();
     }
@@ -45,6 +47,5 @@ public class CalculatorTestCase extends TestCase {
         assertEquals(calculatorService.subtract(3, 2), 1.0);
         assertEquals(calculatorService.multiply(3, 2), 6.0);
         assertEquals(calculatorService.divide(3, 2), 1.5);
-
     }
 }

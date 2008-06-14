@@ -19,21 +19,35 @@
 
 package echo.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 import echo.EchoBinding;
 
 /**
  * Implementation of the Echo binding model.
  */
-public class EchoBindingImpl implements EchoBinding {
+public class EchoBindingImpl implements EchoBinding, PolicySetAttachPoint {
     
     private String name;
     private String uri;
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType bindingType = null;
+
+    public IntentAttachPointType getType() {
+        return bindingType;
+    }
+
+    public void setType(IntentAttachPointType type) {
+        this.bindingType = type;
+    }
 
     public String getName() {
         return name;
@@ -52,18 +66,11 @@ public class EchoBindingImpl implements EchoBinding {
     }
 
     public List<PolicySet> getPolicySets() {
-        // The sample binding does not support policies
-        return Collections.emptyList();
+        return policySets;
     }
 
     public List<Intent> getRequiredIntents() {
-        // The sample binding does not support policies
-        return Collections.emptyList();
-    }
-    
-    public List<Object> getExtensions() {
-        // The sample binding does not support extensions
-        return Collections.emptyList();
+        return requiredIntents;
     }
 
     public boolean isUnresolved() {
@@ -73,6 +80,25 @@ public class EchoBindingImpl implements EchoBinding {
 
     public void setUnresolved(boolean unresolved) {
         // The sample binding is always resolved
+    }
+    
+    public void setPolicySets(List<PolicySet> policySets) {
+        this.policySets = policySets;
+        
+    }
+
+    public void setRequiredIntents(List<Intent> intents) {
+        this.requiredIntents = intents;
+        
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }    
+    
+    public List<PolicySet> getApplicablePolicySets() {
+        return this.applicablePolicySets;
     }
 
 }

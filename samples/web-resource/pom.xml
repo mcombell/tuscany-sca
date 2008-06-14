@@ -21,12 +21,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
-        <artifactId>tuscany-samples</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>tuscany-sca</artifactId>
+        <version>2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-web-resource</artifactId>
-    <name>Apache Tuscany Web Resource Sample</name>
+    <name>Apache Tuscany SCA Web Resource Sample</name>
 
     <repositories>
        <repository>
@@ -39,20 +39,27 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-resource</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <artifactId>tuscany-implementation-resource-runtime</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-http-tomcat</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <artifactId>tuscany-binding-http-runtime</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-tomcat</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 

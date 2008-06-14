@@ -22,18 +22,30 @@ import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.databinding.javabeans.JavaBean2XMLStreamReader;
+import org.apache.tuscany.sca.databinding.javabeans.JavaBean2XMLStreamReaderTransformer;
+import org.custommonkey.xmlunit.XMLAssert;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class JavaBean2XMLStreamReaderTestCase extends TestCase {
+    private static final String XML_RESULT =
+        "<?xml version='1.0' encoding='UTF-8'?>" 
+            + "<MyBean xmlns=\"http://xml.databinding.sca.tuscany.apache.org/\">"
+            + "<arr>1</arr><arr>2</arr><arr>3</arr><bean><name>Name</name></bean><i>1</i><str>ABC</str>"
+            + "</MyBean>";
+
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
 
-    public void testTransformation() {
-        JavaBean2XMLStreamReader t2 = new JavaBean2XMLStreamReader();
+    public void testTransformation() throws Exception {
+        JavaBean2XMLStreamReaderTransformer t2 = new JavaBean2XMLStreamReaderTransformer();
         MyBean bean = new MyBean();
         bean.str = "ABC";
         bean.i = 1;
@@ -43,9 +55,8 @@ public class JavaBean2XMLStreamReaderTestCase extends TestCase {
         XMLStreamReader reader = t2.transform(bean, null);
         XMLStreamReader2String t3 = new XMLStreamReader2String();
         String xml = t3.transform(reader, null);
-        assertTrue(xml.contains("<JavaBean2XMLStreamReaderTestCase$MyBean>" 
-                     + "<arr>1</arr><arr>2</arr><arr>3</arr><bean><name>Name</name></bean>"
-                     + "<i>1</i><str>ABC</str></JavaBean2XMLStreamReaderTestCase$MyBean>"));
+        XMLAssert.assertXMLEqual(XML_RESULT, xml);
+
     }
 
     private static class MyBean {

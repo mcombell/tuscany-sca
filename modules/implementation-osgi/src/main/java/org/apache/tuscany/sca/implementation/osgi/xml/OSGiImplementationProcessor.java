@@ -22,13 +22,11 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-import static org.osoa.sca.Constants.SCA_NS;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
-
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,7 +42,12 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.assembly.xml.Constants;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.osgi.BundleReference;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -55,8 +58,10 @@ import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
-import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceIntrospector;
-import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -67,44 +72,64 @@ import org.w3c.dom.Node;
  * Process an <implementation.osgi/> element in a component definition. An instance of
  * OSGiImplementation is created.
  * Also associates the component type file with the implementation.
- * 
  *
+ * @version $Rev$ $Date$
  */
 public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiImplementation> {
     
-    public static final QName IMPLEMENTATION_OSGI  = new QName(SCA_NS, "implementation.osgi");
+    public static final QName IMPLEMENTATION_OSGI  = new QName(Constants.SCA10_TUSCANY_NS, "implementation.osgi");
     
-    private static final String BUNDLE             = "bundle";
-    private static final String BUNDLE_LOCATION    = "bundleLocation";
-    private static final String SCOPE              = "scope";
-    private static final String EAGER_INIT         = "eagerInit";
+    private static final String BUNDLE_SYMBOLICNAME= "bundleSymbolicName";
+    private static final String BUNDLE_VERSION     = "bundleVersion";
+    private static final String CLASSES            = "classes";
     private static final String IMPORTS            = "imports";
-    private static final String ALLOWS_PASS_BY_REF = "allowsPassByReference";
-    private static final String INJECT_PROPERTIES  = "injectProperties";
 
-   
-    private static final QName PROPERTIES_QNAME    = new QName(SCA_NS, "properties");
-    private static final QName PROPERTY_QNAME      = new QName(SCA_NS, "property");
+    private static final QName PROPERTIES_QNAME    = new QName(Constants.SCA10_TUSCANY_NS, "properties");
+    private static final QName PROPERTY_QNAME      = new QName(Constants.SCA10_TUSCANY_NS, "property");
     
-    private JavaInterfaceIntrospector interfaceIntrospector;
     private JavaInterfaceFactory javaInterfaceFactory;
     private AssemblyFactory assemblyFactory;
-    //private PolicyFactory policyFactory;
+    private ModelFactoryExtensionPoint modelFactories;
+    private Monitor monitor;
     
     private static final DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
     static {
         domFactory.setNamespaceAware(true);
     }
 
-    public OSGiImplementationProcessor(JavaInterfaceIntrospector interfaceIntrospector,
-            JavaInterfaceFactory javaInterfaceFactory,
-            AssemblyFactory assemblyFactory,
-            PolicyFactory policyFactory) {
-        
-        this.interfaceIntrospector = interfaceIntrospector;
-        this.assemblyFactory = assemblyFactory;
-        this.javaInterfaceFactory = javaInterfaceFactory;
-        //this.policyFactory = policyFactory;
+    public OSGiImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+    	this.monitor = monitor;
+        this.modelFactories = modelFactories;
+        this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        this.javaInterfaceFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+    }
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "impl-osgi-validation-messages", Severity.ERROR, model, message, ex);
+	        monitor.problem(problem);
+    	 }
+    }
+    
+    /**
+     * Report a error.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+    	 if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "impl-osgi-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	 }
     }
     
     public QName getArtifactType() {
@@ -125,106 +150,119 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
         return tokens;
     }
     
-    public OSGiImplementation read(XMLStreamReader reader) throws ContributionReadException {
-        
+    public OSGiImplementation read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         assert IMPLEMENTATION_OSGI.equals(reader.getName());
-        
-        try {
-            String bundleName = reader.getAttributeValue(null, BUNDLE);
-            String bundleLocation = reader.getAttributeValue(null, BUNDLE_LOCATION);
-            String imports = reader.getAttributeValue(null, IMPORTS);
-            String[] importList;
-            if (imports != null)
-                importList = tokenize(imports);
-            else
-                importList = new String[0];
-            String scope = reader.getAttributeValue(null, SCOPE);  
-            String allowsPassByRef = reader.getAttributeValue(null, ALLOWS_PASS_BY_REF);
-            String[] allowsPassByRefList;
-            if (allowsPassByRef != null)
-                allowsPassByRefList = tokenize(allowsPassByRef);
-            else
-                allowsPassByRefList = new String[0];
-            
-            boolean injectProperties = !"false".equalsIgnoreCase(reader.getAttributeValue(null, INJECT_PROPERTIES));
-            boolean eagerInit = "true".equalsIgnoreCase(reader.getAttributeValue(null, EAGER_INIT));
-            
-            
-            Hashtable<String, List<ComponentProperty>> refProperties = 
+
+        String bundleSymbolicName = reader.getAttributeValue(null, BUNDLE_SYMBOLICNAME);
+        String bundleVersion = reader.getAttributeValue(null, BUNDLE_VERSION);
+        String imports = reader.getAttributeValue(null, IMPORTS);
+        String[] importList;
+        if (imports != null)
+            importList = tokenize(imports);
+        else
+            importList = new String[0];
+        String classes = reader.getAttributeValue(null, CLASSES);
+        String[] classList;
+        if (classes != null)
+            classList = tokenize(classes);
+        else
+            classList = new String[0];
+
+        Hashtable<String, List<ComponentProperty>> refProperties = 
                 new Hashtable<String, List<ComponentProperty>>();
-            Hashtable<String, List<ComponentProperty>> serviceProperties = 
+        Hashtable<String, List<ComponentProperty>> serviceProperties = 
                 new Hashtable<String, List<ComponentProperty>>();
-            Hashtable<String, List<ComponentProperty>> refCallbackProperties = 
+        Hashtable<String, List<ComponentProperty>> refCallbackProperties = 
                 new Hashtable<String, List<ComponentProperty>>();
-            Hashtable<String, List<ComponentProperty>> serviceCallbackProperties = 
+        Hashtable<String, List<ComponentProperty>> serviceCallbackProperties = 
                 new Hashtable<String, List<ComponentProperty>>();
             
-            while (reader.hasNext()) {
+        while (reader.hasNext()) {
                 
-                int next = reader.next();
-                if (next == END_ELEMENT && IMPLEMENTATION_OSGI.equals(reader.getName())) {
-                    break;
-                }
-                else if (next == START_ELEMENT && PROPERTIES_QNAME.equals(reader.getName())) {
-                    
-                    // FIXME: This is temporary code which allows reference and service properties used
-                    //        for filtering OSGi services to be specified in <implementation.osgi/>
-                    //        This should really be provided in the component type file since these
-                    //        properties are associated with an implementation rather than a configured
-                    //        instance of an implementation.
-                    String refName = reader.getAttributeValue(null, "reference");
-                    String serviceName = reader.getAttributeValue(null, "service");
-                    String refCallbackName = reader.getAttributeValue(null, "referenceCallback");
-                    String serviceCallbackName = reader.getAttributeValue(null, "serviceCallback");
-                    List<ComponentProperty> props = readProperties(reader);
-                    if (refName != null)
-                        refProperties.put(refName, props);
-                    else if (serviceName != null)
-                        serviceProperties.put(serviceName, props);
-                    else if (refCallbackName != null)
-                        refCallbackProperties.put(refCallbackName, props);
-                    else if (serviceCallbackName != null)
-                        serviceCallbackProperties.put(serviceCallbackName, props);
-                    else
-                        throw new ContributionReadException("Properties in implementation.osgi should specify service or reference");                }
+            int next = reader.next();
+            if (next == END_ELEMENT && IMPLEMENTATION_OSGI.equals(reader.getName())) {
+                break;
             }
-                
-            OSGiImplementation implementation = new OSGiImplementation(
-                    bundleName, 
-                    bundleLocation,
-                    importList, 
-                    scope,
-                    eagerInit,
-                    allowsPassByRefList,
-                    refProperties,
-                    serviceProperties,
-                    injectProperties);
-            implementation.setCallbackProperties(refCallbackProperties, serviceCallbackProperties);
-            
-            
-            implementation.setUnresolved(true);
-            
-            return implementation;
-            
-        } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+            else if (next == START_ELEMENT && PROPERTIES_QNAME.equals(reader.getName())) {
+                    
+                // FIXME: This is temporary code which allows reference and service properties used
+                //        for filtering OSGi services to be specified in <implementation.osgi/>
+                //        This should really be provided in the component type file since these
+                //        properties are associated with an implementation rather than a configured
+                //        instance of an implementation.
+                String refName = reader.getAttributeValue(null, "reference");
+                String serviceName = reader.getAttributeValue(null, "service");
+                String refCallbackName = reader.getAttributeValue(null, "referenceCallback");
+                String serviceCallbackName = reader.getAttributeValue(null, "serviceCallback");
+                List<ComponentProperty> props = readProperties(reader);
+                if (refName != null)
+                    refProperties.put(refName, props);
+                else if (serviceName != null)
+                    serviceProperties.put(serviceName, props);
+                else if (refCallbackName != null)
+                    refCallbackProperties.put(refCallbackName, props);
+                else if (serviceCallbackName != null)
+                    serviceCallbackProperties.put(serviceCallbackName, props);
+                else {
+                	error("PropertyShouldSpecifySR", reader);
+                    //throw new ContributionReadException("Properties in implementation.osgi should specify service or reference");
+                }
+            }
+
         }
+            
+        OSGiImplementation implementation = new OSGiImplementation(
+                    modelFactories,
+                    bundleSymbolicName,
+                    bundleVersion,
+                    importList, 
+                    classList,
+                    refProperties,
+                    serviceProperties);
+        implementation.setCallbackProperties(refCallbackProperties, serviceCallbackProperties);
+           
+        implementation.setUnresolved(true);
+            
+        return implementation;
+        
     }
+    
 
     public void resolve(OSGiImplementation impl, ModelResolver resolver) throws ContributionResolveException {
         
         try {
+        	
+        	if (impl == null || !impl.isUnresolved())
+        		return;
+        	
+        	impl.setUnresolved(false);
             
-            impl.setUnresolved(false);
+            BundleReference bundleReference = new BundleReference(impl.getBundleSymbolicName(), impl.getBundleVersion());
+            BundleReference resolvedBundle = resolver.resolveModel(BundleReference.class, bundleReference);
+            Bundle bundle = (Bundle)resolvedBundle.getBundle();
+            if (bundle != null) {
+                impl.setOSGiBundle(bundle);                
+            } else {
+            	error("CouldNotLocateOSGiBundle", impl, impl.getBundleSymbolicName());
+                //throw new ContributionResolveException("Could not locate OSGi bundle " + 
+                        //impl.getBundleSymbolicName());
+            	return;
+            }
             
-            
-            String bundleName = impl.getBundleName();
-            String ctURI = bundleName.replaceAll("\\.", "/") + ".componentType";
-            
-            impl.setURI(ctURI);
-            ComponentType componentType = resolver.resolveModel(ComponentType.class, impl);
+            String bundleName = resolvedBundle.getBundleRelativePath();
+            String ctURI = bundleName.endsWith(".jar") || bundleName.endsWith(".JAR")? 
+                    bundleName.substring(0, bundleName.lastIndexOf(".")) : bundleName;
+            ctURI = ctURI.replaceAll("\\.", "/");
+            ctURI = ctURI + ".componentType";
+
+            ComponentType componentType = assemblyFactory.createComponentType();
+            componentType.setURI(ctURI);
+            componentType.setUnresolved(true);
+            componentType = resolver.resolveModel(ComponentType.class, componentType);
             if (componentType.isUnresolved()) {
-                throw new ContributionResolveException("missing .componentType side file");
+            	error("MissingComponentTypeFile", impl, ctURI);
+                //throw new ContributionResolveException("missing .componentType side file " + ctURI);
+            	return;
             }
             
             List<Service> services = componentType.getServices();
@@ -233,15 +271,14 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
                 if (interfaze instanceof JavaInterface) {
                     JavaInterface javaInterface = (JavaInterface)interfaze;
                     if (javaInterface.getJavaClass() == null) {
-                        Class<?> javaClass = Class.forName(javaInterface.getName());
-                        javaInterface.setJavaClass(javaClass);
+                        
+                        javaInterface.setJavaClass(getJavaClass(resolver, javaInterface.getName()));
                     }
                     Class<?> callback = null;
                     if (service.getInterfaceContract().getCallbackInterface() instanceof JavaInterface) {
                         JavaInterface callbackInterface = (JavaInterface)service.getInterfaceContract().getCallbackInterface();
                         if (callbackInterface.getJavaClass() == null) {
-                            Class<?> javaClass = Class.forName(javaInterface.getName());
-                            callbackInterface.setJavaClass(javaClass);
+                            callbackInterface.setJavaClass(getJavaClass(resolver, callbackInterface.getName()));
                         }
                         callback = callbackInterface.getJavaClass();
                     }
@@ -257,8 +294,7 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
                 if (interfaze instanceof JavaInterface) {
                     JavaInterface javaInterface = (JavaInterface)interfaze;
                     if (javaInterface.getJavaClass() == null) {
-                        Class<?> javaClass = Class.forName(javaInterface.getName());
-                        javaInterface.setJavaClass(javaClass);
+                        javaInterface.setJavaClass(getJavaClass(resolver, javaInterface.getName()));
                     }
                     Reference ref = createReference(reference, javaInterface.getJavaClass());
                     impl.getReferences().add(ref);
@@ -273,11 +309,19 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
             }
             impl.setConstrainingType(componentType.getConstrainingType());
             
-            
-        } catch (Exception e) {
-            throw new ContributionResolveException(e);
+        } catch (InvalidInterfaceException e) {
+        	ContributionResolveException ce = new ContributionResolveException(e);
+        	error("ContributionResolveException", resolver, ce);
+            //throw ce;
         }
         
+    }
+    
+
+    private Class getJavaClass(ModelResolver resolver, String className) {
+        ClassReference ref = new ClassReference(className);
+        ref = resolver.resolveModel(ClassReference.class, ref);
+        return ref.getJavaClass();
     }
     
     private Service createService(Service serv, Class<?> interfaze, Class<?> callbackInterfaze) throws InvalidInterfaceException {
@@ -289,15 +333,15 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
         // create a relative URI
         service.setName(serv.getName());
 
-        JavaInterface callInterface = interfaceIntrospector.introspect(interfaze);
+        JavaInterface callInterface = javaInterfaceFactory.createJavaInterface(interfaze);
         service.getInterfaceContract().setInterface(callInterface);
         
         if (callbackInterfaze != null) {
-            JavaInterface callbackInterface = interfaceIntrospector.introspect(callbackInterfaze);
+            JavaInterface callbackInterface = javaInterfaceFactory.createJavaInterface(callbackInterfaze);
             service.getInterfaceContract().setCallbackInterface(callbackInterface);
         }
         else if (callInterface.getCallbackClass() != null) {
-            JavaInterface callbackInterface = interfaceIntrospector.introspect(callInterface.getCallbackClass());
+            JavaInterface callbackInterface = javaInterfaceFactory.createJavaInterface(callInterface.getCallbackClass());
             service.getInterfaceContract().setCallbackInterface(callbackInterface);
         }
         return service;
@@ -311,17 +355,19 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
         reference.setName(ref.getName());
         reference.setMultiplicity(ref.getMultiplicity());
 
-        JavaInterface callInterface = interfaceIntrospector.introspect(clazz);
+        JavaInterface callInterface = javaInterfaceFactory.createJavaInterface(clazz);
         reference.getInterfaceContract().setInterface(callInterface);
         if (callInterface.getCallbackClass() != null) {
-            JavaInterface callbackInterface = interfaceIntrospector.introspect(callInterface.getCallbackClass());
+            JavaInterface callbackInterface = javaInterfaceFactory.createJavaInterface(callInterface.getCallbackClass());
             reference.getInterfaceContract().setCallbackInterface(callbackInterface);
         }
        
         return reference;
     }
 
-    public void write(OSGiImplementation model, XMLStreamWriter outputSource) throws ContributionWriteException {
+    public void write(OSGiImplementation model, XMLStreamWriter outputSource) throws ContributionWriteException, XMLStreamException {
+        
+        //FIXME Implement this method
     }
     
   
@@ -471,7 +517,9 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
             Document value = readPropertyValue(reader, prop.getXSDType());
             prop.setValue(value);
         } catch (ParserConfigurationException e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", reader, ce);
+            throw ce;
         }
     }
     
@@ -497,4 +545,5 @@ public class OSGiImplementationProcessor implements StAXArtifactProcessor<OSGiIm
         return properties;
 
     }
+   
 }

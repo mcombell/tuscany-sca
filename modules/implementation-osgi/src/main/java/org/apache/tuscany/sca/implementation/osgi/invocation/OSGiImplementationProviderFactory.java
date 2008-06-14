@@ -19,9 +19,22 @@
 package org.apache.tuscany.sca.implementation.osgi.invocation;
 
 
+import org.apache.tuscany.sca.context.ContextFactoryExtensionPoint;
+import org.apache.tuscany.sca.context.RequestContextFactory;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.core.invocation.ExtensibleProxyFactory;
+import org.apache.tuscany.sca.core.invocation.ProxyFactory;
+import org.apache.tuscany.sca.core.invocation.ProxyFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.scope.ScopeRegistry;
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
+import org.apache.tuscany.sca.databinding.TransformerExtensionPoint;
+import org.apache.tuscany.sca.databinding.impl.MediatorImpl;
+import org.apache.tuscany.sca.implementation.java.injection.JavaPropertyValueObjectFactory;
 import org.apache.tuscany.sca.implementation.osgi.OSGiImplementationInterface;
-import org.apache.tuscany.sca.implementation.osgi.context.OSGiPropertyValueObjectFactory;
+import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
+import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.provider.ImplementationProviderFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -30,18 +43,43 @@ import org.osgi.framework.BundleException;
 
 /**
  * Builds a OSGi-based implementation provider from a component definition
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class OSGiImplementationProviderFactory implements ImplementationProviderFactory<OSGiImplementationInterface> {
     
+    private DataBindingExtensionPoint dataBindings;
+    private JavaPropertyValueObjectFactory propertyFactory;
+    private ProxyFactory proxyFactory;
+    private ScopeRegistry scopeRegistry;
+    private MessageFactory messageFactory;
+    private InterfaceContractMapper mapper;
     
-    DataBindingExtensionPoint dataBindingRegistry;
+    private RequestContextFactory requestContextFactory;
     
-    public OSGiImplementationProviderFactory(DataBindingExtensionPoint dataBindings,
-            OSGiPropertyValueObjectFactory factory) {
+    public OSGiImplementationProviderFactory(ExtensionPointRegistry extensionPoints ) {
         
-        dataBindingRegistry = dataBindings;
+        dataBindings = extensionPoints.getExtensionPoint(DataBindingExtensionPoint.class);
+        ProxyFactoryExtensionPoint proxyFactories = extensionPoints.getExtensionPoint(ProxyFactoryExtensionPoint.class);
+        proxyFactory = new ExtensibleProxyFactory(proxyFactories);
+        ContextFactoryExtensionPoint contextFactories = extensionPoints.getExtensionPoint(ContextFactoryExtensionPoint.class);
+        requestContextFactory = contextFactories.getFactory(RequestContextFactory.class);
         
+
+        // FIXME: Scope registry is not an extension point, and this usage is specific
+        // to implementation.osgi since it needs to change scope after the component is
+        // created. Do we need to find a better way?
+        scopeRegistry = extensionPoints.getExtensionPoint(ScopeRegistry.class);
+        
+        TransformerExtensionPoint transformers = extensionPoints.getExtensionPoint(TransformerExtensionPoint.class);
+        MediatorImpl mediator = new MediatorImpl(dataBindings, transformers);
+        propertyFactory = new JavaPropertyValueObjectFactory(mediator);
+
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        messageFactory = modelFactories.getFactory(MessageFactory.class);
+        
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        mapper = utilities.getUtility(InterfaceContractMapper.class);
     }
 
     public ImplementationProvider createImplementationProvider(RuntimeComponent component,
@@ -49,7 +87,16 @@ public class OSGiImplementationProviderFactory implements ImplementationProvider
                 
         try {
                 
-            return new OSGiImplementationProvider(component, implementation, dataBindingRegistry);
+            return new OSGiImplementationProvider(component, 
+                    implementation, 
+                    dataBindings,
+                    propertyFactory,
+                    proxyFactory,
+                    scopeRegistry,
+                    requestContextFactory,
+                    messageFactory,
+                    mapper
+                    );
                 
         } catch (BundleException e) {
             throw new RuntimeException(e);

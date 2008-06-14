@@ -19,13 +19,21 @@
 package org.apache.tuscany.sca.interfacedef.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.interfacedef.ConversationSequence;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
+import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * Represents an operation on a service interface.
@@ -44,36 +52,21 @@ public class OperationImpl implements Operation {
     private boolean nonBlocking;
     private boolean wrapperStyle;
     private WrapperInfo wrapper;
-    private String dataBinding;
     private boolean dynamic;
+    private Map<QName, List<DataType<XMLType>>> faultBeans;
+    
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private IntentAttachPointType type;
 
     /**
      * @param name
      */
     public OperationImpl() {
-        this(null);
-    }
-
-    /**
-     * @param name
-     */
-    public OperationImpl(String name) {
-        this(name, null, null, null);
-    }
-
-    /**
-     * @param name
-     * @param inputType
-     * @param outputType
-     * @param faultTypes
-     */
-    public OperationImpl(String name, DataType<List<DataType>> inputType, DataType outputType, List<DataType> faultTypes) {
-        super();
-        this.name = name;
-        this.inputType = inputType != null ? inputType : new DataTypeImpl<List<DataType>>("idl:input", Object[].class,
-                                                                                          new ArrayList<DataType>());
-        this.outputType = outputType;
-        this.faultTypes = faultTypes != null ? faultTypes : new ArrayList<DataType>();
+        inputType = new DataTypeImpl<List<DataType>>("idl:input", Object[].class, new ArrayList<DataType>());
+        faultTypes = new ArrayList<DataType>();
+        faultBeans = new HashMap<QName, List<DataType<XMLType>>>();
     }
 
     public String getName() {
@@ -135,14 +128,14 @@ public class OperationImpl implements Operation {
     }
 
     /**
-     * @return the interfaze
+     * @return the interface
      */
     public Interface getInterface() {
         return interfaze;
     }
 
     /**
-     * @param interfaze the interfaze to set
+     * @param interfaze the interface to set
      */
     public void setInterface(Interface interfaze) {
         this.interfaze = interfaze;
@@ -271,11 +264,13 @@ public class OperationImpl implements Operation {
     }
 
     public String getDataBinding() {
-        return dataBinding;
+        return wrapper != null ? wrapper.getDataBinding() : null;
     }
 
     public void setDataBinding(String dataBinding) {
-        this.dataBinding = dataBinding;
+        if (wrapper != null) {
+            wrapper.setDataBinding(dataBinding);
+        }
     }
 
     public boolean isDynamic() {
@@ -284,6 +279,14 @@ public class OperationImpl implements Operation {
 
     public void setDynamic(boolean b) {
         this.dynamic = b;
+    }
+    
+    public Map<QName, List<DataType<XMLType>>> getFaultBeans() {
+        return faultBeans;
+    }
+    
+    public void setFaultBeans(Map<QName, List<DataType<XMLType>>> faultBeans) {
+        this.faultBeans = faultBeans;
     }
 
     @Override
@@ -306,11 +309,31 @@ public class OperationImpl implements Operation {
         clonedInputType.setDataBinding(inputType.getDataBinding());
         copy.inputType = clonedInputType;
         
-        if(this.outputType!=null) {
+        if (this.outputType != null) {
             copy.outputType = (DataType) this.outputType.clone();
         }
         
         return copy;
     }
 
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
+
+    public List<PolicySet> getPolicySets() {
+        return policySets;
+    }
+
+    public List<Intent> getRequiredIntents() {
+        return requiredIntents;
+    }
+
+    public IntentAttachPointType getType() {
+        return type;
+    }
+
+    public void setType(IntentAttachPointType type) {
+        this.type = type;
+    }
+    
 }

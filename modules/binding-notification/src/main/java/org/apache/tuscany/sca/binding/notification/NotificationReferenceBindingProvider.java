@@ -29,6 +29,7 @@ import javax.servlet.ServletOutputStream;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.binding.notification.encoding.Broker;
+import org.apache.tuscany.sca.binding.notification.encoding.BrokerID;
 import org.apache.tuscany.sca.binding.notification.encoding.ConnectionOverride;
 import org.apache.tuscany.sca.binding.notification.encoding.Constants;
 import org.apache.tuscany.sca.binding.notification.encoding.EncodingObject;
@@ -40,7 +41,7 @@ import org.apache.tuscany.sca.binding.notification.encoding.Subscribe;
 import org.apache.tuscany.sca.binding.notification.util.NotificationServlet;
 import org.apache.tuscany.sca.binding.notification.util.URIUtil;
 import org.apache.tuscany.sca.binding.notification.util.NotificationServlet.NotificationServletStreamHandler;
-import org.apache.tuscany.sca.http.ServletHost;
+import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -50,7 +51,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 
 /**
- * The runtime representaion of the notification reference binding
+ * The runtime representation of the notification reference binding
  *
  * @version $Rev$ $Date$
  */
@@ -70,6 +71,9 @@ public class NotificationReferenceBindingProvider
     private boolean started;
     private NotificationBrokerManager brokerManager;
 
+    private List<SubscriberInfo> subscribers;
+    private String brokerID;
+    
     public NotificationReferenceBindingProvider(NotificationBinding notificationBinding,
                                                 RuntimeComponent component,
                                                 RuntimeComponentReference reference,
@@ -93,8 +97,7 @@ public class NotificationReferenceBindingProvider
             if (ntmAddress != null && notificationType != null) {
                 remoteNtmUrl = new URL(ntmAddress + notificationTypePath);
             }
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
         this.started = false;
@@ -103,10 +106,13 @@ public class NotificationReferenceBindingProvider
         URI uri = URI.create(component.getURI() + "/" + notificationBinding.getName());
         notificationBinding.setURI(uri.toString());
         Interface interfaze = reference.getInterfaceContract().getInterface();
-        interfaze.setDefaultDataBinding(OMElement.class.getName());
+        interfaze.resetDataBinding(OMElement.class.getName());
         for (Operation operation : interfaze.getOperations()) {
             operation.setNonBlocking(false);
         }
+
+        this.subscribers = new ArrayList<SubscriberInfo>();
+        this.brokerID = null;
     }
     
     public NotificationBinding getBinding() {
@@ -120,15 +126,24 @@ public class NotificationReferenceBindingProvider
     public boolean isStarted() {
         return started;
     }
+    
+    public void setBrokerID(String brokerID) {
+        this.brokerID = brokerID;
+    }
+    
+    public String getBrokerID() {
+        return brokerID;
+    }
 
-    public Invoker createInvoker(Operation operation, boolean isCallback) {
-        if (isCallback) {
-            throw new UnsupportedOperationException();
-        }
+    public Invoker createInvoker(Operation operation) {
         if (invoker == null) {
-            invoker = new NotificationReferenceBindingInvoker(operation);
+            invoker = new NotificationReferenceBindingInvoker(operation, this);
         }
         return invoker;
+    }
+
+    public boolean supportsOneWayInvocation() {
+        return false;
     }
 
     public InterfaceContract getBindingInterfaceContract() {
@@ -157,13 +172,12 @@ public class NotificationReferenceBindingProvider
         }
         if (Constants.EndConsumers.equals(sequenceType)) {
             for (URL consumerUrl : consumerList) {
-                invoker.addSubscriberUrl(consumerUrl);
+                addSubscriberUrl(consumerUrl);
             }
-        }
-        else if (Constants.BrokerConsumers.equals(sequenceType)) {
+        } else if (Constants.BrokerConsumers.equals(sequenceType)) {
             // Pick a broker consumer, for now the first one
             URL consumerUrl = consumerList.get(0);
-            invoker.addSubscriberUrl(consumerUrl);
+            addSubscriberUrl(consumerUrl);
         }
 
         servletHost.addServletMapping(myUrl.toString(), new NotificationServlet(this));
@@ -171,21 +185,21 @@ public class NotificationReferenceBindingProvider
     
     public void deployBroker(String brokerID, EndpointReference brokerConsumerEPR, List<EndpointReference> consumerList) {
         if (brokerConsumerEPR != null) {
-            invoker.addSubscriber(brokerConsumerEPR);            
+            addSubscriber(brokerConsumerEPR);            
         }
         if (consumerList != null && !consumerList.isEmpty()) {
             for (EndpointReference consumerEPR : consumerList) {
-                invoker.addSubscriber(consumerEPR);
+                addSubscriber(consumerEPR);
             }
         }
-        invoker.setBrokerID(brokerID);
+        setBrokerID(brokerID);
         servletHost.addServletMapping(myUrl.toString(), new NotificationServlet(this));
     }
     
     public void undeployBroker(URL brokerConsumerUrl) {
-        EndpointReference brokerConsumerEpr = EncodingUtils.createEndpointReference(brokerConsumerUrl, invoker.getBrokerID());
-        ntm.removeBroker(brokerConsumerEpr, invoker.getNeighborBrokerConsumerEprs(), remoteNtmUrl);
-        invoker.removeBrokerSubscribers();
+        EndpointReference brokerConsumerEpr = EncodingUtils.createEndpointReference(brokerConsumerUrl, getBrokerID());
+        ntm.removeBroker(brokerConsumerEpr, getNeighborBrokerConsumerEprs(), remoteNtmUrl);
+        removeBrokerSubscribers();
     }
     
     public void handle(Map<String, String> headers, ServletInputStream istream, int contentLength, ServletOutputStream ostream) {
@@ -194,33 +208,131 @@ public class NotificationReferenceBindingProvider
             EncodingObject eo = EncodingUtils.decodeFromStream(encodingRegistry, istream);
             if (eo instanceof Subscribe) {
                 Subscribe sub = (Subscribe)eo;
-                invoker.addSubscriber(sub.getConsumerReference().getReference());
-            }
-            else if (eo instanceof ConnectionOverride) {
+                addSubscriber(sub.getConsumerReference().getReference());
+            } else if (eo instanceof ConnectionOverride) {
                 ConnectionOverride co = (ConnectionOverride)eo;
-                invoker.replaceSubscribers(co.getBrokerConsumerReference().getReference());
-            }
-            else if (eo instanceof ReplaceBrokerConnection) {
+                replaceSubscribers(co.getBrokerConsumerReference().getReference());
+            } else if (eo instanceof ReplaceBrokerConnection) {
                 ReplaceBrokerConnection rbc = (ReplaceBrokerConnection)eo;
                 URL removedBrokerConsumerEpr = rbc.getRemovedBroker().getReference().getEndpointAddress().getAddress();
                 if (rbc.getNeighbors() != null) {
                     int choice = rbc.getNeighbors().getBrokerSequence().size() - 1;
                     Broker chosenBroker = rbc.getNeighbors().getBrokerSequence().get(choice);
-                    invoker.replaceBrokerSubscriber(removedBrokerConsumerEpr,
+                    replaceBrokerSubscriber(removedBrokerConsumerEpr,
                                                     chosenBroker.getBrokerConsumerReference().getReference());
                     brokerManager.replaceConsumersBrokerConnection(notificationType,
                                                                    chosenBroker.getBrokerProducerReference().getReference());
+                } else {
+                    replaceBrokerSubscriber(removedBrokerConsumerEpr, null);
                 }
-                else {
-                    invoker.replaceBrokerSubscriber(removedBrokerConsumerEpr, null);
-                }
-            }
-            else {
+            } else {
                 throw new RuntimeException("Unknown encoding object");
             }
         } catch(Throwable e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    public synchronized List<SubscriberInfo> getSubscribers() {
+        return subscribers;
+    }
+    
+    private void addSubscriberUrl(URL subscriberUrl) {
+        addSubscriber(subscriberUrl, null);
+    }
+    
+    private void addSubscriber(EndpointReference subscriberEPR) {
+        BrokerID brokerID = null;
+        if (subscriberEPR.getReferenceProperties() != null) {
+            brokerID = subscriberEPR.getReferenceProperties().getProperty(BrokerID.class);
+        }
+        addSubscriber(subscriberEPR.getEndpointAddress().getAddress(), (brokerID != null ? brokerID.getID() : null));
+    }
+
+    private void addSubscriber(URL address, String brokerID) {
+        synchronized(this) {
+            SubscriberInfo si = new SubscriberInfo(address);
+            si.brokerID = brokerID;
+            if (subscribers == null) {
+                subscribers = new ArrayList<SubscriberInfo>();
+            }
+            subscribers.add(si);
+        }
+    }
+    
+    private void replaceSubscribers(EndpointReference brokerConsumerEPR) {
+        synchronized(this) {
+            subscribers = null;
+        }
+        addSubscriber(brokerConsumerEPR);
+    }
+    
+    private void replaceBrokerSubscriber(URL removedBrokerConsumerUrl, EndpointReference chosenBrokerConsumerEpr) {
+        synchronized(this) {
+            if (subscribers == null) {
+                throw new RuntimeException("No subscribers");
+            }
+            SubscriberInfo siToRemove = null;
+            for (SubscriberInfo si : subscribers) {
+                if (si.address.equals(removedBrokerConsumerUrl)) {
+                    siToRemove = si;
+                }
+            }
+            if (siToRemove == null) {
+                throw new RuntimeException("Can't find info for broker to remove [" + removedBrokerConsumerUrl + "]");
+            }
+            if (!subscribers.remove(siToRemove)) {
+                throw new RuntimeException("Can't remove info for [" + siToRemove.address + "]");
+            }
+        }
+        if (chosenBrokerConsumerEpr != null) {
+            addSubscriber(chosenBrokerConsumerEpr);
+        }
+    }
+    
+    private List<EndpointReference> getNeighborBrokerConsumerEprs() {
+        synchronized(this) {
+            if (subscribers == null) {
+                throw new RuntimeException("No subscribers");
+            }
+            List<EndpointReference> neighborBrokerConsumerEprs = new ArrayList<EndpointReference>();
+            for(SubscriberInfo si : subscribers) {
+                if (si.brokerID != null) {
+                    neighborBrokerConsumerEprs.add(EncodingUtils.createEndpointReference(si.address, si.brokerID));
+                }
+            }
+            
+            return neighborBrokerConsumerEprs;
+        }
+    }
+    
+    private void removeBrokerSubscribers() {
+        synchronized(this) {
+            if (subscribers == null) {
+                throw new RuntimeException("No subscribers");
+            }
+            List<SubscriberInfo> sisToRemove = new ArrayList<SubscriberInfo>();
+            for (SubscriberInfo si : subscribers) {
+                if (si.brokerID != null) {
+                    sisToRemove.add(si);
+                }
+            }
+            for(SubscriberInfo si : sisToRemove) {
+                if (!subscribers.remove(si)) {
+                    throw new RuntimeException("Can't remove broker subscriber [" + si.address + "]");
+                }
+            }
+        }
+    }
+    
+    class SubscriberInfo {
+        public URL address;
+        public String brokerID;
+        
+        public SubscriberInfo(URL address) {
+            this.address = address;
+            this.brokerID = null;
         }
     }
 }

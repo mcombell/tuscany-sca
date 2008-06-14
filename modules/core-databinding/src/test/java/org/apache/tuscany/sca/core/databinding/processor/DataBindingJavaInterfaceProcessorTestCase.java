@@ -21,7 +21,6 @@ package org.apache.tuscany.sca.core.databinding.processor;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.sca.core.databinding.processor.DataBindingJavaInterfaceProcessor;
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
 import org.apache.tuscany.sca.databinding.DefaultDataBindingExtensionPoint;
 import org.apache.tuscany.sca.databinding.annotation.DataBinding;
@@ -36,15 +35,16 @@ import org.osoa.sca.annotations.Remotable;
 import org.w3c.dom.Node;
 
 /**
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class DataBindingJavaInterfaceProcessorTestCase extends TestCase {
 
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
     }
 
     /**
@@ -59,8 +59,8 @@ public class DataBindingJavaInterfaceProcessorTestCase extends TestCase {
         contract.setJavaClass(MockInterface.class);
         JavaInterfaceContract interfaceContract = javaFactory.createJavaInterfaceContract();
         interfaceContract.setInterface(contract);
-        Operation operation = new OperationImpl("call");
-        Operation operation1 = new OperationImpl("call1");
+        Operation operation = newOperation("call");
+        Operation operation1 = newOperation("call1");
         contract.getOperations().add(operation);
         contract.getOperations().add(operation1);
         contract.setRemotable(true);
@@ -81,4 +81,9 @@ public class DataBindingJavaInterfaceProcessorTestCase extends TestCase {
         String call1(String msg);
     }
 
+    private static Operation newOperation(String name) {
+        Operation operation = new OperationImpl();
+        operation.setName(name);
+        return operation;
+    }
 }

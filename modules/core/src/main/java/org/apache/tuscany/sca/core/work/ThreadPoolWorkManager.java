@@ -25,9 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadFactory;
 
 import org.osoa.sca.annotations.Destroy;
-import org.osoa.sca.annotations.Property;
 
 import commonj.work.Work;
 import commonj.work.WorkEvent;
@@ -35,7 +35,6 @@ import commonj.work.WorkException;
 import commonj.work.WorkItem;
 import commonj.work.WorkListener;
 import commonj.work.WorkManager;
-import commonj.work.WorkRejectedException;
 
 /**
  * A thread-pool based implementation for the JSR-237 work manager.
@@ -44,6 +43,8 @@ import commonj.work.WorkRejectedException;
  * This implementation supports only local work.
  * <p/>
  * TODO Elaborate the implementation. </p>
+ *
+ * @version $Rev$ $Date$
  */
 public class ThreadPoolWorkManager implements WorkManager {
 
@@ -57,9 +58,23 @@ public class ThreadPoolWorkManager implements WorkManager {
      * Initializes the thread-pool.
      *
      * @param threadPoolSize Thread-pool size.
+     * @throws IllegalArgumentException if threadPoolSize < 1
      */
-    public ThreadPoolWorkManager(@Property(name = "poolSize") int threadPoolSize) {
-        executor = Executors.newFixedThreadPool(threadPoolSize);
+    public ThreadPoolWorkManager(int threadPoolSize) {
+        if (threadPoolSize < 1) {
+            throw new IllegalArgumentException("Invalid threadPoolSize of " 
+                    + threadPoolSize + ". It must be >= 1");
+        }
+
+        // Creates a new Executor, use a custom ThreadFactory that
+        // creates daemon threads.
+        executor = Executors.newFixedThreadPool(threadPoolSize, new ThreadFactory() {
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
     }
 
     /**
@@ -68,7 +83,7 @@ public class ThreadPoolWorkManager implements WorkManager {
      * @param work Work that needs to be scheduled.
      * @return Work Work item representing the asynchronous work
      */
-    public WorkItem schedule(Work work) throws WorkException {
+    public WorkItem schedule(Work work) throws IllegalArgumentException {
         return schedule(work, null);
     }
 
@@ -79,7 +94,7 @@ public class ThreadPoolWorkManager implements WorkManager {
      * @param workListener Work listener for callbacks.
      * @return Work Work item representing the asynchronous work
      */
-    public WorkItem schedule(Work work, WorkListener workListener) throws WorkRejectedException {
+    public WorkItem schedule(Work work, WorkListener workListener) throws IllegalArgumentException {
 
         WorkItemImpl workItem = new WorkItemImpl(new UID().toString(), work);
         if (workListener != null) {
@@ -93,7 +108,7 @@ public class ThreadPoolWorkManager implements WorkManager {
             if (workListener != null) {
                 workListener.workRejected(new WorkEventImpl(workItem));
             }
-            throw new WorkRejectedException("Unable to schedule work");
+            throw new IllegalArgumentException("Unable to schedule work");
         }
     }
 
@@ -118,7 +133,7 @@ public class ThreadPoolWorkManager implements WorkManager {
     }
 
     /**
-     * Method provided for subclasses to indicate a work accptance.
+     * Method provided for subclasses to indicate a work acceptance.
      *
      * @param workItem Work item representing the work that was accepted.
      * @param work     Work that was accepted.
@@ -167,7 +182,7 @@ public class ThreadPoolWorkManager implements WorkManager {
     }
 
     /*
-     * Schedules the work using the threadpool.
+     * Schedules the work using the ThreadPool.
      */
     private boolean scheduleWork(final Work work, final WorkItemImpl workItem) {
         try {

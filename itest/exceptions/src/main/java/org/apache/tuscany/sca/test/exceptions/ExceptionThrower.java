@@ -19,13 +19,20 @@
 
 package org.apache.tuscany.sca.test.exceptions;
 
+
+/**
+ * Local exception thrower
+ * @version $Rev$ $Date$
+ */
 public interface ExceptionThrower {
+    public static final Checked BAD = new Checked("theBad");
+    public static final UnChecked UGLY = new UnChecked("theUgly");
     public static final String SO_THEY_SAY = "All is good that ends good.";
 
-    public String theGood() throws org.apache.tuscany.sca.test.exceptions.Checked;
+    public String theGood() throws Checked;
 
-    public String theBad() throws org.apache.tuscany.sca.test.exceptions.Checked;
+    public String theBad() throws Checked;
 
-    public String theUgly() throws org.apache.tuscany.sca.test.exceptions.Checked;
+    public String theUgly() throws Checked;
 
 }

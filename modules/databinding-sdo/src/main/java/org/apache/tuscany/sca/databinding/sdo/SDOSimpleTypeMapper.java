@@ -31,6 +31,8 @@ import commonj.sdo.helper.TypeHelper;
 
 /**
  * SDO Java/XML mapping for simple XSD types
+ *
+ * @version $Rev$ $Date$
  */
 public class SDOSimpleTypeMapper implements SimpleTypeMapper {
     public static final String URI_2001_SCHEMA_XSD = "http://www.w3.org/2001/XMLSchema";
@@ -44,7 +46,7 @@ public class SDOSimpleTypeMapper implements SimpleTypeMapper {
         if (URI_2001_SCHEMA_XSD.equals(typeName.getNamespaceURI())) {
             type = SDOUtil.getXSDSDOType(typeName.getLocalPart());
         } else {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, false);
             TypeHelper typeHelper = helperContext.getTypeHelper();
             type = typeHelper.getType(typeName.getNamespaceURI(), typeName.getLocalPart());
         }
@@ -56,7 +58,7 @@ public class SDOSimpleTypeMapper implements SimpleTypeMapper {
         if (URI_2001_SCHEMA_XSD.equals(typeName.getNamespaceURI())) {
             type = SDOUtil.getXSDSDOType(typeName.getLocalPart());
         } else {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, true);
             TypeHelper typeHelper = helperContext.getTypeHelper();
             type = typeHelper.getType(typeName.getNamespaceURI(), typeName.getLocalPart());
         }

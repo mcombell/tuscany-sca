@@ -21,35 +21,58 @@ package org.apache.tuscany.sca.databinding;
 
 import java.util.List;
 
-import org.apache.tuscany.sca.interfacedef.util.ElementInfo;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
 
 /**
  * A contract for transformers to deal with wrapping/unwrapping for WSDL wrapper style operations
+ *
+ * @version $Rev$ $Date$
  */
 public interface WrapperHandler<T> {
     /**
      * Create a wrapper element
-     * 
-     * @param element The XSD element
-     * @param context The transformation context
+     * @param operation The operation
+     * @param input Is it for input or output
      * @return An object representing the wrapper element
      */
-    T create(ElementInfo element, TransformationContext context);
+    T create(Operation operation, boolean input);
 
     /**
-     * Set child element for the wrapper
-     * 
-     * @param wrapper The wrapper
-     * @param i The index
-     * @param childElement The XSD element
-     * @param value The value of the child
+     * Get the data type for the wrapper
+     * @param operation The operation
+     * @param input Is it for input or output?
+     * @return The data type of the wrapper, null if it's not a wrapper type
      */
-    void setChild(T wrapper, int i, ElementInfo childElement, Object value);
+    DataType getWrapperType(Operation operation, boolean input);
+
+    /**
+     * Check if the given data is an instance of the wrapper
+     * @param wrapper
+     * @param operation The operation
+     * @param input Input or output
+     * @return
+     */
+    boolean isInstance(Object wrapper, Operation operation, boolean input);
+
+    /**
+     * Populate the wrapper element with the child objects
+     * @param wrapper The wrapper object
+     * @param childObjects The child objects
+     * @param operation The operation
+     * @param input Is it for input or output
+     */
+    public void setChildren(T wrapper,
+                            Object[] childObjects,
+                            Operation operation,
+                            boolean input);
 
     /**
      * Get a list of child elements from the wrapper
-     * @param wrapper
+     * @param wrapper The wrapper object
+     * @param operation The operation
+     * @param input Is it for input or output
      * @return child elements under the wrapper
      */
-    List getChildren(T wrapper);
+    List getChildren(T wrapper, Operation operation, boolean input);
 }

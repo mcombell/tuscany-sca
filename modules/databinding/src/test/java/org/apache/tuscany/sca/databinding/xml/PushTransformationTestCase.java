@@ -27,6 +27,10 @@ import org.apache.tuscany.sca.databinding.impl.PipedTransformer;
 import org.w3c.dom.Node;
 import org.xml.sax.ContentHandler;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class PushTransformationTestCase extends TestCase {
     private static final String IPO_XML =
         "<?xml version=\"1.0\"?>" + "<ipo:purchaseOrder"
@@ -61,6 +65,7 @@ public class PushTransformationTestCase extends TestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }

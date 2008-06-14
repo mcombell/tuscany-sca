@@ -26,39 +26,62 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.service.ContributionException;
 import org.apache.tuscany.sca.contribution.service.TypeDescriber;
-import org.apache.tuscany.sca.contribution.service.UnsupportedContentTypeException;
+import org.apache.tuscany.sca.contribution.service.UnsupportedPackageTypeException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
- * Default implementation of PackageProcessor.
+ * Implementation of an extensible package processor.
+ * 
+ * Takes a package processor extension point and delegates to the proper package
+ * processor from the extension point based on the package's content type.
  * 
  * @version $Rev$ $Date$
  */
 public class ExtensiblePackageProcessor implements PackageProcessor {
 
     private PackageProcessorExtensionPoint processors;
-
-    /**
-     * Helper method to describe contentType for each artifact
-     */
     private TypeDescriber packageTypeDescriber;
+    private Monitor monitor;
 
-    public ExtensiblePackageProcessor(PackageProcessorExtensionPoint processors, TypeDescriber packageTypeDescriber) {
+    public ExtensiblePackageProcessor(PackageProcessorExtensionPoint processors, 
+    								  TypeDescriber packageTypeDescriber,
+    								  Monitor monitor) {
         this.processors = processors; 
         this.packageTypeDescriber = packageTypeDescriber;
+        this.monitor = monitor;
+    }
+    
+    /**
+     * Marshals errors into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
     }
 
     public List<URI> getArtifacts(URL packageSourceURL, InputStream inputStream) 
         throws ContributionException, IOException {
-        String contentType = this.packageTypeDescriber.getType(packageSourceURL, null);
-        if (contentType == null) {
-            throw new UnsupportedContentTypeException("Unsupported contribution package", packageSourceURL.toString());
+        String packageType = this.packageTypeDescriber.getType(packageSourceURL, null);
+        if (packageType == null) {
+        	error("UnsupportedPackageTypeException", packageTypeDescriber, packageSourceURL.toString());
+            throw new UnsupportedPackageTypeException("Unsupported contribution package type: " + packageSourceURL.toString());
         }
 
-        PackageProcessor packageProcessor = this.processors.getPackageProcessor(contentType);
+        PackageProcessor packageProcessor = this.processors.getPackageProcessor(packageType);
         if (packageProcessor == null) {
-            throw new UnsupportedContentTypeException(contentType, packageSourceURL.getPath());
+        	error("UnsupportedPackageTypeException", packageTypeDescriber, packageType);
+            throw new UnsupportedPackageTypeException("Unsupported contribution package type: " + packageType);
         }
 
         return packageProcessor.getArtifacts(packageSourceURL, inputStream);

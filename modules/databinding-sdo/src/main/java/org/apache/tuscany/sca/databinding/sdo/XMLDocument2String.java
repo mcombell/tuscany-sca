@@ -33,8 +33,11 @@ public class XMLDocument2String extends BaseTransformer<XMLDocument, String> imp
     PullTransformer<XMLDocument, String> {
 
     public String transform(XMLDocument source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
-            HelperContext helperContext = SDOContextHelper.getHelperContext(context);
+            HelperContext helperContext = SDOContextHelper.getHelperContext(context, true);
             XMLHelper xmlHelper = helperContext.getXMLHelper();
             StringWriter writer = new StringWriter();
             xmlHelper.save(source, writer, null);
@@ -44,14 +47,17 @@ public class XMLDocument2String extends BaseTransformer<XMLDocument, String> imp
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLDocument> getSourceType() {
         return XMLDocument.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<String> getTargetType() {
         return String.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

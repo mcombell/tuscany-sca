@@ -27,6 +27,10 @@ import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.impl.BaseTransformer;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class XMLStreamReader2OMElement extends BaseTransformer<XMLStreamReader, OMElement> implements
     PullTransformer<XMLStreamReader, OMElement> {
 
@@ -35,6 +39,9 @@ public class XMLStreamReader2OMElement extends BaseTransformer<XMLStreamReader, 
     }
 
     public OMElement transform(XMLStreamReader source, TransformationContext context) {
+        if (source == null) {
+            return null;
+        }
         try {
             StAXOMBuilder builder = new StAXOMBuilder(source);
             OMElement element = builder.getDocumentElement();
@@ -45,14 +52,17 @@ public class XMLStreamReader2OMElement extends BaseTransformer<XMLStreamReader, 
         }
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<OMElement> getTargetType() {
         return OMElement.class;
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLStreamReader> getSourceType() {
         return XMLStreamReader.class;
     }
 
+    @Override
     public int getWeight() {
         return 10;
     }

@@ -26,7 +26,7 @@ import supplychain.SupplyChainTestCase;
 public class InterfacesTestCase extends SupplyChainTestCase {
 
     public InterfacesTestCase() {
-        super("sca/interfaces-test.composite");
+        super("interfaces-test.composite", "interfaces");
     }
    
 }

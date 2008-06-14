@@ -58,7 +58,7 @@ public class TestModelResolver implements ModelResolver {
             
             // Load a class on demand
             ClassReference classReference = (ClassReference)unresolved;
-            Class clazz;
+            Class<?> clazz;
             try {
                 clazz = Class.forName(classReference.getClassName(), true, classLoader.get());
             } catch (ClassNotFoundException e) {
@@ -67,7 +67,7 @@ public class TestModelResolver implements ModelResolver {
                 return unresolved;
             }
             
-            // Store a new ClassReference wrappering the loaded class
+            // Store a new ClassReference wrapping the loaded class
             resolved = new ClassReference(clazz);
             map.put(resolved, resolved);
             

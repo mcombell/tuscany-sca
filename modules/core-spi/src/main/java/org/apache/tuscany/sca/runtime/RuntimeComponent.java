@@ -19,9 +19,11 @@
 
 package org.apache.tuscany.sca.runtime;
 
+import java.util.List;
+
 import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
-import org.osoa.sca.ComponentContext;
+import org.apache.tuscany.sca.provider.PolicyProvider;
 
 /**
  * The runtime component interface. Provides the bridge between the
@@ -30,19 +32,31 @@ import org.osoa.sca.ComponentContext;
  * 
  * @version $Rev$ $Date$
  */
-public interface RuntimeComponent extends Component, ComponentContext {
+public interface RuntimeComponent extends Component {
     /**
      * Set the implementation-specific configuration for this component
      * @param implementationProvider The object that manages the component implementation
      */
     void setImplementationProvider(ImplementationProvider implementationProvider);
-    
+
     /**
-     * Get the implementation-specific configuation for this component
+     * Get the implementation-specific configuration for this component
      * @return The implementation provider for this component
      */
     ImplementationProvider getImplementationProvider();
-    
+
+    /**
+     * Get the associated component context
+     * @return
+     */
+    RuntimeComponentContext getComponentContext();
+
+    /**
+     * Set the associated component context
+     * @param context
+     */
+    void setComponentContext(RuntimeComponentContext context);
+
     /**
      * Tests if the RuntimeComponent is started
      * @return true if the RuntimeComponent is started otherwise false
@@ -51,7 +65,19 @@ public interface RuntimeComponent extends Component, ComponentContext {
 
     /**
      * Sets the RuntimeComponent started state
-     * @param the state to set
+     * @param started the state to set
      */
     void setStarted(boolean started);
+    
+    /**
+     * Add a policy provider to the component
+     * @param policyProvider
+     */
+    void addPolicyProvider(PolicyProvider policyProvider);
+    
+    /**
+     * Get a list of policy providers configured for this component
+     * @return
+     */
+    List<PolicyProvider> getPolicyProviders();
 }

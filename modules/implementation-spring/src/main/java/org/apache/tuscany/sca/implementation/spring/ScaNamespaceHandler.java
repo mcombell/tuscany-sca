@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Created on 10-Apr-2006 by Adrian Colyer
  */
 package org.apache.tuscany.sca.implementation.spring;
 
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
  * Handler for the &lt;sca:&gt; namespace in an application context
- *
+ * 
  * @version $Rev: 511195 $ $Date: 2007-02-24 02:29:46 +0000 (Sat, 24 Feb 2007) $
  */
 public class ScaNamespaceHandler extends NamespaceHandlerSupport {

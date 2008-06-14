@@ -28,6 +28,8 @@ import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
 /**
  * Transformer to convert data from a simple java object to a databinding's representation
+ *
+ * @version $Rev$ $Date$
  */
 public abstract class Java2SimpleTypeTransformer<T> extends BaseTransformer<Object, T> implements
         PullTransformer<Object, T> {
@@ -48,10 +50,12 @@ public abstract class Java2SimpleTypeTransformer<T> extends BaseTransformer<Obje
         return createElement(xmlType.getElementName(), text, context);
     }
 
-    public Class getSourceType() {
+    @Override
+    public Class<Object> getSourceType() {
         return Object.class;
     }
 
+    @Override
     public int getWeight() {
         return 10000;
     }

@@ -32,6 +32,8 @@ import org.w3c.dom.Node;
 
 /**
  * Push DOM Reader to Node
+ *
+ * @version $Rev$ $Date$
  */
 public class Reader2Node extends BaseTransformer<Reader, Node> implements PullTransformer<Reader, Node> {
     private static final Source2ResultTransformer TRANSFORMER = new Source2ResultTransformer();
@@ -47,14 +49,17 @@ public class Reader2Node extends BaseTransformer<Reader, Node> implements PullTr
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Reader> getSourceType() {
         return Reader.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<Node> getTargetType() {
         return Node.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

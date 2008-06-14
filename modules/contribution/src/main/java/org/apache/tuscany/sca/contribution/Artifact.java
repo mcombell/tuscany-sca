@@ -19,39 +19,68 @@
 
 package org.apache.tuscany.sca.contribution;
 
+import org.apache.tuscany.sca.assembly.Base;
+
 
 /**
- * Base Artifact interface to accomodate common properties between Contribution and Deployed Artifact
+ * Represents an artifact in an SCA contribution.
  * 
  * @version $Rev$ $Date$
  */
-public interface Artifact {
+public interface Artifact extends Base {
+    
     /**
-     * Get the URI that unique identifies the artifact
+     * Returns the URI that unique identifies the artifact inside the contribution.
      * 
-     * @return The artifact uri
+     * @return The artifact URI
      */
     String getURI();
     
     /**
-     * Set the URI that unique identifies the artifact
+     * Sets the URI that uniquely identifies the artifact inside the contribution.
      * 
-     * @param uri The artifact uri
+     * @param uri The artifact URI
      */
     void setURI(String uri);
 
     /**
-     * Get the URL location for the artifact
+     * Returns the location of the artifact.
      * 
      * @return The artifact location
      */
     String getLocation();
     
     /**
-     * Set the URL location for the artifact
+     * Set the location of the artifact.
      * 
      * @param location The artifact location
      */
     void setLocation(String location);
 
+    
+    /**
+     * Returns the in-memory model representing the artifact.
+     * 
+     * @return The model object
+     */
+    Object getModel();
+    
+    /**
+     * Sets the in-memory model representing the artifact.
+     * 
+     * @param model The model object
+     */
+    void setModel(Object model);
+
+    /**
+     * Returns the contents of the artifact cached here.
+     * @return the contents of the artifact
+     */
+    byte[] getContents();
+    
+    /**
+     * Sets the contents of the artifact.
+     * @param contents the contents of the artifact
+     */
+    void setContents(byte[] contents);
 }

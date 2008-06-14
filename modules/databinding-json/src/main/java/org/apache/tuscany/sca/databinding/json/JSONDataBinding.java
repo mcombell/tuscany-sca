@@ -19,31 +19,53 @@
 
 package org.apache.tuscany.sca.databinding.json;
 
+
 import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.databinding.impl.BaseDataBinding;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
  * JAXB DataBinding
+ *
+ * @version $Rev$ $Date$
  */
 public class JSONDataBinding extends BaseDataBinding {
-    public static final String NAME = JSONObject.class.getName();
+    public static final String NAME = "JSON";
     public static final String[] ALIASES = new String[] {"json"};
 
     public static final String ROOT_NAMESPACE = "http://tuscany.apache.org/xmlns/sca/databinding/json/1.0";
     public static final QName ROOT_ELEMENT = new QName(ROOT_NAMESPACE, "root");
 
     public JSONDataBinding() {
-        super(NAME, ALIASES, JSONObject.class);
+        super(NAME, ALIASES, org.json.JSONObject.class);
+    }
+
+    public boolean introspect(DataType type, Operation operation) {
+        assert type != null;
+        Class cls = type.getPhysical();
+        if (JSONObject.class.isAssignableFrom(cls) || org.json.JSONObject.class.isAssignableFrom(cls)) {
+            type.setDataBinding(getName());
+            if (type.getLogical() == null) {
+                type.setLogical(XMLType.UNKNOWN);
+            }
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object copy(Object arg) {
+    public Object copy(Object arg, DataType dataType, Operation operation) {
+        if (arg == null) {
+            return null;
+        }
         try {
-            JSONObject src = (JSONObject)arg;
-            return new JSONObject(src.toString());
+            Class type = arg != null ? arg.getClass() : null;
+            return JSONHelper.toJSON(arg.toString(), type);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

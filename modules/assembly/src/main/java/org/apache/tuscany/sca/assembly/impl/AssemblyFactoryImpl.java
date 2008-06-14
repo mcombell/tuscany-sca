@@ -32,13 +32,12 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.CompositeService;
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.Wire;
-import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
 
 /**
  * A factory for the assembly model.
@@ -115,7 +114,8 @@ public abstract class AssemblyFactoryImpl implements AssemblyFactory {
         return new WireImpl();
     }
 
-    public Operation createOperation() {
-        return new OperationImpl();
+    public ConfiguredOperation createConfiguredOperation() {
+        return new ConfiguredOperationImpl();
     }
+    
 }

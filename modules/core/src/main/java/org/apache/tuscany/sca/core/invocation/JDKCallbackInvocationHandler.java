@@ -18,22 +18,17 @@
  */
 package org.apache.tuscany.sca.core.invocation;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.tuscany.sca.interfacedef.InterfaceContract;
-import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.interfacedef.java.impl.JavaInterfaceUtil;
+import org.apache.tuscany.sca.core.assembly.RuntimeWireImpl;
+import org.apache.tuscany.sca.core.context.CallableReferenceImpl;
+import org.apache.tuscany.sca.core.conversation.ConversationState;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.MessageFactory;
-import org.apache.tuscany.sca.runtime.EndpointReference;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.osoa.sca.NoRegisteredCallbackException;
+import org.osoa.sca.ServiceRuntimeException;
 
 /**
  * Responsible for dispatching to a callback through a wire. <p/> TODO cache
@@ -41,60 +36,74 @@ import org.osoa.sca.NoRegisteredCallbackException;
  * 
  * @version $Rev$ $Date$
  */
-public class JDKCallbackInvocationHandler extends AbstractInvocationHandler implements InvocationHandler {
+public class JDKCallbackInvocationHandler extends JDKInvocationHandler {
     private static final long serialVersionUID = -3350283555825935609L;
-    private transient Map<String, RuntimeWire> wires;
 
-    /**
-     * Constructor used for deserialization only
-     */
-    public JDKCallbackInvocationHandler(MessageFactory messageFactory) {
-        super(messageFactory, false);
-        wires = new HashMap<String, RuntimeWire>();
+    public JDKCallbackInvocationHandler(MessageFactory messageFactory, CallbackReferenceImpl ref) {
+        super(messageFactory, ref);
+        this.fixedWire = false;
     }
 
-    public JDKCallbackInvocationHandler(MessageFactory messageFactory, List<RuntimeWire> wireList) {
-        super(messageFactory, false);
-        this.wires = new HashMap<String, RuntimeWire>();
-        for (RuntimeWire wire : wireList) {
-            wires.put(wire.getSource().getURI(), wire);
-            InterfaceContract contract = wire.getSource().getInterfaceContract();
-            this.conversational = contract.getCallbackInterface().isConversational();
-            // TODO: doesn't work if mix conv. and non-conv, can that happen? 
-        }
-    }
-
+    @Override
     @SuppressWarnings( {"unchecked"})
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getParameterTypes().length == 0 && "toString".equals(method.getName())) {
-            return "[Proxy - " + Integer.toHexString(hashCode()) + "]";
-        } else if (method.getDeclaringClass().equals(Object.class) && "equals".equals(method.getName())) {
-            // TODO implement
-            throw new UnsupportedOperationException();
-        } else if (Object.class.equals(method.getDeclaringClass()) && "hashCode".equals(method.getName())) {
-            return hashCode();
-            // TODO beter hash algorithm
+        if (Object.class == method.getDeclaringClass()) {
+            return invokeObjectMethod(method, args);
         }
-        EndpointReference from = ThreadMessageContext.getMessageContext().getFrom();
-        RuntimeWire wire = null;
-        if (from != null) {
-            wire = wires.get(from.getURI());
-        }
+
+        // obtain a dedicated wire to be used for this callback invocation
+        RuntimeWire wire = ((CallbackReferenceImpl)callableReference).getCallbackWire();
         if (wire == null) {
             //FIXME: need better exception
-            throw new RuntimeException("Wire for callback cannot be found");
+            throw new ServiceRuntimeException("No callback wire found");
         }
-        IdentityHashMap<Operation, InvocationChain> map = wire.getCallbackInvocationMap();
-        Operation operation = JavaInterfaceUtil.findOperation(method, map.keySet());
-        InvocationChain chain = map.get(operation);
+
+        // set the conversational state based on the interface that
+        // is specified for the reference that this wire belongs to
+        initConversational(wire);
+
+        // set the conversation id into the conversation object. This is
+        // a special case for callbacks as, unless otherwise set manually,
+        // the callback should use the same conversation id as was received
+        // on the incoming call to this component
+        if (conversational) {
+
+            if (conversation == null || conversation.getState() == ConversationState.ENDED) {
+                conversation = null;
+            }
+            Object convID = conversation == null ? null : conversation.getConversationID();
+
+            // create a conversation id if one doesn't exist 
+            // already, i.e. the conversation is just starting
+            if (convID == null) {
+                convID = ((CallbackReferenceImpl)callableReference).getConvID();
+                if (convID != null) {
+                    conversation = ((RuntimeWireImpl)wire).getConversationManager().getConversation(convID);
+                    if (callableReference != null) {
+                        ((CallableReferenceImpl)callableReference).attachConversation(conversation);
+                    }
+                }
+            }
+        }
+
+        setEndpoint(((CallbackReferenceImpl)callableReference).getResolvedEndpoint());
+
+        InvocationChain chain = getInvocationChain(method, wire);
+        if (chain == null) {
+            throw new IllegalArgumentException("No matching operation is found: " + method);
+        }
+
         try {
-            return invoke(chain, args, wire);
+            return invoke(chain, args, wire, wire.getSource());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof NoRegisteredCallbackException) {
                 throw t;
             }
             throw e;
+        } finally {
+            // allow the cloned wire to be reused by subsequent callbacks
+            ((RuntimeWireImpl)wire).releaseWire();
         }
     }
 

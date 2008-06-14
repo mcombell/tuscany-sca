@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.databinding.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,14 +26,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Directed, weighted graph
  * 
  * @param <V> The type of vertex object
  * @param <E> The type of edge object
+ *
+ * @version $Rev$ $Date$
  */
-public class DirectedGraph<V, E> {
+public class DirectedGraph<V, E> implements Cloneable {
     private final Map<V, Vertex> vertices = new HashMap<V, Vertex>();
 
     /**
@@ -53,6 +57,7 @@ public class DirectedGraph<V, E> {
             this.target = target;
         }
 
+        @Override
         public boolean equals(Object object) {
             if (!VertexPair.class.isInstance(object)) {
                 return false;
@@ -61,6 +66,7 @@ public class DirectedGraph<V, E> {
             return source == pair.source && target == pair.target;
         }
 
+        @Override
         public int hashCode() {
             int x = source == null ? 0 : source.hashCode();
             int y = target == null ? 0 : target.hashCode();
@@ -69,7 +75,9 @@ public class DirectedGraph<V, E> {
 
     }
 
-    private final Map<VertexPair, Path> paths = new HashMap<VertexPair, Path>();
+    // Fix for TUSCANY-2069, making the map concurrent
+    private final Map<VertexPair, Path> paths = new ConcurrentHashMap<VertexPair, Path>();
+    private final Path NULL_PATH = new Path();
 
     /**
      * Vertex of a graph
@@ -80,11 +88,13 @@ public class DirectedGraph<V, E> {
         // TODO: Do we want to support multiple edges for a vertex pair? If so,
         // we should use a List instead of Map
         private Map<Vertex, Edge> outEdges = new HashMap<Vertex, Edge>();
+        private Map<Vertex, Edge> inEdges = new HashMap<Vertex, Edge>();
 
         private Vertex(V value) {
             this.value = value;
         }
 
+        @Override
         public String toString() {
             return "(" + value + ")";
         }
@@ -95,6 +105,10 @@ public class DirectedGraph<V, E> {
 
         public Map<Vertex, Edge> getOutEdges() {
             return outEdges;
+        }
+
+        public Map<Vertex, Edge> getInEdges() {
+            return inEdges;
         }
 
     }
@@ -111,13 +125,17 @@ public class DirectedGraph<V, E> {
 
         private int weight;
 
-        public Edge(Vertex source, Vertex target, E value, int weight) {
+        private boolean pub = true;
+
+        public Edge(Vertex source, Vertex target, E value, int weight, boolean pub) {
             this.sourceVertex = source;
             this.targetVertex = target;
             this.value = value;
             this.weight = weight;
+            this.pub = pub;
         }
 
+        @Override
         public String toString() {
             return sourceVertex + "->" + targetVertex + "[" + value + "," + weight + "]";
         }
@@ -153,6 +171,14 @@ public class DirectedGraph<V, E> {
         public void setSourceVertex(Vertex sourceVertex) {
             this.sourceVertex = sourceVertex;
         }
+
+        public boolean isPublic() {
+            return pub;
+        }
+
+        public void setPublic(boolean pub) {
+            this.pub = pub;
+        }
     }
 
     private final class Node implements Comparable<Node> {
@@ -172,7 +198,7 @@ public class DirectedGraph<V, E> {
         }
     }
 
-    public void addEdge(V source, V target, E edgeValue, int weight) {
+    public void addEdge(V source, V target, E edgeValue, int weight, boolean publicEdge) {
         Vertex s = getVertex(source);
         if (s == null) {
             s = new Vertex(source);
@@ -183,8 +209,13 @@ public class DirectedGraph<V, E> {
             t = new Vertex(target);
             vertices.put(target, t);
         }
-        Edge edge = new Edge(s, t, edgeValue, weight);
+        Edge edge = new Edge(s, t, edgeValue, weight, publicEdge);
         s.outEdges.put(t, edge);
+        t.inEdges.put(s, edge);
+    }
+
+    public void addEdge(V soure, V target) {
+        addEdge(soure, target, null, 0, true);
     }
 
     public Vertex getVertex(V source) {
@@ -203,8 +234,23 @@ public class DirectedGraph<V, E> {
             return false;
         }
 
-        return s.outEdges.remove(t) != null;
+        return s.outEdges.remove(t) != null && t.inEdges.remove(s) != null;
 
+    }
+
+    public void removeEdge(Edge edge) {
+        edge.sourceVertex.outEdges.remove(edge.targetVertex);
+        edge.targetVertex.inEdges.remove(edge.sourceVertex);
+    }
+
+    public void removeVertex(Vertex vertex) {
+        vertices.remove(vertex.getValue());
+        for (Edge e : new ArrayList<Edge>(vertex.outEdges.values())) {
+            removeEdge(e);
+        }
+        for (Edge e : new ArrayList<Edge>(vertex.inEdges.values())) {
+            removeEdge(e);
+        }
     }
 
     public Edge getEdge(Vertex source, Vertex target) {
@@ -212,11 +258,19 @@ public class DirectedGraph<V, E> {
     }
 
     public Edge getEdge(V source, V target) {
+        Vertex sv = getVertex(source);
+        if (sv == null) {
+            return null;
+        }
+        Vertex tv = getVertex(target);
+        if (tv == null) {
+            return null;
+        }
         return getEdge(getVertex(source), getVertex(target));
     }
 
     /**
-     * Get the shortes path from the source vertex to the target vertex using
+     * Get the shortest path from the source vertex to the target vertex using
      * Dijkstra's algorithm. If there's no path, null will be returned. If the
      * source is the same as the target, it returns a path with empty edges with
      * weight 0.
@@ -236,17 +290,17 @@ public class DirectedGraph<V, E> {
         }
 
         VertexPair pair = new VertexPair(source, target);
+        Path path = null;
         if (paths.containsKey(pair)) {
-            return paths.get(pair);
+            path = paths.get(pair);
+            return path == NULL_PATH? null: path;
         }
 
-        // HACK: To support same vertex
-        if (source == target) {
-            Path path = new Path();
-            Edge edge = getEdge(source, target);
-            if (edge != null) {
-                path.addEdge(edge);
-            }
+        // Check if there is a direct link, if yes, use it instead
+        Edge direct = getEdge(source, target);
+        path = new Path();
+        if (direct != null) {
+            path.addEdge(direct);
             paths.put(pair, path);
             return path;
         }
@@ -262,23 +316,27 @@ public class DirectedGraph<V, E> {
 
         Set<Node> otherNodes = new HashSet<Node>(nodes.values());
         Set<Node> nodesOnPath = new HashSet<Node>();
+        Node nextNode = null;
         while (!otherNodes.isEmpty()) {
-            Node nextNode = extractMin(otherNodes);
+            nextNode = extractMin(otherNodes);
             if (nextNode.vertex == target) {
-                Path path = getPath(nextNode);
+                path = getPath(nextNode);
                 paths.put(pair, path); // Cache it
-                return path;
+                return path == NULL_PATH? null: path;
             }
             nodesOnPath.add(nextNode);
             for (Edge edge : nextNode.vertex.outEdges.values()) {
                 Node adjacentNode = nodes.get(edge.targetVertex);
-                if (nextNode.distance + edge.weight < adjacentNode.distance) {
-                    adjacentNode.distance = nextNode.distance + edge.weight;
-                    adjacentNode.previous = nextNode;
+                // The private edge can only be used if the edge connects to the target directly
+                if (edge.isPublic() || edge.getTargetVertex() == target) {
+                    if (nextNode.distance + edge.weight < adjacentNode.distance) {
+                        adjacentNode.distance = nextNode.distance + edge.weight;
+                        adjacentNode.previous = nextNode;
+                    }
                 }
             }
         }
-        paths.put(pair, null); // Cache it
+        paths.put(pair, NULL_PATH); // Cache it
         return null;
     }
 
@@ -316,6 +374,7 @@ public class DirectedGraph<V, E> {
             weight += edge.weight;
         }
 
+        @Override
         public String toString() {
             return edges + ", " + weight;
         }
@@ -323,7 +382,7 @@ public class DirectedGraph<V, E> {
 
     private Path getPath(Node t) {
         if (t.distance == Integer.MAX_VALUE) {
-            return null;
+            return NULL_PATH;
         }
         Path path = new Path();
         Node u = t;
@@ -335,6 +394,7 @@ public class DirectedGraph<V, E> {
         return path;
     }
 
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         for (Vertex v : vertices.values()) {
@@ -350,8 +410,43 @@ public class DirectedGraph<V, E> {
     public void addGraph(DirectedGraph<V, E> otherGraph) {
         for (Vertex v : otherGraph.vertices.values()) {
             for (Edge e : v.outEdges.values()) {
-                addEdge(e.sourceVertex.value, e.targetVertex.value, e.value, e.weight);
+                addEdge(e.sourceVertex.value, e.targetVertex.value, e.value, e.weight, true);
             }
         }
+    }
+
+    private Vertex getFirst() {
+        for (Vertex v : vertices.values()) {
+            if (v.inEdges.isEmpty()) {
+                return v;
+            }
+        }
+        if (!vertices.isEmpty()) {
+            throw new IllegalArgumentException("Circular ordering has been detected: " + toString());
+        } else {
+            return null;
+        }
+    }
+
+    public List<V> topologicalSort(boolean readOnly) {
+        DirectedGraph<V, E> graph = (!readOnly) ? this : (DirectedGraph<V, E>)clone();
+        List<V> list = new ArrayList<V>();
+        while (true) {
+            Vertex v = graph.getFirst();
+            if (v == null) {
+                break;
+            }
+            list.add(v.getValue());
+            graph.removeVertex(v);
+        }
+
+        return list;
+    }
+
+    @Override
+    public Object clone() {
+        DirectedGraph<V, E> copy = new DirectedGraph<V, E>();
+        copy.addGraph(this);
+        return copy;
     }
 }

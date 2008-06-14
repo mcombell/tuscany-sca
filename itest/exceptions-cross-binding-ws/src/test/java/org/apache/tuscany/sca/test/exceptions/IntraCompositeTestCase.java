@@ -20,20 +20,17 @@ package org.apache.tuscany.sca.test.exceptions;
 
 import junit.framework.TestCase;
 
-import org.apache.tuscany.api.SCARuntime;
+import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.test.exceptions.impl.StockTraderSDO;
 import org.apache.tuscany.sca.test.exceptions.sdohandgen.InvalidSymbolSDOException;
-import org.apache.tuscany.spi.databinding.TransformationException;
-import org.osoa.sca.CompositeContext;
-import org.osoa.sca.CurrentCompositeContext;
+import org.osoa.sca.ServiceRuntimeException;
 
 import stockexceptiontestservice.scatesttool.InvalidSymbolFault;
 import stockexceptiontestservice.scatesttool.StockOffer;
 
 public class IntraCompositeTestCase extends TestCase {
+    private SCADomain domain;
     private StockTraderSDO stockTrader;
-
-    private CompositeContext context;
 
     public void testTrading() {
         try {
@@ -69,29 +66,37 @@ public class IntraCompositeTestCase extends TestCase {
         }
     }
 
-    public void _testNotDeclaredAtSourceException() {
+    public void testNotDeclaredAtSourceException() {
 
         Object ret = stockTrader.testNotDeclaredAtSourceTest();
 
         assertNotNull(ret);
 
-        assertEquals(TransformationException.class, ret.getClass());
+        assertEquals(ServiceRuntimeException.class, ret.getClass());
+
+    }
+    
+    public void testNotDeclaredAtTargetException() {
+
+        Object ret = stockTrader.testNotDeclaredAtTargetTest();
+
+        assertNotNull(ret);
+
+        assertEquals(ServiceRuntimeException.class, ret.getClass());
 
     }
 
     @Override
     protected void setUp() throws Exception {
-    	SCARuntime.start("ExceptionTest.composite");
-
-    	context = CurrentCompositeContext.getContext();
-        assertNotNull(context);
-        stockTrader = context.locateService(StockTraderSDO.class, "stockTraderSDOComponent");
-
-        assertNotNull(context);
+        domain = SCADomain.newInstance("intracomposite.composite");
+        stockTrader = domain.getService(StockTraderSDO.class, "stockTraderSDOComponent");
+        assertNotNull(stockTrader);
     }
-    
+
     @Override
     protected void tearDown() throws Exception {
-    	SCARuntime.stop();
+        if (domain != null) {
+            domain.close();
+        }
     }
 }

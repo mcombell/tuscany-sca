@@ -19,20 +19,32 @@
 
 package org.apache.tuscany.sca.binding.feed.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.sca.binding.feed.RSSBinding;
 import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
- * Implementation of the Feed binding model.
+ * Implementation of the RSS Feed binding model.
+ *
+ * @version $Rev$ $Date$
  */
-public class RSSBindingImpl implements RSSBinding {
+class RSSBindingImpl implements RSSBinding, PolicySetAttachPoint {
 
     private String name;
     private String uri;
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType intentAttachPointType;
+    private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+
+    public List<PolicySet> getApplicablePolicySets() {
+        return applicablePolicySets;
+    }
 
     public String getName() {
         return name;
@@ -50,21 +62,6 @@ public class RSSBindingImpl implements RSSBinding {
         this.uri = uri;
     }
 
-    public List<PolicySet> getPolicySets() {
-        // The sample binding does not support policies
-        return Collections.emptyList();
-    }
-
-    public List<Intent> getRequiredIntents() {
-        // The binding does not support policies
-        return Collections.emptyList();
-    }
-
-    public List<Object> getExtensions() {
-        // The binding does not support extensions
-        return Collections.emptyList();
-    }
-
     public boolean isUnresolved() {
         return false;
     }
@@ -73,4 +70,31 @@ public class RSSBindingImpl implements RSSBinding {
         // The binding is always resolved
     }
 
+    public List<PolicySet> getPolicySets() {
+        return policySets;
+    }
+    
+    public List<Intent> getRequiredIntents() {
+        return requiredIntents;
+    }
+
+    public IntentAttachPointType getType() {
+        return intentAttachPointType;
+    }
+    
+    public void setType(IntentAttachPointType intentAttachPointType) {
+        this.intentAttachPointType = intentAttachPointType;
+    }
+    
+    public void setPolicySets(List<PolicySet> policySets) {
+        this.policySets = policySets; 
+    }
+
+    public void setRequiredIntents(List<Intent> intents) {
+        this.requiredIntents = intents;
+    }
+    
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }     
 }

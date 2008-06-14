@@ -27,8 +27,10 @@ import org.apache.tuscany.sca.policy.IntentAttachPoint;
  * set data values. An implementation can have zero or more properties. Each
  * property has a data type, which may be either simple or complex. An
  * implementation may also define a default value for a property.
+ *
+ * @version $Rev$ $Date$
  */
-public interface AbstractProperty extends Base, IntentAttachPoint {
+public interface AbstractProperty extends Base, Extensible, IntentAttachPoint {
 
     /**
      * Returns the property name.
@@ -47,14 +49,14 @@ public interface AbstractProperty extends Base, IntentAttachPoint {
     /**
      * Returns the default value of the property.
      * 
-     * @return the default value of ths property
+     * @return the default value of this property
      */
     Object getValue();
 
     /**
      * Sets the default value of the property.
      * 
-     * @param defaultValue the default value of ths property
+     * @param defaultValue the default value of this property
      */
     void setValue(Object defaultValue);
 
@@ -115,7 +117,7 @@ public interface AbstractProperty extends Base, IntentAttachPoint {
      * Sets the element defining the data type of this property. This is the
      * qualified name of an XML schema element.
      * 
-     * @param type the element defining the type of this property
+     * @param element the element defining the type of this property
      */
     void setXSDElement(QName element);
 

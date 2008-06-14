@@ -20,20 +20,27 @@
 package org.apache.tuscany.sca.binding.rmi;
 
 import org.apache.tuscany.sca.assembly.Binding;
-import org.apache.tuscany.sca.rmi.RMIHost;
+import org.apache.tuscany.sca.extension.helper.BindingActivator;
+import org.apache.tuscany.sca.extension.helper.ComponentLifecycle;
+import org.apache.tuscany.sca.extension.helper.InvokerFactory;
+import org.apache.tuscany.sca.host.rmi.ExtensibleRMIHost;
+import org.apache.tuscany.sca.host.rmi.RMIHost;
+import org.apache.tuscany.sca.host.rmi.RMIHostExtensionPoint;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
-import org.apache.tuscany.sca.spi.BindingActivator;
-import org.apache.tuscany.sca.spi.ComponentLifecycle;
-import org.apache.tuscany.sca.spi.InvokerFactory;
 
+/**
+ * Binding Activator for the RMI Binding.
+ *
+ * @version $Rev$ $Date$
+ */
 public class RMIBindingActivator implements BindingActivator<RMIBinding> {
 
     private RMIHost rmiHost;
 
-    public RMIBindingActivator(RMIHost rmiHost) {
-        this.rmiHost = rmiHost;
+    public RMIBindingActivator(RMIHostExtensionPoint rmiHosts) {
+        this.rmiHost = new ExtensibleRMIHost(rmiHosts);
     }
 
     public Class<RMIBinding> getBindingClass() {

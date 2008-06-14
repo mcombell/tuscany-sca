@@ -22,9 +22,10 @@ import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.assembly.CallbackBinding;
+import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
+import org.w3c.dom.Element;
 
 
 /**
@@ -32,7 +33,7 @@ import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
  * 
  * @version $Rev$ $Date$
  */
-public interface WebServiceBinding extends CallbackBinding {
+public interface WebServiceBinding extends Binding {
 
     /**
      * Sets the WSDL location. 
@@ -56,7 +57,7 @@ public interface WebServiceBinding extends CallbackBinding {
     /**
      * Sets the name of the WSDL service.
      * 
-     * @param className the name of the WSDL service
+     * @param serviceName the name of the WSDL service
      */
     void setServiceName(QName serviceName);
 
@@ -70,7 +71,7 @@ public interface WebServiceBinding extends CallbackBinding {
     /**
      * Sets the name of the WSDL port.
      * 
-     * @param className the name of the WSDL port
+     * @param portName the name of the WSDL port
      */
     void setPortName(String portName);
 
@@ -84,7 +85,7 @@ public interface WebServiceBinding extends CallbackBinding {
     /**
      * Sets the name of the WSDL binding.
      * 
-     * @param className the name of the WSDL binding
+     * @param bindingName the name of the WSDL binding
      */
     void setBindingName(QName bindingName);
 
@@ -98,7 +99,7 @@ public interface WebServiceBinding extends CallbackBinding {
     /**
      * Sets the name of the WSDL endpoint.
      * 
-     * @param className the name of the WSDL endpoint
+     * @param endpointName the name of the WSDL endpoint
      */
     void setEndpointName(String endpointName);
 
@@ -122,7 +123,7 @@ public interface WebServiceBinding extends CallbackBinding {
     
     /**
      * Sets the WSDL endpoint
-     * @param port the WSDL endpoint
+     * @param endpoint the WSDL endpoint
      */
     void setEndpoint(Port endpoint);
     
@@ -151,14 +152,14 @@ public interface WebServiceBinding extends CallbackBinding {
     void setBinding(javax.wsdl.Binding binding);
 
     /**
-     * Returns the WSDL binding.
-     * @return the WSDL binding
+     * Returns the WSDL definition.
+     * @return the WSDL definition
      */
     WSDLDefinition getWSDLDefinition();
     
     /**
-     * Sets the WSDL binding
-     * @param binding the WSDL binding
+     * Sets the WSDL definition.
+     * @param wsdlDefinition the WSDL definition
      */
     void setDefinition(WSDLDefinition wsdlDefinition);
 
@@ -170,7 +171,7 @@ public interface WebServiceBinding extends CallbackBinding {
     
     /**
      * Sets the WSDL namespace
-     * @param namspace the WSDL namspace
+     * @param namespace the WSDL namespace
      */
     void setNamespace(String namespace);
     
@@ -191,4 +192,8 @@ public interface WebServiceBinding extends CallbackBinding {
     InterfaceContract getBindingInterfaceContract();
     
     void setBindingInterfaceContract(InterfaceContract bindingInterfaceContract);
+    
+    Element getEndPointReference();
+    
+    void setEndPointReference(Element element);
 }

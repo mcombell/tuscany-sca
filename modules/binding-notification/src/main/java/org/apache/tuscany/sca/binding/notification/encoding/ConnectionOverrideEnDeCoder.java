@@ -69,12 +69,14 @@ public class ConnectionOverrideEnDeCoder extends AbstractEnDeCoder<ConnectionOve
         }
     }
 
-    protected QName getEncodingObjectQName() {
+    
+	public QName getEncodingObjectQName() {
         
         return QNAME;
     }
 
-    protected Class<ConnectionOverride> getEncodingObjectType() {
+    
+	public Class<ConnectionOverride> getEncodingObjectType() {
         
         return ConnectionOverride.class;
     }

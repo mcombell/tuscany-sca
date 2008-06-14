@@ -28,27 +28,26 @@ import org.xml.sax.ContentHandler;
 
 /**
  * XMLStreamReader to SAX events
+ *
+ * @version $Rev$ $Date$
  */
 public class XMLStreamReader2SAX extends BaseTransformer<XMLStreamReader, ContentHandler> implements
     PushTransformer<XMLStreamReader, ContentHandler> {
 
-    /**
-     * @see org.apache.tuscany.sca.databinding.PushTransformer#getSourceType()
-     */
-    public Class getTargetType() {
+    @Override
+    protected Class<ContentHandler> getTargetType() {
         return ContentHandler.class;
     }
 
-    /**
-     * @see org.apache.tuscany.sca.databinding.PushTransformer#getSourceType()
-     */
-    public Class getSourceType() {
+    @Override
+    protected Class<XMLStreamReader> getSourceType() {
         return XMLStreamReader.class;
     }
 
     /**
      * @see org.apache.tuscany.sca.databinding.PushTransformer#getWeight()
      */
+    @Override
     public int getWeight() {
         return 20;
     }

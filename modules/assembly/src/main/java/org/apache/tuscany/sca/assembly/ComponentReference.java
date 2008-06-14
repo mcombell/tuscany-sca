@@ -18,6 +18,9 @@
  */
 package org.apache.tuscany.sca.assembly;
 
+import java.util.List;
+
+
 
 /**
  * An instance of a reference associated with a particular component.
@@ -29,36 +32,52 @@ public interface ComponentReference extends Reference {
     /**
      * Returns the reference defined by the implementation for this reference.
      * 
-     * @return
+     * @return the implementation reference
      */
     Reference getReference();
 
     /**
      * Sets the reference defined by the implementation for this reference.
      * 
-     * @param reference
+     * @param reference the implementation reference
      */
     void setReference(Reference reference);
     
     /**
-     * Returns true if the reference should be autowired.
-     * 
-     * @return whether the reference should be autowired.
+     * Return the Boolean value of autowire
+     * @return null/TRUE/FALSE
      */
-    boolean isAutowire();
+    Boolean getAutowire();
 
     /**
-     * Sets whether the reference should be autowired.
+     * Sets whether component references should be autowired.
      * 
-     * @param autowire whether the reference should be autowired
+     * @param autowire whether component references should be autowired
      */
-    void setAutowire(boolean autowire);
+    void setAutowire(Boolean autowire);
 
 
     /**
-     * Clone the component reference.
+     * Returns the callback service created internally as a target endpoint
+     * for callbacks to this reference.
      * 
-     * @return a clone of the component reference
+     * @return the callback service
      */
-    Object clone() throws CloneNotSupportedException;
+    ComponentService getCallbackService();
+
+    /**
+     * Sets the callback service created internally as a target endpoint
+     * for callbacks to this reference.
+     * 
+     * @param callbackService the callback service
+     */
+    void setCallbackService(ComponentService callbackService);
+    
+    /**
+     * Returns the endpoints implied by this reference.
+     * 
+     * @return the endpoints implied by this reference
+     */
+    List<Endpoint> getEndpoints();    
+    
 }

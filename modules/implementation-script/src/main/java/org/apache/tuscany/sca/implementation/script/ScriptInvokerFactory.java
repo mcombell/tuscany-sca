@@ -20,6 +20,8 @@
 package org.apache.tuscany.sca.implementation.script;
 
 import java.io.StringReader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -33,8 +35,10 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
-import org.apache.tuscany.sca.factory.ObjectCreationException;
-import org.apache.tuscany.sca.factory.ObjectFactory;
+import org.apache.tuscany.sca.core.factory.ObjectCreationException;
+import org.apache.tuscany.sca.core.factory.ObjectFactory;
+import org.apache.tuscany.sca.extension.helper.InvokerFactory;
+import org.apache.tuscany.sca.extension.helper.utils.PropertyValueObjectFactory;
 import org.apache.tuscany.sca.implementation.script.engines.TuscanyJRubyScriptEngine;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -42,23 +46,48 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
-import org.apache.tuscany.sca.spi.InvokerFactory;
-import org.apache.tuscany.sca.spi.utils.PropertyValueObjectFactory;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class ScriptInvokerFactory implements InvokerFactory {
 
     protected ScriptEngine scriptEngine;
     protected XMLHelper xmlHelper;
-
-    public ScriptInvokerFactory(RuntimeComponent rc, ComponentType ct, ScriptImplementation implementation, PropertyValueObjectFactory propertyFactory) {
-        init(rc, ct, implementation, propertyFactory);
-    }
     
+    protected RuntimeComponent rc; 
+    protected ComponentType ct; 
+    protected ScriptImplementation implementation;
+    protected PropertyValueObjectFactory propertyFactory;
+
+    
+    /**
+     * @param rc
+     * @param ct
+     * @param implementation
+     * @param propertyFactory
+     */
+    public ScriptInvokerFactory(RuntimeComponent rc,
+                                ComponentType ct,
+                                ScriptImplementation implementation,
+                                PropertyValueObjectFactory propertyFactory) {
+        super();
+        this.rc = rc;
+        this.ct = ct;
+        this.implementation = implementation;
+        this.propertyFactory = propertyFactory;
+    }
+
     public Invoker createInvoker(Operation operation) {
+        init(rc, ct, implementation, propertyFactory);
         return new ScriptInvoker(scriptEngine, xmlHelper, operation);
     }
     
-    protected void init(RuntimeComponent rc, ComponentType ct, ScriptImplementation implementation, PropertyValueObjectFactory propertyFactory) {
+    protected synchronized void init(RuntimeComponent rc, ComponentType ct, ScriptImplementation implementation, PropertyValueObjectFactory propertyFactory) {
+        if(scriptEngine!=null) {
+            return;
+        }
         try {
             scriptEngine = getScriptEngineByExtension(implementation.getScriptLanguage());
             if (scriptEngine == null) {
@@ -85,12 +114,12 @@ public class ScriptInvokerFactory implements InvokerFactory {
             throw new ObjectCreationException(e);
         }
 
-        // set the databinding and xmlhelper for wsdl interfaces
+        // set the databinding and XMLHelper for WSDL interfaces
         for (Service service : rc.getServices()) {
             InterfaceContract ic = service.getInterfaceContract();
             if (ic instanceof WSDLInterfaceContract) {
                 // Set to use the Axiom data binding
-                ic.getInterface().setDefaultDataBinding(OMElement.class.getName());
+                ic.getInterface().resetDataBinding(OMElement.class.getName());
                 xmlHelper = XMLHelper.getArgHelper(scriptEngine);
             }
         }
@@ -104,7 +133,7 @@ public class ScriptInvokerFactory implements InvokerFactory {
         for (ComponentReference reference : component.getReferences()) {
             if (reference.getName().equals(name)) {
                 Class iface = ((JavaInterface)reference.getInterfaceContract().getInterface()).getJavaClass();
-                return component.getService(iface, name);
+                return component.getComponentContext().getService(iface, name);
             }
         }
         throw new IllegalArgumentException("reference " + name + " not found on component: " + component);
@@ -114,11 +143,31 @@ public class ScriptInvokerFactory implements InvokerFactory {
      * Hack for now to work around a problem with the JRuby script engine
      */
     protected ScriptEngine getScriptEngineByExtension(String scriptExtn) {
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         if ("rb".equals(scriptExtn)) {
             return new TuscanyJRubyScriptEngine();
         } else {
+            if ("py".equals(scriptExtn)) {
+                pythonCachedir();
+            }
+            // Allow privileged access to run access classes. Requires RuntimePermission
+            // for accessClassInPackage.sun.misc.
+            ScriptEngineManager scriptEngineManager =
+                AccessController.doPrivileged(new PrivilegedAction<ScriptEngineManager>() {
+                    public ScriptEngineManager run() {
+                        return new ScriptEngineManager();
+                    }
+                });
             return scriptEngineManager.getEngineByExtension(scriptExtn);
         }
+    }
+
+    /**
+     * If the Python home isn't set then let Tuscany suppress messages other than errors
+     * See TUSCANY-1950
+     */
+    protected void pythonCachedir() {
+            if (System.getProperty("python.home") == null) {
+              System.setProperty("python.verbose", "error");
+            }
     }
 }

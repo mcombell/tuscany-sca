@@ -22,24 +22,29 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-itest</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>tuscany-itest-callback-api</artifactId>
+    <artifactId>itest-callback-api</artifactId>
     <name>Apache Tuscany SCA Callback API Integration Tests</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <was.ant.script>${basedir}/../build-was-integration.xml</was.ant.script>
+        <was.python.script>${basedir}/../wasAdmin.py</was.python.script>
+    </properties>
 </project>

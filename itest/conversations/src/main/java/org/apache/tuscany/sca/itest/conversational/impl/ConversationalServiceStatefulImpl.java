@@ -19,16 +19,12 @@
 package org.apache.tuscany.sca.itest.conversational.impl;
 
 import org.apache.tuscany.sca.itest.conversational.ConversationalCallback;
-import org.apache.tuscany.sca.itest.conversational.ConversationalClient;
 import org.apache.tuscany.sca.itest.conversational.ConversationalService;
 import org.osoa.sca.annotations.Callback;
 import org.osoa.sca.annotations.ConversationAttributes;
 import org.osoa.sca.annotations.ConversationID;
-import org.osoa.sca.annotations.Conversational;
 import org.osoa.sca.annotations.Destroy;
-import org.osoa.sca.annotations.EndsConversation;
 import org.osoa.sca.annotations.Init;
-import org.osoa.sca.annotations.Remotable;
 import org.osoa.sca.annotations.Scope;
 import org.osoa.sca.annotations.Service;
 
@@ -82,6 +78,10 @@ public class ConversationalServiceStatefulImpl implements ConversationalService 
         return count;
     }
     
+    public void businessException() throws Exception {
+        throw new Exception("Business Exception");
+    }     
+    
     public void initializeCountCallback(int count){
         calls.append("initializeCountCallback,"); 
         this.count = count;
@@ -99,13 +99,19 @@ public class ConversationalServiceStatefulImpl implements ConversationalService 
         return conversationalCallback.retrieveCount();
     }
     
-    public void endConversation(){
+    public void businessExceptionCallback() throws Exception {
+        calls.append("businessExceptionCallback,");        
+        conversationalCallback.businessException();
+    }    
+    
+    public String endConversation(){
         calls.append("endConversation,"); 
         count = 0;
+        return conversationId;
     }
     
-    public void endConversationCallback(){
+    public String endConversationCallback(){
         calls.append("endConversationCallback,"); 
-        conversationalCallback.endConversation();
+        return conversationalCallback.endConversation();
     }
 }

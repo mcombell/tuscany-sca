@@ -30,6 +30,11 @@ import org.w3c.dom.Node;
 
 import com.example.ipo.xmlbeans.PurchaseOrderDocument;
 
+/**
+ * Test cases for testing XML Object transformations.
+ *
+ * @version $Rev$ $Date$
+ */
 public class XmlObjectTestCase extends TestCase {
     private static final String IPO_XML = "<?xml version=\"1.0\"?>" + "<ipo:purchaseOrder"
     + "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + "  xmlns:ipo=\"http://www.example.com/IPO\""
@@ -42,6 +47,7 @@ public class XmlObjectTestCase extends TestCase {
     + "      <ipo:comment>Want this for the holidays</ipo:comment>" + "      <shipDate>1999-12-05</shipDate>" + "    </item>" + "  </items>"
     + "</ipo:purchaseOrder>";
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
@@ -91,6 +97,7 @@ public class XmlObjectTestCase extends TestCase {
         Assert.assertNotNull(object3);
     }   
 
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }

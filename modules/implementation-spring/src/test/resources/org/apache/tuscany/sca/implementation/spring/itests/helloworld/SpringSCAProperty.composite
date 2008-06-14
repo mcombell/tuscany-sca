@@ -27,8 +27,8 @@
            name="SpringSCAProperty">
     
     <component name="ClientComponent">
-		<implementation.java class="org.apache.tuscany.sca.implementation.spring.itests.helloworld.HelloWorldProxy"/>
-        <reference name="delegate" target="HelloWorldComponent"></reference>
+        <implementation.java class="org.apache.tuscany.sca.implementation.spring.itests.helloworld.HelloWorldProxy"/>
+        <reference name="delegate" target="HelloWorldComponent"/>
     </component>
 
     <component name="HelloWorldComponent">

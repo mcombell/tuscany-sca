@@ -18,15 +18,19 @@
  */
 package org.apache.tuscany.sca.core.work;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.apache.tuscany.sca.work.NotificationListener;
 import org.apache.tuscany.sca.work.WorkScheduler;
 import org.apache.tuscany.sca.work.WorkSchedulerException;
 
 import commonj.work.WorkEvent;
-import commonj.work.WorkException;
 import commonj.work.WorkListener;
 import commonj.work.WorkManager;
-import commonj.work.WorkRejectedException;
 
 /**
  * A work scheduler implementation based on a JSR 237 work manager.
@@ -34,8 +38,10 @@ import commonj.work.WorkRejectedException;
  * <p/>
  * This needs a JSR 237 work manager implementation available for scheduling work. Instances can be configured with a
  * work manager implementation that is injected in. It is the responsibility of the runtime environment to make a work
- * manager implementaion available. For example, if the managed environment supports work manager the runtime can use
+ * manager implementation available. For example, if the managed environment supports work manager the runtime can use
  * the appropriate lookup mechanism to inject the work manager implementation. </p>
+ *
+ * @version $Rev$ $Date$
  */
 public class Jsr237WorkScheduler implements WorkScheduler {
 
@@ -49,11 +55,17 @@ public class Jsr237WorkScheduler implements WorkScheduler {
      *
      * @param jsr237WorkManager JSR 237 work manager.
      */
-    public Jsr237WorkScheduler(WorkManager jsr237WorkManager) {
-        if (jsr237WorkManager == null) {
-            throw new IllegalArgumentException("Work manager cannot be null");
+    public Jsr237WorkScheduler() {
+        
+        try {
+            InitialContext ctx  = new InitialContext();
+            jsr237WorkManager = (WorkManager) ctx.lookup("java:comp/env/wm/TuscanyWorkManager");
+        } catch (NamingException e) {
+            // ignore
         }
-        this.jsr237WorkManager = jsr237WorkManager;
+        if (jsr237WorkManager == null) {
+            jsr237WorkManager = new ThreadPoolWorkManager(10);
+        }
     }
 
     /**
@@ -87,20 +99,33 @@ public class Jsr237WorkScheduler implements WorkScheduler {
                 Jsr237WorkListener<T> jsr237WorkListener = new Jsr237WorkListener<T>(listener, work);
                 jsr237WorkManager.schedule(jsr237Work, jsr237WorkListener);
             }
-        } catch (WorkRejectedException ex) {
+        } catch (IllegalArgumentException ex) {
             if (listener != null) {
                 listener.workRejected(work);
             } else {
                 throw new WorkSchedulerException(ex);
             }
-        } catch (WorkException ex) {
+        } catch (Exception ex) {
             throw new WorkSchedulerException(ex);
         }
 
     }
 
+    public void destroy() {
+        if (jsr237WorkManager instanceof ThreadPoolWorkManager) {
+            // Allow privileged access to modify threads. Requires RuntimePermission in security
+            // policy.
+            AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                public Object run() {
+                    ((ThreadPoolWorkManager)jsr237WorkManager).destroy();
+                    return null;
+                }
+            });
+        }
+    }
+
     /*
-     * Worklistener for keeping track of work status callbacks.
+     * WorkListener for keeping track of work status callbacks.
      *
      */
     private class Jsr237WorkListener<T extends Runnable> implements WorkListener {

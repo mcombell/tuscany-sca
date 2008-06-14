@@ -29,6 +29,8 @@ import org.xml.sax.InputSource;
 
 /**
  * Transform XML string to SAX
+ *
+ * @version $Rev$ $Date$
  */
 public class Reader2SAX extends BaseTransformer<Reader, ContentHandler> implements
     PushTransformer<Reader, ContentHandler> {
@@ -40,14 +42,17 @@ public class Reader2SAX extends BaseTransformer<Reader, ContentHandler> implemen
         }
     }
 
-    public Class getSourceType() {
+    @Override
+    protected Class<Reader> getSourceType() {
         return Reader.class;
     }
 
-    public Class getTargetType() {
+    @Override
+    protected Class<ContentHandler> getTargetType() {
         return ContentHandler.class;
     }
 
+    @Override
     public int getWeight() {
         return 40;
     }

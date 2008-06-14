@@ -19,10 +19,12 @@
 package calculator;
 
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Service;
 
 /**
  * An implementation of the Calculator service.
  */
+@Service(CalculatorService.class)
 public class CalculatorServiceImpl implements CalculatorService {
 
     private AddService addService;
@@ -59,6 +61,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     public double multiply(double n1, double n2) {
+        System.err.println("Multiply");
         return multiplyService.multiply(n1, n2);
     }
 

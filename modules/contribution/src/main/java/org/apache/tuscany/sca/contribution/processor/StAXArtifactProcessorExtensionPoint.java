@@ -19,7 +19,7 @@
 package org.apache.tuscany.sca.contribution.processor;
 
 /**
- * A registry for DOM artifact processors.
+ * An extension point for StAX artifact processors.
  * 
  * @version $Rev$ $Date$
  */

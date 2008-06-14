@@ -21,12 +21,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
-        <artifactId>tuscany-samples</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>tuscany-sca</artifactId>
+        <version>2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-calculator-distributed</artifactId>
-    <name>Apache Tuscany Distributed Calculator Sample</name>
+    <name>Apache Tuscany SCA Distributed Calculator Sample</name>
 
     <repositories>
        <repository>
@@ -36,47 +36,73 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-distributed</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>   
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-topology</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency> 
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-topology-xml</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>                       
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-sca</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <artifactId>tuscany-node2-api</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>    
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-jms</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>           
+            <artifactId>tuscany-node2-launcher</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency>    
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-domain-manager</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+        </dependency> 
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-node-runtime</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency> 
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-sca</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>                                        
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-sca-axis2</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>         
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-http-runtime</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-resource-runtime</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency> 
+        
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>3.2.1</version>
+            <scope>runtime</scope>
+        </dependency> 
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-tomcat</artifactId>
+            <version>2.0-incubating-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>   
         
         <dependency>
             <groupId>junit</groupId>

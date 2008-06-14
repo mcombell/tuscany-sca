@@ -25,16 +25,17 @@ import org.osoa.sca.annotations.Reference;
  * A simple proxy Java class which implements the HelloWorld interface but which uses
  * a reference "delegate" to actually provide the HelloWorld service
  *
+ * @version $Rev$ $Date$
  */
 public class HelloWorldProxy implements HelloWorld {
 
-	// Here is the reference "delegate" - it implements the HelloWorld interface...
+    // Here is the reference "delegate" - it implements the HelloWorld interface...
     @Reference
     public HelloWorld delegate;
 
     public String sayHello(String s) {
-    	// Simply call the reference to satisfy the service request...
-    	System.out.println("HelloWorldProxy - calling sayHello");
+        // Simply call the reference to satisfy the service request...
+        System.out.println("HelloWorldProxy - calling sayHello");
         return delegate.sayHello(s);
     }
 

@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
  * 
  * @version $Rev$ $Date$
  */
-public interface EndpointReference {
+public interface EndpointReference extends Cloneable {
     /**
      * Get the component for the endpoint
      * @return The component, null of the EPR is for a non-SCA service
@@ -47,8 +47,6 @@ public interface EndpointReference {
      */
     Binding getBinding();
 
-    //FIXME Why do we need this? isn't the interface contract already on the Contract?
-    
     /**
      * Get the interface contract for the endpoint
      * @return The interface contract
@@ -72,5 +70,24 @@ public interface EndpointReference {
      * @param uri The new URI of the endpoint
      */
     void setURI(String uri);
+
+    /**
+     * Get the callback endpoint for this endpoint
+     * @return The callback endpoint for this endpoint
+     */
+    EndpointReference getCallbackEndpoint();
+
+    /**
+     * Set the callback endpoint for this endpoint
+     * @param callbackEndpoint The new callback endpoint for this endpoint
+     */
+    void setCallbackEndpoint(EndpointReference callbackEndpoint);
+
+    Object clone() throws CloneNotSupportedException;   
+    
+    void setReferenceParameters(ReferenceParameters parameters);
+    ReferenceParameters getReferenceParameters();
+
+    void mergeEndpoint(EndpointReference epr);
     
 }

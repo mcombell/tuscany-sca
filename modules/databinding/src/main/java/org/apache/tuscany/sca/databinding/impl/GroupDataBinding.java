@@ -19,11 +19,12 @@
 
 package org.apache.tuscany.sca.databinding.impl;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
 
 /**
  * The base class for a special databinding which represents a group of other databindings
@@ -44,7 +45,8 @@ public abstract class GroupDataBinding extends BaseDataBinding {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean introspect(DataType type, Annotation[] annotations) {
+    @Override
+    public boolean introspect(DataType type, Operation operation) {
         if (markerTypes == null) {
             return false;
         }
@@ -59,13 +61,18 @@ public abstract class GroupDataBinding extends BaseDataBinding {
         for (Class<?> c : markerTypes) {
             if (isTypeOf(c, cls)) {
                 type.setDataBinding(getDataBinding(c));
-                type.setLogical(getLogical(cls, annotations));
+                Object logical = getLogical(cls, null);
+                if (logical != null) {
+                    type.setLogical(getLogical(cls, null));
+                } else {
+                    type.setLogical(XMLType.UNKNOWN);
+                }
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
      * Test if the given type is a subtype of the base type
      * @param markerType
@@ -75,7 +82,7 @@ public abstract class GroupDataBinding extends BaseDataBinding {
     protected boolean isTypeOf(Class<?> markerType, Class<?> type) {
         return markerType.isAssignableFrom(type);
     }
-    
+
     /**
      * Derive the databinding name from a base class
      * @param baseType
@@ -84,13 +91,13 @@ public abstract class GroupDataBinding extends BaseDataBinding {
     protected String getDataBinding(Class<?> baseType) {
         return baseType.getName();
     }
-    
+
     /**
      * Get the logical type
      * @param type The java type
-     * @param annotations
+     * @param operation TODO
      * @return
      */
-    protected abstract Object getLogical(Class<?> type, Annotation[] annotations);
+    protected abstract Object getLogical(Class<?> type, Operation operation);
 
 }

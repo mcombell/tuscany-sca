@@ -31,29 +31,35 @@ import org.codehaus.jettison.json.JSONObject;
 /**
  * @version $Rev$ $Date$
  */
-public class JSON2XMLStreamReader extends BaseTransformer<JSONObject, XMLStreamReader> implements
-    PullTransformer<JSONObject, XMLStreamReader> {
+public class JSON2XMLStreamReader extends BaseTransformer<Object, XMLStreamReader> implements
+    PullTransformer<Object, XMLStreamReader> {
     
     @Override
-    protected Class getSourceType() {
-        return JSONObject.class;
+    protected Class<Object> getSourceType() {
+        return Object.class;
     }
 
     @Override
-    protected Class getTargetType() {
+    protected Class<XMLStreamReader> getTargetType() {
         return XMLStreamReader.class;
     }
 
-    public XMLStreamReader transform(JSONObject source, TransformationContext context) {
+    public XMLStreamReader transform(Object source, TransformationContext context) {
         try {
-            return new BadgerFishXMLStreamReader(source);
+            JSONObject json = JSONHelper.toJettison(source);
+            return new BadgerFishXMLStreamReader(json);
         } catch (Exception e) {
             throw new TransformationException(e);
         } 
     }
 
+    @Override
     public int getWeight() {
         return 500;
+    }
+    @Override
+    public String getSourceDataBinding() {
+        return JSONDataBinding.NAME;
     }
 
 }

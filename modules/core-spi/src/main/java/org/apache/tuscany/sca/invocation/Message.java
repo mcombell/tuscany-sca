@@ -18,16 +18,18 @@
  */
 package org.apache.tuscany.sca.invocation;
 
-import org.apache.tuscany.sca.interfacedef.ConversationSequence;
+import java.util.Map;
+
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.runtime.EndpointReference;
 
 /**
  * Represents a request, response, or exception flowing through a wire
  *
- * @version $Rev $Date
+ * @version $Rev $Date$
  */
 public interface Message {
+    String QOS_CTX_SECURITY_PRINCIPAL = "PRINCIPAL";
 
     /**
      * Returns the body of the message, which will be the payload or parameters associated with the wire
@@ -40,18 +42,6 @@ public interface Message {
      * @param body The body of the message
      */
     <T> void setBody(T body);
-
-    /**
-     * Get the conversation id
-     * @return The conversation ID
-     */
-    String getConversationID();
-
-    /**
-     * Set the conversation id
-     * @param conversationId The conversation ID
-     */
-    void setConversationID(String conversationId);
 
     /**
      * Get the end point reference of the source reference
@@ -76,7 +66,7 @@ public interface Message {
      * @param to The end point reference of the service that the message targets
      */
     void setTo(EndpointReference to);
-
+    
     /**
      * Returns the id of the message
      * @return The message Id
@@ -88,19 +78,6 @@ public interface Message {
      * @param messageId The message ID
      */
     void setMessageID(Object messageId);
-
-    /**
-     * Returns the correlation id of the message or null if one is not available. Correlation ids are used by transports
-     * for message routing.
-     * @return The correlation Id
-     */
-    Object getCorrelationID();
-
-    /**
-     * Sets the correlation id of the message. Correlation ids are used by transports for message routing.
-     * @param correlationId The correlation Id
-     */
-    void setCorrelationID(Object correlationId);
 
     /**
      * Determines if the message represents a fault/exception
@@ -117,20 +94,6 @@ public interface Message {
     <T> void setFaultBody(T fault);
 
     /**
-     * Returns the conversational sequence the message is associated with, NONE, START, CONTINUE, or END on TargetInvoker}
-     *
-     * @return The conversational sequence the message is associated with
-     */
-    ConversationSequence getConversationSequence();
-
-    /**
-     * Sets the conversational sequence the message is associated with, NONE, START, CONTINUE, or END
-     *
-     * @param sequence The conversational sequence
-     */
-    void setConversationSequence(ConversationSequence sequence);
-
-    /**
      * Returns the operation that created the message.
      *
      * @return The operation that created the message
@@ -143,5 +106,12 @@ public interface Message {
      * @param op The operation that created the message
      */
     void setOperation(Operation op);
-
+    
+    /** 
+     * Returns a map of objects that represents the QoS context that wraps this message such as 
+     * invoking authenticated principal and so on.
+     * 
+     * @return
+     */
+    Map<String, Object> getQoSContext();
 }

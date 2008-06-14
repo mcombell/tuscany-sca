@@ -20,26 +20,27 @@ package org.apache.tuscany.sca.contribution.processor;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.contribution.processor.impl.FolderContributionProcessor;
 
+/**
+ * Folder Package Processor test case
+ * Verifies proper handle of File System structured contributions
+ * 
+ * @version $Rev$ $Date$
+ */
 public class FolderContributionPackageProcessorTestCase extends TestCase {
     private static final String FOLDER_CONTRIBUTION = ".";
     
-    private File contributionRoot;
-
-    protected void setUp() throws Exception {
-        super.setUp();
-        this.contributionRoot = new File(FOLDER_CONTRIBUTION);
-    }
-    
     public final void testProcessPackageArtifacts() throws Exception {
         FolderContributionProcessor folderProcessor = new FolderContributionProcessor();
+        URL contributionURL = new File(FOLDER_CONTRIBUTION).toURL().toURI().toURL();
 
-        List<URI> artifacts = folderProcessor.getArtifacts(contributionRoot.toURL(), null);
+        List<URI> artifacts = folderProcessor.getArtifacts(contributionURL, null);
         assertNotNull(artifacts);
     }
 }

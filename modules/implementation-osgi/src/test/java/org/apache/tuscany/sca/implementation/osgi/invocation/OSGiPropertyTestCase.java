@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.implementation.osgi.test.OSGiTestWithPropertyImpl;
  * 
  * Test the execution of an OSGi implementation type
  *
+ * @version $Rev$ $Date$
  */
 public class OSGiPropertyTestCase extends OSGiTestCase {
     
@@ -35,8 +36,9 @@ public class OSGiPropertyTestCase extends OSGiTestCase {
     protected void setUp() throws Exception {
         
         className = OSGiTestWithPropertyImpl.class.getName();
+        compositeName = "osgiproptest.composite";
         
-        OSGiTestBundles.createBundle("target/OSGiTestService.jar", 
+        OSGiTestBundles.createBundle("target/test-classes/OSGiTestService.jar", 
                 OSGiTestInterface.class, 
                 OSGiTestWithPropertyImpl.class);        
         

@@ -18,9 +18,10 @@
  */
 package org.apache.tuscany.sca.test;
 
+import org.osoa.sca.CallableReference;
 import org.osoa.sca.ComponentContext;
 import org.osoa.sca.RequestContext;
-import org.osoa.sca.ServiceReference;
+import org.osoa.sca.annotations.Callback;
 import org.osoa.sca.annotations.Context;
 import org.osoa.sca.annotations.Service;
 
@@ -29,8 +30,20 @@ public class CallBackApiServiceImpl implements CallBackApiService {
 
     @Context
     protected ComponentContext componentContext;
-    
+    /**
+     * Object of CallBackApiCallBack class
+     */
     private CallBackApiCallBack callback;
+
+    @Callback
+    protected CallableReference<CallBackApiCallBack> callbackRef;
+
+    /**
+     * This function get an object of CallBackApiServiceImpl by calling getCallBackInterface function and calls the
+     * callBackMessage function.
+     * 
+     * @param aString String passed by a function call
+     */
 
     public void knockKnock(String aString) {
 
@@ -42,6 +55,28 @@ public class CallBackApiServiceImpl implements CallBackApiService {
 
     }
 
+    /**
+     * This function calls the callBackMessage function. <br>
+     * The reference to this function is received from Call back reference to the class CallBackApiService.
+     * 
+     * @param aString String passed by a function call
+     */
+    public void knockKnockByRef(String aString) {
+
+        System.out.println("CallBackApiServiceImpl message received: " + aString);
+        callbackRef.getService().callBackMessage("Who's There");
+        System.out.println("CallBackApiServiceImpl response sent");
+        return;
+
+    }
+
+    /**
+     * This function get an object of CallBackApiServiceImpl by calling getCallBackInterface function. <br>
+     * This function then places multiple callBack using the callbackIncrement function defined in
+     * callBack.ApiServiceImpl
+     * 
+     * @param aString String passed by a function call
+     */
     public void multiCallBack(String aString) {
 
         callback = this.getCallBackInterface();
@@ -57,6 +92,11 @@ public class CallBackApiServiceImpl implements CallBackApiService {
 
     }
 
+    /**
+     * This function does not callBack any function.
+     * 
+     * @param aString String passed by a function call
+     */
     public void noCallBack(String aString) {
 
         System.out.println("CallBackApiServiceImpl message received: " + aString);
@@ -65,11 +105,16 @@ public class CallBackApiServiceImpl implements CallBackApiService {
 
     }
 
+    /**
+     * This function get an object of CallBackApiServiceImpl from the present componentContext
+     * 
+     * @param void
+     */
     private CallBackApiCallBack getCallBackInterface() {
         System.out.println("CallBackApiServiceImpl getting request context");
         RequestContext rc = componentContext.getRequestContext();
         System.out.println("CallBackApiServiceImpl getting callback from request context");
-        callback = (CallBackApiCallBack) ((ServiceReference) rc.getServiceReference()).getCallback();
+        callback = rc.getCallback();
         System.out.println("CallBackApiServiceImpl returning callback");
         return callback;
 

@@ -22,37 +22,36 @@ import java.net.URL;
 
 import org.apache.tuscany.sca.assembly.Implementation;
 
+
 /**
  * The model representing a resource implementation in an SCA assembly model.
+ *
+ * @version $Rev$ $Date$
  */
 public interface ResourceImplementation extends Implementation {
 
     /**
-     * Returns the location of the directory containing the resources.
-     * 
-     * @return the location of the directory containing the resources
+     * The URI of the resource inside its contribution.
+     * @return the URI of the resource
      */
-    public String getLocation();
+    String getLocation();
 
     /**
-     * Sets the location of the directory containing the resources.
-     * 
-     * @param location the location of the directory containing the resources
+     * Sets the URI of the resource inside its contribution.
+     * @param location the URI of the resource
      */
-    public void setLocation(String location);
-    
+    void setLocation(String location);
+
     /**
-     * Returns the resource location URL.
-     * 
-     * @return the location URL
+     * Returns the URL of the resource.
+     * @return the URL of the resource
      */
-    public URL getLocationURL();
-    
+    URL getLocationURL();
+
     /**
-     * Sets the resource location URL.
-     * 
-     * @param url the resource location URL
+     * Sets the URL of the resource.
+     * @param url the URL of the resource
      */
-    public void setLocationURL(URL url);
+    void setLocationURL(URL url);
 
 }

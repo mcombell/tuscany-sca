@@ -22,6 +22,7 @@ package echo.provider;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Invoker;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -31,22 +32,30 @@ import echo.EchoBinding;
 /**
  * Implementation of the Echo binding provider.
  */
-public class EchoReferenceBindingProvider implements ReferenceBindingProvider {
+class EchoReferenceBindingProvider implements ReferenceBindingProvider {
 
     private RuntimeComponentReference reference;
+    private EchoBinding binding;
 
-    public EchoReferenceBindingProvider(RuntimeComponent component,
+    EchoReferenceBindingProvider(RuntimeComponent component,
                                         RuntimeComponentReference reference,
                                         EchoBinding binding) {
         this.reference = reference;
+        this.binding = binding;
     }
 
-    public Invoker createInvoker(Operation operation, boolean isCallback) {
-        if (isCallback) {
-            throw new UnsupportedOperationException();
-        } else {
-            return new EchoBindingInvoker();
+    public Invoker createInvoker(Operation operation) {
+        if (binding instanceof PolicySetAttachPoint) {
+            PolicySetAttachPoint policySetAttachPoint = (PolicySetAttachPoint)binding;
+            if ( !policySetAttachPoint.getPolicySets().isEmpty() ){
+                return new EchoBindingPoliciedInvoker(policySetAttachPoint.getPolicySets());
+            }
         }
+        return new EchoBindingInvoker();
+    }
+    
+    public boolean supportsOneWayInvocation() {
+        return false;
     }
 
     public InterfaceContract getBindingInterfaceContract() {

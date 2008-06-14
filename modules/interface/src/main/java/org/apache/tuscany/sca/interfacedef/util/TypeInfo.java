@@ -23,6 +23,8 @@ import javax.xml.namespace.QName;
 
 /**
  * An abstraction of XML schema types
+ *
+ * @version $Rev$ $Date$
  */
 public class TypeInfo {
     private QName name;
@@ -63,10 +65,36 @@ public class TypeInfo {
         return baseType;
     }
 
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Type: ").append(name);
         return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final TypeInfo other = (TypeInfo)obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
     }
 
 }

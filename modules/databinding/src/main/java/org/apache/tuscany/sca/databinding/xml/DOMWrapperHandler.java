@@ -20,50 +20,69 @@
 package org.apache.tuscany.sca.databinding.xml;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.databinding.TransformationException;
 import org.apache.tuscany.sca.databinding.WrapperHandler;
 import org.apache.tuscany.sca.databinding.impl.DOMHelper;
+import org.apache.tuscany.sca.interfacedef.DataType;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.ElementInfo;
+import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
+import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class DOMWrapperHandler implements WrapperHandler<Node> {
 
-    private Document document;
-
     public DOMWrapperHandler() {
         super();
+    }
+
+    public Node create(Operation operation, boolean input) {
         try {
-            this.document = DOMHelper.newDocument();
+            WrapperInfo wrapperInfo = operation.getWrapper();
+            ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
+            // Class<?> wrapperClass = input ? wrapperInfo.getInputWrapperClass() : wrapperInfo.getOutputWrapperClass();
+            Document document = DOMHelper.newDocument();
+            QName name = element.getQName();
+            return DOMHelper.createElement(document, name);
         } catch (ParserConfigurationException e) {
             throw new TransformationException(e);
         }
     }
 
-    public Node create(ElementInfo element, TransformationContext context) {
-        QName name = element.getQName();
-        return DOMHelper.createElement(document, name);
-    }
+    public void setChildren(Node wrapper,
+                            Object[] childObjects,
+                            Operation operation, boolean input) {
+        List<ElementInfo> childElements = input? operation.getWrapper().getInputChildElements():
+            operation.getWrapper().getOutputChildElements();
+        for (int i = 0; i < childElements.size(); i++) {
+            setChild(wrapper, i, childElements.get(i), childObjects[i]);
+        }
 
+    }
     public void setChild(Node wrapper, int i, ElementInfo childElement, Object value) {
-        Node node = (Node) value;
+        Node node = (Node)value;
         if (node.getNodeType() == Node.DOCUMENT_NODE) {
-            node = ((Document) node).getDocumentElement();
+            node = ((Document)node).getDocumentElement();
         }
         wrapper.appendChild(wrapper.getOwnerDocument().importNode(node, true));
     }
 
-    public List getChildren(Node wrapper) {
+    public List getChildren(Node wrapper, Operation operation, boolean input) {
         assert wrapper != null;
+        List<ElementInfo> childElements = input? operation.getWrapper().getInputChildElements():
+            operation.getWrapper().getOutputChildElements();
         if (wrapper.getNodeType() == Node.DOCUMENT_NODE) {
-            wrapper = ((Document) wrapper).getDocumentElement();
+            wrapper = ((Document)wrapper).getDocumentElement();
         }
         List<Node> elements = new ArrayList<Node>();
         NodeList nodes = wrapper.getChildNodes();
@@ -75,4 +94,48 @@ public class DOMWrapperHandler implements WrapperHandler<Node> {
         }
         return elements;
     }
+
+    /**
+     * @see org.apache.tuscany.sca.databinding.WrapperHandler#getWrapperType(Operation, boolean)
+     */
+    public DataType getWrapperType(Operation operation, boolean input) {
+        WrapperInfo wrapper = operation.getWrapper();
+        ElementInfo element = input? wrapper.getInputWrapperElement(): wrapper.getOutputWrapperElement();
+        DataType<XMLType> wrapperType =
+            new DataTypeImpl<XMLType>(DOMDataBinding.NAME, Node.class, new XMLType(element));
+        return wrapperType;
+    }
+
+    public boolean isInstance(Object wrapperObj,
+                              Operation operation,
+                              boolean input) {
+        WrapperInfo wrapperInfo = operation.getWrapper();
+        ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
+        List<ElementInfo> childElements =
+            input ? wrapperInfo.getInputChildElements() : wrapperInfo.getOutputChildElements();
+        Node wrapper = (Node)wrapperObj;
+        if (wrapper.getNodeType() == Node.DOCUMENT_NODE) {
+            wrapper = ((Document)wrapper).getDocumentElement();
+        }
+        QName elementName = new QName(wrapper.getNamespaceURI(), wrapper.getLocalName());
+        if (!element.getQName().equals(elementName)) {
+            return false;
+        }
+        Set<QName> names = new HashSet<QName>();
+        for (ElementInfo e : childElements) {
+            names.add(e.getQName());
+        }
+        NodeList nodes = wrapper.getChildNodes();
+        for (int j = 0; j < nodes.getLength(); j++) {
+            Node node = nodes.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elementName = new QName(wrapper.getNamespaceURI(), wrapper.getLocalName());
+                if (!names.contains(elementName)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

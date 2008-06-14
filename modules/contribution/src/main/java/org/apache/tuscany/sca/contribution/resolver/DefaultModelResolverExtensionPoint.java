@@ -18,58 +18,97 @@
  */
 package org.apache.tuscany.sca.contribution.resolver;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
+import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
+
 
 /**
- * The default implementation of an model resolver Class registry.
+ * The default implementation of a model resolver extension point.
  * 
- * @version $Rev: 539693 $ $Date: 2007-05-18 23:24:07 -0700 (Fri, 18 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class DefaultModelResolverExtensionPoint implements ModelResolverExtensionPoint {
-    protected final Map<Class<?>, Class<? extends ModelResolver>> resolversByModelType = new HashMap<Class<?>, Class<? extends ModelResolver>>();
     
+    private final Map<Class<?>, Class<? extends ModelResolver>> resolvers = new HashMap<Class<?>, Class<? extends ModelResolver>>();
+    private Map<String, ServiceDeclaration> loadedResolvers;
+
     /**
-     * Constructs a new model resolver registry.
+     * Constructs a new DefaultModelResolverExtensionPoint.
      */
     public DefaultModelResolverExtensionPoint() {
     }
 
-    public void addResolver(Class<?> modelType, Class <? extends ModelResolver> resolver) {
-        
-        resolversByModelType.put(modelType, resolver);
-    }
-    
-    public void removeResolver(Class<?> modelType) {
-        resolversByModelType.remove(modelType);
+    public void addResolver(Class<?> modelType, Class<? extends ModelResolver> resolver) {
+        resolvers.put(modelType, resolver);
     }
 
-    public Class <? extends ModelResolver> getResolver(Class<?> modelType) {
-        Class<?>[] classes = modelType.getInterfaces();
-        for (Class<?> c : classes) {
-            Class <? extends ModelResolver> resolver = resolversByModelType.get(c);
-            if (resolver != null) {
-                return resolver;
-            }
-        }
-        
-        return resolversByModelType.get(modelType);
+    public void removeResolver(Class<?> modelType) {
+        resolvers.remove(modelType);
     }
 
     @SuppressWarnings("unchecked")
-    public Collection<Class<?>> getResolverTypes() {
-        Collection<Class<?>> resolverTypes = new ArrayList<Class<?>>();
+    public Class<? extends ModelResolver> getResolver(Class<?> modelType) {
+        loadModelResolvers();
         
-        Iterator typeIterator = resolversByModelType.keySet().iterator(); 
-        while (typeIterator.hasNext()) {
-            resolverTypes.add( (Class) typeIterator.next() );
+        Class<?>[] classes = modelType.getInterfaces();
+        for (Class<?> c : classes) {
+            Class<? extends ModelResolver> resolver = resolvers.get(c);
+            if (resolver == null) {
+                ServiceDeclaration resolverClass = loadedResolvers.get(c.getName());
+                if (resolverClass != null) {
+                    try {
+                        return (Class<? extends ModelResolver>)resolverClass.loadClass();
+                    } catch (ClassNotFoundException e) {
+                        throw new IllegalArgumentException(e);
+                    }
+                }
+            } else {
+                return resolver;
+            }
+        }
+
+        Class<? extends ModelResolver > resolver = resolvers.get(modelType);
+        if (resolver == null) {
+            ServiceDeclaration resolverClass = loadedResolvers.get(modelType.getName());
+            if (resolverClass != null) {
+                try {
+                    return (Class<? extends ModelResolver>)resolverClass.loadClass();
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        }
+        return resolver;
+    }
+
+    /**
+     * Dynamically load model resolvers declared under META-INF/services
+     */
+    private void loadModelResolvers() {
+        if (loadedResolvers != null)
+            return;
+        loadedResolvers = new HashMap<String, ServiceDeclaration>();
+
+        // Get the model resolver service declarations
+        Set<ServiceDeclaration> modelResolverDeclarations; 
+        try {
+            modelResolverDeclarations = ServiceDiscovery.getInstance().getServiceDeclarations(ModelResolver.class);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
         
-        return resolverTypes;
+        // Load model resolvers
+        for (ServiceDeclaration modelResolverDeclaration: modelResolverDeclarations) {
+            Map<String, String> attributes = modelResolverDeclaration.getAttributes();
+            String model = attributes.get("model");
+
+            loadedResolvers.put(model, modelResolverDeclaration);
+        }
     }
-    
-    
+
 }

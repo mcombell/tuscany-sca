@@ -22,35 +22,35 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-itest</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
+        <version>2.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>tuscany-itest-contribution-import-export</artifactId>
+    <artifactId>itest-contribution-import-export</artifactId>
     <packaging>pom</packaging>
-    <name>Apache Tuscany Contribution Import/Export</name>
+    <name>Apache Tuscany SCA Contribution Import/Export Integration Tests</name>
 
     <modules>
-        <module>contrib-wsdl</module>
-        <module>test-import-wsdl</module>
-        <module>contrib-composite</module>
-        <module>test-import-composite</module>
-        <!--
-        <module>contrib-java</module>
-        <module>test-import-java</module>
-        -->
+        <module>export-composite</module>
+        <module>export-java</module>
+        <module>export-resource</module>
+        <module>export-wsdl</module>
+        <module>import-composite</module>
+        <module>import-java</module>
+        <module>import-resource</module>
+        <module>import-wsdl</module>
     </modules>
     
     <dependencies>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution-impl</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
+            <version>2.0-incubating-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

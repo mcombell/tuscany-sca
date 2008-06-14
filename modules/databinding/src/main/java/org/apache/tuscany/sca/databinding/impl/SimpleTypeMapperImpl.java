@@ -34,6 +34,11 @@ import org.apache.tuscany.sca.databinding.SimpleTypeMapper;
 import org.apache.tuscany.sca.databinding.TransformationContext;
 import org.apache.tuscany.sca.interfacedef.util.TypeInfo;
 
+/**
+ * Simple type mapper that maps from XSD types to Java Classes and Java Classes to XSD types.
+ *
+ * @version $Rev$ $Date$
+ */
 public class SimpleTypeMapperImpl extends XSDDataTypeConverter implements SimpleTypeMapper {
 
     public static final Map<Class, String> JAVA2XML = new HashMap<Class, String>();
@@ -225,7 +230,7 @@ public class SimpleTypeMapperImpl extends XSDDataTypeConverter implements Simple
     }
 
     public static Class getJavaType(QName xmlType) {
-        if (URI_2001_SCHEMA_XSD.equals(xmlType.getNamespaceURI())) {
+         if (xmlType != null && URI_2001_SCHEMA_XSD.equals(xmlType.getNamespaceURI())) {
             return XML2JAVA.get(xmlType.getLocalPart());
         } else {
             return null;
@@ -352,6 +357,10 @@ public class SimpleTypeMapperImpl extends XSDDataTypeConverter implements Simple
     }
 
     public String toXMLLiteral(QName simpleType, Object obj, TransformationContext context) {
+        if(obj == null) {
+            // It could be null if nilable=true
+            return null;
+        }
         if (obj instanceof Float || obj instanceof Double) {
             if (obj instanceof Float) {
                 return printDouble(((Float)obj).floatValue());
