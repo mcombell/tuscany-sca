@@ -148,8 +148,15 @@ class AtomBindingListenerServlet extends HttpServlet {
 
         // No authentication required for a get request
 
+    	System.out.println(request.getRequestURI());
+    	System.out.println(request.getServletPath());
+    	System.out.println(request.getContextPath());
+    	System.out.println(request.getPathInfo());
+    	System.out.println(request.getRequestURL());
+    	
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+    	String servletPath = request.getContextPath() + request.getServletPath();
+        String path = URLDecoder.decode(request.getRequestURI().substring(servletPath.length()), "UTF-8");
 
         logger.fine("get " + request.getRequestURI());
 
