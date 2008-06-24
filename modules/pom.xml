@@ -41,16 +41,11 @@
             </activation>
             <modules>
                 <module>assembly</module>
-                <module>assembly-java-dsl</module>
                 <module>assembly-xml</module>
                 <module>assembly-xsd</module>
-                <module>binding-corba</module>
                 <module>binding-dwr</module>
                 <module>binding-ejb</module>
                 <module>binding-ejb-runtime</module>
-                <!-- obsolete -->
-                <module>binding-feed</module>
-                <!-- new bindings -->
                 <module>binding-atom</module>
                 <module>binding-atom-abdera</module>
                 <module>binding-rss</module>
@@ -70,9 +65,9 @@
                 <module>binding-ws-xml</module>
                 <module>contribution</module>
                 <module>contribution-groovy</module>
+                <module>contribution-impl</module>
                 <module>contribution-namespace</module>
                 <module>contribution-java</module>
-                <module>contribution-impl</module>
                 <module>contribution-osgi</module>
                 <module>contribution-resource</module>
                 <module>contribution-xml</module>
@@ -91,7 +86,6 @@
                 <module>databinding-saxon</module>
                 <module>databinding-xmlbeans</module>
                 <module>databinding-fastinfoset</module>
-                <module>databinding-xstream</module>
                 <module>data-engine-helper</module>
                 <module>definitions</module>
                 <module>definitions-xml</module>
@@ -99,10 +93,8 @@
                 <module>endpoint</module>
                 <module>extensibility</module>
                 <module>extension-helper</module>
-                <module>host-ejb</module>
                 <module>host-embedded</module>
                 <module>host-http</module>
-                <module>host-openejb</module>
                 <module>host-rmi</module>
                 <module>host-webapp</module>
                 <module>host-webapp-junit</module>
@@ -117,8 +109,6 @@
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
                 <module>implementation-bpel-ode</module>
-                <module>implementation-das</module>
-                <module>implementation-data-xml</module>
                 <module>implementation-ejb</module>
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
@@ -150,8 +140,7 @@
                 <module>policy-security-ws</module>
                 <module>policy-transaction</module>
                 <!--module>runtime</module-->
-                <module>runtime-tomcat</module>
-                <!--module>runtime-war</module-->
+                <!--module>runtime-tomcat</module-->
                 <module>sca-api</module>
                 <module>workspace</module>
                 <module>workspace-impl</module>
