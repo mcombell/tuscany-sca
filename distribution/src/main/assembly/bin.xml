@@ -107,6 +107,8 @@
                 <exclude>callback-ws-service/work/**/*</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp/**/*</exclude>
+                <exclude>chat2-webapp</exclude>
+                <exclude>chat2-webapp/**/*</exclude>
                 <exclude>domain-webapp</exclude>
                 <exclude>domain-webapp/**/*</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp</exclude>

@@ -131,6 +131,8 @@
                 <exclude>samples/callback-ws-client/work/**/*</exclude>
                 <exclude>samples/callback-ws-service/work</exclude>
                 <exclude>samples/callback-ws-service/work/**/*</exclude>
+                <exclude>samples/chat2-webapp</exclude>
+                <exclude>samples/chat2-webapp/**/*</exclude>
                 <exclude>samples/domain-webapp</exclude>
                 <exclude>samples/domain-webapp/**/*</exclude>
                 <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo</exclude>
