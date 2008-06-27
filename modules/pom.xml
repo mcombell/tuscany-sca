@@ -86,7 +86,6 @@
                 <module>databinding-saxon</module>
                 <module>databinding-xmlbeans</module>
                 <module>databinding-fastinfoset</module>
-                <module>data-engine-helper</module>
                 <module>definitions</module>
                 <module>definitions-xml</module>
                 <module>domain-manager</module>
