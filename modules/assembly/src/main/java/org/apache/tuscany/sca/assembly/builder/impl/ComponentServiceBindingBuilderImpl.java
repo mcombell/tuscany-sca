@@ -22,8 +22,8 @@ package org.apache.tuscany.sca.assembly.builder.impl;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
-import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.builder.BindingBuilderExtension;
@@ -33,14 +33,14 @@ import org.apache.tuscany.sca.monitor.Monitor;
 
 /**
  * A composite builder that performs any additional building steps that
- * composite service bindings may need.  Used for WSDL generation.
+ * component service bindings may need.  Used for WSDL generation.
  *
  * @version $Rev$ $Date$
  */
-public class CompositeServiceBindingBuilderImpl implements CompositeBuilder {
+public class ComponentServiceBindingBuilderImpl implements CompositeBuilder {
     private Monitor monitor;
 
-    public CompositeServiceBindingBuilderImpl(Monitor monitor) {
+    public ComponentServiceBindingBuilderImpl(Monitor monitor) {
         this.monitor = monitor;
     }
 
@@ -58,12 +58,13 @@ public class CompositeServiceBindingBuilderImpl implements CompositeBuilder {
             }
         }
 
-        // find all the composite service bindings     
-        for (Service service : composite.getServices()) {
-            for (Binding binding : service.getBindings()) {
-                if (binding instanceof BindingBuilderExtension) {
-                    Component component = BaseConfigurationBuilderImpl.getPromotedComponent((CompositeService)service);
-                    ((BindingBuilderExtension)binding).getBuilder().build(component, service, binding, monitor);
+        // find all the component service bindings     
+        for (Component component : composite.getComponents()) {
+            for (ComponentService componentService : component.getServices()) {
+                for (Binding binding : componentService.getBindings()) {
+                    if (binding instanceof BindingBuilderExtension) {
+                        ((BindingBuilderExtension)binding).getBuilder().build(component, componentService, binding, monitor);
+                    }
                 }
             }
         }

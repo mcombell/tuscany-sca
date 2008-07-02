@@ -32,14 +32,14 @@ import org.apache.tuscany.sca.monitor.Monitor;
 
 /**
  * A composite builder that performs any additional building steps that
- * reference bindings may need.  Used for WSDL generation.
+ * component reference bindings may need.  Used for WSDL generation.
  *
  * @version $Rev$ $Date$
  */
-public class CompositeReferenceBindingBuilderImpl implements CompositeBuilder {
+public class ComponentReferenceBindingBuilderImpl implements CompositeBuilder {
     private Monitor monitor;
 
-    public CompositeReferenceBindingBuilderImpl(Monitor monitor) {
+    public ComponentReferenceBindingBuilderImpl(Monitor monitor) {
         this.monitor = monitor;
     }
 
