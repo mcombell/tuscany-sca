@@ -46,7 +46,7 @@ public class WrapperBeanGenerator extends BaseBeanGenerator {
         String wrapperNamespace = JavaInterfaceUtil.getNamespace(sei);
         String wrapperName = m.getName();
         String wrapperBeanName = capitalize(wrapperName);
-        String wrapperClassName = sei.getPackage().getName() + ".jaxws." + wrapperBeanName;
+        String wrapperClassName = CodeGenerationHelper.getPackagePrefix(sei) + wrapperBeanName;
 
         return generateRequestWrapper(m, wrapperClassName, wrapperNamespace, wrapperName, cl);
     }
@@ -90,7 +90,7 @@ public class WrapperBeanGenerator extends BaseBeanGenerator {
 
         String wrapperName = m.getName() + "Response";
         String wrapperBeanName = capitalize(wrapperName);
-        String wrapperClassName = sei.getPackage().getName() + ".jaxws." + wrapperBeanName;
+        String wrapperClassName = CodeGenerationHelper.getPackagePrefix(sei) + wrapperBeanName;
         return generateResponseWrapper(m, wrapperClassName, wrapperNamespace, wrapperName, cl);
 
     }
