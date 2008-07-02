@@ -21,9 +21,12 @@ package org.apache.tuscany.sca.assembly.builder.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 
@@ -36,6 +39,8 @@ import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.Implementation;
+import org.apache.tuscany.sca.assembly.Multiplicity;
+import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.SCABinding;
@@ -825,14 +830,27 @@ public abstract class BaseConfigurationBuilderImpl {
                 newComponentService.setName("$promoted$." + compositeService.getName());
                 promotedComponent.getServices().add(newComponentService);
                 newComponentService.setService(promotedService.getService());
-                 newComponentService.getBindings().addAll(compositeService.getBindings());
+                // set the bindings using the top level bindings to override the 
+                // lower level bindings
+                if (compositeService.getBindings().size() > 0){
+                    newComponentService.getBindings()
+                        .addAll(compositeService.getBindings());
+                } else {
+                    newComponentService.getBindings()
+                    .addAll(promotedService.getBindings());
+                }
                 newComponentService.setInterfaceContract(compositeService.getInterfaceContract());
                 if (compositeService.getInterfaceContract() != null && compositeService
                     .getInterfaceContract().getCallbackInterface() != null) {
                     newComponentService.setCallback(assemblyFactory.createCallback());
-                    if (compositeService.getCallback() != null) {
-                        newComponentService.getCallback().getBindings().addAll(compositeService
-                            .getCallback().getBindings());
+                    if ((compositeService.getCallback() != null) &&
+                            (compositeService.getCallback().getBindings().size() > 0)){
+                        newComponentService.getCallback().getBindings()
+                            .addAll(compositeService.getCallback().getBindings());
+                    } else if ((promotedService.getCallback() != null) &&
+                            (promotedService.getCallback().getBindings().size() > 0)){
+                        newComponentService.getBindings()
+                            .addAll(promotedService.getBindings());
                     }
                 }
 
@@ -891,16 +909,39 @@ public abstract class BaseConfigurationBuilderImpl {
                             newComponentService.setName("$promoted$." + componentService.getName());
                             promotedComponent.getServices().add(newComponentService);
                             newComponentService.setService(promotedService.getService());
-                             newComponentService.getBindings()
-                                .addAll(componentService.getBindings());
+                            // set the bindings using the top level bindings to override the 
+                            // lower level bindings
+                            if (componentService.getBindings().size() > 0){
+                                newComponentService.getBindings()
+                                    .addAll(componentService.getBindings());
+                            } else if (compositeService.getBindings().size() > 0){
+                                newComponentService.getBindings()
+                                    .addAll(compositeService.getBindings());
+                            } else {
+                                newComponentService.getBindings()
+                                .addAll(promotedService.getBindings());
+                            }
                             newComponentService.setInterfaceContract(componentService
                                 .getInterfaceContract());
-                            if (componentService.getInterfaceContract() != null && componentService
-                                .getInterfaceContract().getCallbackInterface() != null) {
+                            if (componentService.getInterfaceContract() != null && 
+                                componentService.getInterfaceContract().getCallbackInterface() != null) {
+                                
                                 newComponentService.setCallback(assemblyFactory.createCallback());
-                                if (componentService.getCallback() != null) {
+                                
+                                // set the bindings using the top level bindings to override the 
+                                // lower level bindings
+                                if ((componentService.getCallback() != null) &&
+                                    (componentService.getCallback().getBindings().size() > 0)){
                                     newComponentService.getCallback().getBindings()
                                         .addAll(componentService.getCallback().getBindings());
+                                } else if ((compositeService.getCallback() != null) &&
+                                           (compositeService.getCallback().getBindings().size() > 0)){
+                                    newComponentService.getCallback().getBindings()
+                                        .addAll(compositeService.getCallback().getBindings());
+                                } else if ((promotedService.getCallback() != null) &&
+                                           (promotedService.getCallback().getBindings().size() > 0)){
+                                    newComponentService.getBindings()
+                                        .addAll(promotedService.getBindings());
                                 }
                             }
 
@@ -914,7 +955,7 @@ public abstract class BaseConfigurationBuilderImpl {
             }
         }
     }
-
+    
     /**
      * @param composite
      */
