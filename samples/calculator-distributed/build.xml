@@ -63,6 +63,7 @@
         <java classname="node.LaunchCalculatorNodeA"
               fork="true">
             <classpath>
+            	<pathelement location="../../lib/jaxb-api-2.1.jar"/>
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
@@ -77,6 +78,7 @@
         <java classname="node.LaunchCalculatorNodeB"
               fork="true">
             <classpath>
+            	<pathelement location="../../lib/jaxb-api-2.1.jar"/>
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
@@ -91,6 +93,7 @@
         <java classname="node.LaunchCalculatorNodeC"
               fork="true">
             <classpath>
+            	<pathelement location="../../lib/jaxb-api-2.1.jar"/>
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
