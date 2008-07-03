@@ -72,11 +72,6 @@
 -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-binding-feed</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-rss</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -332,11 +327,6 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-databinding-xstream</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -398,11 +388,6 @@
             </exclusions>
         </dependency>
 -->
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-implementation-das</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-implementation-ejb</artifactId>
