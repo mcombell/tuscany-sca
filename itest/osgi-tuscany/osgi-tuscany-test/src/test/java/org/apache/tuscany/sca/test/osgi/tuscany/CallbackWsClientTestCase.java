@@ -23,6 +23,7 @@ import org.apache.tuscany.sca.test.osgi.harness.OSGiTuscanyTestHarness;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 /*
  * Test Tuscany running in an OSGi container
@@ -52,6 +53,7 @@ public class CallbackWsClientTestCase {
     
 
     @Test
+    @Ignore("TUSCANY-2409")
     public void runTest() throws Exception {
         
         testHarness.runTest("../../../samples/" + "callback-ws-client", 
