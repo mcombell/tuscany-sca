@@ -45,7 +45,7 @@ public class NonOSGiSamplesTestCase {
         "calculator-implementation-policies",
         "calculator-rmi-reference",
         "calculator-rmi-service",
-        //"callback-ws-service",
+        "callback-ws-service",
         "helloworld-ws-service-jms",
         "helloworld-ws-service-secure",
         "helloworld-ws-service"
