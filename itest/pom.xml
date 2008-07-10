@@ -84,7 +84,6 @@
                 <module>extended-api</module>
                 <module>interfaces</module>
                 <module>jms</module>
-                <module>large-sdo-ws</module>
                 <module>late-reference-resolution</module>
                 <module>oneway</module>
                 <module>operation-overloading</module>
@@ -180,7 +179,6 @@
                 <module>interfaces</module>
                 <module>wires</module>
                 <module>scopes</module>
-                <module>large-sdo-ws</module>
             </modules>
 
 
