@@ -40,6 +40,7 @@ public class ReferenceImpl extends AbstractReferenceImpl implements Reference, C
     private List<ComponentService> targets = new ArrayList<ComponentService>();
     private Callback callback;
     private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
+    private boolean promotionOverride;
 
     public List<PolicySet> getApplicablePolicySets() {
         return applicablePolicySets;
@@ -91,6 +92,14 @@ public class ReferenceImpl extends AbstractReferenceImpl implements Reference, C
 
     public void setWiredByImpl(boolean wiredByImpl) {
         this.wiredByImpl = wiredByImpl;
+    }
+
+    public boolean isPromotionOverride() {
+        return promotionOverride;
+    }
+
+    public void setPromotionOverride(boolean promotionOverride) {
+        this.promotionOverride = promotionOverride;
     }
 
     public List<PolicySet> getPolicySets() {

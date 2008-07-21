@@ -18,11 +18,21 @@
  */
 package org.apache.tuscany.sca.assembly.builder.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
+import org.apache.tuscany.sca.assembly.Reference;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * This class encapsulates utility methods to deal with reference definitions
@@ -30,6 +40,21 @@ import org.apache.tuscany.sca.assembly.OptimizableBinding;
  * @version $Rev$ $Date$
  */
 abstract class ReferenceConfigurationUtil {
+
+    /**
+     * Report a warning.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private static void warning(Monitor monitor, String message, Object model, String... messageParameters) {
+        if (monitor != null) {
+            Problem problem = new ProblemImpl(ReferenceConfigurationUtil.class.getName(), "assembly-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
+    }
+
     static boolean isValidMultiplicityOverride(Multiplicity definedMul, Multiplicity overridenMul) {
         if (definedMul != overridenMul) {
             switch (definedMul) {
@@ -92,4 +117,100 @@ abstract class ReferenceConfigurationUtil {
         }
         return true;
     }
+
+    /**
+     * Follow a reference promotion chain down to the innermost (non composite)
+     * component references.
+     * 
+     * @param compositeReference
+     * @return
+     */
+    static List<ComponentReference> getPromotedComponentReferences(CompositeReference compositeReference) {
+        List<ComponentReference> componentReferences = new ArrayList<ComponentReference>();
+        collectPromotedComponentReferences(compositeReference, componentReferences);
+        return componentReferences;
+    }
+
+    /**
+     * Follow a reference promotion chain down to the innermost (non composite)
+     * component references.
+     * 
+     * @param compositeReference
+     * @param componentReferences
+     * @return
+     */
+    private static void collectPromotedComponentReferences(CompositeReference compositeReference,
+                                                           List<ComponentReference> componentReferences) {
+        for (ComponentReference componentReference : compositeReference.getPromotedReferences()) {
+            Reference reference = componentReference.getReference();
+            if (reference instanceof CompositeReference) {
+    
+                // Continue to follow the reference promotion chain
+                collectPromotedComponentReferences((CompositeReference)reference, componentReferences);
+    
+            } else if (reference != null) {
+    
+                // Found a non-composite reference
+                componentReferences.add(componentReference);
+            }
+        }
+    }
+
+    /**
+     * Override the bindings for a promoted reference from an outer component
+     * reference
+     * 
+     * @param reference
+     * @param promotedReference
+     */
+    static void reconcileReferenceBindings(Reference reference,
+                                           ComponentReference promotedReference,
+                                           AssemblyFactory assemblyFactory,
+                                           Monitor monitor) {
+        List<Binding> bindings = new ArrayList<Binding>();
+        
+        // collect the top level bindings first
+        for (Binding binding : reference.getBindings()) {
+            if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
+                bindings.add(binding);
+            }
+        }
+        
+        // if there are not top level bindings to override the promoted bindings
+        // then collect the promoted bindings
+        if (bindings.size() == 0){
+            for (Binding binding : promotedReference.getBindings()) {
+                if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
+                    bindings.add(binding);
+                }
+            }
+        } else {
+            // TUSCANY-2324: if bindings are being replaced, use the matching interface contract
+            promotedReference.setInterfaceContract(reference.getInterfaceContract());
+        }
+        
+        promotedReference.getBindings().clear();
+        promotedReference.getBindings().addAll(bindings);
+        
+        if (promotedReference.getMultiplicity() == Multiplicity.ONE_ONE ||
+            promotedReference.getMultiplicity() == Multiplicity.ZERO_ONE) {
+            if (promotedReference.getBindings().size() > 1) {
+                warning(monitor, "ComponentReferenceMoreWire", promotedReference, promotedReference.getName());                
+            }
+        }
+        Set<Binding> callbackBindings = new HashSet<Binding>();
+        if (promotedReference.getCallback() != null) {
+            callbackBindings.addAll(promotedReference.getCallback().getBindings());
+        }
+        if (reference.getCallback() != null) {
+            callbackBindings.addAll(reference.getCallback().getBindings());
+        }
+        promotedReference.setCallback(assemblyFactory.createCallback());
+        for (Binding binding : callbackBindings) {
+            if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
+                promotedReference.getCallback().getBindings().add(binding);
+            }
+        }
+    }
+
 }
