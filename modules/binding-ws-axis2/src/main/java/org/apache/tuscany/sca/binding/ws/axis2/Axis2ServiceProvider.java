@@ -73,7 +73,6 @@ import org.apache.axis2.description.WSDL2Constants;
 import org.apache.axis2.description.WSDLToAxisServiceBuilder;
 import org.apache.axis2.engine.ListenerManager;
 import org.apache.axis2.engine.MessageReceiver;
-import org.apache.axis2.transport.http.server.HttpUtils;
 import org.apache.axis2.transport.jms.JMSConstants;
 import org.apache.axis2.transport.jms.JMSListener;
 import org.apache.axis2.transport.jms.JMSSender;
@@ -132,7 +131,6 @@ public class Axis2ServiceProvider {
     private Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassnames = null;
     private List<PolicyHandler> policyHandlerList = new ArrayList<PolicyHandler>();
     private Map<String, Port> urlMap = new HashMap<String, Port>();
-    private Map<String, String> addressMap = new HashMap<String, String>();
 
     public static final QName QNAME_WSA_ADDRESS =
         new QName(AddressingConstants.Final.WSA_NAMESPACE, AddressingConstants.EPR_ADDRESS);
@@ -204,6 +202,27 @@ public class Axis2ServiceProvider {
             String endpointURI = computeEndpointURI(portAddress, servletHost);
             setPortAddress((Port)port, endpointURI);
             urlMap.put(endpointURI, (Port)port);
+        }
+    }
+
+    static String getPortAddress(Port port) {
+        Object ext = port.getExtensibilityElements().get(0);
+        if (ext instanceof SOAPAddress) {
+            return ((SOAPAddress)ext).getLocationURI();
+        }
+        if (ext instanceof SOAP12Address) {
+            return ((SOAP12Address)ext).getLocationURI();
+        }
+        return null;
+    }
+
+    static void setPortAddress(Port port, String locationURI) {
+        Object ext = port.getExtensibilityElements().get(0);
+        if (ext instanceof SOAPAddress) {
+            ((SOAPAddress)ext).setLocationURI(locationURI);
+        }
+        if (ext instanceof SOAP12Address) {
+            ((SOAP12Address)ext).setLocationURI(locationURI);
         }
     }
 
@@ -355,13 +374,6 @@ public class Axis2ServiceProvider {
                 }
                 */
             
-                // remove it from the Axis context
-                String modifiedURI = addressMap.remove(endpointURL);
-                for (Object port : wsBinding.getService().getPorts().values()) {
-                    if (modifiedURI.equals(getPortAddress((Port)port))) {
-                        setPortAddress((Port)port, endpointURL);
-                    }
-                }
                 configContext.getAxisConfiguration().removeService(stringURIPath);
             }
         } catch (URISyntaxException e) {
@@ -502,13 +514,6 @@ public class Axis2ServiceProvider {
         // addresses.  To work around this, compute the values here.
         Parameter modifyAddr = new Parameter("modifyUserWSDLPortAddress", "false");
         axisService.addParameter(modifyAddr);
-        String modifiedURL = setIPAddress(endpointURL);
-        addressMap.put(endpointURL, modifiedURL);
-        for (Object p : wsBinding.getService().getPorts().values()) {
-            if (endpointURL.equals(getPortAddress((Port)p))) {
-                setPortAddress((Port)p, modifiedURL);
-            }
-        }
 
         return axisService;
     }
@@ -578,39 +583,6 @@ public class Axis2ServiceProvider {
                     attribute.setNodeValue(name + "?xsd=" + location);
                 }
             }
-        }
-    }
-
-    private String getPortAddress(Port port) {
-        Object ext = port.getExtensibilityElements().get(0);
-        if (ext instanceof SOAPAddress) {
-            return ((SOAPAddress)ext).getLocationURI();
-        }
-        if (ext instanceof SOAP12Address) {
-            return ((SOAP12Address)ext).getLocationURI();
-        }
-        return null;
-    }
-
-    private void setPortAddress(Port port, String locationURI) {
-        Object ext = port.getExtensibilityElements().get(0);
-        if (ext instanceof SOAPAddress) {
-            ((SOAPAddress)ext).setLocationURI(locationURI);
-        }
-        if (ext instanceof SOAP12Address) {
-            ((SOAP12Address)ext).setLocationURI(locationURI);
-        }
-    }
-
-    private static String setIPAddress(String uriString) {
-        try {
-            URI uriObj = new URI(uriString);
-            String ipAddr = HttpUtils.getIpAddress();
-            String host = uriObj.getHost();
-            return uriString.replace(host, ipAddr);
-        } catch (Exception e) {
-            // URI string not in expected format, so return it unmodified
-            return uriString;
         }
     }
 
