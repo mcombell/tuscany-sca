@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.Reference;
+import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
@@ -49,6 +50,7 @@ public class BuilderTestCase extends TestCase {
     protected void tearDown() throws Exception {
     }
 
+    
     // Scenario 1: <binding.ws> on outer composite service CompositeA/Service1
     public void testScenario1() throws Exception {
         System.out.println("====>Running testScenario1");
@@ -690,4 +692,88 @@ public class BuilderTestCase extends TestCase {
         assert wsBinding.getWSDLDocument() == null;
     }
 
+    // Scenario 9: targets in references CDR1A and CBR2A and binding.ws at CDR3A
+    public void testScenario9() throws Exception {
+        System.out.println("====>Running testScenario9");
+        customBuilder = new CustomCompositeBuilder(false);
+        customBuilder.loadContribution("scenario9.composite", "TestContribution", "src/main/resources/scenario9/");
+        //TestUtils.printResults(customBuilder);
+        TestUtils.checkProblems(customBuilder);
+        checkScenario9Results();
+    }
+
+    private void checkScenario9Results() {
+        Composite domainComposite = customBuilder.getDomainComposite();
+
+        Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
+        WebServiceBinding wsBinding = null;
+        for (ComponentReference reference : componentD.getReferences()) {
+            if ("reference3a".equals(reference.getName())) {
+                assertTrue(reference.getBindings().size() == 2);
+                assertTrue(reference.getBindings().get(0) instanceof WebServiceBinding);
+                assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
+            }
+        }
+     
+    }
+    
+    // Scenario 10: targets in references CDR1A and CBR2A and binding.ws at CCR2A
+    public void testScenario10() throws Exception {
+        System.out.println("====>Running testScenario10");
+        customBuilder = new CustomCompositeBuilder(false);
+        customBuilder.loadContribution("scenario10.composite", "TestContribution", "src/main/resources/scenario10/");
+        //TestUtils.printResults(customBuilder);
+        TestUtils.checkProblems(customBuilder);
+        checkScenario10And11Results();
+    }
+    
+    // Scenario 11: targets in references CDR1A and CBR2A and binding.ws at CBR2A
+    public void testScenario11() throws Exception {
+        System.out.println("====>Running testScenario11");
+        customBuilder = new CustomCompositeBuilder(false);
+        customBuilder.loadContribution("scenario11.composite", "TestContribution", "src/main/resources/scenario11/");
+        //TestUtils.printResults(customBuilder);
+        TestUtils.checkProblems(customBuilder);
+        checkScenario10And11Results();
+    }    
+
+    private void checkScenario10And11Results() {
+        Composite domainComposite = customBuilder.getDomainComposite();
+
+        Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
+        WebServiceBinding wsBinding = null;
+        for (ComponentReference reference : componentD.getReferences()) {
+            if ("reference3a".equals(reference.getName())) {
+                assertTrue(reference.getBindings().size() == 2);
+                assertTrue(reference.getBindings().get(0) instanceof SCABinding);
+                assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
+            }
+        }
+     
+    }  
+
+    // Scenario 12: targets in references CDR1A and CBR2A and binding.ws at CAR1A
+    public void testScenario12() throws Exception {
+        System.out.println("====>Running testScenario12");
+        customBuilder = new CustomCompositeBuilder(false);
+        customBuilder.loadContribution("scenario12.composite", "TestContribution", "src/main/resources/scenario12/");
+        //TestUtils.printResults(customBuilder);
+        TestUtils.checkProblems(customBuilder);
+        checkScenario12Results();
+    }    
+
+    private void checkScenario12Results() {
+        Composite domainComposite = customBuilder.getDomainComposite();
+
+        Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
+        WebServiceBinding wsBinding = null;
+        for (ComponentReference reference : componentD.getReferences()) {
+            if ("reference3a".equals(reference.getName())) {
+                assertTrue(reference.getBindings().size() == 2);
+                assertTrue(reference.getBindings().get(0) instanceof SCABinding);
+                assertTrue(reference.getBindings().get(1) instanceof SCABinding);
+            }
+        }
+     
+    }    
 }

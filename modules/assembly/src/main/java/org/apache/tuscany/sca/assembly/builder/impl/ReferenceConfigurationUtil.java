@@ -27,6 +27,7 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.CompositeReference;
+import org.apache.tuscany.sca.assembly.Endpoint;
 import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.Reference;
@@ -167,37 +168,57 @@ abstract class ReferenceConfigurationUtil {
                                            ComponentReference promotedReference,
                                            AssemblyFactory assemblyFactory,
                                            Monitor monitor) {
-        List<Binding> bindings = new ArrayList<Binding>();
-        
-        // collect the top level bindings first
-        for (Binding binding : reference.getBindings()) {
-            if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
-                bindings.add(binding);
-            }
-        }
-        
-        // if there are not top level bindings to override the promoted bindings
-        // then collect the promoted bindings
-        if (bindings.size() == 0){
-            for (Binding binding : promotedReference.getBindings()) {
-                if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
-                    bindings.add(binding);
-                }
-            }
-        } else {
-            // TUSCANY-2324: if bindings are being replaced, use the matching interface contract
-            promotedReference.setInterfaceContract(reference.getInterfaceContract());
-        }
-        
-        promotedReference.getBindings().clear();
-        promotedReference.getBindings().addAll(bindings);
-        
+              
         if (promotedReference.getMultiplicity() == Multiplicity.ONE_ONE ||
             promotedReference.getMultiplicity() == Multiplicity.ZERO_ONE) {
+            
+            // if necessary override the promoted endpoints (and bindings) with the top level bindings
+            if (reference.getBindings().size() > 0 ){
+                
+                if (reference instanceof ComponentReference){
+                    promotedReference.getEndpoints().clear();
+                    promotedReference.getEndpoints().addAll(((ComponentReference)reference).getEndpoints());
+                }
+                
+                promotedReference.getBindings().clear();
+                
+                for (Binding binding : reference.getBindings()) {
+                    if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
+                        promotedReference.getBindings().add(binding);
+                        
+                        // TUSCANY-2324: ensure that the promoted reference can identify the
+                        //               correct interface contract for this binding
+                        promotedReference.setInterfaceContract(reference.getInterfaceContract());
+                    }
+                }
+                
+
+            }
+            
             if (promotedReference.getBindings().size() > 1) {
                 warning(monitor, "ComponentReferenceMoreWire", promotedReference, promotedReference.getName());                
             }
+        } else {
+            // if necessary merge the promoted endpoints (and bindings) with the top level bindings
+            if (reference.getBindings().size() > 0 ){
+                
+                if (reference instanceof ComponentReference){
+                    promotedReference.getEndpoints().addAll(((ComponentReference)reference).getEndpoints());
+                }
+                               
+                for (Binding binding : reference.getBindings()) {
+                    if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
+                        promotedReference.getBindings().add(binding);
+                        
+                        // TUSCANY-2324: ensure that the promoted reference can identify the
+                        //               correct interface contract for this binding
+                        // TODO: no such interface exists yet!
+                        //promotedReference.setInterfaceContract(binding, reference.getInterfaceContract());                        
+                    }
+                }
+            }            
         }
+        
         Set<Binding> callbackBindings = new HashSet<Binding>();
         if (promotedReference.getCallback() != null) {
             callbackBindings.addAll(promotedReference.getCallback().getBindings());

@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.sca.itest.builder;
 
+import java.util.List;
+
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Service;
 
