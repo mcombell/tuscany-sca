@@ -639,16 +639,13 @@ class BaseWireBuilderImpl {
                     }
                 } else {
                     
-                    /* TODO - don't enable this yet as we have tests that 
-                              use relative URIs in bindings that don't refer to 
-                              targets 
+                    // create endpoints for manually configured bindings
                     Endpoint endpoint = endpointFactory.createEndpoint();
                     endpoint.setTargetName(uri);
                     endpoint.setSourceComponent(null); // TODO - fixed up at start
                     endpoint.setSourceComponentReference(componentReference);                        
-                    endpoint.getCandidateBindings().add(binding);
+                    endpoint.setSourceBinding(binding);
                     endpoints.add(endpoint); 
-                    */
                 }
             }
         }
@@ -679,8 +676,16 @@ class BaseWireBuilderImpl {
 
             componentReference.getEndpoints().addAll(endpoints);
             
+            // the result of calculating the endpoints is either that bindings have been 
+            // configured manually using a URI or that targets have been provided and the 
+            // endpoint remains unresolved. So all endpoints should be either resved or uresolved.
+            boolean endpointsRequireAutomaticResolution = false;
+            for(Endpoint endpoint : endpoints){
+                endpointsRequireAutomaticResolution = endpoint.isUnresolved();
+            }
+            
             // build each endpoint 
-            if (!endpoints.isEmpty()) { 
+            if (endpointsRequireAutomaticResolution) { 
 
                 for(Endpoint endpoint : endpoints){
                     endpointBuilder.build(endpoint);

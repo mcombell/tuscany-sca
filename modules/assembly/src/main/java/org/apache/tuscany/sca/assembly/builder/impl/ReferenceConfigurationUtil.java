@@ -185,9 +185,11 @@ abstract class ReferenceConfigurationUtil {
                 for (Binding binding : reference.getBindings()) {
                     if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
                         promotedReference.getBindings().add(binding);
-                        
                         // TUSCANY-2324: ensure that the promoted reference can identify the
                         //               correct interface contract for this binding
+                        // TODO - Remove and use Reference.getInterfaceContract(binding)
+                        //        in any binding that needs to use the interface contract
+                        //        from the promoting reference
                         promotedReference.setInterfaceContract(reference.getInterfaceContract());
                     }
                 }
@@ -209,11 +211,12 @@ abstract class ReferenceConfigurationUtil {
                 for (Binding binding : reference.getBindings()) {
                     if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
                         promotedReference.getBindings().add(binding);
-                        
                         // TUSCANY-2324: ensure that the promoted reference can identify the
                         //               correct interface contract for this binding
-                        // TODO: no such interface exists yet!
-                        //promotedReference.setInterfaceContract(binding, reference.getInterfaceContract());                        
+                        // TODO: use Reference.getInterfaceContract(binding) when the interface contract is required
+                        //        in any binding that needs to use the interface contract
+                        //        from the promoting reference
+                        //promotedReference.setInterfaceContract(binding, reference.getInterfaceContract());                             
                     }
                 }
             }            

@@ -26,6 +26,7 @@ import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.Callback;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Reference;
+import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
@@ -121,5 +122,12 @@ public class ReferenceImpl extends AbstractReferenceImpl implements Reference, C
     public void setPolicySets(List<PolicySet> policySets) {
         this.policySets = policySets; 
     }
+    
+    /**
+     * By default return the interface contract for the reference
+     */
+    public InterfaceContract getInterfaceContract(Binding binding){
+        return getInterfaceContract();
+    }      
 
 }
