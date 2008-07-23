@@ -45,6 +45,7 @@
         </reference>
         <reference name="reference2a" target="ComponentF">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
+            <interface.wsdl interface="http://scenarios#wsdl.interface(Service3)" />
             <binding.ws />
         </reference>        
     </component>

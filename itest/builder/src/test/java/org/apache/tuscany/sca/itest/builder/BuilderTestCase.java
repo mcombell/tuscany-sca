@@ -451,7 +451,7 @@ public class BuilderTestCase extends TestCase {
             for (ComponentReference reference : componentD.getReferences()) {
                 if ("reference3".equals(reference.getName())) {
                     wsBinding = reference.getBinding(WebServiceBinding.class);
-                    assert reference.getInterfaceContract() instanceof WSDLInterfaceContract;
+                    assert reference.getInterfaceContract(wsBinding) instanceof WSDLInterfaceContract;
                 }
             }
             assert "http://foo.com/bar".equals(wsBinding.getURI());
@@ -540,7 +540,8 @@ public class BuilderTestCase extends TestCase {
             for (ComponentReference reference : componentD.getReferences()) {
                 if ("reference3".equals(reference.getName())) {
                     wsBinding = reference.getBinding(WebServiceBinding.class);
-                    assert reference.getInterfaceContract() instanceof WSDLInterfaceContract;
+                    assert reference.getBindings().size() == 1;
+                    assert reference.getInterfaceContract(wsBinding) instanceof WSDLInterfaceContract;
                 }
             }
             assert "http://foo.com/bar".equals(wsBinding.getURI());
@@ -692,7 +693,7 @@ public class BuilderTestCase extends TestCase {
         assert wsBinding.getWSDLDocument() == null;
     }
 
-    // Scenario 9: targets in references CDR1A and CBR2A and binding.ws at CDR3A
+    // Scenario 9: targets in references CBR2A and CDR3A and binding.ws at CDR3A
     public void testScenario9() throws Exception {
         System.out.println("====>Running testScenario9");
         customBuilder = new CustomCompositeBuilder(false);
@@ -706,18 +707,19 @@ public class BuilderTestCase extends TestCase {
         Composite domainComposite = customBuilder.getDomainComposite();
 
         Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
-        WebServiceBinding wsBinding = null;
+        ComponentReference componentRef = null;
         for (ComponentReference reference : componentD.getReferences()) {
             if ("reference3a".equals(reference.getName())) {
+                componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
                 assertTrue(reference.getBindings().get(0) instanceof WebServiceBinding);
                 assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
             }
         }
-     
+        assertTrue(componentRef != null);
     }
     
-    // Scenario 10: targets in references CDR1A and CBR2A and binding.ws at CCR2A
+    // Scenario 10: targets in references CBR2A and CDR3A and binding.ws at CCR2A
     public void testScenario10() throws Exception {
         System.out.println("====>Running testScenario10");
         customBuilder = new CustomCompositeBuilder(false);
@@ -727,7 +729,7 @@ public class BuilderTestCase extends TestCase {
         checkScenario10And11Results();
     }
     
-    // Scenario 11: targets in references CDR1A and CBR2A and binding.ws at CBR2A
+    // Scenario 11: targets in references CBR2A and CDR3A and binding.ws at CBR2A
     public void testScenario11() throws Exception {
         System.out.println("====>Running testScenario11");
         customBuilder = new CustomCompositeBuilder(false);
@@ -741,18 +743,23 @@ public class BuilderTestCase extends TestCase {
         Composite domainComposite = customBuilder.getDomainComposite();
 
         Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
-        WebServiceBinding wsBinding = null;
+        ComponentReference componentRef = null;
         for (ComponentReference reference : componentD.getReferences()) {
             if ("reference3a".equals(reference.getName())) {
+                componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
-                assertTrue(reference.getBindings().get(0) instanceof SCABinding);
-                assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
+                Binding binding1 = reference.getBindings().get(0);
+                assertTrue(binding1 instanceof SCABinding);
+                assertTrue(reference.getInterfaceContract(binding1) instanceof JavaInterfaceContract);
+                Binding binding2 = reference.getBindings().get(1);
+                assertTrue(binding2 instanceof WebServiceBinding);
+                assertTrue(reference.getInterfaceContract(binding2) instanceof WSDLInterfaceContract);
             }
         }
-     
+        assertTrue(componentRef != null);
     }  
 
-    // Scenario 12: targets in references CDR1A and CBR2A and binding.ws at CAR1A
+    // Scenario 12: target in reference CDR3A and binding.ws uri= at CAR1A
     public void testScenario12() throws Exception {
         System.out.println("====>Running testScenario12");
         customBuilder = new CustomCompositeBuilder(false);
@@ -766,14 +773,41 @@ public class BuilderTestCase extends TestCase {
         Composite domainComposite = customBuilder.getDomainComposite();
 
         Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
-        WebServiceBinding wsBinding = null;
+        ComponentReference componentRef = null;
         for (ComponentReference reference : componentD.getReferences()) {
             if ("reference3a".equals(reference.getName())) {
+                componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
                 assertTrue(reference.getBindings().get(0) instanceof SCABinding);
                 assertTrue(reference.getBindings().get(1) instanceof SCABinding);
             }
         }
-     
+        assertTrue(componentRef != null);
     }    
+
+    // Scenario 13: target in reference CDR3A
+    public void testScenario13() throws Exception {
+        System.out.println("====>Running testScenario13");
+        customBuilder = new CustomCompositeBuilder(false);
+        customBuilder.loadContribution("scenario13.composite", "TestContribution", "src/main/resources/scenario13/");
+        //TestUtils.printResults(customBuilder);
+        TestUtils.checkProblems(customBuilder);
+        checkScenario13Results();
+    }
+
+    private void checkScenario13Results() {
+        Composite domainComposite = customBuilder.getDomainComposite();
+
+        Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
+        ComponentReference componentRef = null;
+        for (ComponentReference reference : componentD.getReferences()) {
+            if ("reference3a".equals(reference.getName())) {
+                componentRef = reference;
+                assertTrue(reference.getBindings().size() == 1);
+                assertTrue(reference.getBindings().get(0) instanceof WebServiceBinding);
+            }
+        }
+        assertTrue(componentRef != null);
+    }
+
 }
