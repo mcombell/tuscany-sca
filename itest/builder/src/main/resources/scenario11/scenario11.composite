@@ -39,14 +39,13 @@
         </service>
         <service name="Service2a">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
+            <binding.ws uri="http://foo.com/bar" />
         </service>
         <reference name="reference2">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
         </reference>
         <reference name="reference2a" target="ComponentF">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <interface.wsdl interface="http://scenarios#wsdl.interface(Service3)" />
-            <binding.ws />
         </reference>        
     </component>
     

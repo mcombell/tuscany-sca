@@ -167,9 +167,7 @@ public class BuilderTestCase extends TestCase {
         assert "/ComponentB/Service2".equals(TestUtils.getPortAddress(port));
 
         Component componentD = TestUtils.getComponent(domainComposite, "ComponentD");
-        /*
         if (!nonWiring) {
-        */
             // Should create component service $promoted$.ComponentB.Service2 on innermost component
             //  ComponentD, with <binding.ws> and uri="/ComponentB/Service2"
             wsBinding = null;
@@ -185,14 +183,12 @@ public class BuilderTestCase extends TestCase {
             svc = def.getService(new QName("http://builder.itest.sca.tuscany.apache.org/", "Service3Service")); 
             port = svc.getPort("Service3Port");
             assert "/ComponentB/Service2".equals(TestUtils.getPortAddress(port));
-        /*
         } else {
             // Should not create component service $promoted$.ComponentB.Service2 on innermost component ComponentD
             for (ComponentService service : componentD.getServices()) {
                 assert !"$promoted$.ComponentB.Service2".equals(service.getName());
             }
         }
-        */
 
         // Should add <binding.ws> to outer composite service CompositeA/Service1 
         wsBinding = null;
@@ -337,9 +333,7 @@ public class BuilderTestCase extends TestCase {
         port = svc.getPort("Service3Port");
         assert "/ComponentB/Service2".equals(TestUtils.getPortAddress(port));
 
-        /*
         if (!nonWiring) {
-        */
             // Should create component service $promoted$.ComponentB.Service2 on innermost component
             //  ComponentD, with <binding.ws> and uri="/ComponentB/Service2"
             wsBinding = null;
@@ -355,14 +349,12 @@ public class BuilderTestCase extends TestCase {
             svc = def.getService(new QName("http://builder.itest.sca.tuscany.apache.org/", "Service3Service")); 
             port = svc.getPort("Service3Port");
             assert "/ComponentB/Service2".equals(TestUtils.getPortAddress(port));
-        /*
         } else {
             // Should not create component service $promoted$.ComponentB.Service2 on innermost component ComponentD
             for (ComponentService service : componentD.getServices()) {
                 assert !"$promoted$.ComponentB.Service2".equals(service.getName());
             }
         }
-        */
 
         // Should add <binding.ws> to outer composite service CompositeA/Service1 
         wsBinding = null;
@@ -693,7 +685,7 @@ public class BuilderTestCase extends TestCase {
         assert wsBinding.getWSDLDocument() == null;
     }
 
-    // Scenario 9: targets in references CBR2A and CDR3A and binding.ws at CDR3A
+    // Scenario 9: target in reference CDR3A and binding.ws uri= at CAR1A
     public void testScenario9() throws Exception {
         System.out.println("====>Running testScenario9");
         customBuilder = new CustomCompositeBuilder(false);
@@ -701,7 +693,7 @@ public class BuilderTestCase extends TestCase {
         //TestUtils.printResults(customBuilder);
         TestUtils.checkProblems(customBuilder);
         checkScenario9Results();
-    }
+    }    
 
     private void checkScenario9Results() {
         Composite domainComposite = customBuilder.getDomainComposite();
@@ -712,14 +704,14 @@ public class BuilderTestCase extends TestCase {
             if ("reference3a".equals(reference.getName())) {
                 componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
-                assertTrue(reference.getBindings().get(0) instanceof WebServiceBinding);
+                assertTrue(reference.getBindings().get(0) instanceof SCABinding);
                 assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
             }
         }
         assertTrue(componentRef != null);
-    }
+    }    
     
-    // Scenario 10: targets in references CBR2A and CDR3A and binding.ws at CCR2A
+    // Scenario 10: targets in references CBR2A and CDR3A and binding.ws at CBR2A
     public void testScenario10() throws Exception {
         System.out.println("====>Running testScenario10");
         customBuilder = new CustomCompositeBuilder(false);
@@ -727,9 +719,9 @@ public class BuilderTestCase extends TestCase {
         //TestUtils.printResults(customBuilder);
         TestUtils.checkProblems(customBuilder);
         checkScenario10And11Results();
-    }
+    }    
     
-    // Scenario 11: targets in references CBR2A and CDR3A and binding.ws at CBR2A
+    // Scenario 11: targets in references CBR2A and CDR3A and binding.ws at CCR2A
     public void testScenario11() throws Exception {
         System.out.println("====>Running testScenario11");
         customBuilder = new CustomCompositeBuilder(false);
@@ -737,7 +729,7 @@ public class BuilderTestCase extends TestCase {
         //TestUtils.printResults(customBuilder);
         TestUtils.checkProblems(customBuilder);
         checkScenario10And11Results();
-    }    
+    }
 
     private void checkScenario10And11Results() {
         Composite domainComposite = customBuilder.getDomainComposite();
@@ -759,7 +751,7 @@ public class BuilderTestCase extends TestCase {
         assertTrue(componentRef != null);
     }  
 
-    // Scenario 12: target in reference CDR3A and binding.ws uri= at CAR1A
+    // Scenario 12: targets in references CBR2A and CDR3A and binding.ws at CDR3A
     public void testScenario12() throws Exception {
         System.out.println("====>Running testScenario12");
         customBuilder = new CustomCompositeBuilder(false);
@@ -767,7 +759,7 @@ public class BuilderTestCase extends TestCase {
         //TestUtils.printResults(customBuilder);
         TestUtils.checkProblems(customBuilder);
         checkScenario12Results();
-    }    
+    }
 
     private void checkScenario12Results() {
         Composite domainComposite = customBuilder.getDomainComposite();
@@ -778,12 +770,12 @@ public class BuilderTestCase extends TestCase {
             if ("reference3a".equals(reference.getName())) {
                 componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
-                assertTrue(reference.getBindings().get(0) instanceof SCABinding);
+                assertTrue(reference.getBindings().get(0) instanceof WebServiceBinding);
                 assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
             }
         }
         assertTrue(componentRef != null);
-    }    
+    }
 
     // Scenario 13: target in reference CDR3A
     public void testScenario13() throws Exception {

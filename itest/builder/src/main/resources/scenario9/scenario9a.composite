@@ -42,15 +42,12 @@
         </service>
         <service name="Service3a">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <binding.ws uri="http://foo.com/bar" />
         </service>
         <reference name="reference3" target="ComponentD/Service3a">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <binding.ws/>
         </reference>
         <reference name="reference3a" target="ComponentE">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <binding.ws />
         </reference>        
     </component>
     

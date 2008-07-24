@@ -33,8 +33,6 @@
     </reference>
     <reference name="reference2a" promote="ComponentD/reference3a">
         <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-        <interface.wsdl interface="http://scenarios#wsdl.interface(Service3)" />
-        <binding.ws />
     </reference>    
 
     <component name="ComponentD">
@@ -44,11 +42,9 @@
         </service>
         <service name="Service3a">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <binding.ws uri="http://foo.com/bar" />
         </service>
         <reference name="reference3" target="ComponentD/Service3a">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
-            <binding.ws/>
         </reference>
         <reference name="reference3a" target="ComponentE">
             <!-- bindings and/or interfaces may or may not be specified explicitly here -->
