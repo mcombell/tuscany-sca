@@ -50,7 +50,7 @@ public class BuilderTestCase extends TestCase {
     protected void tearDown() throws Exception {
     }
 
-    
+
     // Scenario 1: <binding.ws> on outer composite service CompositeA/Service1
     public void testScenario1() throws Exception {
         System.out.println("====>Running testScenario1");
@@ -779,7 +779,7 @@ public class BuilderTestCase extends TestCase {
                 componentRef = reference;
                 assertTrue(reference.getBindings().size() == 2);
                 assertTrue(reference.getBindings().get(0) instanceof SCABinding);
-                assertTrue(reference.getBindings().get(1) instanceof SCABinding);
+                assertTrue(reference.getBindings().get(1) instanceof WebServiceBinding);
             }
         }
         assertTrue(componentRef != null);

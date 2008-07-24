@@ -100,7 +100,7 @@ public class ComponentReferenceImpl extends ReferenceImpl implements ComponentRe
         
         for (Endpoint theEndpoint : endpoints){
             if (theEndpoint.getSourceBinding() == binding){
-                interfaceContract = theEndpoint.getSourceComponentReference().getInterfaceContract();
+                interfaceContract = theEndpoint.getInterfaceContract();
             }
         }
         

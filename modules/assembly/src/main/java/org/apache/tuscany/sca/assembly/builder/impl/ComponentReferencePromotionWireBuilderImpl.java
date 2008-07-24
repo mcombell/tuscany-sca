@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.CompositeService;
+import org.apache.tuscany.sca.assembly.EndpointFactory;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.Reference;
@@ -43,10 +44,12 @@ import org.apache.tuscany.sca.monitor.Monitor;
  */
 public class ComponentReferencePromotionWireBuilderImpl implements CompositeBuilder {
     private AssemblyFactory assemblyFactory;
+    private EndpointFactory endpointFactory;
     private Monitor monitor;
 
-    public ComponentReferencePromotionWireBuilderImpl(AssemblyFactory assemblyFactory, Monitor monitor) {
+    public ComponentReferencePromotionWireBuilderImpl(AssemblyFactory assemblyFactory, EndpointFactory endpointFactory, Monitor monitor) {
         this.assemblyFactory = assemblyFactory;
+        this.endpointFactory = endpointFactory;
         this.monitor = monitor;
     }
 
@@ -91,7 +94,7 @@ public class ComponentReferencePromotionWireBuilderImpl implements CompositeBuil
                                 ReferenceConfigurationUtil.getPromotedComponentReferences(compositeReference);
                             for (ComponentReference promotedReference : promotedReferences) {
                                 ReferenceConfigurationUtil.reconcileReferenceBindings(
-                                        componentReference, promotedReference, assemblyFactory, monitor);
+                                        componentReference, promotedReference, assemblyFactory, endpointFactory, monitor);
                                 if (componentReference.getInterfaceContract() != null && // can be null in unit tests
                                     componentReference.getInterfaceContract().getCallbackInterface() != null) {
                                     SCABinding scaCallbackBinding = promotedReference.getCallbackBinding(SCABinding.class);

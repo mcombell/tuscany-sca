@@ -424,6 +424,7 @@ class BaseWireBuilderImpl {
                             endpoint.setTargetName(targetComponent.getName());
                             endpoint.setSourceComponent(null); // TODO - fixed up at start
                             endpoint.setSourceComponentReference(componentReference);
+                            endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                             endpoint.setTargetComponent(targetComponent);
                             endpoint.setTargetComponentService(targetComponentService);
                             endpoint.getCandidateBindings().addAll(componentReference.getBindings());
@@ -477,7 +478,8 @@ class BaseWireBuilderImpl {
                         Endpoint endpoint = endpointFactory.createEndpoint();
                         endpoint.setTargetName(targetComponent.getName());
                         endpoint.setSourceComponent(null); // TODO - fixed up at start
-                        endpoint.setSourceComponentReference(componentReference);                        
+                        endpoint.setSourceComponentReference(componentReference);     
+                        endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                         endpoint.setTargetComponent(targetComponent);
                         endpoint.setTargetComponentService(targetComponentService);
                         endpoint.getCandidateBindings().addAll(componentReference.getBindings());
@@ -498,7 +500,8 @@ class BaseWireBuilderImpl {
                     Endpoint endpoint = endpointFactory.createEndpoint();
                     endpoint.setTargetName(name);
                     endpoint.setSourceComponent(null); // TODO - fixed up at start
-                    endpoint.setSourceComponentReference(componentReference);                    
+                    endpoint.setSourceComponentReference(componentReference);  
+                    endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                     endpoint.getCandidateBindings().addAll(componentReference.getBindings());
                     endpoints.add(endpoint);
                     
@@ -536,7 +539,8 @@ class BaseWireBuilderImpl {
                         Endpoint endpoint = endpointFactory.createEndpoint();
                         endpoint.setTargetName(targetComponent.getName());
                         endpoint.setSourceComponent(null); // TODO - fixed up at start
-                        endpoint.setSourceComponentReference(componentReference);                        
+                        endpoint.setSourceComponentReference(componentReference);  
+                        endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                         endpoint.setTargetComponent(targetComponent);
                         endpoint.setTargetComponentService(targetComponentService);
                         endpoint.getCandidateBindings().addAll(componentReference.getBindings());
@@ -560,7 +564,8 @@ class BaseWireBuilderImpl {
                     Endpoint endpoint = endpointFactory.createEndpoint();
                     endpoint.setTargetName(name);
                     endpoint.setSourceComponent(null); // TODO - fixed up at start
-                    endpoint.setSourceComponentReference(componentReference);                    
+                    endpoint.setSourceComponentReference(componentReference);  
+                    endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                     endpoint.getCandidateBindings().addAll(componentReference.getBindings());
                     endpoints.add(endpoint);                    
                     
@@ -625,7 +630,8 @@ class BaseWireBuilderImpl {
                         Endpoint endpoint = endpointFactory.createEndpoint();
                         endpoint.setTargetName(targetComponent.getName());
                         endpoint.setSourceComponent(null); // TODO - fixed up at start
-                        endpoint.setSourceComponentReference(componentReference);                        
+                        endpoint.setSourceComponentReference(componentReference); 
+                        endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                         endpoint.setTargetComponent(targetComponent);
                         endpoint.setTargetComponentService(targetComponentService);
                         endpoint.getCandidateBindings().add(binding);
@@ -643,7 +649,8 @@ class BaseWireBuilderImpl {
                     Endpoint endpoint = endpointFactory.createEndpoint();
                     endpoint.setTargetName(uri);
                     endpoint.setSourceComponent(null); // TODO - fixed up at start
-                    endpoint.setSourceComponentReference(componentReference);                        
+                    endpoint.setSourceComponentReference(componentReference);   
+                    endpoint.setInterfaceContract(componentReference.getInterfaceContract());
                     endpoint.setSourceBinding(binding);
                     endpoints.add(endpoint); 
                 }

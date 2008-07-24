@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.CompositeReference;
 import org.apache.tuscany.sca.assembly.Endpoint;
+import org.apache.tuscany.sca.assembly.EndpointFactory;
 import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.Reference;
@@ -167,6 +168,7 @@ abstract class ReferenceConfigurationUtil {
     static void reconcileReferenceBindings(Reference reference,
                                            ComponentReference promotedReference,
                                            AssemblyFactory assemblyFactory,
+                                           EndpointFactory endpointFactory,
                                            Monitor monitor) {
               
         if (promotedReference.getMultiplicity() == Multiplicity.ONE_ONE ||
@@ -175,26 +177,40 @@ abstract class ReferenceConfigurationUtil {
             // if necessary override the promoted endpoints (and bindings) with the top level bindings
             if (reference.getBindings().size() > 0 ){
                 
-                if (reference instanceof ComponentReference){
-                    promotedReference.getEndpoints().clear();
-                    promotedReference.getEndpoints().addAll(((ComponentReference)reference).getEndpoints());
-                }
-                
-                promotedReference.getBindings().clear();
+                List<Binding> bindingsToCopyDown = new ArrayList<Binding>();
+                List<Endpoint> endpointsToCopyDown = new ArrayList<Endpoint>();
                 
                 for (Binding binding : reference.getBindings()) {
                     if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
-                        promotedReference.getBindings().add(binding);
-                        // TUSCANY-2324: ensure that the promoted reference can identify the
-                        //               correct interface contract for this binding
-                        // TODO - Remove and use Reference.getInterfaceContract(binding)
-                        //        in any binding that needs to use the interface contract
-                        //        from the promoting reference
-                        promotedReference.setInterfaceContract(reference.getInterfaceContract());
+                        bindingsToCopyDown.add(binding);
+                        
+                        if (reference instanceof ComponentReference){
+                            for (Endpoint endpoint : ((ComponentReference)reference).getEndpoints()){
+                                if ( endpoint.getSourceBinding() == binding){
+                                    endpointsToCopyDown.add(endpoint);
+                                    break;
+                                }
+                            }
+                        } else {
+                            // create a new endpoint to represent this promoted binding
+                            Endpoint endpoint = endpointFactory.createEndpoint();
+                            endpoint.setTargetName(binding.getURI());
+                            endpoint.setSourceComponent(null); // TODO - fixed up at start
+                            endpoint.setSourceComponentReference(promotedReference);  
+                            endpoint.setInterfaceContract(reference.getInterfaceContract());
+                            endpoint.setSourceBinding(binding);
+                            endpointsToCopyDown.add(endpoint); 
+                        }
                     }
                 }
                 
-
+                if (bindingsToCopyDown.size() > 0) {
+                    promotedReference.getBindings().clear();
+                    promotedReference.getBindings().addAll(bindingsToCopyDown);
+                    
+                    promotedReference.getEndpoints().clear();
+                    promotedReference.getEndpoints().addAll(endpointsToCopyDown);
+                }
             }
             
             if (promotedReference.getBindings().size() > 1) {
@@ -204,21 +220,29 @@ abstract class ReferenceConfigurationUtil {
             // if necessary merge the promoted endpoints (and bindings) with the top level bindings
             if (reference.getBindings().size() > 0 ){
                 
-                if (reference instanceof ComponentReference){
-                    promotedReference.getEndpoints().addAll(((ComponentReference)reference).getEndpoints());
-                }
-                               
                 for (Binding binding : reference.getBindings()) {
                     if ((!(binding instanceof OptimizableBinding)) || binding.getURI() != null) {
                         promotedReference.getBindings().add(binding);
-                        // TUSCANY-2324: ensure that the promoted reference can identify the
-                        //               correct interface contract for this binding
-                        // TODO: use Reference.getInterfaceContract(binding) when the interface contract is required
-                        //        in any binding that needs to use the interface contract
-                        //        from the promoting reference
-                        //promotedReference.setInterfaceContract(binding, reference.getInterfaceContract());                             
+                        
+                        if (reference instanceof ComponentReference){
+                            for (Endpoint endpoint : ((ComponentReference)reference).getEndpoints()){
+                                if ( endpoint.getSourceBinding() == binding){
+                                    promotedReference.getEndpoints().add(endpoint);
+                                    break;
+                                }
+                            }
+                        } else {
+                            // create a new endpoint to represent this promoted binding
+                            Endpoint endpoint = endpointFactory.createEndpoint();
+                            endpoint.setTargetName(binding.getURI());
+                            endpoint.setSourceComponent(null); // TODO - fixed up at start
+                            endpoint.setSourceComponentReference(promotedReference); 
+                            endpoint.setInterfaceContract(reference.getInterfaceContract());
+                            endpoint.setSourceBinding(binding);
+                            promotedReference.getEndpoints().add(endpoint); 
+                        }
                     }
-                }
+                }                
             }            
         }
         

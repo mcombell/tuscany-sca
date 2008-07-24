@@ -99,8 +99,8 @@ public class CompositeBuilderImpl implements CompositeBuilder {
         
         compositeIncludeBuilder = new CompositeIncludeBuilderImpl(monitor); 
         componentReferenceWireBuilder = new ComponentReferenceWireBuilderImpl(assemblyFactory, endpointFactory, interfaceContractMapper, monitor);
-        componentReferencePromotionWireBuilder = new ComponentReferencePromotionWireBuilderImpl(assemblyFactory, monitor);
-        compositeReferenceWireBuilder = new CompositeReferenceWireBuilderImpl(assemblyFactory, monitor);
+        componentReferencePromotionWireBuilder = new ComponentReferencePromotionWireBuilderImpl(assemblyFactory, endpointFactory, monitor);
+        compositeReferenceWireBuilder = new CompositeReferenceWireBuilderImpl(assemblyFactory, endpointFactory, monitor);
         compositeCloneBuilder = new CompositeCloneBuilderImpl(monitor);
         componentConfigurationBuilder = new ComponentConfigurationBuilderImpl(assemblyFactory, scaBindingFactory, interfaceContractMapper, policyDefinitions, monitor);
         compositeServiceConfigurationBuilder = new CompositeServiceConfigurationBuilderImpl(assemblyFactory);
