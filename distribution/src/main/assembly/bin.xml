@@ -175,6 +175,8 @@
                 <exclude>helloworld-ws-deep-webapp/target/sample-helloworld-ws-deep-webapp.war</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp.war</exclude>
                 <exclude>helloworld-ws-service-webapp/target/sample-helloworld-ws-service-webapp.war</exclude>
+                <exclude>zipcode-jaxws/src/main/resources/wsdl</exclude>
+                <exclude>zipcode-jaxws/src/main/resources/wsdl/**/*</exclude>
             </excludes>
         </fileSet>
         <!-- Add all the demos to the demos directory -->
