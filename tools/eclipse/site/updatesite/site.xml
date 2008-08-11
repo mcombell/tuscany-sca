@@ -22,15 +22,15 @@
       Apache Tuscany SCA Tools.
    </description>
    
-   <feature id="org.apache.tuscany.sca.feature" version="1.3.0"
-      url="features/org.apache.tuscany.sca.feature-1.3-SNAPSHOT.jar"/>
+   <feature id="org.apache.tuscany.sca.feature" version="1.3.1"
+      url="features/org.apache.tuscany.sca.feature-1.3.1-SNAPSHOT.jar"/>
    
-   <archive path="plugins/org.apache.tuscany.sca.core_1.3.0.jar"
-      url="plugins/org.apache.tuscany.sca.core-1.3-SNAPSHOT.jar"/>
+   <archive path="plugins/org.apache.tuscany.sca.core_1.3.1.jar"
+      url="plugins/org.apache.tuscany.sca.core-1.3.1-SNAPSHOT.jar"/>
 
-   <archive path="features/org.apache.tuscany.sca.feature_1.3.0/runtime/apache-tuscany-sca-1.3-SNAPSHOT.jar"
-      url="../apache-tuscany-sca-1.3-SNAPSHOT.zip"/>
+   <archive path="features/org.apache.tuscany.sca.feature_1.3.1/runtime/apache-tuscany-sca-1.3.1-SNAPSHOT.jar"
+      url="../apache-tuscany-sca-1.3.1-SNAPSHOT.zip"/>
 
-   <archive path="features/org.apache.tuscany.sca.feature_1.3.0/src/apache-tuscany-sca-1.3-SNAPSHOT-src.zip"
-      url="../apache-tuscany-sca-1.3-SNAPSHOT-src.zip"/>   
+   <archive path="features/org.apache.tuscany.sca.feature_1.3.1/src/apache-tuscany-sca-1.3.1-SNAPSHOT-src.zip"
+      url="../apache-tuscany-sca-1.3.1-SNAPSHOT-src.zip"/>   
 </site>
