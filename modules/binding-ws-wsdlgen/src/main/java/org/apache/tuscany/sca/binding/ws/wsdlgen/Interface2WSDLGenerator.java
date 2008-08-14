@@ -76,6 +76,8 @@ import org.apache.ws.commons.schema.XmlSchemaException;
 import org.apache.ws.commons.schema.utils.NamespaceMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @version $Rev: 670103 $ $Date: 2008-06-21 01:35:00 +0100 (Sat, 21 Jun 2008) $
@@ -325,7 +327,10 @@ public class Interface2WSDLGenerator {
                             }
                             QName typeName = element.getType().getQName();
                             String nsURI = typeName.getNamespaceURI();
-                            if ("".equals(nsURI) || targetNS.equals(nsURI)) {
+                            if ("".equals(nsURI)) {
+                                xsElement.setAttribute("type", typeName.getLocalPart());
+                                addSchemaImport(schema, "", schemaDoc);
+                            } else if (targetNS.equals(nsURI)) {
                                 xsElement.setAttribute("type", typeName.getLocalPart());
                             } else if (SCHEMA_NS.equals(nsURI)) {
                                 xsElement.setAttribute("type", "xs:" + typeName.getLocalPart());
@@ -336,6 +341,7 @@ public class Interface2WSDLGenerator {
                                     prefix = "ns" + i++;
                                     prefixMap.put(nsURI, prefix);
                                     schema.setAttributeNS(XMLNS_NS, "xmlns:" + prefix, nsURI);
+                                    addSchemaImport(schema, nsURI, schemaDoc);
                                 }
                                 xsElement.setAttribute("type", prefix + ":" + typeName.getLocalPart());
                             }
@@ -354,7 +360,26 @@ public class Interface2WSDLGenerator {
 
         return definition;
     }
-    
+
+    private static void addSchemaImport(Element schema, String nsURI, Document schemaDoc) {
+        Element imp = schemaDoc.createElementNS(SCHEMA_NS, "xs:import");
+        if (!"".equals(nsURI)) {
+            imp.setAttribute("namespace", nsURI);
+        }
+        NodeList childNodes = schema.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node childNode = childNodes.item(i);
+            if (childNode instanceof Element) {
+                schema.insertBefore(imp, childNode);
+                imp = null;
+                break;
+            }
+        }
+        if (imp != null) {
+            schema.appendChild(imp);
+        }
+    }
+
     private void addSchemaExtension(XSDefinition xsDef,
                                     XmlSchemaCollection schemaCollection,
                                     WSDLDefinition wsdlDefinition,
