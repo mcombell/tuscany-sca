@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
@@ -454,6 +455,18 @@ public class NodeImpl implements SCANode2, SCAClient {
         monitor = monitorFactory.createMonitor();
     }
 
+    /**
+     * Escape the space in URL string
+     * @param uri
+     * @return
+     */
+    private static URI createURI(String uri) {
+        if (uri.indexOf(' ') != -1) {
+            uri = uri.replace(" ", "%20");
+        }
+        return URI.create(uri);
+    }
+    
     private void configureNode(ConfiguredNodeImplementation configuration) throws Exception {
 
         // Find if any contribution JARs already available locally on the classpath
@@ -463,7 +476,7 @@ public class NodeImpl implements SCANode2, SCAClient {
         ContributionService contributionService = runtime.getContributionService();
         List<Contribution> contributions = new ArrayList<Contribution>();
         for (Contribution contribution : configuration.getContributions()) {
-            URI uri = URI.create(contribution.getLocation());
+        	URI uri = createURI(contribution.getLocation());
             if (uri.getScheme() == null) {
                 uri = new File(contribution.getLocation()).toURI();
             }
@@ -503,13 +516,16 @@ public class NodeImpl implements SCANode2, SCAClient {
         // Load the specified composite
         StAXArtifactProcessor<Composite> compositeProcessor = artifactProcessors.getProcessor(Composite.class);
         if (configuration.getComposite().getName() == null) {
-            URI uri = URI.create(configuration.getComposite().getURI());
+        	URI uri = createURI(configuration.getComposite().getURI());
             if (uri.getScheme() == null) {
                 uri = new File(configuration.getComposite().getURI()).toURI();
             }
             URL compositeURL = uri.toURL();
             logger.log(Level.INFO, "Loading composite: " + compositeURL);
-            InputStream is = compositeURL.openStream();
+            URLConnection connection = compositeURL.openConnection();
+            connection.setDefaultUseCaches(false);
+            connection.setUseCaches(false);
+            InputStream is = connection.getInputStream();
             XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
             composite = compositeProcessor.read(reader);
         } else {
