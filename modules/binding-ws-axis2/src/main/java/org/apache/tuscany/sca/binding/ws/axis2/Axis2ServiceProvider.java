@@ -536,12 +536,10 @@ public class Axis2ServiceProvider {
             if (obj instanceof XmlSchemaExternal) {
                 XmlSchemaExternal extSchema = (XmlSchemaExternal)obj;
                 String location = extSchema.getSchemaLocation();
-                if (location.length() > 0 && location.indexOf(":/") < 0 && location.indexOf("?xsd=") < 0) {
+                if (location.indexOf(":/") < 0 & location.indexOf("?xsd=") < 0) {
                     extSchema.setSchemaLocation(name + "?xsd=" + location);
                 }
-                if (extSchema.getSchema() != null) {
-                    updateSchemaRefs(extSchema.getSchema(), name);
-                }
+                updateSchemaRefs(extSchema.getSchema(), name);
             }
         }
     }
