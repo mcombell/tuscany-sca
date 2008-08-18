@@ -94,7 +94,6 @@ public class Axis2SCAReferenceBindingProvider implements ReferenceBindingProvide
         axisReferenceBindingProvider = new Axis2ReferenceBindingProvider(component,
                                                                          reference,
                                                                          wsBinding,
-                                                                         servletHost,
                                                                          modelFactories,
                                                                          policyHandlerClassnames,
                                                                          dataBindings);
