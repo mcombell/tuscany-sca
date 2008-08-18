@@ -44,7 +44,6 @@ public class Axis2ReferenceBindingProvider implements ReferenceBindingProvider {
     public Axis2ReferenceBindingProvider(RuntimeComponent component,
                                          RuntimeComponentReference reference,
                                          WebServiceBinding wsBinding,
-                                         ServletHost servletHost,
                                          ModelFactoryExtensionPoint modelFactories,
                                          Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassnames,
                                          DataBindingExtensionPoint dataBindings) {
@@ -63,7 +62,7 @@ public class Axis2ReferenceBindingProvider implements ReferenceBindingProvider {
             contract.getInterface().resetDataBinding(OMElement.class.getName());
         }
 
-        axisClient = new Axis2ServiceClient(component, reference, wsBinding, servletHost, messageFactory, policyHandlerClassnames);
+        axisClient = new Axis2ServiceClient(component, reference, wsBinding, messageFactory, policyHandlerClassnames);
     }
 
     public void start() {

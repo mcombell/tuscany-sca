@@ -54,9 +54,7 @@ public class Axis2BindingProviderFactory implements BindingProviderFactory<WebSe
     public Axis2BindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
         List<ServletHost> hosts = servletHosts.getServletHosts();
-        if (hosts.isEmpty()) {
-            throw new ServiceRuntimeException("No Servlet host is avaible for HTTP web services");
-        } else {
+        if (!hosts.isEmpty()) {
             this.servletHost = hosts.get(0);
         }
         modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
@@ -68,8 +66,7 @@ public class Axis2BindingProviderFactory implements BindingProviderFactory<WebSe
                                                                    RuntimeComponentReference reference,
                                                                    WebServiceBinding binding) {
         return new Axis2ReferenceBindingProvider(component, reference, binding,
-                                                 servletHost, modelFactories,
-                                                 policyHandlerClassnames, dataBindings);
+                                                 modelFactories, policyHandlerClassnames, dataBindings);
     }
 
     public ServiceBindingProvider createServiceBindingProvider(RuntimeComponent component,
