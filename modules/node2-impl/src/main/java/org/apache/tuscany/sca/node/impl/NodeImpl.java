@@ -655,7 +655,7 @@ public class NodeImpl implements SCANode2, SCAClient {
                     CompositeService compositeService = (CompositeService)componentService.getService();
                     if (compositeService != null) {
                         if (serviceName != null) {
-                            serviceName = "$promoted$." + component.getName() + "." + serviceName;
+                            serviceName = "$promoted$" + component.getName() + "$slash$" + serviceName;
                         }
                         componentContext =
                             ((RuntimeComponent)compositeService.getPromotedComponent()).getComponentContext();
