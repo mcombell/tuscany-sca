@@ -60,6 +60,6 @@ public interface JMSBindingConstants {
     String DEFAULT_MP_CLASSNAME = XMLTextMessageProcessor.class.getName();
     String DEFAULT_OPERATION_PROP_NAME = "scaOperationName";
 
-    String FAULT_PROPERTY = "org.apache.tuscany.sca.fault";
+    String FAULT_PROPERTY = "org_apache_tuscany_sca_fault";
 
 }
