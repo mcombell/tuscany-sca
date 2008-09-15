@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.event.TrueFilter;
 /**
  * Base implementation of an <code>EventPublisher</code>
  *
- * @version $Rev: 537240 $ $Date: 2007-05-11 10:35:03 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public abstract class BaseEventPublisher implements EventPublisher {
     protected static final EventFilter TRUE_FILTER = new TrueFilter();

@@ -41,7 +41,7 @@ import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 
 /**
- * @version $Rev: 564364 $ $Date: 2007-08-09 13:14:52 -0700 (Thu, 09 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConstructorProcessorTestCase extends TestCase {
     private ConstructorProcessor processor = new ConstructorProcessor(new DefaultAssemblyFactory());

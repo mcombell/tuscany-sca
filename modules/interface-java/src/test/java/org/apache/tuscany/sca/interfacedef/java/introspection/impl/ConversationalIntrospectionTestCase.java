@@ -30,7 +30,7 @@ import org.osoa.sca.annotations.Conversational;
 import org.osoa.sca.annotations.EndsConversation;
 
 /**
- * @version $Rev: 567542 $ $Date: 2007-08-19 21:13:29 -0800 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConversationalIntrospectionTestCase extends TestCase {
     private JavaInterfaceFactory javaFactory;

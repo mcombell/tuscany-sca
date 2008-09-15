@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Thrown when an implementation is annotated multiple times with {@link @org.osoa.sca.annotations.Init}
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class DuplicateInitException extends IntrospectionException {
     private static final long serialVersionUID = -6282935288115512057L;

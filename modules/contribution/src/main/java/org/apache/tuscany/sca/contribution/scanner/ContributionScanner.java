@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.sca.contribution.scanner;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionReadException;
  * Contribution scanners understand the format of the contribution and how to get the
  * artifacts in the contribution.
  * 
- * @version $Rev: 631891 $ $Date: 2008-02-28 00:34:05 -0800 (Thu, 28 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ContributionScanner {
     

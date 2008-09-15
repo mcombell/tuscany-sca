@@ -33,7 +33,7 @@ import org.apache.tuscany.sca.implementation.java.impl.JavaElementImpl;
 import org.osoa.sca.annotations.Property;
 
 /**
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class PropertyProcessorTestCase extends TestCase {
 

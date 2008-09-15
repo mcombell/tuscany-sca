@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 /**
  * A test implementation of a model resolver, based on a map.
  * 
- * @version $Rev: 618158 $ $Date: 2008-02-03 18:44:47 -0800 (Sun, 03 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestModelResolver implements ModelResolver {
     

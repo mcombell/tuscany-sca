@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.assembly.Property;
 /**
  * Represents a component property.
  * 
- * @version $Rev: 636985 $ $Date: 2008-03-13 20:48:47 -0700 (Thu, 13 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentPropertyImpl extends PropertyImpl implements ComponentProperty, Cloneable {
     private String file;

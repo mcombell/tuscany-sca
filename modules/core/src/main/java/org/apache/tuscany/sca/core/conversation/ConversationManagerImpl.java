@@ -19,6 +19,8 @@
 
 package org.apache.tuscany.sca.core.conversation;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +32,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @version $Rev: 638875 $ $Date: 2008-03-19 08:32:44 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ConversationManagerImpl implements ConversationManager {
 	
@@ -65,13 +67,17 @@ public class ConversationManagerImpl implements ConversationManager {
     /**
      * constructor
      */
-    public ConversationManagerImpl()
-    {
+    public ConversationManagerImpl() {
     	long mit = DEFAULT_MAX_IDLE_TIME;
     	long ma = DEFAULT_MAX_AGE;
     	
-    	String aProperty;
-    	aProperty = System.getProperty("org.apache.tuscany.sca.core.scope.ConversationalScopeContainer.MaxIdleTime");
+    	// Allow privileged access to read system property. Requires PropertyPermission in security
+        // policy.
+        String aProperty = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            public String run() {
+                return System.getProperty("org.apache.tuscany.sca.core.scope.ConversationalScopeContainer.MaxIdleTime");
+            }
+        });
     	if (aProperty != null) {
     		try {
     			mit = (new Long(aProperty) * 1000);
@@ -80,7 +86,13 @@ public class ConversationManagerImpl implements ConversationManager {
     		}
     	}
 
-        aProperty = System.getProperty("org.apache.tuscany.sca.core.scope.ConversationalScopeContainer.MaxAge");
+    	// Allow privileged access to read system property. Requires PropertyPermission in security
+        // policy.
+        aProperty = AccessController.doPrivileged(new PrivilegedAction<String>() {
+            public String run() {
+                return System.getProperty("org.apache.tuscany.sca.core.scope.ConversationalScopeContainer.MaxAge");
+            }
+        });
         if (aProperty != null) {
             try {
                 ma = (new Long(aProperty) * 1000);
@@ -134,7 +146,8 @@ public class ConversationManagerImpl implements ConversationManager {
      * @see org.apache.tuscany.sca.core.conversation.ConversationManager#getConversation(java.lang.Object)
      */
     public ExtendedConversation getConversation(Object conversationID) {
-        return conversations.get(conversationID);
+        // ConcurrentHashMap cannot take null key
+        return conversationID == null ? null : conversations.get(conversationID);
     }
 
     /**
@@ -189,16 +202,15 @@ public class ConversationManagerImpl implements ConversationManager {
      * return the default max idle time
      * @param impProvider the implementation Provider to extract any ConversationAttribute details
      */
-    public long getMaxIdleTime()
-    {
+    public long getMaxIdleTime() {
         return maxIdleTime;
     }
-    
+
     /**
      * returns the default max age
      * @param impProvider the implementation Provider to extract any ConversationAttribute details
      */
     public long getMaxAge(){
         return maxAge;
-    } 
+    }
 }

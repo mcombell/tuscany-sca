@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.injection.InjectionRuntimeExce
 /**
  * Denotes an error when invoking an event on an object
  *
- * @version $Rev: 567313 $ $Date: 2007-08-18 11:38:44 -0700 (Sat, 18 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class EventInvocationException extends InjectionRuntimeException {
     private static final long serialVersionUID = 1480018831708211581L;

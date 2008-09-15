@@ -23,6 +23,8 @@ import javax.xml.namespace.QName;
 
 /**
  * Constants used in SCA assembly XML files.
+ *
+ * @version $Rev$ $Date$
  */
 public interface Constants {
     String SCA10_NS = "http://www.osoa.org/xmlns/sca/1.0";

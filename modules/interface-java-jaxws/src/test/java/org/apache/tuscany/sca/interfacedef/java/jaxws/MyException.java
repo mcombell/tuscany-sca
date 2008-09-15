@@ -19,8 +19,13 @@
 
 package org.apache.tuscany.sca.interfacedef.java.jaxws;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class MyException extends Exception {
     private String error;
+    private int code;
 
     public MyException() {
         super();
@@ -44,6 +49,14 @@ public class MyException extends Exception {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
 }

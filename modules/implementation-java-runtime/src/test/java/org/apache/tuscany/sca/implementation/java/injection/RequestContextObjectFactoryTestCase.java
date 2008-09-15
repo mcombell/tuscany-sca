@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.implementation.java.injection;
 import junit.framework.TestCase;
 
 /**
- * @version $Rev: 557408 $ $Date: 2007-07-18 14:58:03 -0700 (Wed, 18 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public class RequestContextObjectFactoryTestCase extends TestCase {
 

@@ -40,10 +40,10 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.apache.tuscany.sca.runtime.RuntimeWireProcessor;
 
 /**
- * @version $Rev: 632064 $ $Date: 2008-02-28 09:18:51 -0800 (Thu, 28 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaCallbackRuntimeWireProcessor implements RuntimeWireProcessor {
-    private final static Logger logger = Logger.getLogger(JavaCallbackRuntimeWireProcessor.class.getName());
+    private static final Logger logger = Logger.getLogger(JavaCallbackRuntimeWireProcessor.class.getName());
     private InterfaceContractMapper interfaceContractMapper;
     private JavaInterfaceFactory javaInterfaceFactory;
 

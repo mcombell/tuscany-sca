@@ -37,7 +37,7 @@ import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 /**
  * Default implementation of a package processor extension point.
  * 
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultPackageProcessorExtensionPoint implements PackageProcessorExtensionPoint {
 

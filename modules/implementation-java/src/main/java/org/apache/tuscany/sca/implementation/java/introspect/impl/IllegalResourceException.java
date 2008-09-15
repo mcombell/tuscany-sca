@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Denotes an illegal resource definition in a component type
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class IllegalResourceException extends IntrospectionException {
     private static final long serialVersionUID = -1100936539412435579L;

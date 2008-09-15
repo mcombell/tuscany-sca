@@ -24,7 +24,7 @@ import org.osoa.sca.ComponentContext;
 /**
  * Interface implemented by the provider of the ComponentContext.
  * 
- * @version $Rev: 557408 $ $Date: 2007-07-18 14:58:03 -0700 (Wed, 18 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ComponentContextFactory {
     /**

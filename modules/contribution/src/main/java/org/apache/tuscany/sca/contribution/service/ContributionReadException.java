@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.contribution.service;
 /**
  * Denotes an exception while reading artifacts inside an SCA contribution.
  *
- * @version $Rev: 560434 $ $Date: 2007-07-27 18:23:02 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public class ContributionReadException extends ContributionException {
     public static final int UNDEFINED = -1;

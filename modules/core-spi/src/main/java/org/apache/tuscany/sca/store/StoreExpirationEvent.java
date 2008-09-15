@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * Fired when a store implementation expires a resource
  *
- * @version $Rev: 538423 $ $Date: 2007-05-15 21:11:06 -0700 (Tue, 15 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class StoreExpirationEvent implements Event {
     private Object source;

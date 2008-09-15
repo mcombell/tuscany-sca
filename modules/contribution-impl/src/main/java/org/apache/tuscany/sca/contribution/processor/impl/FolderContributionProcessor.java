@@ -39,7 +39,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 /**
  * Folder contribution package processor.
  * 
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class FolderContributionProcessor implements PackageProcessor {
 

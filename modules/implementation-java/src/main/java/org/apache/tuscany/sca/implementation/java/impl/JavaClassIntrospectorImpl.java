@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.JavaIntrospect
 /**
  * An extensible Java class introspector implementation.
  * 
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class JavaClassIntrospectorImpl {
     
@@ -68,11 +68,8 @@ public class JavaClassIntrospectorImpl {
      */
     public void introspectClass(JavaImplementation type, Class<?> clazz)
         throws IntrospectionException {
-    	
         for (JavaClassVisitor extension : visitors) {
-        	//try {
             extension.visitClass(clazz, type);
-        	//} catch (Exception e) {}
         }
 
         for (Constructor<?> constructor : clazz.getConstructors()) {
@@ -95,9 +92,25 @@ public class JavaClassIntrospectorImpl {
                 extension.visitField(field, type);
             }
         }
+
+        // Check if any private fields have illegal annotations that should be raised as errors
+        Set<Field> privateFields = JavaIntrospectionHelper.getPrivateFields(clazz);
+        for (Field field : privateFields) {
+            for (JavaClassVisitor processor : visitors) {
+                processor.visitField(field, type);
+            }
+        }
         
         Set<Method> methods = JavaIntrospectionHelper.getAllUniquePublicProtectedMethods(clazz, true);
         for (Method method : methods) {
+            for (JavaClassVisitor processor : visitors) {
+                processor.visitMethod(method, type);
+            }
+        }
+
+        // Check if any private methods have illegal annotations that should be raised as errors
+        Set<Method> privateMethods = JavaIntrospectionHelper.getPrivateMethods(clazz);
+        for (Method method : privateMethods) {
             for (JavaClassVisitor processor : visitors) {
                 processor.visitMethod(method, type);
             }

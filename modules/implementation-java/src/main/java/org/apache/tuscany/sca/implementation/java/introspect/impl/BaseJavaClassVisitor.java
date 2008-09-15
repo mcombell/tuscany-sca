@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
  * A convenience class for annotation processors which alleviates the need to
  * implement unused callbacks
  * 
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public abstract class BaseJavaClassVisitor implements JavaClassVisitor {
     protected AssemblyFactory assemblyFactory;

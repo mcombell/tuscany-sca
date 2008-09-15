@@ -31,27 +31,32 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.ValidatingXMLInputFactory;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.util.PolicyComputationUtils;
 
 /**
  * A composite processor.
  * 
- * @version $Rev: 643489 $ $Date: 2008-04-01 10:06:42 -0800 (Tue, 01 Apr 2008) $
+ * @version $Rev$ $Date$
  */
 public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements URLArtifactProcessor<Composite> {
     private XMLInputFactory inputFactory;
+    private DocumentBuilderFactory documentBuilderFactory;
     private List scaDefnSink;
     private Collection<PolicySet> domainPolicySets = null;
     private int scaDefnsCount = 0;
@@ -62,33 +67,80 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
      * @param policyFactory
      * @param staxProcessor
      */
-    public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory, List scaDefnsSink) {
-        super(null, null, staxProcessor);
+    @Deprecated
+    public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
+                                                                  XMLInputFactory inputFactory,
+                                                                  List scaDefnsSink, Monitor monitor) {
+        super(null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
         this.scaDefnSink = scaDefnsSink;
     }
 
+    /**
+     * Construct a new composite processor
+     * @param assemblyFactory
+     * @param policyFactory
+     * @param staxProcessor
+     */
+    public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
+    								  XMLInputFactory inputFactory,
+    								  DocumentBuilderFactory documentBuilderFactory,
+    								  List scaDefnsSink, Monitor monitor) {
+        super(null, null, staxProcessor, monitor);
+        this.documentBuilderFactory = documentBuilderFactory;
+        this.inputFactory = inputFactory;
+        this.scaDefnSink = scaDefnsSink;
+    }
+
+    /**
+     * Constructs a new composite processor.
+     * @param modelFactories
+     * @param staxProcessor
+     */
+    public CompositeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
+    								  StAXArtifactProcessor staxProcessor, Monitor monitor) {
+        super(null, null, staxProcessor, monitor);
+        this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
+        this.documentBuilderFactory = modelFactories.getFactory(DocumentBuilderFactory.class);
+    }
+    
     public Composite read(URL contributionURL, URI uri, URL url) throws ContributionReadException {
         InputStream scdlStream = null;
+        try {
+            URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
+            scdlStream = connection.getInputStream();
+        } catch (IOException e) {
+            ContributionReadException ce = new ContributionReadException(e);
+            error("ContributionReadException", url, ce);
+            throw ce;
+        }
+        return read(uri, scdlStream);
+    }
+
+    public Composite read(URI uri, InputStream scdlStream) throws ContributionReadException {
         try {
             if (scaDefnSink != null ) {
                 fillDomainPolicySets(scaDefnSink);
             }
-
             
-            byte[] transformedArtifactContent = null;
+            Composite composite = null;
+            
+            byte[] transformedArtifactContent;
             try {
                 if ( domainPolicySets != null ) {
                     transformedArtifactContent =
-                        PolicyComputationUtils.addApplicablePolicySets(url, domainPolicySets);
+                        PolicyComputationUtils.addApplicablePolicySets(scdlStream, domainPolicySets, documentBuilderFactory);
                     scdlStream = new ByteArrayInputStream(transformedArtifactContent);
-                } else {
-                    URLConnection connection = url.openConnection();
-                    connection.setUseCaches(false);
-                    scdlStream = connection.getInputStream();
-                }
+                } 
+            } catch ( IOException e ) {
+            	ContributionReadException ce = new ContributionReadException(e);
+            	error("ContributionReadException", scdlStream, ce);
+            	throw ce;
             } catch ( Exception e ) {
-                throw new ContributionReadException(e);
+            	ContributionReadException ce = new ContributionReadException(e);
+            	error("ContributionReadException", scdlStream, ce);
+                //throw ce;
             }
             
             XMLStreamReader reader = inputFactory.createXMLStreamReader(scdlStream);
@@ -96,7 +148,7 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
             reader.nextTag();
             
             // Read the composite model
-            Composite composite = (Composite)extensionProcessor.read(reader);
+            composite = (Composite)extensionProcessor.read(reader);
             if (composite != null) {
                 composite.setURI(uri.toString());
             }
@@ -122,7 +174,9 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
             return composite;
             
         } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", inputFactory, ce);
+            throw ce;
         } finally {
             try {
                 if (scdlStream != null) {
@@ -136,7 +190,8 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
     }
     
     public void resolve(Composite composite, ModelResolver resolver) throws ContributionResolveException {
-        extensionProcessor.resolve(composite, resolver);
+        if (composite != null)
+    	    extensionProcessor.resolve(composite, resolver);
     }
 
     public String getArtifactType() {

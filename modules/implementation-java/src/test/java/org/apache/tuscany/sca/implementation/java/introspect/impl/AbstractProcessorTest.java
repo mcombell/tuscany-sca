@@ -35,7 +35,7 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 /**
  * Base class to simulate the processor sequences
  * 
- * @version $Rev: 564364 $ $Date: 2007-08-09 13:14:52 -0700 (Thu, 09 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class AbstractProcessorTest extends TestCase {
     protected AssemblyFactory factory;

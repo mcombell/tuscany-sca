@@ -31,6 +31,8 @@ import org.osoa.sca.annotations.Reference;
 /**
  * This is a special transformer to transform the output from one IDL to the
  * other one
+ *
+ * @version $Rev$ $Date$
  */
 public class Array2ArrayTransformer extends BaseTransformer<Object, Object> implements PullTransformer<Object, Object> {
 
@@ -62,7 +64,7 @@ public class Array2ArrayTransformer extends BaseTransformer<Object, Object> impl
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getSourceType()
      */
     @Override
-    protected Class getSourceType() {
+    protected Class<Object> getSourceType() {
         return Object.class;
     }
 
@@ -70,7 +72,7 @@ public class Array2ArrayTransformer extends BaseTransformer<Object, Object> impl
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getTargetType()
      */
     @Override
-    protected Class getTargetType() {
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 

@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * Default implementation of a provider factory extension point.
  *
- * @version $Rev: 634558 $ $Date: 2008-03-06 22:35:52 -0800 (Thu, 06 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultProviderFactoryExtensionPoint implements ProviderFactoryExtensionPoint {
 
@@ -133,17 +133,10 @@ public class DefaultProviderFactoryExtensionPoint implements ProviderFactoryExte
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+
         // Get the target extension point
-        
         ProviderFactoryExtensionPoint factoryExtensionPoint =
             registry.getExtensionPoint(ProviderFactoryExtensionPoint.class);
-        
-        if (factoryExtensionPoint == null) {
-        	factoryExtensionPoint = new DefaultProviderFactoryExtensionPoint(registry);
-        	registry.addExtensionPoint(factoryExtensionPoint);
-        	
-        }
-        
         List<ProviderFactory> factories = new ArrayList<ProviderFactory>();
 
         for (ServiceDeclaration factoryDeclaration : factoryDeclarations) {
@@ -178,7 +171,6 @@ public class DefaultProviderFactoryExtensionPoint implements ProviderFactoryExte
                     new LazyPolicyProviderFactory(registry, modelTypeName, factoryDeclaration);
                 factoryExtensionPoint.addProviderFactory(factory);
                 factories.add(factory);
-
             }
         }
         return factories;

@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.contribution.Artifact;
 /**
  * The model representing an artifact in a contribution.
  * 
- * @version $Rev: 632520 $ $Date: 2008-02-29 16:58:53 -0800 (Fri, 29 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 class ArtifactImpl implements Artifact {
     private String uri;

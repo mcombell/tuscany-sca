@@ -45,7 +45,7 @@ import org.osoa.sca.annotations.Reference;
  * corresponding {@link
  * org.apache.tuscany.spi.implementation.java.JavaMappedReference}
  * 
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class ReferenceProcessor extends BaseJavaClassVisitor {
     private JavaInterfaceFactory javaFactory;

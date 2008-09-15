@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.core.scope;
 /**
  * Denotes an error retrieving a target instance
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class TargetResolutionException extends Exception {
     private static final long serialVersionUID = 2912513650522019405L;

@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.interfacedef.util.JavaXMLMapper;
  * Base class for ImplementationProcessors that handle annotations that add
  * Properties.
  * 
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public abstract class AbstractPropertyProcessor<A extends Annotation> extends BaseJavaClassVisitor {
     private final Class<A> annotationClass;

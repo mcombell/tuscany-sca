@@ -28,15 +28,20 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * Implementation of an extensible StAX artifact processor.
@@ -44,7 +49,7 @@ import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
  * Takes a StAXArtifactProcessorExtensionPoint and delegates to the proper
  * StAXArtifactProcessor by element QName
  * 
- * @version $Rev: 639257 $ $Date: 2008-03-20 05:12:00 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ExtensibleStAXArtifactProcessor
     implements StAXArtifactProcessor<Object> {
@@ -53,6 +58,7 @@ public class ExtensibleStAXArtifactProcessor
     private XMLInputFactory inputFactory;
     private XMLOutputFactory outputFactory;
     private StAXArtifactProcessorExtensionPoint processors;
+    private Monitor monitor;
 
     /**
      * Constructs a new ExtensibleStAXArtifactProcessor.
@@ -60,24 +66,78 @@ public class ExtensibleStAXArtifactProcessor
      * @param inputFactory
      * @param outputFactory
      */
-    public ExtensibleStAXArtifactProcessor(StAXArtifactProcessorExtensionPoint processors, XMLInputFactory inputFactory, XMLOutputFactory outputFactory) {
+    public ExtensibleStAXArtifactProcessor(StAXArtifactProcessorExtensionPoint processors, 
+    									   XMLInputFactory inputFactory, 
+    									   XMLOutputFactory outputFactory,
+    									   Monitor monitor) {
         super();
         this.processors = processors;
         this.inputFactory = inputFactory;
         this.outputFactory = outputFactory;
-        //this.outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.TRUE);
+        if (this.outputFactory != null) {
+            this.outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.TRUE);
+        }
+        this.monitor = monitor;
     }
+    
+    /**
+     * Report a warning.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+     private void warning(String message, Object model, Object... messageParameters) {
+    	 if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	 }
+     }
+     
+     /**
+      * Report a error.
+      * 
+      * @param problems
+      * @param message
+      * @param model
+      */
+     private void error(String message, Object model, Object... messageParameters) {
+     	if (monitor != null) {
+ 	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+ 	        monitor.problem(problem);
+     	}
+     }
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+     private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
+    	     monitor.problem(problem);
+    	 }        
+     }
+
 
     public Object read(XMLStreamReader source) throws ContributionReadException, XMLStreamException {
         
         // Delegate to the processor associated with the element QName
+        int event = source.getEventType();
+        if (event == XMLStreamConstants.START_DOCUMENT) {
+            source.nextTag();
+        }
         QName name = source.getName();
         StAXArtifactProcessor<?> processor = (StAXArtifactProcessor<?>)processors.getProcessor(name);
         if (processor == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                Location location = source.getLocation();
+        	Location location = source.getLocation();
+            if (logger.isLoggable(Level.WARNING)) {                
                 logger.warning("Element " + name + " cannot be processed. (" + location + ")");
             }
+            warning("ElementCannotBeProcessed", processors, name, location);
             return null;
         }
         return processor.read(source);
@@ -95,6 +155,7 @@ public class ExtensibleStAXArtifactProcessor
                 if (logger.isLoggable(Level.WARNING)) {
                     logger.warning("No StAX processor is configured to handle " + model.getClass());
                 }
+                warning("NoStaxProcessor", processors, model.getClass());
             }
         }
     }
@@ -130,13 +191,15 @@ public class ExtensibleStAXArtifactProcessor
                     if (type.isInstance(mo)) {
                         return type.cast(mo);
                     } else {
-                        UnrecognizedElementException e = new UnrecognizedElementException(name);
+                    	error("UnrecognizedElementException", reader, name);
+                        UnrecognizedElementException e = new UnrecognizedElementException(name);                        
                         throw e;
                     }
                 } catch (ContributionReadException e) {
                     Location location = reader.getLocation();
                     e.setLine(location.getLineNumber());
                     e.setColumn(location.getColumnNumber());
+                    error("ContributionReadException", reader, e);
                     throw e;
                 } finally {
                     try {
@@ -154,6 +217,7 @@ public class ExtensibleStAXArtifactProcessor
             }
         } catch (XMLStreamException e) {
             ContributionReadException ce = new ContributionReadException(e);
+            error("ContributionReadException", inputFactory, ce);
             throw ce;
         }
     }
@@ -171,7 +235,9 @@ public class ExtensibleStAXArtifactProcessor
             writer.flush();
             writer.close();
         } catch (XMLStreamException e) {
-            throw new ContributionWriteException(e);
+        	ContributionWriteException cw = new ContributionWriteException(e);
+        	error("ContributionWriteException", outputFactory, cw);
+            throw cw;
         }
     }
 

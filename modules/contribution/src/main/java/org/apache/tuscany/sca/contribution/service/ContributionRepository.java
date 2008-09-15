@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.contribution.Contribution;
 /**
  * Contribution repository 
  * 
- * @version $Rev: 639257 $ $Date: 2008-03-20 05:12:00 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ContributionRepository {
     

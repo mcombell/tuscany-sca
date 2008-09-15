@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
  * Resolves targets configured in a multiplicity by delegating to object factories and returning an <code>Array</code>
  * containing object instances
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ArrayMultiplicityObjectFactory implements ObjectFactory<Object> {
 

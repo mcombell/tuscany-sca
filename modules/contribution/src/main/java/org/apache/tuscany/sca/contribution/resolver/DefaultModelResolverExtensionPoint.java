@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 /**
  * The default implementation of a model resolver extension point.
  * 
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultModelResolverExtensionPoint implements ModelResolverExtensionPoint {
     
@@ -103,11 +103,11 @@ public class DefaultModelResolverExtensionPoint implements ModelResolverExtensio
         }
         
         // Load model resolvers
-        for (ServiceDeclaration dataBindingDeclaration: modelResolverDeclarations) {
-            Map<String, String> attributes = dataBindingDeclaration.getAttributes();
+        for (ServiceDeclaration modelResolverDeclaration: modelResolverDeclarations) {
+            Map<String, String> attributes = modelResolverDeclaration.getAttributes();
             String model = attributes.get("model");
 
-            loadedResolvers.put(model, dataBindingDeclaration);
+            loadedResolvers.put(model, modelResolverDeclaration);
         }
     }
 

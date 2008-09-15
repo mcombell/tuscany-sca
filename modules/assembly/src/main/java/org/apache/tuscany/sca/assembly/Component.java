@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * Represents a component. A component is a configured instance of an
  * implementation.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Component extends Base, Extensible, PolicySetAttachPoint, Cloneable {
     

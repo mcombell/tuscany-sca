@@ -23,16 +23,16 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
-import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 import org.apache.tuscany.sca.invocation.Phase;
 
 /**
  * Default implementation of an invocation chain
  * 
- * @version $Rev: 634778 $ $Date: 2008-03-07 10:58:16 -0800 (Fri, 07 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class InvocationChainImpl implements InvocationChain {
     private Operation sourceOperation;
@@ -40,7 +40,7 @@ public class InvocationChainImpl implements InvocationChain {
     private List<Node> nodes = new ArrayList<Node>();
 
     // FIXME: Not a good practice to use static reference
-    private final static PhaseManager phaseManager = new PhaseManager();
+    private static final PhaseManager phaseManager = new PhaseManager();
     private boolean forReference;
     private boolean allowsPassByReference;
 
@@ -181,6 +181,7 @@ public class InvocationChainImpl implements InvocationChain {
             return invoker;
         }
 
+        @Override
         public String toString() {
             return "(" + phaseIndex + ")" + invoker;
         }

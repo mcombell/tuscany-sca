@@ -30,7 +30,7 @@ import org.osoa.sca.RequestContext;
  * {@link org.apache.tuscany.sca.core.context.RequestContextImpl} for
  * injection on component implementation instances
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class RequestContextObjectFactory implements ObjectFactory<RequestContext> {
     private RequestContextFactory factory;

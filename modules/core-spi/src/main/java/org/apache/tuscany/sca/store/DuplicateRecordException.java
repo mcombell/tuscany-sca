@@ -21,25 +21,36 @@ package org.apache.tuscany.sca.store;
 /**
  * thrown when a record already exists during an insert operation
  *
- * @version $Rev: 537206 $ $Date: 2007-05-11 08:14:19 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class DuplicateRecordException extends StoreWriteException {
     private static final long serialVersionUID = 3116253222569378447L;
 
+    /**
+     * {@inheritDoc}
+     */
     public DuplicateRecordException() {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public DuplicateRecordException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public DuplicateRecordException(String message) {
         super(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public DuplicateRecordException(Throwable cause) {
         super(cause);
     }
-
 }

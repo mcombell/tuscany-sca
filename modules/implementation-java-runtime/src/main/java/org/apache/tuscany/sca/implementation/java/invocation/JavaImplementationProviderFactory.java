@@ -20,7 +20,6 @@
 package org.apache.tuscany.sca.implementation.java.invocation;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.tuscany.sca.context.ComponentContextFactory;
 import org.apache.tuscany.sca.context.RequestContextFactory;
@@ -34,7 +33,7 @@ import org.apache.tuscany.sca.provider.ImplementationProviderFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
- * @version $Rev: 604245 $ $Date: 2007-12-14 10:07:40 -0800 (Fri, 14 Dec 2007) $
+ * @version $Rev$ $Date$
  */
 public class JavaImplementationProviderFactory implements ImplementationProviderFactory<JavaImplementation> {
     private JavaPropertyValueObjectFactory propertyValueObjectFactory;
@@ -42,14 +41,14 @@ public class JavaImplementationProviderFactory implements ImplementationProvider
     private ProxyFactory proxyService;
     private ComponentContextFactory componentContextFactory;
     private RequestContextFactory requestContextFactory;
-    private Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames = null;
+    private List<PolicyHandlerTuple> policyHandlerClassNames = null;
 
     public JavaImplementationProviderFactory(ProxyFactory proxyService,
                                              DataBindingExtensionPoint dataBindingRegistry,
                                              JavaPropertyValueObjectFactory propertyValueObjectFactory,
                                              ComponentContextFactory componentContextFactory,
                                              RequestContextFactory requestContextFactory,
-                                             Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames) {
+                                             List<PolicyHandlerTuple> policyHandlerClassNames) {
         super();
         this.proxyService = proxyService;
         this.dataBindingRegistry = dataBindingRegistry;

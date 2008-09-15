@@ -47,7 +47,7 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.JavaIntrospect
 /**
  * Encapsulates configuration for a Java-based atomic component
  * 
- * @version $Rev: 639649 $ $Date: 2008-03-21 06:04:01 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaInstanceFactoryProvider<T> implements InstanceFactoryProvider<T> {
     private JavaImplementation definition;

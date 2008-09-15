@@ -28,15 +28,15 @@ import org.apache.tuscany.sca.host.embedded.test.extension.TestService;
 /**
  * Test creation of DefaultSCADomain.
  * 
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultSCADomainTestCase extends TestCase {
     private DefaultSCADomain domain;
 
     @Override
     protected void setUp() throws Exception {
-        domain = new DefaultSCADomain(getClass().getClassLoader(), null,
-                                      "http://localhost", ".", "test.composite");
+        domain = new DefaultSCADomain(getClass().getClassLoader(), getClass().getClassLoader(),
+                                      "http://localhost", "./target/test-classes", "test.composite");
     }
 
     public void testStart() throws Exception {

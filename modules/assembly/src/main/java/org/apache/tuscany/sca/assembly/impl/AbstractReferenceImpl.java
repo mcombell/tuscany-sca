@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.assembly.Multiplicity;
 /**
  * Represents an abstract reference
  * 
- * @version $Rev: 537384 $ $Date: 2007-05-12 04:02:56 -0700 (Sat, 12 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class AbstractReferenceImpl extends ContractImpl implements AbstractReference {
     private Multiplicity multiplicity = Multiplicity.ONE_ONE;

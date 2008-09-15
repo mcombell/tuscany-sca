@@ -26,7 +26,7 @@ package org.apache.tuscany.sca.contribution;
  * as it reads in contributed artifacts it looks up the factory for the 
  * artifact required in this registry
  *
- * @version $Rev: 562796 $ $Date: 2007-08-04 18:20:28 -0700 (Sat, 04 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ModelFactoryExtensionPoint {
     

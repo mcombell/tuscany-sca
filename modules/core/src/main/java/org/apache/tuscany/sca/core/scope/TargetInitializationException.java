@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.core.scope;
 /**
  * Denotes an error initializing a target
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class TargetInitializationException extends TargetResolutionException {
     private static final long serialVersionUID = -6228778208649752698L;

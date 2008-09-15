@@ -23,7 +23,7 @@ import java.lang.reflect.Member;
 /**
  * Denotes a problem processing annotations on a POJO implementation
  * 
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class IntrospectionException extends Exception {
     private static final long serialVersionUID = -361025119035104470L;

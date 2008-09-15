@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.assembly.SCABindingFactory;
 /**
  * A factory for the SCA binding model.
  * 
- * @version $Rev: 563772 $ $Date: 2007-08-07 23:50:49 -0700 (Tue, 07 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class TestSCABindingFactoryImpl implements SCABindingFactory {
     public SCABinding createSCABinding() {

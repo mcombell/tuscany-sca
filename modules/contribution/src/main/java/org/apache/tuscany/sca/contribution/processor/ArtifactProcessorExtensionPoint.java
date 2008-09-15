@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.contribution.processor;
 /**
  * An extension point for artifact processors.
  * 
- * @version $Rev: 616133 $ $Date: 2008-01-28 17:45:50 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ArtifactProcessorExtensionPoint<P extends ArtifactProcessor> {
 

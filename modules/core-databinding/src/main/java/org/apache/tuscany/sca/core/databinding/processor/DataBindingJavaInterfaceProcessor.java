@@ -22,11 +22,14 @@ package org.apache.tuscany.sca.core.databinding.processor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
+import org.apache.tuscany.sca.databinding.WrapperHandler;
 import org.apache.tuscany.sca.databinding.annotation.DataBinding;
 import org.apache.tuscany.sca.databinding.javabeans.JavaBeansDataBinding;
 import org.apache.tuscany.sca.databinding.javabeans.SimpleJavaDataBinding;
@@ -36,13 +39,15 @@ import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaOperation;
 import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceVisitor;
+import org.apache.tuscany.sca.interfacedef.util.WrapperInfo;
 
 /**
  * The databinding annotation processor for java interfaces
  * 
- * @version $Rev: 639350 $ $Date: 2008-03-20 08:43:46 -0800 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
+    private static final String JAXB_DATABINDING = "javax.xml.bind.JAXBElement";
     private DataBindingExtensionPoint dataBindingRegistry;
 
     public DataBindingJavaInterfaceProcessor(DataBindingExtensionPoint dataBindingRegistry) {
@@ -85,6 +90,9 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                 continue;
             }
             Operation operation = opMap.get(method.getName());
+            if (operation == null) { // @WebMethod exclude=true
+                continue;
+            }
             DataBinding methodDataBinding = clazz.getAnnotation(DataBinding.class);
             if (methodDataBinding == null) {
                 methodDataBinding = dataBinding;
@@ -110,7 +118,7 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                         d.setDataBinding(value);
                     }
                 }
-                dataBindingRegistry.introspectType(d, method.getParameterAnnotations()[i]);
+                dataBindingRegistry.introspectType(d, operation);
                 i++;
             }
             if (operation.getOutputType() != null) {
@@ -123,23 +131,40 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                 if (dt != null) {
                     d.setDataBinding(dt.value());
                 }
-                dataBindingRegistry.introspectType(d, method.getAnnotations());
+                dataBindingRegistry.introspectType(d, operation);
             }
             for (org.apache.tuscany.sca.interfacedef.DataType<?> d : operation.getFaultTypes()) {
                 if (d.getDataBinding() == null) {
                     d.setDataBinding(dataBindingId);
                 }
                 // TODO: Handle exceptions
-                dataBindingRegistry.introspectType(d, method.getAnnotations(), true);
+                dataBindingRegistry.introspectType(d, operation);
             }
 
             // JIRA: TUSCANY-842
-            if (operation.getDataBinding() == null) {
+            String db = operation.getDataBinding();
+            if (db == null || JAXB_DATABINDING.equals(db)) {
                 assignOperationDataBinding(operation);
+                db = operation.getDataBinding();
             }
 
-            // FIXME: Do we want to heuristically check the wrapper style?
-            // introspectWrapperStyle(operation);
+            // Introspect the wrapper data type
+            if (operation.getWrapper() != null) {
+                org.apache.tuscany.sca.databinding.DataBinding dbObj =
+                    dataBindingRegistry.getDataBinding(db);
+                WrapperHandler handler = dbObj == null ? null : dbObj.getWrapperHandler();
+                if (handler != null) {
+                    WrapperInfo wrapper = operation.getWrapper();
+                    wrapper.setInputWrapperType(handler.getWrapperType(operation, true));
+                    wrapper.setOutputWrapperType(handler.getWrapperType(operation, false));
+                }
+                if (dbObj != null && handler == null) {
+                    // To avoid JAXB wrapper bean generation
+                    WrapperInfo wrapper = operation.getWrapper();
+                    wrapper.setInputWrapperType(null);
+                    wrapper.setOutputWrapperType(null);
+                }
+            }
         }
     }
 
@@ -152,40 +177,34 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
      */
     private void assignOperationDataBinding(Operation operation) {
 
-        String nonDefaultDataBindingName = null;
+        Set<String> dbs = new HashSet<String>();
 
         // Can't use DataType<?> since operation.getInputType() returns: DataType<List<DataType>> 
         List<DataType> opDataTypes = new LinkedList<DataType>();
 
         opDataTypes.addAll(operation.getInputType().getLogical());
         opDataTypes.add(operation.getOutputType());
-        opDataTypes.addAll(operation.getFaultTypes());
+        for (DataType<DataType> ft : operation.getFaultTypes()) {
+            opDataTypes.add(ft.getLogical());
+        }
 
         for (DataType<?> d : opDataTypes) {
             if (d != null) {
                 String dataBinding = d.getDataBinding();
-                // Assumes JavaBeans DB is default
-                if (dataBinding != null && !dataBinding.equals(JavaBeansDataBinding.NAME)
-                    && !dataBinding.equals(SimpleJavaDataBinding.NAME)) {
-                    if (nonDefaultDataBindingName != null) {
-                        if (!nonDefaultDataBindingName.equals(dataBinding)) {
-                            // We've seen two different non-default DBs, e.g. SDO and JAXB
-                            // so unset the string and break out of the loop 
-                            nonDefaultDataBindingName = null;
-                            break;
-                        } else {
-                            continue;
-                        }
-                    } else {
-                        nonDefaultDataBindingName = dataBinding;
-                    }
+                if ("java:array".equals(dataBinding)) {
+                    dataBinding = ((DataType)d.getLogical()).getDataBinding();
+                }
+                if (dataBinding != null) {
+                    dbs.add(dataBinding);
                 }
             }
         }
 
-        // We have a DB worthy of promoting to operation level.
-        if (nonDefaultDataBindingName != null) {
-            operation.setDataBinding(nonDefaultDataBindingName);
+        dbs.remove(JavaBeansDataBinding.NAME);
+        dbs.remove(SimpleJavaDataBinding.NAME);
+
+        if (dbs.size() == 1) {
+            operation.setDataBinding(dbs.iterator().next());
         }
     }
 }

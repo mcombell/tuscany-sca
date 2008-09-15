@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * Implementations receive callback events during a store recovery operation
  *
- * @version $Rev: 537206 $ $Date: 2007-05-11 08:14:19 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface RecoveryListener {
 

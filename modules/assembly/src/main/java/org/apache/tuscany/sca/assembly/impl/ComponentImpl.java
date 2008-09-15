@@ -36,7 +36,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
 /**
  * Represents a component.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentImpl extends ExtensibleImpl implements Component, Cloneable, OperationsConfigurator {
     private ConstrainingType constrainingType;

@@ -18,19 +18,21 @@
  */
 package org.apache.tuscany.sca.interfacedef.java.impl;
 
+import javax.xml.namespace.QName;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceImpl;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 
 /**
  * Represents a Java interface.
  * 
- * @version $Rev: 639350 $ $Date: 2008-03-20 08:43:46 -0800 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
 
     private String className;
     private Class<?> javaClass;
     private Class<?> callbackClass;
+    private QName qname;
     
     protected JavaInterfaceImpl() {
     }
@@ -50,6 +52,14 @@ public class JavaInterfaceImpl extends InterfaceImpl implements JavaInterface {
             throw new IllegalStateException();
         }
         this.className = className;
+    }
+
+    public QName getQName() {
+        return qname;
+    }
+
+    public void setQName(QName interfacename) {
+        qname = interfacename;
     }
 
     public Class<?> getJavaClass() {

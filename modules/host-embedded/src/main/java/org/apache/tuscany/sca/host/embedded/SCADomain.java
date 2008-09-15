@@ -1,5 +1,4 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -19,91 +18,30 @@
 
 package org.apache.tuscany.sca.host.embedded;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
-import org.apache.tuscany.sca.android.ContextRegistry;
-import org.apache.tuscany.sca.android.DexURLStreamHandlerFactory;
+import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 import org.apache.tuscany.sca.host.embedded.impl.DefaultSCADomain;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 import org.osoa.sca.ServiceRuntimeException;
 
-import android.content.Context;
-
 /**
  * A handle to an SCA domain.
  * 
- * @version $Rev: 628057 $ $Date: 2008-02-15 05:15:58 -0800 (Fri, 15 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public abstract class SCADomain {
     
-    final static String LOCAL_DOMAIN_URI = "http://localhost";
+    static final String LOCAL_DOMAIN_URI = "http://localhost";
 
     /**
      * Static variable to hold the most recent instance of SCADomain
      */
     // TODO: Temporary support for SCADomain.connect() API
     protected static SCADomain theDomain;
-    
-    static {
-    	URL.setURLStreamHandlerFactory(new DexURLStreamHandlerFactory());
-    }
-    
-    private Context context;
-    
-    public SCADomain() {}
-    
-    public SCADomain(Context context) {
-    	this.context = context;
-    	ContextRegistry.registerContext(context);
-    	
-    }
-    
-    public Context getContext() {
-    	return context;
-    }
-    
-    /**
-     * Returns a new instance of a local SCA domain.
-     *  
-     * @return
-     */
-    public static SCADomain newInstance(Context context) {
-        return createNewInstance(context, LOCAL_DOMAIN_URI, null);
-    }
-    
-    /**
-     * Returns a new instance of a local SCA domain. The specified deployable
-     * composite will be included in the SCA domain.
-     * 
-     * @param composite the deployable composite to include in the SCA domain.
-     * @return
-     */
-    public static SCADomain newInstance(Context context, String composite) {
-    	return createNewInstance(context, LOCAL_DOMAIN_URI, "dex://" + context.getPackageName() + "/raw/", composite);
-    }
-    
-    /**
-     * Returns a new instance of a local SCA domain. The specified deployable
-     * composites will be included in the SCA domain.
-     * 
-     * @param domainURI the URI of the SCA domain
-     * @param contributionLocation the location of an SCA contribution
-     * @param composites the deployable composites to include in the SCA domain.
-     * @return
-     */
-    public static SCADomain newInstance(Context context, String domainURI, String contributionLocation, String... composites) {
-        return createNewInstance(context, domainURI, contributionLocation, composites);
-    }
+
     
     /**
      * Returns a new instance of a local SCA domain.
@@ -165,11 +103,6 @@ public abstract class SCADomain {
     public void close() {
         // TODO: temporary to support initial SCADomain.connect capability
         SCADomain.removeInstance(this);
-        
-        if (context != null) {
-        	ContextRegistry.unregisterContext(context);
-        }
-        
     }
 
     /**
@@ -215,52 +148,16 @@ public abstract class SCADomain {
      * @param <B> the Java type of the business interface for the service
      * @return a ServiceReference for the designated service
      */
-    public abstract <B> ServiceReference<B> getServiceReference(Class<B> businessInterface, String referenceName);
-
-    /**
-     * Read the service name from a configuration file
-     * 
-     * @param classLoader
-     * @param name The name of the service class
-     * @return A class name which extends/implements the service class
-     * @throws IOException
-     */
-    private static String getServiceName(ClassLoader classLoader, String name) throws IOException {
-        InputStream is = classLoader.getResourceAsStream("META-INF/services/" + name);
-        if (is == null) {
-            return null;
-        }
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(is));
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) {
-                    break;
-                } else if (!line.startsWith("#")) {
-                    return line.trim();
-                }
-            }
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
-        return null;
-    }
-    
-    static SCADomain createNewInstance(String domainURI, String contributionLocation, String... composites) {
-    	return createNewInstance(null, domainURI, contributionLocation, composites);
-    }
+    public abstract <B> ServiceReference<B> getServiceReference(Class<B> businessInterface, String serviceName);
 
     /**
      * Returns an SCADomain instance. If the system property
      * "org.apache.tuscany.sca.host.embedded.SCADomain" is set, its value is used as
      * the name of the implementation class. Otherwise, if the resource
      * "META-INF/services/org.apache.tuscany.sca.host.embedded.SCADomain" can be
-     * loaded from the supplied classloader. Otherwise, it will use
+     * loaded from the supplied ClassLoader. Otherwise, it will use
      * "org.apache.tuscany.sca.host.embedded.impl.DefaultSCADomain" as the default.
-     * The named class is loaded from the supplied classloader.
+     * The named class is loaded from the supplied ClassLoader.
      * 
      * @param classLoader
      * @param domainURI
@@ -268,62 +165,53 @@ public abstract class SCADomain {
      * @param composites
      * @return
      */
-    static SCADomain createNewInstance(Context context, String domainURI, String contributionLocation, String... composites) {
+    static SCADomain createNewInstance(String domainURI, String contributionLocation, String... composites) {
 
         SCADomain domain = null;
 
         try {
-        	// Determine the runtime and application classloader
+            // Determine the runtime and application ClassLoader
             final ClassLoader runtimeClassLoader = SCADomain.class.getClassLoader();
             final ClassLoader applicationClassLoader = Thread.currentThread().getContextClassLoader();
-            
-            // Discover the SCADomain implementation
-            final String name = SCADomain.class.getName();
-            String className = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                public String run() {
-                    return System.getProperty(name);
-                }
-            });
 
-            if (className == null) {
-                className = getServiceName(runtimeClassLoader, name);
-            }
-            
-            if (className == null) {
-                
+            Class<?> implClass = ServiceDiscovery.getInstance().loadFirstServiceClass(SCADomain.class);
+
+            if (implClass == null) {
+
                 // Create a default SCA domain implementation
                 domain =
-                    new DefaultSCADomain(context,
-                    					 runtimeClassLoader,
-                                         applicationClassLoader,
-                                         domainURI,
-                                         contributionLocation,
+                    new DefaultSCADomain(runtimeClassLoader, applicationClassLoader, domainURI, contributionLocation,
                                          composites);
             } else {
-                
+
                 // Create an instance of the discovered SCA domain implementation
-                Class cls = Class.forName(className, true, runtimeClassLoader);
                 Constructor<?> constructor = null;
                 try {
-                    constructor = cls.getConstructor(ClassLoader.class, ClassLoader.class,
-                                                     String.class, String.class, String[].class);
-                } catch (NoSuchMethodException e) {}
+                    constructor =
+                        implClass.getConstructor(ClassLoader.class,
+                                                 ClassLoader.class,
+                                                 String.class,
+                                                 String.class,
+                                                 String[].class);
+                } catch (NoSuchMethodException e) {
+                }
                 if (constructor != null) {
-                    domain = (SCADomain)constructor.newInstance(runtimeClassLoader,
-                                                                applicationClassLoader,
-                                                                domainURI,
-                                                                contributionLocation,
-                                                                composites);
+                    domain =
+                        (SCADomain)constructor.newInstance(runtimeClassLoader,
+                                                           applicationClassLoader,
+                                                           domainURI,
+                                                           contributionLocation,
+                                                           composites);
                 } else {
-                    
-                    constructor = cls.getConstructor(ClassLoader.class, String.class);
+
+                    constructor = implClass.getConstructor(ClassLoader.class, String.class);
                     domain = (SCADomain)constructor.newInstance(runtimeClassLoader, domainURI);
                 }
             }
-            
+
             // FIXME: temporary support for connect() API
             theDomain = domain;
-            
+
             return domain;
 
         } catch (Exception e) {

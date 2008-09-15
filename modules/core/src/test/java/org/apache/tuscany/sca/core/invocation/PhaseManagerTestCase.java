@@ -26,7 +26,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 /**
- * @version $Rev: 632098 $ $Date: 2008-02-28 11:37:57 -0800 (Thu, 28 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class PhaseManagerTestCase {
 

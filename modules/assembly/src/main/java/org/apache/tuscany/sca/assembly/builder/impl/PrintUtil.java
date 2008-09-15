@@ -40,7 +40,7 @@ import org.w3c.dom.Node;
 /**
  * A simple print utility class to help print model instances.
  * 
- * @version $Rev: 639224 $ $Date: 2008-03-20 02:37:04 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 class PrintUtil {
     private boolean useGetters = false;

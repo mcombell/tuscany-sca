@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.contribution.DefaultContributionFactory;
 /**
  * Test the default model resolver implementation.
  *
- * @version $Rev: 631808 $ $Date: 2008-02-27 17:49:26 -0800 (Wed, 27 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultModelResolverTestCase extends TestCase {
     

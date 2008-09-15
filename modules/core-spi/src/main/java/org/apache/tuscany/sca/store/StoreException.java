@@ -22,25 +22,36 @@ package org.apache.tuscany.sca.store;
 /**
  * Represents a generic exception thrown by a <code>Store</code>
  *
- * @version $Rev: 537206 $ $Date: 2007-05-11 08:14:19 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class StoreException extends Exception {
     private static final long serialVersionUID = -319152147419962709L;
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreException() {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreException(String message) {
         super(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreException(Throwable cause) {
         super(cause);
     }
-    
 }

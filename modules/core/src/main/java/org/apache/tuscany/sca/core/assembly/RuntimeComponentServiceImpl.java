@@ -35,6 +35,11 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.osoa.sca.ServiceRuntimeException;
 
+/**
+ * Implementation of a Component Service.
+ *
+ * @version $Rev$ $Date$
+ */
 public class RuntimeComponentServiceImpl extends ComponentServiceImpl implements RuntimeComponentService {
     private ArrayList<RuntimeWire> wires = new ArrayList<RuntimeWire>();
     private ArrayList<RuntimeWire> callbackWires = new ArrayList<RuntimeWire>();
@@ -149,5 +154,10 @@ public class RuntimeComponentServiceImpl extends ComponentServiceImpl implements
 
     public List<PolicyProvider> getPolicyProviders(Binding binding) {
         return policyProviders.get(binding);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

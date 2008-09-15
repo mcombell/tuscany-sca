@@ -18,13 +18,23 @@
  */
 package org.apache.tuscany.sca.core.invocation;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Contract;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
+import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
+import org.apache.tuscany.sca.core.assembly.RuntimeComponentReferenceImpl;
 import org.apache.tuscany.sca.core.assembly.RuntimeWireImpl;
 import org.apache.tuscany.sca.core.context.CallableReferenceImpl;
+import org.apache.tuscany.sca.core.context.ComponentContextHelper;
+import org.apache.tuscany.sca.interfacedef.InterfaceContract;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.EndpointReference;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -43,7 +53,24 @@ public class CallbackReferenceImpl<B> extends CallableReferenceImpl<B> {
     private EndpointReference resolvedEndpoint;
 	private Object convID;
 
-    public CallbackReferenceImpl(Class<B> interfaze, ProxyFactory proxyFactory, List<RuntimeWire> wires) {
+    public static CallbackReferenceImpl newInstance(Class interfaze,
+                                                    ProxyFactory proxyFactory,
+                                                    List<RuntimeWire> wires) {
+        if (getCallbackEndpoint(ThreadMessageContext.getMessageContext()) != null) {
+            return new CallbackReferenceImpl(interfaze, proxyFactory, wires);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Public constructor for Externalizable serialization/deserialization.
+     */
+    public CallbackReferenceImpl() {
+        super();
+    }
+
+    private CallbackReferenceImpl(Class<B> interfaze, ProxyFactory proxyFactory, List<RuntimeWire> wires) {
         super(interfaze, null, proxyFactory);
         this.wires = wires;
 		init();
@@ -183,5 +210,59 @@ public class CallbackReferenceImpl<B> extends CallableReferenceImpl<B> {
         // whether it is local or remote
         RuntimeComponentReference ref = (RuntimeComponentReference)wire.getSource().getContract();
         wire.getTarget().setInterfaceContract(ref.getBindingProvider(binding).getBindingInterfaceContract());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        this.callbackID = in.readObject();
+        this.convID = in.readObject();
+
+        this.compositeActivator = ComponentContextHelper.getCurrentCompositeActivator();
+
+        // Get the target Component and Service from the URI
+        final String uri = in.readUTF();
+        final Component targetComponent = super.resolveComponentURI(uri);
+        final ComponentService targetService = super.resolveServiceURI(uri, targetComponent);
+        final InterfaceContract targetServiceIfaceContract = targetService.getInterfaceContract();
+
+        // Re-create the resolved Endpoint
+        this.resolvedEndpoint = new EndpointReferenceImpl(
+                (RuntimeComponent) targetComponent, targetService, null, 
+                targetServiceIfaceContract);
+
+        // Copy the Java Interface from the Service
+        final JavaInterface ji = (JavaInterface) targetServiceIfaceContract.getInterface();
+        this.businessInterface = (Class<B>) ji.getJavaClass();
+        
+        // We need to re-create the callback wire. We need to do this on a clone of the Service
+        // wire since we need to change some details on it.
+        // FIXME: Is this the best way to do this?
+        final RuntimeWire cbWire = ((RuntimeComponentService) targetService).getRuntimeWires().get(0);
+        try {
+            this.wire = (RuntimeWireImpl) cbWire.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IOException(e.toString());
+        }
+
+        // Setup the reference on the cloned wire
+        final RuntimeComponentReference ref = new RuntimeComponentReferenceImpl();
+        ref.setComponent((RuntimeComponent) targetComponent);
+        ref.setInterfaceContract(targetServiceIfaceContract);
+        ((EndpointReferenceImpl) this.wire.getSource()).setContract(ref);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        out.writeObject(this.callbackID);
+        out.writeObject(this.convID);
+        out.writeUTF(this.resolvedEndpoint.getURI());
     }
 }

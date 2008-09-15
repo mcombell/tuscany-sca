@@ -23,8 +23,7 @@ import org.apache.tuscany.sca.assembly.Implementation;
 /**
  * The model representing a test implementation in an SCA assembly model.
  * 
- * @version $$Rev: 608205 $$ $$Date: 2007-04-23 19:18:54 -0700 (Mon, 23 Apr
- *          2007) $$
+ * @version $Rev$ $Date$
  */
 public interface TestImplementation extends Implementation {
 
@@ -33,13 +32,13 @@ public interface TestImplementation extends Implementation {
      * 
      * @return the greeting string that can be configured on test implementations
      */
-    public String getGreeting();
+    String getGreeting();
 
     /**
      * Sets the greeting string that can be configured on test implementations.
      * 
      * @param greeting the greeting string that can be configured on test implementations
      */
-    public void setGreeting(String greeting);
+    void setGreeting(String greeting);
 
 }

@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.osoa.sca.annotations.Property;
 
 /**
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConstructorPropertyTestCase extends AbstractProcessorTest {
     

@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 /**
  * The representation of an export.
  * 
- * @version $Rev: 615632 $ $Date: 2008-01-27 11:14:25 -0800 (Sun, 27 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Export {
 

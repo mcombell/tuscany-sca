@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.osoa.sca.annotations.Destroy;
 
 /**
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class DestroyProcessorTestCase extends TestCase {
     
@@ -71,6 +71,29 @@ public class DestroyProcessorTestCase extends TestCase {
         }
     }
 
+    public void testProtectedDestroy() throws Exception {
+        DestroyProcessor processor = new DestroyProcessor(assemblyFactory);
+        JavaImplementation type = javaImplementationFactory.createJavaImplementation();
+        Method method = Bar.class.getDeclaredMethod("protectedDestroy");
+        try {
+            processor.visitMethod(method, type);
+            fail();
+        } catch (IllegalDestructorException e) {
+            // expected
+        }
+    }
+
+    public void testPrivateDestroy() throws Exception {
+        DestroyProcessor processor = new DestroyProcessor(assemblyFactory);
+        JavaImplementation type = javaImplementationFactory.createJavaImplementation();
+        Method method = Bar.class.getDeclaredMethod("privateDestroy");
+        try {
+            processor.visitMethod(method, type);
+            fail();
+        } catch (IllegalDestructorException e) {
+            // expected
+        }
+    }
 
     private class Foo {
 
@@ -94,6 +117,13 @@ public class DestroyProcessorTestCase extends TestCase {
         public void badDestroy(String foo) {
         }
 
+        @Destroy
+        protected void protectedDestroy(){
+        }
+
+        @Destroy
+        private void privateDestroy(){
+        }
 
     }
 }

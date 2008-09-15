@@ -36,7 +36,7 @@ import org.apache.tuscany.sca.host.embedded.test.extension.TestService;
 /**
  * Test creation of an EmbeddedSCADomain and invocation of a service.
  * 
- * @version $Rev: 637129 $ $Date: 2008-03-14 08:11:59 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class EmbeddedSCADomainTestCase extends TestCase {
     private EmbeddedSCADomain domain;

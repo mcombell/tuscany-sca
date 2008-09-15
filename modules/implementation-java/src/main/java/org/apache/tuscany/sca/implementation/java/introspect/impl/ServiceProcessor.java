@@ -22,8 +22,13 @@ import static org.apache.tuscany.sca.implementation.java.introspect.impl.JavaInt
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import javax.jws.WebService;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Service;
@@ -43,9 +48,10 @@ import org.osoa.sca.annotations.Remotable;
  * the component type with corresponding {@link Service}s. Also processes
  * related {@link org.osoa.sca.annotations.Callback} annotations.
  * 
- * @version $Rev: 639634 $ $Date: 2008-03-21 05:33:46 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ServiceProcessor extends BaseJavaClassVisitor {
+    private static final Logger logger = Logger.getLogger(ServiceProcessor.class.getName());
     private JavaInterfaceFactory javaFactory;
     
     public ServiceProcessor(AssemblyFactory assemblyFactory, JavaInterfaceFactory javaFactory) {
@@ -60,7 +66,10 @@ public class ServiceProcessor extends BaseJavaClassVisitor {
             // scan interfaces for remotable
             Set<Class> interfaces = getAllInterfaces(clazz);
             for (Class<?> interfaze : interfaces) {
-                if (interfaze.isAnnotationPresent(Remotable.class) || interfaze.isAnnotationPresent(Callback.class)) {
+                if (interfaze.isAnnotationPresent(Remotable.class) 
+                    || interfaze.isAnnotationPresent(WebService.class)
+                    || interfaze.isAnnotationPresent(Callback.class)
+                    ) {
                     Service service;
                     try {
                         service = createService(interfaze);
@@ -76,7 +85,8 @@ public class ServiceProcessor extends BaseJavaClassVisitor {
         if (interfaces.length == 0) {
             Class<?> interfaze = annotation.value();
             if (Void.class.equals(interfaze)) {
-                throw new IllegalServiceDefinitionException("No interfaces specified");
+                //throw new IllegalServiceDefinitionException("No interfaces specified");
+                logger.warning("Ignoring @Service annotation.  No interfaces specified. class = "+clazz.getName());
             } else {
                 interfaces = new Class<?>[1];
                 interfaces[0] = interfaze;
@@ -99,6 +109,9 @@ public class ServiceProcessor extends BaseJavaClassVisitor {
         if (annotation == null) {
             return;
         }
+        if(Modifier.isPrivate(method.getModifiers())) {
+            throw new IllegalCallbackReferenceException("Illegal annotation @Callback found on "+method, method);
+        }
         if (method.getParameterTypes().length != 1) {
             throw new IllegalCallbackReferenceException("Setter must have one parameter", method);
         }
@@ -112,6 +125,9 @@ public class ServiceProcessor extends BaseJavaClassVisitor {
         Callback annotation = field.getAnnotation(Callback.class);
         if (annotation == null) {
             return;
+        }
+        if(Modifier.isPrivate(field.getModifiers())) {
+            throw new IllegalCallbackReferenceException("Illegal annotation @Callback found on "+field, field);
         }
         JavaElementImpl element = new JavaElementImpl(field);
         createCallback(type, element);
@@ -140,9 +156,12 @@ public class ServiceProcessor extends BaseJavaClassVisitor {
             }
         }
         if (callbackService == null) {
-            throw new IllegalCallbackReferenceException("Callback type does not match a service callback interface");
+            throw new IllegalCallbackReferenceException("Callback type does not match a service callback interface: " + type.getName() );
         }
-        type.getCallbackMembers().put(baseType.getName(), element);
+        if(type.getCallbackMembers().get(baseType.getName()) == null) {
+            type.getCallbackMembers().put(baseType.getName(), new ArrayList<JavaElementImpl>());
+        }
+        type.getCallbackMembers().get(baseType.getName()).add(element);
     }
 
     public Service createService(Class<?> interfaze) throws InvalidInterfaceException {

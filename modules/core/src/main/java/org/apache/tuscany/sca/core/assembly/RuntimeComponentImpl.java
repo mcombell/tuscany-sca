@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.impl.ComponentImpl;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ResolverExtension;
 import org.apache.tuscany.sca.core.scope.ScopeContainer;
 import org.apache.tuscany.sca.core.scope.ScopedRuntimeComponent;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
@@ -31,14 +33,16 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentContext;
 
 /**
- * @version $Rev: 634776 $ $Date: 2008-03-07 10:48:00 -0800 (Fri, 07 Mar 2008) $
+ * @version $Rev$ $Date$
  */
-public class RuntimeComponentImpl extends ComponentImpl implements RuntimeComponent, ScopedRuntimeComponent {
+public class RuntimeComponentImpl extends ComponentImpl implements RuntimeComponent,
+                                              ScopedRuntimeComponent, ResolverExtension {
     protected RuntimeComponentContext componentContext;
     protected ImplementationProvider implementationProvider;
     protected List<PolicyProvider> policyProviders = new ArrayList<PolicyProvider>();
     protected ScopeContainer scopeContainer;
     protected boolean started;
+    protected ModelResolver modelResolver;
 
     /**
      */
@@ -90,5 +94,18 @@ public class RuntimeComponentImpl extends ComponentImpl implements RuntimeCompon
 
     public List<PolicyProvider> getPolicyProviders() {
         return policyProviders;
+    }
+
+    public ModelResolver getModelResolver() {
+        return modelResolver;
+    }
+    
+    public void setModelResolver(ModelResolver modelResolver) {
+        this.modelResolver = modelResolver;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

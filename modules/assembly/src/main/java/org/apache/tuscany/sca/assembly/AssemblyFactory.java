@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * A factory for the assembly model
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface AssemblyFactory {
 

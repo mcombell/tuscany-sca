@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.core.factory;
 /**
  * Implementations create new instances of a particular type
  *
- * @version $Rev: 567617 $ $Date: 2007-08-20 02:29:15 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ObjectFactory<T> {
 

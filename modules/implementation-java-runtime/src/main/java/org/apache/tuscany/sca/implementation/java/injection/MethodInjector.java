@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
 /**
  * Injects a value created by an {@link org.apache.tuscany.sca.core.factory.ObjectFactory} using a given method
  *
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class MethodInjector<T> implements Injector<T> {
     private final Method method;
@@ -54,7 +54,7 @@ public class MethodInjector<T> implements Injector<T> {
         try {
             method.invoke(instance, objectFactory.getInstance());
         } catch (IllegalAccessException e) {
-            throw new AssertionError("Method is not accessible [" + method + "]");
+            throw new ObjectCreationException("Method is not accessible [" + method + "]", e);
         } catch (IllegalArgumentException e) {
             throw new ObjectCreationException("Exception thrown by setter: " + method.getName(), e);
         } catch (InvocationTargetException e) {

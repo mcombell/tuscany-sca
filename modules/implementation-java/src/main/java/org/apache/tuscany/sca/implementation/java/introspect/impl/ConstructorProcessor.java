@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.implementation.java.impl.JavaParameterImpl;
  * Handles processing of a constructor decorated with
  * {@link org.osoa.sca.annotations.Constructor}
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 @SuppressWarnings("unchecked")
 public class ConstructorProcessor extends BaseJavaClassVisitor {
@@ -73,7 +73,7 @@ public class ConstructorProcessor extends BaseJavaClassVisitor {
         String[] value = annotation.value();
         boolean isDefault = value.length == 0 || (value.length == 1 && "".equals(value[0]));
         if (!isDefault && value.length != parameters.length) {
-            throw new InvalidConstructorException("Invalid Nubmer of names in @Constructor");
+            throw new InvalidConstructorException("Invalid Number of names in @Constructor");
         }
         for (int i = 0; i < parameters.length; i++) {
             parameters[i].setName(i < value.length ? value[i] : "");

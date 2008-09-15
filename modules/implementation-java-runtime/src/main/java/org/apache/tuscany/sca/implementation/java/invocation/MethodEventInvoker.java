@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 /**
  * Performs an wire on a method of a given instance
  *
- * @version $Rev: 639649 $ $Date: 2008-03-21 06:04:01 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class MethodEventInvoker<T> implements EventInvoker<T> {
     private final Method method;

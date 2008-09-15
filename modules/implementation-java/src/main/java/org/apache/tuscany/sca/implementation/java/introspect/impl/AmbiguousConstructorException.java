@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Thrown when constructor parameters cannot be unambiguously resolved to a property or reference
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class AmbiguousConstructorException extends IntrospectionException {
     private static final long serialVersionUID = 3662860753837091880L;

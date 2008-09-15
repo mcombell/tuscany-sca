@@ -25,7 +25,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
- * @version $Rev: 639350 $ $Date: 2008-03-20 08:43:46 -0800 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 @WebService
 public class MyServiceImpl {

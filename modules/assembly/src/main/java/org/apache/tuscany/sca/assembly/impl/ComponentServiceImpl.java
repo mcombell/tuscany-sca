@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.assembly.Service;
 /**
  * Represents a component service
  * 
- * @version $Rev: 564107 $ $Date: 2007-08-08 23:05:29 -0700 (Wed, 08 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ComponentServiceImpl extends ServiceImpl implements ComponentService, Cloneable {
     private Service service;

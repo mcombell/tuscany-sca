@@ -106,7 +106,7 @@ public class IOHelper {
      * 
      * @see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4950148
      * 
-     * @version $Rev: 641216 $ $Date: 2008-03-26 01:15:08 -0800 (Wed, 26 Mar 2008) $
+     * @version $Rev$ $Date$
      */
     public static class SafeURLInputStream extends InputStream {
         private JarFile jarFile;

@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * Start/stop a composite
  * 
- * @version $Rev: 575101 $ $Date: 2007-09-12 15:09:19 -0700 (Wed, 12 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface CompositeActivator {
     /**

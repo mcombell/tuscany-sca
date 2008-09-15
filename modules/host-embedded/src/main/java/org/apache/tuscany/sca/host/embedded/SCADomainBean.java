@@ -23,6 +23,10 @@ import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class SCADomainBean extends SCADomain {
     
     private SCADomain instance;
@@ -34,7 +38,8 @@ public class SCADomainBean extends SCADomain {
     /**
      * Constructs a new SCA domain
      */
-    public SCADomainBean() {}
+    public SCADomainBean() {
+    }
 
     @Override
     public String getURI() {

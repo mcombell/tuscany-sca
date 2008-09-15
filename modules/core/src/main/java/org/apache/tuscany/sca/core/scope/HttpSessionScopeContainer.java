@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  * A scope context which manages atomic component instances keyed on HTTP
  * session
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class HttpSessionScopeContainer extends AbstractScopeContainer<Object> {
 

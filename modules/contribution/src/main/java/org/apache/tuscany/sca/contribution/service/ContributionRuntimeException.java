@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.contribution.service;
 /**
  * Base class for runtime exceptions raised by contribution services.
  *
- * @version $Rev: 560434 $ $Date: 2007-07-27 18:23:02 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public class ContributionRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 7711215366287498896L;

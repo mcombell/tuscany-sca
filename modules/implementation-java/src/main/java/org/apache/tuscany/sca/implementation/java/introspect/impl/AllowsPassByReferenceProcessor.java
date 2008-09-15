@@ -28,7 +28,7 @@ import org.osoa.sca.annotations.AllowsPassByReference;
 /**
  * Processes {@link AllowsPassByReference} on an implementation
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class AllowsPassByReferenceProcessor extends BaseJavaClassVisitor {
     

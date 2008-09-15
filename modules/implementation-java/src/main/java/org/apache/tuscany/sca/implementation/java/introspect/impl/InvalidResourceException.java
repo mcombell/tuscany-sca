@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Denotes an invalid usage of {@link @org.apache.tuscany.api.annotation.Resource}
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidResourceException extends IntrospectionException {
     private static final long serialVersionUID = 511728001735534934L;

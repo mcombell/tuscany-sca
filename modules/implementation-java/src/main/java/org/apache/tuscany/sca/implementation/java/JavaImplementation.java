@@ -22,6 +22,7 @@ package org.apache.tuscany.sca.implementation.java;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import org.apache.tuscany.sca.policy.util.PolicyHandlerTuple;
 /**
  * Represents a Java implementation.
  *
- * @version $Rev: 641555 $ $Date: 2008-03-26 12:31:08 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface JavaImplementation extends BaseJavaImplementation {
 
@@ -142,7 +143,7 @@ public interface JavaImplementation extends BaseJavaImplementation {
     /**
      * @return the callbacks
      */
-    Map<String, JavaElementImpl> getCallbackMembers();
+    Map<String, Collection<JavaElementImpl>> getCallbackMembers();
 
     /**
      * @return the properties
@@ -185,13 +186,13 @@ public interface JavaImplementation extends BaseJavaImplementation {
     void setMaxIdleTime(long maxIdleTime);
 
     /**
-     * @return the map of a policy handler classnames
+     * @return the map of a policy handler class names
      */
-    Map<ClassLoader, List<PolicyHandlerTuple>> getPolicyHandlerClassNames();
+    List<PolicyHandlerTuple> getPolicyHandlerClassNames();
 
     /**
-     * @param map of policyhandler classnames
+     * @param policyHandlerClassNames Map of policyhandler class names
      */
-    void setPolicyHandlerClassNames(Map<ClassLoader, List<PolicyHandlerTuple>> policyHandlerClassNames);
+    void setPolicyHandlerClassNames(List<PolicyHandlerTuple> policyHandlerClassNames);
 
 }

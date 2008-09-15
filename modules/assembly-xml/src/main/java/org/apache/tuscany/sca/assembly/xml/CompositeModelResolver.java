@@ -34,7 +34,7 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 /**
  * A Model Resolver for Composite models.
  *
- * @version $Rev: 572482 $ $Date: 2007-09-03 18:28:31 -0700 (Mon, 03 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class CompositeModelResolver implements ModelResolver {
 

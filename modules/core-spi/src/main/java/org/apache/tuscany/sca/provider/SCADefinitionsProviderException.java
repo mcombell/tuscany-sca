@@ -20,7 +20,7 @@
 package org.apache.tuscany.sca.provider;
 
 /**
- * @version $Rev: 643489 $ $Date: 2008-04-01 10:06:42 -0800 (Tue, 01 Apr 2008) $
+ * @version $Rev$ $Date$
  */
 public class SCADefinitionsProviderException extends Exception {
    

@@ -33,7 +33,7 @@ import org.osoa.sca.annotations.ComponentName;
  * a {@link JavaMappedProperty} to the component type which will be used to
  * inject the appropriate component name.
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ComponentNameProcessor extends BaseJavaClassVisitor {
     

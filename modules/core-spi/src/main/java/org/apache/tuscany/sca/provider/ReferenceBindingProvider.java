@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.invocation.Invoker;
  * A reference binding implementation can options implement this
  * interface to tie into the Tuscany SCA runtime
  * 
- * @version $Rev: 576260 $ $Date: 2007-09-16 22:17:22 -0700 (Sun, 16 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ReferenceBindingProvider {
 

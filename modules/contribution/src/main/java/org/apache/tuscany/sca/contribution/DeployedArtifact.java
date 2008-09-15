@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.contribution;
 /**
  * Representation of a deployed artifact
  *
- * @version $Rev: 615632 $ $Date: 2008-01-27 11:14:25 -0800 (Sun, 27 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 @Deprecated
 public interface DeployedArtifact extends Artifact {

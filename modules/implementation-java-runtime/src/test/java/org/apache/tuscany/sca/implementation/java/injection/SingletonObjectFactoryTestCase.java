@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.implementation.java.injection;
 import junit.framework.TestCase;
 
 /**
- * @version $Rev: 537744 $ $Date: 2007-05-14 01:00:18 -0700 (Mon, 14 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class SingletonObjectFactoryTestCase extends TestCase {
 

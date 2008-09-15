@@ -25,7 +25,7 @@ import org.osoa.sca.annotations.Property;
  * Processes an {@link @Property} annotation, updating the component type with
  * corresponding {@link JavaMappedProperty}
  * 
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class PropertyProcessor extends AbstractPropertyProcessor<Property> {
 

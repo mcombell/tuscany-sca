@@ -36,6 +36,7 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Base;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Implementation;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
@@ -44,6 +45,11 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
+/**
+ * Default Model Processor for beans.
+ *
+ * @version $Rev$ $Date$
+ */
 public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements StAXArtifactProcessor {
 
     private QName artifactType;
@@ -57,8 +63,9 @@ public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements 
                                        PolicyFactory policyFactory,
                                        QName artifactType,
                                        Class<Implementation> modelClass,
-                                       Object modelFactory) {
-        super(assemblyFactory, policyFactory, null);
+                                       Object modelFactory,
+                                       Monitor monitor) {
+        super(assemblyFactory, policyFactory, null, monitor);
         this.artifactType = artifactType;
         this.modelClass = modelClass;
         this.modelFactory = modelFactory;
@@ -159,7 +166,9 @@ public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements 
             return model;
 
         } catch (Exception e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", reader, ce);
+            throw ce;
         }
     }
 
@@ -181,7 +190,9 @@ public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements 
             writeEnd(writer);
 
         } catch (Exception e) {
-            throw new ContributionWriteException(e);
+        	ContributionWriteException ce = new ContributionWriteException(e);
+        	error("ContributionWriteException", writer, ce);
+            throw ce;
         }
     }
 
@@ -212,8 +223,7 @@ public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements 
                         implementation.setConstrainingType(componentType.getConstrainingType());
                         
                         if (implementation instanceof PolicySetAttachPoint &&
-                            componentType instanceof PolicySetAttachPoint )
-                        {
+                                componentType instanceof PolicySetAttachPoint ) {
                             PolicySetAttachPoint policiedImpl = (PolicySetAttachPoint)implementation;
                             PolicySetAttachPoint policiedCompType = (PolicySetAttachPoint)componentType;
                             

@@ -24,13 +24,19 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebFault;
 
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
+import org.apache.tuscany.sca.databinding.jaxb.XMLAdapterExtensionPoint;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.FaultExceptionMapper;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.util.FaultException;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.osoa.sca.ServiceRuntimeException;
@@ -38,15 +44,23 @@ import org.osoa.sca.ServiceRuntimeException;
 /**
  * JAX-WS ExceptionHandler
  * 
- * @version $Rev: 639821 $ $Date: 2008-03-21 12:42:37 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
+    public static final String GETCAUSE = "getCause";
+    public static final String GETLOCALIZEDMESSAGE = "getLocalizedMessage";
+    public static final String GETSTACKTRACE = "getStackTrace";
+    public static final String GETCLASS = "getClass";
+
     private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
     private DataBindingExtensionPoint dataBindingExtensionPoint;
+    private XMLAdapterExtensionPoint xmlAdapterExtensionPoint;
 
-    public JAXWSFaultExceptionMapper(DataBindingExtensionPoint dataBindingExtensionPoint) {
+
+    public JAXWSFaultExceptionMapper(DataBindingExtensionPoint dataBindingExtensionPoint, XMLAdapterExtensionPoint xmlAdapters) {
         super();
         this.dataBindingExtensionPoint = dataBindingExtensionPoint;
+        this.xmlAdapterExtensionPoint = xmlAdapters;
     }
 
     /**
@@ -65,7 +79,7 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
      * </ul>
      */
     @SuppressWarnings("unchecked")
-    public Throwable wrapFaultInfo(DataType<DataType> exceptionType, String message, Object faultInfo, Throwable cause) {
+    public Throwable wrapFaultInfo(DataType<DataType> exceptionType, String message, Object faultInfo, Throwable cause, Operation operation) {
         Class<?> exceptionClass = exceptionType.getPhysical();
         if (exceptionClass.isInstance(faultInfo)) {
             return (Throwable)faultInfo;
@@ -73,15 +87,8 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
         DataType<?> faultBeanType = exceptionType.getLogical();
         Class<?> faultBeanClass = faultBeanType.getPhysical();
         try {
-            Exception exc = null;
-            try {
-                Constructor<?> constructor =
-                    exceptionClass.getConstructor(new Class[] {String.class, faultBeanClass, Throwable.class});
-                exc = (Exception)constructor.newInstance(new Object[] {message, faultInfo, cause});
-            } catch (NoSuchMethodException e) {
-                // Create a generic fault exception
-                exc = new FaultException(message, faultInfo, cause);
-            }
+            Throwable exc =
+                newInstance((Class<? extends Throwable>)exceptionClass, message, faultBeanClass, faultInfo, cause);
             // Include the elem name into the FaultException we build so it can be used for matching in the DataTransformationInterceptor
             // 
             // Note this may happen even if we find a constructor above, that is the type of the non-generic fault exc may be an instance
@@ -99,7 +106,78 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
         }
     }
 
-    public Object getFaultInfo(Throwable exception, Class<?> faultBeanClass) {
+    private Throwable newInstance(Class<? extends Throwable> exceptionClass,
+                                  String message,
+                                  Class<?> faultBeanClass,
+                                  Object faultInfo,
+                                  Throwable cause) throws Exception {
+        Throwable ex = null;
+        Constructor<? extends Throwable> ctor = null;
+        try {
+            // Get the message property
+            Method getMessage = faultBeanClass.getMethod("getMessage");
+            message = (String)getMessage.invoke(faultInfo);
+        } catch (Throwable e) {
+            // Ignore
+        }
+        try {
+            // FIXME: What about if the faultBeanClass is a subclass of the argument type?
+            ctor = exceptionClass.getConstructor(String.class, faultBeanClass, Throwable.class);
+            ex = ctor.newInstance(message, faultInfo, cause);
+        } catch (NoSuchMethodException e1) {
+            try {
+                ctor = exceptionClass.getConstructor(String.class, faultInfo.getClass());
+                ex = ctor.newInstance(message, faultInfo);
+            } catch (NoSuchMethodException e2) {
+                try {
+                    ctor = exceptionClass.getConstructor(String.class, Throwable.class);
+                    ex = ctor.newInstance(message, cause);
+                    populateException(ex, faultInfo);
+                } catch (NoSuchMethodException e3) {
+                    try {
+                        ctor = exceptionClass.getConstructor(String.class);
+                        ex = ctor.newInstance(message);
+                        populateException(ex, faultInfo);
+                    } catch (NoSuchMethodException e4) {
+                        ctor = exceptionClass.getConstructor();
+                        if (ctor != null) {
+                            ex = ctor.newInstance();
+                            populateException(ex, faultInfo);
+                        } else {
+                            ex = new FaultException(message, faultInfo, cause);
+                        }
+                    }
+                }
+            }
+        }
+        return ex;
+    }
+
+    /**
+     * Populate the java exception from the fault bean
+     * @param ex
+     * @param faultBean
+     * @throws Exception
+     */
+    private void populateException(Throwable ex, Object faultBean) throws Exception {
+        PropertyDescriptor props[] = Introspector.getBeanInfo(faultBean.getClass()).getPropertyDescriptors();
+        for (PropertyDescriptor p : props) {
+            Method getter = p.getReadMethod();
+            Method setter = p.getWriteMethod();
+            if (getter == null || setter == null) {
+                continue;
+            }
+            try {
+                Method m = ex.getClass().getMethod(setter.getName(), setter.getParameterTypes());
+                Object pv = getter.invoke(faultBean);
+                m.invoke(ex, pv);
+            } catch (Exception e) {
+                // Ignore;
+            }
+        }
+    }
+
+    public Object getFaultInfo(Throwable exception, Class<?> faultBeanClass, Operation operation) {
         if (exception == null) {
             return null;
         }
@@ -154,26 +232,16 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
             for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
                 Method getter = pd.getReadMethod();
                 String name = getter.getName();
-                if ("getClass".equals(name) || "getStackTrace".equals(name)
-                    || "getCause".equals(name)
-                    || "getLocalizedMessage".equals(name)) {
+                if (!isMappedGetter(name)) {
                     continue;
-                }
-                String prefix = "get";
-                if (name.startsWith("get")) {
-                    prefix = "get";
-                } else if (name.startsWith("is")) {
-                    prefix = "is";
                 }
                 Method setter = null;
                 try {
-                    setter =
-                        faultBeanClass.getMethod("set" + name.substring(prefix.length()), new Class[] {getter
-                            .getReturnType()});
+                    setter = faultBeanClass.getMethod("set" + capitalize(pd.getName()), getter.getReturnType());
                 } catch (NoSuchMethodException e) {
                     continue;
                 }
-                Object prop = setter.invoke(faultBean, getter.invoke(exception, (Object[])null));
+                Object prop = getter.invoke(exception);
                 setter.invoke(faultBean, prop);
             }
             return faultBean;
@@ -183,27 +251,37 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean introspectFaultDataType(DataType<DataType> exceptionType) {
+    public boolean introspectFaultDataType(DataType<DataType> exceptionType, final Operation operation, final boolean generatingFaultBean) {
         QName faultName = null;
         boolean result = false;
 
-        Class<?> cls = exceptionType.getPhysical();
+        final Class<?> cls = exceptionType.getPhysical();
         if (cls == FaultException.class) {
             return true;
         }
         DataType faultType = (DataType)exceptionType.getLogical();
         Class<?> faultBean = null;
-        WebFault fault = cls.getAnnotation(WebFault.class);
+        final WebFault fault = cls.getAnnotation(WebFault.class);
         if (fault != null) {
-            faultName = new QName(fault.targetNamespace(), fault.name());
-            XMLType xmlType = new XMLType(faultName, null);
-            faultType.setLogical(xmlType);
+            if (!"".equals(fault.name()) || !"".equals(fault.targetNamespace())) {
+                QName faultQName = ((XMLType)faultType.getLogical()).getElementName();
+                String faultNS =
+                    "".equals(fault.targetNamespace()) ? faultQName.getNamespaceURI() : fault.targetNamespace();
+                String faultLocal = "".equals(fault.name()) ? faultQName.getLocalPart() : fault.name();
+                faultName = new QName(faultNS, faultLocal);
+                XMLType xmlType = new XMLType(faultName, null);
+                faultType.setLogical(xmlType);
+            }
             if (!"".equals(fault.faultBean())) {
-                try {
-                    faultBean = Class.forName(fault.faultBean(), false, cls.getClassLoader());
-                } catch (ClassNotFoundException e) {
-                    throw new ServiceRuntimeException(e);
-                }
+                faultBean = AccessController.doPrivileged(new PrivilegedAction<Class<?>>() {
+                    public Class<?> run() {
+                        try {
+                            return Class.forName(fault.faultBean(), false, cls.getClassLoader());
+                        } catch (ClassNotFoundException e) {
+                            throw new ServiceRuntimeException(e);
+                        }
+                    }
+                });
             } else {
                 Method m;
                 try {
@@ -216,20 +294,41 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
         }
 
         if (faultBean == null) {
-            String faultBeanClassName = cls.getPackage().getName() + ".jaxws." + cls.getSimpleName() + "Bean";
-            try {
-                faultBean = Class.forName(faultBeanClassName, false, cls.getClassLoader());
-            } catch (ClassNotFoundException e) {
-                faultBean = cls;
-            }
+            final String faultBeanClassName = CodeGenerationHelper.getPackagePrefix(cls) + cls.getSimpleName() + "Bean";
+            final QName qname = faultName;
+            faultType = AccessController.doPrivileged(new PrivilegedAction<DataType<XMLType>>() {
+                public DataType<XMLType> run() {
+                    try {
+                        Class<?> faultBean = Class.forName(faultBeanClassName, false, cls.getClassLoader());
+                        return new DataTypeImpl<XMLType>(faultBean, new XMLType(qname, qname));
+                    } catch (ClassNotFoundException e) {
+                        if (generatingFaultBean) {
+                            Class<? extends Throwable> t = (Class<? extends Throwable>)cls;
+                            ClassLoader parent =
+                                operation == null ? t.getClassLoader() : ((JavaInterface)operation.getInterface())
+                                    .getJavaClass().getClassLoader();
+                            GeneratedClassLoader cl = new GeneratedClassLoader(parent);
+                            GeneratedDataTypeImpl dt = new GeneratedDataTypeImpl(xmlAdapterExtensionPoint, t, cl);
+                            return dt;
+                        } else {
+                            return new DataTypeImpl<XMLType>(cls, new XMLType(qname, qname));
+                        }
+                    }
+                }
+            });
+        } else {
+            faultType.setDataBinding(null);
+            faultType.setGenericType(faultBean);
+            faultType.setPhysical(faultBean);
         }
 
-        faultType.setPhysical(faultBean);
         // TODO: Use the databinding framework to introspect the fault bean class
-        if (dataBindingExtensionPoint != null) {
+        if (faultType.getDataBinding() == null && dataBindingExtensionPoint != null) {
+            faultBean = faultType.getPhysical();
             result =
-                dataBindingExtensionPoint.introspectType(faultType, null, Throwable.class.isAssignableFrom(faultBean));
+                dataBindingExtensionPoint.introspectType(faultType, operation);
         }
+        ((DataType) exceptionType).setLogical(faultType);
 
         /*
          The introspection of the fault DT may not have calculated the correct element name, 
@@ -244,6 +343,24 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
         }
 
         return result;
+    }
+
+    public static boolean isMappedGetter(String methodName) {
+        if (GETCAUSE.equals(methodName) || GETLOCALIZEDMESSAGE.equals(methodName)
+            || GETSTACKTRACE.equals(methodName)
+            || GETCLASS.equals(methodName)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private static String capitalize(String name) {
+        if (name == null || name.length() == 0) {
+            return name;
+        } else {
+            return Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        }
     }
 
     public void setDataBindingExtensionPoint(DataBindingExtensionPoint dataBindingExtensionPoint) {

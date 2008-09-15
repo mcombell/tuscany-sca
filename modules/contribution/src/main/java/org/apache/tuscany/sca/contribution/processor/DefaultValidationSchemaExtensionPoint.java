@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 /**
  * Default implementation of an extension point for XML schemas. 
  *
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultValidationSchemaExtensionPoint implements ValidationSchemaExtensionPoint {
     
@@ -61,15 +61,27 @@ public class DefaultValidationSchemaExtensionPoint implements ValidationSchemaEx
             schemaDeclarations = ServiceDiscovery.getInstance().getServiceDeclarations("org.apache.tuscany.sca.contribution.processor.ValidationSchema");
         } catch (IOException e) {
             throw new IllegalStateException(e);
-        }
+        }      
+        
+        // TODO - temp fix to ensure that the schema tuscany-sca.xsd always comes first
+        String tuscanyScaXsd = null;
         
         // Find each schema
         for (ServiceDeclaration schemaDeclaration: schemaDeclarations) {
-            URL url = schemaDeclaration.getResource();
+            URL url = schemaDeclaration.getResource(schemaDeclaration.getClassName());
             if (url == null) {
                 throw new IllegalArgumentException(new FileNotFoundException(schemaDeclaration.getClassName()));
             }
-            schemas.add(url.toString());
+            
+            if (url.toString().contains("tuscany-sca.xsd")){
+                tuscanyScaXsd = url.toString();
+            } else {
+                schemas.add(url.toString());
+            }
+        }
+        
+        if (tuscanyScaXsd != null){
+            schemas.add(0, tuscanyScaXsd);
         }
         
         loaded = true;

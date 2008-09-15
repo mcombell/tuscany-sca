@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.core.scope.TargetInitializationException;
 import org.apache.tuscany.sca.implementation.java.invocation.EventInvoker;
 
 /**
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ReflectiveInstanceWrapper<T> implements InstanceWrapper<T> {
     private final EventInvoker<T> initInvoker;

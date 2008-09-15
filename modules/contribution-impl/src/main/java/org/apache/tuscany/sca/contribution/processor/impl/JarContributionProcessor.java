@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionException;
 /**
  * Jar Contribution package processor.
  * 
- * @version $Rev: 616194 $ $Date: 2008-01-28 23:49:21 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class JarContributionProcessor implements PackageProcessor {
 

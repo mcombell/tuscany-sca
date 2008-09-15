@@ -20,21 +20,23 @@
 package org.apache.tuscany.sca.policy.xml;
 
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.QualifiedIntent;
 
-/* 
+/**
  * Processor for handling XML models of PolicyIntent definitions that are QualifiedIntents
+ *
+ * @version $Rev$ $Date$
  */
 public class QualifiedIntentProcessor extends PolicyIntentProcessor<QualifiedIntent> {
-
-    public QualifiedIntentProcessor(ModelFactoryExtensionPoint modelFactories) {
-        super(modelFactories.getFactory(PolicyFactory.class), null);
+	
+    public QualifiedIntentProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        super(modelFactories, monitor);
     }
     
-    public QualifiedIntentProcessor(PolicyFactory policyFactory, StAXArtifactProcessor<Object> extensionProcessor) {
-        super(policyFactory, extensionProcessor);
+    public QualifiedIntentProcessor(PolicyFactory policyFactory, Monitor monitor) {
+        super(policyFactory, monitor);
     }
 
     public Class<QualifiedIntent> getModelType() {

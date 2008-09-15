@@ -48,15 +48,19 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.service.ContributionRepository;
 import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * The default implementation of ContributionRepository
  * 
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ContributionRepositoryImpl implements ContributionRepository {
     private static final String NS = "http://tuscany.apache.org/xmlns/1.0-SNAPSHOT";
@@ -69,6 +73,49 @@ public class ContributionRepositoryImpl implements ContributionRepository {
 
     private URI domain;
     private XMLInputFactory factory;
+    private Monitor monitor;
+    
+    /**
+     * Marshals warnings into the monitor
+     * 
+     * @param message
+     * @param model
+     * @param messageParameters
+     */
+    protected void warning(String message, Object model, String... messageParameters) {
+        if (monitor != null){
+            Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
+    }
+    
+    /**
+     * Marshals errors into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
+    }
+    
+    /**
+     * Marshals exceptions into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Exception ex) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.ERROR, model, message, ex);
+	        monitor.problem(problem);
+    	}
+    }
 
     /**
      * Constructor with repository root
@@ -76,8 +123,9 @@ public class ContributionRepositoryImpl implements ContributionRepository {
      * @param repository
      * @param factory
      */
-    public ContributionRepositoryImpl(final String repository, XMLInputFactory factory) throws IOException {
-        String root = repository;
+    public ContributionRepositoryImpl(final String repository, XMLInputFactory factory, Monitor monitor) throws IOException {
+        this.monitor = monitor;
+    	String root = repository;
         if (repository == null) {
             root = AccessController.doPrivileged(new PrivilegedAction<String>() {
                 public String run() {
@@ -113,6 +161,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
                 }
             });
         } catch (PrivilegedActionException e) {
+        	error("PrivilegedActionException", rootFile, (IOException)e.getException());
             throw (IOException)e.getException();
         }
             
@@ -123,6 +172,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             }
         });           
         if (notDirectory) {
+        	error("RootNotDirectory", rootFile, repository);
             throw new IOException("The root is not a directory: " + repository);
         }
         this.factory = factory;
@@ -165,17 +215,29 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         }
     }
 
-    public URL store(String contribution, URL sourceURL, InputStream contributionStream) throws IOException {
+    public URL store(final String contribution, URL sourceURL, InputStream contributionStream) throws IOException {
         // where the file should be stored in the repository
-        File location = mapToFile(sourceURL);
+        final File location = mapToFile(sourceURL);
         FileHelper.forceMkdir(location.getParentFile());
 
         copy(contributionStream, location);
 
         // add contribution to repositoryContent
-        URL contributionURL = location.toURL();
-        URI relative = rootFile.toURI().relativize(location.toURI());
-        contributionLocations.put(contribution, relative.toString());
+        // Allow ability to read user.dir property. Requires PropertyPermission in security policy.
+        URL contributionURL;
+        try {
+            contributionURL= AccessController.doPrivileged(new PrivilegedExceptionAction<URL>() {
+                public URL run() throws IOException {
+                    URL contributionURL = location.toURL();
+                    URI relative = rootFile.toURI().relativize(location.toURI());
+                    contributionLocations.put(contribution, relative.toString());
+                    return contributionURL;
+                }
+            });
+        } catch (PrivilegedActionException e) {
+        	error("PrivilegedActionException", location, (IOException)e.getException());
+            throw (IOException)e.getException();
+        }
         saveMap();
 
         return contributionURL;
@@ -219,6 +281,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             return new File(rootFile, location).toURL();
         } catch (MalformedURLException e) {
             // Should not happen
+        	error("MalformedURLException", location, new AssertionError(e));
             throw new AssertionError(e);
         }
     }
@@ -250,6 +313,7 @@ public class ContributionRepositoryImpl implements ContributionRepository {
         try {
             is = new FileInputStream(domainFile);
         } catch (FileNotFoundException e) {
+        	warning("DomainFileNotFound", domainFile, domainFile.getAbsolutePath());
             return;
         }
         try {
@@ -296,7 +360,9 @@ public class ContributionRepositoryImpl implements ContributionRepository {
             writer.println("</domain>");
             writer.flush();
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+        	IllegalArgumentException ae = new IllegalArgumentException(e);
+        	error("IllegalArgumentException", os, ae);
+            throw ae;
         } finally {
             IOHelper.closeQuietly(os);
         }

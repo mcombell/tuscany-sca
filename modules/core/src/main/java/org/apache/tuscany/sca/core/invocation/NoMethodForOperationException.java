@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.core.invocation;
 
 /**
  * Thrown when an {@link org.apache.tuscany.sca.core.factory.model.Operation} cannot be mapped to a method on an interface 
- * @version $Rev: 567617 $ $Date: 2007-08-20 02:29:15 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class NoMethodForOperationException extends ProxyCreationException {
     private static final long serialVersionUID = 5116536602309483679L;

@@ -25,40 +25,84 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
 import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
+
 
 /**
  * The default implementation of a URL artifact processor extension point.
  * 
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultURLArtifactProcessorExtensionPoint
     extends DefaultArtifactProcessorExtensionPoint<URLArtifactProcessor>
     implements URLArtifactProcessorExtensionPoint {
     
-    private ModelFactoryExtensionPoint modelFactories;
+    private ExtensionPointRegistry extensionPoints;
+    private StAXArtifactProcessor<?> staxProcessor;
     private boolean loaded;
+    private Monitor monitor = null;
 
     /**
      * Constructs a new extension point.
      */
-    public DefaultURLArtifactProcessorExtensionPoint(ModelFactoryExtensionPoint modelFactories) {
-        this.modelFactories = modelFactories;
+    public DefaultURLArtifactProcessorExtensionPoint(ExtensionPointRegistry extensionPoints) {
+        this.extensionPoints = extensionPoints;
+        ModelFactoryExtensionPoint modelFactories = this.extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        XMLInputFactory inputFactory = modelFactories.getFactory(XMLInputFactory.class);
+        XMLOutputFactory outputFactory = modelFactories.getFactory(XMLOutputFactory.class);
+        UtilityExtensionPoint utilities = this.extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
+        if (monitorFactory != null) 
+        	this.monitor = monitorFactory.createMonitor();
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, outputFactory, this.monitor);
     }
-
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+    */
+    private void error(String message, Object model, Exception ex) {
+        if (monitor != null) {
+    	    Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
+    	    monitor.problem(problem);
+    	}        
+    }
+    
     public void addArtifactProcessor(URLArtifactProcessor artifactProcessor) {
-        processorsByArtifactType.put((Object)artifactProcessor.getArtifactType(), artifactProcessor);
-        processorsByModelType.put(artifactProcessor.getModelType(), artifactProcessor);
+        if (artifactProcessor.getArtifactType() != null) {
+            processorsByArtifactType.put((Object)artifactProcessor.getArtifactType(), artifactProcessor);
+        }
+        if (artifactProcessor.getModelType() != null) {
+            processorsByModelType.put(artifactProcessor.getModelType(), artifactProcessor);
+        }
     }
     
     public void removeArtifactProcessor(URLArtifactProcessor artifactProcessor) {
-        processorsByArtifactType.remove((Object)artifactProcessor.getArtifactType());
-        processorsByModelType.remove(artifactProcessor.getModelType());        
+        if (artifactProcessor.getArtifactType() != null) {
+            processorsByArtifactType.remove((Object)artifactProcessor.getArtifactType());
+        }
+        if (artifactProcessor.getModelType() != null) {
+            processorsByModelType.remove(artifactProcessor.getModelType());
+        }
     }
     
     @Override
@@ -85,7 +129,9 @@ public class DefaultURLArtifactProcessorExtensionPoint
         try {
             processorDeclarations = ServiceDiscovery.getInstance().getServiceDeclarations(URLArtifactProcessor.class);
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+        	IllegalStateException ie = new IllegalStateException(e);
+        	error("IllegalStateException", staxProcessor, ie);
+            throw ie;
         }
         
         for (ServiceDeclaration processorDeclaration: processorDeclarations) {
@@ -95,7 +141,8 @@ public class DefaultURLArtifactProcessorExtensionPoint
             String modelTypeName = attributes.get("model");
             
             // Create a processor wrapper and register it
-            URLArtifactProcessor processor = new LazyURLArtifactProcessor(modelFactories, artifactType, modelTypeName, processorDeclaration);
+            URLArtifactProcessor processor = new LazyURLArtifactProcessor(artifactType, modelTypeName, 
+            		processorDeclaration, extensionPoints, staxProcessor, monitor);
             addArtifactProcessor(processor);
         }
         
@@ -108,36 +155,62 @@ public class DefaultURLArtifactProcessorExtensionPoint
      */
     private static class LazyURLArtifactProcessor implements URLArtifactProcessor {
 
-        private ModelFactoryExtensionPoint modelFactories;
+        private ExtensionPointRegistry extensionPoints;
         private String artifactType;
         private String modelTypeName;
         private ServiceDeclaration processorDeclaration;
         private URLArtifactProcessor processor;
         private Class<?> modelType;
+        private StAXArtifactProcessor<?> staxProcessor;
+        private Monitor monitor;
         
-        LazyURLArtifactProcessor(ModelFactoryExtensionPoint modelFactories, 
-        		String artifactType, 
+        LazyURLArtifactProcessor(String artifactType, 
         		String modelTypeName, 
-        		ServiceDeclaration processorDeclaration) {
-            this.modelFactories = modelFactories;
+        		ServiceDeclaration processorDeclaration,
+        		ExtensionPointRegistry extensionPoints, 
+                        StAXArtifactProcessor<?> staxProcessor,
+                        Monitor monitor) {
             this.artifactType = artifactType;
             this.modelTypeName = modelTypeName;
             this.processorDeclaration = processorDeclaration;
+            this.extensionPoints = extensionPoints;
+            this.staxProcessor = staxProcessor;
+            this.monitor = monitor;
         }
 
         public String getArtifactType() {
             return artifactType;
         }
         
+        private void error(String message, Object model, Exception ex) {
+            if (monitor != null) {
+        	    Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
+        	    monitor.problem(problem);
+        	}        
+        }
+        
         @SuppressWarnings("unchecked")
         private URLArtifactProcessor getProcessor() {
             if (processor == null) {
                 try {
+                    ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
                     Class<URLArtifactProcessor> processorClass = (Class<URLArtifactProcessor>)processorDeclaration.loadClass();
-                    Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ModelFactoryExtensionPoint.class);
-                    processor = constructor.newInstance(modelFactories);
+                    try {
+                        Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ModelFactoryExtensionPoint.class, Monitor.class);
+                        processor = constructor.newInstance(modelFactories, monitor);
+                    } catch (NoSuchMethodException e) {
+                        try {
+                            Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ModelFactoryExtensionPoint.class, StAXArtifactProcessor.class, Monitor.class);
+                            processor = constructor.newInstance(modelFactories, staxProcessor, monitor);
+                        } catch (NoSuchMethodException e2) {
+                            Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ExtensionPointRegistry.class, StAXArtifactProcessor.class, Monitor.class);
+                            processor = constructor.newInstance(extensionPoints, staxProcessor, monitor);
+                        }
+                    }
                 } catch (Exception e) {
-                    throw new IllegalStateException(e);
+                	IllegalStateException ie = new IllegalStateException(e);
+                	error("IllegalStateException", processor, ie);
+                    throw ie;
                 }
             }
             return processor;
@@ -148,11 +221,13 @@ public class DefaultURLArtifactProcessorExtensionPoint
         }
         
         public Class<?> getModelType() {
-            if (modelType == null) {
+            if (modelTypeName != null && modelType == null) {
                 try {
                     modelType = processorDeclaration.loadClass(modelTypeName);
-                } catch (Exception e) {
-                    throw new IllegalStateException(e);
+                } catch (ClassNotFoundException e) {
+                	IllegalStateException ie = new IllegalStateException(e);
+                	error("IllegalStateException", processorDeclaration, ie);
+                    throw ie;
                 }
             }
             return modelType;

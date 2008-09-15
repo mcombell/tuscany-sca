@@ -25,12 +25,12 @@ import org.apache.tuscany.sca.assembly.Composite;
  * A builder that handles the configuration of the components inside a
  * composite and the wiring of component references to component services.
  *
- * @version $Rev: 563358 $ $Date: 2007-08-06 17:26:27 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface CompositeBuilder {
     
     /**
-     * Build, configure and wire a composite.
+     * Build a composite.
      * 
      * @param composite
      * @throws CompositeBuilderException

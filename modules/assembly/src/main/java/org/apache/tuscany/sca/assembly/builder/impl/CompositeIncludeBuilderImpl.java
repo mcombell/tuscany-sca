@@ -23,17 +23,36 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.tuscany.sca.assembly.Composite;
-import org.apache.tuscany.sca.assembly.builder.CompositeBuilderMonitor;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
+import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
-public class CompositeIncludeBuilderImpl {
-    
-    public static Logger logger = Logger.getLogger(CompositeIncludeBuilderImpl.class.getName());
-	
-    public CompositeIncludeBuilderImpl(CompositeBuilderMonitor monitor) {
+/**
+ * Implementation of a CompositeBuilder.
+ *
+ * @version $Rev$ $Date$
+ */
+public class CompositeIncludeBuilderImpl implements CompositeBuilder {   
+
+    private Monitor monitor;
+        
+    public CompositeIncludeBuilderImpl(Monitor monitor) {
+        this.monitor = monitor;
+    }
+      
+    public void build(Composite composite) throws CompositeBuilderException {
+        fuseIncludes(composite);
+    }
+
+    private void warning(String message, Object model, String... messageParameters) {
+        if (monitor != null){
+            Problem problem = new ProblemImpl(this.getClass().getName(), "assembly-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
     }
 
     /**
@@ -45,10 +64,10 @@ public class CompositeIncludeBuilderImpl {
     private void collectIncludes(Composite composite, List<Composite> includes, Set<Composite> visited) {
         for (Composite include : composite.getIncludes()) {
             if (visited.contains(include)) {
-                logger.warning("Composite " + include.getName() + " has already been included.");
+                warning("CompositeAlreadyIncluded", composite, include.getName().toString());
                 continue;
             }
-        		
+                        
             includes.add(include);
             visited.add(include);
             collectIncludes(include, includes, visited);
@@ -60,7 +79,7 @@ public class CompositeIncludeBuilderImpl {
      * 
      * @param composite
      */
-    public void fuseIncludes(Composite composite) {
+    private void fuseIncludes(Composite composite) {
     
         // First collect all includes
         List<Composite> includes = new ArrayList<Composite>();
@@ -80,10 +99,8 @@ public class CompositeIncludeBuilderImpl {
             composite.getReferences().addAll(clone.getReferences());
             composite.getProperties().addAll(clone.getProperties());
             composite.getWires().addAll(clone.getWires());
-            if ( composite instanceof PolicySetAttachPoint ) {
-                ((PolicySetAttachPoint)composite).getPolicySets().addAll(((PolicySetAttachPoint)clone).getPolicySets());
-                ((PolicySetAttachPoint)composite).getRequiredIntents().addAll(((PolicySetAttachPoint)clone).getRequiredIntents());
-            }
+            composite.getPolicySets().addAll(clone.getPolicySets());
+            composite.getRequiredIntents().addAll(clone.getRequiredIntents());
         }
     
         // Clear the list of includes

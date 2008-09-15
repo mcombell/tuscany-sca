@@ -35,7 +35,7 @@ import org.osoa.sca.ServiceReference;
 /**
  * Default implementation of a ServiceReference.
  *
- * @version $Rev: 636920 $ $Date: 2008-03-13 16:26:30 -0700 (Thu, 13 Mar 2008) $
+ * @version $Rev$ $Date$
  * @param <B> the type of the business interface
  */
 public class ServiceReferenceImpl<B> extends CallableReferenceImpl<B> implements ServiceReference<B> {
@@ -115,6 +115,7 @@ public class ServiceReferenceImpl<B> extends CallableReferenceImpl<B> implements
         this.callback = callback;
     }
 
+    @Override
     protected ReferenceParameters getReferenceParameters() {
         ReferenceParameters parameters = super.getReferenceParameters();
         if (callback != null) {

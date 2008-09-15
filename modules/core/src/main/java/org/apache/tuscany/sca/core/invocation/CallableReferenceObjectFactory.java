@@ -28,7 +28,7 @@ import org.osoa.sca.CallableReference;
 /**
  * Uses a wire to return a CallableReference
  * 
- * @version $Rev: 639271 $ $Date: 2008-03-20 05:54:38 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class CallableReferenceObjectFactory implements ObjectFactory<CallableReference<?>> {
     private Class<?> businessInterface;

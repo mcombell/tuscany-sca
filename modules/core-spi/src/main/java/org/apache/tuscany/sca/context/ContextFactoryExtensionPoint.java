@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.context;
 /**
  * An extension point for context factories. 
  *
- * @version $Rev: 572488 $ $Date: 2007-09-03 18:41:17 -0700 (Mon, 03 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ContextFactoryExtensionPoint {
     

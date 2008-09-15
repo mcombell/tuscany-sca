@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * A test interface model.
  * 
- * @version $Rev: 604880 $ $Date: 2007-12-17 06:30:07 -0800 (Mon, 17 Dec 2007) $
+ * @version $Rev$ $Date$
  */
 public class TestBinding implements Binding {
     public TestBinding(AssemblyFactory factory) {
@@ -48,7 +48,8 @@ public class TestBinding implements Binding {
     public boolean isUnresolved() {
         return false;
     }
-    
+
+    @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }     

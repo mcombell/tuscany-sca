@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.provider.ImplementationProvider;
  * A component implementation can implement this interface to provide scope
  * management for the components
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ScopedImplementationProvider extends ImplementationProvider {
     /**

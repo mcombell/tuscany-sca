@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.store.Store;
 
 /**
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConversationalScopeContainerFactory implements ScopeContainerFactory {
     private Store store;

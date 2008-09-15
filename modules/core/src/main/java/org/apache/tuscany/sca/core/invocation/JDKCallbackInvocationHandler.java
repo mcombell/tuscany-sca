@@ -34,7 +34,7 @@ import org.osoa.sca.ServiceRuntimeException;
  * Responsible for dispatching to a callback through a wire. <p/> TODO cache
  * target invoker
  * 
- * @version $Rev: 638875 $ $Date: 2008-03-19 08:32:44 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JDKCallbackInvocationHandler extends JDKInvocationHandler {
     private static final long serialVersionUID = -3350283555825935609L;

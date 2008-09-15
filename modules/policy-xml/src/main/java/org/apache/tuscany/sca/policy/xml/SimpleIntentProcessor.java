@@ -19,17 +19,24 @@
 
 package org.apache.tuscany.sca.policy.xml;
 
-import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 
-/* 
+/**
  * Processor for handling XML models of PolicyIntent definitions
+ *
+ * @version $Rev$ $Date$
  */
 public class SimpleIntentProcessor extends PolicyIntentProcessor<Intent> {
 
-    public SimpleIntentProcessor(PolicyFactory policyFactory, StAXArtifactProcessor<Object> extensionProcessor) {
-        super(policyFactory, extensionProcessor);
+    public SimpleIntentProcessor(PolicyFactory policyFactory, Monitor monitor) {
+        super(policyFactory, monitor);
+    }
+
+    public SimpleIntentProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+        super(modelFactories, monitor);
     }
 
     public Class<Intent> getModelType() {

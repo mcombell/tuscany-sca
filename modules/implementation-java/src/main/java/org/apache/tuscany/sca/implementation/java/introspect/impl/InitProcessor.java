@@ -30,7 +30,7 @@ import org.osoa.sca.annotations.Init;
  * Processes the {@link @Init} annotation on a component implementation and
  * updates the component type with the decorated initializer method
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InitProcessor extends BaseJavaClassVisitor {
     
@@ -47,11 +47,14 @@ public class InitProcessor extends BaseJavaClassVisitor {
         if (method.getParameterTypes().length != 0) {
             throw new IllegalInitException("Initializer must not have argments", method);
         }
+        if(!method.getReturnType().equals(void.class)) {
+            throw new IllegalInitException("Initializer must return void.", method);
+        }
         if (type.getInitMethod() != null) {
             throw new DuplicateInitException("More than one initializer found on implementaton");
         }
-        if (Modifier.isProtected(method.getModifiers())) {
-            method.setAccessible(true);
+        if (!Modifier.isPublic(method.getModifiers())) {
+            throw new IllegalInitException("Initializer must be a public method. Invalid annotation @Init found on "+method);
         }
         type.setInitMethod(method);
     }

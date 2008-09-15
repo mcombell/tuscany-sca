@@ -33,7 +33,7 @@ import org.apache.tuscany.sca.policy.IntentAttachPointType;
 /**
  * Represents a constraining type.
  * 
- * @version $Rev: 592745 $ $Date: 2007-11-07 05:36:22 -0800 (Wed, 07 Nov 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConstrainingTypeImpl extends ExtensibleImpl implements ConstrainingType {
     private QName name;

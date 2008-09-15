@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
 
 /**
- * @version $Rev: 614967 $ $Date: 2008-01-24 12:00:04 -0800 (Thu, 24 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaInterfaceUtilTestCase extends TestCase {
     private List<Operation> operations;

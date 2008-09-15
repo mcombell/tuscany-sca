@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
  * Represent a reference binding that supports optimized SCA local wiring between component 
  * references and services 
  * 
- * @version $Rev: 575759 $ $Date: 2007-09-14 10:09:31 -0700 (Fri, 14 Sep 2007) $
+ * @version $Rev$ $Date$
  * 
  */
 public interface OptimizableBinding extends Binding, Cloneable {

@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 /**
  * A test cheel for the SCA binding.
  * 
- * @version $Rev: 620307 $ $Date: 2008-02-10 10:56:51 -0800 (Sun, 10 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestSCABindingImpl implements SCABinding, OptimizableBinding, PolicySetAttachPoint, OperationsConfigurator {
     private String name;
@@ -49,10 +49,10 @@ public class TestSCABindingImpl implements SCABinding, OptimizableBinding, Polic
     private ComponentService targetComponentService;
     private Binding targetBinding;
     
-    List<Intent> requiredIntents = new ArrayList<Intent>();
-    List<PolicySet> policySets = new ArrayList<PolicySet>();
-    IntentAttachPointType bindingType = new TestSCABindingType();
-    List<ConfiguredOperation>  configuredOperations = new ArrayList<ConfiguredOperation>();
+    private List<Intent> requiredIntents = new ArrayList<Intent>();
+    private List<PolicySet> policySets = new ArrayList<PolicySet>();
+    private IntentAttachPointType bindingType = new TestSCABindingType();
+    private List<ConfiguredOperation>  configuredOperations = new ArrayList<ConfiguredOperation>();
     private List<PolicySet> applicablePolicySets = new ArrayList<PolicySet>();
 
     /**

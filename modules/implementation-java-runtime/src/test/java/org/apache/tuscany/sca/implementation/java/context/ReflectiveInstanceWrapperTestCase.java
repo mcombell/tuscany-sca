@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.implementation.java.invocation.EventInvoker;
 import org.easymock.EasyMock;
 
 /**
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ReflectiveInstanceWrapperTestCase extends TestCase {
     private ReflectiveInstanceWrapper<Object> wrapper;

@@ -35,12 +35,13 @@ import java.util.List;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.tuscany.sca.android.ContextRegistry;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.Artifact;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
+import org.apache.tuscany.sca.contribution.ContributionMetadata;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.PackageProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
@@ -55,16 +56,17 @@ import org.apache.tuscany.sca.contribution.service.ExtensibleContributionListene
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
 import org.apache.tuscany.sca.contribution.xml.ContributionMetadataDocumentProcessor;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
-
-import android.content.Context;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
+import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * Service interface that manages artifacts contributed to a Tuscany runtime.
  * 
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
- */
-/**
- * 
+ * @version $Rev$ $Date$
  */
 public class ContributionServiceImpl implements ContributionService {
 
@@ -123,10 +125,11 @@ public class ContributionServiceImpl implements ContributionService {
     private ContributionFactory contributionFactory;
     
     
-    private ModelResolver domainResolver;
+    private ModelResolver policyDefinitionsResolver;
 
-
-    private List scaDefinitionsSink = null; 
+    private List policyDefinitions; 
+    
+    private Monitor monitor;
     
     private String COMPOSITE_FILE_EXTN = ".composite";    
 
@@ -135,13 +138,14 @@ public class ContributionServiceImpl implements ContributionService {
                                    URLArtifactProcessor documentProcessor,
                                    StAXArtifactProcessor staxProcessor,
                                    ExtensibleContributionListener contributionListener,
-                                   ModelResolver domainResolver,
+                                   ModelResolver policyDefinitionsResolver,
                                    ModelResolverExtensionPoint modelResolvers,
                                    ModelFactoryExtensionPoint modelFactories,
                                    AssemblyFactory assemblyFactory,
                                    ContributionFactory contributionFactory,
                                    XMLInputFactory xmlFactory,
-                                   List scaDefnSink) {
+                                   List<SCADefinitions> policyDefinitions,
+                                   Monitor monitor) {
         super();
         this.contributionRepository = repository;
         this.packageProcessor = packageProcessor;
@@ -153,19 +157,35 @@ public class ContributionServiceImpl implements ContributionService {
         this.xmlFactory = xmlFactory;
         this.assemblyFactory = assemblyFactory;
         this.contributionFactory = contributionFactory;
-        this.domainResolver = domainResolver;
-        this.scaDefinitionsSink = scaDefnSink;
+        this.policyDefinitionsResolver = policyDefinitionsResolver;
+        this.policyDefinitions = policyDefinitions;
+        this.monitor = monitor;
+    }
+    
+    /**
+     * Report a error.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+        if (monitor != null) {
+            Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-impl-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
     }
 
     public Contribution contribute(String contributionURI, URL sourceURL, boolean storeInRepository)
         throws ContributionException, IOException {
         if (contributionURI == null) {
+        	error("ContributionURINull", contributionURI);
             throw new IllegalArgumentException("URI for the contribution is null");
         }
         if (sourceURL == null) {
+        	error("SourceURLNull", sourceURL);
             throw new IllegalArgumentException("Source URL for the contribution is null");
         }
-
         return addContribution(contributionURI, sourceURL, null, null, storeInRepository);
     }
 
@@ -174,9 +194,11 @@ public class ContributionServiceImpl implements ContributionService {
                                    ModelResolver modelResolver,
                                    boolean storeInRepository) throws ContributionException, IOException {
         if (contributionURI == null) {
+        	error("ContributionURINull", contributionURI);
             throw new IllegalArgumentException("URI for the contribution is null");
         }
         if (sourceURL == null) {
+        	error("SourceURLNull", sourceURL);
             throw new IllegalArgumentException("Source URL for the contribution is null");
         }
 
@@ -237,9 +259,9 @@ public class ContributionServiceImpl implements ContributionService {
         Contribution contributionMetadata = contributionFactory.createContribution();
 
         ContributionMetadataDocumentProcessor metadataDocumentProcessor =
-            new ContributionMetadataDocumentProcessor(staxProcessor, xmlFactory);
+            new ContributionMetadataDocumentProcessor(modelFactories, staxProcessor, monitor);
         
-       /* final URL[] urls = {sourceURL};
+        final URL[] urls = {sourceURL};
         // Allow access to create classloader. Requires RuntimePermission in security policy.
         URLClassLoader cl = AccessController.doPrivileged(new PrivilegedAction<URLClassLoader>() {
             public URLClassLoader run() {
@@ -251,12 +273,12 @@ public class ContributionServiceImpl implements ContributionService {
                                        Contribution.SCA_CONTRIBUTION_META}) {
             URL url = cl.getResource(path);
             if (url != null) {
-                Contribution contribution = metadataDocumentProcessor.read(sourceURL, URI.create(path), url);
+                ContributionMetadata contribution = metadataDocumentProcessor.read(sourceURL, URI.create(path), url);
                 contributionMetadata.getImports().addAll(contribution.getImports());
                 contributionMetadata.getExports().addAll(contribution.getExports());
                 contributionMetadata.getDeployables().addAll(contribution.getDeployables());
             }
-        }*/
+        }
         
         // For debugging purposes, write it back to XML
         //        if (contributionMetadata != null) {
@@ -298,6 +320,7 @@ public class ContributionServiceImpl implements ContributionService {
                                          boolean storeInRepository) throws IOException, ContributionException {
 
         if (contributionStream == null && sourceURL == null) {
+        	error("ContributionContentNull", contributionStream);
             throw new IllegalArgumentException("The content of the contribution is null.");
         }
 
@@ -313,24 +336,18 @@ public class ContributionServiceImpl implements ContributionService {
 
         //initialize contribution based on it's metadata if available
         Contribution contribution = readContributionMetadata(locationURL);
-        
+
         // Create contribution model resolver
         if (modelResolver == null) {
             //FIXME Remove this domain resolver, visibility of policy declarations should be handled by
             // the contribution import/export mechanism instead of this domainResolver hack.
-            modelResolver = new ExtensibleModelResolver(contribution, modelResolvers, modelFactories, domainResolver);
+            modelResolver = new ExtensibleModelResolver(contribution, modelResolvers, modelFactories, policyDefinitionsResolver);
         }
 
         //set contribution initial information
-        contribution.setURI(contributionURI.toString());
+        contribution.setURI(contributionURI);
         contribution.setLocation(locationURL.toString());
         contribution.setModelResolver(modelResolver);
-        
-        Context[] contexts = ContextRegistry.getContexts(new URL(contribution.getLocation()).getHost());
-        
-        if (contexts.length > 0) {
-        	contribution.setClassLoader(contexts[0].getClassLoader());
-        }
         
         List<URI> contributionArtifacts = null;
 
@@ -392,12 +409,46 @@ public class ContributionServiceImpl implements ContributionService {
             }
         }
 
+        processApplicationComposite(contribution);
+
         // store the contribution on the registry
-        if (this.contributionRepository != null) {
-        	this.contributionRepository.addContribution(contribution);
-        }
+        this.contributionRepository.addContribution(contribution);
 
         return contribution;
+    }
+
+    /**
+     * Process any application composite (eg see 5.1.3 of SCA JEE spec) 
+     * TODO: see TUSCANY-2581
+     */
+    private void processApplicationComposite(Contribution contribution) {
+        
+        Composite composite = findComposite("web-inf/web.composite", contribution);
+        if (composite != null) {
+            if (!contribution.getDeployables().contains(composite)) {
+                contribution.getDeployables().add(createDeploymentComposite(composite));
+            }
+        }
+    }
+
+    /**
+     * Create a deployment composite for the composite
+     * See line 247 section 5.1.3 of SCA JEE spec
+     */
+    private Composite createDeploymentComposite(Composite composite) {
+        // TODO: for now just use as-is
+        return composite;
+    }
+
+    private Composite findComposite(String name, Contribution contribution) {
+        for (Artifact artifact : contribution.getArtifacts()) {
+            if (artifact.getModel() instanceof Composite) {
+                if (name.equalsIgnoreCase(artifact.getURI())) {
+                    return (Composite)artifact.getModel();
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -439,8 +490,29 @@ public class ContributionServiceImpl implements ContributionService {
                     // Add the loaded model to the model resolver
                     modelResolver.addModel(model);
                     
-                    if ( isSCADefnsFile(anArtifactUri) ) {
-                        scaDefinitionsSink.add(model);
+                    // Add policy definitions to the list of policy definitions
+                    if (model instanceof SCADefinitions) { 
+                        policyDefinitions.add(model);
+                        
+                        SCADefinitions definitions = (SCADefinitions)model;
+                        for (Intent intent : definitions.getPolicyIntents() ) {
+                            policyDefinitionsResolver.addModel(intent);
+                        }
+                        
+                        for (PolicySet policySet : definitions.getPolicySets() ) {
+                            policyDefinitionsResolver.addModel(policySet);
+                        }
+                        
+                        for (IntentAttachPointType attachPointType : definitions.getBindingTypes() ) {
+                            policyDefinitionsResolver.addModel(attachPointType);
+                        }
+                        
+                        for (IntentAttachPointType attachPointType : definitions.getImplementationTypes() ) {
+                            policyDefinitionsResolver.addModel(attachPointType);
+                        }
+                        for (Object binding : definitions.getBindings() ) {
+                            policyDefinitionsResolver.addModel(binding);
+                        }
                     }
                 }
             }
@@ -484,6 +556,7 @@ public class ContributionServiceImpl implements ContributionService {
             } else {
                 // resolve the model object
                 if (artifact.getModel() != null) {
+                    // System.out.println("Processing Resolve Phase : " + artifact.getURI());
                     this.artifactProcessor.resolve(artifact.getModel(), contribution.getModelResolver());
                 }
             }
@@ -493,7 +566,6 @@ public class ContributionServiceImpl implements ContributionService {
         for (Artifact artifact : composites) {
             // resolve the model object
             if (artifact.getModel() != null) {
-                // System.out.println("Processing Resolve Phase : " + artifact.getURI());
                 this.artifactProcessor.resolve(artifact.getModel(), contribution.getModelResolver());
             }
         }
@@ -508,13 +580,5 @@ public class ContributionServiceImpl implements ContributionService {
         }
         contribution.getDeployables().clear();
         contribution.getDeployables().addAll(resolvedDeployables);
-    }
-
-    private boolean isSCADefnsFile(URI uri) {
-        int index = uri.toString().lastIndexOf("/");
-
-        index = (index != -1) ? index + 1 : 0;
-
-        return uri.toString().substring(index).equals("definitions.xml");
     }
 }

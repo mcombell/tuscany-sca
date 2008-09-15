@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.assembly.Extensible;
 /**
  * Convenience base class for extensible assembly model objects.
  * 
- * @version $Rev: 568902 $ $Date: 2007-08-23 02:32:29 -0700 (Thu, 23 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public abstract class ExtensibleImpl extends BaseImpl implements Extensible {
     private List<Object> extensions = new ArrayList<Object>();

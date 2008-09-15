@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.runtime;
 /**
  * Parameters for the EndPointReference
  * 
- * @version $Rev: 574648 $ $Date: 2007-09-11 10:45:36 -0700 (Tue, 11 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ReferenceParameters extends Cloneable {
     /**

@@ -22,21 +22,25 @@ package org.apache.tuscany.sca.assembly.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.CompositeReference;
+import org.apache.tuscany.sca.assembly.Endpoint;
 import org.apache.tuscany.sca.assembly.Reference;
+import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 
 /**
  * Represents a component reference
  * 
- * @version $Rev: 571694 $ $Date: 2007-08-31 22:24:11 -0700 (Fri, 31 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ComponentReferenceImpl extends ReferenceImpl implements ComponentReference, Cloneable {
     private Reference reference;
     private Boolean autowire;
     private List<CompositeReference> promotedAs = new ArrayList<CompositeReference>();
     private ComponentService callbackService;
+    private List<Endpoint> endpoints = new ArrayList<Endpoint>();
 
     /**
      * Constructs a new component reference.
@@ -83,4 +87,27 @@ public class ComponentReferenceImpl extends ReferenceImpl implements ComponentRe
         this.callbackService = callbackService;
     }
     
+    public List<Endpoint> getEndpoints(){
+        return endpoints;
+    }
+    
+    /**
+     * Use endpoint information to work out what the interface contract for the
+     * binding is. 
+     */
+    @Override
+    public InterfaceContract getInterfaceContract(Binding binding){
+        InterfaceContract interfaceContract = null;
+        
+        for (Endpoint theEndpoint : endpoints){
+            if (theEndpoint.getSourceBinding() == binding){
+                interfaceContract = theEndpoint.getInterfaceContract();
+            }
+        }
+        
+        if (interfaceContract == null){
+            interfaceContract = getInterfaceContract();
+        }
+        return interfaceContract;
+    } 
 }

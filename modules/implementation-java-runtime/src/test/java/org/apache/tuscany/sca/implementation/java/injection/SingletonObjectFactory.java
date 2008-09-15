@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
 /**
  * Implementation of ObjectFactory that returns a single instance, typically an immutable type.
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class SingletonObjectFactory<T> implements ObjectFactory<T> {
     private final T instance;

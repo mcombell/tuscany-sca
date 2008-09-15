@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.event;
 /**
  * Evaluates whether a {@link RuntimeEventListener} is applicable to a given runtime event
  *
- * @version $$Rev: 539355 $$ $$Date: 2007-05-18 03:05:14 -0700 (Fri, 18 May 2007) $$
+ * @version $Rev$ $Date$
  */
 public interface EventFilter {
 

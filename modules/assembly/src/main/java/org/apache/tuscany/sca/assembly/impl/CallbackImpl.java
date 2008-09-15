@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
 /**
  * Represents a reference.
  * 
- * @version $Rev: 620307 $ $Date: 2008-02-10 10:56:51 -0800 (Sun, 10 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class CallbackImpl extends ExtensibleImpl implements Callback {
     private List<Binding> bindings = new ArrayList<Binding>();

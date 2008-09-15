@@ -27,41 +27,43 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
+
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.assembly.EndpointFactory;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilderException;
-import org.apache.tuscany.sca.assembly.builder.DomainBuilder;
-import org.apache.tuscany.sca.binding.sca.impl.SCABindingFactoryImpl;
-import org.apache.tuscany.sca.context.ContextFactoryExtensionPoint;
-import org.apache.tuscany.sca.context.DefaultContextFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
-import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
-import org.apache.tuscany.sca.contribution.impl.ContributionFactoryImpl;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionService;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ModuleActivator;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.core.assembly.ActivationException;
 import org.apache.tuscany.sca.core.assembly.CompositeActivator;
 import org.apache.tuscany.sca.core.assembly.RuntimeAssemblyFactory;
-import org.apache.tuscany.sca.core.invocation.MessageFactoryImpl;
+import org.apache.tuscany.sca.core.invocation.ExtensibleProxyFactory;
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
+import org.apache.tuscany.sca.core.invocation.ProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.core.scope.ScopeRegistry;
-import org.apache.tuscany.sca.core.work.Jsr237WorkScheduler;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
 import org.apache.tuscany.sca.definitions.impl.SCADefinitionsImpl;
 import org.apache.tuscany.sca.definitions.util.SCADefinitionsUtil;
-import org.apache.tuscany.sca.definitions.xml.SCADefinitionsDocumentProcessor;
 import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
 import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
-import org.apache.tuscany.sca.interfacedef.java.DefaultJavaInterfaceFactory;
 import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorFactoryImpl;
 import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
 import org.apache.tuscany.sca.policy.Intent;
@@ -69,13 +71,16 @@ import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySet;
-import org.apache.tuscany.sca.provider.DefaultSCADefinitionsProviderExtensionPoint;
 import org.apache.tuscany.sca.provider.SCADefinitionsProvider;
 import org.apache.tuscany.sca.provider.SCADefinitionsProviderExtensionPoint;
 import org.apache.tuscany.sca.work.WorkScheduler;
 
+/**
+ *
+ * @version $Rev$ $Date$
+ */
 public class ReallySmallRuntime {
-	private final static Logger logger = Logger.getLogger(ReallySmallRuntime.class.getName());
+	private static final Logger logger = Logger.getLogger(ReallySmallRuntime.class.getName());
     private List<ModuleActivator> modules;
     private ExtensionPointRegistry registry;
 
@@ -84,11 +89,13 @@ public class ReallySmallRuntime {
     private ContributionService contributionService;
     private CompositeActivator compositeActivator;
     private CompositeBuilder compositeBuilder;
-    private DomainBuilder domainBuilder;    
+    // private DomainBuilder domainBuilder;    
     private WorkScheduler workScheduler;
     private ScopeRegistry scopeRegistry;
     private ProxyFactory proxyFactory;
-    private List scaDefnsSink = new ArrayList();
+    private List<SCADefinitions> policyDefinitions;
+    private ModelResolver policyDefinitionsResolver;
+    private Monitor monitor;
 
     public ReallySmallRuntime(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -99,37 +106,23 @@ public class ReallySmallRuntime {
     	
         // Create our extension point registry
         registry = new DefaultExtensionPointRegistry();
-        registry.addExtensionPoint(registry);
+        UtilityExtensionPoint utilities = registry.getExtensionPoint(UtilityExtensionPoint.class);
 
-        //Get work scheduler
-        
-        /*
-         * host-embedded
-        workScheduler = registry.getExtensionPoint(WorkScheduler.class); */
-        
-        workScheduler = new Jsr237WorkScheduler();
+        // Get work scheduler
+        workScheduler = utilities.getUtility(WorkScheduler.class);
 
         // Create an interface contract mapper
-        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
 
         // Get factory extension point
-        /*
-         * host-embedded
-        ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);*/
+        ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
         
-        ModelFactoryExtensionPoint factories = new DefaultModelFactoryExtensionPoint();
-        registry.addExtensionPoint(factories);
-        
-        // Create context factory extension point
-        ContextFactoryExtensionPoint contextFactories = new DefaultContextFactoryExtensionPoint();
-        registry.addExtensionPoint(contextFactories);
-        
-        // Create Message factory
-        MessageFactory messageFactory = new MessageFactoryImpl();
-        factories.addFactory(messageFactory);
+        // Get Message factory
+        MessageFactory messageFactory = factories.getFactory(MessageFactory.class);
 
-        // Create a proxy factory
-        proxyFactory = ReallySmallRuntimeBuilder.createProxyFactory(registry, mapper, messageFactory);
+        // Get proxy factory
+        ProxyFactoryExtensionPoint proxyFactories = registry.getExtensionPoint(ProxyFactoryExtensionPoint.class);  
+        proxyFactory = new ExtensibleProxyFactory(proxyFactories); 
 
         // Create model factories
         assemblyFactory = new RuntimeAssemblyFactory();
@@ -140,28 +133,38 @@ public class ReallySmallRuntime {
         // Load the runtime modules
         modules = loadModules(registry);
         
-        registry.getExtensionPoint(ModelFactoryExtensionPoint.class).addFactory(new DefaultJavaInterfaceFactory());
-        
         // Start the runtime modules
         startModules(registry, modules);
         
-        factories.addFactory(new SCABindingFactoryImpl());
         SCABindingFactory scaBindingFactory = factories.getFactory(SCABindingFactory.class);
-        
         IntentAttachPointTypeFactory intentAttachPointTypeFactory = new DefaultIntentAttachPointTypeFactory();
         factories.addFactory(intentAttachPointTypeFactory);
+        ContributionFactory contributionFactory = factories.getFactory(ContributionFactory.class);
         
-        factories.addFactory(new ContributionFactoryImpl());
-        ContributionFactory contributionFactory = factories.getFactory(ContributionFactory.class); 
+        // Create a monitor
+        MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
+        
+        if (monitorFactory != null){
+            monitor = monitorFactory.createMonitor();
+        } else {
+            monitorFactory = new DefaultMonitorFactoryImpl();
+            monitor = monitorFactory.createMonitor();
+            utilities.addUtility(monitorFactory);
+            //logger.fine("No MonitorFactory is found on the classpath.");
+        }
         
         // Create a contribution service
+        policyDefinitions = new ArrayList<SCADefinitions>();
+        policyDefinitionsResolver = new DefaultModelResolver();
         contributionService = ReallySmallRuntimeBuilder.createContributionService(classLoader,
                                                                                   registry,
                                                                                   contributionFactory,
                                                                                   assemblyFactory,
                                                                                   policyFactory,
                                                                                   mapper,
-                                                                                  scaDefnsSink);
+                                                                                  policyDefinitions,
+                                                                                  policyDefinitionsResolver,
+                                                                                  monitor);
         
         // Create the ScopeRegistry
         scopeRegistry = ReallySmallRuntimeBuilder.createScopeRegistry(registry); 
@@ -177,7 +180,7 @@ public class ReallySmallRuntime {
                                                                                 workScheduler);
 
         // Load the definitions.xml
-        loadSCADefinitions(registry);
+        loadSCADefinitions();
         
         if (logger.isLoggable(Level.FINE)) {
             long end = System.currentTimeMillis();
@@ -212,17 +215,28 @@ public class ReallySmallRuntime {
     public void buildComposite(Composite composite) throws CompositeBuilderException {
         //Get factory extension point
         ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
-        factories.addFactory(new SCABindingFactoryImpl());
         SCABindingFactory scaBindingFactory = factories.getFactory(SCABindingFactory.class);
-        factories.addFactory(new DefaultIntentAttachPointTypeFactory());
         IntentAttachPointTypeFactory intentAttachPointTypeFactory = factories.getFactory(IntentAttachPointTypeFactory.class);
-        InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
+        EndpointFactory endpointFactory = factories.getFactory(EndpointFactory.class);        
+        UtilityExtensionPoint utilities = registry.getExtensionPoint(UtilityExtensionPoint.class);
+        InterfaceContractMapper mapper = utilities.getUtility(InterfaceContractMapper.class);
+        DocumentBuilderFactory documentBuilderFactory = factories.getFactory(DocumentBuilderFactory.class);
+        TransformerFactory transformerFactory = factories.getFactory(TransformerFactory.class);
         
         //Create a composite builder
-        compositeBuilder = ReallySmallRuntimeBuilder.createCompositeBuilder(assemblyFactory,
+        SCADefinitions aggregatedDefinitions = new SCADefinitionsImpl();
+        for ( SCADefinitions definition : ((List<SCADefinitions>)policyDefinitions) ) {
+            SCADefinitionsUtil.aggregateSCADefinitions(definition, aggregatedDefinitions);
+        }
+        compositeBuilder = ReallySmallRuntimeBuilder.createCompositeBuilder(monitor,
+                                                                            assemblyFactory,
                                                                             scaBindingFactory,
+                                                                            endpointFactory,
                                                                             intentAttachPointTypeFactory,
-                                                                            mapper);
+                                                                            documentBuilderFactory,
+                                                                            transformerFactory,
+                                                                            mapper, 
+                                                                            aggregatedDefinitions);
         compositeBuilder.build(composite);
         
     }
@@ -242,29 +256,11 @@ public class ReallySmallRuntime {
     public AssemblyFactory getAssemblyFactory() {
         return assemblyFactory;
     }
-
-    public DomainBuilder getDomainBuilder() {
-        if ( domainBuilder == null ) {
-            //Create a domain builder
-            //Get factory extension point
-            ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
-            SCABindingFactory scaBindingFactory = factories.getFactory(SCABindingFactory.class);
-            IntentAttachPointTypeFactory intentAttachPointTypeFactory = factories.getFactory(IntentAttachPointTypeFactory.class);
-            InterfaceContractMapper mapper = new InterfaceContractMapperImpl();
-            domainBuilder = ReallySmallRuntimeBuilder.createDomainBuilder(assemblyFactory,
-                                                                          scaBindingFactory,
-                                                                          intentAttachPointTypeFactory,
-                                                                          mapper);
-        }
-        return domainBuilder;
-    }
-    
-    private void  loadSCADefinitions(ExtensionPointRegistry registry) throws ActivationException {
+   
+    private void  loadSCADefinitions() throws ActivationException {
         try {
-        	registry.addExtensionPoint(new DefaultSCADefinitionsProviderExtensionPoint(registry));
-        	
             URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
-            SCADefinitionsDocumentProcessor definitionsProcessor = (SCADefinitionsDocumentProcessor)documentProcessors.getProcessor(SCADefinitions.class);
+            URLArtifactProcessor<SCADefinitions> definitionsProcessor = documentProcessors.getProcessor(SCADefinitions.class);
             SCADefinitionsProviderExtensionPoint scaDefnProviders = registry.getExtensionPoint(SCADefinitionsProviderExtensionPoint.class);
             
             SCADefinitions systemSCADefinitions = new SCADefinitionsImpl();
@@ -274,61 +270,38 @@ public class ReallySmallRuntime {
                SCADefinitionsUtil.aggregateSCADefinitions(aSCADefn, systemSCADefinitions);
             }
             
+            policyDefinitions.add(systemSCADefinitions);
+            
             //we cannot expect that providers will add the intents and policysets into the resolver
             //so we do this here explicitly
             for ( Intent intent : systemSCADefinitions.getPolicyIntents() ) {
-                definitionsProcessor.getSCADefinitionsResolver().addModel(intent);
+                policyDefinitionsResolver.addModel(intent);
             }
             
             for ( PolicySet policySet : systemSCADefinitions.getPolicySets() ) {
-                definitionsProcessor.getSCADefinitionsResolver().addModel(policySet);
+                policyDefinitionsResolver.addModel(policySet);
             }
             
             for ( IntentAttachPointType attachPoinType : systemSCADefinitions.getBindingTypes() ) {
-                definitionsProcessor.getSCADefinitionsResolver().addModel(attachPoinType);
+                policyDefinitionsResolver.addModel(attachPoinType);
             }
             
             for ( IntentAttachPointType attachPoinType : systemSCADefinitions.getImplementationTypes() ) {
-                definitionsProcessor.getSCADefinitionsResolver().addModel(attachPoinType);
+                policyDefinitionsResolver.addModel(attachPoinType);
             }
             
-            //now that all system sca definitions have been read, lets resolve them rightaway
+            //now that all system sca definitions have been read, lets resolve them right away
             definitionsProcessor.resolve(systemSCADefinitions, 
-                                         definitionsProcessor.getSCADefinitionsResolver());
+                                         policyDefinitionsResolver);
         } catch ( Exception e ) {
             throw new ActivationException(e);
         }
-        
-        /*URLArtifactProcessorExtensionPoint documentProcessors = registry.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
-        SCADefinitionsDocumentProcessor definitionsProcessor = (SCADefinitionsDocumentProcessor)documentProcessors.getProcessor(SCADefinitions.class);
-        
-        try {
-            Map<ClassLoader, Set<URL>> scaDefinitionFiles = 
-            ServiceDiscovery.getInstance().getServiceResources("definitions.xml");
-            
-            SCADefinitions systemSCADefinitions = new SCADefinitionsImpl();
-            for ( ClassLoader cl : scaDefinitionFiles.keySet() ) {
-                for ( URL scaDefnUrl : scaDefinitionFiles.get(cl) ) {
-                    SCADefinitions defnSubset = definitionsProcessor.read(null, null, scaDefnUrl);
-                    SCADefinitionsUtil.aggregateSCADefinitions(defnSubset, systemSCADefinitions);
-                }
-            }
-            
-            definitionsProcessor.resolve(systemSCADefinitions, definitionsProcessor.getSCADefinitionsResolver());
-            scaDefnsSink.add(systemSCADefinitions);
-        } catch ( ContributionReadException e ) {
-            throw new ActivationException(e);
-        } catch ( ContributionResolveException e ) {
-            throw new ActivationException(e);
-        } catch ( IOException e ) {
-            throw new ActivationException(e);
-        }*/
     }
     
     @SuppressWarnings("unchecked")
     private List<ModuleActivator> loadModules(ExtensionPointRegistry registry) throws ActivationException {
 
-        // Load and instantiate the modules found on the classpath (or any registered classloaders)
+        // Load and instantiate the modules found on the classpath (or any registered ClassLoaders)
         modules = new ArrayList<ModuleActivator>();
         try {
             Set<ServiceDeclaration> moduleActivators =
@@ -366,15 +339,20 @@ public class ReallySmallRuntime {
                 logger.fine(module.getClass().getName() + " is starting.");
                 start = System.currentTimeMillis();
             }
-            module.start(registry);
-            if (debug) {
-                long end = System.currentTimeMillis();
-                logger.fine(module.getClass().getName() + " is started in " + (end - start) + " ms.");
+            try {
+                module.start(registry);
+                if (debug) {
+                    long end = System.currentTimeMillis();
+                    logger.fine(module.getClass().getName() + " is started in " + (end - start) + " ms.");
+                }
+            } catch (Throwable e) {
+            	logger.log(Level.WARNING, "Exception starting module " + module.getClass().getName() + " :" + e.getMessage());
+            	logger.log(Level.FINE, "Exception starting module " + module.getClass().getName(), e);
             }
         }
     }
 
-    private void stopModules(ExtensionPointRegistry registry, List<ModuleActivator> modules) {
+    private void stopModules(final ExtensionPointRegistry registry, List<ModuleActivator> modules) {
         boolean debug = logger.isLoggable(Level.FINE);
         for (ModuleActivator module : modules) {
             long start = 0L;

@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation used to indicate a resource should be provided to an implementation by the runtime.
  *
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

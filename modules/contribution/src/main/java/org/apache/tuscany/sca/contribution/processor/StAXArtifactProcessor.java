@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 /**
  * An artifact processor that can read models from a StAX XMLStreamReader.
  * 
- * @version $Rev: 572267 $ $Date: 2007-09-03 02:46:41 -0700 (Mon, 03 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface StAXArtifactProcessor<M> extends ArtifactProcessor<M> {
 

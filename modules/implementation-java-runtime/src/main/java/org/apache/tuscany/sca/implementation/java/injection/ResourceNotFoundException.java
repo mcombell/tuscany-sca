@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 /**
  * Denotes an exception thrown when a runtime resource is not found
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ResourceNotFoundException extends ObjectCreationException {
 

@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.event.Event;
 /**
  * Propagated when a conversation is expired
  *
- * @version $$Rev: 537240 $$ $$Date: 2007-05-11 10:35:03 -0700 (Fri, 11 May 2007) $$
+ * @version $Rev$ $Date$
  */
 public class ConversationEnd implements Event {
     

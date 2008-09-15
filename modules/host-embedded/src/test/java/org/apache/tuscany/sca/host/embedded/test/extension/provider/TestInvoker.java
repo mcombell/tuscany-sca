@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.invocation.Message;
  * 
  * The target invoker is responsible for handling operation invocations.
  * 
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestInvoker implements Invoker {
     private Operation operation;

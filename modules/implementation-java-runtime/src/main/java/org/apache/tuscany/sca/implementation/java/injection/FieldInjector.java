@@ -19,6 +19,8 @@
 package org.apache.tuscany.sca.implementation.java.injection;
 
 import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 import org.apache.tuscany.sca.core.factory.ObjectFactory;
@@ -26,7 +28,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
 /**
  * Injects a value created by an {@link org.apache.tuscany.sca.core.factory.ObjectFactory} on a given field
  *
- * @version $Rev: 639649 $ $Date: 2008-03-21 06:04:01 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class FieldInjector<T> implements Injector<T> {
 
@@ -38,9 +40,17 @@ public class FieldInjector<T> implements Injector<T> {
      * Create an injector and have it use the given <code>ObjectFactory</code> to inject a value on the instance using
      * the reflected <code>Field</code>
      */
-    public FieldInjector(Field field, ObjectFactory<?> objectFactory) {
-        this.field = field;
-        this.field.setAccessible(true);
+    public FieldInjector(Field pField, ObjectFactory<?> objectFactory) {
+        field = pField;
+        // Allow privileged access to set accessibility. Requires ReflectPermission
+        // in security policy.
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            public Object run() {
+                field.setAccessible(true); // ignore Java accessibility
+                return null;
+            }
+        });
+        
         this.objectFactory = objectFactory;
     }
 
@@ -51,7 +61,7 @@ public class FieldInjector<T> implements Injector<T> {
         try {
             field.set(instance, objectFactory.getInstance());
         } catch (IllegalAccessException e) {
-            throw new AssertionError("Field is not accessible [" + field + "]");
+            throw new ObjectCreationException("Field is not accessible [" + field + "]", e);
         }
     }
 }

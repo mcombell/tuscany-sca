@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * Represents a binding.
  * 
- * @version $Rev: 639224 $ $Date: 2008-03-20 02:37:04 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Binding extends Base, Cloneable {
 

@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.policy.IntentAttachPoint;
  * Interface contracts define one or more business functions. These business
  * functions are provided by services and are used by references.
  * 
- * @version $Rev: 598005 $ $Date: 2007-11-25 08:36:27 -0800 (Sun, 25 Nov 2007) $
+ * @version $Rev$ $Date$
  */
 public interface AbstractContract extends Base, Extensible, IntentAttachPoint, OperationsConfigurator {
 

@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
  * Thrown when a service type specified by an {@link org.osoa.sca.annotations.Service} annotation is invalid, e.g. it is
  * not an interface
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidServiceType extends IntrospectionException {
     private static final long serialVersionUID = -1076466639416644386L;

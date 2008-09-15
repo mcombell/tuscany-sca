@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.contribution.scanner;
 /**
  * An extension point for contribution scanners
  * 
- * @version $Rev: 631271 $ $Date: 2008-02-26 08:11:36 -0800 (Tue, 26 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ContributionScannerExtensionPoint {
     

@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 
 /**
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ModelHelper {
 

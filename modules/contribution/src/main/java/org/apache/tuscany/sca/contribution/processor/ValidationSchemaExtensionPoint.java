@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * An extension point for XML schemas used for validation.
  *
- * @version $Rev: 581132 $ $Date: 2007-10-01 21:05:32 -0700 (Mon, 01 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ValidationSchemaExtensionPoint {
     

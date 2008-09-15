@@ -27,13 +27,15 @@ import junit.framework.TestCase;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 
 
 /**
  * URL Artifact Processor Extension Point test case
  * Verifies the right registration and lookup for processors that handle filename and file types
  * 
- * @version $Rev: 618158 $ $Date: 2008-02-03 18:44:47 -0800 (Sun, 03 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class URLartifactProcessorExtensionPointTestCase extends TestCase {
     
@@ -41,7 +43,8 @@ public class URLartifactProcessorExtensionPointTestCase extends TestCase {
     
     @Override
     protected void setUp() throws Exception {
-        artifactProcessors = new DefaultURLArtifactProcessorExtensionPoint(null);
+        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        artifactProcessors = new DefaultURLArtifactProcessorExtensionPoint(extensionPoints);
         artifactProcessors.addArtifactProcessor(new FileTypeArtifactProcessor());
         artifactProcessors.addArtifactProcessor(new FileNameArtifactProcessor());
     }

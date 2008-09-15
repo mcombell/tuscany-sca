@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.implementation.java.impl;
 /**
  * The default implementation scopes supported by assemblies.
  *
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class JavaScopeImpl {
     public static final JavaScopeImpl STATELESS = new JavaScopeImpl("STATELESS");

@@ -24,11 +24,10 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ModuleActivator;
-import org.apache.tuscany.sca.host.embedded.test.extension.TestImplementationFactory;
 import org.apache.tuscany.sca.host.embedded.test.extension.DefaultTestImplementationFactory;
+import org.apache.tuscany.sca.host.embedded.test.extension.TestImplementationFactory;
 import org.apache.tuscany.sca.host.embedded.test.extension.impl.TestImplementationProcessor;
 import org.apache.tuscany.sca.host.embedded.test.extension.provider.TestImplementationProviderFactory;
-import org.apache.tuscany.sca.interfacedef.java.DefaultJavaInterfaceFactory;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
 
@@ -37,18 +36,18 @@ import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
 /**
  * Implements a module activator for the test implementation extension module.
  * 
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestModuleActivator implements ModuleActivator {
 
     public void start(ExtensionPointRegistry registry) {
 
         // Create the test  implementation factory
-        ModelFactoryExtensionPoint factories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
-        AssemblyFactory assemblyFactory = factories.getFactory(AssemblyFactory.class);
-        JavaInterfaceFactory javaFactory = new DefaultJavaInterfaceFactory();
+        ModelFactoryExtensionPoint modelFactories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+        JavaInterfaceFactory javaFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
         TestImplementationFactory testFactory = new DefaultTestImplementationFactory(assemblyFactory, javaFactory);
-        factories.addFactory(testFactory);
+        modelFactories.addFactory(testFactory);
 
         // Add the test implementation extension to the StAXArtifactProcessor
         // extension point

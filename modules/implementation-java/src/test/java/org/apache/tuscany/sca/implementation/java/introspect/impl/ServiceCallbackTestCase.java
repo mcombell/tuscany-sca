@@ -37,7 +37,7 @@ import org.osoa.sca.annotations.Callback;
 import org.osoa.sca.annotations.Service;
 
 /**
- * @version $Rev: 571266 $ $Date: 2007-08-30 11:23:58 -0700 (Thu, 30 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ServiceCallbackTestCase extends TestCase {
     private ServiceProcessor processor;
@@ -56,7 +56,7 @@ public class ServiceCallbackTestCase extends TestCase {
         assertNotNull(service);
         Method method = FooImpl.class.getMethod("setCallback", FooCallback.class);
         processor.visitMethod(method, type);
-        assertEquals(method, type.getCallbackMembers().get(FooCallback.class.getName()).getAnchor());
+        assertEquals(method, type.getCallbackMembers().get(FooCallback.class.getName()).iterator().next().getAnchor());
     }
 
     public void testFieldCallbackInterface() throws Exception {
@@ -66,7 +66,7 @@ public class ServiceCallbackTestCase extends TestCase {
         assertNotNull(service);
         Field field = FooImpl.class.getDeclaredField("callback");
         processor.visitField(field, type);
-        assertEquals(field, type.getCallbackMembers().get(FooCallback.class.getName()).getAnchor());
+        assertEquals(field, type.getCallbackMembers().get(FooCallback.class.getName()).iterator().next().getAnchor());
     }
 
     public void testFieldCallbackInterface1() throws Exception {
@@ -76,7 +76,7 @@ public class ServiceCallbackTestCase extends TestCase {
         assertNotNull(service);
         Field field1 = FooImpl1.class.getDeclaredField("callbackRef");
         processor.visitField(field1, type);
-        assertEquals(field1, type.getCallbackMembers().get(FooCallback.class.getName()).getAnchor());
+        assertEquals(field1, type.getCallbackMembers().get(FooCallback.class.getName()).iterator().next().getAnchor());
         
     }
     

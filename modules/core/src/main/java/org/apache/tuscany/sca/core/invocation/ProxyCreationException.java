@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 /**
  * Denotes an error creating a proxy
  *
- * @version $$Rev: 567617 $$ $$Date: 2007-08-20 02:29:15 -0700 (Mon, 20 Aug 2007) $$
+ * @version $Rev$ $Date$
  */
 public class ProxyCreationException extends ObjectCreationException {
     private static final long serialVersionUID = 8002454344828513781L;

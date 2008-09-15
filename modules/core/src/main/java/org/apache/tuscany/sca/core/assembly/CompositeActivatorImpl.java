@@ -19,6 +19,8 @@
 
 package org.apache.tuscany.sca.core.assembly;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +31,8 @@ import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.assembly.CompositeService;
+import org.apache.tuscany.sca.assembly.Endpoint;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.Reference;
@@ -45,6 +49,9 @@ import org.apache.tuscany.sca.core.scope.Scope;
 import org.apache.tuscany.sca.core.scope.ScopeContainer;
 import org.apache.tuscany.sca.core.scope.ScopeRegistry;
 import org.apache.tuscany.sca.core.scope.ScopedRuntimeComponent;
+import org.apache.tuscany.sca.endpointresolver.EndpointResolver;
+import org.apache.tuscany.sca.endpointresolver.EndpointResolverFactory;
+import org.apache.tuscany.sca.endpointresolver.EndpointResolverFactoryExtensionPoint;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
@@ -67,10 +74,10 @@ import org.apache.tuscany.sca.runtime.RuntimeWireProcessor;
 import org.apache.tuscany.sca.work.WorkScheduler;
 
 /**
- * @version $Rev: 639277 $ $Date: 2008-03-20 06:02:37 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class CompositeActivatorImpl implements CompositeActivator {
-    private final static Logger logger = Logger.getLogger(CompositeActivatorImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(CompositeActivatorImpl.class.getName());
 
     private final AssemblyFactory assemblyFactory;
     private final MessageFactory messageFactory;
@@ -79,6 +86,7 @@ public class CompositeActivatorImpl implements CompositeActivator {
     private final WorkScheduler workScheduler;
     private final RuntimeWireProcessor wireProcessor;
     private final ProviderFactoryExtensionPoint providerFactories;
+    private final EndpointResolverFactoryExtensionPoint endpointResolverFactories;
 
     private final RequestContextFactory requestContextFactory;
     private final ProxyFactory proxyFactory;
@@ -108,6 +116,7 @@ public class CompositeActivatorImpl implements CompositeActivator {
                                   RequestContextFactory requestContextFactory,
                                   ProxyFactory proxyFactory,
                                   ProviderFactoryExtensionPoint providerFactories,
+                                  EndpointResolverFactoryExtensionPoint endpointResolverFactories,
                                   StAXArtifactProcessorExtensionPoint processors,
                                   ConversationManager conversationManager) {
         this.assemblyFactory = assemblyFactory;
@@ -117,6 +126,7 @@ public class CompositeActivatorImpl implements CompositeActivator {
         this.workScheduler = workScheduler;
         this.wireProcessor = wireProcessor;
         this.providerFactories = providerFactories;
+        this.endpointResolverFactories = endpointResolverFactories;
         this.javaInterfaceFactory = javaInterfaceFactory;
         this.requestContextFactory = requestContextFactory;
         this.proxyFactory = proxyFactory;
@@ -135,6 +145,14 @@ public class CompositeActivatorImpl implements CompositeActivator {
         for (Binding binding : ref.getBindings()) {
             addReferenceBindingProvider(component, ref, binding);
         }
+        
+        for (Endpoint endpoint : ref.getEndpoints()){
+            // TODO - source component should be set in the builder but the 
+            //        way the builder is written it's difficult to get at it
+            endpoint.setSourceComponent(component);
+            
+            addEndpointResolver(component, ref, endpoint);
+        }
     }
 
     public void start(RuntimeComponent component, RuntimeComponentReference ref) {
@@ -150,13 +168,18 @@ public class CompositeActivatorImpl implements CompositeActivator {
                 }
                 addReferenceWire(component, ref, binding);
             }
+            
+            // targets now have an endpoint representation. We can use this to 
+            // look for unresolved endpoints using dummy wires for late resolution
+            for (Endpoint endpoint : ref.getEndpoints()){
+                addReferenceEndpointWire(component, ref, endpoint);
+            }
         }
     }
-    
-    public void stop(Component component, ComponentReference reference)
-    {
+
+    public void stop(Component component, ComponentReference reference) {
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Starting component reference: " + component.getURI() + "#" + reference.getName());
+            logger.fine("Stopping component reference: " + component.getURI() + "#" + reference.getName());
         }
         RuntimeComponentReference runtimeRef = ((RuntimeComponentReference)reference);
         for (Binding binding : reference.getBindings()) {
@@ -165,7 +188,7 @@ public class CompositeActivatorImpl implements CompositeActivator {
                 bindingProvider.stop();
             }
         }
-    }    
+    }
 
     public void deactivate(RuntimeComponent component, RuntimeComponentReference ref) {
         if (logger.isLoggable(Level.FINE)) {
@@ -176,6 +199,54 @@ public class CompositeActivatorImpl implements CompositeActivator {
             removeReferenceBindingProvider(component, ref, binding);
         }
 
+    }
+
+    /**
+     * @param component
+     * @param reference
+     * @param binding
+     */
+    private EndpointResolver addEndpointResolver(RuntimeComponent component,
+                                                 RuntimeComponentReference reference,
+                                                 Endpoint endpoint){
+        
+        // only create endpoint resolvers for unresolved endpoints currently
+        // this will also prevent a wire from being created later
+        if (!endpoint.isUnresolved()){
+            return null;
+        }
+        
+        // This souldn't happen as the endpoint resolver extension point is in core-spi but 
+        // just in case returning null here will mean that no wire is created and calling 
+        // the reference will fail with NPE
+        if (endpointResolverFactories == null){
+            return null;
+        }
+        
+        EndpointResolverFactory<Endpoint> resolverFactory =
+            (EndpointResolverFactory<Endpoint>)endpointResolverFactories.getEndpointResolverFactory(endpoint.getClass());
+        
+        if (resolverFactory != null) {
+            @SuppressWarnings("unchecked")
+            EndpointResolver endpointResolver =
+                resolverFactory.createEndpointResolver(endpoint, null);
+            if (endpointResolver != null) {
+                ((RuntimeComponentReference)reference).setEndpointResolver(endpoint, endpointResolver);
+            }
+            
+            return endpointResolver;
+        } else {
+            // TODO - for the time being allow the lack of an endpoint provider to be the 
+            //        switch to turn off endpoint processing
+            return null;
+            //throw new IllegalStateException("Endpoint provider factory not found for class: " + endpoint.getClass().getName());
+        }
+    }
+    
+    public void addReferenceBindingProviderForEndpoint(Endpoint endpoint){
+        addReferenceBindingProvider((RuntimeComponent)endpoint.getSourceComponent(),
+                                    (RuntimeComponentReference)endpoint.getSourceComponentReference(),
+                                    endpoint.getSourceBinding());
     }
 
     /**
@@ -214,65 +285,41 @@ public class CompositeActivatorImpl implements CompositeActivator {
      * @param reference
      */
     private void resolveTargets(RuntimeComponentReference reference) {
-        
-/* Not used now that domain wires are created using the domain wire builder
-        // go over any targets that have not been resolved yet (as they are running on other nodes)
-        // and try an resolve them remotely
-        // TODO - this should work for any kind of wired binding but the only wireable binding 
-        //        is currently the SCA binding so we assume that
-        for (ComponentService service : reference.getTargets()) {
-            if (service.isUnresolved()) {
-                for (Binding binding : service.getBindings()) {
-                    
-
-                    //binding.setURI(service.getName());
-                    
-                    // TODO - we should look at all the bindings now associated with the 
-                    //        unresolved target but we assume the SCA binding here as
-                    //        its currently the only wireable one
-                    if (binding instanceof SCABinding) {
-                        OptimizableBinding scaBinding = (OptimizableBinding)binding;
-
-                        // clone the SCA binding and fill in service details 
-                        // its cloned as each target 
-                        SCABinding clonedSCABinding = null;
-                        try {
-                            clonedSCABinding = (SCABinding)((OptimizableBinding)scaBinding).clone();
-                            // TODO - Reusing the name here to store the target name so the 
-                            //        binding can be found again once the URI is set to the real endpoint
-                            clonedSCABinding.setName(service.getName());
-                            clonedSCABinding.setURI(service.getName());
-                            // wireable binding stuff needs to go. SCA binding uses it
-                            // currently to get to the service to work out if the service
-                            // is resolved. 
-                            OptimizableBinding endpoint = ((OptimizableBinding)clonedSCABinding);
-                            endpoint.setTargetComponentService(service);
-                            //endpoint.setTargetComponent(component); - not known for unresolved target
-                            //endpoint.setTargetBinding(serviceBinding); - not known for unresolved target
-
-                            // add the cloned SCA binding to the reference as it will be used to look up the 
-                            // provider later
-                            reference.getBindings().remove(binding);
-                            reference.getBindings().add(clonedSCABinding);
-                        } catch (Exception e) {
-                            // warning("The binding doesn't support clone: " + binding.getClass().getSimpleName(), binding);
-                        }
-                    } else {
-                        
-                         * Just leave the binding as it. It will be filled in later 
-                         * when the node resolves the targets
-                        throw new IllegalStateException(
-                                                        "Unable to create a distributed SCA binding provider for reference: " + reference
-                                                            .getName()
-                                                            + " and target: "
-                                                            + service.getName());
-                     
-                    }
-                }
-            }
-        }
-*/        
+        // The code that used to be here to resolved unresolved targets is now 
+        // at the bottom of BaseWireBuilder.connectComponentReferences()
     }
+    
+    /**
+     * Create the runtime wires for a reference endpoint. Currently this method
+     * only deals with the late binding case and creates a dummy wire that 
+     * will use the Endpoint to resolve the target at the point when the 
+     * wire chains are created.
+     * 
+     * @param component
+     * @param reference
+     * @param binding
+     */
+    private void addReferenceEndpointWire(Component component, ComponentReference reference, Endpoint endpoint) {
+        // only deal with unresolved endpoints as, to prevent breaking changes, targets that are resolved
+        // at build time are still represented as bindings in the binding list
+        if (((RuntimeComponentReference)reference).getEndpointResolver(endpoint) == null){ 
+            // no endpoint provider has previously been created so don't create the 
+            // wire
+            return;
+        }
+
+        // TODO: TUSCANY-2580: avoid NPE if the InterfaceCOntract is null
+        Reference ctref = endpoint.getSourceComponentReference().getReference();
+        if (ctref != null && ctref.getInterfaceContract() == null) {
+            ctref.setInterfaceContract(reference.getInterfaceContract());
+        }
+        
+        RuntimeWire wire = new EndpointWireImpl(endpoint, this);
+        
+        RuntimeComponentReference runtimeRef = (RuntimeComponentReference)reference;
+        runtimeRef.getRuntimeWires().add(wire);
+    }
+    
 
     /**
      * Create the runtime wires for a reference binding
@@ -285,16 +332,21 @@ public class CompositeActivatorImpl implements CompositeActivator {
         if (!(reference instanceof RuntimeComponentReference)) {
             return;
         }
-
+        
         // create wire if binding has an endpoint
         Component targetComponent = null;
         ComponentService targetComponentService = null;
         Binding targetBinding = null;
+    
         if (binding instanceof OptimizableBinding) {
             OptimizableBinding endpoint = (OptimizableBinding)binding;
             targetComponent = endpoint.getTargetComponent();
             targetComponentService = endpoint.getTargetComponentService();
             targetBinding = endpoint.getTargetBinding();
+            // FIXME: TUSCANY-2136, For unresolved binding, don't add wire. Is it the right solution?
+            if (!reference.isCallback() && binding.getURI() == null && targetComponentService == null) {
+                return;
+            }
         }
 
         // create a forward wire, either static or dynamic
@@ -339,6 +391,14 @@ public class CompositeActivatorImpl implements CompositeActivator {
         */
     }
 
+    public void addReferenceWireForEndpoint(Endpoint endpoint){
+        addReferenceWire(endpoint.getSourceComponent(),
+                         endpoint.getSourceComponentReference(),
+                         endpoint.getSourceBinding(),
+                         endpoint.getTargetComponent(),
+                         endpoint.getTargetComponentService(),
+                         endpoint.getTargetBinding());
+    }
     /**
      * Create a reference wire for a forward call or a callback
      * @param reference
@@ -358,8 +418,14 @@ public class CompositeActivatorImpl implements CompositeActivator {
 
         // Use the interface contract of the reference on the component type
         Reference componentTypeRef = reference.getReference();
-        InterfaceContract sourceContract =
-            componentTypeRef == null ? reference.getInterfaceContract() : componentTypeRef.getInterfaceContract();
+
+        InterfaceContract sourceContract;
+        if (componentTypeRef == null || componentTypeRef.getInterfaceContract() == null) {
+            sourceContract = reference.getInterfaceContract();
+        } else {
+            sourceContract = componentTypeRef.getInterfaceContract();
+        }
+
         sourceContract = sourceContract.makeUnidirectional(false);
 
         EndpointReference wireSource =
@@ -388,6 +454,12 @@ public class CompositeActivatorImpl implements CompositeActivator {
 
         EndpointReference wireTarget =
             new EndpointReferenceImpl((RuntimeComponent)serviceComponent, service, serviceBinding, bindingContract);
+        
+        // TUSCANY-2029 - We should use the URI of the serviceBinding because the target may be a Component in a
+        // nested composite.
+        if (serviceBinding != null) {
+            wireTarget.setURI(serviceBinding.getURI());
+        }
 
         RuntimeWire wire =
             new RuntimeWireImpl(wireSource, wireTarget, interfaceContractMapper, workScheduler, wireProcessor,
@@ -493,7 +565,7 @@ public class CompositeActivatorImpl implements CompositeActivator {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Stopping composite: " + composite.getName());
         }
-        for (Component component : composite.getComponents()) {
+        for (final Component component : composite.getComponents()) {
             stop(component);
         }
     }
@@ -515,10 +587,30 @@ public class CompositeActivatorImpl implements CompositeActivator {
             }
             RuntimeComponentReference runtimeRef = ((RuntimeComponentReference)reference);
             runtimeRef.setComponent(runtimeComponent);
+            
+            for (Endpoint endpoint : reference.getEndpoints()) {
+                final EndpointResolver endpointResolver = runtimeRef.getEndpointResolver(endpoint);
+                if (endpointResolver != null) {
+                    // Allow endpoint resolvers to do any startup reference manipulation
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            endpointResolver.start();
+                            return null;
+                          }
+                    });                       
+                }
+            }
+            
             for (Binding binding : reference.getBindings()) {
-                ReferenceBindingProvider bindingProvider = runtimeRef.getBindingProvider(binding);
+                final ReferenceBindingProvider bindingProvider = runtimeRef.getBindingProvider(binding);
                 if (bindingProvider != null) {
-                    bindingProvider.start();
+                    // Allow bindings to add shutdown hooks. Requires RuntimePermission shutdownHooks in policy. 
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            bindingProvider.start();
+                            return null;
+                          }
+                    });                       
                 }
             }
         }
@@ -529,9 +621,16 @@ public class CompositeActivatorImpl implements CompositeActivator {
             }
             RuntimeComponentService runtimeService = (RuntimeComponentService)service;
             for (Binding binding : service.getBindings()) {
-                ServiceBindingProvider bindingProvider = runtimeService.getBindingProvider(binding);
+                final ServiceBindingProvider bindingProvider = runtimeService.getBindingProvider(binding);
                 if (bindingProvider != null) {
-                    bindingProvider.start();
+                    // bindingProvider.start();
+                    // Allow bindings to add shutdown hooks. Requires RuntimePermission shutdownHooks in policy. 
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            bindingProvider.start();
+                            return null;
+                          }
+                    });                       
                 }
             }
         }
@@ -581,9 +680,15 @@ public class CompositeActivatorImpl implements CompositeActivator {
                 logger.fine("Stopping component service: " + component.getURI() + "#" + service.getName());
             }
             for (Binding binding : service.getBindings()) {
-                ServiceBindingProvider bindingProvider = ((RuntimeComponentService)service).getBindingProvider(binding);
+                final ServiceBindingProvider bindingProvider = ((RuntimeComponentService)service).getBindingProvider(binding);
                 if (bindingProvider != null) {
-                    bindingProvider.stop();
+                    // Allow bindings to read properties. Requires PropertyPermission read in security policy. 
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            bindingProvider.stop();
+                            return null;
+                          }
+                    });                       
                 }
             }
         }
@@ -592,20 +697,46 @@ public class CompositeActivatorImpl implements CompositeActivator {
                 logger.fine("Starting component reference: " + component.getURI() + "#" + reference.getName());
             }
             RuntimeComponentReference runtimeRef = ((RuntimeComponentReference)reference);
+            
             for (Binding binding : reference.getBindings()) {
-                ReferenceBindingProvider bindingProvider = runtimeRef.getBindingProvider(binding);
+                final ReferenceBindingProvider bindingProvider = runtimeRef.getBindingProvider(binding);
                 if (bindingProvider != null) {
-                    bindingProvider.stop();
+                    // Allow bindings to read properties. Requires PropertyPermission read in security policy. 
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            bindingProvider.stop();
+                            return null;
+                          }
+                    });                       
                 }
-            }
+            } 
+            
+            for (Endpoint endpoint : reference.getEndpoints()) {
+                final EndpointResolver endpointResolver = runtimeRef.getEndpointResolver(endpoint);
+                if (endpointResolver != null) {
+                    // Allow endpoint resolvers to do any shutdown reference manipulation
+                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                        public Object run() {
+                            endpointResolver.stop();
+                            return null;
+                          }
+                    });                       
+                }
+            }             
         }
         Implementation implementation = component.getImplementation();
         if (implementation instanceof Composite) {
             stop((Composite)implementation);
         } else {
-            ImplementationProvider implementationProvider = ((RuntimeComponent)component).getImplementationProvider();
+            final ImplementationProvider implementationProvider = ((RuntimeComponent)component).getImplementationProvider();
             if (implementationProvider != null) {
-                implementationProvider.stop();
+                // Allow bindings to read properties. Requires PropertyPermission read in security policy. 
+                AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        implementationProvider.stop();
+                        return null;
+                      }
+                });                       
             }
         }
 
@@ -730,6 +861,9 @@ public class CompositeActivatorImpl implements CompositeActivator {
                     + "#"
                     + service.getName());
             }
+            return;
+        }
+        if (service.getService() instanceof CompositeService) {
             return;
         }
         if (logger.isLoggable(Level.FINE)) {

@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.implementation.java.JavaImplementation;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 
 /**
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ConstructorResourceTestCase extends AbstractProcessorTest {
     

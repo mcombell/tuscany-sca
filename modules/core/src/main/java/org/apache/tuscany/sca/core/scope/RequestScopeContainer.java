@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  * A scope context which manages atomic component instances keyed on the current
  * request context
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class RequestScopeContainer extends AbstractScopeContainer<Thread> {
     private final Map<Thread, InstanceWrapper> contexts;

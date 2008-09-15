@@ -27,11 +27,12 @@ import org.apache.tuscany.sca.interfacedef.java.JavaOperation;
 /**
  * Represents a Java operation. 
  *
- * @version $Rev: 616060 $ $Date: 2008-01-28 13:39:55 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaOperationImpl extends OperationImpl implements JavaOperation {
 
     private Method method;
+    private String action;
 
     public Method getJavaMethod() {
         return method;
@@ -39,6 +40,14 @@ public class JavaOperationImpl extends OperationImpl implements JavaOperation {
 
     public void setJavaMethod(Method method) {
         this.method = method;
+    }
+
+    public String getAction() {
+        return action;
+    }
+    
+    public void setAction(String action) {
+        this.action = action;
     }
 
     @Override
@@ -66,6 +75,7 @@ public class JavaOperationImpl extends OperationImpl implements JavaOperation {
         return true;
     }
 
+    @Override
     public String toString() {
         return method == null ? "null" : method.toGenericString();
     }

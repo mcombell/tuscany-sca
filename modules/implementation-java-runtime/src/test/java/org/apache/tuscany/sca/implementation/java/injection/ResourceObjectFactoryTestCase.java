@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 import org.easymock.EasyMock;
 
 /**
- * @version $Rev: 537744 $ $Date: 2007-05-14 01:00:18 -0700 (Mon, 14 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class ResourceObjectFactoryTestCase extends TestCase {
 

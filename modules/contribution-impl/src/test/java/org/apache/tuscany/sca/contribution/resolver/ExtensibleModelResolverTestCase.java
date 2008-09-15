@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 /**
  * Test DefaultArtifactResolver.
  *
- * @version $Rev: 618158 $ $Date: 2008-02-03 18:44:47 -0800 (Sun, 03 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class ExtensibleModelResolverTestCase extends TestCase {
     private ExtensibleModelResolver resolver;

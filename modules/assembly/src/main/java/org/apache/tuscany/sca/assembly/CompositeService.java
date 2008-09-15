@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * Represents a composite service.
  * 
- * @version $Rev: 566036 $ $Date: 2007-08-14 23:16:47 -0700 (Tue, 14 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface CompositeService extends Service {
 

@@ -23,7 +23,7 @@ import javax.xml.xpath.XPathExpression;
 /**
  * Represents a configured property of a component.
  * 
- * @version $Rev: 639224 $ $Date: 2008-03-20 02:37:04 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ComponentProperty extends Property {
 
@@ -35,9 +35,9 @@ public interface ComponentProperty extends Property {
     Property getProperty();
 
     /**
-     * Sets the property type that defines this property.
+     * Sets the property defined by this component implementation.
      * 
-     * @param type the property that defines this property
+     * @param property the property defined by this component implementation
      */
     void setProperty(Property property);
 

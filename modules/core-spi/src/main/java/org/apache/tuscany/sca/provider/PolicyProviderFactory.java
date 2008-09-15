@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 
 /**
- * @version $Rev: 634558 $ $Date: 2008-03-06 22:35:52 -0800 (Thu, 06 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface PolicyProviderFactory<M extends Policy> extends ProviderFactory<M> {
     /**

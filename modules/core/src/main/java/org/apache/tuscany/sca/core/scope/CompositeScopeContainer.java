@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * A scope context which manages atomic component instances keyed by composite
  * 
- * @version $Rev: 571516 $ $Date: 2007-08-31 09:41:22 -0700 (Fri, 31 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class CompositeScopeContainer<KEY> extends AbstractScopeContainer<KEY> {
     private InstanceWrapper<?> wrapper;

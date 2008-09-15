@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
  * URI is assumed to be relative and the parent composite is searched. If a mapped name is not provided, i.e. resolution
  * is by type, the parent composite is first searched followed by the host namespace.
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ResourceObjectFactory<T> implements ObjectFactory<T> {
 

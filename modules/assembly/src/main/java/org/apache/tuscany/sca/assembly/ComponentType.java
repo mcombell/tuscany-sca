@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Describes an implementation and represents its configurable aspects.
  * 
- * @version $Rev: 567222 $ $Date: 2007-08-17 20:47:14 -0700 (Fri, 17 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ComponentType extends Base {
     

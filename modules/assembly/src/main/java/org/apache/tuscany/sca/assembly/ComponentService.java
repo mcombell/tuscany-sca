@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * An addressable instance of a service associated with a particular component.
  * 
- * @version $Rev: 564107 $ $Date: 2007-08-08 23:05:29 -0700 (Wed, 08 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ComponentService extends Service {
 

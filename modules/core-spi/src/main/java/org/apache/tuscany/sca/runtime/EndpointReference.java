@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 /**
  * The endpoint reference for a component service or reference
  * 
- * @version $Rev: 576055 $ $Date: 2007-09-16 00:11:45 -0700 (Sun, 16 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface EndpointReference extends Cloneable {
     /**

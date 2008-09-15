@@ -35,7 +35,7 @@ import org.osoa.sca.annotations.Context;
  * a {@link JavaMappedProperty} to the component type which will be used to
  * inject the appropriate context
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ContextProcessor extends BaseJavaClassVisitor {
     

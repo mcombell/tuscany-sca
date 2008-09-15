@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
 /**
  * Exception that indicates an element was encountered that could not be handled.
  *
- * @version $Rev: 560434 $ $Date: 2007-07-27 18:23:02 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public class UnrecognizedElementException extends ContributionReadException {
     private static final long serialVersionUID = 2549543622209829032L;
@@ -34,7 +34,7 @@ public class UnrecognizedElementException extends ContributionReadException {
      * @param element the element that could not be handled
      */
     public UnrecognizedElementException(QName element) {
-        super("Unrecognized element: " + element.toString());
+        super("Unrecognized element: " + element);
         this.element = element;
     }
 

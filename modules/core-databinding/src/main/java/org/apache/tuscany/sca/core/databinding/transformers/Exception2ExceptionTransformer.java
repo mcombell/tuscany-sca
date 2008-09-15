@@ -30,8 +30,10 @@ import org.apache.tuscany.sca.interfacedef.FaultExceptionMapper;
 /**
  * This is a special transformer to transform the exception from one IDL to the
  * other one
+ *
+ * @version $Rev$ $Date$
  */
-public class Exception2ExceptionTransformer extends BaseTransformer<Object[], Object[]> implements
+public class Exception2ExceptionTransformer extends BaseTransformer<Throwable, Throwable> implements
     PullTransformer<Throwable, Throwable> {
 
     protected Mediator mediator;
@@ -68,7 +70,7 @@ public class Exception2ExceptionTransformer extends BaseTransformer<Object[], Ob
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getSourceType()
      */
     @Override
-    protected Class getSourceType() {
+    protected Class<Throwable> getSourceType() {
         return Throwable.class;
     }
 
@@ -76,7 +78,7 @@ public class Exception2ExceptionTransformer extends BaseTransformer<Object[], Ob
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getTargetType()
      */
     @Override
-    protected Class getTargetType() {
+    protected Class<Throwable> getTargetType() {
         return Throwable.class;
     }
 
@@ -94,12 +96,12 @@ public class Exception2ExceptionTransformer extends BaseTransformer<Object[], Ob
 
         DataType<DataType> targetType = context.getTargetDataType();
 
-        Object sourceFaultInfo = faultExceptionMapper.getFaultInfo(source, sourceType.getLogical().getPhysical());
+        Object sourceFaultInfo = faultExceptionMapper.getFaultInfo(source, sourceType.getLogical().getPhysical(), context.getSourceOperation());
         Object targetFaultInfo =
             mediator.mediate(sourceFaultInfo, sourceType.getLogical(), targetType.getLogical(), context.getMetadata());
 
         Throwable targetException =
-            faultExceptionMapper.wrapFaultInfo(targetType, source.getMessage(), targetFaultInfo, source.getCause());
+            faultExceptionMapper.wrapFaultInfo(targetType, source.getMessage(), targetFaultInfo, source.getCause(), context.getTargetOperation());
 
         // FIXME
         return targetException == null ? source : targetException;

@@ -33,6 +33,7 @@ import org.apache.tuscany.sca.assembly.AbstractReference;
 import org.apache.tuscany.sca.assembly.AbstractService;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
@@ -42,12 +43,13 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
 import org.apache.tuscany.sca.policy.PolicyFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.w3c.dom.Document;
 
 /**
  * A constrainingType processor.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements StAXArtifactProcessor<ConstrainingType> {
 
@@ -57,10 +59,24 @@ public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements 
      * @param policyFactory
      * @param extensionProcessor
      */
-    public ConstrainingTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, StAXArtifactProcessor extensionProcessor) {
-        super(factory, policyFactory, extensionProcessor);
+    public ConstrainingTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, 
+    								 StAXArtifactProcessor extensionProcessor, Monitor monitor) {
+        super(factory, policyFactory, extensionProcessor, monitor);
     }
 
+    /**
+     * Constructs a new constrainingType processor.
+     * 
+     * @param modelFactories
+     * @param extensionProcessor
+     */
+    public ConstrainingTypeProcessor(ModelFactoryExtensionPoint modelFactories, 
+    								 StAXArtifactProcessor extensionProcessor,
+    								 Monitor monitor) {
+        super(modelFactories.getFactory(AssemblyFactory.class),
+              modelFactories.getFactory(PolicyFactory.class), extensionProcessor, monitor);
+    }
+    
     public ConstrainingType read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         ConstrainingType constrainingType = null;
         AbstractService abstractService = null;
@@ -115,7 +131,7 @@ public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements 
                         constrainingType.getProperties().add(abstractProperty);
                         policyProcessor.readPolicies(abstractProperty, reader);
                         
-                    } else if (OPERATION.equals(name)) {
+                    } else if (OPERATION_QNAME.equals(name)) {
 
                         // Read an <operation>
                         Operation operation = new OperationImpl();

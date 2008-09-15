@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 /**
  * A test component implementation model.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestImplementation extends ImplementationImpl implements Implementation {
     public TestImplementation(AssemblyFactory factory) {

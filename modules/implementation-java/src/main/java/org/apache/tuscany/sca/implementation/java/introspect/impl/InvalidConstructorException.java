@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
  * Denotes an invalid constructor definition, e.g. when the number of injection names specified in {@link
  * org.osoa.sca.annotations.Constructor} do not match the number of actual constructor parameters
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidConstructorException extends IntrospectionException {
     private static final long serialVersionUID = 1411492435210741512L;

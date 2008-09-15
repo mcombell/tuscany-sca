@@ -25,7 +25,7 @@ import org.osoa.sca.Conversation;
 /**
  * An extended interface over org.osoa.Conversation
  * 
- * @version $Rev: 620333 $ $Date: 2008-02-10 13:31:04 -0800 (Sun, 10 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ExtendedConversation extends Conversation {
     /**
@@ -56,11 +56,11 @@ public interface ExtendedConversation extends Conversation {
      */
     void updateLastReferencedTime();
     
-    public void initializeConversationAttributes(RuntimeComponent targetComponent);
+    void initializeConversationAttributes(RuntimeComponent targetComponent);
 
     
     /**
      * @return true if the conversational attributes have been initialized
      */
-    public boolean conversationalAttributesInitialized();
+    boolean conversationalAttributesInitialized();
 }

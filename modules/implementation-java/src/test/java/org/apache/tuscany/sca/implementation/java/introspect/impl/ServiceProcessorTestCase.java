@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.sca.implementation.java.introspect.impl;
 
+import javax.jws.WebService;
+
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
@@ -31,7 +33,7 @@ import org.osoa.sca.annotations.Remotable;
 import org.osoa.sca.annotations.Service;
 
 /**
- * @version $Rev: 575401 $ $Date: 2007-09-13 11:54:15 -0700 (Thu, 13 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class ServiceProcessorTestCase extends TestCase {
     private ServiceProcessor processor;
@@ -65,6 +67,12 @@ public class ServiceProcessorTestCase extends TestCase {
         assertEquals(1, type.getServices().size());
     }
 
+
+    public void testMultipleWithWebServiceAnnotation() throws Exception {
+        processor.visitClass(FooMultipleWithWebService.class, type);
+        assertEquals(2, type.getServices().size());
+    }
+    
     public void testRemotableNoService() throws Exception {
         processor.visitClass(FooRemotableNoService.class, type);
         assertEquals(1, type.getServices().size());
@@ -79,9 +87,9 @@ public class ServiceProcessorTestCase extends TestCase {
     public void testNoInterfaces() throws Exception {
         try {
             processor.visitClass(BadDefinition.class, type);
-            fail();
         } catch (IllegalServiceDefinitionException e) {
-            //expected
+            //not expected
+            fail();
         }
     }
 
@@ -101,6 +109,10 @@ public class ServiceProcessorTestCase extends TestCase {
     }
 
     private interface Bar2 {
+    }
+    
+    @WebService
+    private interface Bar3 {
     }
 
     @Remotable
@@ -124,7 +136,10 @@ public class ServiceProcessorTestCase extends TestCase {
     private class FooMultipleWithCalback implements Baz, Bar {
 
     }
-
+    
+    private class FooMultipleWithWebService implements BazRemotable, Bar3 {
+    }
+    
     private class FooRemotableNoService implements BazRemotable, Bar {
 
     }

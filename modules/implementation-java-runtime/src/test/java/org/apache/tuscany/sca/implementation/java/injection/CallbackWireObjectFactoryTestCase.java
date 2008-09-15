@@ -31,7 +31,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.easymock.EasyMock;
 
 /**
- * @version $Rev: 538423 $ $Date: 2007-05-15 21:11:06 -0700 (Tue, 15 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class CallbackWireObjectFactoryTestCase extends TestCase {
 

@@ -29,7 +29,7 @@ import org.osoa.sca.ServiceReference;
 /**
  * Test creation of an SCADomainBean and invocation of a service.
  * 
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class SCADomainBeanTestCase extends TestCase {
 

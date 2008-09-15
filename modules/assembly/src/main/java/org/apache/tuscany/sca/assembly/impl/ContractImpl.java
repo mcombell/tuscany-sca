@@ -27,6 +27,11 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
 
+/**
+ * Implementation of a Contract.
+ *
+ * @version $Rev$ $Date$
+ */
 public class ContractImpl extends ExtensibleImpl implements AbstractContract {
     private InterfaceContract interfaceContract;
     private String name;

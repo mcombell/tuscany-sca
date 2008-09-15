@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.core.factory.ObjectFactory;
 /**
  * Creates new instances of a Java class
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  * @see org.apache.tuscany.sca.implementation.java.injection.Injector
  */
 public class TestObjectFactory<T> implements ObjectFactory<T> {

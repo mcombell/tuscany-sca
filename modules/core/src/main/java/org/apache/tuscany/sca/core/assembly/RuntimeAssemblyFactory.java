@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
 
 /**
  * The runtime version of assembly factory
- * @version $Rev: 571866 $ $Date: 2007-09-01 13:20:37 -0700 (Sat, 01 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class RuntimeAssemblyFactory extends DefaultAssemblyFactory implements AssemblyFactory {
    

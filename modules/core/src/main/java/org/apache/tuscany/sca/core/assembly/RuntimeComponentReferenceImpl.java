@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.Endpoint;
 import org.apache.tuscany.sca.assembly.impl.ComponentReferenceImpl;
+import org.apache.tuscany.sca.endpointresolver.EndpointResolver;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
@@ -34,10 +36,17 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 
+/**
+ * Implementation of a Component Reference.
+ *
+ * @version $Rev$ $Date$
+ */
 public class RuntimeComponentReferenceImpl extends ComponentReferenceImpl implements RuntimeComponentReference {
     private ArrayList<RuntimeWire> wires;
     private HashMap<Binding, ReferenceBindingProvider> bindingProviders =
         new HashMap<Binding, ReferenceBindingProvider>();
+    private HashMap<Endpoint, EndpointResolver> endpointResolvers =
+        new HashMap<Endpoint, EndpointResolver>();    
     private HashMap<Binding, List<PolicyProvider>> policyProviders = new HashMap<Binding, List<PolicyProvider>>();
 
     private RuntimeComponent component;
@@ -60,6 +69,18 @@ public class RuntimeComponentReferenceImpl extends ComponentReferenceImpl implem
                 return wire;
             }
         }
+
+        // TODO: TUSCANY-2580: before returning null see if a candidate binding matches 
+        for (RuntimeWire wire : getRuntimeWires()) {
+            if (wire instanceof EndpointWireImpl) {
+                Endpoint endpoint = ((EndpointWireImpl)wire).getEndpoint();
+                for (Binding b : endpoint.getCandidateBindings()) {
+                    if (b == binding) {
+                        return wire;
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -69,6 +90,14 @@ public class RuntimeComponentReferenceImpl extends ComponentReferenceImpl implem
 
     public void setBindingProvider(Binding binding, ReferenceBindingProvider bindingProvider) {
         bindingProviders.put(binding, bindingProvider);
+    }
+    
+    public EndpointResolver getEndpointResolver(Endpoint endpoint){
+        return endpointResolvers.get(endpoint);
+    }
+    
+    public void setEndpointResolver(Endpoint endpoint, EndpointResolver endpointResolver){
+        endpointResolvers.put(endpoint, endpointResolver);
     }
 
     public Invoker getInvoker(Binding binding, Operation operation) {
@@ -119,4 +148,8 @@ public class RuntimeComponentReferenceImpl extends ComponentReferenceImpl implem
         return policyProviders.get(binding);
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

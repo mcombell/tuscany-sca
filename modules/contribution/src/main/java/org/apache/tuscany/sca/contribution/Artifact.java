@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.assembly.Base;
 /**
  * Represents an artifact in an SCA contribution.
  * 
- * @version $Rev: 618930 $ $Date: 2008-02-06 01:15:49 -0800 (Wed, 06 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Artifact extends Base {
     

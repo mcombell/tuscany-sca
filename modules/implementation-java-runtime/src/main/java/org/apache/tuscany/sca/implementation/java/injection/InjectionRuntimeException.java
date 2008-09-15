@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.implementation.java.injection;
 /**
  * Root unchecked exception for the injection package
  *
- * @version $Rev: 537424 $ $Date: 2007-05-12 06:47:18 -0700 (Sat, 12 May 2007) $
+ * @version $Rev$ $Date$
  */
 public abstract class InjectionRuntimeException extends RuntimeException {
 

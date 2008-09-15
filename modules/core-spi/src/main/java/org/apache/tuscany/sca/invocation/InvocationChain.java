@@ -23,11 +23,11 @@ import org.apache.tuscany.sca.interfacedef.Operation;
 /**
  * A wire consists of 1..n invocation chains associated with the operations of its source service contract.
  * <p/>
- * Invocation chains may contain </code>Interceptors</code> that process invocations.
+ * Invocation chains may contain <code>Interceptors</code> that process invocations.
  * <p/>
  * A <code>Message</code> is used to pass data associated with an invocation through the chain.
  *
- * @version $Rev: 632064 $ $Date: 2008-02-28 09:18:51 -0800 (Thu, 28 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public interface InvocationChain {
     /**

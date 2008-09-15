@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * Manages the lifecycle and visibility of instances associated with a an {@link RuntimeComponent}.
  *
- * @version $Rev: 572525 $ $Date: 2007-09-03 22:00:52 -0700 (Mon, 03 Sep 2007) $
+ * @version $Rev$ $Date$
  * @param <KEY> the type of IDs that this container uses to identify its contexts.
  * For example, for COMPOSITE scope this could be the URI of the composite component,
  * or for HTTP Session scope it might be the HTTP session ID.

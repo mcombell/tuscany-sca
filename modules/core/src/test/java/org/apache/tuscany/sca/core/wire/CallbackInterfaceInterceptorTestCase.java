@@ -29,7 +29,7 @@ import org.easymock.EasyMock;
 import org.osoa.sca.NoRegisteredCallbackException;
 
 /**
- * @version $Rev: 608822 $ $Date: 2008-01-04 04:59:56 -0800 (Fri, 04 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class CallbackInterfaceInterceptorTestCase extends TestCase {
 

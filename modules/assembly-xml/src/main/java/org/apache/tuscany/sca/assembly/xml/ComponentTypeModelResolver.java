@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 /**
  * A Model Resolver for ComponentType models.
  *
- * @version $Rev: 631056 $ $Date: 2008-02-25 17:28:13 -0800 (Mon, 25 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentTypeModelResolver implements ModelResolver {
 	private Contribution contribution;

@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Denotes an illegal use of the {@link @org.osoa.sca.annotations.Service} annotation
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class IllegalServiceDefinitionException extends IntrospectionException {
     private static final long serialVersionUID = -7151534258405092548L;

@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.implementation.java.introspect.impl;
 /**
  * Thrown when a method or field marked with {@link org.osoa.sca.annotations.Context} takes an unknown type
  *
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class UnknownContextTypeException extends IllegalContextException {
     private static final long serialVersionUID = 8125863714365422419L;

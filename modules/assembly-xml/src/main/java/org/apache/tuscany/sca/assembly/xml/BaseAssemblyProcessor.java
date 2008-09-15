@@ -49,18 +49,25 @@ import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Contract;
+import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.Multiplicity;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPoint;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
@@ -80,7 +87,7 @@ import org.w3c.dom.NodeList;
 /**
  * A base class with utility methods for the other artifact processors in this module. 
  * 
- * @version $Rev: 643489 $ $Date: 2008-04-01 10:06:42 -0800 (Tue, 01 Apr 2008) $
+ * @version $Rev$ $Date$
  */
 abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implements Constants {
 
@@ -91,6 +98,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     protected PolicyAttachPointProcessor policyProcessor;
     private DocumentBuilderFactory documentBuilderFactory;
     protected IntentAttachPointTypeFactory intentAttachPointTypeFactory;
+    private Monitor monitor;
 
     /**
      * Constructs a new BaseArtifactProcessor.
@@ -102,13 +110,15 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     public BaseAssemblyProcessor(ContributionFactory contribFactory,
                                  AssemblyFactory factory,
                                  PolicyFactory policyFactory,
-                                 StAXArtifactProcessor extensionProcessor) {
+                                 StAXArtifactProcessor extensionProcessor,
+                                 Monitor monitor) {
         this.assemblyFactory = factory;
         this.policyFactory = policyFactory;
         this.extensionProcessor = (StAXArtifactProcessor<Object>)extensionProcessor;
         this.contributionFactory = contribFactory;
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.intentAttachPointTypeFactory = new IntentAttachPointTypeFactoryImpl();
+        this.monitor = monitor;
     }
 
     /**
@@ -119,11 +129,57 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     @SuppressWarnings("unchecked")
     public BaseAssemblyProcessor(AssemblyFactory factory,
                                  PolicyFactory policyFactory,
-                                 StAXArtifactProcessor extensionProcessor) {
+                                 StAXArtifactProcessor extensionProcessor,
+                                 Monitor monitor) {
         this.assemblyFactory = factory;
         this.policyFactory = policyFactory;
         this.extensionProcessor = (StAXArtifactProcessor<Object>)extensionProcessor;
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
+        this.monitor = monitor;
+        
+        //TODO - this constructor should take a monitor too. 
+    }
+    
+    /**
+     * Marshals warnings into the monitor
+     * 
+     * @param message
+     * @param model
+     * @param messageParameters
+     */
+    protected void warning(String message, Object model, String... messageParameters) {
+        if (monitor != null){
+            Problem problem = new ProblemImpl(this.getClass().getName(), "assembly-xml-validation-messages", Severity.WARNING, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }
+    }
+    
+    /**
+     * Marshals errors into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "assembly-xml-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
+    }
+    
+    /**
+     * Marshals exceptions into the monitor
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    protected void error(String message, Object model, Exception ex) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "assembly-xml-validation-messages", Severity.ERROR, model, message, ex);
+	        monitor.problem(problem);
+    	}
     }
 
     /**
@@ -322,7 +378,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
         throws ContributionResolveException {
         
         String parentName = (parent instanceof Composite) ? ((Composite)parent).getName().toString() :
-            (parent instanceof Component) ? ((Component)parent).getName().toString() : "UNKNOWN";
+            (parent instanceof Component) ? ((Component)parent).getName() : "UNKNOWN";
         
         for (Contract contract : contracts) {
             try {
@@ -332,10 +388,8 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                 resolvePolicySets(contract.getPolicySets(), resolver);
                 resolvePolicySets(contract.getApplicablePolicySets(), resolver);
                 
-                //inherit the composite / component level policy intents and policysets
+                // Inherit the composite / component level applicable policy sets.
                 if ( parent != null && parent instanceof PolicySetAttachPoint )  {
-                    addInheritedIntents(((PolicySetAttachPoint)parent).getRequiredIntents(), contract.getRequiredIntents());
-                    addInheritedPolicySets(((PolicySetAttachPoint)parent).getPolicySets(), contract.getPolicySets());
                     addInheritedPolicySets(((PolicySetAttachPoint)parent).getApplicablePolicySets(), contract.getApplicablePolicySets());
                 }
                 
@@ -344,9 +398,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                     resolvePolicySets(confOp.getPolicySets(), resolver);
                     resolvePolicySets(confOp.getApplicablePolicySets(), resolver);
                     
-                    //inherit intents and policysets from parent contract
-                    addInheritedIntents(contract.getRequiredIntents(), confOp.getRequiredIntents());
-                    addInheritedPolicySets(contract.getPolicySets(), confOp.getPolicySets());
+                    //inherit applicable policy sets from parent contract
                     addInheritedPolicySets(contract.getApplicablePolicySets(), confOp.getApplicablePolicySets());
                 }
                                 
@@ -364,7 +416,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                     if (binding instanceof IntentAttachPoint) {
                         IntentAttachPoint policiedBinding = (IntentAttachPoint)binding;
                         
-                        if ( policiedBinding.getType().isUnresolved() ) {
+                        if ( policiedBinding.getType() != null && policiedBinding.getType().isUnresolved() ) {
                             IntentAttachPointType resolved = 
                                 resolver.resolveModel(IntentAttachPointType.class, 
                                                       policiedBinding.getType());
@@ -399,11 +451,6 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                             addInheritedPolicySets(((PolicySetAttachPoint)binding).getApplicablePolicySets(), 
                                                    confOp.getApplicablePolicySets());
                             PolicyValidationUtils.validatePolicySets(confOp, ((PolicySetAttachPoint)binding).getType());
-                            
-                            addInheritedIntents(((PolicySetAttachPoint)binding).getRequiredIntents(), 
-                                                confOp.getRequiredIntents());
-                            addInheritedPolicySets(((PolicySetAttachPoint)binding).getPolicySets(), 
-                                                confOp.getPolicySets());
                         }
                     }
                 }
@@ -414,8 +461,6 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                     resolvePolicySets(contract.getCallback().getPolicySets(), resolver);
                     resolvePolicySets(contract.getCallback().getApplicablePolicySets(), resolver);
                     //inherit the contract's policy intents and policysets
-                    addInheritedIntents(contract.getRequiredIntents(), contract.getCallback().getRequiredIntents());
-                    addInheritedPolicySets(contract.getPolicySets(), contract.getCallback().getPolicySets());
                     addInheritedPolicySets(contract.getApplicablePolicySets(), contract.getCallback().getApplicablePolicySets());
                     
                     for (int i = 0, n = contract.getCallback().getBindings().size(); i < n; i++) {
@@ -465,8 +510,9 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                     }
                 }
             } catch ( PolicyValidationException e ) {
-                throw new ContributionResolveException("PolicyValidation exceptions when processing service/reference '" 
-                                                       + contract.getName() + "' in '" + parentName + "'");
+            	error("PolicyServiceValidationException", contract, contract.getName(), parentName, e.getMessage());
+                //throw new ContributionResolveException("PolicyValidation exceptions when processing service/reference '" 
+                                                       //+ contract.getName() + "' in '" + parentName + "'");
             }
         }
     }
@@ -522,7 +568,9 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
             }
             document = documentBuilderFactory.newDocumentBuilder().newDocument();
         } catch (ParserConfigurationException e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", documentBuilderFactory, ce);
+            throw ce;
         }
 
         // root element has no namespace and local name "value"
@@ -695,8 +743,12 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
         List<PolicySet> resolvedPolicySets = new ArrayList<PolicySet>();
         PolicySet resolvedPolicySet = null;
         for (PolicySet policySet : policySets) {
-            resolvedPolicySet = resolver.resolveModel(PolicySet.class, policySet);
-            resolvedPolicySets.add(resolvedPolicySet);
+            if (policySet.isUnresolved()) {
+                resolvedPolicySet = resolver.resolveModel(PolicySet.class, policySet);
+                resolvedPolicySets.add(resolvedPolicySet);
+            } else {
+                resolvedPolicySets.add(policySet);
+            }
         }
         policySets.clear();
         policySets.addAll(resolvedPolicySets);
@@ -783,6 +835,45 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
         }
     }
     
+    /**
+     * 
+     * @param reader
+     * @param elementName
+     * @param estensibleElement
+     * @param extensionAttributeProcessor
+     * @throws ContributionReadException
+     * @throws XMLStreamException
+     */
+    protected void readExtendedAttributes(XMLStreamReader reader, QName elementName, Extensible estensibleElement, StAXAttributeProcessor extensionAttributeProcessor) throws ContributionReadException, XMLStreamException {
+    	 for (int a = 0; a < reader.getAttributeCount(); a++) {
+         	QName attributeName = reader.getAttributeName(a);
+         	if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
+             	if( ! elementName.getNamespaceURI().equals(attributeName.getNamespaceURI()) ) {
+             		String attributeExtension = (String) extensionAttributeProcessor.read(attributeName, reader);
+             		estensibleElement.getExtensions().add(attributeExtension);
+             	}
+         	}
+         }
+    }
+    
+
+    /**
+     * 
+     * @param attributeModel
+     * @param writer
+     * @param extensibleElement
+     * @param extensionAttributeProcessor
+     * @throws ContributionWriteException
+     * @throws XMLStreamException
+     */
+    protected void writeExtendedAttributes(XMLStreamWriter writer, Extensible extensibleElement, StAXAttributeProcessor extensionAttributeProcessor) throws ContributionWriteException, XMLStreamException {
+        for(Object o : extensibleElement.getExtensions()) {
+        	//FIXME How to identify it's a extended attribute ? 
+        	if(o instanceof String) {
+        		extensionAttributeProcessor.write(o, writer);
+        	}
+        }
+    }
     
     /*protected void validatePolicySets(PolicySetAttachPoint policySetAttachPoint) 
                                                             throws ContributionResolveException {

@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.core.factory;
 /**
  * Denotes an error creating a new object instance
  *
- * @version $Rev: 567617 $ $Date: 2007-08-20 02:29:15 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ObjectCreationException extends RuntimeException {
     private static final long serialVersionUID = -6423113430265944499L;

@@ -36,9 +36,9 @@ import org.apache.tuscany.sca.host.embedded.test.extension.TestImplementationFac
 
 
 /**
- * Implements a STAX artifact processor for test implementations.
+ * Implements a StAX artifact processor for test implementations.
  *
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestImplementationProcessor implements StAXArtifactProcessor<TestImplementation> {
     private static final QName IMPLEMENTATION_TEST = new QName("http://test/extension", "implementation.test");
@@ -50,7 +50,7 @@ public class TestImplementationProcessor implements StAXArtifactProcessor<TestIm
     }
 
     public QName getArtifactType() {
-        // Returns the qname of the XML element processed by this processor
+        // Returns the QName of the XML element processed by this processor
         return IMPLEMENTATION_TEST;
     }
 

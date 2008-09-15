@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.core.assembly;
 /**
  * Denotes an error starting the runtime
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ActivationException extends Exception {
     private static final long serialVersionUID = 8612661660934426123L;

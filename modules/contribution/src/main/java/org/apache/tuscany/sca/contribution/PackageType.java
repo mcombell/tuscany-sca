@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.contribution;
 /**
  * Constants for the main supported contribution package types.
  * 
- * @version $Rev: 637139 $ $Date: 2008-03-14 09:02:49 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface PackageType {
     

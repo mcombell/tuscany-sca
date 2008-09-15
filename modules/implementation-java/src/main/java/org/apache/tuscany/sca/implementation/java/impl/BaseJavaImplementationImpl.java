@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.implementation.java.BaseJavaImplementation;
 /**
  * Represents a Java implementation.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 abstract class BaseJavaImplementationImpl extends ImplementationImpl implements BaseJavaImplementation {
 
@@ -60,6 +60,11 @@ abstract class BaseJavaImplementationImpl extends ImplementationImpl implements 
         if (this.className == null) {
             this.className = javaClass.getName();
         }
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     @Override

@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWireProcessorExtensionPoint;
 /**
  * The default implementation of an extensible <code>WireProcessor</code>
  *
- * @version $Rev: 538423 $ $Date: 2007-05-15 21:11:06 -0700 (Tue, 15 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class ExtensibleWireProcessor implements RuntimeWireProcessor {
     

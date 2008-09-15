@@ -21,10 +21,14 @@ package org.apache.tuscany.sca.contribution.processor;
 import java.net.URI;
 import java.net.URL;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * Implementation of an extensible URL artifact processor.
@@ -32,20 +36,36 @@ import org.apache.tuscany.sca.contribution.service.UnrecognizedElementException;
  * Takes a URLArtifactProcessorExtensionPoint and delegates to the proper URLArtifactProcessor
  * by either fileName or fileExtention
  * 
- * @version $Rev: 616114 $ $Date: 2008-01-28 16:05:37 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class ExtensibleURLArtifactProcessor
     implements URLArtifactProcessor<Object> {
     
     private URLArtifactProcessorExtensionPoint processors;
+    private Monitor monitor;
 
     /**
      * Constructs a new ExtensibleURLArtifactProcessor.
      * 
      * @param processors
      */
-    public ExtensibleURLArtifactProcessor(URLArtifactProcessorExtensionPoint processors) {
+    public ExtensibleURLArtifactProcessor(URLArtifactProcessorExtensionPoint processors, Monitor monitor) {
         this.processors = processors;
+        this.monitor = monitor;
+    }
+    
+    /**
+     * Report a error.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+    private void error(String message, Object model, Object... messageParameters) {
+    	if (monitor != null) {
+	        Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+	        monitor.problem(problem);
+    	}
     }
 
     @SuppressWarnings("unchecked")
@@ -96,6 +116,7 @@ public class ExtensibleURLArtifactProcessor
         } else {
             UnrecognizedElementException e = new UnrecognizedElementException(null);
             e.setResourceURI(artifactURI.toString());
+            error("UnrecognizedElementException", processors, artifactURI.toString());
             throw e;
         }
     }

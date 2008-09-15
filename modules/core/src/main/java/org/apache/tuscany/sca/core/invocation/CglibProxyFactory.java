@@ -40,15 +40,11 @@ import org.osoa.sca.ServiceReference;
 /**
  * The implementation of a wire service that uses cglib dynamic proxies
  * 
- * @version $Rev: 628809 $ $Date: 2008-02-18 08:50:37 -0800 (Mon, 18 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 @SuppressWarnings("unused")
 public class CglibProxyFactory implements ProxyFactory {
     private MessageFactory messageFactory;
-
-    public CglibProxyFactory() {
-        this(new MessageFactoryImpl(), new InterfaceContractMapperImpl());
-    }
 
     public CglibProxyFactory(MessageFactory messageFactory, InterfaceContractMapper mapper) {
         this.messageFactory = messageFactory;
@@ -79,8 +75,8 @@ public class CglibProxyFactory implements ProxyFactory {
      * JDKCallbackInvocationHandler as JDKProxyService.
      */
     public <T> T createCallbackProxy(Class<T> interfaze, final List<RuntimeWire> wires) throws ProxyCreationException {
-        CallbackReferenceImpl<T> callbackReference = new CallbackReferenceImpl(interfaze, this, wires);
-        return createCallbackProxy(callbackReference);
+        CallbackReferenceImpl<T> callbackReference = CallbackReferenceImpl.newInstance(interfaze, this, wires);
+        return callbackReference != null ? createCallbackProxy(callbackReference) : null;
     }
 
     /**

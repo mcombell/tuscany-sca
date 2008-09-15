@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * Implements functionality common to scope contexts.
  * 
- * @version $Rev: 639271 $ $Date: 2008-03-20 05:54:38 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public abstract class AbstractScopeContainer<KEY> implements ScopeContainer<KEY> {
     protected Map<KEY, InstanceWrapper<?>> wrappers = new ConcurrentHashMap<KEY, InstanceWrapper<?>>();
@@ -80,8 +80,7 @@ public abstract class AbstractScopeContainer<KEY> implements ScopeContainer<KEY>
     }
     
     public void addWrapperReference(KEY existingContextId, KEY newContextId) 
-      throws TargetResolutionException 
-    {
+      throws TargetResolutionException {
         // do nothing here. the conversational scope container implements this
     }
 

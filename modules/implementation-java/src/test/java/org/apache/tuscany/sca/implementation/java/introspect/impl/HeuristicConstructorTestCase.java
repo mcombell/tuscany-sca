@@ -36,7 +36,7 @@ import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Remotable;
 
 /**
- * @version $Rev: 570495 $ $Date: 2007-08-28 10:32:53 -0700 (Tue, 28 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class HeuristicConstructorTestCase extends AbstractProcessorTest {
 

@@ -29,7 +29,7 @@ import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.osoa.sca.annotations.Init;
 
 /**
- * @version $Rev: 563019 $ $Date: 2007-08-05 20:43:59 -0700 (Sun, 05 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InitProcessorTestCase extends TestCase {
     
@@ -72,7 +72,42 @@ public class InitProcessorTestCase extends TestCase {
             // expected
         }
     }
+    
+    public void testProtectedInit() throws Exception {
+        InitProcessor processor = new InitProcessor(new DefaultAssemblyFactory());
+        JavaImplementation type = javaImplementationFactory.createJavaImplementation();
+        Method method = InitProcessorTestCase.Bar.class.getDeclaredMethod("protectedInit");
+        try {
+            processor.visitMethod(method, type);
+            fail();
+        } catch (IllegalInitException e) {
+            // expected
+        }
+    }
 
+    public void testPrivateInit() throws Exception {
+        InitProcessor processor = new InitProcessor(new DefaultAssemblyFactory());
+        JavaImplementation type = javaImplementationFactory.createJavaImplementation();
+        Method method = InitProcessorTestCase.Bar.class.getDeclaredMethod("privateInit");
+        try {
+            processor.visitMethod(method, type);
+            fail();
+        } catch (IllegalInitException e) {
+            // expected
+        }
+    }
+
+    public void testBadInit2() throws Exception {
+        InitProcessor processor = new InitProcessor(new DefaultAssemblyFactory());
+        JavaImplementation type = javaImplementationFactory.createJavaImplementation();
+        Method method = InitProcessorTestCase.Bar.class.getDeclaredMethod("badInit2");
+        try {
+            processor.visitMethod(method, type);
+            fail();
+        } catch (IllegalInitException e) {
+            // expected
+        }
+    }
 
     private class Foo {
         @Init
@@ -93,7 +128,18 @@ public class InitProcessorTestCase extends TestCase {
         @Init
         public void badInit(String foo) {
         }
+        
+        @Init
+        public String badInit2() {
+            return null;
+        }        
 
+        @Init
+        protected void protectedInit() {
+        }
 
+        @Init
+        private void privateInit() {
+        }
     }
 }

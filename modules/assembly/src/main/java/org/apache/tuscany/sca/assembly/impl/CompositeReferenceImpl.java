@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.assembly.CompositeReference;
 /**
  * Represents a composite reference.
  * 
- * @version $Rev: 537384 $ $Date: 2007-05-12 04:02:56 -0700 (Sat, 12 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class CompositeReferenceImpl extends ReferenceImpl implements CompositeReference, Cloneable {
     private List<ComponentReference> promotedReferences = new ArrayList<ComponentReference>();

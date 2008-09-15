@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 import org.apache.tuscany.sca.core.scope.Scope;
 
 /**
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ScopeTestCase extends TestCase {
 

@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * property has a data type, which may be either simple or complex. An
  * implementation may also define a default value for a property.
  * 
- * @version $Rev: 560488 $ $Date: 2007-07-27 21:18:42 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Property extends AbstractProperty, PolicySetAttachPoint, Cloneable {
     

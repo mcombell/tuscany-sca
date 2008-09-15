@@ -18,12 +18,15 @@
  */
 package org.apache.tuscany.sca.implementation.java.invocation;
 
+import java.lang.annotation.ElementType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +69,7 @@ import org.osoa.sca.annotations.ConversationID;
 /**
  * The runtime instantiation of Java component implementations
  * 
- * @version $Rev: 638895 $ $Date: 2008-03-19 08:56:51 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaComponentContextProvider {
     private JavaPropertyValueObjectFactory propertyValueFactory;
@@ -110,7 +113,19 @@ public class JavaComponentContextProvider {
 
         if (element != null && configuredProperty.getValue() != null) {
             if (!(element.getAnchor() instanceof Constructor)) {
-                instanceFactoryProvider.getInjectionSites().add(element);
+                if(element.getElementType() == ElementType.FIELD) {
+                    // Field field = (Field)element.getAnchor();
+                    instanceFactoryProvider.getInjectionSites().add(element);
+                    /*
+                    if(Modifier.isPublic(field.getModifiers())) {
+                        instanceFactoryProvider.getInjectionSites().add(element);
+                    } else if(field.getAnnotation(org.osoa.sca.annotations.Property.class) != null) {
+                        instanceFactoryProvider.getInjectionSites().add(element);
+                    }
+                    */
+                } else {
+                    instanceFactoryProvider.getInjectionSites().add(element);
+                }
             }
 
             //Class propertyJavaType = JavaIntrospectionHelper.getBaseType(element.getType(), element.getGenericType());
@@ -142,7 +157,7 @@ public class JavaComponentContextProvider {
                 }
             }
 
-            for (Map.Entry<String, JavaElementImpl> entry : instanceFactoryProvider.getImplementation()
+            for (Map.Entry<String, Collection<JavaElementImpl>> entry : instanceFactoryProvider.getImplementation()
                 .getCallbackMembers().entrySet()) {
                 List<RuntimeWire> wires = callbackWires.get(entry.getKey());
                 if (wires == null) {
@@ -150,21 +165,22 @@ public class JavaComponentContextProvider {
                     // component that has a callback
                     continue;
                 }
-                JavaElementImpl element = entry.getValue();
-                Class<?> businessInterface = element.getType();
-                ObjectFactory<?> factory = null;
-                if (CallableReference.class.isAssignableFrom(element.getType())) {
-                    businessInterface =
-                        JavaIntrospectionHelper.getBusinessInterface(element.getType(), element.getGenericType());
-                    factory =
-                        new CallbackReferenceObjectFactory(businessInterface, proxyFactory, wires);
-                } else {
-                    factory = new CallbackWireObjectFactory(businessInterface, proxyFactory, wires);
+                for(JavaElementImpl element : entry.getValue()) {
+                    Class<?> businessInterface = element.getType();
+                    ObjectFactory<?> factory = null;
+                    if (CallableReference.class.isAssignableFrom(element.getType())) {
+                        businessInterface =
+                            JavaIntrospectionHelper.getBusinessInterface(element.getType(), element.getGenericType());
+                        factory =
+                            new CallbackReferenceObjectFactory(businessInterface, proxyFactory, wires);
+                    } else {
+                        factory = new CallbackWireObjectFactory(businessInterface, proxyFactory, wires);
+                    }
+                    if (!(element.getAnchor() instanceof Constructor)) {
+                        instanceFactoryProvider.getInjectionSites().add(element);
+                    }
+                    instanceFactoryProvider.setObjectFactory(element, factory);
                 }
-                if (!(element.getAnchor() instanceof Constructor)) {
-                    instanceFactoryProvider.getInjectionSites().add(element);
-                }
-                instanceFactoryProvider.setObjectFactory(element, factory);
             }
         }
         for (Reference ref : instanceFactoryProvider.getImplementation().getReferences()) {
@@ -172,7 +188,16 @@ public class JavaComponentContextProvider {
                 instanceFactoryProvider.getImplementation().getReferenceMembers().get(ref.getName());
             if (element != null) {
                 if (!(element.getAnchor() instanceof Constructor)) {
-                    instanceFactoryProvider.getInjectionSites().add(element);
+                    if(element.getElementType() == ElementType.FIELD) {
+                        Field field = (Field)element.getAnchor();
+                        if(Modifier.isPublic(field.getModifiers())) {
+                            instanceFactoryProvider.getInjectionSites().add(element);
+                        } else if(field.getAnnotation(org.osoa.sca.annotations.Reference.class) != null) {
+                            instanceFactoryProvider.getInjectionSites().add(element);
+                        }
+                    } else {
+                        instanceFactoryProvider.getInjectionSites().add(element);
+                    }
                 }
                 ComponentReference componentReference = null;
                 List<RuntimeWire> wireList = null;

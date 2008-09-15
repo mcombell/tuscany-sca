@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.implementation.java.impl.JavaScopeImpl;
 /**
  * Processes the {@link JavaScopeImpl} annotation and updates the component type with the corresponding implmentation scope
  *
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ScopeProcessor extends BaseJavaClassVisitor {
     

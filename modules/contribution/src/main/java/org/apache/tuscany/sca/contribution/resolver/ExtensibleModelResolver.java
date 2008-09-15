@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.tuscany.sca.assembly.Base;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 
@@ -30,31 +31,34 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
  * An implementation of an extensible model resolver which delegates to the
  * proper resolver extension based on the class of the model to resolve.
  * 
- * @version $Rev: 632499 $ $Date: 2008-02-29 15:59:39 -0800 (Fri, 29 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class ExtensibleModelResolver implements ModelResolver {
-    private final ModelResolverExtensionPoint resolvers;
-    private final ModelFactoryExtensionPoint factories;
+    private final ModelResolverExtensionPoint resolverExtensions;
+    private final ModelFactoryExtensionPoint modelFactories;
     private final Contribution contribution;
-    private final ModelResolver defaultResolver;
-    private final Map<Class<?>, ModelResolver> resolverInstances = new HashMap<Class<?>, ModelResolver>();
+    private ModelResolver defaultResolver;
+    private final Map<Class<?>, ModelResolver> resolversByModelType = new HashMap<Class<?>, ModelResolver>();
+    private final Map<Class<?>, ModelResolver> resolversByImplementationClass = new HashMap<Class<?>, ModelResolver>();
     private Map<Object, Object> map = new HashMap<Object, Object>();
+    private Object lastUnresolved;
 
     /**
      * Constructs an extensible model resolver
      * 
-     * @param resolvers
      * @param contribution
-     * @param factories
+     * @param resolverExtensions
+     * @param modelFactories
+     * @param defaultResolver
      */
     @Deprecated
     public ExtensibleModelResolver(Contribution contribution,
-                                   ModelResolverExtensionPoint resolvers,
-                                   ModelFactoryExtensionPoint factories,
+                                   ModelResolverExtensionPoint resolverExtensions,
+                                   ModelFactoryExtensionPoint modelFactories,
                                    ModelResolver defaultResolver) {
         this.contribution = contribution;
-        this.resolvers = resolvers;
-        this.factories = factories;
+        this.resolverExtensions = resolverExtensions;
+        this.modelFactories = modelFactories;
         //FIXME Remove this default resolver, this is currently used to resolve policy declarations
         // but they should be handled by the contribution import/export mechanism instead of this
         // defaultResolver hack.
@@ -64,17 +68,16 @@ public class ExtensibleModelResolver implements ModelResolver {
     /**
      * Constructs an extensible model resolver
      * 
-     * @param resolvers
+     * @param resolverExtensions
      * @param contribution
-     * @param factories
+     * @param modelFactories
      */
     public ExtensibleModelResolver(Contribution contribution,
-                                   ModelResolverExtensionPoint resolvers,
-                                   ModelFactoryExtensionPoint factories) {
+                                   ModelResolverExtensionPoint resolverExtensions,
+                                   ModelFactoryExtensionPoint modelFactories) {
         this.contribution = contribution;
-        this.resolvers = resolvers;
-        this.factories = factories;
-        this.defaultResolver = null;
+        this.resolverExtensions = resolverExtensions;
+        this.modelFactories = modelFactories;
     }
 
     /**
@@ -85,7 +88,6 @@ public class ExtensibleModelResolver implements ModelResolver {
      * @return
      */
     private ModelResolver getModelResolverInstance(Class<?> modelType) {
-
         // Look up a model resolver instance for the model class or
         // each implemented interface
         Class<?>[] interfaces = modelType.getInterfaces();
@@ -97,24 +99,31 @@ public class ExtensibleModelResolver implements ModelResolver {
         for (Class<?> c : classes) {
 
             // Look up an existing model resolver instance
-            ModelResolver resolverInstance = resolverInstances.get(c);
+            ModelResolver resolverInstance = resolversByModelType.get(c);
             if (resolverInstance != null) {
                 return resolverInstance;
             }
 
             // We don't have an instance, lookup a model resolver class
             // and instantiate it
-            Class<? extends ModelResolver> resolverClass = resolvers.getResolver(c);
+            Class<? extends ModelResolver> resolverClass = resolverExtensions.getResolver(c);
             if (resolverClass != null) {
+
+                // Construct the model resolver instance and cache it
+                resolverInstance = resolversByImplementationClass.get(resolverClass);
+                if (resolverInstance != null) {
+                    resolversByModelType.put(c, resolverInstance);
+                    return resolverInstance;
+                }
                 try {
                     Constructor<? extends ModelResolver> constructor =
                         resolverClass
                             .getConstructor(new Class[] {Contribution.class, ModelFactoryExtensionPoint.class});
                     if (constructor != null) {
 
-                        // Construct the model resolver instance and cache it
-                        resolverInstance = constructor.newInstance(contribution, factories);
-                        resolverInstances.put(c, resolverInstance);
+                        resolverInstance = constructor.newInstance(contribution, modelFactories);
+                        resolversByImplementationClass.put(resolverClass, resolverInstance);
+                        resolversByModelType.put(c, resolverInstance);
                         return resolverInstance;
                     }
                 } catch (Exception e) {
@@ -145,9 +154,21 @@ public class ExtensibleModelResolver implements ModelResolver {
     }
 
     public <T> T resolveModel(Class<T> modelClass, T unresolved) {
+        // Protect against dependency cycles causing infinite recursion
+        // Save the current unresolved object and check later if we are trying
+        // to resolve the same object again
+        if (unresolved == lastUnresolved) {
+            return unresolved;
+        }
+        lastUnresolved = unresolved;
+        
         ModelResolver resolver = getModelResolverInstance(unresolved.getClass());
         if (resolver != null) {
-            return resolver.resolveModel(modelClass, unresolved);
+            Object resolved = resolver.resolveModel(modelClass, unresolved);
+            if (resolved != null && resolved != unresolved) {
+                lastUnresolved = null;
+                return modelClass.cast(resolved);
+            }
         } else {
             //FIXME Remove this default resolver, this is currently used to resolve policy declarations
             // but they should be handled by the contribution import/export mechanism instead of this
@@ -155,6 +176,7 @@ public class ExtensibleModelResolver implements ModelResolver {
             if (defaultResolver != null) {
                 Object resolved = defaultResolver.resolveModel(modelClass, unresolved);
                 if (resolved != null && resolved != unresolved) {
+                    lastUnresolved = null;
                     return modelClass.cast(resolved);
                 }
             }
@@ -162,11 +184,18 @@ public class ExtensibleModelResolver implements ModelResolver {
             Object resolved = map.get(unresolved);
             if (resolved != null) {
                 // Return the resolved object
+                lastUnresolved = null;
                 return modelClass.cast(resolved);
             }
         }
 
         return unresolved;
+    }
+    
+    // FIXME: TUSCANY-2499: temporarily  give access to the defaultResolver to get the jms binding
+    //  use of definitions.xml working while the definitions.xml processing is being refactored
+    public ModelResolver getDefaultModelResolver() {
+        return defaultResolver;
     }
 
 }

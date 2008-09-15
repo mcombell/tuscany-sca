@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Denotes an illegal use of {@link org.osoa.sca.annotations.Callback} on a reference
  *
- * @version $Rev: 639634 $ $Date: 2008-03-21 05:33:46 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class IllegalCallbackReferenceException extends IntrospectionException {
     private static final long serialVersionUID = -8932525723147700591L;

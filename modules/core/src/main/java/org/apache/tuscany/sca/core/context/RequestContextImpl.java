@@ -37,7 +37,7 @@ import org.osoa.sca.CallableReference;
 import org.osoa.sca.RequestContext;
 
 /**
- * @version $Rev: 628809 $ $Date: 2008-02-18 08:50:37 -0800 (Mon, 18 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class RequestContextImpl implements RequestContext {
 
@@ -66,9 +66,7 @@ public class RequestContextImpl implements RequestContext {
         CallableReference<B> callableReference = component.getComponentContext().getCallableReference(null, component, service);
         ReferenceParameters parameters = msgContext.getFrom().getReferenceParameters();
         ((CallableReferenceImpl<B>) callableReference).attachCallbackID(parameters.getCallbackID());
-        if (callableReference.getConversation() != null) {
-            ((CallableReferenceImpl<B>) callableReference).attachConversationID(parameters.getConversationID());
-        }
+        ((CallableReferenceImpl<B>) callableReference).attachConversation(parameters.getConversationID());
         return callableReference;
     }
 
@@ -93,12 +91,14 @@ public class RequestContextImpl implements RequestContext {
         JavaInterface javaInterface = (JavaInterface) callbackReference.getInterfaceContract().getInterface();
         Class<CB> javaClass = (Class<CB>)javaInterface.getJavaClass();
         List<RuntimeWire> wires = callbackReference.getRuntimeWires();
-        CallbackReferenceImpl ref = new CallbackReferenceImpl(javaClass, proxyFactory, wires);
-        //ref.resolveTarget();
-        ReferenceParameters parameters = msgContext.getFrom().getReferenceParameters();
-        ref.attachCallbackID(parameters.getCallbackID());
-        if (ref.getConversation() != null) {
-            ref.attachConversationID(parameters.getConversationID());
+        CallbackReferenceImpl ref = CallbackReferenceImpl.newInstance(javaClass, proxyFactory, wires);
+        if (ref != null) {  
+            //ref.resolveTarget();
+            ReferenceParameters parameters = msgContext.getFrom().getReferenceParameters();
+            ref.attachCallbackID(parameters.getCallbackID());
+            if (ref.getConversation() != null) {
+                ref.attachConversationID(parameters.getConversationID());
+            }
         }
         return ref;
     }

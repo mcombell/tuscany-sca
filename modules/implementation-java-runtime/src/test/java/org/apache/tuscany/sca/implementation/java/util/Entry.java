@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.implementation.java.util;
 /**
  * Implementations are used in wiring tests
  *
- * @version $Rev: 567313 $ $Date: 2007-08-18 11:38:44 -0700 (Sat, 18 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Entry {
 

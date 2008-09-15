@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 /**
  * Base interface for artifact processors.
  * 
- * @version $Rev: 616114 $ $Date: 2008-01-28 16:05:37 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ArtifactProcessor<M> {
     

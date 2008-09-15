@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
 /**
  * Factory for the Java model
  * 
- * @version $Rev: 564429 $ $Date: 2007-08-09 16:49:11 -0700 (Thu, 09 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface JavaImplementationFactory {
 

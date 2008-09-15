@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.runtime;
 /**
  * Implementations are called after wires are decorated with policy and before they are connected.
  *
- * @version $Rev: 538423 $ $Date: 2007-05-15 21:11:06 -0700 (Tue, 15 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface RuntimeWireProcessor {
 

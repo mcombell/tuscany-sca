@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.policy.IntentAttachPoint;
  * is constrained by this shape. The constrainingType specifies the services,
  * references and properties that must be implemented.
  * 
- * @version $Rev: 568902 $ $Date: 2007-08-23 02:32:29 -0700 (Thu, 23 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ConstrainingType extends Base, Extensible, IntentAttachPoint {
 

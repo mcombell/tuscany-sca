@@ -36,7 +36,9 @@ import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -44,6 +46,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.impl.OperationImpl;
+import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.policy.IntentAttachPoint;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
@@ -52,7 +55,7 @@ import org.w3c.dom.Document;
 /**
  * A componentType processor.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StAXArtifactProcessor<ComponentType> {
     
@@ -62,8 +65,23 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
      * @param policyFactory
      * @param registry
      */
-    public ComponentTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, StAXArtifactProcessor extensionProcessor) {
-        super(factory, policyFactory, extensionProcessor);
+    public ComponentTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, 
+    							  StAXArtifactProcessor extensionProcessor, StAXAttributeProcessor extensionAttributeProcessor, Monitor monitor) {
+        super(factory, policyFactory, extensionProcessor, monitor);
+    }
+
+    /**
+     * Constructs a new componentType processor.
+     * 
+     * @param modelFactories
+     * @param extensionProcessor
+     */
+    public ComponentTypeProcessor(ModelFactoryExtensionPoint modelFactories, 
+    							  StAXArtifactProcessor extensionProcessor,
+    							  StAXAttributeProcessor extensionAttributeProcessor,
+    							  Monitor monitor) {
+        super(modelFactories.getFactory(AssemblyFactory.class),
+              modelFactories.getFactory(PolicyFactory.class), extensionProcessor, monitor);
     }
     
     public ComponentType read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
@@ -134,7 +152,7 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
                         contract.setCallback(callback);
                         policyProcessor.readPolicies(callback, reader);
 
-                    } else if (OPERATION.equals(name)) {
+                    } else if (OPERATION_QNAME.equals(name)) {
 
                         // Read an <operation>
                         Operation operation = new OperationImpl();

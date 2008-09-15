@@ -23,11 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
-import java.net.URLConnection;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -45,6 +44,10 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -52,13 +55,15 @@ import org.xml.sax.SAXParseException;
  * Default implementation of an XMLInputFactory that creates validating
  * XMLStreamReaders.
  *
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
-public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
+public class DefaultValidatingXMLInputFactory extends ValidatingXMLInputFactory {
     
     private XMLInputFactory inputFactory;
     private ValidationSchemaExtensionPoint schemas;
+    private Monitor monitor;
     private boolean initialized;
+    private boolean hasSchemas;
     private Schema aggregatedSchema;
 
     /**
@@ -67,10 +72,25 @@ public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
      * @param inputFactory
      * @param schemas
      */
-    public DefaultValidatingXMLInputFactory(XMLInputFactory inputFactory, ValidationSchemaExtensionPoint schemas) {
+    public DefaultValidatingXMLInputFactory(XMLInputFactory inputFactory, ValidationSchemaExtensionPoint schemas, Monitor monitor) {
         this.inputFactory = inputFactory;
         this.schemas = schemas;
+        this.monitor = monitor;
     }
+    
+    /**
+     * Report a exception.
+     * 
+     * @param problems
+     * @param message
+     * @param model
+     */
+     private void error(String message, Object model, Exception ex) {
+    	 if (monitor != null) {
+    		 Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
+    	     monitor.problem(problem);
+    	 }        
+     }
     
     /**
      * Initialize the registered schemas and create an aggregated schema for
@@ -86,6 +106,11 @@ public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
         try {
             List<String> uris = schemas.getSchemas();
             int n = uris.size();
+            if (n ==0) {
+                return;
+            } else {
+                hasSchemas = true;
+            }
             final Source[] sources = new Source[n];
             for (int i =0; i < n; i++) {
                 final String uri = uris.get(i);
@@ -101,6 +126,7 @@ public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
                         }
                     });
                 } catch (PrivilegedActionException e) {
+                	error("PrivilegedActionException", url, (IOException)e.getException());
                     throw (IOException)e.getException();
                 }
                 sources[i] = new StreamSource(urlStream, uri);
@@ -117,6 +143,7 @@ public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
                     }
                 });
             } catch (PrivilegedActionException e) {
+            	error("PrivilegedActionException", schemaFactory, (SAXException)e.getException());
                 throw (SAXException)e.getException();
             }
 
@@ -124,111 +151,161 @@ public class DefaultValidatingXMLInputFactory extends XMLInputFactory {
             // FIXME Log this, some old JDKs don't support XMLSchema validation
             //e.printStackTrace();
         } catch (SAXParseException e) {
-            throw new IllegalStateException(e);
+        	IllegalStateException ie = new IllegalStateException(e);
+        	error("IllegalStateException", schemas, ie);
+            throw ie;
         } catch (Exception e) {
             //FIXME Log this, some old JDKs don't support XMLSchema validation
             e.printStackTrace();
         }
     }
 
+    @Override
     public XMLEventReader createFilteredReader(XMLEventReader arg0, EventFilter arg1) throws XMLStreamException {
         return inputFactory.createFilteredReader(arg0, arg1);
     }
 
+    @Override
     public XMLStreamReader createFilteredReader(XMLStreamReader arg0, StreamFilter arg1) throws XMLStreamException {
         return inputFactory.createFilteredReader(arg0, arg1);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(InputStream arg0, String arg1) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0, arg1);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(InputStream arg0) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(Reader arg0) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(Source arg0) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(String arg0, InputStream arg1) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0, arg1);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(String arg0, Reader arg1) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0, arg1);
     }
 
+    @Override
     public XMLEventReader createXMLEventReader(XMLStreamReader arg0) throws XMLStreamException {
         return inputFactory.createXMLEventReader(arg0);
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(InputStream arg0, String arg1) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema, monitor);
+        }else {
+            return inputFactory.createXMLStreamReader(arg0, arg1);
+        }
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(InputStream arg0) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema, monitor);
+        } else {
+            return inputFactory.createXMLStreamReader(arg0);
+        }
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(Reader arg0) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema, monitor);
+        } else {
+            return inputFactory.createXMLStreamReader(arg0);
+        }
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(Source arg0) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0), aggregatedSchema, monitor);
+        } else {
+            return inputFactory.createXMLStreamReader(arg0);
+        }
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(String arg0, InputStream arg1) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema, monitor);
+        } else {
+            return inputFactory.createXMLStreamReader(arg0, arg1);
+        }
     }
 
+    @Override
     public XMLStreamReader createXMLStreamReader(String arg0, Reader arg1) throws XMLStreamException {
         initializeSchemas();
-        return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema);
+        if (hasSchemas) {
+            return new ValidatingXMLStreamReader(inputFactory.createXMLStreamReader(arg0, arg1), aggregatedSchema, monitor);
+        } else {
+            return inputFactory.createXMLStreamReader(arg0, arg1);
+        }
     }
 
+    @Override
     public XMLEventAllocator getEventAllocator() {
         return inputFactory.getEventAllocator();
     }
 
+    @Override
     public Object getProperty(String arg0) throws IllegalArgumentException {
         return inputFactory.getProperty(arg0);
     }
 
+    @Override
     public XMLReporter getXMLReporter() {
         return inputFactory.getXMLReporter();
     }
 
+    @Override
     public XMLResolver getXMLResolver() {
         return inputFactory.getXMLResolver();
     }
 
+    @Override
     public boolean isPropertySupported(String arg0) {
         return inputFactory.isPropertySupported(arg0);
     }
 
+    @Override
     public void setEventAllocator(XMLEventAllocator arg0) {
         inputFactory.setEventAllocator(arg0);
     }
 
+    @Override
     public void setProperty(String arg0, Object arg1) throws IllegalArgumentException {
         inputFactory.setProperty(arg0, arg1);
     }
 
+    @Override
     public void setXMLReporter(XMLReporter arg0) {
         inputFactory.setXMLReporter(arg0);
     }
 
+    @Override
     public void setXMLResolver(XMLResolver arg0) {
         inputFactory.setXMLResolver(arg0);
     }

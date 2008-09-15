@@ -19,13 +19,13 @@
 
 package org.apache.tuscany.sca.core.invocation;
 
-import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 
 /**
  * The extension point to plug in proxy factories
- * @version $Rev: 561673 $ $Date: 2007-07-31 23:25:09 -0700 (Tue, 31 Jul 2007) $
+ * @version $Rev$ $Date$
  */
-public interface ProxyFactoryExtensionPoint extends ProxyFactory {
+public interface ProxyFactoryExtensionPoint {
+    
     /**
      * Get the proxy factory for java interfaces
      * @return
@@ -50,9 +50,4 @@ public interface ProxyFactoryExtensionPoint extends ProxyFactory {
      */
     void setClassProxyFactory(ProxyFactory factory);
     
-    /**
-     * @return the interfaceContractMapper
-     */
-    InterfaceContractMapper getInterfaceContractMapper();
-
 }

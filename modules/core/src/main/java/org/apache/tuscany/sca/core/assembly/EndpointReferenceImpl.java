@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.runtime.ReferenceParameters;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 /**
- * @version $Rev: 637621 $ $Date: 2008-03-16 10:59:45 -0700 (Sun, 16 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class EndpointReferenceImpl implements EndpointReference {
     private RuntimeComponent component;

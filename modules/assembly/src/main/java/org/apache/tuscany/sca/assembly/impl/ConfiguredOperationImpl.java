@@ -29,6 +29,8 @@ import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * Represents an Operation.
+ *
+ * @version $Rev$ $Date$
  */
 public class ConfiguredOperationImpl extends BaseImpl implements ConfiguredOperation {
     private List<PolicySet> policySets = new ArrayList<PolicySet>();

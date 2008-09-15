@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * Factory to create ScopeContainer for components
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ScopeContainerFactory {
     ScopeContainer createScopeContainer(RuntimeComponent component);

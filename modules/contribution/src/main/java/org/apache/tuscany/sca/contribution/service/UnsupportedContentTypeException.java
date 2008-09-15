@@ -24,7 +24,7 @@ package org.apache.tuscany.sca.contribution.service;
  * 
  * FIXME Don't use as it's deprecated and replaced by UnsupportedPackageTypeException.
  *
- * @version $Rev: 616149 $ $Date: 2008-01-28 19:10:32 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 @Deprecated
 public class UnsupportedContentTypeException extends ContributionException {

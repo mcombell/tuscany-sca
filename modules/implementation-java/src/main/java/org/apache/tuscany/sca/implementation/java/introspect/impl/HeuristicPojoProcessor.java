@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jws.WebService;
+
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.Contract;
 import org.apache.tuscany.sca.assembly.Multiplicity;
@@ -56,7 +58,6 @@ import org.osoa.sca.annotations.Context;
 import org.osoa.sca.annotations.Property;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Remotable;
-import org.osoa.sca.annotations.Service;
 
 /**
  * Heuristically evaluates an un-annotated Java implementation type to determine
@@ -68,7 +69,7 @@ import org.osoa.sca.annotations.Service;
  * interface implemented by the class then the service interface will be defined
  * in terms of that interface.
  * 
- * @version $Rev: 639634 $ $Date: 2008-03-21 05:33:46 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
     private JavaInterfaceFactory javaFactory;
@@ -97,7 +98,7 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
              */
             Set<Class> interfaces = getAllInterfaces(clazz);
             for (Class<?> i : interfaces) {
-                if (i.isAnnotationPresent(Remotable.class)) {
+                if (i.isAnnotationPresent(Remotable.class) || i.isAnnotationPresent(WebService.class)) {
                     addService(type, i);
                 }
             }
@@ -150,11 +151,14 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
         // heuristically determine the properties references
         // make a first pass through all public methods with one param
         Set<String> setters = new HashSet<String>();
+        Set<String> others = new HashSet<String>();
         for (Method method : methods) {
             if (!isPublicSetter(method)) {
                 continue;
             }
             if (method.isAnnotationPresent(Callback.class) || method.isAnnotationPresent(Context.class)) {
+                // Add the property name as others
+                others.add(toPropertyName(method.getName()));
                 continue;
             }
             if (!isInServiceInterface(method, services)) {
@@ -181,6 +185,8 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
                 continue;
             }
             if (method.isAnnotationPresent(Callback.class) || method.isAnnotationPresent(Context.class)) {
+                // Add the property name as others
+                others.add(toPropertyName(method.getName()));
                 continue;
             }
             Class<?> param = method.getParameterTypes()[0];
@@ -208,7 +214,7 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
             if (field.isAnnotationPresent(Callback.class) || field.isAnnotationPresent(Context.class)) {
                 continue;
             }
-            if (setters.contains(field.getName())) {
+            if (setters.contains(field.getName()) || others.contains(field.getName())) {
                 continue;
             }
             String name = field.getName();
@@ -456,8 +462,7 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
      */
     private boolean isReferenceType(Class<?> cls, Type genericType) {
         Class<?> baseType = JavaIntrospectionHelper.getBaseType(cls, genericType);
-        return baseType.isInterface() && (baseType.isAnnotationPresent(Remotable.class) || baseType
-            .isAnnotationPresent(Service.class));
+        return baseType.isInterface() && baseType.isAnnotationPresent(Remotable.class);
     }
 
     /**
@@ -499,10 +504,9 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
     }
 
     /**
-     * Creates a mapped property
+     * Creates a mapped property.
      * 
      * @param name the property name
-     * @param member the injection site the reference maps to
      * @param paramType the property type
      */
     private org.apache.tuscany.sca.assembly.Property createProperty(String name, Class<?> paramType) {
@@ -550,6 +554,8 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
         } catch (InvalidInterfaceException e1) {
             throw new IntrospectionException(e1);
         }
+
+        // FIXME:  This part seems to have already been taken care above!!
         try {
             processCallback(paramType, reference);
         } catch (InvalidServiceType e) {
@@ -582,9 +588,13 @@ public class HeuristicPojoProcessor extends BaseJavaClassVisitor {
         Callback callback = interfaze.getAnnotation(Callback.class);
         if (callback != null && !Void.class.equals(callback.value())) {
             Class<?> callbackClass = callback.value();
-            JavaInterface javaInterface = javaFactory.createJavaInterface();
-            javaInterface.setJavaClass(callbackClass);
-            contract.getInterfaceContract().setCallbackInterface(javaInterface);
+            JavaInterface javaInterface;
+            try {
+                javaInterface = javaFactory.createJavaInterface(callbackClass);
+                contract.getInterfaceContract().setCallbackInterface(javaInterface);
+            } catch (InvalidInterfaceException e) {
+                throw new InvalidServiceType("Invalid callback interface "+callbackClass, interfaze);
+            }
         } else if (callback != null && Void.class.equals(callback.value())) {
             throw new InvalidServiceType("No callback interface specified on annotation", interfaze);
         }

@@ -50,12 +50,12 @@ import org.apache.tuscany.sca.assembly.Wire;
 import org.junit.Test;
 
 /**
- * @version $Rev: 579601 $ $Date: 2007-09-26 04:25:30 -0700 (Wed, 26 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class PrintUtilTestCase {
 
     private AssemblyFactory factory = new DefaultAssemblyFactory();
-
+    
     /**
      * Create a composite
      */

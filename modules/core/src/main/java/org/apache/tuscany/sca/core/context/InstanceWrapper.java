@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.core.scope.TargetInitializationException;
  * Provides lifecycle management for an implementation instance associated with
  * a component for use by the component's associated {@link org.apache.tuscany.sca.core.scope.ScopeContainer}
  * 
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface InstanceWrapper<T> {
 

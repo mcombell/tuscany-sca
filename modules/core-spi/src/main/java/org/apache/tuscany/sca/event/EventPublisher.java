@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.event;
  * Publishes events in the runtime by accepting {@link Event} objects and 
  * forwarding them to all registered {@link RuntimeEventListener} objects.
  *
- * @version $$Rev: 639280 $$ $$Date: 2008-03-20 06:10:11 -0700 (Thu, 20 Mar 2008) $$
+ * @version $Rev$ $Date$
  */
 public interface EventPublisher {
 

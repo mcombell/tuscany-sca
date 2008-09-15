@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.contribution.Contribution;
 /**
  * A listener interface used to listen to contribution repository events.
  *
- * @version $Rev: 561159 $ $Date: 2007-07-30 15:28:12 -0700 (Mon, 30 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ContributionListener extends EventListener {
 

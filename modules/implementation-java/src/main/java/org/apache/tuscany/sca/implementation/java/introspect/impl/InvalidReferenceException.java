@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Denotes an invalid usage of {@link org.osoa.sca.annotations.Reference}
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidReferenceException extends IntrospectionException {
     private static final long serialVersionUID = -3285246635989254165L;

@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * Represents a component implementation.
  * 
- * @version $Rev: 596604 $ $Date: 2007-11-20 02:35:30 -0800 (Tue, 20 Nov 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Implementation extends ComponentType {
 }

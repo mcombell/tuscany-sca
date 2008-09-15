@@ -18,12 +18,14 @@
  */
 package org.apache.tuscany.sca.assembly;
 
+import java.util.List;
+
 
 
 /**
  * An instance of a reference associated with a particular component.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ComponentReference extends Reference {
 
@@ -70,5 +72,12 @@ public interface ComponentReference extends Reference {
      * @param callbackService the callback service
      */
     void setCallbackService(ComponentService callbackService);
+    
+    /**
+     * Returns the endpoints implied by this reference.
+     * 
+     * @return the endpoints implied by this reference
+     */
+    List<Endpoint> getEndpoints();    
     
 }

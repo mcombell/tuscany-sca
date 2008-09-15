@@ -21,25 +21,36 @@ package org.apache.tuscany.sca.store;
 /**
  * Thrown when an error occurs reading from persistent storage
  *
- * @version $Rev: 537206 $ $Date: 2007-05-11 08:14:19 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class StoreReadException extends StoreException {
     private static final long serialVersionUID = -8624542082121467271L;
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreReadException() {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreReadException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreReadException(String message) {
         super(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StoreReadException(Throwable cause) {
         super(cause);
     }
-    
 }

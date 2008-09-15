@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.invocation.MessageFactory;
 /**
  * Implementation of MessageFactory.
  *
- * @version $Rev: 537327 $ $Date: 2007-05-11 20:18:05 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class MessageFactoryImpl implements MessageFactory {
 

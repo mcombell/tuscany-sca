@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * A scope context which manages stateless atomic component instances in a non-pooled fashion.
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class StatelessScopeContainer<KEY> extends AbstractScopeContainer<KEY> {
 

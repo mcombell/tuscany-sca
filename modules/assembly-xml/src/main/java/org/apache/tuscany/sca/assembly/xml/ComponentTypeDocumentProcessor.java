@@ -30,8 +30,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.tuscany.sca.assembly.ComponentType;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.ValidatingXMLInputFactory;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -39,7 +42,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 /**
  * A componentType processor.
  * 
- * @version $Rev: 635373 $ $Date: 2008-03-09 14:51:51 -0700 (Sun, 09 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implements URLArtifactProcessor<ComponentType> {
     private XMLInputFactory inputFactory;
@@ -50,9 +53,23 @@ public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implem
      * @param policyFactory
      * @param registry
      */
-    public ComponentTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, XMLInputFactory inputFactory) {
-        super(null, null, staxProcessor);
+    public ComponentTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
+    									  XMLInputFactory inputFactory, 
+    									  Monitor monitor) {
+        super(null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
+    }
+    
+    /**
+     * Constructs a new componentType processor.
+     * @param modelFactories
+     * @param staxProcessor
+     */
+    public ComponentTypeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
+    									  StAXArtifactProcessor staxProcessor,
+    									  Monitor monitor) {
+        super(null, null, staxProcessor, monitor);
+        this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
     }
     
     public ComponentType read(URL contributionURL, URI uri, URL url) throws ContributionReadException {
@@ -93,9 +110,13 @@ public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implem
             return componentType;
             
         } catch (XMLStreamException e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", inputFactory, ce);
+            throw ce;
         } catch (IOException e) {
-            throw new ContributionReadException(e);
+        	ContributionReadException ce = new ContributionReadException(e);
+        	error("ContributionReadException", inputFactory, ce);
+            throw ce;
         } finally {
             try {
                 if (urlStream != null) {

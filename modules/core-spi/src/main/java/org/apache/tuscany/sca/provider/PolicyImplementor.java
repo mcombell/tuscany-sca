@@ -27,7 +27,7 @@ import javax.xml.namespace.QName;
  * This interface can be optionally implemented by the Binding or Implementation providers to
  * indicate if they implement the policies in the binding/implementation provider.
  * 
- * @version $Rev: 634558 $ $Date: 2008-03-06 22:35:52 -0800 (Thu, 06 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface PolicyImplementor {
     /**

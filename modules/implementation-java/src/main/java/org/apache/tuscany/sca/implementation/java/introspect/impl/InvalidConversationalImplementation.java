@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Raised when an implementation specifies improper conversational metadata
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidConversationalImplementation extends IntrospectionException {
     private static final long serialVersionUID = -5487291552769408149L;

@@ -54,7 +54,7 @@ import org.osoa.sca.ServiceRuntimeException;
 /**
  * Implementation of ComponentContext that delegates to a ComponentContextProvider.
  *
- * @version $Rev: 583217 $ $Date: 2007-10-09 09:35:27 -0700 (Tue, 09 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class ComponentContextImpl implements RuntimeComponentContext {
     private final RuntimeComponent component;
@@ -127,11 +127,10 @@ public class ComponentContextImpl implements RuntimeComponentContext {
      * 
      * @see #getProperty(Class, String)
      */
-    public void setPropertyValueFactory(PropertyValueFactory factory)
-    {
+    public void setPropertyValueFactory(PropertyValueFactory factory) {
         propertyFactory = factory;
     }
-    
+
     /**
      * Gets the value for the specified property with the specified type.
      * 
@@ -220,7 +219,11 @@ public class ComponentContextImpl implements RuntimeComponentContext {
             InterfaceContract refInterfaceContract = getInterfaceContract(interfaceContract, businessInterface);
             if (refInterfaceContract != interfaceContract) {
                 ref = (RuntimeComponentReference)reference.clone();
-                ref.setInterfaceContract(interfaceContract);
+                if (interfaceContract != null) {
+                    ref.setInterfaceContract(interfaceContract);
+                } else {
+                    ref.setInterfaceContract(refInterfaceContract);
+                }
             }
             ref.setComponent(component);
             return new ServiceReferenceImpl<B>(businessInterface, component, ref, binding, proxyFactory, compositeActivator);
@@ -343,14 +346,17 @@ public class ComponentContextImpl implements RuntimeComponentContext {
      */
     private InterfaceContract getInterfaceContract(InterfaceContract interfaceContract, Class<?> businessInterface)
         throws CloneNotSupportedException, InvalidInterfaceException {
-        Interface interfaze = interfaceContract.getInterface();
         boolean compatible = false;
-        if (interfaze instanceof JavaInterface) {
-            Class<?> cls = ((JavaInterface)interfaze).getJavaClass();
-            if (businessInterface.isAssignableFrom(cls)) {
-                compatible = true;
+        if (interfaceContract != null && interfaceContract.getInterface() != null) {
+            Interface interfaze = interfaceContract.getInterface();
+            if (interfaze instanceof JavaInterface) {
+                Class<?> cls = ((JavaInterface)interfaze).getJavaClass();
+                if (businessInterface.isAssignableFrom(cls)) {
+                    compatible = true;
+                }
             }
         }
+
         if (!compatible) {
             // The interface is not assignable from the interface contract
             interfaceContract = javaInterfaceFactory.createJavaInterfaceContract();

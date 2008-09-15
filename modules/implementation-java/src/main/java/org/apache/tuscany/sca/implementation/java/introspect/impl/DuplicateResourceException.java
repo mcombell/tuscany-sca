@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Thrown when an implementation has more than one resource injection site with the same name
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class DuplicateResourceException extends IntrospectionException {
 

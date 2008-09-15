@@ -35,7 +35,7 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.osoa.sca.annotations.Reference;
 
 /**
- * @version $Rev: 584985 $ $Date: 2007-10-15 17:47:36 -0700 (Mon, 15 Oct 2007) $
+ * @version $Rev$ $Date$
  */
 public class ReferenceProcessorTestCase extends TestCase {
 

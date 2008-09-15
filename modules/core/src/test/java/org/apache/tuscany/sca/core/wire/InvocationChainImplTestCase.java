@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.invocation.Phase;
 
 /**
- * @version $Rev: 632064 $ $Date: 2008-02-28 09:18:51 -0800 (Thu, 28 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class InvocationChainImplTestCase extends TestCase {
 

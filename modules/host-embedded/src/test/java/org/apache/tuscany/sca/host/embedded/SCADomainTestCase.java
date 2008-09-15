@@ -29,7 +29,7 @@ import org.osoa.sca.ServiceReference;
 /**
  * Test SCADomain.newInstance and invocation of a service.
  * 
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class SCADomainTestCase extends TestCase {
 
@@ -37,7 +37,7 @@ public class SCADomainTestCase extends TestCase {
     
     @Override
     protected void setUp() throws Exception {
-        domain = SCADomain.newInstance(null, "test.composite");
+        domain = SCADomain.newInstance("test.composite");
     }
 
     public void testInvoke() throws Exception {

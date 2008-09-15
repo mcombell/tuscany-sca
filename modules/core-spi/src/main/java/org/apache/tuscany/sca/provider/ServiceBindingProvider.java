@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
  * A service binding can optionally implement this interface to tie
  * into the Tuscany SCA runtime
  * 
- * @version $Rev: 576260 $ $Date: 2007-09-16 22:17:22 -0700 (Sun, 16 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ServiceBindingProvider {
     /**

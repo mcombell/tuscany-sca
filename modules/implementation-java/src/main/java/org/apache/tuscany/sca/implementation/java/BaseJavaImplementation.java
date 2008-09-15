@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.assembly.Implementation;
 /**
  * Represents a Java implementation.
  * 
- * @version $Rev: 568902 $ $Date: 2007-08-23 02:32:29 -0700 (Thu, 23 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface BaseJavaImplementation extends Implementation, Extensible {
 

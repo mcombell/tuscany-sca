@@ -20,12 +20,13 @@ package org.apache.tuscany.sca.core.invocation;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.List;
 
 import org.apache.tuscany.sca.core.context.CallableReferenceImpl;
 import org.apache.tuscany.sca.core.context.ServiceReferenceImpl;
 import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
-import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractMapperImpl;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.osoa.sca.CallableReference;
@@ -34,16 +35,11 @@ import org.osoa.sca.ServiceReference;
 /**
  * the default implementation of a wire service that uses JDK dynamic proxies
  * 
- * @version $$Rev: 628809 $$ $$Date: 2007-04-11 18:59:43 -0700 (Wed, 11 Apr
- *          2007) $$
+ * @version $Rev$ $Date$
  */
 public class JDKProxyFactory implements ProxyFactory {
     protected InterfaceContractMapper contractMapper;
     private MessageFactory messageFactory;
-
-    public JDKProxyFactory() {
-        this(new MessageFactoryImpl(), new InterfaceContractMapperImpl());
-    }
 
     public JDKProxyFactory(MessageFactory messageFactory, InterfaceContractMapper mapper) {
         this.contractMapper = mapper;
@@ -61,17 +57,22 @@ public class JDKProxyFactory implements ProxyFactory {
 
     public <T> T createProxy(CallableReference<T> callableReference) throws ProxyCreationException {
         assert callableReference != null;
-        Class<T> interfaze = callableReference.getBusinessInterface();
+        final Class<T> interfaze = callableReference.getBusinessInterface();
         InvocationHandler handler = new JDKInvocationHandler(messageFactory, callableReference);
-        ClassLoader cl = interfaze.getClassLoader();
-		Object proxy = Proxy.newProxyInstance(cl, new Class[] {interfaze}, handler);
-		((CallableReferenceImpl)callableReference).setProxy(proxy);
+        // Allow privileged access to class loader. Requires RuntimePermission in security policy.
+        ClassLoader cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return interfaze.getClassLoader();
+            }
+        });
+        Object proxy = Proxy.newProxyInstance(cl, new Class[] {interfaze}, handler);
+        ((CallableReferenceImpl)callableReference).setProxy(proxy);
         return interfaze.cast(proxy);
     }
 
     public <T> T createCallbackProxy(Class<T> interfaze, List<RuntimeWire> wires) throws ProxyCreationException {
-        CallbackReferenceImpl<T> callbackReference = new CallbackReferenceImpl(interfaze, this, wires);
-        return createCallbackProxy(callbackReference);
+        CallbackReferenceImpl<T> callbackReference = CallbackReferenceImpl.newInstance(interfaze, this, wires);
+        return callbackReference != null ? createCallbackProxy(callbackReference) : null;
     }
 
     public <T> T createCallbackProxy(CallbackReferenceImpl<T> callbackReference) throws ProxyCreationException {

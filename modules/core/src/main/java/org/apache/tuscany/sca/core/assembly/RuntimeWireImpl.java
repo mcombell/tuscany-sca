@@ -55,7 +55,7 @@ import org.apache.tuscany.sca.work.WorkScheduler;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
- * @version $Rev: 634776 $ $Date: 2008-03-07 10:48:00 -0800 (Fri, 07 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class RuntimeWireImpl implements RuntimeWire {
     private EndpointReference wireSource;
@@ -185,6 +185,7 @@ public class RuntimeWireImpl implements RuntimeWire {
                 if (operation.isNonBlocking()) {
                     addNonBlockingInterceptor(service, serviceBinding, chain);
                 }
+                addServiceBindingInterceptor(service, serviceBinding, chain, operation);
                 addImplementationInterceptor(serviceComponent, service, chain, targetOperation);
                 chains.add(chain);
             }
@@ -249,7 +250,7 @@ public class RuntimeWireImpl implements RuntimeWire {
      * @param chain
      * @param operation
      */
-    private void addServiceBindingInterceptor(ComponentReference service,
+    private void addServiceBindingInterceptor(ComponentService service,
                                               Binding binding,
                                               InvocationChain chain,
                                               Operation operation) {
@@ -292,7 +293,7 @@ public class RuntimeWireImpl implements RuntimeWire {
         ServiceBindingProvider provider = ((RuntimeComponentService)service).getBindingProvider(binding);
         if (provider != null) {
             if (!provider.supportsOneWayInvocation()) {
-                chain.addInterceptor(Phase.SERVICE_BINDING, new NonBlockingInterceptor(workScheduler));
+                chain.addInterceptor(Phase.SERVICE, new NonBlockingInterceptor(workScheduler));
             }
         }
     }

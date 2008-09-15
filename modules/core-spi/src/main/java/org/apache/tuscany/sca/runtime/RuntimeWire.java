@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.invocation.Message;
  * The runtime wire interface that connects a component reference to a 
  *  component service (or an external service) over the selected binding
  * 
- * @version $Rev: 576055 $ $Date: 2007-09-16 00:11:45 -0700 (Sun, 16 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface RuntimeWire extends Cloneable {
 

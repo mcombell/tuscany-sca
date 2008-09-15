@@ -36,7 +36,8 @@ import org.apache.tuscany.sca.store.Store;
 
 /**
  * A scope context which manages atomic component instances keyed on ConversationID
- * 
+ *
+ * @version $Rev$ $Date$
  */
 public class ConversationalScopeContainer extends AbstractScopeContainer<Object> implements ConversationListener {
     private ConversationManager conversationManager;
@@ -101,6 +102,7 @@ public class ConversationalScopeContainer extends AbstractScopeContainer<Object>
      * @param context this should be a conversation object so that the conversation can b stored 
      *                and reset when the component instance is removed
      */
+    @Override
     public void addWrapperReference(Object existingContextId, Object contextId) throws TargetResolutionException {
        
         
@@ -119,6 +121,7 @@ public class ConversationalScopeContainer extends AbstractScopeContainer<Object>
         }
     }
 
+    @Override
     public void registerWrapper(InstanceWrapper wrapper, Object contextId) throws TargetResolutionException {
         // if a wrapper for a different instance is already registered for this contextId, remove it
         InstanceLifeCycleWrapper anInstanceWrapper = this.instanceLifecycleCollection.get(contextId);
@@ -235,8 +238,7 @@ public class ConversationalScopeContainer extends AbstractScopeContainer<Object>
     	
     	Object conversationId = conversation.getConversationID();
     	InstanceLifeCycleWrapper ilcw = instanceLifecycleCollection.get(conversationId);
-    	if (ilcw != null)
-    	{
+    	if (ilcw != null) {
     		// cycle through all the references to this instance and
     		// remove them from the underlying wrappers collection and
     		// from the lifecycle wrappers collection
@@ -245,8 +247,7 @@ public class ConversationalScopeContainer extends AbstractScopeContainer<Object>
     			try{
         			ilcw.removeInstanceWrapper(conversationID);
     				remove(conversationID);
-    			}
-    			catch(TargetDestructionException tde){
+                } catch(TargetDestructionException tde) {
     				System.out.println("Could not remove conversation id " + conversationID);
     			}
     		}
@@ -256,8 +257,7 @@ public class ConversationalScopeContainer extends AbstractScopeContainer<Object>
     			try{
         			ilcw.removeInstanceWrapper(ilcw.clientConversationId);
     				remove(ilcw.clientConversationId);
-    			}
-    			catch(TargetDestructionException tde){
+                } catch(TargetDestructionException tde) {
     				System.out.println("Could not remove conversation id " + ilcw.clientConversationId);
     			}
     		}

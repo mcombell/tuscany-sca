@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
  * Represents a service. Services are used to publish services provided by
  * implementations, so that they are addressable by other components.
  * 
- * @version $Rev: 560488 $ $Date: 2007-07-27 21:18:42 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Service extends AbstractService, Contract {
 

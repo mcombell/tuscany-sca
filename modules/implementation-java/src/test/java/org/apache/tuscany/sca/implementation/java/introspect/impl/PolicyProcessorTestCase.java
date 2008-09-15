@@ -41,7 +41,7 @@ import org.osoa.sca.annotations.Requires;
 import org.osoa.sca.annotations.Service;
 
 /**
- * @version $Rev: 639350 $ $Date: 2008-03-20 09:43:46 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class PolicyProcessorTestCase extends TestCase {
     private ServiceProcessor serviceProcessor;

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * A default implementation of a model resolver based on a map.
  *
- * @version $Rev: 631277 $ $Date: 2008-02-26 08:23:26 -0800 (Tue, 26 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultModelResolver implements ModelResolver {
     
@@ -55,6 +55,12 @@ public class DefaultModelResolver implements ModelResolver {
     
     public Object removeModel(Object resolved) {
         return map.remove(resolved);
+    }
+    
+    // FIXME: TUSCANY-2499: temporarily  give access to the models to get the jms binding
+    //  use of definitions.xml working while the definitions.xml processing is being refactored
+    public Map getModels() {
+        return map;
     }
     
 }

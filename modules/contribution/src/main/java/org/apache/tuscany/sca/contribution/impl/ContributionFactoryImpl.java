@@ -22,25 +22,40 @@ package org.apache.tuscany.sca.contribution.impl;
 import org.apache.tuscany.sca.contribution.Artifact;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
+import org.apache.tuscany.sca.contribution.ContributionMetadata;
+import org.apache.tuscany.sca.contribution.DefaultExport;
+import org.apache.tuscany.sca.contribution.DefaultImport;
 import org.apache.tuscany.sca.contribution.DeployedArtifact;
 
 
 /**
  * Default implementation of a contribution model factory.
  * 
- * @version $Rev: 629585 $ $Date: 2008-02-20 11:39:27 -0800 (Wed, 20 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class ContributionFactoryImpl implements ContributionFactory {
     
-    public ContributionFactoryImpl() {
+    protected ContributionFactoryImpl() {
     }
     
     public Contribution createContribution() {
         return new ContributionImpl();
     }
+    
+    public ContributionMetadata createContributionMetadata() {
+        return new ContributionMetadataImpl();
+    }
 
     public Artifact createArtifact() {
         return new ArtifactImpl();
+    }
+    
+    public DefaultExport createDefaultExport() {
+        return new DefaultExportImpl();
+    }
+    
+    public DefaultImport createDefaultImport() {
+        return new DefaultImportImpl();
     }
     
     @Deprecated

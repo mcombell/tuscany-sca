@@ -41,7 +41,7 @@ import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.easymock.EasyMock;
 
 /**
- * @version $Rev: 629687 $ $Date: 2008-02-20 20:11:14 -0800 (Wed, 20 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaInterfaceProcessorRegistryImplTestCase extends TestCase {
     private JavaInterfaceFactory factory;

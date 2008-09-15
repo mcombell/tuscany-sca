@@ -23,26 +23,29 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.TestCase;
 
-import org.apache.neethi.Policy;
-import org.apache.tuscany.sca.contribution.DefaultModelFactoryExtensionPoint;
-import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
-import org.apache.tuscany.sca.policy.DefaultIntentAttachPointTypeFactory;
-import org.apache.tuscany.sca.policy.DefaultPolicyFactory;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
+import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorFactoryImpl;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
-import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.ProfileIntent;
 import org.apache.tuscany.sca.policy.QualifiedIntent;
@@ -56,20 +59,17 @@ import org.apache.tuscany.sca.policy.impl.ImplementationTypeImpl;
  */
 public class ReadDocumentTestCase extends TestCase {
 
-    //private ModelResolver resolver;
-    PolicySetProcessor policySetProcessor;
-    TestModelResolver resolver = null;
-    ExtensibleStAXArtifactProcessor staxProcessor = null;
-    
+    private ModelResolver resolver;
+    private StAXArtifactProcessor<Object> staxProcessor;
+    private Monitor monitor;
         
-    Map<QName, Intent> intentTable = new Hashtable<QName, Intent>();
-    Map<QName, PolicySet> policySetTable = new Hashtable<QName, PolicySet>();
-    Map<QName, IntentAttachPointType> bindingTypesTable = new Hashtable<QName, IntentAttachPointType>();
-    Map<QName, IntentAttachPointType> implTypesTable = new Hashtable<QName, IntentAttachPointType>();
-    public static final String scaNamespace = "http://www.osoa.org/xmlns/sca/1.0";
-    public static final String namespace = "http://test";
+    private Map<QName, Intent> intentTable = new Hashtable<QName, Intent>();
+    private Map<QName, PolicySet> policySetTable = new Hashtable<QName, PolicySet>();
+    private Map<QName, IntentAttachPointType> bindingTypesTable = new Hashtable<QName, IntentAttachPointType>();
+    private Map<QName, IntentAttachPointType> implTypesTable = new Hashtable<QName, IntentAttachPointType>();
+    private static final String scaNamespace = "http://www.osoa.org/xmlns/sca/1.0";
+    private static final String namespace = "http://test";
     
-    private static final QName secureWsPolicy = new QName(namespace, "SecureWSPolicy");
     private static final QName confidentiality = new QName(namespace, "confidentiality");
     private static final QName integrity = new QName(namespace, "integrity");
     private static final QName messageProtection = new QName(namespace, "messageProtection");
@@ -85,25 +85,23 @@ public class ReadDocumentTestCase extends TestCase {
 
     @Override
     public void setUp() throws Exception {
-        resolver = new TestModelResolver();
+        DefaultExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        resolver = new DefaultModelResolver();
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        PolicyFactory policyFactory = new DefaultPolicyFactory();
-        IntentAttachPointTypeFactory intentAttachPointFactory = new DefaultIntentAttachPointTypeFactory();
-        DefaultStAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(new DefaultModelFactoryExtensionPoint());
-        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance());
-        
-        staxProcessors.addArtifactProcessor(new SimpleIntentProcessor(policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ProfileIntentProcessor(policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new QualifiedIntentProcessor(policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new PolicySetProcessor(policyFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new ImplementationTypeProcessor(policyFactory, intentAttachPointFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new BindingTypeProcessor(policyFactory, intentAttachPointFactory, staxProcessor));
-        staxProcessors.addArtifactProcessor(new MockPolicyProcessor());
+        // Create a monitor
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        MonitorFactory monitorFactory = new DefaultMonitorFactoryImpl();  
+        if (monitorFactory != null) {
+            monitor = monitorFactory.createMonitor();
+            utilities.addUtility(monitorFactory);
+        }
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, null, monitor);
+        staxProcessors.addArtifactProcessor(new TestPolicyProcessor());
         
         URL url = getClass().getResource("test_definitions.xml");
         InputStream urlStream = url.openStream();
         XMLStreamReader reader = inputFactory.createXMLStreamReader(urlStream);
-        QName name = null;
         reader.next();
         while ( true ) {
             int event = reader.getEventType();
@@ -163,7 +161,6 @@ public class ReadDocumentTestCase extends TestCase {
         
         assertNotNull(policySetTable.get(secureMessagingPolicies));
         assertEquals(policySetTable.get(secureMessagingPolicies).getMappedPolicies().size(), 3);
-        assertTrue(policySetTable.get(secureWsPolicy).getPolicies().get(0) instanceof Policy);
         
         assertEquals(bindingTypesTable.size(), 1);
         assertNotNull(bindingTypesTable.get(wsBinding));
@@ -203,12 +200,35 @@ public class ReadDocumentTestCase extends TestCase {
         assertNull(javaImplType.getAlwaysProvidedIntents().get(0).getDescription());
         assertNull(javaImplType.getMayProvideIntents().get(0).getDescription());
         
-        for ( Intent intent : intentTable.values() ) {
+        List<Intent> simpleIntents = new ArrayList<Intent>();
+        List<ProfileIntent> profileIntents = new ArrayList<ProfileIntent>();
+        List<QualifiedIntent> qualifiedIntents = new ArrayList<QualifiedIntent>();
+        
+        for (Intent intent : intentTable.values()) {
+            if (intent instanceof ProfileIntent)
+                profileIntents.add((ProfileIntent)intent);
+            else if (intent instanceof QualifiedIntent)
+                qualifiedIntents.add((QualifiedIntent)intent);
+            else simpleIntents.add(intent);
+        }
+        
+        for (Intent intent : simpleIntents)
             staxProcessor.resolve(intent, resolver);
+        
+        for (ProfileIntent intent : profileIntents)
+            staxProcessor.resolve(intent, resolver);
+        
+        for (QualifiedIntent intent : qualifiedIntents)
+            staxProcessor.resolve(intent, resolver);
+        
+        for ( PolicySet policySet : policySetTable.values() ) {
+            if (policySet.getReferencedPolicySets().isEmpty())
+                staxProcessor.resolve(policySet, resolver);
         }
         
         for ( PolicySet policySet : policySetTable.values() ) {
-            staxProcessor.resolve(policySet, resolver);
+            if (!policySet.getReferencedPolicySets().isEmpty())
+                staxProcessor.resolve(policySet, resolver);
         }
         
         for (  IntentAttachPointType bindingType : bindingTypesTable.values() ) {
@@ -218,8 +238,6 @@ public class ReadDocumentTestCase extends TestCase {
         for ( IntentAttachPointType implType : implTypesTable.values() ) {
             staxProcessor.resolve(implType, resolver);
         }
-        
-        
         
         //testing if policy intents have been linked have property been linked up 
         assertNotNull(profileIntent.getRequiredIntents().get(0).getDescription());

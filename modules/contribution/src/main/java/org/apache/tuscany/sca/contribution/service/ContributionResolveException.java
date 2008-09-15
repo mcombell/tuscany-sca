@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.contribution.service;
 /**
  * Denotes a problem while resolving models inside an SCA contribution.
  *
- * @version $Rev: 560434 $ $Date: 2007-07-27 18:23:02 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public class ContributionResolveException extends ContributionException {
     private static final long serialVersionUID = -7459051598906813461L;

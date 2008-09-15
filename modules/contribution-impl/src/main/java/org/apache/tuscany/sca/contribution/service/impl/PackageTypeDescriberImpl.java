@@ -35,7 +35,7 @@ import org.apache.tuscany.sca.contribution.service.util.FileHelper;
 /**
  * Implementation of the content describer for contribution packages
  * 
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class PackageTypeDescriberImpl implements TypeDescriber {
     private final Map<String, String> contentTypeRegistry = new HashMap<String, String>();
@@ -87,10 +87,11 @@ public class PackageTypeDescriberImpl implements TypeDescriber {
                 // Special case : contribution is a folder
                 contentType = PackageType.FOLDER;
             }
-            String fileName = resourceURL.toString();
-            String fileExt = fileName.substring(fileName.lastIndexOf('.')+1, fileName.length());
-            if ( fileExt.equalsIgnoreCase( "JAR" ) )
-                return PackageType.JAR;
+            
+            String type = resolveContentyTypeByExtension(resourceURL);
+            if (type != null) {
+                return type;
+            }
         } else if (urlProtocol.equals("bundle") || urlProtocol.equals("bundleresource")) {
             contentType = PackageType.BUNDLE;
         } else {

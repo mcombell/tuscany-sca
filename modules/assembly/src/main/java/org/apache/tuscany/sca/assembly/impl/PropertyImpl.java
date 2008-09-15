@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
 /**
  * Represents a property.
  * 
- * @version $Rev: 620307 $ $Date: 2008-02-10 10:56:51 -0800 (Sun, 10 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class PropertyImpl extends AbstractPropertyImpl implements Property, Cloneable {
     private List<PolicySet> policySets = new ArrayList<PolicySet>();

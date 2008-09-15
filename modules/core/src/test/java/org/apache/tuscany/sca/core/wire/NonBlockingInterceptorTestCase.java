@@ -35,7 +35,7 @@ import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 
 /**
- * @version $Rev: 576235 $ $Date: 2007-09-16 19:07:54 -0700 (Sun, 16 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class NonBlockingInterceptorTestCase extends TestCase {
 
@@ -61,6 +61,7 @@ public class NonBlockingInterceptorTestCase extends TestCase {
         //msg.setConversationID(convID);
         Interceptor next = EasyMock.createMock(Interceptor.class);
         EasyMock.expect(next.invoke(EasyMock.eq(msg))).andReturn(msg);
+        EasyMock.expect(msg.isFault()).andReturn(false);
         EasyMock.replay(next);
         EasyMock.replay(msg);
         Interceptor interceptor = new NonBlockingInterceptor(scheduler, next);

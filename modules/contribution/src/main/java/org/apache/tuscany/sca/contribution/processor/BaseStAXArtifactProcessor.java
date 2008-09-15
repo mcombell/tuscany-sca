@@ -39,7 +39,7 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * A base class with utility methods for the other artifact processors in this module. 
  * 
- * @version $Rev: 639257 $ $Date: 2008-03-20 05:12:00 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public abstract class BaseStAXArtifactProcessor {
 
@@ -217,12 +217,11 @@ public abstract class BaseStAXArtifactProcessor {
      */
     protected void writeStart(XMLStreamWriter writer, String uri, String name, XAttr... attrs) throws XMLStreamException {
         String prefix = writeElementPrefix(writer, uri);
-        writeAttributePrefixes(writer, attrs);
         writer.writeStartElement(uri, name);
-        
         if (prefix != null){
             writer.writeNamespace(prefix,uri); 
         }
+        writeAttributePrefixes(writer, attrs);
         writeAttributes(writer, attrs);
     }
     
@@ -344,6 +343,26 @@ public abstract class BaseStAXArtifactProcessor {
             this(null, name, value);
         }
 
+        public XAttr(String uri, String name, Integer value) {
+            this.uri = uri;
+            this.name = name;
+            this.value = value;
+        }
+
+        public XAttr(String name, Integer value) {
+            this(null, name, value);
+        }
+
+        public XAttr(String uri, String name, Double value) {
+            this.uri = uri;
+            this.name = name;
+            this.value = value;
+        }
+
+        public XAttr(String name, Double value) {
+            this(null, name, value);
+        }
+
         public XAttr(String uri, String name, QName value) {
             this.uri = uri;
             this.name = name;
@@ -365,10 +384,17 @@ public abstract class BaseStAXArtifactProcessor {
                 String prefix = qname.getPrefix();
                 String uri = qname.getNamespaceURI();
                 prefix = writer.getPrefix(uri);
-                if (prefix != null && prefix.length() > 0) {
+                if (prefix != null) {
 
                     // Use the prefix already bound to the given URI
-                    return prefix + ":" + qname.getLocalPart();
+                    if (prefix.length() > 0) {
+                        return prefix + ":" + qname.getLocalPart();
+                    } else {
+                        
+                        // Empty prefix, just return the local part of the given qname
+                        return qname.getLocalPart();
+                    }
+                    
                 } else {
                     
                     // Find an available prefix and bind it to the given URI 
@@ -412,6 +438,7 @@ public abstract class BaseStAXArtifactProcessor {
                         }
                     }
                     writer.setPrefix(prefix, uri);
+                    writer.writeNamespace(prefix, uri);
                 }
             }
         }

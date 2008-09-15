@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import junit.framework.TestCase;
 
 /**
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class FieldInjectorTestCase extends TestCase {
 

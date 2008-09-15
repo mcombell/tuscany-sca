@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
  * Represents a Java interface contract.
  * JavaInterfaceContract
  *
- * @version $Rev: 537404 $ $Date: 2007-05-12 04:51:42 -0800 (Sat, 12 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface JavaInterfaceContract extends InterfaceContract {
 

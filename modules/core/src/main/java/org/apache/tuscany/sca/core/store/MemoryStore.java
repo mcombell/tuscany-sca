@@ -41,7 +41,7 @@ import org.osoa.sca.annotations.Service;
 /**
  * Implements a non-durable, non-transactional store using a simple in-memory map
  *
- * @version $Rev: 538423 $ $Date: 2007-05-15 21:11:06 -0700 (Tue, 15 May 2007) $
+ * @version $Rev$ $Date$
  */
 @Service(Store.class)
 @EagerInit

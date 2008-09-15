@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.provider;
 /**
  * A factory for runtime providers.
  *
- * @version $Rev: 537206 $ $Date: 2007-05-11 08:14:19 -0700 (Fri, 11 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface ProviderFactory<M> {
 

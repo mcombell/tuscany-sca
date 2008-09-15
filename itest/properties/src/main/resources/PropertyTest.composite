@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+-->
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" 
+       xmlns:foo="http://foo" 
+       xmlns:cust="http://www.example.com/Customer"
+       xmlns:dbsdo="http://tuscany.apache.org/xmlns/sca/databinding/sdo/1.0"
+       xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+       xmlns:rcp="http://test.sca.jaxb/rcprops"
+       targetNamespace="http://foo"
+       name="PropertyTest"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+           
+    <service name="ProperterTestService" promote="ABComponent">
+        <interface.java interface="org.apache.tuscany.sca.itest.ABComponent"/>
+    </service>           
+           
+    <dbsdo:import.sdo location="customer.xsd" />
+    <!-- dbsdo:import.sdo factory="com.example.customer.sdo.SdoFactory" / -->
+               
+    <property name="number" type="xsd:int">1</property>
+    <property name="complex" type="foo:MyComplexType" >
+        <foo:MyComplexValue xsi:type="foo:MyComplexType" >
+            <foo:a>a</foo:a>
+            <foo:b>b</foo:b>
+            <foo:c>c</foo:c>
+            <foo:d>d</foo:d>
+            <foo:x>
+                <foo:y>y</foo:y>
+                <foo:z>z</foo:z>
+            </foo:x>
+        </foo:MyComplexValue>
+    </property>
+
+    <property name="moreComplex" type="foo:MyMoreComplexType">
+        <MyMoreComplexValue xmlns="">
+            <numberSetArray>
+                <integerNumber>1</integerNumber>
+                <floatNumber>11</floatNumber>
+                <doubleNumber>111</doubleNumber>
+            </numberSetArray>
+            <numberSetArray>
+                <integerNumber>2</integerNumber>
+                <floatNumber>22</floatNumber>
+                <doubleNumber>222</doubleNumber>
+            </numberSetArray>
+            <stringArray>TestString_1</stringArray>
+            <stringArray>TestString_2</stringArray>
+            <intArray>10</intArray>
+            <intArray>20</intArray>
+            <integerNumber>27</integerNumber>
+            <floatNumber>79.34</floatNumber>
+            <doubleNumber>184.52</doubleNumber>
+            <doubleArray>50.05</doubleArray>
+            <doubleArray>25.52</doubleArray>
+            <numberSet>
+                <integerNumber>54</integerNumber>
+                <floatNumber>158.68</floatNumber>
+                <doubleNumber>369.04</doubleNumber>
+            </numberSet>
+        </MyMoreComplexValue>
+    </property>
+    
+    <property name="complexFoo" type="foo:MyMoreComplexType">
+        <MyMoreComplexValue xmlns="">
+            <stringArray>TestString_3</stringArray>
+            <stringArray>TestString_4</stringArray>
+            <intArray>100</intArray>
+            <intArray>200</intArray>
+        </MyMoreComplexValue>
+    </property>
+
+    <component name="ABCDComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.ABCDComponentImpl"/>
+        <reference name="ab" target="ABComponent"/>
+        <reference name="cd" target="CDComponent"/>
+    </component>
+
+    <component name="ABComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.ABComponentImpl"/>
+        <property name="a" source="$complex/foo:MyComplexValue/foo:a"/>
+        <property name="b" source="$complex/foo:MyComplexValue/foo:b"/>
+        <property name="f" source="$complex/foo:MyComplexValue/foo:a">f</property>
+        <property name="xpath" source="$complex/foo:MyComplexValue/foo:x/*[local-name()='z']"/>
+        <property name="one" source="$number"/>
+        <property name="foobar" many="true">"Apache" "Tuscany" "Java SCA"</property>
+        <property name="fooInts" many="true">123 456 789</property>
+    </component>
+    
+
+    <component name="CDComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.CDComponentImpl"/>
+        <property name="c" source="$complex/foo:MyComplexValue/foo:c"/>
+        <property name="d" source="$complex/foo:MyComplexValue/foo:d"/>
+        <property name="nosource">aValue</property>
+        <property name="fileProperty" file="fileProperty.txt"/>
+        <property name="manyValuesFileProperty" many="true" file="manyValuesFileProperty.txt"/>
+        <property name="nonFileProperty"  file="fileProperty.txt" source="$complex/foo:MyComplexValue/foo:c"/>
+        <property name="two" source="$number">25</property>
+    </component>
+
+    <component name="PropertyComponent">
+        <implementation.java class="org.apache.tuscany.sca.itest.PropertyComponentImpl"/>
+        <property name="complexPropertyOne" source="$moreComplex"></property>
+        <property name="complexPropertyTwo">
+            <MyAnotherComplexValue xmlns="">
+                <stringArray>TestString_1</stringArray>
+                <stringArray>TestString_2</stringArray>
+                <intArray>10</intArray>
+                <integerNumber>27</integerNumber>
+                <floatNumber>79.34</floatNumber>
+                <doubleArray>25.52</doubleArray>
+                <doubleNumber>184.52</doubleNumber>
+                <doubleArray>50.05</doubleArray>
+                <intArray>20</intArray>
+                <numberSetArray>
+                    <integerNumber>1</integerNumber>
+                    <floatNumber>11</floatNumber>
+                    <doubleNumber>111</doubleNumber>
+                </numberSetArray>
+                <numberSetArray>
+                    <integerNumber>2</integerNumber>
+                    <floatNumber>22</floatNumber>
+                    <doubleNumber>222</doubleNumber>
+                </numberSetArray>
+                <numberSet>
+                    <integerNumber>54</integerNumber>
+                    <floatNumber>158.68</floatNumber>
+                    <doubleNumber>369.04</doubleNumber>
+                </numberSet>
+            </MyAnotherComplexValue>
+        </property>
+        <property name="complexPropertyThree" element="foo:PropertyThreeElement">
+            <PropertyThreeElement xmlns="">
+                <stringArray>TestElementString_1</stringArray>
+                <stringArray>TestElementString_2</stringArray>
+                <intArray>10</intArray>
+                <integerNumber>27</integerNumber>
+                <floatNumber>79.34</floatNumber>
+                <doubleArray>25.52</doubleArray>
+                <doubleNumber>184.52</doubleNumber>
+                <doubleArray>50.05</doubleArray>
+                <intArray>20</intArray>
+                <numberSetArray>
+                    <integerNumber>1</integerNumber>
+                    <floatNumber>11</floatNumber>
+                    <doubleNumber>111</doubleNumber>
+                </numberSetArray>
+                <numberSetArray>
+                    <integerNumber>2</integerNumber>
+                    <floatNumber>22</floatNumber>
+                    <doubleNumber>222</doubleNumber>
+                </numberSetArray>
+                <numberSet>
+                    <integerNumber>54</integerNumber>
+                    <floatNumber>158.68</floatNumber>
+                    <doubleNumber>369.04</doubleNumber>
+                </numberSet>
+            </PropertyThreeElement>
+        </property>
+        <property name="complexPropertyFour" element="foo:PropertyFourElement" many="true">
+            <PropertyFourElement xmlns="">
+                <integerNumber>1</integerNumber>
+                <floatNumber>11.11</floatNumber>
+                <doubleNumber>111.111</doubleNumber>
+                <numberSet>
+                    <integerNumber>11</integerNumber>
+                    <floatNumber>1111.1111</floatNumber>
+                    <doubleNumber>11111.11111</doubleNumber>
+                </numberSet>
+            </PropertyFourElement>
+            <PropertyFourElement xmlns="">
+                <integerNumber>2</integerNumber>
+                <floatNumber>22.22</floatNumber>
+                <doubleNumber>222.222</doubleNumber>
+                <numberSet>
+                    <integerNumber>22</integerNumber>
+                    <floatNumber>2222.2222</floatNumber>
+                    <doubleNumber>22222.22222</doubleNumber>
+                </numberSet>
+            </PropertyFourElement>
+            <PropertyFourElement xmlns="">
+                <integerNumber>3</integerNumber>
+                <floatNumber>33.33</floatNumber>
+                <doubleNumber>333.333</doubleNumber>
+                <numberSet>
+                    <integerNumber>33</integerNumber>
+                    <floatNumber>3333.3333</floatNumber>
+                    <doubleNumber>33333.33333</doubleNumber>
+                </numberSet>
+            </PropertyFourElement>
+        </property>
+        <property name="complexPropertyFive" source="$complexFoo"/>
+        <property name="sdoProperty" type="cust:Customer">	
+        	<cust:customer>
+        		<cust:firstName>Firstly Name</cust:firstName>
+        		<cust:middleName>Middler Name</cust:middleName>
+        		<cust:lastName>Lasting Name</cust:lastName>
+       		</cust:customer>
+        </property>
+        <property name="customerSdo" type="cust:Customer">	
+        	<cust:customer>
+        		<cust:firstName>Sdo Firstly Name</cust:firstName>
+        		<cust:middleName>Sdo Middler Name</cust:middleName>
+        		<cust:lastName>Sdo Lasting Name</cust:lastName>
+       		</cust:customer>
+        </property>
+        <property name="location" type="xsd:string">RTP</property>	
+        <property name="year" type="xsd:string">2006</property>	
+        <property name="daysOfTheWeek" many="true" type="xsd:string">"Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" "Sunday"</property>
+        <property name="integerNumbers" many="true" type="xsd:int">1 2 3 4 5 6 7 8 9 10</property>
+        <property name="intNumbers" many="true" type="xsd:int">10 9 8 7 6 5 4 3 2 1 0</property>
+        <property name="sdoArray" many="true" type="cust:Customer">
+            <cust:customer>
+                <cust:firstName>Firstly Name 1</cust:firstName>
+                <cust:middleName>Middler Name 1</cust:middleName>
+                <cust:lastName>Lasting Name 1</cust:lastName>
+            </cust:customer>
+            <cust:customer>
+                <cust:firstName>Firstly Name 2</cust:firstName>
+                <cust:middleName>Middler Name 2</cust:middleName>
+                <cust:lastName>Lasting Name 2</cust:lastName>
+            </cust:customer>
+            <cust:customer>
+                <cust:firstName>Firstly Name 3</cust:firstName>
+                <cust:middleName>Middler Name 3</cust:middleName>
+                <cust:lastName>Lasting Name 3</cust:lastName>
+            </cust:customer>
+        </property>
+        <property name="complexJAXBPropertyOne" type="rcp:ReturnCodeProperties">
+            <MyRCProps xmlns="http://test.sca.jaxb/rcprops">
+                <AInt>10</AInt>
+                <BInteger>10</BInteger>
+            </MyRCProps>
+        </property>
+        <property name="complexJAXBPropertyTwo" type="rcp:ReturnCodeProperties" file="rcProps.txt"/>
+    </component>
+</composite>
+
+

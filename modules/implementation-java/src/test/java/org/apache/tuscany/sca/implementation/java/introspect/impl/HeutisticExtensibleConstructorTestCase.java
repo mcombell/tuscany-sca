@@ -35,7 +35,7 @@ import org.apache.tuscany.sca.interfacedef.java.DefaultJavaInterfaceFactory;
  * parameters marked by annotations which are themselves processed by some other
  * implementation processor
  * 
- * @version $Rev: 639634 $ $Date: 2008-03-21 05:33:46 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class HeutisticExtensibleConstructorTestCase extends AbstractProcessorTest {
 

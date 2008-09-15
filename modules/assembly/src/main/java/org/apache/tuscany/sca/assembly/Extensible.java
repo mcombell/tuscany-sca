@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Base interface for extensible assembly model objects.
  * 
- * @version $Rev: 568902 $ $Date: 2007-08-23 02:32:29 -0700 (Thu, 23 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Extensible {
 

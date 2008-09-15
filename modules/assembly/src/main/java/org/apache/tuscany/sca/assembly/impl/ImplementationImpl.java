@@ -32,7 +32,8 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Base implementation class of Implementation model interface
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ *
+ * @version $Rev$ $Date$
  */
 public abstract class ImplementationImpl extends ComponentTypeImpl implements Implementation, PolicySetAttachPoint,
     OperationsConfigurator {

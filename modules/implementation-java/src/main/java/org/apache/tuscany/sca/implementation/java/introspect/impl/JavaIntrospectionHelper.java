@@ -46,7 +46,7 @@ import org.osoa.sca.CallableReference;
 /**
  * Implements various reflection-related operations
  * 
- * @version $Rev: 641645 $ $Date: 2008-03-26 15:37:28 -0800 (Wed, 26 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public final class JavaIntrospectionHelper {
     private static final Logger logger = Logger.getLogger(JavaIntrospectionHelper.class.getName());
@@ -68,7 +68,7 @@ public final class JavaIntrospectionHelper {
 
     private static void checkInvalidAnnotations(AnnotatedElement element) {
         for (Annotation a : element.getAnnotations()) {
-            if ("org.osoa.sca.annotations".equals(a.annotationType().getPackage().getName())) {
+            if (a.annotationType().getName().startsWith("org.osoa.sca.annotations.")) {
                 logger.warning("Invalid annotation " + a + " is found on " + element);
             }
         }
@@ -84,10 +84,17 @@ public final class JavaIntrospectionHelper {
         }
         fields = getAllPublicAndProtectedFields(clazz.getSuperclass(), fields, validating);
         Field[] declaredFields = clazz.getDeclaredFields();
-        for (Field field : declaredFields) {
+        for (final Field field : declaredFields) {
             int modifiers = field.getModifiers();
             if ((Modifier.isPublic(modifiers) || Modifier.isProtected(modifiers)) && !Modifier.isStatic(modifiers)) {
-                field.setAccessible(true); // ignore Java accessibility
+                // Allow privileged access to set accessibility. Requires ReflectPermission
+                // in security policy.
+                AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        field.setAccessible(true); // ignore Java accessibility
+                        return null;
+                    }
+                });
                 fields.add(field);
             } else {
                 if (validating) {
@@ -306,18 +313,7 @@ public final class JavaIntrospectionHelper {
         if (!name.startsWith("set")) {
             return name;
         }
-        
-        if (name == null || name.length() == 0) {
-    	    return name;
-    	}
-    	if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) &&
-    			Character.isUpperCase(name.charAt(0))){
-    	    return name;
-    	}
-    	char chars[] = name.toCharArray();
-    	chars[0] = Character.toLowerCase(chars[0]);
-    	return new String(chars);
-    	
+        return Introspector.decapitalize(name.substring(3));
     }
 
     public static Class<?> getErasure(Type type) {
@@ -551,5 +547,31 @@ public final class JavaIntrospectionHelper {
         }
         buf.append(getSignature(componentType));
         return Class.forName(buf.toString(), false, componentType.getClassLoader());
+    }
+
+    public static Set<Method> getPrivateMethods(Class clazz) {
+        Set<Method> methods = new HashSet<Method>();
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (final Method declaredMethod : declaredMethods) {
+            int modifiers = declaredMethod.getModifiers();
+            if(Modifier.isPrivate(modifiers)) {
+                methods.add(declaredMethod);
+            }
+        }
+        
+        return methods;
+    }
+
+    public static Set<Field> getPrivateFields(Class clazz) {
+        Set<Field> fields = new HashSet<Field>();
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (final Field declaredField : declaredFields) {
+            int modifiers = declaredField.getModifiers();
+            if(Modifier.isPrivate(modifiers)) {
+                fields.add(declaredField);
+            }
+        }
+        
+        return fields;
     }
 }

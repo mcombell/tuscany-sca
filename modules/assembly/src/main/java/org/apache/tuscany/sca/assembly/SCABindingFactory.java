@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.assembly;
 /**
  * A factory for the SCA binding model
  * 
- * @version $Rev: 538819 $ $Date: 2007-05-16 23:54:50 -0700 (Wed, 16 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface SCABindingFactory {
 

@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 /**
  * Returns proxy instance for a wire callback
  *
- * @version $Rev: 596162 $ $Date: 2007-11-18 15:50:50 -0800 (Sun, 18 Nov 2007) $
+ * @version $Rev$ $Date$
  */
 public class CallbackWireObjectFactory<B> implements ObjectFactory<B> {
     private Class<B> businessInterface;

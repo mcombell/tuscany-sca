@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
 /**
  * Uses a wire to return an object instance
  * 
- * @version $Rev: 596162 $ $Date: 2007-11-18 15:50:50 -0800 (Sun, 18 Nov 2007) $
+ * @version $Rev$ $Date$
  */
 public class WireObjectFactory<T> implements ObjectFactory<T> {
     private Class<T> interfaze;

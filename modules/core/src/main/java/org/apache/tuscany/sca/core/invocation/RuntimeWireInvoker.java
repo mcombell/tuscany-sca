@@ -45,7 +45,7 @@ import org.osoa.sca.ConversationEndedException;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
- * @version $Rev: 638875 $ $Date: 2008-03-19 08:32:44 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class RuntimeWireInvoker {
     protected ConversationManager conversationManager;

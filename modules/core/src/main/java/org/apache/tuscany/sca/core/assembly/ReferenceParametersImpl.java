@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.runtime.EndpointReference;
 import org.apache.tuscany.sca.runtime.ReferenceParameters;
 
 /**
- * @version $Rev: 574648 $ $Date: 2007-09-11 10:45:36 -0700 (Tue, 11 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public class ReferenceParametersImpl implements ReferenceParameters {
     private Object callbackID;

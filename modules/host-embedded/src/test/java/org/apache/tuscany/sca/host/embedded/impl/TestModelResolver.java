@@ -33,7 +33,7 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 /**
  * A test model resolver, based on a map.
  *
- * @version $Rev: 608205 $ $Date: 2008-01-02 12:29:05 -0800 (Wed, 02 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class TestModelResolver implements ModelResolver {
     private static final long serialVersionUID = -7826976465762296634L;
@@ -67,7 +67,7 @@ public class TestModelResolver implements ModelResolver {
                 return unresolved;
             }
             
-            // Store a new ClassReference wrappering the loaded class
+            // Store a new ClassReference wrapping the loaded class
             resolved = new ClassReference(clazz);
             map.put(resolved, resolved);
             

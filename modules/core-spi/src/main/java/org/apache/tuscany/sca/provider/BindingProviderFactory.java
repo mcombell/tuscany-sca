@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * A factory for creating the runtime artifacts that represent bindings.
  * 
- * @version $Rev: 539355 $ $Date: 2007-05-18 03:05:14 -0700 (Fri, 18 May 2007) $
+ * @version $Rev$ $Date$
  */
 public interface BindingProviderFactory<M extends Binding> extends ProviderFactory<M> {
 

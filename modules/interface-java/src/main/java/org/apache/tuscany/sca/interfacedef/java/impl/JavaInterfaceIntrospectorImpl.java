@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-//import java.rmi.Remote;
-//import java.rmi.RemoteException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,6 +46,7 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.interfacedef.java.JavaOperation;
 import org.apache.tuscany.sca.interfacedef.java.introspect.JavaInterfaceVisitor;
+import org.apache.tuscany.sca.interfacedef.util.JavaXMLMapper;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.osoa.sca.annotations.Conversational;
 import org.osoa.sca.annotations.EndsConversation;
@@ -55,7 +56,7 @@ import org.osoa.sca.annotations.Remotable;
 /**
  * Default implementation of a Java interface introspector.
  * 
- * @version $Rev: 641897 $ $Date: 2008-03-27 09:07:00 -0800 (Thu, 27 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaInterfaceIntrospectorImpl {
     public static final String IDL_INPUT = "idl:input";
@@ -68,15 +69,16 @@ public class JavaInterfaceIntrospectorImpl {
         this.visitors = javaFactory.getInterfaceVisitors();
     }
 
-    public void introspectInterface(JavaInterface javaInterface, Class<?> clazz) throws InvalidInterfaceException {
+    public void introspectInterface(JavaInterface javaInterface, Class<?> clazz)
+        throws InvalidInterfaceException {
         javaInterface.setJavaClass(clazz);
 
         boolean remotable = clazz.isAnnotationPresent(Remotable.class);
-        
+
         // Consider @javax.ejb.Remote, java.rmi.Remote and javax.ejb.EJBObject
         // equivalent to @Remotable
         if (!remotable) {
-            for (Annotation annotation: clazz.getAnnotations()) {
+            for (Annotation annotation : clazz.getAnnotations()) {
                 if ("javax.ejb.Remote".equals(annotation.annotationType().getName())) {
                     remotable = true;
                     break;
@@ -84,14 +86,14 @@ public class JavaInterfaceIntrospectorImpl {
             }
         }
         if (!remotable) {
-            for (Class<?> superInterface: clazz.getInterfaces()) {
-                if (/*Remote.class == superInterface || */"javax.ejb.EJBObject".equals(superInterface.getName())) {
+            for (Class<?> superInterface : clazz.getInterfaces()) {
+                if (Remote.class == superInterface || "javax.ejb.EJBObject".equals(superInterface.getName())) {
                     remotable = true;
                     break;
                 }
             }
         }
-        
+
         javaInterface.setRemotable(remotable);
 
         boolean conversational = clazz.isAnnotationPresent(Conversational.class);
@@ -101,12 +103,19 @@ public class JavaInterfaceIntrospectorImpl {
         org.osoa.sca.annotations.Callback callback = clazz.getAnnotation(org.osoa.sca.annotations.Callback.class);
         if (callback != null && !Void.class.equals(callback.value())) {
             callbackClass = callback.value();
+            if (remotable && !callbackClass.isAnnotationPresent(Remotable.class)) {
+                throw new InvalidCallbackException("Callback must be remotable on a remotable interface");
+            }
+            if (!remotable && callbackClass.isAnnotationPresent(Remotable.class)) {
+                throw new InvalidCallbackException("Callback must not be remotable on a local interface");
+            }
         } else if (callback != null && Void.class.equals(callback.value())) {
             throw new InvalidCallbackException("No callback interface specified on annotation");
         }
+
         javaInterface.setCallbackClass(callbackClass);
 
-        String ns = JavaInterfaceUtil.getNamespace(clazz);
+        String ns = JavaXMLMapper.getNamespace(clazz);
         javaInterface.getOperations().addAll(getOperations(clazz, remotable, conversational, ns));
 
         for (JavaInterfaceVisitor extension : visitors) {
@@ -133,10 +142,15 @@ public class JavaInterfaceIntrospectorImpl {
         return rawType;
     }
 
-    private <T> List<Operation> getOperations(Class<T> clazz, boolean remotable, boolean conversational, String ns)
-        throws InvalidInterfaceException {
+    private <T> List<Operation> getOperations(Class<T> clazz,
+                                              boolean remotable,
+                                              boolean conversational,
+                                              String ns) throws InvalidInterfaceException {
 
-        Type[] genericInterfaces = clazz.getGenericInterfaces();
+        Set<Type> genericInterfaces = new HashSet<Type>();
+        for (Type t : clazz.getGenericInterfaces()) {
+            genericInterfaces.add(t);
+        }
         Map<String, Type> typeBindings = new HashMap<String, Type>();
         for (Type genericInterface : genericInterfaces) {
             if (genericInterface instanceof ParameterizedType) {
@@ -172,6 +186,19 @@ public class JavaInterfaceIntrospectorImpl {
                 getActualTypes(method.getGenericExceptionTypes(), method.getExceptionTypes(), typeBindings);
 
             boolean nonBlocking = method.isAnnotationPresent(OneWay.class);
+            if (nonBlocking) {
+                if (!(returnType == void.class)) {
+                    throw new InvalidOperationException(
+                                                        "Method should return 'void' when declared with an @OneWay annotation. " + method,
+                                                        method);
+                }
+                if (!(faultTypes.length == 0)) {
+                    throw new InvalidOperationException(
+                                                        "Method should not declare exceptions with an @OneWay annotation. " + method,
+                                                        method);
+                }
+            }
+
             ConversationSequence conversationSequence = ConversationSequence.CONVERSATION_NONE;
             if (method.isAnnotationPresent(EndsConversation.class)) {
                 if (!conversational) {
@@ -187,23 +214,29 @@ public class JavaInterfaceIntrospectorImpl {
             // Set outputType to null for void
             XMLType xmlReturnType = new XMLType(new QName(ns, "return"), null);
             DataType<XMLType> returnDataType =
-                returnType == void.class ? null : new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, returnType,
-                                                                            xmlReturnType);
+                returnType == void.class ? null : new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, returnType, method
+                    .getGenericReturnType(), xmlReturnType);
             List<DataType> paramDataTypes = new ArrayList<DataType>(parameterTypes.length);
+            Type[] genericParamTypes = method.getGenericParameterTypes();
             for (int i = 0; i < parameterTypes.length; i++) {
                 Class paramType = parameterTypes[i];
                 XMLType xmlParamType = new XMLType(new QName(ns, "arg" + i), null);
-                paramDataTypes.add(new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, paramType, xmlParamType));
+                paramDataTypes.add(new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, paramType, genericParamTypes[i],
+                                                             xmlParamType));
             }
             List<DataType> faultDataTypes = new ArrayList<DataType>(faultTypes.length);
-            for (Class<?> faultType : faultTypes) {
+            Type[] genericFaultTypes = method.getGenericExceptionTypes();
+            for (int i = 0; i < faultTypes.length; i++) {
+                Class<?> faultType = faultTypes[i];
                 // Only add checked exceptions
                 // JAXWS Specification v2.1 section 3.7 says RemoteException should not be mapped
                 if (Exception.class.isAssignableFrom(faultType) && (!RuntimeException.class.isAssignableFrom(faultType))
-                		/*&& (!RemoteException.class.isAssignableFrom(faultType))*/) {
+                    && (!RemoteException.class.isAssignableFrom(faultType))) {
                     XMLType xmlFaultType = new XMLType(new QName(ns, faultType.getSimpleName()), null);
-                    DataType<XMLType> faultDataType = new DataTypeImpl<XMLType>(faultType, xmlFaultType);
-                    faultDataTypes.add(new DataTypeImpl<DataType>(UNKNOWN_DATABINDING, faultType, faultDataType));
+                    DataType<XMLType> faultDataType =
+                        new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, faultType, genericFaultTypes[i], xmlFaultType);
+                    faultDataTypes.add(new DataTypeImpl<DataType>(UNKNOWN_DATABINDING, faultType, genericFaultTypes[i],
+                                                                  faultDataType));
                 }
             }
 

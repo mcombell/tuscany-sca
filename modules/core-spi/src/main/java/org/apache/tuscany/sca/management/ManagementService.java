@@ -25,7 +25,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  * could be based on a variety of technologies including JMX, WSDM,
  * SNMP etc.
  *
- * @version $Revision: 639280 $ $Date: 2008-03-20 06:10:11 -0700 (Thu, 20 Mar 2008) $
+ * @version $Revision$ $Date$
  */
 public interface ManagementService {
 

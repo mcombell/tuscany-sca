@@ -24,6 +24,8 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * Represents an Operation. Typically Operation elements are used when there is a
  * need to apply certain facets such as intents and policysets only to a specific
  * operation provided by a service or reference.
+ *
+ * @version $Rev$ $Date$
  */
 public interface ConfiguredOperation extends Base, PolicySetAttachPoint {
     /**
@@ -53,7 +55,7 @@ public interface ConfiguredOperation extends Base, PolicySetAttachPoint {
     /**
      * Sets the name of the service or reference to which this operation belongs.
      * 
-     * @param the name of the contract to which this operation belongs
+     * @param contractName the name of the contract to which this operation belongs
      */
     void setContractName(String contractName);
 }

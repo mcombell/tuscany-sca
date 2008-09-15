@@ -32,7 +32,7 @@ import org.osoa.sca.annotations.ConversationID;
 import org.osoa.sca.annotations.Scope;
 
 /**
- * @version $Rev: 620333 $ $Date: 2008-02-10 13:31:04 -0800 (Sun, 10 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class ConversationProcessorTestCase extends TestCase {
     private ConversationProcessor processor = new ConversationProcessor(new DefaultAssemblyFactory());

@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.core.invocation.TargetInvocationException;
 /**
  * Denotes an unknown operation sequence in a conversation
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class InvalidConversationSequenceException extends TargetInvocationException {
     private static final long serialVersionUID = -5744028391493899147L;

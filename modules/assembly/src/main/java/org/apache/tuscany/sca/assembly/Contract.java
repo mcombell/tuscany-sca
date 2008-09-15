@@ -20,12 +20,13 @@ package org.apache.tuscany.sca.assembly;
 
 import java.util.List;
 
+import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
 /**
  * Represents a contract. A contract can be either a service or a reference.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Contract extends AbstractContract, PolicySetAttachPoint, Cloneable {
 
@@ -77,5 +78,18 @@ public interface Contract extends AbstractContract, PolicySetAttachPoint, Clonea
      * @throws CloneNotSupportedException
      */
     Object clone() throws CloneNotSupportedException;
+    
+    /**
+     * Returns the interface contract given a binding. Important in the case where
+     * a reference with multiplicity > 1 has been promoted and has it's list of 
+     * resolved bindings extended by a promoting reference. Here the binding
+     * from the promoting reference may need the interface contract from the 
+     * promoting reference and not the promoted reference.
+     * TODO - remove this wrinkle with better endpoint support.  
+     * 
+     * @param binding the binding for which the interface contract is required
+     * @return the interface contract
+     */
+    InterfaceContract getInterfaceContract(Binding binding);    
     
 }

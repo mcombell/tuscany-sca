@@ -28,7 +28,7 @@ import java.util.List;
  * to be located based on a given model type. Hence the runtime can 
  * generate runtime artifacts from the in memory assembly model. 
  *
- * @version $Rev: 634558 $ $Date: 2008-03-06 22:35:52 -0800 (Thu, 06 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface ProviderFactoryExtensionPoint {
 

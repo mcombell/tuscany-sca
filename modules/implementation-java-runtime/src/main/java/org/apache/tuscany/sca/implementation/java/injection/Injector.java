@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.core.factory.ObjectCreationException;
 /**
  * Implementations inject a pre-configured value on an instance
  *
- * @version $Rev: 567619 $ $Date: 2007-08-20 02:29:57 -0700 (Mon, 20 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Injector<T> {
 

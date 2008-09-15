@@ -31,7 +31,7 @@ import org.apache.tuscany.sca.contribution.processor.impl.FolderContributionProc
  * Folder Package Processor test case
  * Verifies proper handle of File System structured contributions
  * 
- * @version $Rev: 618718 $ $Date: 2008-02-05 09:45:08 -0800 (Tue, 05 Feb 2008) $
+ * @version $Rev$ $Date$
  */
 public class FolderContributionPackageProcessorTestCase extends TestCase {
     private static final String FOLDER_CONTRIBUTION = ".";

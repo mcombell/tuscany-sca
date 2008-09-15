@@ -21,7 +21,7 @@ package org.apache.tuscany.sca.core.scope;
 /**
  * The default implementation scopes supported by assemblies.
  *
- * @version $Rev: 568826 $ $Date: 2007-08-22 22:27:34 -0700 (Wed, 22 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class Scope {
     public static final Scope STATELESS = new Scope("STATELESS");

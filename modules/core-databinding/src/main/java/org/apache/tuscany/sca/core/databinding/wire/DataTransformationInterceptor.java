@@ -43,7 +43,7 @@ import org.osoa.sca.ServiceRuntimeException;
 /**
  * An interceptor to transform data across databindings on the wire
  * 
- * @version $Rev: 643467 $ $Date: 2008-04-01 08:12:08 -0800 (Tue, 01 Apr 2008) $
+ * @version $Rev$ $Date$
  */
 public class DataTransformationInterceptor implements Interceptor, DataExchangeSemantics {
     private Invoker next;
@@ -197,7 +197,8 @@ public class DataTransformationInterceptor implements Interceptor, DataExchangeS
         if (first instanceof XMLType && second instanceof XMLType) {
             XMLType t1 = (XMLType)first;
             XMLType t2 = (XMLType)second;
-            return matches(t1.getElementName(), t2.getElementName()) || matches(t1.getTypeName(), t2.getTypeName());
+            // TUSCANY-2113, we should compare element names only
+            return matches(t1.getElementName(), t2.getElementName());
         }
         return false;
     }

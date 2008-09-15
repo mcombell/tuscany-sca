@@ -30,7 +30,7 @@ import org.apache.tuscany.sca.provider.PolicyProvider;
  * assembly model representation of a component and its runtime 
  * realization.
  * 
- * @version $Rev: 639280 $ $Date: 2008-03-20 06:10:11 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface RuntimeComponent extends Component {
     /**
@@ -65,7 +65,7 @@ public interface RuntimeComponent extends Component {
 
     /**
      * Sets the RuntimeComponent started state
-     * @param the state to set
+     * @param started the state to set
      */
     void setStarted(boolean started);
     

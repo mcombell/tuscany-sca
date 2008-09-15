@@ -33,7 +33,7 @@ import org.apache.tuscany.sca.implementation.java.impl.JavaResourceImpl;
  * Processes an {@link @Resource} annotation, updating the component type with
  * corresponding {@link org.apache.tuscany.spi.implementation.java.JavaResourceImpl}
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ResourceProcessor extends BaseJavaClassVisitor {
     

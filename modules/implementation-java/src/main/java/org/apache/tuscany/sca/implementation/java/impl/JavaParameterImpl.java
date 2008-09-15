@@ -22,7 +22,7 @@ package org.apache.tuscany.sca.implementation.java.impl;
 import java.lang.reflect.Constructor;
 
 /**
- * @version $Rev: 537426 $ $Date: 2007-05-12 07:05:05 -0700 (Sat, 12 May 2007) $
+ * @version $Rev$ $Date$
  */
 public class JavaParameterImpl extends JavaElementImpl {
     /**

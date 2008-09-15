@@ -23,7 +23,7 @@ package org.apache.tuscany.sca.invocation;
  * An invoker or interceptor can optionally implement this interface to indicate if they can 
  * enforce the pass-by-value semantics for an operation on remotable interfaces.
  * 
- * @version $Rev: 634778 $ $Date: 2008-03-07 10:58:16 -0800 (Fri, 07 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface DataExchangeSemantics {
     /**

@@ -46,7 +46,6 @@ import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.core.assembly.CompositeActivator;
-import org.apache.tuscany.sca.core.assembly.ReferenceParameterProcessor;
 import org.apache.tuscany.sca.core.invocation.ThreadMessageContext;
 import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
@@ -61,7 +60,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
- * @version $Rev: 639271 $ $Date: 2008-03-20 05:54:38 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ComponentContextHelper {
 
@@ -79,7 +78,6 @@ public class ComponentContextHelper {
         this.assemblyFactory = assemblyFactory;
         this.javaInterfaceFactory = javaInterfaceFactory;
         this.staxProcessors = processors;
-        staxProcessors.addArtifactProcessor(new ReferenceParameterProcessor());
     }
 
     /**
@@ -194,6 +192,10 @@ public class ComponentContextHelper {
     }
 
     public void write(Component component, ComponentReference reference, Writer writer) throws IOException {
+        write(component, reference, null, writer);
+    }
+
+    public void write(Component component, ComponentReference reference, ComponentService service, Writer writer) throws IOException {
         try {
             StAXArtifactProcessor<Composite> processor = staxProcessors.getProcessor(Composite.class);
             Composite composite = assemblyFactory.createComposite();
@@ -202,7 +204,12 @@ public class ComponentContextHelper {
             comp.setName("default");
             comp.setURI(component.getURI());
             composite.getComponents().add(comp);
-            comp.getReferences().add(reference);
+            if (reference != null) {
+                comp.getReferences().add(reference);
+            }
+            if (service != null) {
+                comp.getServices().add(service);
+            }
 
             XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             XMLStreamWriter streamWriter = outputFactory.createXMLStreamWriter(writer);
@@ -215,6 +222,12 @@ public class ComponentContextHelper {
     public String toXML(Component component, ComponentReference reference) throws IOException {
         StringWriter writer = new StringWriter();
         write(component, reference, writer);
+        return writer.toString();
+    }
+
+    public String toXML(Component component, ComponentService service) throws IOException {
+        StringWriter writer = new StringWriter();
+        write(component, null, service, writer);
         return writer.toString();
     }
 

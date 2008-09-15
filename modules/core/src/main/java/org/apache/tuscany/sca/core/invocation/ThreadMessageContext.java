@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.invocation.Message;
 /**
  * Class for tunnelling a WorkContext through the invocation of a user class.
  *
- * @version $Rev: 639271 $ $Date: 2008-03-20 05:54:38 -0700 (Thu, 20 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public final class ThreadMessageContext {
 

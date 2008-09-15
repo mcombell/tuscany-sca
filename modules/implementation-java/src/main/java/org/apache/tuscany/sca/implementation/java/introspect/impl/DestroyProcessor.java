@@ -30,7 +30,7 @@ import org.osoa.sca.annotations.Destroy;
  * Processes the {@link @Destroy} annotation on a component implementation and
  * updates the component type with the decorated destructor method
  * 
- * @version $Rev: 567542 $ $Date: 2007-08-19 22:13:29 -0700 (Sun, 19 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class DestroyProcessor extends BaseJavaClassVisitor {
     
@@ -47,11 +47,14 @@ public class DestroyProcessor extends BaseJavaClassVisitor {
         if (method.getParameterTypes().length != 0) {
             throw new IllegalDestructorException("Destructor must not have argments", method);
         }
+        if(!method.getReturnType().equals(void.class)) {
+            throw new IllegalDestructorException("Destructor must return void.", method);
+        }
         if (type.getDestroyMethod() != null) {
             throw new DuplicateDestructorException("More than one destructor found on implementation");
         }
-        if (Modifier.isProtected(method.getModifiers())) {
-            method.setAccessible(true);
+        if (!Modifier.isPublic(method.getModifiers())) {
+            throw new IllegalDestructorException("Destructor must be a public method. Invalid annotation @Destroy found on "+method);
         }
         type.setDestroyMethod(method);
     }

@@ -28,7 +28,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 /**
  * Represents a composite.
  * 
- * @version $Rev: 637192 $ $Date: 2008-03-14 11:13:01 -0700 (Fri, 14 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public interface Composite extends Implementation, Extensible, Cloneable, PolicySetAttachPoint {
 

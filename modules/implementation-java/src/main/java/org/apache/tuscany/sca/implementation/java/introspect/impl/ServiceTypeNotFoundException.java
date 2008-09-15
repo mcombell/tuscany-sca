@@ -23,7 +23,7 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 /**
  * Thrown when a service interface cannot be determined based on a heuristic evaluation of an implementation
  *
- * @version $Rev: 563061 $ $Date: 2007-08-06 01:19:58 -0700 (Mon, 06 Aug 2007) $
+ * @version $Rev$ $Date$
  */
 public class ServiceTypeNotFoundException extends IntrospectionException {
     private static final long serialVersionUID = -5124437274726947007L;

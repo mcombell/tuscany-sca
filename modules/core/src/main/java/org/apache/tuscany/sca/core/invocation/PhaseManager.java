@@ -36,7 +36,7 @@ import org.apache.tuscany.sca.invocation.Phase;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class PhaseManager {
     private static final Logger log = Logger.getLogger(PhaseManager.class.getName());
@@ -44,13 +44,13 @@ public class PhaseManager {
     public static final String STAGE_REFERENCE = "reference";
     public static final String STAGE_SERVICE = "service";
     public static final String STAGE_IMPLEMENTATION = "implementation";
-    private final static String[] SYSTEM_REFERENCE_PHASES =
+    private static final String[] SYSTEM_REFERENCE_PHASES =
         {Phase.REFERENCE, Phase.REFERENCE_INTERFACE, Phase.REFERENCE_POLICY, Phase.REFERENCE_BINDING};
 
-    private final static String[] SYSTEM_SERVICE_PHASES =
+    private static final String[] SYSTEM_SERVICE_PHASES =
         {Phase.SERVICE_BINDING, Phase.SERVICE_POLICY, Phase.SERVICE_INTERFACE, Phase.SERVICE};
 
-    private final static String[] SYSTEM_IMPLEMENTATION_PHASES = {Phase.IMPLEMENTATION_POLICY, Phase.IMPLEMENTATION};
+    private static final String[] SYSTEM_IMPLEMENTATION_PHASES = {Phase.IMPLEMENTATION_POLICY, Phase.IMPLEMENTATION};
 
     private String pattern = Phase.class.getName();
     private Map<String, Stage> stages;
@@ -88,6 +88,7 @@ public class PhaseManager {
             return phases;
         }
 
+        @Override
         public String toString() {
             return name + phases;
         }
@@ -119,7 +120,7 @@ public class PhaseManager {
         return getPhases(STAGE_IMPLEMENTATION);
     }
 
-    public List<String> getAllPhases() {
+    public synchronized List<String> getAllPhases() {
         if (phases == null) {
             phases = new ArrayList<String>();
             phases.addAll(getReferencePhases());
@@ -144,7 +145,7 @@ public class PhaseManager {
 
         for (ServiceDeclaration d : services) {
             if (log.isLoggable(Level.FINE)) {
-                log.fine(d.getResource() + ": " + d.getAttributes());
+                log.fine(d.getLocation() + ": " + d.getAttributes());
             }
             String name = d.getAttributes().get("name");
             if (name == null) {

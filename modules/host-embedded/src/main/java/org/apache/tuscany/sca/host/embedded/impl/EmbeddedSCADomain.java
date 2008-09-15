@@ -40,6 +40,7 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
+import org.apache.tuscany.sca.node.impl.RuntimeBootStrapper;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentContext;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -50,13 +51,13 @@ import org.osoa.sca.ServiceRuntimeException;
 /**
  * An SCA domain facade implementation.
  * 
- * @version $Rev: 638890 $ $Date: 2008-03-19 08:52:30 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class EmbeddedSCADomain extends SCADomain {
 
     private String uri;
     private Composite domainComposite;
-    private ReallySmallRuntime runtime;
+    private RuntimeBootStrapper runtime;
     private ComponentManagerImpl componentManager = new ComponentManagerImpl(this);
     
     /**
@@ -67,10 +68,10 @@ public class EmbeddedSCADomain extends SCADomain {
      */
     public EmbeddedSCADomain(ClassLoader runtimeClassLoader,
                             String domainURI) {
-    	this.uri = domainURI;
+        this.uri = domainURI;
         
         // Create a runtime
-        runtime = new ReallySmallRuntime(null/*runtimeClassLoader*/);
+        runtime = new RuntimeBootStrapper(runtimeClassLoader);
     }
     
     public void start() throws ActivationException {
@@ -203,7 +204,7 @@ public class EmbeddedSCADomain extends SCADomain {
                     CompositeService compositeService = (CompositeService)componentService.getService();
                     if (compositeService != null) {
                         if (serviceName != null) {
-                            serviceName = "$promoted$." + serviceName;
+                            serviceName = "$promoted$" + component.getName() + "$slash$" + serviceName;
                         }
                         componentContext =
                             ((RuntimeComponent)compositeService.getPromotedComponent()).getComponentContext();

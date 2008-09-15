@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.interfacedef.Operation;
 /**
  * Represents a Java operation.
  *
- * @version $Rev: 614967 $ $Date: 2008-01-24 12:00:04 -0800 (Thu, 24 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public interface JavaOperation extends Operation {
 
@@ -41,5 +41,17 @@ public interface JavaOperation extends Operation {
      * @param method the Java method
      */
     void setJavaMethod(Method method);
+
+    /**
+     * Returns the JAX-WS @WebMethod action parameter.
+     * @return the action value
+     */
+    String getAction();
+    
+    /**
+     * Sets the JAX-WS @WebMethod action parameter.
+     * @param action the action value
+     */
+    void setAction(String action);
 
 }

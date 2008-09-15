@@ -31,7 +31,7 @@ import java.lang.reflect.Type;
  * This class represents a java element such as a Package, Class, Constructor,
  * Field, Method or Parameter.
  * 
- * @version $Rev: 639634 $ $Date: 2008-03-21 05:33:46 -0800 (Fri, 21 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class JavaElementImpl {
     private AnnotatedElement anchor;

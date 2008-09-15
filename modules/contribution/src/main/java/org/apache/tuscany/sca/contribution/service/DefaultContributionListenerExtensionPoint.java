@@ -22,22 +22,23 @@ package org.apache.tuscany.sca.contribution.service;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
 import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 
 /**
  * Default implementation of a contribution listener extension point.
  *
- * @version $Rev: 632642 $ $Date: 2008-03-01 10:16:44 -0800 (Sat, 01 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class DefaultContributionListenerExtensionPoint implements ContributionListenerExtensionPoint {
     
-    private List<ContributionListener> listeners = new ArrayList<ContributionListener>();
+    private List<ContributionListener> listeners = new CopyOnWriteArrayList<ContributionListener>();
     private boolean loadedListeners;
     private ModelFactoryExtensionPoint modelFactories;
     
@@ -47,6 +48,14 @@ public class DefaultContributionListenerExtensionPoint implements ContributionLi
      */
     public DefaultContributionListenerExtensionPoint(ModelFactoryExtensionPoint modelFactories) {
         this.modelFactories = modelFactories;
+    }
+
+    /**
+     * Constructs a new DefaultContributionListenerExtensionPoint.
+     *  
+     */
+    public DefaultContributionListenerExtensionPoint(ExtensionPointRegistry extensionPoints) {
+        this.modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
     }
 
     public void addContributionListener(ContributionListener listener) {
@@ -66,7 +75,7 @@ public class DefaultContributionListenerExtensionPoint implements ContributionLi
      * Dynamically load listeners declared under META-INF/services
      */
     @SuppressWarnings("unchecked")
-    private void loadListeners() {
+    private synchronized void loadListeners() {
         if (loadedListeners)
             return;
 

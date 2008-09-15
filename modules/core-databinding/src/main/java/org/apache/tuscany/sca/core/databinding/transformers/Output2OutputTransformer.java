@@ -37,6 +37,8 @@ import org.osoa.sca.annotations.Reference;
 /**
  * This is a special transformer to transform the output from one IDL to the
  * other one
+ *
+ * @version $Rev$ $Date$
  */
 public class Output2OutputTransformer extends BaseTransformer<Object, Object> implements
     PullTransformer<Object, Object> {
@@ -72,7 +74,7 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getSourceType()
      */
     @Override
-    protected Class getSourceType() {
+    protected Class<Object> getSourceType() {
         return Object.class;
     }
 
@@ -80,7 +82,7 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
      * @see org.apache.tuscany.sca.databinding.impl.BaseTransformer#getTargetType()
      */
     @Override
-    protected Class getTargetType() {
+    protected Class<Object> getTargetType() {
         return Object.class;
     }
 
@@ -93,7 +95,12 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
     }
 
     private String getDataBinding(Operation operation) {
-        return operation.getDataBinding();
+        WrapperInfo wrapper = operation.getWrapper();
+        if (wrapper != null) {
+            return wrapper.getDataBinding();
+        } else {
+            return null;
+        }
     }
 
     private WrapperHandler getWrapperHandler(String dataBindingId, boolean required) {
@@ -108,12 +115,47 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
         return wrapperHandler;
     }
 
+    /**
+     * Match the structure of the wrapper element. If it matches, then we can do
+     * wrapper to wrapper transformation. Otherwise, we do child to child.
+     * @param w1
+     * @param w2
+     * @return
+     */
+    private boolean matches(WrapperInfo w1, WrapperInfo w2) {
+        if (w1 == null || w2 == null) {
+            return false;
+        }
+        if (!w1.getOutputWrapperElement().equals(w2.getOutputWrapperElement())) {
+            return false;
+        }
+
+        // Compare the child elements
+        List<ElementInfo> list1 = w1.getOutputChildElements();
+        List<ElementInfo> list2 = w2.getOutputChildElements();
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+        // FXIME: [rfeng] At this point, the J2W generates local elments under the namespace
+        // of the interface instead of "". We only compare the local parts only to work around
+        // the namespace mismatch
+        for (int i = 0; i < list1.size(); i++) {
+            String n1 = list1.get(i).getQName().getLocalPart();
+            String n2 = list2.get(i).getQName().getLocalPart();
+            if (!n1.equals(n2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     public Object transform(Object response, TransformationContext context) {
         try {
             DataType<DataType> sourceType = context.getSourceDataType();
             Operation sourceOp = context.getSourceOperation();
-            boolean sourceWrapped = sourceOp != null && sourceOp.isWrapperStyle();
+            boolean sourceWrapped = sourceOp != null && sourceOp.isWrapperStyle() && sourceOp.getWrapper() != null;
+            boolean sourceBare = sourceOp != null && !sourceOp.isWrapperStyle() && sourceOp.getWrapper() == null;
 
             WrapperHandler sourceWrapperHandler = null;
             String sourceDataBinding = getDataBinding(sourceOp);
@@ -121,28 +163,37 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
 
             DataType<DataType> targetType = context.getTargetDataType();
             Operation targetOp = (Operation)context.getTargetOperation();
-            boolean targetWrapped = targetOp != null && targetOp.isWrapperStyle();
+            boolean targetWrapped = targetOp != null && targetOp.isWrapperStyle() && targetOp.getWrapper() != null;
+            boolean targetBare = targetOp != null && !targetOp.isWrapperStyle() && targetOp.getWrapper() == null;
+
             WrapperHandler targetWrapperHandler = null;
             String targetDataBinding = getDataBinding(targetOp);
             targetWrapperHandler = getWrapperHandler(targetDataBinding, targetWrapped);
 
-            if ((!sourceWrapped) && targetWrapped) {
+            if ((!sourceWrapped &&!sourceBare) && targetWrapped) {
                 // Unwrapped --> Wrapped
                 WrapperInfo wrapper = targetOp.getWrapper();
                 ElementInfo wrapperElement = wrapper.getOutputWrapperElement();
                 List<ElementInfo> childElements = wrapper.getOutputChildElements();
+                Class<?> targetWrapperClass = wrapper != null ? wrapper.getOutputWrapperClass() : null;
 
                 // If the source can be wrapped, wrapped it first
                 if (sourceWrapperHandler != null) {
+                    WrapperInfo sourceWrapperInfo = sourceOp.getWrapper();
                     DataType sourceWrapperType =
-                        sourceWrapperHandler.getWrapperType(wrapperElement, childElements, context);
-                    if (sourceWrapperType != null) {
-                        Object sourceWrapper = sourceWrapperHandler.create(wrapperElement, context);
+                        sourceWrapperInfo != null ? sourceWrapperInfo.getOutputWrapperType() : null;
+
+                    if (sourceWrapperType != null && matches(sourceOp.getWrapper(), targetOp.getWrapper())) {
+                        Class<?> sourceWrapperClass = sourceWrapperType.getPhysical();
+
+                        Object sourceWrapper = sourceWrapperHandler.create(sourceOp, false);
                         if (sourceWrapper != null) {
                             if (!childElements.isEmpty()) {
                                 // Set the return value
-                                ElementInfo returnElement = wrapper.getOutputChildElements().get(0);
-                                sourceWrapperHandler.setChild(sourceWrapper, 0, returnElement, response);
+                                sourceWrapperHandler.setChildren(sourceWrapper,
+                                                                 new Object[] {response},
+                                                                 sourceOp,
+                                                                 false);
                             }
                             Object targetWrapper =
                                 mediator.mediate(sourceWrapper, sourceWrapperType, targetType.getLogical(), context
@@ -151,19 +202,19 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
                         }
                     }
                 }
-                Object targetWrapper = targetWrapperHandler.create(wrapper.getOutputWrapperElement(), context);
+                Object targetWrapper = targetWrapperHandler.create(targetOp, false);
 
                 if (childElements.isEmpty()) {
                     // void output
                     return targetWrapper;
                 }
-                ElementInfo argElement = childElements.get(0);
+
                 DataType<XMLType> argType = wrapper.getUnwrappedOutputType();
                 Object child = response;
                 child = mediator.mediate(response, sourceType.getLogical(), argType, context.getMetadata());
-                targetWrapperHandler.setChild(targetWrapper, 0, argElement, child);
+                targetWrapperHandler.setChildren(targetWrapper, new Object[] {child}, targetOp, false);
                 return targetWrapper;
-            } else if (sourceWrapped && (!targetWrapped)) {
+            } else if (sourceWrapped && (!targetWrapped && !targetBare)) {
                 // Wrapped to Unwrapped
                 Object sourceWrapper = response;
                 List<ElementInfo> childElements = sourceOp.getWrapper().getOutputChildElements();
@@ -176,18 +227,21 @@ public class Output2OutputTransformer extends BaseTransformer<Object, Object> im
 
                     // FIXME: This is a workaround for the wsdless support as it passes in child elements
                     // under the wrapper that only matches by position
-                    if (sourceWrapperHandler.isInstance(sourceWrapper, wrapperElement, childElements, context)) {
+                    if (sourceWrapperHandler.isInstance(sourceWrapper, sourceOp, false)) {
+
+                        WrapperInfo targetWrapperInfo = targetOp.getWrapper();
                         DataType targetWrapperType =
-                            targetWrapperHandler.getWrapperType(wrapperElement, childElements, context);
-                        if (targetWrapperType != null) {
+                            targetWrapperInfo != null ? targetWrapperInfo.getOutputWrapperType() : null;
+
+                        if (targetWrapperType != null && matches(sourceOp.getWrapper(), targetOp.getWrapper())) {
                             Object targetWrapper =
                                 mediator.mediate(sourceWrapper, sourceType.getLogical(), targetWrapperType, context
                                     .getMetadata());
-                            return targetWrapperHandler.getChildren(targetWrapper, childElements, context).get(0);
+                            return targetWrapperHandler.getChildren(targetWrapper, targetOp, false).get(0);
                         }
                     }
                 }
-                Object child = sourceWrapperHandler.getChildren(sourceWrapper, childElements, context).get(0);
+                Object child = sourceWrapperHandler.getChildren(sourceWrapper, sourceOp, false).get(0);
                 DataType<?> childType = sourceOp.getWrapper().getUnwrappedOutputType();
                 return mediator.mediate(child, childType, targetType.getLogical(), context.getMetadata());
             } else {

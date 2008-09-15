@@ -19,7 +19,7 @@
 package org.apache.tuscany.sca.implementation.java.injection;
 
 /**
- * @version $$Rev: 567313 $$ $$Date: 2007-08-18 11:38:44 -0700 (Sat, 18 Aug 2007) $$
+ * @version $Rev$ $Date$
  */
 public class InvalidAccessorException extends InjectionRuntimeException {
     private static final long serialVersionUID = 9196299279363310978L;

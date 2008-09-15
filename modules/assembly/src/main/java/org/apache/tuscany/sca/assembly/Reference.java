@@ -25,7 +25,7 @@ import java.util.List;
  * to services that the implementation uses that must be provided by other
  * components.
  * 
- * @version $Rev: 560488 $ $Date: 2007-07-27 21:18:42 -0700 (Fri, 27 Jul 2007) $
+ * @version $Rev$ $Date$
  */
 public interface Reference extends AbstractReference, Contract {
 
@@ -45,6 +45,24 @@ public interface Reference extends AbstractReference, Contract {
      *            dynamically
      */
     void setWiredByImpl(boolean wiredByImpl);
+
+    /**
+     * Returns a boolean value, "false" by default, which indicates whether
+     * the configuration of this reference is a promotion override for
+     * another more deeply nested reference.
+     * 
+     * @return true if the reference is a promotion override
+     */
+    boolean isPromotionOverride();
+
+    /**
+     * Sets a boolean value, "false" by default, which indicates whether
+     * the configuration of this reference is a promotion override for
+     * another more deeply nested reference.
+     * 
+     * @param promotionOverride whether the reference is a promotion override
+     */
+    void setPromotionOverride(boolean promotionOverride);
 
     /**
      * Returns the targets of this reference.

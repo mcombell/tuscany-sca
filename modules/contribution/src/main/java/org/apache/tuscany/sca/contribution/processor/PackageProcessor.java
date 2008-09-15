@@ -33,7 +33,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionException;
  * Package processors understand the format of the contribution and how to get the
  * artifacts in the contribution.
  * 
- * @version $Rev: 616114 $ $Date: 2008-01-28 16:05:37 -0800 (Mon, 28 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public interface PackageProcessor {
     

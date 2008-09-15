@@ -29,7 +29,7 @@ import org.osoa.sca.annotations.ConversationID;
 import org.osoa.sca.annotations.Scope;
 
 /**
- * @version $Rev: 638894 $ $Date: 2008-03-19 08:55:45 -0700 (Wed, 19 Mar 2008) $
+ * @version $Rev$ $Date$
  */
 public class ConversationProcessor extends BaseJavaClassVisitor {
     private static final String SECONDS = " SECONDS";
@@ -45,7 +45,6 @@ public class ConversationProcessor extends BaseJavaClassVisitor {
     @Override
     public <T> void visitClass(Class<T> clazz, JavaImplementation type) throws IntrospectionException {
 
-    	
         ConversationAttributes conversation = clazz.getAnnotation(ConversationAttributes.class);
         if (conversation == null) {
             return;

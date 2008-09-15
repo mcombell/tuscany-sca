@@ -28,7 +28,7 @@ import org.osoa.sca.NoRegisteredCallbackException;
  * An interceptor applied to the forward direction of a wire that ensures the callback target implements the required
  * service contract. This is required as callback targets may be set dynamically by service implementations.
  *
- * @version $Rev: 608822 $ $Date: 2008-01-04 04:59:56 -0800 (Fri, 04 Jan 2008) $
+ * @version $Rev$ $Date$
  */
 public class CallbackInterfaceInterceptor implements Interceptor {
     private Invoker next;

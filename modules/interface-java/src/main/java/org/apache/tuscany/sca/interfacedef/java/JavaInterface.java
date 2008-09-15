@@ -18,13 +18,14 @@
  */
 package org.apache.tuscany.sca.interfacedef.java;
 
+import javax.xml.namespace.QName;
 import org.apache.tuscany.sca.assembly.Base;
 import org.apache.tuscany.sca.interfacedef.Interface;
 
 /**
  * Represents a Java interface.
  * 
- * @version $Rev: 574428 $ $Date: 2007-09-10 18:01:37 -0800 (Mon, 10 Sep 2007) $
+ * @version $Rev$ $Date$
  */
 public interface JavaInterface extends Interface, Base {
 
@@ -41,6 +42,20 @@ public interface JavaInterface extends Interface, Base {
      * @param className the name of the Java interface class
      */
     void setName(String className);
+
+    /**
+     * Returns the QName of the JAX-WS interface.
+     *
+     * @return the QName of the JAX-WS interface
+     */
+    QName getQName();
+
+    /**
+     * Sets the QName of the JAX-WS interface.
+     *
+     * @param interfaceName the QName of the JAX-WS interface
+     */
+    void setQName(QName interfaceName);
 
     /**
      * Returns the Java interface class.
