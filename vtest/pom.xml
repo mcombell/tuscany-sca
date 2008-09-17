@@ -45,10 +45,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
+                <!--
                 <module>java-api</module>
                 <module>wsbinding</module>
                 <module>utilities</module>
                 <module>assembly</module>
+                -->
            </modules>
         </profile>
     </profiles>
