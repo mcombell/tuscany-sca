@@ -31,14 +31,8 @@
     <name>Apache Tuscany SCA Feature Distributions</name>
 
     <modules>
-        <module>all</module>
         <module>core</module>
-        <module>ejava</module>
         <module>repository</module>
-        <module>manager</module>
-        <module>process</module>
-        <module>web20</module>
-        <module>webservice</module>
     </modules>
 
 </project>
