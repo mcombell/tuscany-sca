@@ -36,8 +36,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>store</module>
-                <!-- <module>photo-gallery</module> -->
             </modules>
         </profile>
 
