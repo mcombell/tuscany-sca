@@ -21,24 +21,6 @@
 echo "Generate Maven files: core"
 cd core; ../etc/generate-filtered-dependencies.sh > src/main/components/bin-filtered-dependencies.xml; ../etc/generate-maven-files.sh
 
-echo "Generate Maven files: ejava"
-cd ../ejava; ../etc/generate-maven-files.sh
-
-echo "Generate Maven files: manager"
-cd ../manager; ../etc/generate-maven-files.sh
-
-echo "Generate Maven files: process"
-cd ../process; ../etc/generate-maven-files.sh
-
-echo "Generate Maven files: web20"
-cd ../web20; ../etc/generate-maven-files.sh
-
-echo "Generate Maven files: webservice"
-cd ../webservice; ../etc/generate-maven-files.sh
-
-echo "Generate Maven files: all"
-cd ../all; ../etc/generate-maven-files.sh
-
 echo "Generate Maven files: repository"
 cd ../repository; ../etc/generate-maven-files.sh
 
