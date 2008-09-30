@@ -2426,7 +2426,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ================================================================================
 
-The module host-webapp includes the file sca.tld under the following license:
+The tuscany-host-webapp and tuscany-sca-api jars include files under the following license:
 
 Permission to copy, display and distribute the Service Component Architecture Specification and/or
 portions thereof, without modification, in any medium without fee or royalty is hereby granted, provided
