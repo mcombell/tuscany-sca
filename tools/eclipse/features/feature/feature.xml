@@ -20,7 +20,7 @@
 <feature
       id="org.apache.tuscany.sca.feature"
       label="Apache Tuscany SCA Tools"
-      version="1.3.1"
+      version="1.3.2"
       provider-name="Apache Software Foundation">
    <install-handler handler="org.eclipse.update.core.DefaultInstallHandler"/>
 
@@ -56,7 +56,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
          id="org.apache.tuscany.sca.core"
          download-size="0"
          install-size="0"
-         version="1.3.1"
+         version="1.3.2"
          unpack="false"/>
 
    <data

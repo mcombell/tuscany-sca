@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Tuscany SCA Tools
 Bundle-SymbolicName: org.apache.tuscany.sca.feature
-Bundle-Version: 1.3.0
+Bundle-Version: 1.3.2
 Bundle-Vendor: Apache Software Foundation
