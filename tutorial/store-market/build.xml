@@ -46,7 +46,7 @@
     </target>
 
     <fileset id="tuscany.jars" dir="../../modules">
-        <include name="tuscany-sca-api-1.3.2-SNAPSHOT.jar"/>
+        <include name="tuscany-sca-api-1.3.2.jar"/>
     </fileset>
     <fileset id="3rdparty.jars" dir="../../lib">
     </fileset>

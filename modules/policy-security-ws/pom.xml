@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.3.2-SNAPSHOT</version>
+        <version>1.3.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-policy-security-ws</artifactId>
@@ -32,19 +32,19 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution</artifactId>
-            <version>1.3.2-SNAPSHOT</version>
+            <version>1.3.2</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-assembly-xml</artifactId>
-            <version>1.3.2-SNAPSHOT</version>
+            <version>1.3.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-policy-security</artifactId>
-            <version>1.3.2-SNAPSHOT</version>
+            <version>1.3.2</version>
         </dependency>
 		
     	<dependency>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-contribution-impl</artifactId>
-            <version>1.3.2-SNAPSHOT</version>
+            <version>1.3.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
