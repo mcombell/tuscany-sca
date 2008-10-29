@@ -211,7 +211,7 @@ public class XSDModelResolver implements ModelResolver {
         }
         if (facade == null) {
             // This will add the facade into the collection
-            facade = new XmlSchema(ns, AGGREGATED_XSD, schemaCollection);
+            facade = new XmlSchema(ns, schemaCollection);
         }
 
         for (XmlSchema d : schemaCollection.getXmlSchemas()) {
