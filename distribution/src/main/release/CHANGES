@@ -1,3 +1,10 @@
+Changes With Apache Tuscany SCA 1.3.3 Xxxxxxx 2008 
+==================================================
+
+Fix the following JIRA issues (http://issues.apache.org/jira/browse/TUSCANY):
+  * TUSCANY-2635 Pool stateless-scoped Java impl instances
+
+
 Changes With Apache Tuscany SCA 1.3.2 October 2008 
 ==================================================
 
