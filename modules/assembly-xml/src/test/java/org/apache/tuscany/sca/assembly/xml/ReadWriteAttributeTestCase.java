@@ -52,7 +52,7 @@ public class ReadWriteAttributeTestCase extends TestCase {
     private static final String XML = "<?xml version='1.0' encoding='UTF-8'?>"+
 		 	 "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://calc\" name=\"Calculator\">"+
 		 	 "<service name=\"CalculatorService\" promote=\"CalculatorServiceComponent\">"+
-		 	 	"<interface.java xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" interface=\"calculator.CalculatorService\" />"+
+		 	 	"<interface.java interface=\"calculator.CalculatorService\" />"+
 	 	 	 "</service>"+
 	 	 	 "<component name=\"CalculatorServiceComponent\" customAttribute=\"customValue\">"+
 	 	 	 	"<reference name=\"addService\" target=\"AddServiceComponent\" />"+
@@ -74,7 +74,6 @@ public class ReadWriteAttributeTestCase extends TestCase {
 
         StAXAttributeProcessorExtensionPoint staxAttributeProcessors = extensionPoints.getExtensionPoint(StAXAttributeProcessorExtensionPoint.class);
         staxAttributeProcessors.addArtifactProcessor(new TestAttributeProcessor());
-        
         
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance(), null);
     }
