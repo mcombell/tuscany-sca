@@ -20,6 +20,9 @@ package org.apache.tuscany.sca.contribution.processor.xml;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
+import static javax.xml.stream.XMLStreamConstants.COMMENT;
+import static javax.xml.stream.XMLStreamConstants.CDATA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +39,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tuscany.sca.contribution.Constants;
@@ -141,6 +145,14 @@ public class AnyElementProcessor implements StAXArtifactProcessor<Object> {
 					writer.writeAttribute(reader.getAttributePrefix(i), reader.getAttributeNamespace(i), 
 							reader.getAttributeLocalName(i), reader.getAttributeValue(i));
 				}
+				break;
+				
+			case CHARACTERS:
+				writer.writeCharacters(reader.getText());	
+				break;
+				
+			case CDATA:				
+				writer.writeCData(reader.getText());
 				break;
 
 			case END_ELEMENT:
