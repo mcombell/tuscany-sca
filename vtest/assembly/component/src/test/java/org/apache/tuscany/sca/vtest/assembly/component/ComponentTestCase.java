@@ -33,6 +33,7 @@ public class ComponentTestCase {
 
     private void initDomain(String compositePath) {
         System.out.println("Setting up");
+        
         ServiceFinder.init(compositePath);
     }
 
@@ -40,6 +41,8 @@ public class ComponentTestCase {
         System.out.println("Cleaning up");
         ServiceFinder.cleanup();
     }
+    
+    
 
     /**
      * Lines 92-96:
@@ -72,7 +75,7 @@ public class ComponentTestCase {
     /**
      * Lines 142-143:
      * <p>
-     * name (required) – the name of the component. The name must be unique
+     * name (required) ?the name of the component. The name must be unique
      * across all the components in the composite.
      */
     @Test(expected = ServiceRuntimeException.class)
@@ -145,6 +148,83 @@ public class ComponentTestCase {
         Assert.assertEquals("Some State", service.getState());
         cleanupDomain();
     }
+    
+    /**
+     * Lines 599-601:
+     * <p>
+     * ASM50001
+     * <p>
+     * The @name attribute of a <service/> child element of a <componentType/> MUST 
+     * be unique amongst the service elements of that <componentType/>
+     * 
+     */
+    @Test(expected=ServiceRuntimeException.class)
+    @Ignore("TUSCANY-2675")
+    public void ASM50001() throws Exception {    	
+    	initDomain("nonuniqueservicenameincomponenttype.composite");
+    	AService service = ServiceFinder.getService(AService.class, "ABComponent/AService");
+    	Assert.assertEquals("OK", service.getState());    	
+    	cleanupDomain();
+    }
+    
+    /**
+     * Lines 695-697:
+     * <p>
+     * ASM50002
+     * <p>
+     * The @name attribute of a service element of a <component/> MUST be unique amongst 
+     * the service elements of that <component/>
+     * 
+     */
+    @Test(expected=ServiceRuntimeException.class)
+    public void ASM50002() throws Exception {
+    	initDomain("nonuniqueservicenameincomposite.composite");
+    	DService service = ServiceFinder.getService(DService.class, "CDComponent/CServiceImpl");
+        Assert.assertEquals("hello", service.sayHello());
+    	cleanupDomain();
+    }
+    
+    /**
+     * Lines 697-699:
+     * <p>
+     * ASM50003
+     * <p>
+     * OSOA
+     * The @name attribute of a service element of a <component/> MUST match the 
+     * @name attribute of a service element of the componentType of the <implementation/> child element of the component.
+     * <p>
+     * OASIS
+     * the name of the service has to match a name of a service defined by the implementation
+     * 
+     */
+    @Test(expected=ServiceRuntimeException.class)
+    public void ASM50003() throws Exception {
+    	initDomain("notmatchofservicename.composite");
+    	DService service = ServiceFinder.getService(DService.class, "DComponent1/DService1");
+        Assert.assertEquals("hello", service.sayHello());    	
+    	cleanupDomain();
+    }
+    
+    /**
+     * Lines 709-715:
+     * <p>
+     * ASM50004
+     * <p>      
+     * If a <service/> element has an interface subelement specified, the interface MUST 
+     * provide a compatible subset of the interface declared on the componentType of the 
+     * implementation. 
+     */
+    @Test(expected=ServiceRuntimeException.class)
+    public void ASM50004() throws Exception {
+    	//for this case, if you remove the method3() in the EEService
+    	//the EEService will be a compatible subset of EService.
+    	initDomain("notcompatibleinterface.composite");    	
+    	EEService service = ServiceFinder.getService(EEService.class, "EEComponent/EEService");
+        Assert.assertEquals("method1", service.method1());
+    	cleanupDomain();
+    }
+    
+    
     
     
 }
