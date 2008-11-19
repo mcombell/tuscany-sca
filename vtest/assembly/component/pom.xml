@@ -27,7 +27,7 @@
     </parent>
     <artifactId>vtest-assembly-component</artifactId>
 
-    <name>Apache Tuscany SCA Assembly Verification Tests - Component</name>
+    <name>Apache Tuscany SCA vTest SCA Assembly Verification Tests - Component</name>
 
     <dependencies>
         <dependency>

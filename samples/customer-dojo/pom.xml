@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-customer-dojo</artifactId>
-    <name>Apache Tuscany SCA Customer DOJO Sample WebApp</name>
+    <name>Apache Tuscany SCA Sample Customer DOJO</name>
 
     <repositories>
        <repository>

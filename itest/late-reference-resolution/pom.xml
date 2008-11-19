@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>itest-late-reference-resolution</artifactId>
-    <name>Apache Tuscany SCA Late Reference Resolution Integration Test</name>
+    <name>Apache Tuscany SCA iTest Late Reference Resolution</name>
 
     <repositories>
        <repository>

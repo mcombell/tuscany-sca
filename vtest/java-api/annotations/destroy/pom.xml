@@ -26,8 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-java-api-annotations-destroy</artifactId>
-
-    <name>Apache Tuscany SCA Java APIs and Annotations Verification Tests - Annotations - @Destroy</name>
+    <name>Apache Tuscany SCA vTest Java APIs and Annotations Verification Tests - Annotations - @Destroy</name>
 
     <dependencies>
         <dependency>

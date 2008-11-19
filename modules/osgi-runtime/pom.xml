@@ -26,7 +26,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-osgi-runtime</artifactId>
-    <name>Apache Tuscany OSGi Runtime Helper Library</name>
+    <name>Apache Tuscany SCA OSGi Runtime Helper Library</name>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.felix</groupId>

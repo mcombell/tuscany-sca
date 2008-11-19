@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>itest-recursive-ws</artifactId>
-    <name>Apache Tuscany SCA Recursive WS Integration Tests</name>
+    <name>Apache Tuscany SCA iTest Recursive WS</name>
 
     <dependencies>
         <dependency>

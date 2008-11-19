@@ -29,7 +29,7 @@
     <artifactId>itest-databindings-common</artifactId>
     <version>1.4-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Apache Tuscany SCA Databinding Common Integration Tests</name>
+    <name>Apache Tuscany SCA iTest Databinding Common</name>
 
     <repositories>
         <repository>

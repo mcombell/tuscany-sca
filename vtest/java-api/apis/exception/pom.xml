@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-java-api-apis-exception</artifactId>
-    <name>Apache Tuscany SCA Java APIs and Annotations Verification Tests - APIs - Exception</name>
+    <name>Apache Tuscany SCA vTest Java APIs and Annotations Verification Tests - APIs - Exception</name>
 
     <dependencies>
         <dependency>

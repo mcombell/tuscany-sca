@@ -27,7 +27,7 @@
     </parent>
     <artifactId>sample-helloworld-jms-webapp</artifactId>
     <packaging>war</packaging>
-    <name>Apache Tuscany SCA JMS HelloWorld Sample in a WebApp</name>
+    <name>Apache Tuscany SCA Sample JMS HelloWorld in a WebApp</name>
 
     <repositories>
        <repository>

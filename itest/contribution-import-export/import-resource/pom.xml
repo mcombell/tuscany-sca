@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>itest-contribution-import-resource</artifactId>
-    <name>Apache Tuscany SCA Contribution Resource Import Java Integration Tests</name>
+    <name>Apache Tuscany SCA iTest Contribution Resource Import</name>
 
 <dependencies>
 	

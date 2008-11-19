@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-binding-atom-abdera</artifactId>
-    <name>Apache Tuscany SCA Atom Feed Binding Extension</name>
+    <name>Apache Tuscany SCA Abdera Atom Feed Binding Extension</name>
 
     <dependencies>
         <dependency>

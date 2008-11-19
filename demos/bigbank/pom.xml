@@ -27,7 +27,7 @@
     </parent>
     <artifactId>demo-bigbank</artifactId>
     <packaging>jar</packaging>
-    <name>Apache Tuscany SCA BigBank Demo</name>
+    <name>Apache Tuscany SCA Demo BigBank</name>
 
     <repositories>
        <repository>

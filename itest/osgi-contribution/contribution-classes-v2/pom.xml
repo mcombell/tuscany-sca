@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>itest-osgi-contribution-classes</artifactId>
-    <name>Apache Tuscany OSGi Contribution Version 1 classes</name>
+    <name>Apache Tuscany SCA iTest OSGi Contribution Version 1 Classes</name>
 
 <dependencies>
         <dependency>

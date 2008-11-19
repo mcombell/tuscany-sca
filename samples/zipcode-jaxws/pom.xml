@@ -27,8 +27,8 @@
     </parent>
     <artifactId>sample-zipcode-jaxws</artifactId>
     <packaging>jar</packaging>
-    <name>Apache Tuscany SCA US Zip Code JAX-WS Sample</name>
-    <description>Apache Tuscany SCA US Zip Code JAX-WS Sample</description>
+    <name>Apache Tuscany SCA Sample US Zip Code JAX-WS</name>
+    <description>Apache Tuscany SCA Sample US Zip Code JAX-WS</description>
 
     <dependencies>
         <dependency>

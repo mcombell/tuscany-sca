@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>sample-simple-bigbank-spring</artifactId>
-    <name>Apache Tuscany SCA Spring-Based Simplified BigBank Sample</name>
+    <name>Apache Tuscany SCA Sample Spring Based Simplified BigBank</name>
 
     <repositories>
        <repository>

@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-wsbinding-nowsdl-soapversion</artifactId>
-    <name>Apache Tuscany SCA Web Service Binding Verification Tests - No WSDL SOAP Version</name>
+    <name>Apache Tuscany SCA vTest Web Service Binding Verification Tests - No WSDL SOAP Version</name>
 
     <dependencies>
         <dependency>

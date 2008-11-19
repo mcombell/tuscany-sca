@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-java-api-annotations-endsconversation</artifactId>
-    <name>Apache Tuscany SCA Java APIs and Annotations Verification Tests - Annotations - @EndsConversation</name>
+    <name>Apache Tuscany SCA vTest Java APIs and Annotations Verification Tests - Annotations - @EndsConversation</name>
 
     <dependencies>
         <dependency>

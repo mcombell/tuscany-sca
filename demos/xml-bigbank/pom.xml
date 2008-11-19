@@ -27,7 +27,7 @@
     </parent>
     <artifactId>demo-xml-bigbank</artifactId>
     <packaging>jar</packaging>
-    <name>Apache Tuscany SCA XML BigBank Demo</name>
+    <name>Apache Tuscany SCA Demo XML BigBank</name>
     <description>Apache Tuscany SCA XML BigBank Demo</description>
 
     <dependencies>

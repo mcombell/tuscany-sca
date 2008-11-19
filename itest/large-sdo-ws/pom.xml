@@ -27,7 +27,7 @@
     </parent>
     <artifactId>itest-large-sdo-ws</artifactId>
     <packaging>jar</packaging>
-    <name>Apache Tuscany SCA Web Service with Large SDO Integration Tests</name>
+    <name>Apache Tuscany SCA iTest Web Service with Large SDO</name>
 
     <dependencies>
         <dependency>

@@ -27,7 +27,7 @@
     </parent>
     <artifactId>vtest-assembly-ctypefile</artifactId>
 
-    <name>Apache Tuscany SCA Assembly Verification Tests - Component Type File</name>
+    <name>Apache Tuscany SCA vTest SCA Assembly Verification Tests - Component Type File</name>
 
     <dependencies>
         <dependency>

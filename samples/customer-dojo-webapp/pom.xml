@@ -27,7 +27,7 @@
     </parent>
     <artifactId>sample-customer-dojo-webapp</artifactId>
 	<packaging>war</packaging>
-    <name>Apache Tuscany SCA Customer DOJO Sample WebApp</name>
+    <name>Apache Tuscany SCA Sample Customer DOJO WebApp</name>
 
     <repositories>
        <repository>

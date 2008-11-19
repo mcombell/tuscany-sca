@@ -26,6 +26,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>itest-contribution-export-resource</artifactId>
-    <name>Apache Tuscany SCA Contribution Resource Export Integration Tests</name>
+    <name>Apache Tuscany SCA iTest Contribution Resource Export</name>
 
 </project>

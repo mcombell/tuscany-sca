@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-wsbinding-nowsdl-promoted</artifactId>
-    <name>Apache Tuscany SCA Web Service Binding Verification Tests - No WSDL Promoted Service and Reference</name>
+    <name>Apache Tuscany SCA vTest Web Service Binding Verification Tests - No WSDL Promoted Service and Reference</name>
 
     <dependencies>
         <dependency>

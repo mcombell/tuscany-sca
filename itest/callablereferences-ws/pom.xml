@@ -26,7 +26,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>itest-callablereferences-ws</artifactId>
-    <name>Apache Tuscany Test for Callable References over Web Services</name>
+    <name>Apache Tuscany SCA iTest Callable References over Web Services</name>
 
     <dependencies>
         <dependency>

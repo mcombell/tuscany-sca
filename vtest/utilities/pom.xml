@@ -27,7 +27,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>vtest-utilities</artifactId>
-    <name>Apache Tuscany SCA Verification Tests - Utilities</name>
+    <name>Apache Tuscany SCA vTest Utilities</name>
 
     <dependencies>
 

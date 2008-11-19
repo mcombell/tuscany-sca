@@ -27,8 +27,7 @@
     </parent>
     <artifactId>sample-calculator-ws-secure-webapp</artifactId>
     <packaging>war</packaging>
-    <name>Apache Tuscany SCA Calculator Sample Web Service enabled for 
-WS Security and in a WebApp</name>
+    <name>Apache Tuscany SCA Sample Calculator Web Service enabled for WS Security in a WebApp</name>
 
     <repositories>
        <repository>
