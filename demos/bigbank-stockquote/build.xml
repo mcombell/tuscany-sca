@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="calculator" default="run">
+<project name="bigbank-stockquote" default="run">
     <property name="test.class" value="stockquote.demo.StockQuoteServer" />
 	
     <path id="test.classpath">

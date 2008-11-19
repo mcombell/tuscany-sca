@@ -17,7 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
-<project name="bigbank-account" default="run">
+<project name="bigbank" default="run">
     <property name="settings.localRepository" value="./target/repo" />
     <property name="artifactId" value="demo-bigbank" />	
     <property name="test.class" value="bigbank.demo.BigBankServer" />

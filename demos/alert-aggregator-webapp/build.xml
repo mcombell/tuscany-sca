@@ -20,11 +20,11 @@
 <!ENTITY buildDependency SYSTEM "build-dependency.xml">
 ]>
 
-<project name="helloworld-jsonrpc" default="package">
+<project name="alert-aggregator-webapp" default="package">
 	&buildDependency;
 	
     <property name="settings.localRepository" value="./target/repo" />
-    <property name="artifactId" value="sample-feed-aggregator" />
+    <property name="artifactId" value="demo-alert-aggregator" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>
