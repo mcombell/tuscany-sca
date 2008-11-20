@@ -97,7 +97,7 @@ class WebImplementationImpl implements WebImplementation, ComponentPreProcessor 
     }
 
     /**
-     * Use preProcess to add any references dynamically
+     * Use preProcess to add any references and properties dynamically
      * TODO: also support introspection and handle WEB-INF/web.componentType (spec line 503) 
      */
     public void preProcess(Component component) {
@@ -109,6 +109,12 @@ class WebImplementationImpl implements WebImplementation, ComponentPreProcessor 
         for (Reference reference : rtc.getReferences()) {
             if (getReference(reference.getName()) == null) {
                 getReferences().add(createReference(reference));
+            }
+        }
+
+        for (Property property : rtc.getProperties()) {
+            if (getProperty(property.getName()) == null) {
+                getProperties().add(createProperty(property));
             }
         }
     }
@@ -130,6 +136,25 @@ class WebImplementationImpl implements WebImplementation, ComponentPreProcessor 
             throw new AssertionError(e); // should not ever happen
         }
         return newReference;
+    }
+
+    protected Property getProperty(String name) {
+        for (Property property : getProperties()) {
+            if (property.getName().equals(name)) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    protected Property createProperty(Property property) {
+        Property newProperty;
+        try {
+            newProperty = (Property)property.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e); // should not ever happen
+        }
+        return newProperty;
     }
 
 }
