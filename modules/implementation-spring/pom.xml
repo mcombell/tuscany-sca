@@ -76,13 +76,6 @@
             <version>1.4-SNAPSHOT</version>
         </dependency>
         
-        <!-- Temporarily depend on implementation-script for a set of utility classes -->
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-script</artifactId>
-            <version>1.4-SNAPSHOT</version>
-        </dependency>
-                
         <!-- Spring dependencies... -->    
         <dependency>
             <groupId>org.springframework</groupId>

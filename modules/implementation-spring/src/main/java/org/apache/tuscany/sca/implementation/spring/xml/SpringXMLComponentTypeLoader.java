@@ -527,7 +527,7 @@ public class SpringXMLComponentTypeLoader {
 
         if (locationFile.isDirectory()) {
             try {
-                manifestFile = new File(locationFile, "META-INF"+ File.separator +"MANIFEST.MF");
+                manifestFile = new File(locationFile, "META-INF"+ File.separator +"MANIFEST.MF");                
                 if (manifestFile.exists()) {
                     Manifest mf = new Manifest(new FileInputStream(manifestFile));
                     Attributes mainAttrs = mf.getMainAttributes();
@@ -548,11 +548,8 @@ public class SpringXMLComponentTypeLoader {
             } catch (IOException e) {
                 throw new ContributionReadException("Error reading manifest " + manifestFile);
             }
-        } else {            
-            if (locationFile.isFile() && locationFile.getName().indexOf(".jar") < 0) {
-                return new UrlResource(url);
-            }
-            else {
+        } else {          
+        	if (locationFile.isFile() && locationFile.getName().endsWith(".jar")) {
                 try {
                     JarFile jf = new JarFile(locationFile);
                     JarEntry je;
@@ -568,19 +565,46 @@ public class SpringXMLComponentTypeLoader {
                             }
                         }
                     }
-                    je = jf.getJarEntry("META-INF" + File.separator + "spring" 
-                                                + File.separator + Constants.APPLICATION_CONTEXT);
+                    je = jf.getJarEntry("META-INF" + "/" + "spring" + "/" + Constants.APPLICATION_CONTEXT);
                     if (je != null) {
                         return new UrlResource(new URL("jar:" + locationFile.toURI().toURL() + "!/" + Constants.APPLICATION_CONTEXT));
                     }
                 } catch (IOException e) {
                     // bad archive
                     // TODO: create a more appropriate exception type
-                    throw new ContributionReadException(
-                                                        "SpringXMLLoader getApplicationContextResource: " + " IO exception reading context file.",
-                                                        e);
+                    throw new ContributionReadException("SpringXMLLoader getApplicationContextResource: " 
+                    												+ " IO exception reading context file.", e);
                 }
-            }
+        	}
+        	else {
+        		if (locationFile.getName().endsWith(".xml")) {
+        			return new UrlResource(url);
+        		} 
+        		else {
+        			// Deal with the directory inside a jar file, in case the contribution itself is a JAR file.
+        			try {
+	        			if (locationFile.getPath().indexOf(".jar") > 0) {
+	        				String jarEntry = url.getPath().substring(6, url.getPath().indexOf("!"));
+	        				JarFile jf = new JarFile(jarEntry);	        				
+	        				JarEntry je = jf.getJarEntry(url.getPath().substring(url.getPath().indexOf("!/")+2) 
+	        												+ "/" + "META-INF" + "/" + "MANIFEST.MF");
+	        			    if (je != null) {
+	        					Manifest mf = new Manifest(jf.getInputStream(je));
+	        					Attributes mainAttrs = mf.getMainAttributes();
+	                            String appCtxPath = mainAttrs.getValue("Spring-Context");
+	                            if (appCtxPath != null) {
+	                                je = jf.getJarEntry(url.getPath().substring(url.getPath().indexOf("!/")+2) + "/" + appCtxPath);
+	                                if (je != null) {
+	                                    return new UrlResource(new URL("jar:" + url.getPath() + "/" + appCtxPath));
+	                                }
+	                            }
+	        				}
+	        			}	        			
+            		} catch (IOException e) {
+                        throw new ContributionReadException("Error reading manifest " + manifestFile);
+                    }
+        		}        		
+        	}
         }
 
         throw new ContributionReadException("SpringXMLLoader getApplicationContextResource: " 
