@@ -113,6 +113,7 @@
                 <module>recursive</module>
                 <module>recursive-multi-level</module>
                 <module>recursive-ws</module>
+                <module>references-collection</module>
                 <module>references</module>
                 <module>serialization</module>
                 <module>services</module>
