@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="calculator" default="runDomain">
+<project name="calculator-distributed" default="runDomain">
 	<property name="test.jar"   value="sample-calculator-distributed.jar" />
 	
     <target name="init">
@@ -31,8 +31,8 @@
                target="1.5">
             <classpath>
             	<pathelement location="../../modules/tuscany-sca-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-launcher-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-api-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-launcher-1.4-SNAPSHOT.jar"/>
             </classpath>
         </javac> 
         <copy todir="target/classes">
@@ -53,8 +53,8 @@
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
             	<pathelement location="../../modules/tuscany-sca-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-launcher-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-api-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-launcher-1.4-SNAPSHOT.jar"/>
             </classpath>    	        	
         </java>
     </target>
@@ -67,8 +67,8 @@
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
             	<pathelement location="../../modules/tuscany-sca-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-launcher-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-api-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-launcher-1.4-SNAPSHOT.jar"/>
             </classpath>     	        	
         </java>
     </target>
@@ -81,8 +81,8 @@
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
             	<pathelement location="../../modules/tuscany-sca-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-launcher-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-api-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-launcher-1.4-SNAPSHOT.jar"/>
             </classpath>      	
         </java>
     </target>	
@@ -95,8 +95,8 @@
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
             	<pathelement location="../../modules/tuscany-sca-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-api-1.4-SNAPSHOT.jar"/>
-            	<pathelement location="../../modules/tuscany-node2-launcher-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-api-1.4-SNAPSHOT.jar"/>
+            	<pathelement location="../../modules/tuscany-node-launcher-1.4-SNAPSHOT.jar"/>
             </classpath>      	
         </java>
     </target>	

@@ -19,7 +19,7 @@
 -->
 <project name="spring-bigbank-checkaccount" default="run">    
     <property name="test.class" value="bigbank.account.checking.server.CheckingAccountServer" />
-    <property name="test.jar"   value="sample-spring-bigbank-calculator.jar" />
+    <property name="test.jar"   value="sample-spring-bigbank-checkaccount.jar" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>

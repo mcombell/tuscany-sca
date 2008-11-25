@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="store" default="compile">
+<project name="photo-gallary" default="compile">
     <property name="test.class" value="launch.Launch" />
-	<property name="test.jar"   value="sample-store.jar" />
+	<property name="test.jar"   value="sample-photo-gallary.jar" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>

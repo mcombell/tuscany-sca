@@ -20,7 +20,7 @@
 <!ENTITY buildDependency SYSTEM "build-dependency.xml">
 ]>
 
-<project name="sample-helloworld-dojo-webapp" default="compile">
+<project name="sample-customer-dojo" default="compile">
 	
 	&buildDependency;
 	

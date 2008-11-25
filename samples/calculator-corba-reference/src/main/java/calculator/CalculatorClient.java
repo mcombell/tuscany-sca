@@ -27,7 +27,7 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
  */
 public class CalculatorClient {
     public static void main(String[] args) throws Exception {
-        SCADomain scaDomain = SCADomain.newInstance("CalculatorRMIReference.composite");
+        SCADomain scaDomain = SCADomain.newInstance("CalculatorCORBAReference.composite");
         CalculatorService calculatorService = 
             scaDomain.getService(CalculatorService.class, "CalculatorServiceComponent");
 
