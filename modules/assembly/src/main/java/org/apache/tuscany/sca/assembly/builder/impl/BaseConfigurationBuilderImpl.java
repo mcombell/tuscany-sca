@@ -1084,6 +1084,10 @@ public abstract class BaseConfigurationBuilderImpl {
      * @param binding
      */
     private void constructBindingName(Contract contract, Binding binding) {
+        if(binding == null) {
+            warning("Binding is null", binding, contract.getName());
+            return;
+        }
         
         // set the default binding name if one is required        
         // if there is no name on the binding then set it to the service or reference name 
