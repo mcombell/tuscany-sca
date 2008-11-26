@@ -21,11 +21,14 @@ package org.apache.tuscany.sca.implementation.ejb.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.assembly.builder.ComponentPreProcessor;
 import org.apache.tuscany.sca.implementation.ejb.EJBImplementation;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
 
 /**
@@ -33,7 +36,7 @@ import org.apache.tuscany.sca.implementation.ejb.EJBImplementation;
  *
  * @version $Rev$ $Date$
  */
-class EJBImplementationImpl implements EJBImplementation {
+class EJBImplementationImpl implements EJBImplementation, ComponentPreProcessor {
 
     private List<Property> properties = new ArrayList<Property>(); 
     private List<Service> services = new ArrayList<Service>(); 
@@ -91,5 +94,65 @@ class EJBImplementationImpl implements EJBImplementation {
 
     public void setUnresolved(boolean unresolved) {
         this.unresolved = unresolved;
+    }
+
+    /**
+     * Use preProcess to add any references and properties dynamically
+     */
+    public void preProcess(Component component) {
+        if (!(component instanceof RuntimeComponent)) {
+            return;
+        }
+        RuntimeComponent rtc = (RuntimeComponent) component;
+        
+        for (Reference reference : rtc.getReferences()) {
+            if (getReference(reference.getName()) == null) {
+                getReferences().add(createReference(reference));
+            }
+        }
+
+        for (Property property : rtc.getProperties()) {
+            if (getProperty(property.getName()) == null) {
+                getProperties().add(createProperty(property));
+            }
+        }
+    }
+
+    protected Reference getReference(String name) {
+        for (Reference reference : getReferences()) {
+            if (reference.getName().equals(name)) {
+                return reference;
+            }
+        }
+        return null;
+    }
+
+    protected Reference createReference(Reference reference) {
+        Reference newReference;
+        try {
+            newReference = (Reference)reference.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e); // should not ever happen
+        }
+        return newReference;
+    }
+
+    protected Property getProperty(String name) {
+        for (Property property : getProperties()) {
+            if (property.getName().equals(name)) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    protected Property createProperty(Property property) {
+        Property newProperty;
+        try {
+            newProperty = (Property)property.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e); // should not ever happen
+        }
+        return newProperty;
     }
 }
