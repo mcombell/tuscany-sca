@@ -21,7 +21,7 @@ package impl.spring;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 
 import domain.CustomCompositeBuilder;
 
@@ -51,7 +51,7 @@ public class ContributionResolveExceptionTestCase extends TestCase {
 
     public void testCalculator() {
     	Monitor monitor = customDomain.getMonitorInstance();        
-    	assertTrue(((DefaultLoggingMonitorImpl)monitor).isMessageLogged("ContributionResolveException"));
+    	assertTrue(((DefaultMonitorImpl)monitor).isMessageLogged("ContributionResolveException"));
         //assertEquals("ContributionResolveException", problem.getMessageId());  
     }
 }

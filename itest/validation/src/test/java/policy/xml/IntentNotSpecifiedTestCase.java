@@ -21,7 +21,7 @@ package policy.xml;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 
 import domain.CustomCompositeBuilder;
 
@@ -51,7 +51,7 @@ public class IntentNotSpecifiedTestCase extends TestCase {
 
     public void testCalculator() {
        Monitor monitor = customDomain.getMonitorInstance();
-       assertTrue(((DefaultLoggingMonitorImpl)monitor).isMessageLogged("IntentNotSpecified"));
+       assertTrue(((DefaultMonitorImpl)monitor).isMessageLogged("IntentNotSpecified"));
        /*Problem problem = ((DefaultLoggingMonitorImpl)monitor).getLastLoggedProblem(); 
        assertNotNull(problem);
        assertEquals("IntentNotSpecified", problem.getMessageId());*/  

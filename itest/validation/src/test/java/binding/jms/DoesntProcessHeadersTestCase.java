@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.Problem;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 import org.junit.Ignore;
 
 import domain.CustomCompositeBuilder;
@@ -54,7 +54,7 @@ public class DoesntProcessHeadersTestCase extends TestCase {
     @Ignore("TUSCANY-2532")
     public void testCalculator() {
     	Monitor monitor = customDomain.getMonitorInstance();
-    	Problem problem = ((DefaultLoggingMonitorImpl)monitor).getLastLoggedProblem();
+    	Problem problem = ((DefaultMonitorImpl)monitor).getLastLoggedProblem();
         
     	assertNotNull(problem);
 //       assertEquals("DoesntProcessHeaders", problem.getMessageId()); 

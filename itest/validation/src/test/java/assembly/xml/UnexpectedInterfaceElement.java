@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.Problem;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 
 import domain.CustomCompositeBuilder;
 /**
@@ -51,7 +51,7 @@ public class UnexpectedInterfaceElement extends TestCase {
 
     public void testCalculator() {
     	Monitor monitor = customDomain.getMonitorInstance();
-    	Problem problem = ((DefaultLoggingMonitorImpl)monitor).getLastLoggedProblem();
+    	Problem problem = ((DefaultMonitorImpl)monitor).getLastLoggedProblem();
         
         assertNotNull(problem);
         assertEquals("UnexpectedInterfaceElement", problem.getMessageId());

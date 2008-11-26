@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.Problem;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 
 import domain.CustomCompositeBuilder;
 
@@ -52,7 +52,7 @@ public class AttributeURIMissingTestCase extends TestCase {
 
     public void testCalculator() {
     	Monitor monitor = customDomain.getMonitorInstance();
-    	Problem problem = ((DefaultLoggingMonitorImpl)monitor).getProblems().get(2);
+    	Problem problem = ((DefaultMonitorImpl)monitor).getProblems().get(2);
         
     	assertNotNull(problem);
         assertEquals("AttributeURIMissing", problem.getMessageId());

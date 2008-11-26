@@ -21,7 +21,7 @@ package policy.xml;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.monitor.Monitor;
-import org.apache.tuscany.sca.monitor.logging.impl.DefaultLoggingMonitorImpl;
+import org.apache.tuscany.sca.monitor.impl.DefaultMonitorImpl;
 import org.junit.Ignore;
 
 import domain.CustomCompositeBuilder;

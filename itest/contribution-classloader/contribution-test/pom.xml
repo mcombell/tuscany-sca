@@ -44,7 +44,7 @@
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-monitor-logging</artifactId>
+            <artifactId>tuscany-monitor</artifactId>
             <version>1.4-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>        
