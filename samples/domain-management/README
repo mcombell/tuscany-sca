@@ -1,8 +1,170 @@
 Domain Management Sample Tasks
 ==============================
-This sample implements the following sample domain management tasks:
-- list deployables in a contribution
-- list contribution dependencies
-- fuse includes in a composite
-- add deployables to a domain composite and wire them
+This sample shows how to use a subset of Tuscany to read contribution metadata, 
+analyze and resolve contribution dependencies given a set of available contributions.
 
+The README in the samples directory (the directory above this) provides 
+general instructions about building and running samples. Take a look there first.
+
+Sample Overview
+---------------
+
+This sample demonstrates how to use some of the APIs for processing the contributions.
+These APIs are currently used under the cover in the domain manager.
+
+domain-management/
+  src/
+    main/
+      java/
+        manager/
+	  DistributeAndRunComponents.java
+	  DistributeComponents.java
+	  ListComponents.java
+	  ListDependencies.java
+	  ListDeployables.java
+  	  WireComponents.java
+      resources/
+    test/
+      java/
+	services/
+	  Cart.java
+	  Item.java
+	  ShoppingCartClientImpl.java
+	  ShoppingCartImpl.java
+	resources/
+	  assembly/
+	    assets.xml
+	    client.xml
+            store.xml
+	  assets/
+	    META-INF/
+	      sca-contribution.xml
+	  client/
+	    META-INF/
+	      client.composite
+	  store/
+	    META-INF/
+	      sca-contribution.xml
+	    store.composite
+    build.xml
+    pom.xml
+    README
+
+Building the Sample Using Maven 
+-------------------------------------------
+
+cd domain-management
+mvn
+
+** Please note that the mvn command will just build the sample and will install the required jar files into the Maven repository.
+** In order to run the sample, please see the instructions - "Running the Sample"
+
+Running the Sample
+------------------
+
+** Please make sure that sample is built using above build command(s).
+
+This sample implements following sample domain management tasks:
+
+1. List deployables in a contribution:
+  ------------------------------------
+
+   - This sample reads the SCA metadata for two sample contributions and prints the names of their deployable composites.
+
+   - Use the following command to run the sample:
+	
+	On windows do:
+	java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-domain-management.jar manager.ListDeployables	
+
+	On *nix do: 		
+	java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-domain-management.jar manager.ListDeployables
+
+   - You should see the following output:
+	
+	Deployable: {http://store}store
+
+2. List contribution dependencies:
+  --------------------------------
+
+   - The sample reads the SCA metadata for two sample contributions and prints their dependencies.
+
+   - Use the following command to run the sample:
+
+	On windows do:
+	java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-domain-management.jar manager.ListDependencies
+	
+	On *nix do:	
+	java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-domain-management.jar manager.ListDependencies
+
+   - You should see the following output:
+
+	Contribution: store
+	dependency: assets
+	dependency: store
+	Contribution: assets
+	dependency: assets
+
+3. Add deployables to a domain composite and wire them:
+  -----------------------------------------------------
+
+   - The sample first reads the SCA metadata for three sample contributions, and resolve the artifacts contained in the contributions,  
+     includes all their deployable composites in a composite model representing an SCA domain, and then
+     uses several composite builder utilities to configure and assemble and wire them together.
+     Finally it prints the resulting domain composite model, showing service bindings
+     configured with the URIs from the nodes hosting them.
+
+   - Use the following command to run the sample:
+
+	On windows do:
+	java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-domain-management.jar manager.WireComponents		
+
+	On *nix do:	
+	java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-domain-management.jar manager.WireComponents
+
+   - You should see the following output:
+	
+	<?xml version="1.0" encoding="UTF-8"?>
+	  <composite name="domain" targetNamespace="http://sample"
+			xmlns="http://www.osoa.org/xmlns/sca/1.0" xmlns:ns1="http://www.osoa.org/xmlns/sca/1.0">
+		<component name="ShoppingCart" uri="ShoppingCart">
+		    <implementation.java class="services.ShoppingCartImpl"/>
+		    <service name="Cart">
+		      <ns2:binding.atom name="Cart" uri="/ShoppingCart/Cart" xmlns:ns2="http://tuscany.apache.org/xmlns/sca/1.0"/>
+		    </service>
+		</component>
+		<component name="ShoppingCartClient" uri="ShoppingCartClient">
+		    <implementation.java class="services.ShoppingCartClientImpl"/>
+		    <service name="Cart">
+		      <ns2:binding.atom name="Cart" uri="/ShoppingCartClient/Cart" xmlns:ns2="http://tuscany.apache.org/xmlns/sca/1.0"/>
+		    </service>
+		    <reference name="cart">
+		      <ns2:binding.atom name="cart#ShoppingCart/Cart"
+		        uri="/ShoppingCart/Cart" xmlns:ns2="http://tuscany.apache.org/xmlns/sca/1.0"/>
+		    </reference>
+		</component>
+	</composite>
+
+4. List Components:
+  -----------------
+	
+   - This sample reads the SCA metadata for two sample contributions, and displays their dependencies, reads and resolve 
+     the artifacts contained in the contributions, and finally prints the deployables composites and the components
+     they declare as well as their main characteristics (showing that their interfaces and implementations are actually resolved).
+
+   - Use the following command to run the sample:
+
+	On windows do:	
+	java -cp ..\..\lib\tuscany-sca-manifest.jar;target\sample-domain-management.jar manager.ListComponents
+
+	On *nix do:		
+	java -cp ../../lib/tuscany-sca-manifest.jar:target/sample-domain-management.jar manager.ListComponents
+
+   - You should see the following output:
+
+	Deployable: {http://store}store
+	  component: ShoppingCart
+	    componentService: Cart
+	      binding: class org.apache.tuscany.sca.binding.atom.impl.AtomBindingImpl - /ShoppingCart/Cart
+	    implementation: services.ShoppingCartImpl
+	      service: Cart
+	        interface: services.Cart
