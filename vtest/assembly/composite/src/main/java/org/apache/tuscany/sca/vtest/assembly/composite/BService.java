@@ -23,7 +23,6 @@ package org.apache.tuscany.sca.vtest.assembly.composite;
  */
 public interface BService {
 
-    public String getState();
     public String getSomeProperty();
     
 }

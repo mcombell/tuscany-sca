@@ -21,6 +21,8 @@ package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
 import org.apache.tuscany.sca.vtest.assembly.composite.AService;
 import org.apache.tuscany.sca.vtest.assembly.composite.BService;
+import org.apache.tuscany.sca.vtest.assembly.composite.CService;
+import org.apache.tuscany.sca.vtest.assembly.composite.DService;
 import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Service;
 
@@ -31,19 +33,17 @@ public class AServiceImpl implements AService {
     protected BService b;
     
     @Reference
-    protected BService b2;
+    protected CService c;
 
     public String getState() {
-        return b.getState();
+        return c.getState();
     }
     
     public String getBProperty() {
         return b.getSomeProperty();
     }
 
-    public String getB2Property() {
-        return b2.getSomeProperty();
-    }
+   
 
 }
 

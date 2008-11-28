@@ -741,6 +741,12 @@ public class NodeImpl implements SCANode, SCAClient {
                         }
                         componentContext =
                             ((RuntimeComponent)compositeService.getPromotedComponent()).getComponentContext();
+                        
+                        if (componentContext == null){
+                        	// there is a break in the promotion chain so just let and exception 
+                        	// be thrown
+                        	break;
+                        }
                         return componentContext.createSelfReference(businessInterface, compositeService
                             .getPromotedService());
                     }

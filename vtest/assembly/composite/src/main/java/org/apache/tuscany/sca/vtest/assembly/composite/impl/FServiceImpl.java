@@ -16,15 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.vtest.assembly.composite;
 
-/**
- * Simple Remotable Service
- */
-public interface AService {
+package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
-    public String getState();
-    public String getBProperty();
+import org.apache.tuscany.sca.vtest.assembly.composite.FService;
+import org.apache.tuscany.sca.vtest.assembly.composite.EService;
+import org.apache.tuscany.sca.vtest.assembly.composite.DService;
+import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Service;
 
+@Service(FService.class)
+public class FServiceImpl implements FService {
+
+    @Reference
+    protected EService e;
     
+    @Reference
+    protected DService d;
+    
+    public String getString(String a) {
+        return e.getString(a);
+    }
+    
+    public String getGreetings(String name) {
+        return d.getGreetings(name);
+    }
+
 }
+

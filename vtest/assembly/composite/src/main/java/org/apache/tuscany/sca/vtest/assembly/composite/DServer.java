@@ -16,15 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
+
 package org.apache.tuscany.sca.vtest.assembly.composite;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
+import org.apache.tuscany.sca.host.embedded.SCADomain;
+
 /**
- * Simple Remotable Service
+ * This server program shows how to create an SCA runtime, and start it which
+ * activates the helloworld Web service endpoint.
  */
-public interface AService {
+public class DServer {
 
-    public String getState();
-    public String getBProperty();
+    public static void main(String[] args) {
 
-    
+       
+        SCADomain scaDomain = SCADomain.newInstance("dservicews.composite");
+
+        try {
+            System.out.println("HelloWorld server started (press enter to shutdown)");
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        scaDomain.close();
+        System.out.println("HelloWorld server stopped");
+    }
+
 }

@@ -18,13 +18,13 @@
  */
 package org.apache.tuscany.sca.vtest.assembly.composite;
 
+import org.osoa.sca.annotations.Remotable;
+
 /**
- * Simple Remotable Service
+ * Simple Remotable service.
  */
-public interface AService {
+@Remotable
+public interface EService {
 
-    public String getState();
-    public String getBProperty();
-
-    
+    public String getString(String a);
 }

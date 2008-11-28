@@ -22,9 +22,14 @@ package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 public class CServiceImpl {
 
     private String state = "Some State";
+    private String name = "CServiceImpl";
     
     public String getState() {
         return state;
+    }
+    
+    public String getName() {
+        return name;
     }
     
 }

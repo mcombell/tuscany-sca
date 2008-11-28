@@ -29,9 +29,6 @@ public class BServiceImpl implements BService {
     @Property  
     protected String someProperty;
 
-    public String getState() {
-        return "SomeStateFromB";
-    }
     
     public String getSomeProperty() {
         return someProperty;

@@ -16,15 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.vtest.assembly.composite;
+package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
-/**
- * Simple Remotable Service
- */
-public interface AService {
+import org.apache.tuscany.sca.vtest.assembly.composite.DService;
+import org.osoa.sca.annotations.Service;
 
-    public String getState();
-    public String getBProperty();
+@Service(DService.class)
+public class DServiceImpl implements DService {
 
-    
+    public String getGreetings(String name) {
+        return "Hello, " + name;
+    }
+
 }

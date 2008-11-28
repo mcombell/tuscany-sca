@@ -18,13 +18,26 @@
  */
 package org.apache.tuscany.sca.vtest.assembly.composite;
 
+import org.osoa.sca.annotations.Scope;
+
 /**
- * Simple Remotable Service
+ * This client program shows how to create an SCA runtime, start it,
+ * locate the HelloWorld service and invoke it.
  */
-public interface AService {
+@Scope("COMPOSITE")
+public class DServiceComponent implements DService {
+   
+    DService helloWorldService;
 
-    public String getState();
-    public String getBProperty();
+    public String getGreetings(String name) {
+        return helloWorldService.getGreetings(name);
+    }
 
-    
+    public DService getHelloWorldService() {
+        return helloWorldService;
+    }
+
+    public void setHelloWorldService(DService helloWorldService) {
+        this.helloWorldService = helloWorldService;
+    }
 }

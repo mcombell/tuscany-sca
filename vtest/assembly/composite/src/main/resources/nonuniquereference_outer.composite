@@ -20,12 +20,24 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assemby-composite--Composite">
+	xmlns:assembly-tests="http://assembly-tests"
+	name="Assembly-non-unique-reference-outer--Composite">
+
+    <component name="TestNonUniqueReferenceComponent">
+	    <implementation.composite name="assembly-tests:Assembly-non-unique-reference-inner--Composite"/>
+        <reference name="NonUniqueReference" target="BComponent"/>
+        <reference name="NonUniqueReference" target="CComponent"/> 	
+     </component>
 
     <component name="BComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.BServiceImpl"/>
         <property name="someProperty">some b component value</property>
     </component>
-   
-   
+    
+    
+    <component name="CComponent">
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>        
+    </component>
+
+               
 </composite>

@@ -21,10 +21,10 @@ package org.apache.tuscany.sca.vtest.assembly.composite;
 /**
  * Simple Remotable Service
  */
-public interface AService {
+public interface FService {
 
-    public String getState();
-    public String getBProperty();
+    public String getString(String a);
+    public String getGreetings(String name);
 
     
 }

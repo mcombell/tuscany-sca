@@ -18,11 +18,14 @@
  */
 package org.apache.tuscany.sca.vtest.assembly.composite;
 
+import org.osoa.sca.annotations.Remotable;
+
 /**
  * 
  */
 public interface CService {
 
     public String getState();
+    public String getName();
     
 }
