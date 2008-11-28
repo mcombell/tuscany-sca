@@ -96,6 +96,8 @@
                 <exclude>pom.xml</exclude>
                 <exclude>calculator2</exclude>
                 <exclude>calculator2/**/*</exclude>
+                <exclude>calculator-rcp</exclude>
+                <exclude>calculator-rcp/**/*</exclude>
                 <exclude>calculator-distributed/work</exclude>
                 <exclude>calculator-distributed/work/**/*</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp</exclude>
