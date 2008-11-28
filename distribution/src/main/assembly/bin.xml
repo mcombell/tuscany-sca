@@ -292,6 +292,10 @@
                 <exclude>target/**/*</exclude>
                 <exclude>store/*/target/classes</exclude>
                 <exclude>store/*/target/classes/**/*</exclude>
+                <exclude>store/*/target/test-classes</exclude>
+                <exclude>store/*/target/test-classes/**/*</exclude>
+                <exclude>store/*/target/surefire-reports</exclude>
+                <exclude>store/*/target/surefire-reports/**/*</exclude>
                 <exclude>store/*/target/maven-archiver</exclude>
                 <exclude>store/*/target/maven-archiver/**/*</exclude>
                 <exclude>store/catalog-webapp/target/war</exclude>
