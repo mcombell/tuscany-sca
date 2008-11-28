@@ -62,4 +62,22 @@
             </extension>
         </complexContent>
     </complexType>  
+    
+    <element name="import.java" type="sca:ImportJavaType" substitutionGroup="sca:import"/>
+    <complexType name="ImportJavaType">
+        <complexContent>
+            <extension base="sca:ImportType">
+                 <attribute name="package" type="string" use="optional"/>
+            </extension>
+        </complexContent>
+    </complexType>   
+    
+    <element name="export.java" type="sca:ExportJavaType" substitutionGroup="sca:export"/>
+    <complexType name="ExportJavaType">
+        <complexContent>
+            <extension base="sca:ExportType">
+                <attribute name="package" type="string" use="optional"/>
+            </extension>
+        </complexContent>
+    </complexType> 
 </schema> 
