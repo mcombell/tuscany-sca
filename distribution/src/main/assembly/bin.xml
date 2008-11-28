@@ -80,6 +80,8 @@
                 <exclude>*/target/classes/**/*</exclude>
                 <exclude>*/target/dependency-maven-plugin-markers</exclude>
                 <exclude>*/target/dependency-maven-plugin-markers/**/*</exclude>
+                <exclude>*/target/.felix</exclude>
+                <exclude>*/target/.felix/**/*</exclude>
                 <exclude>*/target/maven-archiver</exclude>
                 <exclude>*/target/maven-archiver/**/*</exclude>
                 <exclude>*/target/test-classes</exclude>
