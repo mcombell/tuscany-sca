@@ -80,6 +80,8 @@
                 <exclude>*/target/classes/**/*</exclude>
                 <exclude>*/target/dependency-maven-plugin-markers</exclude>
                 <exclude>*/target/dependency-maven-plugin-markers/**/*</exclude>
+                <exclude>*/target/maven-archiver</exclude>
+                <exclude>*/target/maven-archiver/**/*</exclude>
                 <exclude>*/target/test-classes</exclude>
                 <exclude>*/target/test-classes/**/*</exclude>
                 <exclude>*/target/surefire-reports</exclude>
@@ -107,6 +109,10 @@
                 <exclude>callback-ws-service/work/**/*</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp/**/*</exclude>
+                <exclude>customer-dojo-webapp/src/main/webapp/dojo</exclude>
+                <exclude>customer-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
+                <exclude>customer-dojo-webapp/target/</exclude>
+                <exclude>customer-dojo-webapp/target/**/*</exclude>
                 <exclude>domain-webapp</exclude>
                 <exclude>domain-webapp/**/*</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp</exclude>
@@ -156,8 +162,12 @@
                 <exclude>osgi-supplychain/.felix/**/*</exclude>
                 <exclude>osgi-supplychain/target/sample-osgi-supplychain</exclude>
                 <exclude>osgi-supplychain/target/sample-osgi-supplychain/**/*</exclude>
+                <exclude>simple-bigbank-spring/src/main/resources/web/dojo</exclude>
+                <exclude>simple-bigbank-spring/src/main/resources/web/dojo/**/*</exclude>
                 <exclude>simple-callback-ws/work</exclude>
                 <exclude>simple-callback-ws/work/**/*</exclude>
+                <exclude>zipcode-jaxws/target/endorsed</exclude>
+                <exclude>zipcode-jaxws/target/endorsed/**/*</exclude>
                 <exclude>spi-implementation-pojo</exclude>
                 <exclude>spi-implementation-pojo/**/*</exclude>
                 <!-- Sample war files to exclude -->
@@ -272,6 +282,10 @@
                 <exclude>*/**/*.ruleset</exclude>
                 <exclude>target</exclude>
                 <exclude>target/**/*</exclude>
+                <exclude>store/*/target/classes</exclude>
+                <exclude>store/*/target/classes/**/*</exclude>
+                <exclude>store/*/target/maven-archiver</exclude>
+                <exclude>store/*/target/maven-archiver/**/*</exclude>
                 <exclude>store/catalog-webapp/target/war</exclude>
                 <exclude>store/catalog-webapp/target/war/**/*</exclude>
                 <exclude>store/catalog-webapp/target/tutorial-catalog-webapp</exclude>
