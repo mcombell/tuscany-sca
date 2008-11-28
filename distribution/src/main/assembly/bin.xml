@@ -111,6 +111,8 @@
                 <exclude>callback-ws-client/work/**/*</exclude>
                 <exclude>callback-ws-service/work</exclude>
                 <exclude>callback-ws-service/work/**/*</exclude>
+                <exclude>chat2-webapp</exclude>
+                <exclude>chat2-webapp/**/*</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp/**/*</exclude>
                 <exclude>customer-dojo-webapp/src/main/webapp/dojo</exclude>
