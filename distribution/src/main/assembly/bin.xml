@@ -298,10 +298,8 @@
                 <exclude>store/*/target/surefire-reports/**/*</exclude>
                 <exclude>store/*/target/maven-archiver</exclude>
                 <exclude>store/*/target/maven-archiver/**/*</exclude>
-                <exclude>store/catalog-webapp/target/war</exclude>
-                <exclude>store/catalog-webapp/target/war/**/*</exclude>
-                <exclude>store/catalog-webapp/target/tutorial-catalog-webapp</exclude>
-                <exclude>store/catalog-webapp/target/tutorial-catalog-webapp/**/*</exclude>
+                <exclude>store/catalog-webapp/target</exclude>
+                <exclude>store/catalog-webapp/target/**/*</exclude>
                 <exclude>store/store-db/target/cart-db/</exclude>
                 <exclude>store/store-db/target/cart-db/**/*</exclude>
                 <exclude>store/store-eu/target/cart-eu-db/</exclude>
