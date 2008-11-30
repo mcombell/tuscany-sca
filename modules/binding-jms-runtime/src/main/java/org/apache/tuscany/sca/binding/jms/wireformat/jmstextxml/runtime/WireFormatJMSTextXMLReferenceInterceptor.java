@@ -16,31 +16,43 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.wireformat.jmstext;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.runtime;
 
 
+
+
+import java.util.Map;
+
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Session;
 
+import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.WireFormat;
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
+import org.apache.tuscany.sca.binding.jms.provider.JMSBindingServiceBindingProvider;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
+import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
+import org.apache.tuscany.sca.runtime.ReferenceParameters;
+import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
+import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
  *
  * @version $Rev$ $Date$
  */
-public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
+public class WireFormatJMSTextXMLReferenceInterceptor implements Interceptor {
 
     private Invoker next;
     private RuntimeWire runtimeWire;
@@ -49,7 +61,8 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
     private JMSMessageProcessor requestMessageProcessor;
     private JMSMessageProcessor responseMessageProcessor;
 
-    public WireFormatJMSTextReferenceInterceptor(JMSBinding jmsBinding, JMSResourceFactory jmsResourceFactory, RuntimeWire runtimeWire) {
+
+    public WireFormatJMSTextXMLReferenceInterceptor(JMSBinding jmsBinding, JMSResourceFactory jmsResourceFactory, RuntimeWire runtimeWire) {
         super();
         this.jmsBinding = jmsBinding;
         this.runtimeWire = runtimeWire;
@@ -59,13 +72,13 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
     }
 
     public Message invoke(Message msg) {
-        if (jmsBinding.getRequestWireFormat() instanceof WireFormatJMSText){
+        if (jmsBinding.getRequestWireFormat() instanceof WireFormatJMSTextXML){
             msg = invokeRequest(msg);
         }
         
         msg = getNext().invoke(msg);
         
-        if (jmsBinding.getResponseWireFormat() instanceof WireFormatJMSText){
+        if (jmsBinding.getResponseWireFormat() instanceof WireFormatJMSTextXML){
             msg = invokeResponse(msg);
         }
         
@@ -75,7 +88,7 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
     public Message invokeRequest(Message msg) {
         try {
             // get the jms context
-            JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+            JMSBindingContext context = msg.getBindingContext();
             Session session = context.getJmsSession();
             
             javax.jms.Message requestMsg = requestMessageProcessor.insertPayloadIntoJMSMessage(session, msg.getBody());
@@ -100,7 +113,7 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
         }
 
         return msg;
-    }     
+    }    
 
     public Invoker getNext() {
         return next;
@@ -108,5 +121,5 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
 
     public void setNext(Invoker next) {
         this.next = next;
-    }
+    }    
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.wireformat.jmstext;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmstext.runtime;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -29,6 +29,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmstext.WireFormatJMSText;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
@@ -73,7 +74,7 @@ public class WireFormatJMSTextServiceInterceptor implements Interceptor {
     
     public Message invokeRequest(Message msg) {
         // get the jms context
-        JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+        JMSBindingContext context = msg.getBindingContext();
         javax.jms.Message jmsMsg = context.getJmsMsg();
 
         Object requestPayload = requestMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
@@ -84,8 +85,7 @@ public class WireFormatJMSTextServiceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) {
         // get the jms context
-        JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
-        javax.jms.Message requestJMSMsg = context.getJmsMsg();
+        JMSBindingContext context = msg.getBindingContext();
         Session session = context.getJmsSession();
 
         javax.jms.Message responseJMSMsg;

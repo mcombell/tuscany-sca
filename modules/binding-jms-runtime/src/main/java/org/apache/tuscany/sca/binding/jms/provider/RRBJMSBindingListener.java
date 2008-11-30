@@ -23,34 +23,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.NamingException;
-import javax.security.auth.Subject;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
-import org.apache.tuscany.sca.binding.jms.policy.authentication.token.JMSTokenAuthenticationPolicy;
-import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
 import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.invocation.InvocationChain;
-import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.MessageFactory;
-import org.apache.tuscany.sca.policy.PolicySet;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
-import org.apache.tuscany.sca.policy.SecurityUtil;
-import org.apache.tuscany.sca.policy.authentication.token.TokenPrincipal;
-import org.apache.tuscany.sca.runtime.EndpointReference;
-import org.apache.tuscany.sca.runtime.ReferenceParameters;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 
 /**
@@ -104,7 +86,7 @@ public class RRBJMSBindingListener implements MessageListener {
         
         // populate the message context with JMS binding information
         JMSBindingContext context = new JMSBindingContext();
-        tuscanyMsg.getHeaders().add(context);
+        tuscanyMsg.setBindingContext(context);
         
         context.setJmsMsg(requestJMSMsg);
         context.setJmsResourceFactory(jmsResourceFactory);

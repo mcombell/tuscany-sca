@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.runtime;
 
 import java.util.List;
 

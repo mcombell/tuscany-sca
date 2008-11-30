@@ -26,7 +26,9 @@ import javax.jms.JMSException;
 import javax.security.auth.Subject;
 
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
+import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.policy.JMSBindingDefinitionsProvider;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -80,6 +82,9 @@ public class JMSHeaderReferencePolicyInterceptor implements Interceptor {
 
     public Message invoke(Message msg) {
         try {
+            // get the jms context
+            JMSBindingContext context = msg.getBindingContext();
+
             javax.jms.Message jmsMsg = msg.getBody();
             String operationName = msg.getOperation().getName();
     
@@ -113,6 +118,11 @@ public class JMSHeaderReferencePolicyInterceptor implements Interceptor {
                     jmsMsg.setObjectProperty(propName, jmsHeaderPolicy.getProperties().get(propName));
                 }
             }
+            
+            if (jmsHeaderPolicy != null && 
+                jmsHeaderPolicy.getTimeToLive() != null) {
+                    context.setTimeToLive(jmsHeaderPolicy.getTimeToLive());
+            }            
                         
             return getNext().invoke(msg);
         } catch (JMSException e) {

@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.wireformat.jmsobject;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.runtime;
 
 import java.util.List;
 
@@ -40,14 +40,14 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * @version $Rev$ $Date$
  */
-public class WireFormatJMSObjectServiceProvider implements WireFormatProvider {
+public class WireFormatJMSBytesServiceProvider implements WireFormatProvider {
     private ExtensionPointRegistry registry;
     private RuntimeComponent component;
     private RuntimeComponentService service;
     private JMSBinding binding;
     private InterfaceContract interfaceContract; 
 
-    public WireFormatJMSObjectServiceProvider(ExtensionPointRegistry registry,
+    public WireFormatJMSBytesServiceProvider(ExtensionPointRegistry registry,
                                              RuntimeComponent component, 
                                              RuntimeComponentService service, 
                                              Binding binding) {
@@ -62,9 +62,9 @@ public class WireFormatJMSObjectServiceProvider implements WireFormatProvider {
         // currently maintaining the message processor structure which 
         // contains the details of jms message processing however overried 
         // any message processors specied in the SCDL in this case
-        this.binding.setRequestMessageProcessorName(JMSBindingConstants.OBJECT_MP_CLASSNAME);
-        this.binding.setResponseMessageProcessorName(JMSBindingConstants.OBJECT_MP_CLASSNAME);
-
+        this.binding.setRequestMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
+        this.binding.setResponseMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
+        
         // just point to the reference interface contract so no 
         // databinding transformation takes place
         interfaceContract = service.getInterfaceContract();
@@ -77,7 +77,7 @@ public class WireFormatJMSObjectServiceProvider implements WireFormatProvider {
     /**
      */
     public Interceptor createInterceptor() {
-        return new WireFormatJMSObjectServiceInterceptor((JMSBinding)binding,
+        return new WireFormatJMSBytesServiceInterceptor((JMSBinding)binding,
                                                          null,
                                                         service.getRuntimeWire(binding));
     }

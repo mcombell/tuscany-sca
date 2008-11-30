@@ -238,7 +238,7 @@ public class RuntimeWireImpl implements RuntimeWire {
                 if (p instanceof PolicyProviderRRB) {
                     Interceptor interceptor = ((PolicyProviderRRB)p).createBindingInterceptor();
                     if (interceptor != null) {
-                        bindingInvocationChain.addInterceptor(p.getPhase(), interceptor);
+                        bindingInvocationChain.addInterceptor(Phase.REFERENCE_BINDING_POLICY, interceptor);
                     }
                 }
             }
@@ -263,12 +263,11 @@ public class RuntimeWireImpl implements RuntimeWire {
                 if (p instanceof PolicyProviderRRB) {
                     Interceptor interceptor = ((PolicyProviderRRB)p).createBindingInterceptor();
                     if (interceptor != null) {
-                        bindingInvocationChain.addInterceptor(p.getPhase(), interceptor);
+                        bindingInvocationChain.addInterceptor(Phase.SERVICE_BINDING_POLICY, interceptor);
                     }
                 }
             }
         }        
-        
         
         // TODO - add something on the end of the wire to invoke the 
         //        invocation chain. Need to split out the runtime

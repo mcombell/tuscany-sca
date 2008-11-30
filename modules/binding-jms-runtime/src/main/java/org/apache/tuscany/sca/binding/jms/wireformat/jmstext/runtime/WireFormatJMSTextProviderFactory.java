@@ -17,9 +17,10 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.wireformat.jmsobject;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmstext.runtime;
 
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmstext.WireFormatJMSText;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.provider.WireFormatProvider;
 import org.apache.tuscany.sca.provider.WireFormatProviderFactory;
@@ -30,10 +31,10 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * @version $Rev$ $Date$
  */
-public class WireFormatJMSObjectProviderFactory implements WireFormatProviderFactory<WireFormatJMSObject> {
+public class WireFormatJMSTextProviderFactory implements WireFormatProviderFactory<WireFormatJMSText> {
     private ExtensionPointRegistry registry;
     
-    public WireFormatJMSObjectProviderFactory(ExtensionPointRegistry registry) {
+    public WireFormatJMSTextProviderFactory(ExtensionPointRegistry registry) {
         super();
         this.registry = registry;
     }
@@ -43,7 +44,7 @@ public class WireFormatJMSObjectProviderFactory implements WireFormatProviderFac
     public WireFormatProvider createReferenceWireFormatProvider(RuntimeComponent component,
                                                         RuntimeComponentReference reference,
                                                         Binding binding) {
-        return new WireFormatJMSObjectReferenceProvider(registry, component, reference, binding);
+        return new WireFormatJMSTextReferenceProvider(registry, component, reference, binding);
     }
 
     /**
@@ -51,7 +52,7 @@ public class WireFormatJMSObjectProviderFactory implements WireFormatProviderFac
     public WireFormatProvider createServiceWireFormatProvider(RuntimeComponent component,
                                                               RuntimeComponentService service,
                                                               Binding binding) {
-        return new WireFormatJMSObjectServiceProvider(registry, component, service, binding);
+        return new WireFormatJMSTextServiceProvider(registry, component, service, binding);
     }
 
     /**

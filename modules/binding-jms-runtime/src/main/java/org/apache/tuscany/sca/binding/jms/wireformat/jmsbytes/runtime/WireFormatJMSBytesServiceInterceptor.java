@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.wireformat.jmsobject;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.runtime;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -29,6 +29,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.WireFormatJMSBytes;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
@@ -40,7 +41,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
  *
  * @version $Rev$ $Date$
  */
-public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
+public class WireFormatJMSBytesServiceInterceptor implements Interceptor {
     private Invoker next;
     private RuntimeWire runtimeWire;
     private JMSResourceFactory jmsResourceFactory;
@@ -48,7 +49,7 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
     private JMSMessageProcessor requestMessageProcessor;
     private JMSMessageProcessor responseMessageProcessor;
 
-    public WireFormatJMSObjectServiceInterceptor(JMSBinding jmsBinding, JMSResourceFactory jmsResourceFactory, RuntimeWire runtimeWire) {
+    public WireFormatJMSBytesServiceInterceptor(JMSBinding jmsBinding, JMSResourceFactory jmsResourceFactory, RuntimeWire runtimeWire) {
         super();
         this.jmsBinding = jmsBinding;
         this.runtimeWire = runtimeWire;
@@ -58,13 +59,13 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
     }
 
     public Message invoke(Message msg) {
-        if (jmsBinding.getRequestWireFormat() instanceof WireFormatJMSObject){
+        if (jmsBinding.getRequestWireFormat() instanceof WireFormatJMSBytes){
             msg = invokeRequest(msg);
         }
         
         msg = getNext().invoke(msg);
         
-        if (jmsBinding.getResponseWireFormat() instanceof WireFormatJMSObject){
+        if (jmsBinding.getResponseWireFormat() instanceof WireFormatJMSBytes){
             msg = invokeResponse(msg);
         }
         
@@ -73,7 +74,7 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
     
     public Message invokeRequest(Message msg) {
         // get the jms context
-        JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+        JMSBindingContext context = msg.getBindingContext();
         javax.jms.Message jmsMsg = context.getJmsMsg();
 
         Object requestPayload = requestMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
@@ -84,8 +85,7 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) {
         // get the jms context
-        JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
-        javax.jms.Message requestJMSMsg = context.getJmsMsg();
+        JMSBindingContext context = msg.getBindingContext();
         Session session = context.getJmsSession();
 
         javax.jms.Message responseJMSMsg;

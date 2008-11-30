@@ -189,6 +189,13 @@ public class NonBlockingInterceptor implements Interceptor {
         
         public List<Object> getHeaders() {
             return null;
+        }   
+        
+        public <T> T getBindingContext() {
+            return null;
+        }
+
+        public <T> void setBindingContext(T bindingContext) {
         }        
     }
 

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault;
+package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault.runtime;
 
 import java.util.List;
 
@@ -81,7 +81,7 @@ public class OperationSelectorJMSDefaultServiceInterceptor implements Intercepto
     public Message invokeRequest(Message msg) { 
         try {
             // get the jms context
-            JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+            JMSBindingContext context = msg.getBindingContext();
             javax.jms.Message jmsMsg = context.getJmsMsg();
             
             String operationName = requestMessageProcessor.getOperationName(jmsMsg);

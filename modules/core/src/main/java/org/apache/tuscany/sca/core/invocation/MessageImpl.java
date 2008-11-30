@@ -32,6 +32,7 @@ import org.apache.tuscany.sca.runtime.EndpointReference;
  * @version $Rev $Date$
  */
 public class MessageImpl implements Message { 
+	private Object bindingContext;
     private List<Object> headers = new ArrayList<Object>();
     private Object body;
     private Object messageID;
@@ -99,6 +100,14 @@ public class MessageImpl implements Message {
     
     public List<Object> getHeaders() {
         return headers;
-    }    
+    } 
+    
+    @SuppressWarnings("unchecked")
+    public <T> T getBindingContext() {
+        return (T)bindingContext;
+    }
 
+    public <T> void setBindingContext(T bindingContext) {
+        this.bindingContext = bindingContext;
+    }
 }

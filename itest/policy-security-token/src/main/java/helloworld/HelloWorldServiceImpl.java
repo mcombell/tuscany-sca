@@ -18,6 +18,8 @@
  */
 package helloworld;
 
+import java.security.Principal;
+
 import javax.security.auth.Subject;
 
 import org.osoa.sca.RequestContext;
@@ -39,7 +41,13 @@ public class HelloWorldServiceImpl implements HelloWorldService {
         if (subject == null){
             return "Hello " + name + " null subject";
         } else {
-            return "Hello " + name + " " + subject.toString();
+        	String response = "Hello " + name + " ";
+        	
+        	for (Principal principal : subject.getPrincipals()){
+        		response += principal.getName();
+        	}
+        	
+            return response + " ";
         }
     }
 

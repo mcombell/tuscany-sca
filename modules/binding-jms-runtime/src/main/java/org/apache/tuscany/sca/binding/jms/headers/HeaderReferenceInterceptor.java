@@ -83,8 +83,8 @@ public class HeaderReferenceInterceptor implements Interceptor {
     public Message invokeRequest(Message tuscanyMsg) {
         try {
             // get the jms context
-            JMSBindingContext context = (JMSBindingContext)tuscanyMsg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
-            javax.jms.Message jmsMsg = (javax.jms.Message)tuscanyMsg.getBody();
+            JMSBindingContext context = tuscanyMsg.getBindingContext();
+            javax.jms.Message jmsMsg = tuscanyMsg.getBody();
             
             Operation operation = tuscanyMsg.getOperation();
             String operationName = operation.getName();
@@ -143,6 +143,12 @@ public class HeaderReferenceInterceptor implements Interceptor {
                     jmsMsg.setObjectProperty(propName, value);
                 }
             }
+            
+            if (jmsBinding.getOperationJMSTimeToLive(operationName) != null) {
+                context.setTimeToLive(jmsBinding.getOperationJMSTimeToLive(operationName) * 2);        
+            } else {   
+            	context.setTimeToLive(JMSBindingConstants.DEFAULT_TIME_TO_LIVE);        
+            }             
             
             return tuscanyMsg;
         } catch (JMSException e) {

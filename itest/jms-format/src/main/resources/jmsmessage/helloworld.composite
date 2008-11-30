@@ -20,6 +20,7 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
 	targetNamespace="http://helloworld"
 	xmlns:hw="http://helloworld"
+	xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
     name="helloworld">
 
     <component name="HelloWorldReferenceComponent">
@@ -29,6 +30,7 @@
             <interface.java interface="org.apache.tuscany.sca.binding.jms.format.jmsmessage.helloworld.HelloWorldServiceReferenceSide"/>
             <binding.jms>
                 <destination name="HelloWorldService1"/>
+                <tuscany:wireFormat.jmsText/>
             </binding.jms>
         </reference>  
     </component>

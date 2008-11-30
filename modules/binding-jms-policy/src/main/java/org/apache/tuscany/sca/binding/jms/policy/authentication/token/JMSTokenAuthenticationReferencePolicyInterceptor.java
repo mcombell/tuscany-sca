@@ -19,8 +19,12 @@
 package org.apache.tuscany.sca.binding.jms.policy.authentication.token;
 
 
+import javax.jms.JMSException;
 import javax.security.auth.Subject;
 
+import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
+import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
+import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
@@ -38,14 +42,12 @@ import org.apache.tuscany.sca.policy.authentication.token.TokenPrincipal;
 public class JMSTokenAuthenticationReferencePolicyInterceptor implements Interceptor {
 
     private Invoker next;
-    private Operation operation;
     private PolicySet policySet = null;
     private String context;
     private JMSTokenAuthenticationPolicy policy;
 
-    public JMSTokenAuthenticationReferencePolicyInterceptor(String context, Operation operation, PolicySet policySet) {
+    public JMSTokenAuthenticationReferencePolicyInterceptor(String context, PolicySet policySet) {
         super();
-        this.operation = operation;
         this.policySet = policySet;
         this.context = context;
         init();
@@ -63,20 +65,29 @@ public class JMSTokenAuthenticationReferencePolicyInterceptor implements Interce
     }
 
     public Message invoke(Message msg) {
-        // could call out here to some 3rd party system to get credentials
-        
-        if ( policy.getTokenName() != null){
-    
-            Subject subject = SecurityUtil.getSubject(msg);
-            TokenPrincipal principal = SecurityUtil.getPrincipal(subject, TokenPrincipal.class);
-            
-            if (principal == null){
-                principal = new TokenPrincipal("SomeJMSAuthorizationToken");
-                subject.getPrincipals().add(principal);
-            }
-        }
-        
-        return getNext().invoke(msg);
+    	try {	
+	        javax.jms.Message jmsMsg = msg.getBody();
+	        
+	        if ( policy.getTokenName() != null){
+	    
+	            Subject subject = SecurityUtil.getSubject(msg);
+	            TokenPrincipal principal = SecurityUtil.getPrincipal(subject, TokenPrincipal.class);
+	            
+	            if (principal == null){
+	            	// should call out here to some 3rd party system to get credentials
+	            	// and correct token. Here we are just putting in the token name
+	                principal = new TokenPrincipal("DummyTokenID");
+	                subject.getPrincipals().add(principal); 
+	            }
+	            
+	            jmsMsg.setStringProperty(policy.getTokenName().toString(), principal.getName());
+	        }
+	        
+	        return getNext().invoke(msg);
+	        
+	    } catch (JMSException e) {
+	        throw new JMSBindingException(e);
+	    }
     }
 
     public Invoker getNext() {

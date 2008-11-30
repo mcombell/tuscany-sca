@@ -47,6 +47,10 @@ public class FormatJMSDelimitedTestCase {
         node.start();
     }
 
+    /**
+     * The delimited wrie format is not yet implemented
+     * 
+     */
     @Test
     @Ignore
     public void testHelloWorldCreate() throws Exception {

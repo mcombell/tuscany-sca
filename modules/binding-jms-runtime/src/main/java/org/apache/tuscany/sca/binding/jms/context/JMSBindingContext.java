@@ -37,6 +37,7 @@ public class JMSBindingContext {
     private Destination requestDestination;
     private Destination replyToDestination;
     private JMSResourceFactory jmsResourceFactory;
+    private long timeToLive;
 
     public Message getJmsMsg() {
         return jmsMsg;
@@ -79,4 +80,12 @@ public class JMSBindingContext {
     public void setJmsResourceFactory(JMSResourceFactory jmsResourceFactory) {
         this.jmsResourceFactory = jmsResourceFactory;
     }
+    
+    public long getTimeToLive() {
+		return timeToLive;
+	}
+    
+    public void setTimeToLive(long timeToLive) {
+		this.timeToLive = timeToLive;
+	}
 }

@@ -18,34 +18,25 @@
  */
 package org.apache.tuscany.sca.binding.jms.transport;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
-import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.NamingException;
-import javax.security.auth.Subject;
 
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
-import org.apache.tuscany.sca.binding.jms.provider.DefaultJMSBindingListener;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
-import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.policy.SecurityUtil;
-import org.apache.tuscany.sca.policy.authentication.token.TokenPrincipal;
 import org.apache.tuscany.sca.runtime.EndpointReference;
 import org.apache.tuscany.sca.runtime.ReferenceParameters;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -86,7 +77,7 @@ public class TransportServiceInterceptor implements Interceptor {
             return invokeResponse(next.invoke(invokeRequest(msg)));
         } catch (Throwable e) {
             logger.log(Level.SEVERE, "Exception invoking service '" + service.getName(), e);
-            JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+            JMSBindingContext context = msg.getBindingContext();
             javax.jms.Message replyJMSMsg = responseMessageProcessor.createFaultMessage(context.getJmsSession(), 
                                                                                         (Throwable)e);
             msg.setBody(replyJMSMsg);
@@ -97,7 +88,7 @@ public class TransportServiceInterceptor implements Interceptor {
     
     public Message invokeRequest(Message msg) { 
         try {
-            JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+            JMSBindingContext context = msg.getBindingContext();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
             context.setJmsSession(context.getJmsResourceFactory().createSession());
             
@@ -121,7 +112,7 @@ public class TransportServiceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) { 
         try {
-            JMSBindingContext context = (JMSBindingContext)msg.getHeaders().get(JMSBindingConstants.MSG_CTXT_POSITION);
+            JMSBindingContext context = msg.getBindingContext();
             Session session = context.getJmsSession();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
             javax.jms.Message responseJMSMsg = msg.getBody();

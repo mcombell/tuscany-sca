@@ -17,15 +17,13 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmsobject.runtime;
 
 import org.apache.tuscany.sca.assembly.Binding;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
-import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
-import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactoryExtensionPoint;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmsobject.WireFormatJMSObject;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.provider.OperationSelectorProvider;
-import org.apache.tuscany.sca.provider.OperationSelectorProviderFactory;
+import org.apache.tuscany.sca.provider.WireFormatProvider;
+import org.apache.tuscany.sca.provider.WireFormatProviderFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -33,28 +31,28 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 /**
  * @version $Rev$ $Date$
  */
-public class OperationSelectorJMSDefaultProviderFactory implements OperationSelectorProviderFactory<OperationSelectorJMSDefault> {
+public class WireFormatJMSObjectProviderFactory implements WireFormatProviderFactory<WireFormatJMSObject> {
     private ExtensionPointRegistry registry;
     
-    public OperationSelectorJMSDefaultProviderFactory(ExtensionPointRegistry registry) {
+    public WireFormatJMSObjectProviderFactory(ExtensionPointRegistry registry) {
         super();
         this.registry = registry;
     }
-    
+
     /**
      */
-    public OperationSelectorProvider createReferenceOperationSelectorProvider(RuntimeComponent component,
+    public WireFormatProvider createReferenceWireFormatProvider(RuntimeComponent component,
                                                         RuntimeComponentReference reference,
                                                         Binding binding) {
-        return null;
+        return new WireFormatJMSObjectReferenceProvider(registry, component, reference, binding);
     }
 
     /**
       */
-    public OperationSelectorProvider createServiceOperationSelectorProvider(RuntimeComponent component,
+    public WireFormatProvider createServiceWireFormatProvider(RuntimeComponent component,
                                                               RuntimeComponentService service,
                                                               Binding binding) {
-        return new OperationSelectorJMSDefaultServiceProvider(component, service, binding);
+        return new WireFormatJMSObjectServiceProvider(registry, component, service, binding);
     }
 
     /**

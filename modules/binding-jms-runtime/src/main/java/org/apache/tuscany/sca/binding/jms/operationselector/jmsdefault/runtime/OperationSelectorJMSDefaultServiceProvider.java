@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault;
+package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault.runtime;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;

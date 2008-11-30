@@ -51,7 +51,7 @@ public class FormatJMSBytesTestCase {
         HelloWorldReference helloWorldService = ((SCAClient)node).getService(HelloWorldReference.class, "HelloWorldReferenceComponent");
         
         System.out.println(helloWorldService.getGreetings("Fred Bloggs"));
-        //assertEquals("Hello Fred Bloggs", helloWorldService.getGreetings("Fred Bloggs"));
+        assertEquals("Hello Fred Bloggs", helloWorldService.getGreetings("Fred Bloggs"));
         
     }
 

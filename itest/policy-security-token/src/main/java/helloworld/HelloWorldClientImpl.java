@@ -34,8 +34,7 @@ public class HelloWorldClientImpl implements HelloWorldService {
     protected HelloWorldService helloworldJMS;    
 
     public String getGreetings(String name) {
-        return "Hello " + 
-                helloworldWS.getGreetings(name) + 
+        return  helloworldWS.getGreetings(name) + 
                 helloworldJMS.getGreetings(name);
     }
 

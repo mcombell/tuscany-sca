@@ -24,27 +24,18 @@ import java.util.List;
 
 import javax.jms.JMSException;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.binding.jms.headers.HeaderReferenceInterceptor;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
-import org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault.OperationSelectorJMSDefault;
 import org.apache.tuscany.sca.binding.jms.transport.TransportReferenceInterceptor;
-import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
-import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
-import org.apache.tuscany.sca.binding.ws.WebServiceBindingFactory;
-import org.apache.tuscany.sca.binding.ws.wsdlgen.BindingWSDLGenerator;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Phase;
-import org.apache.tuscany.sca.provider.OperationSelectorProvider;
-import org.apache.tuscany.sca.provider.OperationSelectorProviderFactory;
 import org.apache.tuscany.sca.provider.ProviderFactoryExtensionPoint;
-import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ReferenceBindingProviderRRB;
 import org.apache.tuscany.sca.provider.WireFormatProvider;
 import org.apache.tuscany.sca.provider.WireFormatProviderFactory;
@@ -160,7 +151,8 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
                                         responseWireFormatProvider.createInterceptor());
         }
         
-        // add the header processor that comes after the wire formatter
+        // add the header processor that comes after the wire formatter but before the
+        // policy interceptors
         bindingChain.addInterceptor(Phase.REFERENCE_BINDING_WIREFORMAT, 
                                     new HeaderReferenceInterceptor(jmsBinding,
                                                                    jmsResourceFactory,

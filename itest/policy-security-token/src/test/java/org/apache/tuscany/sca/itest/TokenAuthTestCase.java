@@ -65,7 +65,9 @@ public class TokenAuthTestCase {
     //@Ignore
     public void testViaSCAClient() {
         String greetings = service.getGreetings("Simon");
-        System.out.println(">>>" + greetings);
+        System.out.println("Tokens reported at component context security subject = ");
+        System.out.println(greetings);
+        Assert.assertEquals("Hello Simon SomeWSAuthorizationToken Hello Simon DummyTokenID ", greetings);
     } 
     
     @Test

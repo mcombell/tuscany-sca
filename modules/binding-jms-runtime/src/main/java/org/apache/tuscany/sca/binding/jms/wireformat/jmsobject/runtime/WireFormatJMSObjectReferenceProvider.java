@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.binding.jms.wireformat.jmstext;
+package org.apache.tuscany.sca.binding.jms.wireformat.jmsobject.runtime;
 
 import java.util.List;
 
@@ -47,14 +47,14 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 /**
  * @version $Rev$ $Date$
  */
-public class WireFormatJMSTextReferenceProvider implements WireFormatProvider {
+public class WireFormatJMSObjectReferenceProvider implements WireFormatProvider {
     private ExtensionPointRegistry registry;
     private RuntimeComponent component;
     private RuntimeComponentReference reference;
     private JMSBinding binding;
     private InterfaceContract interfaceContract; 
 
-    public WireFormatJMSTextReferenceProvider(ExtensionPointRegistry registry,
+    public WireFormatJMSObjectReferenceProvider(ExtensionPointRegistry registry,
                                                RuntimeComponent component,
                                                RuntimeComponentReference reference,
                                                Binding binding) {
@@ -69,9 +69,8 @@ public class WireFormatJMSTextReferenceProvider implements WireFormatProvider {
         // currently maintaining the message processor structure which 
         // contains the details of jms message processing however overried 
         // any message processors specied in the SCDL in this case
-        this.binding.setRequestMessageProcessorName(JMSBindingConstants.TEXT_MP_CLASSNAME);
-        this.binding.setResponseMessageProcessorName(JMSBindingConstants.TEXT_MP_CLASSNAME);
-
+        this.binding.setRequestMessageProcessorName(JMSBindingConstants.OBJECT_MP_CLASSNAME);
+        this.binding.setResponseMessageProcessorName(JMSBindingConstants.OBJECT_MP_CLASSNAME);
         
         // just point to the reference interface contract so no 
         // databinding transformation takes place
@@ -83,7 +82,7 @@ public class WireFormatJMSTextReferenceProvider implements WireFormatProvider {
     }
 
     public Interceptor createInterceptor() {
-        return new WireFormatJMSTextReferenceInterceptor(binding, 
+        return new WireFormatJMSObjectReferenceInterceptor(binding, 
                                                           null, 
                                                           reference.getRuntimeWire(binding));
     }

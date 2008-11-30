@@ -72,7 +72,7 @@
     
     <intent name="priority.medium">
         <description>
-            Messages are meduim priority
+            Messages are medium priority
         </description>
     </intent>
 	  
