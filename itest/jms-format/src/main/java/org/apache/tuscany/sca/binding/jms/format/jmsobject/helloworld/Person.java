@@ -16,20 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.format.jmsdelimited.helloworld;
+package org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld;
 
-import org.osoa.sca.annotations.OneWay;
-import org.osoa.sca.annotations.Remotable;
+import java.io.Serializable;
 
-/**
- * This is the business interface of the HelloWorld greetings service.
- */
-@Remotable
-public interface HelloWorldService {
+public class Person implements Serializable {
 
-    @OneWay
-    public void setGreetings(String firstName, 
-                            String lastName);
+    private static final long serialVersionUID = -6842761353978551779L;
     
+    String firstName;
+    String lastName;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
 }
 

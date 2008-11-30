@@ -16,27 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.format.jmsdelimited.helloworld;
+package org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld;
 
-import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Remotable;
 
+/**
+ * This is the business interface of the HelloWorld greetings service.
+ */
+@Remotable
+public interface HelloWorldReference {
 
-public class HelloWorldReferenceImpl implements HelloWorldReference {
+    public String getGreetings(String firstName, String lastName);
     
-    @Reference
-    protected HelloWorldService helloWorldService1;
-    
-    public String getGreetings(String firstName, 
-                               String lastName){
-        helloWorldService1.setGreetings(firstName, lastName);
-        
-        try {
-            Thread.sleep(2000);
-        } catch (Exception ex) {
-            // do nothing
-        }
-        
-        return HelloWorldServiceImpl.getGreetings(); 
-    }    
 }
 

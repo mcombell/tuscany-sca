@@ -16,27 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.format.jmstextxml.helloworld;
+package org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld;
 
-public class Person {
-    String firstName;
-    String lastName;
+import org.osoa.sca.annotations.Reference;
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
+public class HelloWorldReferenceImpl implements HelloWorldReference {
+    
+    @Reference
+    protected HelloWorldService helloWorldService;
+    
+    public String getGreetings(String firstName, String lastName){ 
+    	Person person = new Person();
+    	person.setFirstName(firstName);
+    	person.setLastName(lastName);
+        Person returnPerson =  helloWorldService.getGreetings(person); 
+        
+        return returnPerson.getFirstName() + " " + returnPerson.getLastName();
+    }    
 }
 

@@ -20,24 +20,25 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
 	targetNamespace="http://helloworld"
 	xmlns:hw="http://helloworld"
+	xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0" 
     name="helloworld">
 
     <component name="HelloWorldReferenceComponent">
-        <implementation.java class="org.apache.tuscany.sca.binding.jms.format.jmsmessage.helloworld.HelloWorldReferenceImpl" />
-        <reference name="helloWorldService1" >
-            <!--interface.wsdl interface="http://helloworld#wsdl.interface(HelloWorld)"/-->
-            <interface.java interface="org.apache.tuscany.sca.binding.jms.format.jmsmessage.helloworld.HelloWorldServiceReferenceSide"/>
+        <implementation.java class="org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld.HelloWorldReferenceImpl" />
+        <reference name="helloWorldService" >
             <binding.jms>
                 <destination name="HelloWorldService1"/>
+                 <tuscany:wireFormat.jmsObject/>
             </binding.jms>
         </reference>  
     </component>
     
     <component name="HelloWorldServiceComponent1">
-        <implementation.java class="org.apache.tuscany.sca.binding.jms.format.jmsmessage.helloworld.HelloWorldServiceImpl" />
+        <implementation.java class="org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld.HelloWorldServiceImpl" />
         <service name="HelloWorldService">
             <binding.jms>
                 <destination name="HelloWorldService1"/>
+                 <tuscany:wireFormat.jmsObject/>
             </binding.jms>
         </service>
     </component> 

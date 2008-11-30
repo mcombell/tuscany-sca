@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.format.jmsdelimited.helloworld;
+package org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld;
 
 import org.osoa.sca.annotations.Remotable;
 
@@ -24,10 +24,9 @@ import org.osoa.sca.annotations.Remotable;
  * This is the business interface of the HelloWorld greetings service.
  */
 @Remotable
-public interface HelloWorldReference {
+public interface HelloWorldService {
 
-    public String getGreetings(String firstName, 
-                               String lastName);
+    public Person getGreetings(Person person);
     
 }
 

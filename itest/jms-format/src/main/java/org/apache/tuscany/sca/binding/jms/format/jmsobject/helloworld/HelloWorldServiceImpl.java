@@ -16,21 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.binding.jms.format.jmsdelimited.helloworld;
+package org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld;
 
 
 public class HelloWorldServiceImpl implements HelloWorldService {
     
-    private static String greetings = "not set";
-    
-    public void setGreetings(String firstName, 
-                            String lastName){
+    public Person getGreetings(Person person){
          
-        greetings =  "Hello " + firstName + " " + lastName;
-    }
-    
-    public static String getGreetings(){
-        return greetings;
+    	person.setFirstName("Hello " + person.getFirstName());
+    	person.setLastName("Hello " + person.getLastName());
+    	
+        return person;
     }
 }
 

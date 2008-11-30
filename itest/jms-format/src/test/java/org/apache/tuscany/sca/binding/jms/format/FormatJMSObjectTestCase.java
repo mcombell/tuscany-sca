@@ -20,7 +20,7 @@ package org.apache.tuscany.sca.binding.jms.format;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.tuscany.sca.binding.jms.format.jmsdelimited.helloworld.HelloWorldReference;
+import org.apache.tuscany.sca.binding.jms.format.jmsobject.helloworld.HelloWorldReference;
 import org.apache.tuscany.sca.node.SCAClient;
 import org.apache.tuscany.sca.node.SCAContribution;
 import org.apache.tuscany.sca.node.SCANode;
@@ -34,31 +34,27 @@ import org.junit.Test;
 /**
  * This shows how to test the JMS binding using a simple HelloWorld application.
  */
-public class FormatJMSDelimitedTestCase {
+public class FormatJMSObjectTestCase {
 
     private static SCANode node;
 
     @Before
     public void init() {
         SCANodeFactory factory = SCANodeFactory.newInstance();
-        node = factory.createSCANode("jmsdelimited/helloworld.composite", 
-                                     new SCAContribution("test", "./target/classes"));
+        node = factory.createSCANode("jmsobject/helloworld.composite",
+                new SCAContribution("test", "./target/classes"));
 
         node.start();
     }
 
-    /**
-     * The delimited wrie format is not yet implemented
-     * 
-     */
     @Test
-    @Ignore
     public void testHelloWorldCreate() throws Exception {
-        HelloWorldReference helloWorldService = ((SCAClient)node).getService(HelloWorldReference.class, "HelloWorldReferenceComponent");
-        
-        System.out.println(helloWorldService.getGreetings("Fred", "Bloggs"));
-        //assertEquals("Hello Fred Bloggs", helloWorldService.getGreetings("Fred Bloggs"));
-        
+        HelloWorldReference helloWorldService = ((SCAClient) node).getService(
+                HelloWorldReference.class, "HelloWorldReferenceComponent");
+
+        assertEquals("Hello Fred Hello Bloggs", 
+                     helloWorldService.getGreetings("Fred", "Bloggs"));
+
     }
 
     @After
