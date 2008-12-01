@@ -112,7 +112,6 @@
                 <include>maven-java2wsdl/**/*</include>
                 <include>maven-wsdl2java/**/*</include>
                 <include>monitor/**/*</include>
-                <include>monitor-logging/**/*</include>
                 <include>node-api/**/*</include>
                 <include>node-impl/**/*</include>
                 <include>node-launcher/**/*</include>

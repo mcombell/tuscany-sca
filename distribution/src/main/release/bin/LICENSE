@@ -220,33 +220,43 @@ The following components come under Apache Software License 1.1
 
 The following components come under Apache Software License 2.0
 
- abdera-core-0.3.0-incubating.jar
- abdera-i18n-0.3.0-incubating.jar
- abdera-parser-0.3.0-incubating.jar
+ abdera-client-0.4.0-incubating.jar
+ abdera-core-0.4.0-incubating.jar
+ abdera-extensions-html-0.4.0-incubating.jar
+ abdera-extensions-json-0.4.0-incubating.jar
+ abdera-extensions-main-0.4.0-incubating.jar
+ abdera-i18n-0.4.0-incubating.jar
+ abdera-parser-0.4.0-incubating.jar
+ abdera-server-0.4.0-incubating.jar
  activeio-2.0-r118.jar
  activeio-core-3.0.0-incubator.jar
+ activeio-core-3.1.0-tests.jar
+ activemq-core-5.1.0.jar
  apache-activemq-4.1.1.jar
  addressing-1.3.mar
  annogen-0.1.0.jar
  aopalliance-1.0.jar
- axiom-api-1.2.5.jar
- axiom-dom-1.2.5.jar
- axiom-impl-1.2.5.jar
- axis2-adb-1.3.jar
- axis2-codegen-1.3.jar
- axis2-java2wsdl-1.3.jar
- axis2-kernel-1.3.jar
- axis2-mtompolicy-1.3.jar
+ axiom-api-1.2.7.jar
+ axiom-dom-1.2.7.jar
+ axiom-impl-1.2.7.jar
+ axis2-adb-1.4.1.jar
+ axis2-codegen-1.4.1.jar
+ axis2-java2wsdl-1.4.1.jar
+ axis2-kernel-1.4.1.jar
+ axis2-mtompolicy-1.4.1.jar
+ bcel-5.2.jar
  bsf-all-3.0-beta2.jar
+ camel-core-1.3.0.jar
  cglib-nodep-2.1_3.jar
  commons-collections-3.1.jar
  commons-codec-1.3.jar
- commons-fileupload-1.1.1.jar
- commons-httpclient-3.0.1.jar
- commons-io-1.2.jar
+ commons-fileupload-1.2.jar
+ commons-httpclient-3.1.jar
+ commons-io-1.4.jar
  commons-jexl-1.1.jar
  commons-lang-2.1.jar
- commons-logging-1.1.jar
+ commons-logging-1.1.1.jar
+ commons-logging-api-1.1.jar
  derby-10.3.1.4.jar
  geronimo-common-1.2-beta.jar
  geronimo-commonj_1.1_spec-1.0.jar
@@ -258,8 +268,8 @@ The following components come under Apache Software License 2.0
  geronimo-j2ee-1.2-beta.jar
  geronimo-j2ee-connector_1.5_spec-1.1.jar
  geronimo-j2ee-jacc_1.0_spec-1.1.jar
- geronimo-j2ee-management_1.0_spec-1.1.jar
- geronimo-javamail_1.4_spec-1.0-M1.jar
+ geronimo-j2ee-management_1.0_spec-1.0.jar
+ geronimo-javamail_1.4_spec-1.2.jar
  geronimo-jms_1.1_spec-1.1.jar
  geronimo-jpa_3.0_spec-1.0.jar
  geronimo-jta_1.0.1B_spec-1.0.jar
@@ -269,33 +279,34 @@ The following components come under Apache Software License 2.0
  geronimo-security-1.2-beta.jar
  geronimo-spec-j2ee-connector-1.5-rc4.jar
  geronimo-spec-jta-1.0.1B-rc4.jar
+ geronimo-stax-api_1.0_spec-1.0.1.jar
  geronimo-system-1.2-beta.jar
  geronimo-transaction-1.2-beta.jar
  geronimo-util-1.2-beta.jar
- httpcore-4.0-alpha5.jar
- httpcore-nio-4.0-alpha5.jar
- httpcore-niossl-4.0-alpha5.jar
- jettison-1.0.jar
+ httpcore-4.0-beta1.jar
+ httpcore-nio-4.0-beta1.jar
+ httpcore-niossl-4.0-beta1.jar
+ jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
  json-rpc-1.0.jar
  log4j-1.2.12.jar
  logkit-1.0.1.jar
- neethi-2.0.2.jar
- ode-bpel-api-1.1.jar
- ode-bpel-compiler-1.1.jar
- ode-bpel-dao-1.1.jar
- ode-bpel-epr-1.1.jar
- ode-bpel-obj-1.1.jar
- ode-bpel-runtime-1.1.jar
- ode-bpel-schemas-1.1.jar
- ode-bpel-store-1.1.jar
- ode-dao-jpa-1.1.jar
- ode-dao-jpa-ojpa-derby-1.1.zip
- ode-jacob-1.1.jar
- ode-jacob-ap-1.1.jar
- ode-scheduler-simple-1.1.jar
- ode-utils-1.1.jar
+ neethi-2.0.4.jar
+ ode-bpel-api-1.1.1.jar
+ ode-bpel-compiler-1.1.1.jar
+ ode-bpel-dao-1.1.1.jar
+ ode-bpel-epr-1.1.1.jar
+ ode-bpel-obj-1.1.1.jar
+ ode-bpel-runtime-1.1.1.jar
+ ode-bpel-schemas-1.1.1.jar
+ ode-bpel-store-1.1.1.jar
+ ode-dao-jpa-1.1.1.jar
+ ode-dao-jpa-ojpa-derby-1.1.1.zip
+ ode-jacob-1.1.1.jar
+ ode-jacob-ap-1.1.1.jar
+ ode-scheduler-simple-1.1.1.jar
+ ode-utils-1.1.1.jar
  openjpa-all-0.9.7-incubating.jar
  openjpa-persistence-0.9.7-incubating.jar
  org.apache.felix.bundlerepository-1.0.3.jar
@@ -303,28 +314,29 @@ The following components come under Apache Software License 2.0
  org.apache.felix.main-1.0.4.jar
  org.apache.felix.shell-1.0.1.jar
  org.apache.felix.shell.tui-1.0.1.jar
- rampart-core-1.3.jar
- rampart-policy-1.3.jar
- rampart-trust-1.3.jar
+ rampart-core-1.4.jar
+ rampart-policy-1.4.jar
+ rampart-trust-1.4.jar
  regexp-1.3.jar
- spring-beans-2.0.8.jar
- spring-context-2.0.8.jar
- spring-core-2.0.8.jar
+ spring-beans-2.5.5.jar
+ spring-context-2.5.5.jar
+ spring-core-2.5.5.jar
  tranql-connector-1.1.jar
- tuscany-sdo-api-r2.1-1.1-incubating.jar
- tuscany-sdo-impl-1.1-incubating.jar
- tuscany-sdo-lib-1.1-incubating.jar
- tuscany-sdo-tools-1.1-incubating.jar
- woden-1.0-incubating-M7b.jar
- wss4j-1.5.3.jar
- wstx-asl-3.2.1.jar
+ tuscany-sdo-api-r2.1-1.1.1.jar
+ tuscany-sdo-impl-1.1.1.jar
+ tuscany-sdo-lib-1.1.1.jar
+ tuscany-sdo-tools-1.1.1.jar
+ woden-api-1.0M8.jar
+ woden-impl-dom-1.0M8.jar
+ wss4j-1.6.2.jar
+ wstx-asl-3.2.4.jar
  xalan-2.7.0.jar
  xbean-naming-2.7.jar
  xercesImpl-2.8.1.jar
  xml-apis-1.3.03.jar
  xmlbeans-2.3.0.jar
  xml-resolver-1.1.jar
- xmlsec-1.4.0.jar
+ xmlsec-1.4.2.jar
  XmlSchema-1.3.2.jar
 
 ===============================================================================
@@ -1967,7 +1979,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
 ===============================================================================
 
-backport-util-concurrent-3.0.jar:
+backport-util-concurrent-3.1.jar:
 
 The software comprising backport-util-concurrent is based in large
 part on the code from JSR166, and the package dl.util.concurrent.
@@ -2143,7 +2155,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ================================================================================
 
-The module tuscany-implementation-script-1.0-incubating.jar temporarily includes    
+The module tuscany-implementation-script-1.4.jar temporarily includes    
 one file under the below BSD license with the following copyright:
 
  Copyright (c) 2006, Sun Microsystems, Inc.
@@ -2292,7 +2304,7 @@ No other rights are granted by implication, estoppel or otherwise.
 Revision level 1.1, last updated on 2007/11/19
 
 ================================================================================
-License for the Service Data Objects JavaDoc and Interface Definition files. (tuscany-sdo-api-r2.1-1.1-incubating.jar)
+License for the Service Data Objects JavaDoc and Interface Definition files. (tuscany-sdo-api-r2.1-1.1.1.jar)
 
 These files being ...
 commonj/sdo/ChangeSummary$Setting.class

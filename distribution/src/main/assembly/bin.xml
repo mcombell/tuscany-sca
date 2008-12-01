@@ -96,10 +96,6 @@
                 <exclude>*/**/*.svg</exclude>
                 <!-- Sample specific work file/folders to exclude -->
                 <exclude>pom.xml</exclude>
-                <exclude>calculator2</exclude>
-                <exclude>calculator2/**/*</exclude>
-                <exclude>calculator-rcp</exclude>
-                <exclude>calculator-rcp/**/*</exclude>
                 <exclude>calculator-distributed/work</exclude>
                 <exclude>calculator-distributed/work/**/*</exclude>
                 <exclude>calculator-webapp/target/sample-calculator-webapp</exclude>
@@ -113,16 +109,12 @@
                 <exclude>callback-ws-client/work/**/*</exclude>
                 <exclude>callback-ws-service/work</exclude>
                 <exclude>callback-ws-service/work/**/*</exclude>
-                <exclude>chat2-webapp</exclude>
-                <exclude>chat2-webapp/**/*</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp</exclude>
                 <exclude>chat-webapp/target/sample-chat-webapp/**/*</exclude>
                 <exclude>customer-dojo-webapp/src/main/webapp/dojo</exclude>
                 <exclude>customer-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
                 <exclude>customer-dojo-webapp/target/</exclude>
                 <exclude>customer-dojo-webapp/target/**/*</exclude>
-                <exclude>domain-webapp</exclude>
-                <exclude>domain-webapp/**/*</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp</exclude>
                 <exclude>feed-aggregator-webapp/target/sample-feed-aggregator-webapp/**/*</exclude>
                 <exclude>feed-aggregator-webapp/target/war</exclude>
@@ -133,23 +125,14 @@
                 <exclude>helloworld-dojo-webapp/target/sample-helloworld-dojo-webapp</exclude>
                 <exclude>helloworld-dojo-webapp/target/sample-helloworld-dojo-webapp/**/*</exclude>
                 <exclude>helloworld-dojo-webapp/target/war</exclude>
-                <exclude>helloworld-jms-webapp</exclude>
-                <exclude>helloworld-jms-webapp/**/*</exclude>
-                <exclude>helloworld-jms-webapp/work</exclude>
                 <exclude>helloworld-jsonrpc-webapp/target/sample-helloworld-jsonrpc-webapp</exclude>
                 <exclude>helloworld-jsonrpc-webapp/target/sample-helloworld-jsonrpc-webapp/**/*</exclude>
-                <exclude>helloworld-ws-deep-webapp</exclude>
-                <exclude>helloworld-ws-deep-webapp/**/*</exclude>
-                <exclude>helloworld-ws-deep-webapp/work</exclude>
-                <exclude>helloworld-ws-deep-webapp/work/**/*</exclude>
                 <exclude>helloworld-ws-reference/work</exclude>
                 <exclude>helloworld-ws-reference/work/**/*</exclude>
                 <exclude>helloworld-ws-reference-jms/activemq-data</exclude>
                 <exclude>helloworld-ws-reference-jms/activemq-data/**/*</exclude>
                 <exclude>helloworld-ws-reference-secure/work</exclude>
                 <exclude>helloworld-ws-reference-secure/work/**/*</exclude>
-                <exclude>helloworld-ws-service-webapp</exclude>
-                <exclude>helloworld-ws-service-webapp/**/*</exclude>
                 <exclude>helloworld-ws-service/work</exclude>
                 <exclude>helloworld-ws-service/secure/work/**/*</exclude>
                 <exclude>helloworld-ws-service/secure/work</exclude>
@@ -164,8 +147,6 @@
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp/**/*</exclude>
-                <exclude>loanapplication</exclude>
-                <exclude>loanapplication/**/*</exclude>
                 <exclude>osgi-supplychain/.felix</exclude>
                 <exclude>osgi-supplychain/.felix/**/*</exclude>
                 <exclude>osgi-supplychain/target/sample-osgi-supplychain</exclude>
@@ -176,8 +157,6 @@
                 <exclude>simple-callback-ws/work/**/*</exclude>
                 <exclude>zipcode-jaxws/target/endorsed</exclude>
                 <exclude>zipcode-jaxws/target/endorsed/**/*</exclude>
-                <exclude>spi-implementation-pojo</exclude>
-                <exclude>spi-implementation-pojo/**/*</exclude>
                 <!-- Sample war files to exclude -->
                 <exclude>calculator-ws-secure-webapp/target/sample-calculator-ws-secure-webapp.war</exclude>
                 <exclude>calculator-ws-webapp/target/sample-calculator-ws-webapp.war</exclude>
@@ -190,6 +169,55 @@
                 <exclude>helloworld-ws-deep-webapp/target/sample-helloworld-ws-deep-webapp.war</exclude>
                 <exclude>helloworld-ws-sdo-webapp/target/sample-helloworld-ws-sdo-webapp.war</exclude>
                 <exclude>helloworld-ws-service-webapp/target/sample-helloworld-ws-service-webapp.war</exclude>
+                <!-- Modules excluded from distribution as work is in progress... -->
+                <exclude>calculator2</exclude>
+                <exclude>calculator2/**/*</exclude>
+                <exclude>calculator-corba-reference</exclude>
+                <exclude>calculator-corba-reference/**/*</exclude>
+                <exclude>calculator-corba-service</exclude>
+                <exclude>calculator-corba-service/**/*</exclude>
+                <exclude>calculator-lean</exclude>
+                <exclude>calculator-lean/**/*</exclude>
+                <exclude>calculator-osgi</exclude>
+                <exclude>calculator-osgi/**/*</exclude>
+                <exclude>calculator-rcp</exclude>
+                <exclude>calculator-rcp/**/*</exclude>
+                <exclude>chat2-webapp</exclude>
+                <exclude>chat2-webapp/**/*</exclude>
+                <exclude>customer-dojo</exclude>
+                <exclude>customer-dojo/**/*</exclude>
+                <exclude>customer-dojo-webapp</exclude>
+                <exclude>customer-dojo-webapp/**/*</exclude>
+                <exclude>helloworld-distributed</exclude>
+                <exclude>helloworld-distributed/**/*</exclude>
+                <exclude>helloworld-jsp</exclude>
+                <exclude>helloworld-jsp/**/*</exclude>
+                <exclude>helloworld-servlet</exclude>
+                <exclude>helloworld-servlet/**/*</exclude>
+                <exclude>helloworld-web</exclude>
+                <exclude>helloworld-web/**/*</exclude>
+                <exclude>helloworld-web-callback</exclude>
+                <exclude>helloworld-web-callback/**/*</exclude>
+                <exclude>loanapplication</exclude>
+                <exclude>loanapplication/**/*</exclude>
+                <exclude>helloworld-ws-reference-lean</exclude>
+                <exclude>helloworld-ws-reference-lean/**/*</exclude>
+                <exclude>spi-implementation-pojo</exclude>
+                <exclude>spi-implementation-pojo/**/*</exclude>
+		    <exclude>helloworld-jms-webapp</exclude>
+                <exclude>helloworld-jms-webapp/**/*</exclude>
+                <exclude>helloworld-jms-webapp/work</exclude>
+                <exclude>domain-webapp</exclude>
+                <exclude>domain-webapp/**/*</exclude>
+                <exclude>calculator-ws-secure-webapp</exclude>
+                <exclude>calculator-ws-secure-webapp/**/*</exclude>
+                <exclude>calculator-ws-secure-webapp/work</exclude>
+                <exclude>helloworld-ws-deep-webapp</exclude>
+                <exclude>helloworld-ws-deep-webapp/**/*</exclude>
+                <exclude>helloworld-ws-deep-webapp/work</exclude>
+                <exclude>helloworld-ws-deep-webapp/work/**/*</exclude>
+                <exclude>helloworld-ws-service-webapp</exclude>
+                <exclude>helloworld-ws-service-webapp/**/*</exclude>
             </excludes>
         </fileSet>
         <!-- Add all the demos to the demos directory -->
@@ -259,6 +287,11 @@
                 <exclude>xml-bigbank/target/**/*</exclude>
                 <exclude>target</exclude>
                 <exclude>target/**/*</exclude>
+                <!-- Modules excluded from distribution as work is in progress... -->
+		    <exclude>load-balancing-webapp</exclude>
+		    <exclude>load-balancing-webapp/**/*</exclude>
+                <exclude>workpool-distributed</exclude>
+                <exclude>workpool-distributed/**/*</exclude>
             </excludes>
         </fileSet>
         <!-- Add all the tutorials to the tutorials directory -->
