@@ -49,8 +49,12 @@ import org.osoa.sca.ServiceRuntimeException;
 /**
  * Invoker for the JMS binding.
  * 
+ * 
  * @version $Rev$ $Date$
  */
+
+// NOTE - THIS BINDING INVOKER IS NOT LONGER ACTIVE. RRBBindingInvoker IS USED INSTEAD
+@Deprecated
 public class JMSBindingInvoker implements Invoker, DataExchangeSemantics {
 
     protected Operation operation;

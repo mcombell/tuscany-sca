@@ -49,6 +49,9 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
  * 
  * @version $Rev$ $Date$
  */
+
+//NOTE - THIS BINDING LISTENER IS NOT LONGER ACTIVE. RRBBindingListener IS USED INSTEAD
+@Deprecated
 public class DefaultJMSBindingListener implements MessageListener {
 
     private static final Logger logger = Logger.getLogger(DefaultJMSBindingListener.class.getName());
