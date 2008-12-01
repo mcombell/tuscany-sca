@@ -165,6 +165,8 @@ public class NodeImpl implements SCANode, SCAClient {
 
             ConfiguredNodeImplementation config = findNodeConfiguration(compositeURI, classLoader);
             configureNode(config);
+        } catch (ServiceRuntimeException e) {
+            throw e;
         } catch (Throwable e) {
             throw new ServiceRuntimeException(e);
         }

@@ -156,7 +156,17 @@ public class XSDModelResolver implements ModelResolver {
             if (definition.getLocation() != null) {
                 uri = definition.getLocation().toString();
             }
-            XmlSchema schema = schemaCollection.read(definition.getDocument(), uri, null);
+            XmlSchema schema = null;
+            try {
+                schema = schemaCollection.read(definition.getDocument(), uri, null);
+            } catch (RuntimeException e) {
+                // find original cause of the problem
+                Throwable cause = e;
+                while (cause.getCause() != null) {
+                    cause = cause.getCause();
+                }
+                throw new ContributionRuntimeException(cause);
+            }
             definition.setSchemaCollection(schemaCollection);
             definition.setSchema(schema);
             definition.setUnresolved(false);
@@ -168,14 +178,32 @@ public class XSDModelResolver implements ModelResolver {
             // Read an XSD document
             InputSource xsd = XMLDocumentHelper.getInputSource(definition.getLocation().toURL());
             for (XmlSchema d : schemaCollection.getXmlSchemas()) {
-                if (d.getTargetNamespace().equals(definition.getNamespace())) {
+                if (isSameNamespace(d.getTargetNamespace(), definition.getNamespace())) {
                     if (d.getSourceURI().equals(definition.getLocation().toString()))
                         return;
                 }
             }
-            XmlSchema schema = schemaCollection.read(xsd, null);
+            XmlSchema schema = null;
+            try {
+                schema = schemaCollection.read(xsd, null);
+            } catch (RuntimeException e) {
+                // find original cause of the problem
+                Throwable cause = e;
+                while (cause.getCause() != null) {
+                    cause = cause.getCause();
+                }
+                throw new ContributionRuntimeException(cause);
+            }
             definition.setSchemaCollection(schemaCollection);
             definition.setSchema(schema);
+        }
+    }
+
+    private boolean isSameNamespace(String ns1, String ns2) {
+        if (ns1 == null) {
+            return ns2 == null;
+        } else {
+            return ns1.equals(ns2);
         }
     }
 
@@ -249,9 +277,7 @@ public class XSDModelResolver implements ModelResolver {
             this.contribution = contribution;
         }
 
-        public org.xml.sax.InputSource resolveEntity(java.lang.String targetNamespace,
-                                                     java.lang.String schemaLocation,
-                                                     java.lang.String baseUri) {
+        public InputSource resolveEntity(String targetNamespace, String schemaLocation, String baseUri) {
             try {
                 if (schemaLocation == null) {
                     return null;
@@ -266,12 +292,19 @@ public class XSDModelResolver implements ModelResolver {
                             break;
                         }
                     }
+                    if (url == null) {
+                        // URI not found in the contribution; return a default InputSource
+                        // so that the XmlSchema code will produce a useful diagnostic
+                        return new InputSource(schemaLocation);
+                    }
                 } else {
                     url = new URL(new URL(baseUri), schemaLocation);
                 }
                 return XMLDocumentHelper.getInputSource(url);
             } catch (IOException e) {
-                return null;
+                // Invalid URI; return a default InputSource so that the
+                // XmlSchema code will produce a useful diagnostic
+                return new InputSource(schemaLocation);
             }
         }
     }

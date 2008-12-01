@@ -46,6 +46,7 @@ import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.contribution.service.ContributionRuntimeException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.UtilityExtensionPoint;
@@ -97,9 +98,9 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
     /**
      * Report a warning.
      * 
-     * @param problems
-     * @param message
+     * @param problem
      * @param model
+     * @param message data
      */
     private void warning(String message, Object model, Object... messageParameters) {
        if (monitor != null) {
@@ -109,15 +110,29 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
     }
          
     /**
-     * Report a error.
+     * Report an error.
      * 
-     * @param problems
-     * @param message
+     * @param problem
      * @param model
+     * @param message data
      */
     private void error(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
             Problem problem = new ProblemImpl(this.getClass().getName(), "binding-wsxml-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+            monitor.problem(problem);
+        }        
+    }
+
+   /**
+    * Report an exception.
+    * 
+    * @param problem
+    * @param model
+    * @param exception
+    */
+    private void error(String message, Object model, Exception ex) {
+        if (monitor != null) {
+            Problem problem = new ProblemImpl(this.getClass().getName(), "binding-wsxml-validation-messages", Severity.ERROR, model, message, ex);
             monitor.problem(problem);
         }        
     }
@@ -322,7 +337,14 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
     	WSDLDefinition wsdlDefinition = wsdlFactory.createWSDLDefinition();
         wsdlDefinition.setUnresolved(true);
         wsdlDefinition.setNamespace(model.getNamespace());
-        WSDLDefinition resolved = resolver.resolveModel(WSDLDefinition.class, wsdlDefinition);
+        WSDLDefinition resolved = null;
+        try {
+            resolved = resolver.resolveModel(WSDLDefinition.class, wsdlDefinition);
+        } catch (ContributionRuntimeException e) {
+            ContributionResolveException ce = new ContributionResolveException(e.getCause());
+            error("ContributionResolveException", wsdlDefinition, ce);
+            throw ce;
+        }                        
 
         if (!resolved.isUnresolved()) {
             wsdlDefinition.setDefinition(resolved.getDefinition());

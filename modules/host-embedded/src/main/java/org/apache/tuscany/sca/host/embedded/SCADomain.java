@@ -214,6 +214,8 @@ public abstract class SCADomain {
 
             return domain;
 
+        } catch (ServiceRuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new ServiceRuntimeException(e);
         }

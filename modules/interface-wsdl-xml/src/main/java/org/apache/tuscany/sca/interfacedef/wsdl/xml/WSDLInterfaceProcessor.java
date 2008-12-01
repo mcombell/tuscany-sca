@@ -34,6 +34,7 @@ import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.contribution.service.ContributionRuntimeException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLDefinition;
@@ -62,9 +63,9 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
     /**
      * Report a warning.
      * 
-     * @param problems
-     * @param message
+     * @param problem
      * @param model
+     * @param message data
      */
     private void warning(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
@@ -74,11 +75,11 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
      }
     
     /**
-     * Report a error.
+     * Report an error.
      * 
-     * @param problems
-     * @param message
+     * @param problem
      * @param model
+     * @param message data
      */
     private void error(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
@@ -88,11 +89,11 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
      }
    
    /**
-    * Report a exception.
+    * Report an exception.
     * 
-    * @param problems
-    * @param message
+    * @param problem
     * @param model
+    * @param exception
     */
     private void error(String message, Object model, Exception ex) {
         if (monitor != null) {
@@ -217,9 +218,12 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
                             wsdlInterface = wsdlFactory.createWSDLInterface(portType.getElement(), wsdlDefinition, resolver);
                             wsdlInterface.setWsdlDefinition(wsdlDefinition);
                             resolver.addModel(wsdlInterface);
+                        } catch (ContributionRuntimeException e) {
+                            ContributionResolveException ce = new ContributionResolveException(e.getCause());
+                            error("ContributionResolveException", wsdlDefinition, ce);
                         } catch (InvalidInterfaceException e) {
                         	ContributionResolveException ce = new ContributionResolveException(e);
-                        	error("ContributionResolveException", wsdlFactory, ce);
+                        	error("ContributionResolveException", wsdlDefinition, ce);
                             //throw ce;
                         }                        
                     }
