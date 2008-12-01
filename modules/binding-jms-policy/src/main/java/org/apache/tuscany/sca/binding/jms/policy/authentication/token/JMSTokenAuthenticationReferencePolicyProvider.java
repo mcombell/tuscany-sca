@@ -29,14 +29,13 @@ import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 import org.apache.tuscany.sca.policy.util.PolicyHandler;
 import org.apache.tuscany.sca.provider.PolicyProvider;
-import org.apache.tuscany.sca.provider.PolicyProviderRRB;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 
 /**
  * @version $Rev$ $Date$
  */
-public class JMSTokenAuthenticationReferencePolicyProvider implements PolicyProviderRRB {
+public class JMSTokenAuthenticationReferencePolicyProvider implements PolicyProvider {
     private RuntimeComponent component;
     private RuntimeComponentReference reference;
     private Binding binding;
@@ -77,19 +76,16 @@ public class JMSTokenAuthenticationReferencePolicyProvider implements PolicyProv
      * @see org.apache.tuscany.sca.provider.PolicyProvider#createInterceptor(org.apache.tuscany.sca.interfacedef.Operation)
      */
     public Interceptor createInterceptor(Operation operation) {
-    	return null;
-    }
-    
-    public Interceptor createBindingInterceptor() {
         PolicySet ps = findPolicySet();
         return ps == null ? null : new JMSTokenAuthenticationReferencePolicyInterceptor(getContext(), ps);
-    }    
+
+    }   
 
     /**
      * @see org.apache.tuscany.sca.provider.PolicyProvider#getPhase()
      */
     public String getPhase() {
-        return Phase.REFERENCE_POLICY;
+        return Phase.REFERENCE_BINDING_POLICY;
     }
 
 }

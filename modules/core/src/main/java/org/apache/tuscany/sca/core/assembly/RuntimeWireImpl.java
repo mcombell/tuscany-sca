@@ -41,11 +41,8 @@ import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.invocation.Phase;
-import org.apache.tuscany.sca.policy.PolicySet;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.provider.PolicyProvider;
-import org.apache.tuscany.sca.provider.PolicyProviderRRB;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ReferenceBindingProviderRRB;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -235,8 +232,8 @@ public class RuntimeWireImpl implements RuntimeWire {
         List<PolicyProvider> pps = ((RuntimeComponentReference)reference).getPolicyProviders(referenceBinding);
         if (pps != null) {
             for (PolicyProvider p : pps) {
-                if (p instanceof PolicyProviderRRB) {
-                    Interceptor interceptor = ((PolicyProviderRRB)p).createBindingInterceptor();
+                if (p.getPhase().equals(Phase.REFERENCE_BINDING_POLICY)) {
+                    Interceptor interceptor = p.createInterceptor(null);
                     if (interceptor != null) {
                         bindingInvocationChain.addInterceptor(Phase.REFERENCE_BINDING_POLICY, interceptor);
                     }
@@ -260,8 +257,8 @@ public class RuntimeWireImpl implements RuntimeWire {
         List<PolicyProvider> pps = ((RuntimeComponentService)service).getPolicyProviders(serviceBinding);
         if (pps != null) {
             for (PolicyProvider p : pps) {
-                if (p instanceof PolicyProviderRRB) {
-                    Interceptor interceptor = ((PolicyProviderRRB)p).createBindingInterceptor();
+                if (p.getPhase().equals(Phase.SERVICE_BINDING_POLICY)) {
+                    Interceptor interceptor = p.createInterceptor(null);
                     if (interceptor != null) {
                         bindingInvocationChain.addInterceptor(Phase.SERVICE_BINDING_POLICY, interceptor);
                     }

@@ -29,14 +29,13 @@ import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 import org.apache.tuscany.sca.policy.util.PolicyHandler;
 import org.apache.tuscany.sca.provider.PolicyProvider;
-import org.apache.tuscany.sca.provider.PolicyProviderRRB;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 
 /**
  * @version $Rev$ $Date$
  */
-public class JMSHeaderReferencePolicyProvider implements PolicyProviderRRB {
+public class JMSHeaderReferencePolicyProvider implements PolicyProvider {
     private RuntimeComponent component;
     private RuntimeComponentReference reference;
     private Binding binding;
@@ -77,14 +76,10 @@ public class JMSHeaderReferencePolicyProvider implements PolicyProviderRRB {
      * @see org.apache.tuscany.sca.provider.PolicyProvider#createInterceptor(org.apache.tuscany.sca.interfacedef.Operation)
      */
     public Interceptor createInterceptor(Operation operation) {
-        return null;
-    }
-    
-    public Interceptor createBindingInterceptor() {
         PolicySet ps = findPolicySet();
         return ps == null ? null : new JMSHeaderReferencePolicyInterceptor(getContext(), component, reference, binding, ps);
     }
-
+    
     /**
      * @see org.apache.tuscany.sca.provider.PolicyProvider#getPhase()
      */
