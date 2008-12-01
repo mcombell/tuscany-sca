@@ -41,6 +41,17 @@
             <artifactId>tuscany-das-rdb</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>backport-util-concurrent</groupId>
+                    <artifactId>backport-util-concurrent</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>        
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>3.1</version>
         </dependency>
 
         <dependency>
