@@ -74,6 +74,6 @@
     </target>
     
     <fileset id="3rdparty.jars" dir="../../lib">
-        <include name="saxon-9.0.0.2.jar"/>
+        <include name="saxon-8.7.jar"/>
     </fileset>
 </project>

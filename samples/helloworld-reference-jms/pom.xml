@@ -81,7 +81,12 @@
                     <artifactId>activemq-web-demo</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>     
+        </dependency>
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>3.1</version>
+        </dependency>  
         
     </dependencies>
     

@@ -53,7 +53,7 @@
                 <module>calculator-corba-service</module>
                 <module>calculator-lean</module>
                 <module>calculator-distributed</module>
-		<module>calculator-implementation-policies</module>
+		    <module>calculator-implementation-policies</module>
                 <module>calculator-rmi-reference</module>
                 <module>calculator-rmi-service</module>
                 <module>calculator-script</module>
@@ -62,6 +62,7 @@
                 <module>calculator-ws-webapp</module>
                 <module>callback-ws-client</module>
                 <module>callback-ws-service</module>
+                <module>callbacks-jms</module>
                 <module>chat-webapp</module>
                 <module>customer-dojo</module>
                 <module>customer-dojo-webapp</module>
