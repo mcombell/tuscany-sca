@@ -60,12 +60,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
          unpack="false"/>
 
    <data
-         id="runtime/apache-tuscany-sca-1.4-SNAPSHOT.jar"
+         id="runtime/apache-tuscany-sca-1.5-SNAPSHOT.jar"
          download-size="0"
          install-size="0"/>
 
    <data
-         id="src/apache-tuscany-sca-1.4-SNAPSHOT-src.zip"
+         id="src/apache-tuscany-sca-1.5-SNAPSHOT-src.zip"
          download-size="0"
          install-size="0"/>
 
