@@ -8,7 +8,7 @@ For an overview of the scenarios covered here, please refer to Tutorial.pdf.
 
 For more detailed information, please see:
 
-http://incubator.apache.org/tuscany/sca-java-tutorial.html
+http://tuscany.apache.org/sca-java-tutorial.html
 
 
 Running The Tutorial Application
@@ -16,7 +16,7 @@ Running The Tutorial Application
 
 Start the SCA Domain Manager:
    cd domain
-   java -jar ../../modules/tuscany-node2-launcher-1.2-incubating.jar domain
+   java -jar ../../modules/tuscany-node-launcher-1.4.jar domain
 
 To access the SCA Manager application, point your Web browser to:
    http://localhost:9990/ui/cloud/
