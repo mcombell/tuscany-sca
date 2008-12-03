@@ -51,7 +51,6 @@
                 <module>calculator</module>
                 <module>calculator-corba-reference</module>
                 <module>calculator-corba-service</module>
-                <module>calculator-lean</module>
                 <module>calculator-distributed</module>
 		    <module>calculator-implementation-policies</module>
                 <module>calculator-rmi-reference</module>
