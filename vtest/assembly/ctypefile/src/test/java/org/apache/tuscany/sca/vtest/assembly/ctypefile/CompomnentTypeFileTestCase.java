@@ -31,23 +31,25 @@ import org.junit.Test;
  */
 public class CompomnentTypeFileTestCase {
 
-    protected static String compositeName = "typefile.composite";
+    //protected static String compositeName = "typefile.composite";
     protected static AService aService = null;
     protected static BService bService2 = null;
+    protected static CService cService = null;
+    protected static DService dService = null;
 
-    @BeforeClass
-    public static void init() throws Exception {
+    //@BeforeClass
+    public static void init(String compositeName) throws Exception {
         try {
             System.out.println("Setting up");
             ServiceFinder.init(compositeName);
-            aService = ServiceFinder.getService(AService.class, "AComponent/AService");
-            bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
+            //aService = ServiceFinder.getService(AService.class, "AComponent/AService");
+            //bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    @AfterClass
+    //@AfterClass
     public static void destroy() throws Exception {
 
         System.out.println("Cleaning up");
@@ -74,7 +76,11 @@ public class CompomnentTypeFileTestCase {
      */
     @Test
     public void typeFile1() throws Exception {
+    	init("typefile.composite");
+    	aService = ServiceFinder.getService(AService.class, "AComponent/AService");
+        bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
         Assert.assertSame("SomeStateFromB", aService.getState());
+        destroy();
     }
 
     /**
@@ -89,8 +95,12 @@ public class CompomnentTypeFileTestCase {
      */
     @Test
     public void typeFile2() throws Exception {
+    	init("typefile.composite");
+    	aService = ServiceFinder.getService(AService.class, "AComponent/AService");
+        bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
         Assert.assertSame("SomeStateFromB", aService.getState());
         Assert.assertSame("SomeStateFromB", aService.getState2());
+        destroy();
     }
 
     /**
@@ -101,11 +111,73 @@ public class CompomnentTypeFileTestCase {
      */
     @Test
     public void typeFile3() throws Exception {
+    	init("typefile.composite");
+    	aService = ServiceFinder.getService(AService.class, "AComponent/AService");
+        bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
         Assert.assertEquals("compositeValue", aService.getBProperty());
+        destroy();
     }
 
     public void typeFile31() throws Exception {
+    	init("typefile.composite");
+    	aService = ServiceFinder.getService(AService.class, "AComponent/AService");
+        bService2 = ServiceFinder.getService(BService.class, "BComponent2/BService");
         Assert.assertEquals("componentTypeValue", bService2.getSomeProperty());
+        destroy();
     }
+    
+    /**
+     * Lines 2204-2205:
+     * <p>
+     * A constrainingType can be applied to an implementation. In this case, 
+     * the implementation's componentType has a constrainingType attribute set to 
+     * the QName of the constrainingType.
+     * <p>
+     * ASM40002
+     * <p>
+     * If present, the @constrainingType attribute of a <componentType/> element 
+     * MUST reference a <constrainingType/> element in the Domain through its QName.
+     * <p>
+     * Description of how the OSOA function differs from the OASIS function:
+     * <p>
+     * The OASIS spec explicitly requires the <constrainingType/> element, 
+     * whereas the OSOA spec implies the <constrainingType/> element is needed.
+     * <p>
+     */
+    @Test
+    public void ASM40002_positive() throws Exception {
+    	System.out.println("Running ASM40002 positive test");
+    	init("constrainingtype.composite");
+    	cService = ServiceFinder.getService(CService.class, "CComponent/CService");
+    	cService.getSomeProperty();
+    	destroy();
+    }
+    
+    /**
+     * Lines 2204-2205:
+     * <p>
+     * A constrainingType can be applied to an implementation. In this case, 
+     * the implementation's componentType has a constrainingType attribute set to 
+     * the QName of the constrainingType.
+     * <p>
+     * ASM40002
+     * <p>
+     * If present, the @constrainingType attribute of a <componentType/> element 
+     * MUST reference a <constrainingType/> element in the Domain through its QName.
+     * <p>
+     * Description of how the OSOA function differs from the OASIS function:
+     * <p>
+     * The OASIS spec explicitly requires the <constrainingType/> element, 
+     * whereas the OSOA spec implies the <constrainingType/> element is needed.
+     * <p>
+     */
+    @Test
+    public void ASM40002_negative() throws Exception {
+    	System.out.println("Running ASM40002 negative test");
+    	init("noconstrainingtype.composite");
+    	dService = ServiceFinder.getService(DService.class, "DComponent/DService");
+    	dService.getSomeProperty();
+    	destroy();
+    }    
 
 }
