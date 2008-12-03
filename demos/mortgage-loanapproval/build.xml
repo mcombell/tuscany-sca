@@ -49,7 +49,7 @@
 		</java>
 	</target>
 
-	<target name="run">
+	<target name="run" depends="compile">
 		<java classname="${test.class}" fork="true">
 			<classpath>
 				<pathelement path="target/${test.jar}" />

@@ -44,7 +44,7 @@
 
     <target name="package" depends="compile"/>
 
-    <target name="run">
+    <target name="run" depends="compile">
         <java classname="bigbank.BigBankClient" fork="true">
             <classpath>
                 <pathelement location="target/demo-xml-bigbank.jar"/>
