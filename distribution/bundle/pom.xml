@@ -54,17 +54,7 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-binding-corba</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-corba-runtime</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-binding-gdata</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -90,6 +80,11 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-http-runtime</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-binding-jms-policy</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -142,11 +137,11 @@
             <artifactId>tuscany-binding-sca-corba</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-sca-jms</artifactId>
             <version>${pom.version}</version>
-        </dependency>
+        </dependency -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-sca-xml</artifactId>
@@ -283,16 +278,21 @@
             <artifactId>tuscany-databinding-sdo-axiom</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-databinding-xmlbeans</artifactId>
             <version>${pom.version}</version>
-        </dependency>
+        </dependency -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-embedded</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <!-- dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-host-corba</artifactId>
+            <version>${pom.version}</version>
+        </dependency -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-http</artifactId>
@@ -449,6 +449,11 @@
             <artifactId>tuscany-node-launcher</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <!-- dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-node-launcher-webapp</artifactId>
+            <version>${pom.version}</version>
+        </dependency -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-node-manager</artifactId>
@@ -612,10 +617,13 @@
                                     <resource>META-INF/services/org.apache.tuscany.sca.binding.feed.RSSBindingFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.apache.tuscany.sca.binding.atom.AtomBindingFactory</resource>
+                                    <resource>META-INF/services/org.apache.tuscany.sca.binding.gdata.GdataBindingFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.apache.tuscany.sca.binding.rss.RSSBindingFactory</resource>
+                                    <resource>META-INF/services/org.apache.tuscany.sca.binding.corba.CorbaBindingFactory</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.binding.rmi.RMIBindingFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.binding.http.HTTPResourceBindingFactory</resource>
@@ -689,6 +697,9 @@
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.extension.helper.ImplementationActivator</resource>
                                 </transformer>
+                                <!-- transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.host.corba.CorbaHostExtensionPoint</resource>
+                                </transformer -->
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.host.http.ServletHostExtensionPoint</resource>
                                 </transformer>
@@ -697,6 +708,9 @@
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.implementation.java.JavaImplementationFactory</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.implementation.jee.JEEImplementationFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.implementation.resource.ResourceImplementationFactory</resource>
@@ -712,6 +726,12 @@
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.provider.BindingProviderFactory</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.provider.OperationSelectorProviderFactory</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.provider.WireFormatProviderFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.provider.ImplementationProviderFactory</resource>
