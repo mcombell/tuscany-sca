@@ -178,6 +178,8 @@
                 <exclude>samples/spi-implementation-pojo/**/*</exclude>
                 <exclude>samples/simple-callback-ws/work</exclude>
                 <exclude>samples/simple-callback-ws/work/**/*</exclude>
+                <exclude>samples/simple-bigbank-spring/src/main/resources/web/dojo</exclude> 
+                <exclude>samples/simple-bigbank-spring/src/main/resources/web/dojo/**/*</exclude> 
                 <exclude>demos/alert-aggregator-webapp/bin</exclude>
                 <exclude>demos/alert-aggregator-webapp/bin/**/*</exclude>
                 <exclude>demos/alert-aggregator-webapp/src/main/webapp/dojo</exclude>
