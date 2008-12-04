@@ -74,6 +74,7 @@
     		<exclude>**/.wtpmodules</exclude>
     		<exclude>**/surefire*</exclude>
     		<exclude>**/cobertura.ser</exclude>
+    		<exclude>**/log/*.dat</exclude>
     		<exclude>bin</exclude>
     		<exclude>bin/*</exclude>
     		<exclude>**/var/journal</exclude>
@@ -149,6 +150,8 @@
                 <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo/**/*</exclude>
                 <exclude>samples/helloworld-dojo-webapp/src/main/webapp/dojo</exclude>
                 <exclude>samples/helloworld-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
+                <exclude>samples/customer-dojo-webapp/src/main/webapp/dojo</exclude>
+                <exclude>samples/customer-dojo-webapp/src/main/webapp/dojo/**/*</exclude>
                 <exclude>samples/helloworld-ws-deep-webapp</exclude>
                 <exclude>samples/helloworld-ws-deep-webapp/**/*</exclude>
                 <exclude>samples/helloworld-ws-deep-webapp/work</exclude>
