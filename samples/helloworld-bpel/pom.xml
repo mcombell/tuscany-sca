@@ -156,7 +156,7 @@
 								<artifactItem>
 									<groupId>org.apache.ode</groupId>
 									<artifactId>ode-dao-jpa-ojpa-derby</artifactId>
-									<version>1.1</version>
+									<version>1.1.1</version>
 									<type>zip</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/test-classes/</outputDirectory>

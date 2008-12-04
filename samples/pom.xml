@@ -66,11 +66,11 @@
                 <module>customer-dojo</module>
                 <module>customer-dojo-webapp</module>
                 <module>databinding-echo</module>
-                <!--module>domain-webapp</module-->
                 <module>domain-management</module>
                 <module>feed-aggregator</module>
                 <module>feed-aggregator-webapp</module>
                 <module>helloworld-bpel</module>
+                <module>helloworld-bpel-ws</module>
                 <module>helloworld-dojo-webapp</module>
                 <module>helloworld-jms-webapp</module>
                 <module>helloworld-jsonrpc-webapp</module>
@@ -80,7 +80,6 @@
                 <module>helloworld-ws-service-jms</module>
                 <module>helloworld-ws-service-secure</module>
                 <module>helloworld-ws-reference</module>
-                <module>helloworld-ws-reference-lean</module>
                 <module>helloworld-ws-reference-jms</module>
                 <module>helloworld-ws-reference-secure</module>
                 <module>helloworld-ws-sdo</module>
