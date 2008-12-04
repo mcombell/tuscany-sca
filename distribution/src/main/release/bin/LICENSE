@@ -328,7 +328,7 @@ The following components come under Apache Software License 2.0
  tuscany-sdo-tools-1.1.1.jar
  woden-api-1.0M8.jar
  woden-impl-dom-1.0M8.jar
- wss4j-1.6.2.jar
+ wss4j-1.5.4.jar
  wstx-asl-3.2.4.jar
  xalan-2.7.0.jar
  xbean-naming-2.7.jar
@@ -337,7 +337,7 @@ The following components come under Apache Software License 2.0
  xmlbeans-2.3.0.jar
  xml-resolver-1.1.jar
  xmlsec-1.4.2.jar
- XmlSchema-1.3.2.jar
+ XmlSchema-1.4.2.jar
 
 ===============================================================================
 axion-1.0-M3-dev.jar 
@@ -1888,7 +1888,7 @@ COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
 ===============================================================================
 
-JRuby (jruby-complete-1.0.jar), wsdl4j (wsdl4j-1.6.2.jar):
+JRuby (jruby-complete-1.1.3.jar), wsdl4j (wsdl4j-1.6.2.jar):
 
 Common Public License - v 1.0
 
