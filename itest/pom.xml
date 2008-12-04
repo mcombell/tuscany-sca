@@ -74,24 +74,19 @@
                 <module>contribution</module>
                 <module>contribution-multiple</module>
                 <module>contribution-import-export</module>
-              <!--  
- <module>contribution-classloader</module> -->
+                <!-- 
+                <module>contribution-classloader</module> 
+                -->
                 <module>conversations</module>
                 <module>corba</module>
                 <module>conversations-ws</module>
                 <module>databindings</module>
-                <!--module>domain</module-->
                 <module>exceptions</module>
                 <module>exceptions-cross-binding</module>
                 <module>exceptions-cross-binding-ws</module>
                 <module>exceptions-simple-ws</module>
                 <module>extended-api</module>
                 <module>interfaces</module>
-                <!--
-                <module>interop-soap-client</module>
-                <module>interop-soap-round2-client</module>
-                <module>interop-soap-service</module>
-                -->
                 <module>jms</module>
                 <module>jms-args</module>
                 <module>jms-callbacks</module>
