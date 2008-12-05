@@ -30,9 +30,7 @@
                source="1.5"
                target="1.5">
             <classpath>
-            	<pathelement location="../../modules/tuscany-sca-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-launcher-1.4.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
             </classpath>
         </javac> 
         <copy todir="target/classes">
@@ -52,9 +50,7 @@
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
-            	<pathelement location="../../modules/tuscany-sca-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-launcher-1.4.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
             </classpath>    	        	
         </java>
     </target>
@@ -66,9 +62,7 @@
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
-            	<pathelement location="../../modules/tuscany-sca-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-launcher-1.4.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
             </classpath>     	        	
         </java>
     </target>
@@ -80,9 +74,7 @@
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
-            	<pathelement location="../../modules/tuscany-sca-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-launcher-1.4.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
             </classpath>      	
         </java>
     </target>	
@@ -94,9 +86,7 @@
             	<pathelement path="src/main/resources"/>
                 <pathelement path="target/classes"/>
             	<pathelement path="target/${test.jar}"/>
-            	<pathelement location="../../modules/tuscany-sca-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-api-1.4.jar"/>
-            	<pathelement location="../../modules/tuscany-node-launcher-1.4.jar"/>
+            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
             </classpath>      	
         </java>
     </target>	
