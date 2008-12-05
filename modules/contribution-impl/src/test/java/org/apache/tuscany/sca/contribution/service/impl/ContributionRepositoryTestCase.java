@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.contribution.services;
+package org.apache.tuscany.sca.contribution.service.impl;
 
 import java.io.File;
 import java.io.InputStream;
