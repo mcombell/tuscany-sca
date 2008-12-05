@@ -16,7 +16,7 @@ Running The Tutorial Application
 
 Start the SCA Domain Manager:
    cd domain
-   java -jar ../../modules/tuscany-node-launcher-1.4.jar domain
+   java -jar ../../../modules/tuscany-node-launcher-1.4.jar domain
 
 To access the SCA Manager application, point your Web browser to:
    http://localhost:9990/ui/cloud/

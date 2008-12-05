@@ -150,9 +150,13 @@
                 <exclude>osgi-supplychain/.felix</exclude>
                 <exclude>osgi-supplychain/.felix/**/*</exclude>
                 <exclude>osgi-supplychain/target/sample-osgi-supplychain</exclude>
-                <exclude>osgi-supplychain/target/sample-osgi-supplychain/**/*</exclude>
+                <exclude>osgi-supplychain/target/sample-osgi-supplychain/**/*</exclude>                
+                <exclude>simple-bigbank-spring/work</exclude>
+                <exclude>simple-bigbank-spring/work/**/*</exclude>                
                 <exclude>simple-bigbank-spring/src/main/resources/web/dojo</exclude>
                 <exclude>simple-bigbank-spring/src/main/resources/web/dojo/**/*</exclude>
+                <exclude>spring-bigbank-stockquote/work</exclude>
+                <exclude>spring-bigbank-stockquote/work/**/*</exclude>
                 <exclude>simple-callback-ws/work</exclude>
                 <exclude>simple-callback-ws/work/**/*</exclude>
                 <exclude>zipcode-jaxws/target/endorsed</exclude>
@@ -331,8 +335,10 @@
                 <exclude>store/*/target/surefire-reports/**/*</exclude>
                 <exclude>store/*/target/maven-archiver</exclude>
                 <exclude>store/*/target/maven-archiver/**/*</exclude>
-                <exclude>store/catalog-webapp/target</exclude>
-                <exclude>store/catalog-webapp/target/**/*</exclude>
+                <exclude>store/catalog-webapp/target/war/</exclude>
+                <exclude>store/catalog-webapp/target/war/**/*</exclude>
+                <exclude>store/catalog-webapp/target/tutorial-catalog-webapp/</exclude>
+                <exclude>store/catalog-webapp/target/tutorial-catalog-webapp/**/*</exclude>
                 <exclude>store/store-db/target/cart-db/</exclude>
                 <exclude>store/store-db/target/cart-db/**/*</exclude>
                 <exclude>store/store-eu/target/cart-eu-db/</exclude>

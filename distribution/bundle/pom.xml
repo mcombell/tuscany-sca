@@ -177,10 +177,10 @@
                     <groupId>bouncycastle</groupId>
                     <artifactId>bcprov-jdk15</artifactId>
                 </exclusion>
-                <exclusion>
+                <!-- <exclusion>
                     <groupId>opensaml</groupId>
                     <artifactId>opensaml</artifactId>
-                </exclusion>
+                </exclusion> -->
             </exclusions>
         </dependency>
         <dependency>
@@ -226,11 +226,6 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-contribution-resource</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-contribution-groovy</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -386,11 +381,6 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-implementation-jee</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>tuscany-implementation-node</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -692,6 +682,9 @@
                                     <resource>META-INF/services/org.apache.tuscany.sca.databinding.TransformerExtensionPoint</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.databinding.jaxb.XMLAdapterExtensionPoint</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.extension.helper.BindingActivator</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
@@ -708,6 +701,9 @@
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.implementation.java.JavaImplementationFactory</resource>
+                                </transformer>
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.tuscany.sca.implementation.node.NodeImplementationFactory</resource>
                                 </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.implementation.jee.JEEImplementationFactory</resource>

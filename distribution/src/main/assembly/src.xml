@@ -98,7 +98,7 @@
                 <exclude>itest/contribution-import-export/import-wsdl/work/**/*</exclude>
                 <exclude>itest/conversations-ws/work</exclude>
                 <exclude>itest/conversations-ws/work/**/*</exclude>
-    		<exclude>itest/databindings/jaxbgen/velocity.log</exclude>
+    		    <exclude>itest/databindings/jaxbgen/velocity.log</exclude>
                 <exclude>itest/domain/work</exclude>
                 <exclude>itest/domain/work/**/*</exclude>
                 <exclude>itest/exceptions-simple-ws/work</exclude>
@@ -109,6 +109,14 @@
                 <exclude>itest/policy/work/**/*</exclude>
                 <exclude>itest/transaction/derbydb</exclude>
                 <exclude>itest/transaction/derbydb/**/*</exclude>
+                <exclude>itest/late-reference-resolution/work</exclude>
+                <exclude>itest/late-reference-resolution/work/**/*</exclude>
+		    <exclude>itest/policy-security-basicauth/work</exclude>
+                <exclude>itest/policy-security-basicauth/work/**/*</exclude>
+		    <exclude>itest/policy-security-token/work</exclude>
+                <exclude>itest/policy-security-token/work/**/*</exclude>
+		    <exclude>itest/spring/work</exclude>
+                <exclude>itest/spring/work/**/*</exclude>		    
                 <exclude>itest/ws-void-args-return/work</exclude>
                 <exclude>itest/ws-void-args-return/work/**/*</exclude>
                 <exclude>vtest/wsbinding/nowsdl/defaultbinding/work</exclude>
@@ -121,6 +129,12 @@
                 <exclude>vtest/wsbinding/nowsdl/soapversion/work/**/*</exclude>
                 <exclude>vtest/wsbinding/service/work</exclude>
                 <exclude>vtest/wsbinding/service/work/**/*</exclude>
+                <exclude>vtest/wsbinding/wsdlelement/binding/work</exclude>
+                <exclude>vtest/wsbinding/wsdlelement/binding/work/**/*</exclude>
+		    <exclude>vtest/wsbinding/wsdlelement/port/work</exclude>
+                <exclude>vtest/wsbinding/wsdlelement/port/work/**/*</exclude>
+		    <exclude>vtest/wsbinding/wsdlelement/service/work</exclude>
+                <exclude>vtest/wsbinding/wsdlelement/service/work/**/*</exclude>
                 <exclude>modules/domain-impl/work</exclude>
                 <exclude>modules/domain-impl/work/**/*</exclude>
                 <exclude>modules/host-tomcat/work</exclude>
@@ -136,6 +150,12 @@
                 <exclude>modules/implementation-osgi/.felix/**/*</exclude>
                 <exclude>modules/osgi-runtime/.felix</exclude>
                 <exclude>modules/osgi-runtime/.felix/**/*</exclude>
+		    <exclude>modules/core-spi/src/main/java/org/apache/tuscany/sca/work</exclude>
+                <exclude>modules/core-spi/src/main/java/org/apache/tuscany/sca/work/**/*</exclude>
+		    <exclude>modules/core/src/main/java/org/apache/tuscany/sca/core/work</exclude>
+                <exclude>modules/core/src/main/java/org/apache/tuscany/sca/core/work/**/*</exclude>
+		    <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work</exclude>
+                <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work/**/*</exclude>
                 <exclude>samples/old</exclude>
                 <exclude>samples/old/**/*</exclude>
                 <exclude>samples/calculator-distributed/work</exclude>
@@ -179,7 +199,11 @@
                 <exclude>samples/simple-callback-ws/work</exclude>
                 <exclude>samples/simple-callback-ws/work/**/*</exclude>
                 <exclude>samples/simple-bigbank-spring/src/main/resources/web/dojo</exclude> 
-                <exclude>samples/simple-bigbank-spring/src/main/resources/web/dojo/**/*</exclude> 
+                <exclude>samples/simple-bigbank-spring/src/main/resources/web/dojo/**/*</exclude>
+                <exclude>samples/simple-bigbank-spring/work</exclude>
+                <exclude>samples/simple-bigbank-spring/work/**/*</exclude>
+		    <exclude>samples/spring-bigbank-stockquote/work</exclude>
+                <exclude>samples/spring-bigbank-stockquote/work/**/*</exclude>
                 <exclude>demos/alert-aggregator-webapp/bin</exclude>
                 <exclude>demos/alert-aggregator-webapp/bin/**/*</exclude>
                 <exclude>demos/alert-aggregator-webapp/src/main/webapp/dojo</exclude>
