@@ -201,8 +201,14 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
                 WSDLDefinition wsdlDefinition = wsdlFactory.createWSDLDefinition();
                 wsdlDefinition.setUnresolved(true);
                 wsdlDefinition.setNamespace(wsdlInterface.getName().getNamespaceURI());
-                WSDLDefinition resolved = resolver.resolveModel(WSDLDefinition.class, wsdlDefinition);
-                if (!resolved.isUnresolved()) {
+                WSDLDefinition resolved = null;
+                try {
+                    resolved = resolver.resolveModel(WSDLDefinition.class, wsdlDefinition);
+                } catch (ContributionRuntimeException e) {
+                    ContributionResolveException ce = new ContributionResolveException(e.getCause());
+                    error("ContributionResolveException", wsdlDefinition, ce);
+                }
+                if (resolved != null && !resolved.isUnresolved()) {
                     wsdlDefinition.setDefinition(resolved.getDefinition());
                     wsdlDefinition.setLocation(resolved.getLocation());
                     wsdlDefinition.setURI(resolved.getURI());
