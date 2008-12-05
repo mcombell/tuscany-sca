@@ -17,7 +17,7 @@
  * under the License.    
 -->
 <project name="photo-gallary" default="compile">
-    <property name="test.class" value="launch.Launch" />
+    <property name="test.class" value="launch.LaunchGallery" />
 	<property name="test.jar"   value="sample-photo-gallary.jar" />
 	
     <target name="init">
