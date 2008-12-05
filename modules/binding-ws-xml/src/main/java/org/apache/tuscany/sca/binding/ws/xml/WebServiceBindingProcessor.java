@@ -343,10 +343,10 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
         } catch (ContributionRuntimeException e) {
             ContributionResolveException ce = new ContributionResolveException(e.getCause());
             error("ContributionResolveException", wsdlDefinition, ce);
-            throw ce;
+            //throw ce;
         }                        
 
-        if (!resolved.isUnresolved()) {
+        if (resolved != null && !resolved.isUnresolved()) {
             wsdlDefinition.setDefinition(resolved.getDefinition());
             wsdlDefinition.setLocation(resolved.getLocation());
             wsdlDefinition.setURI(resolved.getURI());
@@ -388,11 +388,11 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
                 WSDLInterface wsdlInterface = null;
                 try {
                     wsdlInterface = wsdlFactory.createWSDLInterface(portType, wsdlDefinition, resolver);
+                    interfaceContract.setInterface(wsdlInterface);
+                    model.setBindingInterfaceContract(interfaceContract);
                 } catch (InvalidInterfaceException e) {
                 	warning("InvalidInterfaceException", wsdlFactory, model.getName()); 
                 }
-                interfaceContract.setInterface(wsdlInterface);
-                model.setBindingInterfaceContract(interfaceContract);
             }
         }
         policyProcessor.resolvePolicies(model, resolver);
