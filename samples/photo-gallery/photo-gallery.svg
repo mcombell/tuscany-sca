@@ -31,14 +31,15 @@
    height="744.09448"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.45.1"
-   sodipodi:docbase="C:\simon\tuscany\java-head\sca\samples\store"
-   sodipodi:docname="store.svg"
+   inkscape:version="0.45pre1"
+   sodipodi:docbase="D:\Opensource\Apache\Tuscany\source\java-sca-1.x\samples\photo-gallery"
+   sodipodi:docname="photo-gallery.svg"
    version="1.0"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="C:\simon\tuscany\java-head\sca\samples\store\store.png"
+   inkscape:export-filename="D:\Opensource\Apache\Tuscany\source\java-sca-1.x\samples\photo-gallery\photo-gallery.png"
    inkscape:export-xdpi="52.84"
-   inkscape:export-ydpi="52.84">
+   inkscape:export-ydpi="52.84"
+   sodipodi:modified="true">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -89,82 +90,40 @@
       <flowRoot
          id="flowRoot2954"
          xml:space="preserve"
-         transform="translate(189.90868,1.0101522)"><flowRegion
+         transform="translate(189.90868,1.0101522)"
+         style="text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"><flowRegion
            id="flowRegion2956"><rect
              y="212.66591"
              x="281.42856"
              height="61.42857"
              width="170"
-             id="rect2958" /></flowRegion><flowPara
-           id="flowPara2171">store</flowPara></flowRoot>      <rect
+             id="rect2958"
+             style="text-anchor:start;text-align:start;writing-mode:lr;line-height:125%" /></flowRegion><flowPara
+           id="flowPara2214">photo-gallery</flowPara></flowRoot>      <rect
          style="fill:#317fed;fill-opacity:1;stroke:#060000;stroke-width:2.30182266;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect2175"
          width="118.21779"
          height="111.27543"
-         x="491.60019"
-         y="247.75989"
+         x="492.31448"
+         y="342.04559"
          rx="7.1507306"
          ry="9.2311935" />
       <flowRoot
          xml:space="preserve"
          id="flowRoot2177"
-         transform="translate(223.8585,41.670449)"><flowRegion
+         transform="translate(224.57279,135.95616)"
+         style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start"><flowRegion
            id="flowRegion2179"><rect
              id="rect2181"
              width="170"
              height="61.42857"
              x="281.42856"
-             y="212.66591" /></flowRegion><flowPara
-           id="flowPara2183">ufs</flowPara></flowRoot>      <path
+             y="212.66591"
+             style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
+           id="flowPara2216">gallery</flowPara></flowRoot>      <path
          style="fill:#5b9d05;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 474.29877,279.45598 L 507.63381,279.45598 L 513.69472,292.58796 L 506.62366,304.7098 L 474.29877,304.7098 L 481.87492,292.58796 L 474.29877,279.45598 z "
+         d="M 475.01306,373.74169 L 508.3481,373.74169 L 514.40901,386.87367 L 507.33795,398.99551 L 475.01306,398.99551 L 482.58921,386.87367 L 475.01306,373.74169 z "
          id="path2187" />
-      <rect
-         style="fill:#317fed;fill-opacity:1;stroke:#060000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect2191"
-         width="115.66247"
-         height="85.862968"
-         x="493.07068"
-         y="503.27759"
-         rx="6.9961648"
-         ry="7.1230249" />
-      <flowRoot
-         xml:space="preserve"
-         id="flowRoot2193"
-         transform="translate(225.47992,297.33908)"><flowRegion
-           id="flowRegion2195"><rect
-             id="rect2197"
-             width="170"
-             height="61.42857"
-             x="281.42856"
-             y="212.66591" /></flowRegion><flowPara
-           id="flowPara2199">ShoppingCart</flowPara></flowRoot>      <path
-         style="fill:#5b9d05;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 475.92019,535.12461 L 509.25523,535.12461 L 515.31614,548.25659 L 508.24508,560.37843 L 475.92019,560.37843 L 483.49634,548.25659 L 475.92019,535.12461 z "
-         id="path2203" />
-      <rect
-         style="fill:#317fed;fill-opacity:1;stroke:#060000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect2207"
-         width="115.66247"
-         height="85.862968"
-         x="761.44415"
-         y="391.31604"
-         rx="6.9961648"
-         ry="7.1230249" />
-      <flowRoot
-         xml:space="preserve"
-         id="flowRoot2209"
-         transform="translate(487.8534,185.37751)"><flowRegion
-           id="flowRegion2211"><rect
-             id="rect2213"
-             width="170"
-             height="61.42857"
-             x="281.42856"
-             y="212.66591" /></flowRegion><flowPara
-           id="flowPara2215">CurrencyConverter</flowPara></flowRoot>      <path
-         style="fill:#5b9d05;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 744.29367,423.16304 L 777.62871,423.16304 L 783.68962,436.29502 L 776.61856,448.41686 L 744.29367,448.41686 L 751.86982,436.29502 L 744.29367,423.16304 z "
-         id="path2219" />
       <rect
          style="opacity:1;fill:#0064ff;fill-opacity:1;stroke:#000000;stroke-width:0.9612025;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect2223"
@@ -196,47 +155,22 @@
          sodipodi:absref="C:\simon\tuscany\evangelism\whitepapers\shoppingcart.png"
          xlink:href="C:\simon\tuscany\evangelism\whitepapers\shoppingcart.png" />
       <image
-         y="270.52304"
-         x="526.42859"
+         y="364.80875"
+         x="527.14288"
          id="image3342"
          height="78.571434"
          width="58.57143"
          sodipodi:absref="C:\simon\tuscany\evangelism\whitepapers\shoppingcart.png"
          xlink:href="C:\simon\tuscany\evangelism\whitepapers\shoppingcart.png" />
       <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 242.85714,374.80877 C 245.71429,374.80877 345.71429,374.80877 345.71429,374.80877 L 345.71429,291.95162 L 481.42858,291.95162"
-         id="path3348"
-         sodipodi:nodetypes="cccc" />
-      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 210.71429,406.95163 L 345,406.95163 L 345,437.66591 L 481.42857,437.66591"
-         id="path3350"
-         sodipodi:nodetypes="cccc" />
-      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 210.71429,439.09448 L 325.71429,439.09448 L 325.71429,548.3802 L 482.85714,548.3802"
-         id="path3352"
-         sodipodi:nodetypes="cccc" />
-      <path
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="M 626.42857,436.23734 C 750,437.66591 752.14286,436.23734 752.14286,436.23734"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.98866588px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 625.70862,383.37452 C 744.37642,384.82859 746.43425,383.37452 746.43425,383.37452"
          id="path3354"
          sodipodi:nodetypes="cc" />
       <flowRoot
          xml:space="preserve"
-         id="flowRoot3356"
-         transform="translate(-94.285714,25)"><flowRegion
-           id="flowRegion3358"><rect
-             id="rect3360"
-             width="142.14285"
-             height="21.428572"
-             x="655"
-             y="349.80878" /></flowRegion><flowPara
-           id="flowPara3362">CurrenyCode</flowPara></flowRoot>      <flowRoot
-         xml:space="preserve"
          id="flowRoot3364"
-         transform="translate(-250.76562,-76.210859)"><flowRegion
+         transform="translate(-199.33705,8.0748553)"><flowRegion
            id="flowRegion3366"><rect
              id="rect3368"
              width="142.14285"
@@ -246,59 +180,47 @@
            id="flowPara3370">HTTP</flowPara></flowRoot>      <flowRoot
          xml:space="preserve"
          id="flowRoot3372"
-         transform="translate(-273.62277,70.931998)"><flowRegion
+         transform="translate(9.9486586,3.0748553)"><flowRegion
            id="flowRegion3374"><rect
              id="rect3376"
              width="142.14285"
              height="21.428572"
              x="655"
              y="349.80878" /></flowRegion><flowPara
-           id="flowPara3378">JSONRPC</flowPara></flowRoot>      <flowRoot
-         xml:space="preserve"
-         id="flowRoot3380"
-         transform="translate(-243.62277,183.07485)"><flowRegion
-           id="flowRegion3382"><rect
-             id="rect3384"
-             width="142.14285"
-             height="21.428572"
-             x="655"
-             y="349.80878" /></flowRegion><flowPara
-           id="flowPara3386">Atom</flowPara></flowRoot>    </g>
+           id="flowPara3378">JSONRPC</flowPara></flowRoot>      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.17523563px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 246.15904,386.72177 C 481.89588,387.75606 485.98382,386.72177 485.98382,386.72177"
+         id="path2220"
+         sodipodi:nodetypes="cc" />
+    </g>
     <rect
        style="fill:#317fed;fill-opacity:1;stroke:#060000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2988"
        width="115.66247"
        height="85.862968"
-       x="491.56897"
-       y="392.70135"
+       x="728.71185"
+       y="338.41565"
        rx="6.9961648"
        ry="7.1230249" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot2966"
-       transform="translate(223.97819,186.76283)"><flowRegion
+       transform="translate(461.12105,132.47712)"
+       style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start"><flowRegion
          id="flowRegion2968"><rect
            id="rect2970"
            width="170"
            height="61.42857"
            x="281.42856"
-           y="212.66591" /></flowRegion><flowPara
-         id="flowPara2972">Catalog</flowPara></flowRoot>    <rect
-       style="opacity:1;fill:#fff62c;fill-opacity:1;stroke:#060000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect3006"
-       width="21.718224"
-       height="20.708065"
-       x="537.53094"
-       y="377.04398"
-       rx="10.859112"
-       ry="0" />
-    <path
+           y="212.66591"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
+         id="flowPara2218">Album</flowPara></flowRoot>    <path
        style="fill:#5b9d05;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 474.41846,424.54836 L 507.7535,424.54836 L 513.81441,437.68034 L 506.74335,449.80218 L 474.41846,449.80218 L 481.99461,437.68034 L 474.41846,424.54836 z "
+       d="M 711.56132,370.26264 L 744.89636,370.26264 L 750.95727,383.39462 L 743.88621,395.51646 L 711.56132,395.51646 L 719.13747,383.39462 L 711.56132,370.26264 z "
        id="path3017" />
     <path
        style="fill:#ae62bf;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 587.6709,422.71008 L 621.00594,422.71008 L 627.06685,435.84206 L 619.99579,447.9639 L 587.6709,447.9639 L 595.24705,435.84206 L 587.6709,422.71008 z "
+       d="M 588.38519,369.13865 L 621.72023,369.13865 L 627.78114,382.27063 L 620.71008,394.39247 L 588.38519,394.39247 L 595.96134,382.27063 L 588.38519,369.13865 z "
        id="path3019" />
   </g>
 </svg>
