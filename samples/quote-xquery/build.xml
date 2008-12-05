@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="sample-quote-xquery" default="compile">
+<project name="quote-xquery" default="compile">
     <property name="test.class" value="xquery.quote.XQueryQuoteClient" />
     <property name="test.server.class" value="xquery.quote.XQueryQuoteServer" />
     <property name="test.jar" value="sample-quote-xquery.jar" />
@@ -34,6 +34,16 @@
     </path>
 
     <target name="generate-sdo" depends="init">
+        <java classname="org.apache.tuscany.sdo.generate.XSD2JavaGenerator" fork="true">
+            <arg value="-targetDirectory" />
+            <arg value="target/sdo-source" />
+            <arg value="-noNotification" />
+            <!-- Make sure the -noUnsettable is not used, otherwise, the SDO cannot be
+            properly transformed to Node as some properties are treated as unset -->
+            <arg value="src/main/resources/wsdl/quotejoin.wsdl" />
+
+            <classpath refid="project.classpath" />
+        </java>
         <java classname="org.apache.tuscany.sdo.generate.XSD2JavaGenerator" fork="true">
             <arg value="-targetDirectory" />
             <arg value="target/sdo-source" />
