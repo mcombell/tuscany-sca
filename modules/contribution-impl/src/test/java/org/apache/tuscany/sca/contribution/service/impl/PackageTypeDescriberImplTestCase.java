@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.contribution.services;
+package org.apache.tuscany.sca.contribution.service.impl;
 
 import java.net.URL;
 
