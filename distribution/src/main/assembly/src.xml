@@ -75,6 +75,7 @@
     		<exclude>**/surefire*</exclude>
     		<exclude>**/cobertura.ser</exclude>
     		<exclude>**/log/*.dat</exclude>
+    		<exclude>**/orbtrc.*.txt</exclude>
     		<exclude>bin</exclude>
     		<exclude>bin/*</exclude>
     		<exclude>**/var/journal</exclude>
