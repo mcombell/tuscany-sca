@@ -156,6 +156,8 @@
                 <exclude>modules/core/src/main/java/org/apache/tuscany/sca/core/work/**/*</exclude>
 		    <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work</exclude>
                 <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work/**/*</exclude>
+                <exclude>modules/implementation-openjpa/test/log</exclude>
+                <exclude>modules/implementation-openjpa/test/log/**/*</exclude>
                 <exclude>samples/old</exclude>
                 <exclude>samples/old/**/*</exclude>
                 <exclude>samples/calculator-distributed/work</exclude>
@@ -213,7 +215,11 @@
                 <exclude>demos/bigbank-account/src/main/resources/web/dojo</exclude> 
                 <exclude>demos/bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
                 <exclude>demos/secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo</exclude> 
-                <exclude>demos/secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo/**/*</exclude> 
+                <exclude>demos/secure-bigbank/secure-bigbank-account/src/main/resources/web/dojo/**/*</exclude>
+                <exclude>tools/eclipse/plugins/core/org/apache/tuscany/sca/core/log</exclude>
+                <exclude>tools/eclipse/plugins/core/org/apache/tuscany/sca/core/log/**/*</exclude>
+                <exclude>tools/eclipse34/plugins/core/org/apache/tuscany/sca/plugin/core/log</exclude>
+                <exclude>tools/eclipse34/plugins/core/org/apache/tuscany/sca/plugin/core/log/**/*</exclude>
                 <exclude>*/**/derby.log</exclude>
                 <exclude>*/**/*.svg</exclude>
                 <exclude>*/**/*.ruleset</exclude>
