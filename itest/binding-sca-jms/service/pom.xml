@@ -26,6 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>itest-binding-sca-jms-service</artifactId>
+    <name>Apache Tuscany SCA iTest JMS SCA Binding Service</name>
 
     <dependencies>
         <dependency>

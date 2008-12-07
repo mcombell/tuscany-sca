@@ -58,6 +58,9 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
+                <!-- 
+                <module>binding-sca-jms</module> 
+                -->
                 <module>bpel</module>
                 <module>builder</module>
                 <module>callablereferences</module>
@@ -73,10 +76,7 @@
                 <module>component-type</module>
                 <module>contribution</module>
                 <module>contribution-multiple</module>
-                <module>contribution-import-export</module>
-                <!-- 
-                <module>contribution-classloader</module> 
-                -->
+                <module>contribution-import-export</module>                
                 <module>conversations</module>
                 <module>corba</module>
                 <module>conversations-ws</module>

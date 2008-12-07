@@ -27,7 +27,7 @@
     </parent>
     <artifactId>itest-binidng-sca-jms</artifactId>
     <packaging>pom</packaging>
-    <name>Apache Tuscany SCA JMS SCA Binding Integration Tests</name>
+    <name>Apache Tuscany SCA iTest JMS SCA Binding</name>
 
     <modules>
        <module>service</module>
