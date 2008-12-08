@@ -142,15 +142,23 @@ public class JavaInterfaceIntrospectorImpl {
         return rawType;
     }
 
+    private void collectGenericInterfaces(Class<?> clazz, Set<Type> genericInterfaces) {
+        for (Type t : clazz.getGenericInterfaces()) {
+            genericInterfaces.add(t);
+        }
+        Class<?>[] interfaces = clazz.getInterfaces();
+        for(Class<?> c : interfaces){
+            collectGenericInterfaces(c, genericInterfaces);
+        }
+    }
+
     private <T> List<Operation> getOperations(Class<T> clazz,
                                               boolean remotable,
                                               boolean conversational,
                                               String ns) throws InvalidInterfaceException {
 
         Set<Type> genericInterfaces = new HashSet<Type>();
-        for (Type t : clazz.getGenericInterfaces()) {
-            genericInterfaces.add(t);
-        }
+        collectGenericInterfaces(clazz, genericInterfaces);
         Map<String, Type> typeBindings = new HashMap<String, Type>();
         for (Type genericInterface : genericInterfaces) {
             if (genericInterface instanceof ParameterizedType) {
