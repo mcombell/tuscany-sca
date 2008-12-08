@@ -1,3 +1,68 @@
+Changes With Apache Tuscany SCA 1.4 December 2008 
+==================================================
+
+- Features and/or Enhancements
+
+Core
+    * Enhancements to Spring integration
+          o Support for Spring version 2.5.5
+          o Spring Schema location changed to http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd
+          o Support for Implementation Policies to Spring Components
+          o Support for basic SCA annotations with Spring beans
+          o Improved user guide documentation
+    * Axis2 Runtime
+          o Support for Axis2 version 1.4.1
+          o Support for MTOM message optimization
+    * JMS
+          o Support for SCA callbacks with JMS binding
+          o Support for new subscription Header element from latest WD3 spec draft
+          o Support for @requestConnection / @responseConnection
+          o Improved user guide documentation
+    * Tracing
+          o Support for Aspect Oriented Tracing
+
+Web 2.0 Extensions
+    * ATOM Binding
+          o Support for eTags, last-modified headers, complete support for location header
+          o Support for streaming postMedia and putMedia
+          o Support for negotiated content types
+    * HTTP Binding
+          o Support for eTags
+
+Other Extensions
+    * Corba Binding (GSoC)
+    * GData Binding (GSoC)
+
+Tools
+    * Tuscany Eclipse Plugins enhancements to be compatible with new Eclipse Ganymede release
+
+Samples/Tutorial/Demos
+    * Improved simple-bigbank-spring samples to demonstrate various SCA bindings with Spring
+
+Fix the following JIRA issues (http://issues.apache.org/jira/browse/TUSCANY):
+  * TUSCANY-2585 	 Support for <import/> tag in Spring Application Context 	 
+  * TUSCANY-2623 	Atom binding JavaScript client needs model to XML serialization 	 
+  * TUSCANY-2634 	Implementation Policies for implementation.spring 	 
+  * TUSCANY-2654 	Support for SCA Annotations in Spring Implementation 	 
+  * TUSCANY-2655 	Create itest for SCA annotations with Spring Implementation 	 
+  * TUSCANY-2656 	More improvement to the spring itest 	 
+  * TUSCANY-2665 	Issue noticed in itest-contribution while starting the CalculatorClient 	 
+  * TUSCANY-2666 	Improvement in Spring BigBank Sample test 	 
+  * TUSCANY-2672 	Compilation Error Building SCA CORBA Binding Runtime 	 
+  * TUSCANY-2455 	Exception not thrown on duplicate component names within a composite 	 
+  * TUSCANY-2550 	Ensure Spring Implementation works with binding.sca/jsonrpc/rss/atom 	 
+  * TUSCANY-2549 	Documentation on Spring Implementation for SCA Java User Guide 	 
+  * TUSCANY-2613 	Upgrade Implementation Spring version from 2.0.8 to 2.5.5 	 
+  * TUSCANY-2641 	Enhancements to Tuscany Logging and tracing 	 
+  * TUSCANY-2567 	Support for streaming postMedia and putMedia in Atom binding 	 
+  * TUSCANY-2537 	Demonstrate Atom Binding end to end caching (ETag, Last-modified use) in 	 
+  * TUSCANY-2504 	Atom binding support for negotiated content types 	 
+  * TUSCANY-2516 	HTTP binding should support etag and if-modified headers 	 
+  * TUSCANY-2597 	Generation of AtomPub workspace/service document 	 
+  * TUSCANY-2477 	Atom binding support for eTags, last-modified header 	 
+  * TUSCANY-2487 	Test Cases for different data type supported by JSONRPC binding 	 
+  * TUSCANY-2517, TUSCANY-2520, TUSCANY-2521, TUSCANY-2522 	Improvements in spring big bank sample 
+
 Changes With Apache Tuscany SCA 1.3.3 Xxxxxxx 2008 
 ==================================================
 
