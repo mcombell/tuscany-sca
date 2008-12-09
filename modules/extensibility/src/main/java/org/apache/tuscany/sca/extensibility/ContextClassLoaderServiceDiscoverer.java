@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 /**
  * A ServiceDiscoverer that find META-INF/services/... using the Context ClassLoader.
  *
- * @version $Rev: $ $Date: $
+ * @version $Rev$ $Date$
  */
 public class ContextClassLoaderServiceDiscoverer implements ServiceDiscoverer {
     private static final Logger logger = Logger.getLogger(ContextClassLoaderServiceDiscoverer.class.getName());

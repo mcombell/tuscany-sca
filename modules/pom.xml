@@ -55,8 +55,10 @@
                 <module>binding-atom-abdera</module>
                 <module>binding-gdata</module>
                 <module>binding-gdata-runtime</module>
+                <!--
                 <module>binding-gdata2</module>
                 <module>binding-gdata2-runtime</module>
+		    -->
                 <module>binding-http</module>
                 <module>binding-http-runtime</module>
                 <module>binding-jms</module>
@@ -90,7 +92,7 @@
                 <module>core</module>
                 <module>core-databinding</module>
                 <module>core-spi</module>
-                <module>core-spring</module>
+                <!--module>core-spring</module-->
                 <module>data-api</module>
                 <module>databinding</module>
                 <module>databinding-axiom</module>
@@ -100,10 +102,10 @@
                 <module>databinding-sdo-axiom</module>
                 <module>databinding-json</module>
                 <module>databinding-saxon</module>
-                <module>databinding-xmlbeans</module>
+                <!--module>databinding-xmlbeans</module-->
                 <module>databinding-fastinfoset</module>
-                <module>databinding-xstream</module>
-                <module>data-engine-helper</module>
+                <!--module>databinding-xstream</module-->
+                <!--module>data-engine-helper</module-->
                 <module>definitions</module>
                 <module>definitions-xml</module>
                 <module>domain-manager</module>
@@ -113,16 +115,16 @@
                 <module>extensibility-equinox</module>
                 <module>extension-helper</module>
                 <module>host-corba</module>
-                <module>host-corba-jee</module>
+                <!-- module>host-corba-jee</module -->
                 <module>host-corba-jse</module>
                 <module>host-corba-jse-tns</module>
                 <module>host-ejb</module>
                 <module>host-embedded</module>
                 <module>host-http</module>
-                <module>host-openejb</module>
+                <!-- module>host-openejb</module -->
                 <module>host-rmi</module>
                 <module>host-webapp</module>
-                <module>host-webapp-junit</module>
+                <!-- module>host-webapp-junit</module -->
                 <module>host-jetty</module>
                 <module>host-tomcat</module>
                 <module>interface</module>
@@ -133,8 +135,8 @@
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
                 <module>implementation-bpel-ode</module>
-                <module>implementation-bpel-jbpm</module>
-                <module>implementation-data-xml</module>
+                <!-- module>implementation-bpel-jbpm</module>
+                <module>implementation-data-xml</module -->
                 <module>implementation-ejb</module>
                 <module>implementation-java</module>
                 <module>implementation-java-xml</module>
@@ -148,21 +150,21 @@
                 <module>implementation-resource-runtime</module>
                 <module>implementation-script</module>
                 <module>implementation-spring</module>
-                <module>implementation-web</module>
-                <module>implementation-web-runtime</module>
+                <!-- module>implementation-web</module>
+                <module>implementation-web-runtime</module -->
                 <module>implementation-widget</module>
                 <module>implementation-widget-runtime</module>
                 <module>implementation-xquery</module>
                 <module>monitor</module>
                 <module>node-api</module>
-                <module>node-dynamic</module>
+                <!-- module>node-dynamic</module -->
                 <module>node-impl</module>
                 <module>node-launcher</module>
                 <!--
-                <module>node-launcher-equinox</module>
-                -->
+                <module>node-launcher-equinox</module>                
                 <module>node-launcher-osgi</module>
-                <module>node-launcher-webapp</module>
+                -->
+                <!-- module>node-launcher-webapp</module -->
                 <module>node-manager</module>
                 <module>osgi-runtime</module>
                 <module>policy</module>
@@ -173,8 +175,8 @@
                 <module>policy-security</module>
                 <module>policy-security-jsr250</module>
                 <module>policy-transaction</module>
-                <module>runtime</module>
-                <module>runtime-tomcat</module>
+                <!-- module>runtime</module>
+                <module>runtime-tomcat</module -->
                 <!--module>runtime-war</module-->
                 <module>sca-api</module>
                 <module>workspace</module>

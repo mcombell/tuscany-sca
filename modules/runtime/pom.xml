@@ -156,11 +156,11 @@
             <artifactId>tuscany-core-spi</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-core-spring</artifactId>
             <version>${pom.version}</version>
-        </dependency>
+        </dependency -->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-databinding</artifactId>
