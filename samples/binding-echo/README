@@ -22,12 +22,11 @@ java -cp ../../lib/tuscany-sca-manifest.jar:../binding-echo-extension/target/sam
 
 This looks like a long command. The three things we add to the classpath are
 
-tuscany-sca-manifest.jar - all of the standard Tuscany SCA runtime and 
-                           extension classes
+tuscany-sca-manifest.jar           - all of the standard Tuscany SCA runtime and 
+                                     extension classes
 sample-binding-echo-extension.jar  - the new echo binding extension implementation
-sample-binding-echo - the application that uses the echo binding                         
+sample-binding-echo                - the application that uses the echo binding                         
 
-Note: this sample currently is not working on Linux
 
 Sample Overview
 ---------------
