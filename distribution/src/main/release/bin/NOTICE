@@ -125,3 +125,12 @@ in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the i
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
     [1] http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+
+This product includes/uses htmlparser (http://about.validator.nu/htmlparser/)
+ * Copyright (c) 2005, 2006, 2007 Henri Sivonen
+ * Copyright (c) 2007-2008 Mozilla Foundation
+ * Portions of comments Copyright 2004-2007 Apple Computer, Inc., Mozilla 
+ * Foundation, and Opera Software ASA.
+ * Copyright (c) 2001-2003 Thai Open Source Software Center Ltd
+ * All rights reserved.
+ * Copyright (c) 2000, 2006, 2008 Ian Hickson and various contributors

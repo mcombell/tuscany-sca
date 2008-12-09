@@ -240,13 +240,12 @@ The following components come under Apache Software License 2.0
  axiom-dom-1.2.7.jar
  axiom-impl-1.2.7.jar
  axis2-adb-1.4.1.jar
+ axis2-ant-1.4.jar
  axis2-codegen-1.4.1.jar
  axis2-java2wsdl-1.4.1.jar
  axis2-kernel-1.4.1.jar
  axis2-mtompolicy-1.4.1.jar
- bcel-5.2.jar
  bsf-all-3.0-beta2.jar
- camel-core-1.3.0.jar
  cglib-nodep-2.1_3.jar
  commons-collections-3.1.jar
  commons-codec-1.3.jar
@@ -256,8 +255,11 @@ The following components come under Apache Software License 2.0
  commons-jexl-1.1.jar
  commons-lang-2.1.jar
  commons-logging-1.1.1.jar
- commons-logging-api-1.1.jar
  derby-10.3.1.4.jar
+ gdata-client-1.0.jar
+ gdata-client-meta-1.0.jar
+ gdata-core-1.0.jar
+ gdata-media-1.0.jar
  geronimo-common-1.2-beta.jar
  geronimo-commonj_1.1_spec-1.0.jar
  geronimo-connector-1.2-beta.jar
@@ -285,13 +287,12 @@ The following components come under Apache Software License 2.0
  geronimo-util-1.2-beta.jar
  httpcore-4.0-beta1.jar
  httpcore-nio-4.0-beta1.jar
- httpcore-niossl-4.0-beta1.jar
  jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
  json-rpc-1.0.jar
  log4j-1.2.12.jar
- logkit-1.0.1.jar
+ mex-1.41-impl.jar
  neethi-2.0.4.jar
  ode-bpel-api-1.1.1.jar
  ode-bpel-compiler-1.1.1.jar
@@ -309,6 +310,7 @@ The following components come under Apache Software License 2.0
  ode-utils-1.1.1.jar
  openjpa-all-0.9.7-incubating.jar
  openjpa-persistence-0.9.7-incubating.jar
+ opensaml-1.1.jar
  org.apache.felix.bundlerepository-1.0.3.jar
  org.apache.felix.framework-1.0.4.jar
  org.apache.felix.main-1.0.4.jar
@@ -322,6 +324,8 @@ The following components come under Apache Software License 2.0
  spring-context-2.5.5.jar
  spring-core-2.5.5.jar
  tranql-connector-1.1.jar
+ tuscany-sca-all-1.4.jar 
+ tuscany-sca-manifest.jar
  tuscany-sdo-api-r2.1-1.1.1.jar
  tuscany-sdo-impl-1.1.1.jar
  tuscany-sdo-lib-1.1.1.jar
@@ -335,6 +339,7 @@ The following components come under Apache Software License 2.0
  xercesImpl-2.8.1.jar
  xml-apis-1.3.03.jar
  xmlbeans-2.3.0.jar
+ xmlParserAPIs-2.6.0.jar
  xml-resolver-1.1.jar
  xmlsec-1.4.2.jar
  XmlSchema-1.4.2.jar
@@ -449,6 +454,9 @@ The EMF jars;
    ecore-change-2.2.3.jar
    ecore-xmi-2.2.3.jar
    xsd-2.2.3.jar
+And AspectJ jars:
+   aspectjlib-1.6.1.jar
+   aspectjrt-1.6.1.jar
 
 Eclipse Public License - v 1.0
 
@@ -1494,7 +1502,6 @@ activation-1.1.jar,
 jaxb-api-2.1.jar, 
 jaxb-impl-2.1.7.jar, 
 jaxb-xjc-2.1.7.jar, 
-jaxb2-reflection-2.1.4.jar,
 jsr181-api-1.0-MR1.jar, 
 jsr250-api-1.0.jar, 
 jaxws-api-2.1.jar, 
@@ -2503,4 +2510,96 @@ The name and trademarks of copyright holders may NOT be used in advertising or p
 pertaining to the software without specific, written prior permission. Title to copyright 
 in this software and any associated documentation will at all times remain with copyright 
 holders.
+
+==========================================================================================
+
+The htmlparser-1.0.5.jar includes files under the following licenses:
+
+This is for the HTML parser as a whole except the rewindable input stream,
+and the Live DOM Viewer. 
+For the copyright notices for individual files, please see individual files.
+
+/*
+ * Copyright (c) 2005, 2006, 2007 Henri Sivonen
+ * Copyright (c) 2007-2008 Mozilla Foundation
+ * Portions of comments Copyright 2004-2007 Apple Computer, Inc., Mozilla 
+ * Foundation, and Opera Software ASA.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a 
+ * copy of this software and associated documentation files (the "Software"), 
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
+ 
+The following license is for the rewindable input stream.
+
+/*
+ * Copyright (c) 2001-2003 Thai Open Source Software Center Ltd
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without 
+ * modification, are permitted provided that the following conditions 
+ * are met:
+ *
+ *  * Redistributions of source code must retain the above copyright 
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above 
+ *    copyright notice, this list of conditions and the following 
+ *    disclaimer in the documentation and/or other materials provided 
+ *    with the distribution.
+ *  * Neither the name of the Thai Open Source Software Center Ltd nor 
+ *    the names of its contributors may be used to endorse or promote 
+ *    products derived from this software without specific prior 
+ *    written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+ * REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+The following license applies to the Live DOM Viewer:
+
+Copyright (c) 2000, 2006, 2008 Ian Hickson and various contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+==========================================================================================
 
