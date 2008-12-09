@@ -97,7 +97,7 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
         String uri = implementation.getURI();
         if (uri != null) {
             ComponentType componentType = assemblyFactory.createComponentType();
-            componentType.setURI(uri + ".componentType");
+            componentType.setURI("web.componentType");
             componentType = resolver.resolveModel(ComponentType.class, componentType);
             if (!componentType.isUnresolved()) {
                 
