@@ -46,4 +46,6 @@
     <include schemaLocation="tuscany-sca-implementation-widget.xsd"/>
     <include schemaLocation="tuscany-sca-implementation-xquery.xsd"/>
     
+    <include schemaLocation="tuscany-sca-contributions.xsd"/>
+    
 </schema>
