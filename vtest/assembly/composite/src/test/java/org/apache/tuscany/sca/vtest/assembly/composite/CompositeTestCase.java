@@ -158,7 +158,7 @@ public class CompositeTestCase {
      * <p>
      * OSOA specification is the same with OASIS in this function.
      */
-    @Ignore("TUSCANY-????")
+    @Ignore("TUSCANY-2701")
     @Test(expected = ServiceRuntimeException.class)
     public void ASM60006() throws Exception {
         initDomain("nonuniquereference_outer.composite");
