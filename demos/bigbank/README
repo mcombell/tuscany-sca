@@ -16,7 +16,6 @@ Bigbank-calculator is a calculator application which handles add, subtract, mult
 To run the bigbank-calculator composite and make it available as a service for this demo do the following:
 
 cd bigbank-calculator
-ant compile  
 ant run
 
 .. Leave the server running
@@ -30,7 +29,6 @@ A very simple web services based stock quote application which returns random
 stock quotes on request. Please note that the stockquote service is not live and is implemented instead to allow for this application to always run without dependency on the availability of a webservice.
 
 cd bigbank-stockquote
-ant compile  
 ant run
 
 .. Leave the server running
@@ -54,21 +52,10 @@ bigbank-calculator services.
 
 Start bigbank-account in the following way:
 
-i ) Compile the bigbank-account as follows :
-	
-	cd bigbank-account					
-	ant compile
-	
-ii) Now start the bigbank service as follows :
-	
 	cd bigbank
-	ant compile 
 	ant run
 
 	.. Leave the server running
-
-Note that 'ant compile' needs to be done the first time you run this demo out ofthe  binary distribution. 
-No need to do 'ant compile' from there on.
 
 Bigbank and the SCA Policies
 ----------------------------
@@ -105,7 +92,7 @@ The front end of this demo application is a web app which users Json/RPC to comm
 
 To try the app out point you browser at:
 
-http://localhost:8080/AccountJSON.html
+http://localhost:8085/AccountJSON.html
 
 This should display an interface with a single button that goes and retrieves 
 a single set of account details exercising services across the three running 
