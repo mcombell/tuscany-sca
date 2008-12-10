@@ -178,6 +178,7 @@
                 <module>runtime-tomcat</module>
                 <!--module>runtime-war</module-->
                 <module>sca-api</module>
+                <module>sca-api-extension</module>
                 <module>workspace</module>
                 <module>workspace-impl</module>
                 <module>workspace-xml</module>

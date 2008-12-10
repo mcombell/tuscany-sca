@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.implementation.web.runtime;
 
 import java.util.Collection;
 
+import org.apache.tuscany.sca.api.ComponentContextExtension;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ComponentContext;
@@ -77,11 +78,11 @@ public class ComponentContextProxy implements ComponentContext {
     }
 
     public <B> Collection<ServiceReference<B>> getServiceReferences(Class<B> businessInterface, String referenceName) {
-        return getComponentContext().getServiceReferences(businessInterface, referenceName);
+        return ((ComponentContextExtension)getComponentContext()).getServiceReferences(businessInterface, referenceName);
     }
 
     public <B> Collection<B> getServices(Class<B> businessInterface, String referenceName) {
-        return getComponentContext().getServices(businessInterface, referenceName);
+        return ((ComponentContextExtension)getComponentContext()).getServices(businessInterface, referenceName);
     }
 
 }

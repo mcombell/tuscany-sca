@@ -24,6 +24,7 @@ import crawler.CrawlerController;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.tuscany.sca.api.ComponentContextExtension;
 import org.osoa.sca.ComponentContext;
 import org.osoa.sca.annotations.AllowsPassByReference;
 import org.osoa.sca.annotations.Context;
@@ -65,7 +66,7 @@ public class CrawlerControllerImpl implements CrawlerController
      */
     public Crawler findCrawler(String crawlerId)
     {
-        Collection<Crawler> crawlers = componentContext.getServices(Crawler.class, "crawlers");
+        Collection<Crawler> crawlers = ((ComponentContextExtension)componentContext).getServices(Crawler.class, "crawlers");
         for (Crawler crawler : crawlers)
         {
             String id = crawler.getCrawlerId();
