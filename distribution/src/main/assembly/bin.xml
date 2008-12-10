@@ -261,16 +261,8 @@
                 <exclude>alert-aggregator-webapp/target/**/*</exclude>
                 <exclude>bigbank/src/main/resources/web/dojo</exclude>
                 <exclude>bigbank/src/main/resources/web/dojo/**/*</exclude>
-                <exclude>bigbank/target</exclude>
-                <exclude>bigbank/target/**/*</exclude>
                 <exclude>bigbank-account/src/main/resources/web/dojo</exclude> 
                 <exclude>bigbank-account/src/main/resources/web/dojo/**/*</exclude>
-                <exclude>bigbank-account/target</exclude>
-                <exclude>bigbank-account/target/**/*</exclude>
-                <exclude>bigbank-calculator/target</exclude>
-                <exclude>bigbank-calculator/target/**/*</exclude>
-                <exclude>bigbank-stockquote/target</exclude>
-                <exclude>bigbank-stockquote/target/**/*</exclude>
                 <exclude>helloworld-ws-sdo/work</exclude>
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck</exclude>
