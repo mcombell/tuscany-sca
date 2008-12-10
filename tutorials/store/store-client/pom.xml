@@ -111,6 +111,9 @@
                 <version>1.4</version>
                 <executions>
                     <execution>
+                        <configuration>
+                            <pathToRootDir>../../..</pathToRootDir>
+                        </configuration>
                         <goals>
                             <goal>generate</goal>
                         </goals>

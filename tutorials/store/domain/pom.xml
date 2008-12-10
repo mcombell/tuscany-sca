@@ -159,6 +159,7 @@
                     <execution>
                         <configuration>
                             <mainClass>launch.LaunchTutorialAdmin</mainClass>
+                            <pathToRootDir>../../..</pathToRootDir>
                         </configuration>
                         <goals>
                             <goal>generate</goal>

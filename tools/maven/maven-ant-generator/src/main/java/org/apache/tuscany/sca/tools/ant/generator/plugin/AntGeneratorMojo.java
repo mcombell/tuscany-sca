@@ -124,7 +124,14 @@ public class AntGeneratorMojo extends AbstractMojo {
      * The build-dependency.xml file to generate.
      * @parameter expression="${basedir}/build-dependency.xml"
      */
-    private String buildDependencyFile;    
+    private String buildDependencyFile;   
+    
+    /**
+     * The path to the root dir so that build.xml files can be generated at any level 
+     * in the distribution hierarchy
+     * @parameter expression="../.."
+     */
+    private String pathToRootDir; 
     
     public void execute() throws MojoExecutionException {
         if ((buildDependencyFileOnly != null) &&
@@ -309,12 +316,12 @@ public class AntGeneratorMojo extends AbstractMojo {
         Collections.sort(otherModules);
 
         // Generate filesets for the tuscany and 3rd party dependencies
-        pw.println("    <fileset id=\"tuscany.jars\" dir=\"../../modules\">");
+        pw.println("    <fileset id=\"tuscany.jars\" dir=\"" + pathToRootDir + "/modules\">");
         for (String name: tuscanyModules) {
             pw.println("        <include name=\"" + name +"\"/>");
         }
         pw.println("    </fileset>");
-        pw.println("    <fileset id=\"3rdparty.jars\" dir=\"../../lib\">");
+        pw.println("    <fileset id=\"3rdparty.jars\" dir=\"" + pathToRootDir + "/lib\">");
         for (String name: otherModules) {
             pw.println("        <include name=\"" + name +"\"/>");
         }
