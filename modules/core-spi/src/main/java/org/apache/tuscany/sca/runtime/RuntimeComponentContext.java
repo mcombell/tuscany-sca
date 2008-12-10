@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.apache.tuscany.sca.api.ComponentContextExtension;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.osoa.sca.CallableReference;
@@ -32,7 +33,7 @@ import org.osoa.sca.ServiceReference;
 /**
  * @version $Rev$ $Date$
  */
-public interface RuntimeComponentContext extends ComponentContext {
+public interface RuntimeComponentContext extends ComponentContextExtension {
     /**
      * Activate the reference (creating runtime wires)
      * @param reference
