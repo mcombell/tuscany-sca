@@ -56,6 +56,13 @@
             <artifactId>tutorial-assets</artifactId>
             <version>1.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-node-runtime</artifactId>
+            <version>1.4</version>
+            <scope>runtime</scope>
+        </dependency>
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
@@ -99,6 +106,7 @@
                 <executions>
                     <execution>
                         <configuration>
+				    <pathToWebappDir>webapp</pathToWebappDir>
                             <pathToRootDir>../../..</pathToRootDir>
                         </configuration>
                         <goals>

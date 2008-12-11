@@ -283,11 +283,16 @@
             <artifactId>tuscany-host-embedded</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <!-- dependency>
+        <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-corba</artifactId>
             <version>${pom.version}</version>
-        </dependency -->
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-host-corba-jse</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-host-http</artifactId>
@@ -690,9 +695,9 @@
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.extension.helper.ImplementationActivator</resource>
                                 </transformer>
-                                <!-- transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
+                                <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.host.corba.CorbaHostExtensionPoint</resource>
-                                </transformer -->
+                                </transformer>
                                 <transformer implementation="org.codehaus.mojo.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.apache.tuscany.sca.host.http.ServletHostExtensionPoint</resource>
                                 </transformer>

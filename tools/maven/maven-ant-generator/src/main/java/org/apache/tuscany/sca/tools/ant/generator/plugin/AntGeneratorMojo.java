@@ -131,7 +131,14 @@ public class AntGeneratorMojo extends AbstractMojo {
      * in the distribution hierarchy
      * @parameter expression="../.."
      */
-    private String pathToRootDir; 
+    private String pathToRootDir;
+    
+    /**
+     * The path to the webapp dir so that build.xml files can be generated at any level 
+     * in the distribution hierarchy
+     * @parameter expression="src/main/webapp"
+     */
+    private String pathToWebappDir;
     
     public void execute() throws MojoExecutionException {
         if ((buildDependencyFileOnly != null) &&
@@ -249,8 +256,8 @@ public class AntGeneratorMojo extends AbstractMojo {
         } else if (packaging.equals("war")) {
             
             // Build a WAR
-            pw.println("        <war destfile=\"target/" + project.getArtifactId() + ".war\" webxml=\"src/main/webapp/WEB-INF/web.xml\">");
-            pw.println("            <fileset dir=\"src/main/webapp\"/>");
+            pw.println("        <war destfile=\"target/" + project.getArtifactId() + ".war\" webxml=\"" + pathToWebappDir + "/WEB-INF/web.xml\">");
+            pw.println("            <fileset dir=\"" + pathToWebappDir + "\"/>");
             pw.println("            <lib refid=\"tuscany.jars\"/>");
             pw.println("            <lib refid=\"3rdparty.jars\"/>");
             pw.println("            <classes dir=\"target/classes\"/>");
