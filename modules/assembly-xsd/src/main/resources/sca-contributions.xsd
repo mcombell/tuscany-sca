@@ -11,10 +11,10 @@
        
     <element name="contribution" type="sca:ContributionType"/>        
     <complexType name="ContributionType">
-         <sequence>
-         	 <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
+         <sequence>         	 
          	 <choice minOccurs="0" maxOccurs="unbounded">
-         	 	 <element name="import" type="sca:ImportType"/>
+		     <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
+         	     <element name="import" type="sca:ImportType"/>
                  <element name="export" type="sca:ExportType"/>
                  <element name="import.java" type="t:ImportJavaType"/>
                  <element name="export.java" type="t:ExportJavaType"/>

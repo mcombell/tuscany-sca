@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.    
 -->
-<project name="photo-gallary" default="compile">
+<project name="photo-gallery" default="compile">
     <property name="test.class" value="launch.LaunchGallery" />
-	<property name="test.jar"   value="sample-photo-gallary.jar" />
+	<property name="test.jar"   value="sample-photo-gallery.jar" />
 	
     <target name="init">
         <mkdir dir="target/classes"/>
@@ -56,13 +56,13 @@
         </java>
     </target>
 	
-    <target name="run">
+    <target name="run" depends="compile">
         <java classname="${test.class}"
               fork="true">
             <classpath>
                 <pathelement path="target/classes"/>
-            	<pathelement location="../../lib/tuscany-sca-manifest.jar"/>
-            	<fileset refid="3rdparty.jars"/>
+                <pathelement location="../../lib/tuscany-sca-manifest.jar"/>
+                <fileset refid="3rdparty.jars"/>
             </classpath>
         </java>    	
     </target>	

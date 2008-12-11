@@ -19,7 +19,6 @@
 -->
 <contribution xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
-	targetNamespace="http://bigbank"
     xmlns:bb="http://bigbank"
     xmlns:bbck="http://bigbank/checkings"
     xmlns:bbsv="http://bigbank/savings"
