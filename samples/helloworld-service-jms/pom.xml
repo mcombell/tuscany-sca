@@ -66,8 +66,8 @@
         
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>apache-activemq</artifactId>
-            <version>4.1.1</version>
+            <artifactId>activemq-all</artifactId>
+            <version>5.2.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.activemq</groupId>
