@@ -231,8 +231,8 @@ The following components come under Apache Software License 2.0
  activeio-2.0-r118.jar
  activeio-core-3.0.0-incubator.jar
  activeio-core-3.1.0-tests.jar
- activemq-core-5.1.0.jar
- apache-activemq-4.1.1.jar
+ activemq-all-5.2.0.jar
+ activemq-core-5.2.0.jar
  addressing-1.3.mar
  annogen-0.1.0.jar
  aopalliance-1.0.jar
