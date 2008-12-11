@@ -18,24 +18,26 @@
  * under the License.
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://assembly-tests"
-	name="Assemby-component-servicewithinterface-Composite">
-
-    <component name="DComponent1">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.impl.DServiceImpl"/>
-                
-        <service name="DService1">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.DService"/>
-           
-        </service> 
-        
-        <service name="DService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.DService"/>
-           
-        </service>      
-        
-        
+	name="binding-resolution" targetNamespace="assembly-tests">
+ 	      
+    <component name="FComponent">
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.impl.FServiceImpl"/>
+		
+		<service name="FService1">
+		    <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.FService"/>
+		</service>
+		
+		<service name="FService2">
+		    <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.FService"/>
+		    
+		</service>
+		
+		<service name="FService3">
+		    <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.FService"/>
+		    <binding.ws uri="http://localhost:8085/FService3"/>
+		</service>
+		
+		
     </component>
     
 </composite>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,23 +20,32 @@
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://assembly-tests"
-	name="Assemby-component-servicewithinterface-Composite">
+	targetNamespace="http://assembly-tests.component.reference"
+	name="Assemby-component">
 
-    <component name="DComponent1">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.impl.DServiceImpl"/>
-                
-        <service name="DService1">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.DService"/>
-           
-        </service> 
+	<component name="ClientComponent">
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientCImpl"/>
         
-        <service name="DService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.DService"/>
-           
-        </service>      
+        <service name="MyClientC">
+           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientC"/>          
+        </service>        
         
+        <reference name="service1" multiplicity="0..1">
+        </reference>       
+        
+        <reference name="service2" multiplicity="0..n"> 
+        </reference>
         
     </component>
     
+        
+    <component name="ServiceComponent">        
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyServiceImpl"/>
+		<service name="MyService">
+           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyService"/>           
+        </service>
+    </component>   
+    
+
 </composite>
+
