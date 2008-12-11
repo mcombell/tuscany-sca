@@ -36,7 +36,7 @@ import org.osoa.sca.annotations.Service;
 @Service(AccountService.class)
 public class AccountServiceImpl implements AccountService {
     private static final String STOCK_QUOTE_REQUEST =
-        "<q:GetQuote xmlns:q=\"http://www.webserviceX.NET/\"><q:symbol>IBM GOOG MSFT</q:symbol></q:GetQuote>";
+        "<q:symbol xmlns:q=\"http://www.webserviceX.NET/\">IBM</q:symbol>";
 
     private XMLInputFactory factory = XMLInputFactory.newInstance();
 
