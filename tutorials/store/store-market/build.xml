@@ -45,10 +45,10 @@
         </delete>
     </target>
 
-    <fileset id="tuscany.jars" dir="../../modules">
+    <fileset id="tuscany.jars" dir="../../../modules">
         <include name="tuscany-sca-api-1.5-SNAPSHOT.jar"/>
     </fileset>
-    <fileset id="3rdparty.jars" dir="../../lib">
+    <fileset id="3rdparty.jars" dir="../../../lib">
     </fileset>
 
 </project>

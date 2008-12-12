@@ -65,6 +65,9 @@
                 <version>1.5-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <configuration>
+                            <pathToRootDir>../../..</pathToRootDir>
+                        </configuration>
                         <goals>
                             <goal>generate</goal>
                         </goals>
