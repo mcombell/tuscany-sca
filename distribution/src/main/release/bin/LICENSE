@@ -229,10 +229,7 @@ The following components come under Apache Software License 2.0
  abdera-parser-0.4.0-incubating.jar
  abdera-server-0.4.0-incubating.jar
  activeio-2.0-r118.jar
- activeio-core-3.0.0-incubator.jar
- activeio-core-3.1.0-tests.jar
  activemq-all-5.2.0.jar
- activemq-core-5.2.0.jar
  addressing-1.3.mar
  annogen-0.1.0.jar
  aopalliance-1.0.jar
@@ -240,7 +237,7 @@ The following components come under Apache Software License 2.0
  axiom-dom-1.2.7.jar
  axiom-impl-1.2.7.jar
  axis2-adb-1.4.1.jar
- axis2-ant-1.4.jar
+ axis-ant-1.4.jar
  axis2-codegen-1.4.1.jar
  axis2-java2wsdl-1.4.1.jar
  axis2-kernel-1.4.1.jar
@@ -287,11 +284,12 @@ The following components come under Apache Software License 2.0
  geronimo-util-1.2-beta.jar
  httpcore-4.0-beta1.jar
  httpcore-nio-4.0-beta1.jar
+ jakarta-regexp-1.4.jar
  jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
  json-rpc-1.0.jar
- log4j-1.2.12.jar
+ log4j-1.2.13.jar
  mex-1.41-impl.jar
  neethi-2.0.4.jar
  ode-bpel-api-1.1.1.jar

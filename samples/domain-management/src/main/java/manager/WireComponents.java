@@ -157,12 +157,6 @@ public class WireComponents {
         Workspace workspace = workspaceFactory.createWorkspace();
         workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
 
-        // Read the sample store contribution
-        URI storeURI = URI.create("store");
-        URL storeURL = new File("./target/sample-domain-management-store.jar").toURI().toURL();
-        Contribution storeContribution = contributionProcessor.read(null, storeURI, storeURL);
-        workspace.getContributions().add(storeContribution);
-
         // Read the sample assets contribution
         URI assetsURI = URI.create("assets");
         URL assetsURL = new File("./target/sample-domain-management-assets.jar").toURI().toURL();
@@ -174,6 +168,12 @@ public class WireComponents {
         URL clientURL = new File("./target/sample-domain-management-client.jar").toURI().toURL();
         Contribution clientContribution = contributionProcessor.read(null, clientURI, clientURL);
         workspace.getContributions().add(clientContribution);
+        
+        // Read the sample store contribution
+        URI storeURI = URI.create("store");
+        URL storeURL = new File("./target/sample-domain-management-store.jar").toURI().toURL();
+        Contribution storeContribution = contributionProcessor.read(null, storeURI, storeURL);
+        workspace.getContributions().add(storeContribution);
 
         // Build the contribution dependencies
         Set<Contribution> resolved = new HashSet<Contribution>();

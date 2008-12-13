@@ -7,19 +7,19 @@
         elementFormDefault="qualified">
        
     <include schemaLocation="sca-core.xsd"/>
-    <import namespace="http://tuscany.apache.org/xmlns/sca/1.0" schemaLocation="tuscany-sca-contributions.xsd"/>
-       
+    <include schemaLocation="tuscany-sca-contributions.xsd"/>
+           
     <element name="contribution" type="sca:ContributionType"/>        
     <complexType name="ContributionType">
-         <sequence>
-         	 <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
+         <sequence>         	 
          	 <choice minOccurs="0" maxOccurs="unbounded">
-         	 	 <element name="import" type="sca:ImportType"/>
+		         <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
+         	     <element name="import" type="sca:ImportType"/>
                  <element name="export" type="sca:ExportType"/>
-                 <element name="import.java" type="t:ImportJavaType"/>
-                 <element name="export.java" type="t:ExportJavaType"/>
-                 <element name="import.resource" type="t:ImportResourceType"/>
-                 <element name="export.resource" type="t:ExportResourceType"/>
+                 <element name="import.java" type="sca:ImportJavaType"/>
+                 <element name="export.java" type="sca:ExportJavaType"/>
+                 <element name="import.resource" type="sca:ImportResourceType"/>
+                 <element name="export.resource" type="sca:ExportResourceType"/>
              </choice>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>

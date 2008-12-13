@@ -18,12 +18,12 @@
     * under the License.    
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
-    targetNamespace="http://tuscany.apache.org/xmlns/sca/1.0" 
+    targetNamespace="http://www.osoa.org/xmlns/sca/1.0" 
     xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0" 
     elementFormDefault="qualified">
     
-    <element name="import.resource" type="t:ImportResourceType"/>
+    <element name="import.resource" type="sca:ImportResourceType"/>
     <complexType name="ImportResourceType">
     	<sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
@@ -34,7 +34,7 @@
         <anyAttribute namespace="##other" processContents="lax"/>
     </complexType>   
     
-    <element name="export.resource" type="t:ExportResourceType"/>
+    <element name="export.resource" type="sca:ExportResourceType"/>
     <complexType name="ExportResourceType">
     	<sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
@@ -44,7 +44,7 @@
         <anyAttribute namespace="##other" processContents="lax"/>
     </complexType>  
     
-    <element name="import.java" type="t:ImportJavaType"/>
+    <element name="import.java" type="sca:ImportJavaType"/>
     <complexType name="ImportJavaType">
     	<sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
@@ -55,7 +55,7 @@
         <anyAttribute namespace="##other" processContents="lax"/>
     </complexType>   
     
-    <element name="export.java" type="t:ExportJavaType"/>
+    <element name="export.java" type="sca:ExportJavaType"/>
     <complexType name="ExportJavaType">
     	 <sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
