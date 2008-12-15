@@ -18,50 +18,45 @@
     * under the License.    
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
-    targetNamespace="http://tuscany.apache.org/xmlns/sca/1.0" 
+    targetNamespace="http://www.osoa.org/xmlns/sca/1.0" 
     xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
-    xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0" 
     elementFormDefault="qualified">
     
-    <element name="import.resource" type="t:ImportResourceType"/>
+    <include schemaLocation="sca-contributions.xsd"/>
+    
+    <element name="import.resource" type="sca:ImportResourceType" substitutionGroup="sca:baseImport"/>
     <complexType name="ImportResourceType">
-    	<sequence>
-             <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </sequence>
-        <attribute name="namespace" type="string" use="optional"/>
-        <attribute name="location" type="anyURI" use="optional"/>
-        <attribute name="uri" type="anyURI" use="required"/>
-        <anyAttribute namespace="##other" processContents="lax"/>
+        <complexContent>
+            <extension base="sca:BaseImportType">
+                <attribute name="uri" type="anyURI" use="required"/>
+            </extension>
+        </complexContent>
     </complexType>   
     
-    <element name="export.resource" type="t:ExportResourceType"/>
+    <element name="export.resource" type="sca:ExportResourceType" substitutionGroup="sca:baseExport"/>
     <complexType name="ExportResourceType">
-    	<sequence>
-             <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </sequence>
-        <attribute name="namespace" type="string" use="optional"/>
-        <attribute name="uri" type="anyURI" use="required"/>
-        <anyAttribute namespace="##other" processContents="lax"/>
+        <complexContent>
+            <extension base="sca:BaseExportType">
+                <attribute name="uri" type="anyURI" use="required"/>
+            </extension>
+        </complexContent>
     </complexType>  
     
-    <element name="import.java" type="t:ImportJavaType"/>
+    <element name="import.java" type="sca:ImportJavaType" substitutionGroup="sca:baseImport"/>
     <complexType name="ImportJavaType">
-    	<sequence>
-             <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </sequence>
-        <attribute name="namespace" type="string" use="optional"/>
-        <attribute name="location" type="anyURI" use="optional"/>
-        <attribute name="package" type="string" use="required"/>
-        <anyAttribute namespace="##other" processContents="lax"/>
+        <complexContent>
+            <extension base="sca:BaseImportType">
+                <attribute name="package" type="string" use="required"/>
+            </extension>
+        </complexContent>
     </complexType>   
     
-    <element name="export.java" type="t:ExportJavaType"/>
+    <element name="export.java" type="sca:ExportJavaType" substitutionGroup="sca:baseExport"/>
     <complexType name="ExportJavaType">
-    	 <sequence>
-             <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </sequence>
-        <attribute name="namespace" type="string" use="optional"/>
-        <attribute name="package" type="string" use="required"/>
-        <anyAttribute namespace="##other" processContents="lax"/>
+        <complexContent>
+            <extension base="sca:BaseExportType">
+                <attribute name="package" type="string" use="required"/>
+            </extension>
+        </complexContent>    
     </complexType> 
 </schema>

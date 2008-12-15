@@ -3,23 +3,17 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://www.osoa.org/xmlns/sca/1.0"
         xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
-        xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
         elementFormDefault="qualified">
        
     <include schemaLocation="sca-core.xsd"/>
-    <import namespace="http://tuscany.apache.org/xmlns/sca/1.0" schemaLocation="tuscany-sca-contributions.xsd"/>
        
     <element name="contribution" type="sca:ContributionType"/>        
     <complexType name="ContributionType">
          <sequence>         	 
          	 <choice minOccurs="0" maxOccurs="unbounded">
-		     <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
-         	     <element name="import" type="sca:ImportType"/>
-                 <element name="export" type="sca:ExportType"/>
-                 <element name="import.java" type="t:ImportJavaType"/>
-                 <element name="export.java" type="t:ExportJavaType"/>
-                 <element name="import.resource" type="t:ImportResourceType"/>
-                 <element name="export.resource" type="t:ExportResourceType"/>
+                 <element name="deployable" type="sca:DeployableType" minOccurs="0" maxOccurs="unbounded"/>
+         	     <element ref="sca:baseImport"/>
+                 <element ref="sca:baseExport"/>
              </choice>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
@@ -32,24 +26,40 @@
         </sequence>
         <attribute name="composite" type="QName" use="required"/>
         <anyAttribute namespace="##other" processContents="lax"/>
-    </complexType>        
-
-    <element name="import" type="sca:ImportType"/>
-    <complexType name="ImportType">
+    </complexType>   
+    
+    <element name="baseImport" type="sca:BaseImportType" abstract="true"/>
+    <complexType name="BaseImportType" abstract="true">
         <sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
-        <attribute name="namespace" type="string" use="required"/>
         <attribute name="location" type="anyURI" use="optional"/>
         <anyAttribute namespace="##other" processContents="lax"/>
-    </complexType>        
+    </complexType> 
 
-    <element name="export" type="sca:ExportType"/>
-    <complexType name="ExportType">
+    <element name="import" type="sca:ImportType" substitutionGroup="sca:baseImport"/>
+    <complexType name="ImportType">
+        <complexContent>
+            <extension base="sca:BaseImportType">
+                <attribute name="namespace" type="string" use="required"/>
+            </extension>
+        </complexContent>    
+    </complexType> 
+    
+    <element name="baseExport" type="sca:BaseExportType" abstract="true"/>
+    <complexType name="BaseExportType" abstract="true">
         <sequence>
              <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
-        <attribute name="namespace" type="string" use="required"/>
         <anyAttribute namespace="##other" processContents="lax"/>
+    </complexType>            
+
+    <element name="export" type="sca:ExportType" substitutionGroup="sca:baseExport"/>
+    <complexType name="ExportType">
+        <complexContent>
+            <extension base="sca:BaseExportType">
+                <attribute name="namespace" type="string" use="required"/>
+            </extension>
+        </complexContent>
     </complexType>
 </schema> 
