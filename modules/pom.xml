@@ -110,6 +110,7 @@
                 <module>extensibility-osgi</module>
                 <module>extensibility-equinox</module>
                 <module>extension-helper</module>
+                <module>host-android</module>
                 <module>host-corba</module>
                 <module>host-corba-jee</module>
                 <module>host-corba-jse</module>
