@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-assembly"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-assembly-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-assembly-xsd"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-definitions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-definitions-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-extensibility"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-implementation-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-implementation-java-runtime"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-implementation-java-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-interface"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-interface-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-interface-java-xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-monitor"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-policy"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-sca-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-contribution"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-contribution-impl"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-host-android"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
