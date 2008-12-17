@@ -30,10 +30,15 @@ public class FileTransferMTOMTestCase extends TestCase {
     private SCADomain domain;
 
     public void testFileTransfer() throws Exception {
-        // For testing purpose lets try uploading FileTransferClient.java file.
-        DataHandler dataHandler = new DataHandler(new FileDataSource("FileTransferClient.java"));
-        FileTransferService filetransfer = domain.getService(FileTransferService.class, "FileTransferServiceComponent");
-        assertEquals("File uploaded Sucessfully", filetransfer.uploadFile(dataHandler));
+        try {
+            // For testing purpose lets try uploading FileTransferClient.java file.
+            DataHandler dataHandler = new DataHandler(new FileDataSource("./LICENSE"));
+            FileTransferService filetransfer = domain.getService(FileTransferService.class, "FileTransferClientComponent");
+            //dataHandler.writeTo(System.out);
+            assertEquals("File uploaded Sucessfully", filetransfer.uploadFile(dataHandler));
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

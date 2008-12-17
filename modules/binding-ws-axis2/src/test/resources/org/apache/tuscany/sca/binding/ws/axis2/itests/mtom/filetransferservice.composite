@@ -26,17 +26,15 @@
         <implementation.java class="org.apache.tuscany.sca.binding.ws.axis2.itests.mtom.FileTransferServiceImpl" />
 	    <service name="FileTransferService">
 	        <interface.wsdl interface="http://filetransfer#wsdl.interface(FileTransfer)" />
-	        <binding.ws uri="http://localhost:8085/FileTransferService"/>
+	        <binding.ws uri="http://localhost:8085/FileTransferService" requires="MTOM"/>
 	    </service>
     </component>
     
     <component name="FileTransferClientComponent">
         <implementation.java class="org.apache.tuscany.sca.binding.ws.axis2.itests.mtom.FileTransferClient"/>
-        <reference name="fileTransferWS" />
+        <reference name="fileTransferWS">
+            <binding.ws uri="http://localhost:8085/FileTransferService" requires="MTOM"/>
+        </reference>
     </component>
     
-     <reference name="fileTransferWS" promote="FileTransferClientComponent/fileTransferWS">
-        <binding.ws uri="http://localhost:8085/FileTransferService"/>
-    </reference>
-
 </composite>

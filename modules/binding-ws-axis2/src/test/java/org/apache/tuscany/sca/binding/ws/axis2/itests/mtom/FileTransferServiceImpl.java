@@ -43,7 +43,8 @@ public class FileTransferServiceImpl implements FileTransferService {
         fileOutputStream.flush();
         fileOutputStream.close();*/
         
-        System.out.println(attachment.getContentType());
+        System.out.println("Content type = " + attachment.getContentType() + "\nContent = ");
+        //attachment.writeTo(System.out);
         
         return "File uploaded Sucessfully";
     }
