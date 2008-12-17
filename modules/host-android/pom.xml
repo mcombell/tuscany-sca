@@ -25,8 +25,8 @@
         <version>1.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>tuscany-host-embedded</artifactId>
-    <name>Apache Tuscany SCA Embedded Host</name>
+    <artifactId>tuscany-host-android</artifactId>
+    <name>Apache Tuscany SCA Host for Android Platform</name>
 
     <dependencies>
         <dependency>
