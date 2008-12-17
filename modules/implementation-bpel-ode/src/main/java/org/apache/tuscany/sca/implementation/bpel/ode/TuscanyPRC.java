@@ -50,6 +50,10 @@ public class TuscanyPRC implements PartnerRoleChannel {
     public QName getProcessName() {
         return this.processName;
     }
+    
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
 
     public void close() {
 

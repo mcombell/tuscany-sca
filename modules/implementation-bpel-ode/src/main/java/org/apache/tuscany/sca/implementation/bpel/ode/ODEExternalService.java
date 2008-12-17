@@ -30,11 +30,13 @@ import org.apache.ode.bpel.iapi.MessageExchange;
 import org.apache.ode.bpel.iapi.PartnerRoleMessageExchange;
 import org.apache.ode.bpel.iapi.Scheduler;
 import org.apache.ode.utils.DOMUtils;
+import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterface;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
+import org.osoa.sca.ServiceRuntimeException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -86,15 +88,27 @@ public class ODEExternalService {
                                 TuscanyPRC channel = (TuscanyPRC) partnerRoleMessageExchange.getChannel();
                                 RuntimeComponent tuscanyRuntimeComponent = _server.getTuscanyRuntimeComponent(channel.getProcessName());
 
-                                RuntimeComponentReference runtimeComponentReference =
-                                    (RuntimeComponentReference)tuscanyRuntimeComponent.getReferences().get(0);
+                                // get the right reference based on the partner link name
+                                String referenceName = channel.getEndpoint().serviceName.getLocalPart();
+                                RuntimeComponentReference runtimeComponentReference = null;
+                                
+                                for (ComponentReference reference : tuscanyRuntimeComponent.getReferences()){
+                                    if (reference.getName().equals(referenceName)){
+                                        runtimeComponentReference = (RuntimeComponentReference)reference;
+                                        break;
+                                    }
+                                }
+                                
+                                if (runtimeComponentReference == null){
+                                    throw new ServiceRuntimeException("Can't find component reference for partner link " + referenceName);
+                                }
+
                                 RuntimeWire runtimeWire =
                                     runtimeComponentReference.getRuntimeWire(runtimeComponentReference.getBindings().get(0));
 
                                 // convert operations
                                 Operation operation =
                                     findOperation(partnerRoleMessageExchange.getOperation().getName(), runtimeComponentReference);
-
 
                                 /*
                                  This is how a request looks like (payload is wrapped with extra info) 
