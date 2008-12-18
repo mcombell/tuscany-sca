@@ -132,12 +132,12 @@
             <artifactId>tuscany-binding-sca-axis2</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-sca-corba</artifactId>
             <version>${pom.version}</version>
         </dependency>
-        <!-- dependency>
+        <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-binding-sca-jms</artifactId>
             <version>${pom.version}</version>

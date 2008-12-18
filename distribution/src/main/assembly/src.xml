@@ -63,6 +63,8 @@
     		<exclude>contrib/**/*</exclude>
     		<exclude>doc</exclude>
     		<exclude>doc/**/*</exclude>
+            <exclude>etc</exclude>
+    		<exclude>etc/**/*</exclude>
                 <exclude>**/target</exclude>
     		<exclude>**/target/**/*</exclude>
     		<exclude>**/build</exclude>
@@ -148,7 +150,7 @@
                 <exclude>modules/implementation-data</exclude>
                 <exclude>modules/implementation-data/**/*</exclude>
                 <exclude>modules/implementation-osgi/.felix</exclude>
-                <exclude>modules/implementation-osgi/.felix/**/*</exclude>
+                <exclude>modules/implementation-osgi/.felix/**/*</exclude>		    
                 <exclude>modules/osgi-runtime/.felix</exclude>
                 <exclude>modules/osgi-runtime/.felix/**/*</exclude>
 		    <exclude>modules/core-spi/src/main/java/org/apache/tuscany/sca/work</exclude>
@@ -157,8 +159,8 @@
                 <exclude>modules/core/src/main/java/org/apache/tuscany/sca/core/work/**/*</exclude>
 		    <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work</exclude>
                 <exclude>modules/core/src/test/java/org/apache/tuscany/sca/core/work/**/*</exclude>
-                <exclude>modules/implementation-openjpa/test/log</exclude>
-                <exclude>modules/implementation-openjpa/test/log/**/*</exclude>
+                <exclude>modules/implementation-openjpa</exclude>
+                <exclude>modules/implementation-openjpa/**/*</exclude>
                 <exclude>samples/old</exclude>
                 <exclude>samples/old/**/*</exclude>
                 <exclude>samples/calculator-distributed/work</exclude>
@@ -167,6 +169,16 @@
                 <exclude>samples/callback-ws-client/work/**/*</exclude>
                 <exclude>samples/callback-ws-service/work</exclude>
                 <exclude>samples/callback-ws-service/work/**/*</exclude>
+                <exclude>samples/calculator-corba-reference</exclude>
+                <exclude>samples/calculator-corba-reference/**/*</exclude>
+                <exclude>samples/calculator-corba-service</exclude>
+                <exclude>samples/calculator-corba-service/**/*</exclude>
+                <exclude>samples/customer-dojo</exclude>
+                <exclude>samples/customer-dojo/**/*</exclude>
+                <exclude>samples/customer-dojo-webapp</exclude>
+                <exclude>samples/customer-dojo-webapp/**/*</exclude>
+                <exclude>samples/loanapplication</exclude>
+                <exclude>samples/loanapplication/**/*</exclude>
                 <exclude>samples/domain-webapp</exclude>
                 <exclude>samples/domain-webapp/**/*</exclude>
                 <exclude>samples/helloworld-jsonrpc-webapp/src/main/webapp/dojo</exclude>

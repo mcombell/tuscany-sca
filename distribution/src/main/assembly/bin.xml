@@ -259,6 +259,8 @@
                 <exclude>alert-aggregator-webapp/target/sdo-source/**/*</exclude>
                 <exclude>alert-aggregator-webapp/target</exclude>
                 <exclude>alert-aggregator-webapp/target/**/*</exclude>
+                <exclude>bigbank/target</exclude>
+                <exclude>bigbank/target/**/*</exclude>
                 <exclude>bigbank/src/main/resources/web/dojo</exclude>
                 <exclude>bigbank/src/main/resources/web/dojo/**/*</exclude>
                 <exclude>bigbank-account/src/main/resources/web/dojo</exclude> 
@@ -327,6 +329,7 @@
                 <exclude>store/*/target/surefire-reports/**/*</exclude>
                 <exclude>store/*/target/maven-archiver</exclude>
                 <exclude>store/*/target/maven-archiver/**/*</exclude>
+		    <exclude>store/catalog-webapp/target/tutorial-catalog-webapp.war</exclude>
                 <exclude>store/catalog-webapp/target/war/</exclude>
                 <exclude>store/catalog-webapp/target/war/**/*</exclude>
                 <exclude>store/catalog-webapp/target/tutorial-catalog-webapp/</exclude>
