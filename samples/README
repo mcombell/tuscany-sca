@@ -31,10 +31,6 @@ calculator-distributed             - A calculator built using SCA nodes running
                                      on multiple JVMs
 calculator-implementation-policies - Shows logging policites associated with 
                                      SCA implementations
-calculator-corba-reference         - The calculator configured to use existing
-                                     CORBA service
-calculator-corba-service           - The calculator configured to be accessible
-                                     as CORBA service
 calculator-rmi-reference           - The calculator configured to talk RMI to
                                      the calculator-rmi-service sample
 calculator-rmi-service             - The calculator configured to accept RMI
@@ -44,20 +40,30 @@ calculator-webapp                  - Calculator running inside a web app
 calculator-ws-webapp               - Calculator running inside a web app also 
                                      showing webservices binding
 
+callbacks-jms			     - Demonstrates SCA callbacks over the JMS binding
 callbck-ws-client                  - The client for showing callbacks across web services
-callback-ws-service                - The server for showing callbacks across web serviced
+callback-ws-service                - The server for showing callbacks across web services
 
 chat-webapp                        - A simple chat style web app demonstrating
                                      use of AJAX binding
 
 databinding-echo                   - An SCA application that shows how databindings 
                                      transform data
+
+domain-management			     - Shows how to use a subset of Tuscany to read contribution 
+						 metadata, analyze and resolve contribution dependencies
                     
 feed-aggregator                    - Demonstrates using the ATOM binding
 feed-aggregator-webapp             - feed-aggregator running in webapp
 
 helloworld-bpel                    - Demonstrates an SCA component invoking a BPEL 
                                      process in a composition
+helloworld-bpel-ws		     - Demonstrates an SCA component invoking a BPEL 
+                                     process in a composition, made available as a Web service
+
+helloworld-jms-webapp              - Demonstrates a simple webapp containing a hello world style 
+						 client and service using the JMS binding for request-response 
+						 style messaging
 
 helloworld-dojo-webapp             - An SCA application that exposes a service using 
                                      JSONRPC and a client using the Dojo toolkit
@@ -83,20 +89,28 @@ implementation-composite           - Shows how SCA composites are used
 osgi-supplychain                   - SCA asynchronous API with OSGi and Java 
                                      implementation types
 
+photo-gallery			     - A picture gallery application using Tuscany SCA
+
 simple-bigbank                     - A banking application built with java components 
                                      and local wire
 simple-bigbank-spring              - A banking application showing how SCA works with Spring
+spring-bigbank-calculator          - A part of simple-bigbank-spring banking application
+spring-bigbank-checkaccount        - A part of simple-bigbank-spring banking application
+spring-bigbank-stockquote          - A part of simple-bigbank-spring banking application
 
-simple-callback                    - demonstrates the callback interface
-simple-callback-ws                 - demonstrates use of callback interface across WS binding
+simple-callback                    - Demonstrates the callback interface
+simple-callback-ws                 - Demonstrates use of callback interface across WS binding
 
 store                              - Step by step guide for creating an online store
 
-supplychain                        - shows how asynchronous callbacks can be used
+supplychain                        - Shows how asynchronous callbacks can be used
 
 web-resource                       - Demonstrates using an SCA Web resource component
 
 quote-xquery                       - Demonstrate SCA components using XQuery
+
+zipcode-jaxws			     - Shows how to access an existing web service using 
+						 JAX-WS/JAXB generated java interfaces/classes
 
 Samples for building extensions
 -------------------------------
