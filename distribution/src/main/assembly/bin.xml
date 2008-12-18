@@ -208,9 +208,6 @@
                 <exclude>helloworld-ws-reference-lean/**/*</exclude>
                 <exclude>spi-implementation-pojo</exclude>
                 <exclude>spi-implementation-pojo/**/*</exclude>
-		    <exclude>helloworld-jms-webapp</exclude>
-                <exclude>helloworld-jms-webapp/**/*</exclude>
-                <exclude>helloworld-jms-webapp/work</exclude>
                 <exclude>domain-webapp</exclude>
                 <exclude>domain-webapp/**/*</exclude>
                 <exclude>calculator-ws-secure-webapp</exclude>
@@ -265,6 +262,10 @@
                 <exclude>bigbank/src/main/resources/web/dojo/**/*</exclude>
                 <exclude>bigbank-account/src/main/resources/web/dojo</exclude> 
                 <exclude>bigbank-account/src/main/resources/web/dojo/**/*</exclude>
+                <exclude>bigbank-calculator/target</exclude>
+                <exclude>bigbank-calculator/target/**/*</exclude>
+                <exclude>bigbank-stockquote/target</exclude>
+                <exclude>bigbank-stockquote/target/**/*</exclude>
                 <exclude>helloworld-ws-sdo/work</exclude>
                 <exclude>helloworld-ws-sdo/work/**/*</exclude>
                 <exclude>mortgage-creditcheck/target/demo-mortgage-creditcheck</exclude>
