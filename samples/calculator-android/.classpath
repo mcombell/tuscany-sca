@@ -19,6 +19,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-sca-api"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-contribution"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-contribution-impl"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-host-android"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tuscany-host-embedded"/>
+	<classpathentry kind="lib" path="/home/acc/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/acc/.m2/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
