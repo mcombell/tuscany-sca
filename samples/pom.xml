@@ -49,8 +49,6 @@
                 <module>binding-notification-consumer</module>
                 <module>binding-notification-producer</module>
                 <module>calculator</module>
-                <module>calculator-corba-reference</module>
-                <module>calculator-corba-service</module>
                 <module>calculator-distributed</module>
 		    <module>calculator-implementation-policies</module>
                 <module>calculator-rmi-reference</module>
@@ -63,8 +61,6 @@
                 <module>callback-ws-service</module>
                 <module>callbacks-jms</module>
                 <module>chat-webapp</module>
-                <module>customer-dojo</module>
-                <module>customer-dojo-webapp</module>
                 <module>databinding-echo</module>
                 <module>domain-management</module>
                 <module>feed-aggregator</module>
@@ -89,7 +85,6 @@
                 <module>implementation-crud-extension</module>
                 <module>implementation-notification</module>
                 <module>implementation-pojo-extension</module>
-                <module>loanapplication</module>
                 <module>osgi-supplychain</module>
                 <module>photo-gallery</module>
                 <module>quote-xquery</module>
