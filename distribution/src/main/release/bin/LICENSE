@@ -278,13 +278,11 @@ The following components come under Apache Software License 2.0
  geronimo-security-1.2-beta.jar
  geronimo-spec-j2ee-connector-1.5-rc4.jar
  geronimo-spec-jta-1.0.1B-rc4.jar
- geronimo-stax-api_1.0_spec-1.0.1.jar
  geronimo-system-1.2-beta.jar
  geronimo-transaction-1.2-beta.jar
  geronimo-util-1.2-beta.jar
  httpcore-4.0-beta1.jar
  httpcore-nio-4.0-beta1.jar
- jakarta-regexp-1.4.jar
  jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
