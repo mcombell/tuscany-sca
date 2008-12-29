@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
+	xmlns:dbsdo="http://tuscany.apache.org/xmlns/sca/databinding/sdo/1.0"
+	xmlns:e="http://hessian"
+	targetNamespace="http://FirstHessianSCA"
+	name="FirstHessianSCA">
+
+	<component name="FirstHessianComponent">
+		<implementation.java
+			class="org.zhulei.test.hessian.first.FirstImpl" />
+	</component>
+ 	
+	<service name="Hessian"
+		promote="FirstHessianComponent">
+		<interface.java
+			interface="org.zhulei.test.hessian.first.IFirst" />
+		<e:binding.hessian uri="/hessian1" />
+	</service>
+
+</composite>
