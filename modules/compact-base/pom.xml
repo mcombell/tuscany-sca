@@ -226,26 +226,6 @@
             <version>${pom.version}</version>
         </dependency>
 
-  <!-- dependencies to keep in the shaded pom.xml -->
-
-        <!-- dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>2.2</version>
-        </dependency -->        
-
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm-all</artifactId>
-            <version>3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-commonj_1.1_spec</artifactId>
-            <version>1.0</version>
-        </dependency>
-
   <!-- these remaining dependencies are not required when using JDK6, maybe make them optional -->
 
         <dependency>
