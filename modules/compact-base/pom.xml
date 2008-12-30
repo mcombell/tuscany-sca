@@ -162,6 +162,49 @@
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-implementation-script</artifactId>
+            <version>${pom.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.bsf</groupId>
+                    <artifactId>bsf-all</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.tuscany.sca</groupId>
+                    <artifactId>tuscany-interface-wsdl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.ws.commons.axiom</groupId>
+                    <artifactId>axiom-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.ws.commons.axiom</groupId>
+                    <artifactId>axiom-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>rhino</groupId>
+                    <artifactId>js</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jruby</groupId>
+                    <artifactId>jruby-complete</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.python</groupId>
+                    <artifactId>jython</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all-minimal</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>tuscany-interface</artifactId>
             <version>${pom.version}</version>
         </dependency>

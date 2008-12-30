@@ -43,7 +43,6 @@ import org.apache.tuscany.sca.implementation.script.engines.TuscanyJRubyScriptEn
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
-import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
@@ -117,7 +116,7 @@ public class ScriptInvokerFactory implements InvokerFactory {
         // set the databinding and XMLHelper for WSDL interfaces
         for (Service service : rc.getServices()) {
             InterfaceContract ic = service.getInterfaceContract();
-            if (ic instanceof WSDLInterfaceContract) {
+            if ("org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract".equals(ic.getClass())) {
                 // Set to use the Axiom data binding
                 ic.getInterface().resetDataBinding(OMElement.class.getName());
                 xmlHelper = XMLHelper.getArgHelper(scriptEngine);
