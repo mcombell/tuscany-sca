@@ -114,6 +114,7 @@
             <outputDirectory>tuscany-sca-${tuscany.version}/lib</outputDirectory>
             <excludes>
                <exclude>org.apache.tuscany.sca:tuscany-webservices</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-spring</exclude>
             </excludes>
                <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
@@ -122,7 +123,17 @@
             <outputDirectory>tuscany-sca-${tuscany.version}/lib/webservices</outputDirectory>
             <excludes>
                <exclude>org.apache.tuscany.sca:tuscany-base</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-spring</exclude>
             </excludes>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+
+        <dependencySet>
+            <outputDirectory>tuscany-sca-${tuscany.version}/lib/spring</outputDirectory>
+            <includes>
+               <include>org.apache.tuscany.sca:tuscany-spring</include>
+               <include>commons-logging:commons-logging</include>
+            </includes>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
 
