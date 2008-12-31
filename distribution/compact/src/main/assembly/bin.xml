@@ -72,6 +72,12 @@
                 <include>calculator/*</include>
                 <include>calculator/src/**/*</include>
                 <include>calculator/target/*.jar</include>
+                <include>helloworld-script/*</include>
+                <include>helloworld-script/src/**/*</include>
+                <include>helloworld-script/target/*.jar</include>
+                <include>helloworld-spring/*</include>
+                <include>helloworld-spring/src/**/*</include>
+                <include>helloworld-spring/target/*.jar</include>
             </includes>
         </fileSet>
         <!-- Add all the demos to the demos directory -->
@@ -102,8 +108,6 @@
                 <exclude>*/**/*.ruleset</exclude>
                 <exclude>*/bin</exclude>
                 <exclude>*/bin/**/*</exclude>
-                <exclude>target</exclude>
-                <exclude>target/**/*</exclude>
             </excludes>
         </fileSet>
     </fileSets>
