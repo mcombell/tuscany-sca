@@ -80,6 +80,18 @@
             <artifactId>tuscany-interface-wsdl-xml</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-xsd</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-xsd-xml</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+
+
   <!-- these remaining dependencies are not required when using JDK6, maybe make them optional -->
 
         <dependency>
@@ -424,6 +436,8 @@
                   <include>org.apache.tuscany.sca:tuscany-databinding-jaxb-axiom</include>
                   <include>org.apache.tuscany.sca:tuscany-interface-wsdl</include>
                   <include>org.apache.tuscany.sca:tuscany-interface-wsdl-xml</include>
+                  <include>org.apache.tuscany.sca:tuscany-xsd</include>
+                  <include>org.apache.tuscany.sca:tuscany-xsd-xml</include>
                 </includes>
               </artifactSet>
 
