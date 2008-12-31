@@ -54,6 +54,11 @@
             <artifactId>tuscany-spring</artifactId>
             <version>${pom.version}</version>
        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>tuscany-standalone</artifactId>
+            <version>${pom.version}</version>
+       </dependency>
     </dependencies>
 
     <build>

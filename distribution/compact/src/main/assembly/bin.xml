@@ -119,6 +119,7 @@
             <excludes>
                <exclude>org.apache.tuscany.sca:tuscany-webservices</exclude>
                <exclude>org.apache.tuscany.sca:tuscany-spring</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-standalone</exclude>
             </excludes>
                <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
@@ -128,6 +129,7 @@
             <excludes>
                <exclude>org.apache.tuscany.sca:tuscany-base</exclude>
                <exclude>org.apache.tuscany.sca:tuscany-spring</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-standalone</exclude>
             </excludes>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
@@ -141,6 +143,15 @@
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
 
+        <dependencySet>
+            <outputDirectory>tuscany-sca-${tuscany.version}/lib/standalone</outputDirectory>
+            <excludes>
+               <exclude>org.apache.tuscany.sca:tuscany-base</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-spring</exclude>
+               <exclude>org.apache.tuscany.sca:tuscany-webservices</exclude>
+            </excludes>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
     </dependencySets>
 
 </assembly>
