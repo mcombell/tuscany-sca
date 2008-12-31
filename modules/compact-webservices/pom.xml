@@ -376,6 +376,16 @@
            <groupId>org.apache.ws.commons.schema</groupId>
            <artifactId>XmlSchema</artifactId>
            <version>1.4.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xalan</groupId>
+                    <artifactId>xalan</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.bcel</groupId>
+                    <artifactId>bcel</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
