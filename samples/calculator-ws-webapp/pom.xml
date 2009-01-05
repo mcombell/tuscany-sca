@@ -29,19 +29,49 @@
     <packaging>war</packaging>
     <name>Apache Tuscany SCA Sample Calculator Web Service in a WebApp</name>
 
+    <repositories>
+       <repository>
+          <id>apache.incubator</id>
+          <url>http://people.apache.org/repo/m2-incubating-repository</url>
+       </repository>
+    </repositories>
+
     <dependencies>
-    
-        <!-- dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-base</artifactId>
-            <version>1.5-SNAPSHOT</version>
-        </dependency -->
     
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-webservices</artifactId>
+            <artifactId>tuscany-host-webapp</artifactId>
+            <version>1.5-SNAPSHOT</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-ws-axis2</artifactId>
             <version>1.5-SNAPSHOT</version>
         </dependency>   
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-implementation-java-runtime</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- exclude stax 1.0.1 as we're also pulling in javax\xml\stream\stax-api\1.0-2 -->
+        <dependency>
+            <groupId>stax</groupId>
+            <artifactId>stax-api</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- marking dependency as provided to exclude from war file -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -70,3 +100,4 @@
        </plugins>       
     </build>
 </project>
+
