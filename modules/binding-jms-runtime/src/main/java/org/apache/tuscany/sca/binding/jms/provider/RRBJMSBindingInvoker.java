@@ -204,7 +204,7 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
                     if ((e.getCause().getCause() instanceof RuntimeException)) {
                         tuscanyMsg.setFaultBody(e.getCause());
                     } else {
-                        tuscanyMsg.setFaultBody(e.getCause().getCause());
+                        tuscanyMsg.setFaultBody(((InvocationTargetException)e.getCause()).getTargetException());
                     }
                 } else {
                     tuscanyMsg.setFaultBody(e);

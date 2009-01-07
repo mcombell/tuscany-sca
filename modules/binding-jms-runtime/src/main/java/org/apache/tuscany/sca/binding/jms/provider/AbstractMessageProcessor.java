@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.sca.binding.jms.provider;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.ObjectMessage;
@@ -101,7 +103,11 @@ public abstract class AbstractMessageProcessor implements JMSMessageProcessor {
         try {
 
             ObjectMessage message = session.createObjectMessage();
-            message.setObject(o);
+            if (o instanceof ServiceRuntimeException && ((ServiceRuntimeException)o).getCause() instanceof InvocationTargetException) {
+                message.setObject(o.getCause() );
+            } else {
+                message.setObject(o);
+            }
             message.setBooleanProperty(JMSBindingConstants.FAULT_PROPERTY, true);
             return message;
 
