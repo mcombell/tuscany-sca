@@ -126,8 +126,13 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
             ex = ctor.newInstance(message, faultInfo, cause);
         } catch (NoSuchMethodException e1) {
             try {
-                ctor = exceptionClass.getConstructor(String.class, faultInfo.getClass());
-                ex = ctor.newInstance(message, faultInfo);
+                if (faultInfo != null) {
+                    ctor = exceptionClass.getConstructor(String.class, faultInfo.getClass());
+                    ex = ctor.newInstance(message, faultInfo);
+                } else {
+                    ctor = exceptionClass.getConstructor(String.class);
+                    ex = ctor.newInstance(message);
+                }
             } catch (NoSuchMethodException e2) {
                 try {
                     ctor = exceptionClass.getConstructor(String.class, Throwable.class);
