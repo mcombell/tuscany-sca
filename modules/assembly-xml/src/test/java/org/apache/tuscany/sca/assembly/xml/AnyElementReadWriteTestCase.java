@@ -19,7 +19,7 @@
 package org.apache.tuscany.sca.assembly.xml;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.StringReader;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -34,12 +34,33 @@ import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtens
 import org.apache.tuscany.sca.contribution.processor.ValidatingXMLInputFactory;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AnyElementReadWriteTestCase extends TestCase {
 
 	private XMLInputFactory inputFactory;
-	String XML = "<?xml version='1.0' encoding='UTF-8'?><composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://calc\" name=\"Calculator\"><service name=\"CalculatorService\" promote=\"CalculatorServiceComponent\"><interface.java interface=\"calculator.CalculatorService\" /></service><component name=\"CalculatorServiceComponent\"><reference name=\"addService\" multiplicity=\"0..1\" target=\"AddServiceComponent\" /><reference name=\"subtractService\" target=\"SubtractServiceComponent\" /><reference name=\"multiplyService\" target=\"MultiplyServiceComponent\" /><reference name=\"divideService\" target=\"DivideServiceComponent\" /></component><component name=\"AddServiceComponent\" /><component name=\"SubtractServiceComponent\" /><component name=\"MultiplyServiceComponent\" /><component name=\"DivideServiceComponent\" /><x:unknownElement xmlns:x=\"http://x\" uknAttr=\"attribute1\"><y:subUnknownElement1 xmlns:y=\"http://y\" uknAttr1=\"attribute2\" /><x:subUnknownElement2 /></x:unknownElement></composite>";
+	private static final String XML_RECURSIVE_EXTENDED_ELEMENT = 
+		"<?xml version='1.0' encoding='UTF-8'?>" +
+	    "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"RecursiveExtendedElement\">" +
+	    "<unknownElement>" +
+	    "<subUnknownElement1 attribute=\"anyAttribute\" />" +
+	    "<subUnknownElement2 />" +
+	    "</unknownElement>" +
+	    "</composite>";
+	
+
+	private static final String XML_UNKNOWN_IMPL = 
+		"<?xml version='1.0' encoding='UTF-8'?>" + 
+        "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"aaaa\" autowire=\"false\">" +
+        "<component name=\"unknownImpl\">" +
+        "<implementation.unknown class=\"raymond\" />"  +
+        "<service name= \"service\" requires=\"\">" +
+        "<binding.ws unknownAttribute=\"unknown\" />" +
+        "</service>" +
+        "</component>" +
+        "</composite>";
+	
 	private ExtensibleStAXArtifactProcessor staxProcessor;
 
 	@Override
@@ -57,39 +78,42 @@ public class AnyElementReadWriteTestCase extends TestCase {
 	@Override
 	public void tearDown() throws Exception {
 	}
-
-	/*
-	@Test
-	public void testReadWriteComposite() throws Exception {
-		InputStream is = getClass().getResourceAsStream("Calculator.composite");
-		XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+	
+	//@Test
+	@Ignore
+	public void testReadWriteExtendedRecursiveElement() throws Exception {
+		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_RECURSIVE_EXTENDED_ELEMENT));
 		Composite composite = (Composite) staxProcessor.read(reader);
 		assertNotNull(composite);
-
+		reader.close();
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		staxProcessor.write(composite, bos);
+		
+		// used for debug comparison
+		//System.out.println(XML_RECURSIVE_EXTENDED_ELEMENT);
 		//System.out.println(bos.toString());
-		assertEquals(XML, bos.toString());
-		bos.close();
 
-		is.close();
-	}
-	*/
+		assertEquals(XML_RECURSIVE_EXTENDED_ELEMENT, bos.toString());
+		bos.close();	
+	}	
 	
 	@Test
-	public void testReadWriteUnknownElementComposite() throws Exception {
-		InputStream is = getClass().getResourceAsStream("UnknownElement.composite");
-		XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
+	public void testReadWriteUnknwonImpl() throws Exception {
+		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_UNKNOWN_IMPL));
 		Composite composite = (Composite) staxProcessor.read(reader);
 		assertNotNull(composite);
+		reader.close();
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		staxProcessor.write(composite, bos);
-		System.out.println(bos.toString());
-		//assertEquals(XML, bos.toString());
-		bos.close();
 
-		is.close();
-	}	
+		// used for debug comparison
+		System.out.println(XML_UNKNOWN_IMPL);
+		System.out.println(bos.toString());
+
+		assertEquals(XML_UNKNOWN_IMPL, bos.toString());
+		bos.close();
+	}		
 
 }
