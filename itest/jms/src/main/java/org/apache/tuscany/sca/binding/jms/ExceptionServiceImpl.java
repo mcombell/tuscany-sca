@@ -25,6 +25,18 @@ public class ExceptionServiceImpl implements ExceptionService {
         throw new CheckedExcpetion("foo");
     }
 
+    public void throwChecked2Args() throws CheckedExcpetion2Args {
+        throw new CheckedExcpetion2Args("foo", new Exception("bla"));
+    }
+
+    public void throwCheckedChained() throws CheckedExcpetionChained {
+        throw new CheckedExcpetionChained(new Exception("bla"));
+    }
+
+    public void throwCheckedNoArgs() throws CheckedExcpetionNoArgs {
+        throw new CheckedExcpetionNoArgs();
+    }
+
     public void throwUnChecked() {
         throw new RuntimeException("bla");
     }

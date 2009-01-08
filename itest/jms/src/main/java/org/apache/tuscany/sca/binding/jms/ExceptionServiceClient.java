@@ -38,6 +38,18 @@ public class ExceptionServiceClient implements ExceptionService {
         service.throwChecked();
     }
 
+    public void throwChecked2Args() throws CheckedExcpetion2Args {
+        service.throwChecked2Args();
+    }
+
+    public void throwCheckedChained() throws CheckedExcpetionChained {
+        service.throwCheckedChained();
+    }
+
+    public void throwCheckedNoArgs() throws CheckedExcpetionNoArgs {
+        service.throwCheckedNoArgs();
+    }
+
     public void throwUnChecked() {
         service.throwUnChecked();
     }
