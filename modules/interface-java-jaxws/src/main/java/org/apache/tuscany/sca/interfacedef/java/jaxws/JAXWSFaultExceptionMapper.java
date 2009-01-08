@@ -120,41 +120,62 @@ public class JAXWSFaultExceptionMapper implements FaultExceptionMapper {
         } catch (Throwable e) {
             // Ignore
         }
-        try {
-            // FIXME: What about if the faultBeanClass is a subclass of the argument type?
-            ctor = exceptionClass.getConstructor(String.class, faultBeanClass, Throwable.class);
-            ex = ctor.newInstance(message, faultInfo, cause);
-        } catch (NoSuchMethodException e1) {
+        if (faultInfo == null) {
             try {
-                if (faultInfo != null) {
-                    ctor = exceptionClass.getConstructor(String.class, faultInfo.getClass());
-                    ex = ctor.newInstance(message, faultInfo);
-                } else {
+                ctor = exceptionClass.getConstructor(String.class, Throwable.class);
+                ex = ctor.newInstance(message, cause);
+            } catch (NoSuchMethodException e1) {
+                try {
                     ctor = exceptionClass.getConstructor(String.class);
                     ex = ctor.newInstance(message);
-                }
-            } catch (NoSuchMethodException e2) {
-                try {
-                    ctor = exceptionClass.getConstructor(String.class, Throwable.class);
-                    ex = ctor.newInstance(message, cause);
-                    populateException(ex, faultInfo);
-                } catch (NoSuchMethodException e3) {
+                } catch (NoSuchMethodException e2) {
                     try {
-                        ctor = exceptionClass.getConstructor(String.class);
-                        ex = ctor.newInstance(message);
-                        populateException(ex, faultInfo);
-                    } catch (NoSuchMethodException e4) {
+                        ctor = exceptionClass.getConstructor(Throwable.class);
+                        ex = ctor.newInstance(cause);
+                    } catch (NoSuchMethodException e3) {
                         ctor = exceptionClass.getConstructor();
-                        if (ctor != null) {
-                            ex = ctor.newInstance();
+                        ex = ctor.newInstance();
+                    }
+                }
+            }
+        } else {
+            try {
+                // FIXME: What about if the faultBeanClass is a subclass of the argument type?
+                ctor = exceptionClass.getConstructor(String.class, faultBeanClass, Throwable.class);
+                ex = ctor.newInstance(message, faultInfo, cause);
+            } catch (NoSuchMethodException e1) {
+                try {
+                    ctor = exceptionClass.getConstructor(String.class, faultInfo.getClass());
+                    ex = ctor.newInstance(message, faultInfo);
+                } catch (NoSuchMethodException e2) {
+                    try {
+                        ctor = exceptionClass.getConstructor(String.class, Throwable.class);
+                        ex = ctor.newInstance(message, cause);
+                        populateException(ex, faultInfo);
+                    } catch (NoSuchMethodException e3) {
+                        try {
+                            ctor = exceptionClass.getConstructor(String.class);
+                            ex = ctor.newInstance(message);
                             populateException(ex, faultInfo);
-                        } else {
-                            ex = new FaultException(message, faultInfo, cause);
+                        } catch (NoSuchMethodException e4) {
+                            try {
+                                ctor = exceptionClass.getConstructor();
+                                if (ctor != null) {
+                                    ex = ctor.newInstance();
+                                    populateException(ex, faultInfo);
+                                } else {
+                                    ex = new FaultException(message, faultInfo, cause);
+                                }
+                            } catch (NoSuchMethodException e5) {
+                                ctor = exceptionClass.getConstructor();
+                                ex = ctor.newInstance();
+                            }
                         }
                     }
                 }
             }
         }
+
         return ex;
     }
 
