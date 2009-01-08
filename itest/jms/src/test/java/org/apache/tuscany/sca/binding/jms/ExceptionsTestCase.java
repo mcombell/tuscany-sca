@@ -19,12 +19,12 @@
 package org.apache.tuscany.sca.binding.jms;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -41,7 +41,7 @@ public class ExceptionsTestCase {
     }
 
     @Test
-    @Ignore // TUSCANY-2593, currently fails for some jaxws reason?
+//    @Ignore // TUSCANY-2593, currently fails for some jaxws reason?
     public void testChecked() {
         ExceptionService service = scaDomain.getService(ExceptionService.class, "ExceptionServiceClient");
         try {
@@ -49,6 +49,42 @@ public class ExceptionsTestCase {
             fail();
         } catch (CheckedExcpetion e) {
             assertEquals("foo", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCheckedNoArgs() {
+        ExceptionService service = scaDomain.getService(ExceptionService.class, "ExceptionServiceClient");
+        try {
+            service.throwCheckedNoArgs();
+            fail();
+        } catch (CheckedExcpetionNoArgs e) {
+            // ok
+        }
+    }
+
+    @Test
+    public void testChecked2Args() {
+        ExceptionService service = scaDomain.getService(ExceptionService.class, "ExceptionServiceClient");
+        try {
+            service.throwChecked2Args();
+            fail();
+        } catch (CheckedExcpetion2Args e) {
+            assertEquals("foo", e.getMessage());
+            assertNotNull(e.getCause());
+            assertEquals("bla", e.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void testCheckedChained() {
+        ExceptionService service = scaDomain.getService(ExceptionService.class, "ExceptionServiceClient");
+        try {
+            service.throwCheckedChained();
+            fail();
+        } catch (CheckedExcpetionChained e) {
+            assertNotNull(e.getCause());
+            assertEquals("bla", e.getCause().getMessage());
         }
     }
 

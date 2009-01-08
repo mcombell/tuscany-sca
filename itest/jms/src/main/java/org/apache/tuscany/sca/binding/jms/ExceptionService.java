@@ -25,6 +25,9 @@ import org.osoa.sca.annotations.Remotable;
 public interface ExceptionService {
 
     public void throwChecked() throws CheckedExcpetion;
+    public void throwCheckedNoArgs() throws CheckedExcpetionNoArgs;
+    public void throwChecked2Args() throws CheckedExcpetion2Args;
+    public void throwCheckedChained() throws CheckedExcpetionChained;
 
     public void throwUnChecked();
 }
