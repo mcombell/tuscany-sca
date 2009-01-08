@@ -30,6 +30,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.util.FaultException;
 import org.apache.tuscany.sca.invocation.DataExchangeSemantics;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -206,6 +207,8 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
                     } else {
                         tuscanyMsg.setFaultBody(((InvocationTargetException)e.getCause()).getTargetException());
                     }
+                } else if (e.getCause() instanceof FaultException) {
+                    tuscanyMsg.setFaultBody(e.getCause());
                 } else {
                     tuscanyMsg.setFaultBody(e);
                 }
