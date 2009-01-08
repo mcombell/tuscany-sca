@@ -71,6 +71,8 @@ public class Axis2BindingInvoker implements Invoker, DataExchangeSemantics {
         new QName(Constants.SCA10_TUSCANY_NS, "CallbackID", TUSCANY_PREFIX);
     public static final QName CONVERSATION_ID_REFPARM_QN =
         new QName(Constants.SCA10_TUSCANY_NS, "ConversationID", TUSCANY_PREFIX);
+    public static long GLOBAL_AXIS_TIMEOUT = 240000L;
+
     
     private Axis2ServiceClient serviceClient;
     private QName wsdlOperationName;
@@ -143,7 +145,7 @@ public class Axis2BindingInvoker implements Invoker, DataExchangeSemantics {
         // ensure connections are tracked so that they can be closed by the reference binding
         MessageContext requestMC = operationClient.getMessageContext(WSDLConstants.MESSAGE_LABEL_OUT_VALUE);
         requestMC.getOptions().setProperty(HTTPConstants.REUSE_HTTP_CLIENT, Boolean.TRUE);
-        requestMC.getOptions().setTimeOutInMilliSeconds(240000L);
+        requestMC.getOptions().setTimeOutInMilliSeconds(GLOBAL_AXIS_TIMEOUT);
 
         for ( PolicyHandler policyHandler : policyHandlerList ) {
             policyHandler.beforeInvoke(msg, requestMC, operationClient);
