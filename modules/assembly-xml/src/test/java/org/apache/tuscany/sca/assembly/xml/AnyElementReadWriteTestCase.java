@@ -18,14 +18,15 @@
  */
 package org.apache.tuscany.sca.assembly.xml;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
-
-import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
@@ -34,12 +35,12 @@ import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtens
 import org.apache.tuscany.sca.contribution.processor.ValidatingXMLInputFactory;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class AnyElementReadWriteTestCase extends TestCase {
-
-	private XMLInputFactory inputFactory;
+public class AnyElementReadWriteTestCase {
 	private static final String XML_RECURSIVE_EXTENDED_ELEMENT = 
 		"<?xml version='1.0' encoding='UTF-8'?>" +
 	    "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"RecursiveExtendedElement\">" +
@@ -60,10 +61,11 @@ public class AnyElementReadWriteTestCase extends TestCase {
         "</service>" +
         "</component>" +
         "</composite>";
-	
+
+	private XMLInputFactory inputFactory;
 	private ExtensibleStAXArtifactProcessor staxProcessor;
 
-	@Override
+	@Before
 	public void setUp() throws Exception {
 		ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
 		 ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
@@ -75,12 +77,11 @@ public class AnyElementReadWriteTestCase extends TestCase {
 				inputFactory, XMLOutputFactory.newInstance(), null);
 	}
 
-	@Override
+	@After
 	public void tearDown() throws Exception {
 	}
 	
-	//@Test
-	@Ignore
+	@Test
 	public void testReadWriteExtendedRecursiveElement() throws Exception {
 		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_RECURSIVE_EXTENDED_ELEMENT));
 		Composite composite = (Composite) staxProcessor.read(reader);
@@ -98,7 +99,8 @@ public class AnyElementReadWriteTestCase extends TestCase {
 		bos.close();	
 	}	
 	
-	@Test
+	//@Test
+	@Ignore()
 	public void testReadWriteUnknwonImpl() throws Exception {
 		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_UNKNOWN_IMPL));
 		Composite composite = (Composite) staxProcessor.read(reader);
