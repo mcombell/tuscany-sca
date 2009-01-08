@@ -22,6 +22,11 @@ To access the SCA Manager application, point your Web browser to:
    http://localhost:9990/ui/cloud/
 
 Select the node you want to start (e.g StoreNode), then click the Start button.
+Note that the distribution does not include a prebuilt .war file for the catalog-webapp
+so before you can start the store node you need to first build this by going the the 
+store/catalog-webapp folder and running
+
+  ant compile
 
 You should now be able to access the online Store application. Point your Web
 browser to:
