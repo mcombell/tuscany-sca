@@ -112,10 +112,6 @@
       <attribute name="JMSPriority" type="string"/>
    </complexType>
 
-   <complexType name="SubscriptionHeaders"> 
-      <attribute name="JMSSelector" type="string"/> 
-   </complexType>
-
    <complexType name="ResourceAdapter">
       <sequence>
          <element name="property" type="string" 
