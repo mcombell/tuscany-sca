@@ -20,6 +20,10 @@ package org.apache.tuscany.sca.implementation.java.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Vector;
+
+import javax.xml.ws.Holder;
 
 import org.apache.tuscany.sca.core.context.InstanceWrapper;
 import org.apache.tuscany.sca.core.scope.Scope;
@@ -68,6 +72,7 @@ public class JavaImplementationInvoker implements Invoker, DataExchangeSemantics
 
     @SuppressWarnings("unchecked")
     public Message invoke(Message msg) {
+        int argumentHolderCount = 0;
         Operation op = msg.getOperation();
         if (op == null) {
             op = this.operation;
@@ -125,6 +130,31 @@ public class JavaImplementationInvoker implements Invoker, DataExchangeSemantics
                 }
             }
             
+            // Holder pattern. Any payload parameters <T> which are should be in holders are placed in Holder<T>.
+            if ( imethod != null) {
+                Class<?> [] params = imethod.getParameterTypes();
+                if ( params != null ) {
+                    for ( int i = 0; i < params.length; i++ ) {
+                        Class<?> parameter = params[ i ];
+                        if ( isHolder( parameter )) {
+                            // System.out.println( "JavaImplementationInvoker.invoke parameter " + i + " is Holder. Payload isArray=" + (payload != null ? payload.getClass().isArray() : "null" ));
+                            if (payload != null && !payload.getClass().isArray()) {
+                                // Promote single param from <T> to Holder<T>
+                                payload = new Holder( payload );                               
+                            } else {
+                                // Promote array params from [<T>] to [Holder<T>]
+                                Object [] payloadArray = (Object[]) payload;
+                                for ( int j = 0; j < payloadArray.length; j++ ) {
+                                    Object item = payloadArray[ j ];
+                                    payloadArray[ j ] = new Holder( item );
+                                }
+                            }
+                            argumentHolderCount++;
+                        }
+                    }
+                }                
+            }
+            
             Object ret;
             if (payload != null && !payload.getClass().isArray()) {
                 ret = imethod.invoke(instance, payload);
@@ -140,7 +170,52 @@ public class JavaImplementationInvoker implements Invoker, DataExchangeSemantics
                 scopeContainer.remove(contextId);
                 parameters.setConversationID(null);
             }
-            msg.setBody(ret);
+            
+            if (argumentHolderCount > 0) {
+                // Holder pattern. Any payload Holder<T> types are returned as the message body.
+                List returnArgs = new Vector<Object>();
+                int foundHolders = 0;
+                if ( imethod != null) {
+                    Class<?> [] params = imethod.getParameterTypes();
+                    if ( params != null ) {
+                        for ( int i = 0; i < params.length; i++ ) {
+                            Class<?> parameter = params[ i ];
+                            // System.out.println( "JavaImplementationInvoker.invoke return parameter " + i + " type=" + parameter.getClass().getName() );
+                            if ( isHolder( parameter )) {
+                                if (payload != null && !payload.getClass().isArray()) {
+                                    // Demote params from Holder<T> to <T>.
+                                    Holder<Object> holder = (Holder<Object>) payload;
+                                    returnArgs.add( holder.value );
+                                    foundHolders++;
+                                } else {
+                                    // Demote array params from Holder<T> to <T>.
+                                    Object [] payloadArray = (Object[]) payload;
+                                    for ( int j = 0; j < payloadArray.length; j++ ) {
+                                        Holder<Object> item = (Holder<Object>) payloadArray[ j ];
+                                        payloadArray[ j ] = item.value;
+                                        returnArgs.add( payloadArray[ j ] );
+                                    }
+                                    foundHolders++;
+                                }
+                            }
+                        }
+                    }                
+                }
+                // Although payload items are returned in a list, currently only support 1 return type.
+                if ( returnArgs.size() == 1 ) {
+                    Object value = returnArgs.get( 0 );
+                    if (( value != null ) && ( value.getClass().isArray() )) {
+                       Object [] values = (Object []) value;
+                       if (( values != null ) && ( values.length > 0 )) {
+                          msg.setBody( values[ 0 ] );
+                       }
+                    } else 
+                        msg.setBody(value);                
+                } else 
+                   msg.setBody(returnArgs.toArray());                
+            } else {
+                msg.setBody(ret);
+            }
         } catch (InvocationTargetException e) {
             Throwable cause = e.getTargetException();
             boolean isChecked = false;
@@ -196,4 +271,16 @@ public class JavaImplementationInvoker implements Invoker, DataExchangeSemantics
         return allowsPBR;
     }
 
+    /**
+     * Given a Class, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
+     * @param testClass
+     * @return
+     * @author DOB
+     */
+    public static boolean isHolder( Class testClass ) {
+        if ( testClass.getName().equals( "javax.xml.ws.Holder" )) {
+            return true;
+        }
+        return false;        
+    }
 }

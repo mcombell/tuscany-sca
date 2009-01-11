@@ -149,13 +149,6 @@ public class DataTypeImpl<L> implements DataType<L> {
         this.dataBinding = dataBinding;
     }
 
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(physical).append(" ").append(dataBinding).append(" ").append(logical);
-        return sb.toString();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -215,5 +208,22 @@ public class DataTypeImpl<L> implements DataType<L> {
             metaDataMap = new ConcurrentHashMap<Class<?>, Object>();
         }
         metaDataMap.put(type, metaData);
+    }
+    
+    @Override
+    public String toString() {
+        // private Class<?> physical;
+        // private Type genericType;
+        // private L logical;
+        // private Map<Class<?>, Object> metaDataMap;
+        StringBuilder b = new StringBuilder( 256 );
+           b.append( "DataType[" );
+           b.append( "dataBinding=" + ((dataBinding==null) ? "null" : dataBinding) );
+           b.append( ", genericType=" + ((genericType==null) ? "null" : genericType) ); 
+           b.append( ", physical=" + ((physical==null) ? "null" : physical) ); 
+           b.append( ", logical=" + ((logical==null) ? "null" : logical) );
+           b.append( ", metaData size=" + ((metaDataMap==null) ? "0" : metaDataMap.size()) );
+           b.append( "]" );
+        return b.toString();
     }
 }

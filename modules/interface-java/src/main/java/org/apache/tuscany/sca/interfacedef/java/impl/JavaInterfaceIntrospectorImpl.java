@@ -224,14 +224,26 @@ public class JavaInterfaceIntrospectorImpl {
             DataType<XMLType> returnDataType =
                 returnType == void.class ? null : new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, returnType, method
                     .getGenericReturnType(), xmlReturnType);
+
+            // Input types
             List<DataType> paramDataTypes = new ArrayList<DataType>(parameterTypes.length);
             Type[] genericParamTypes = method.getGenericParameterTypes();
             for (int i = 0; i < parameterTypes.length; i++) {
                 Class paramType = parameterTypes[i];
                 XMLType xmlParamType = new XMLType(new QName(ns, "arg" + i), null);
-                paramDataTypes.add(new DataTypeImpl<XMLType>(UNKNOWN_DATABINDING, paramType, genericParamTypes[i],
-                                                             xmlParamType));
+                DataTypeImpl<XMLType> xmlDataType = new DataTypeImpl<XMLType>(
+                    UNKNOWN_DATABINDING, paramType, genericParamTypes[i],xmlParamType);
+                // Holder pattern. Physical types of Holder<T> classes are updated to <T> to aid in transformations.
+                if ( isHolder( paramType )) {
+                    Type firstActual = getFirstActualType( genericParamTypes[ i ] );
+                    if ( firstActual != null ) {
+                        xmlDataType.setPhysical( (Class<?>)firstActual );
+                    }
+                }
+                paramDataTypes.add( xmlDataType);
             }
+            
+            // Fault types
             List<DataType> faultDataTypes = new ArrayList<DataType>(faultTypes.length);
             Type[] genericFaultTypes = method.getGenericExceptionTypes();
             for (int i = 0; i < faultTypes.length; i++) {
@@ -263,4 +275,31 @@ public class JavaInterfaceIntrospectorImpl {
         return operations;
     }
 
+    /**
+     * Given a Class, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
+     * @param testClass
+     * @return boolean whether testClass is Holder type.
+     */
+    protected static boolean isHolder( Class testClass ) {
+        if ( testClass.getName().startsWith( "javax.xml.ws.Holder" )) {
+            return true;
+        }
+        return false;        
+    }
+
+    /**
+     * Given a Class<T>, returns T, otherwise null.
+     * @param testClass
+     * @return
+     */
+    protected static Type getFirstActualType(Type genericType) {
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType)genericType;
+            Type[] actualTypes = pType.getActualTypeArguments();
+            if ((actualTypes != null) && (actualTypes.length > 0)) {
+                return actualTypes[0];
+            }
+        }
+        return null;
+    }
 }
