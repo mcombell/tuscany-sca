@@ -1,6 +1,6 @@
-Calculator Sample
+Simple BigBank Sample
 =================
-This sample implements a simple a version of the BigBank scenrio used in 
+This sample implements a simple a version of the BigBank scenario used in 
 various places in the SCA specification documents. 
 
 The README in the samples directory (the directory above this) provides 
@@ -29,7 +29,7 @@ SCA default binding is used.
 A request to the AccountComponent results in a request to the AccountDataComponent to get account data
 which is based on a random stock quote price. Therefore result for this sample will vary on each run.
 
-calculator/
+simple-bigbank/
   src/
     main/
       java/
