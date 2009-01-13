@@ -27,20 +27,19 @@ import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.util.StreamReaderDelegate;
 import javax.xml.validation.Schema;
 import javax.xml.validation.ValidatorHandler;
 
+import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.Problem;
+import org.apache.tuscany.sca.monitor.Problem.Severity;
 import org.xml.sax.Attributes;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
-import org.apache.tuscany.sca.monitor.Monitor;
-import org.apache.tuscany.sca.monitor.Problem;
-import org.apache.tuscany.sca.monitor.Problem.Severity;
 
 /**
  * 
@@ -201,6 +200,7 @@ class ValidatingXMLStreamReader extends TuscanyXMLStreamReader implements XMLStr
                     case XMLStreamConstants.START_ELEMENT:
                         level++;
                         handleStartElement();
+                        pushContext();
                         return event;
                     case XMLStreamConstants.PROCESSING_INSTRUCTION:
                         handler.processingInstruction(super.getPITarget(), super.getPIData());
@@ -214,6 +214,7 @@ class ValidatingXMLStreamReader extends TuscanyXMLStreamReader implements XMLStr
                     case XMLStreamConstants.END_ELEMENT:
                         handleEndElement();
                         level--;
+                        popContext();
                         return event;
                     case XMLStreamConstants.END_DOCUMENT:
                         handler.endDocument();
