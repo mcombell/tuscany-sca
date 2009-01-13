@@ -23,7 +23,7 @@
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
         <relativePath>../../pom.xml</relativePath>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
     </parent>
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>tuscany-distribution-features</artifactId>

@@ -20,7 +20,7 @@
 <feature
       id="org.apache.tuscany.sca.feature.web20"
       label="Apache Tuscany SCA Web 2.0 Eclipse Feature"
-      version="1.4.0"
+      version="1.4.1-SNAPSHOT.0"
       provider-name="Apache Software Foundation">
 
    <description url="http://incubator.apache.org/tuscany">
@@ -37,7 +37,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
    <includes
          id="org.apache.tuscany.sca.feature.core"
-         version="1.4.0"/>
+         version="1.4.1-SNAPSHOT.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui.ide"/>
@@ -55,13 +55,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.apache.tuscany.sca.plugin.core"/>
       <import plugin="org.eclipse.ui.workbench"/>
-      <import feature="org.apache.tuscany.sca.feature.core" version="1.4.0"/>
+      <import feature="org.apache.tuscany.sca.feature.core" version="1.4.1-SNAPSHOT.0"/>
    </requires>
 
    <plugin
          id="org.apache.tuscany.sca.plugin.web20"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.4.1-SNAPSHOT.0"/>
 
 </feature>

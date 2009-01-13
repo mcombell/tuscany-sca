@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.apache.tuscany.sca</groupId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-sca-api</artifactId>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
  
@@ -48,7 +48,7 @@
 
                 <configuration>
                     <instructions>
-                        <Bundle-Version>1.4</Bundle-Version>
+                        <Bundle-Version>1.4.1-SNAPSHOT</Bundle-Version>
                         <Bundle-SymbolicName>org.apache.tuscany.sca.api</Bundle-SymbolicName>
                         <Bundle-Description>${pom.description}</Bundle-Description>
                         <Export-Package>org.osoa.sca*</Export-Package>

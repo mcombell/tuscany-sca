@@ -24,14 +24,14 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-demos</artifactId>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>demo-alert-aggregator-webapp</artifactId>
     <packaging>war</packaging>
-    <version>1.4</version>
+    <version>1.4.1-SNAPSHOT</version>
     <name>Apache Tuscany SCA Demo Alert Aggregator</name>
     <url>http://cwiki.apache.org/TUSCANY</url>
 
@@ -120,24 +120,24 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-host-webapp</artifactId>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-atom-abdera</artifactId>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-binding-rss-rome</artifactId>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
@@ -338,7 +338,7 @@
             <plugin>
                 <groupId>org.apache.tuscany.sca</groupId>
                 <artifactId>tuscany-maven-ant-generator</artifactId>
-                <version>1.4</version>
+                <version>1.4.1-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <configuration>

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-sca</artifactId>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-modules</artifactId>
@@ -30,7 +30,7 @@
     <name>Apache Tuscany SCA Implementation Modules</name>
 
     <properties>
-        <tuscany.version>1.4</tuscany.version>
+        <tuscany.version>1.4.1-SNAPSHOT</tuscany.version>
     </properties>
 
     <profiles>

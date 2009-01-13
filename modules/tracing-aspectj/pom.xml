@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-modules</artifactId>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>tuscany-tracing-aspectj</artifactId>
@@ -98,7 +98,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Version>1.4</Bundle-Version>
+                        <Bundle-Version>1.4.1-SNAPSHOT</Bundle-Version>
                         <Bundle-SymbolicName>org.apache.tuscany.sca.tracing.aspect</Bundle-SymbolicName>
                         <Bundle-Description>${pom.description}</Bundle-Description>
                         <Export-Package></Export-Package>

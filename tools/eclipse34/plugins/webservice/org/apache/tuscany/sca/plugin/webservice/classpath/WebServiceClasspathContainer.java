@@ -33,7 +33,7 @@ public class WebServiceClasspathContainer extends BaseClasspathContainer impleme
     public WebServiceClasspathContainer() {
         super("org.apache.tuscany.sca.plugin.webservice",
               "org.apache.tuscany.sca.plugin.webservice.runtime.library", "Tuscany SCA Web Service Library", 
-              "tuscany-sca", "tuscany-distribution-webservice", "1.4-SNAPSHOT",
+              "tuscany-sca", "tuscany-distribution-webservice", "1.4.1-SNAPSHOT",
               "TUSCANY_HOME", "TUSCANY_SRC");
     }
 }

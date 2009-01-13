@@ -21,5 +21,5 @@
                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                          xsi:schemaLocation="http://www.apache.org/tuscany/interop BuiltInUnsignedLong.xsd ">
 	<unsignedLong>0</unsignedLong>
-	<unsignedLong>18446744073709551615</unsignedLong>
+	<unsignedLong>1.4.1-SNAPSHOT46744073709551615</unsignedLong>
 </tns:BuiltInUnsignedLong>

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.tuscany.sca</groupId>
         <artifactId>tuscany-distribution-features</artifactId>
-        <version>1.4</version>
+        <version>1.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,7 +36,7 @@
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-distribution-all</artifactId>
             <type>pom</type>
-            <version>1.4</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -65,7 +65,7 @@
                                         <descriptor>src/main/assembly/repository.xml</descriptor>
                                     </descriptors>
                                     <tarLongFileMode>gnu</tarLongFileMode>
-                                    <finalName>apache-tuscany-sca-repository-1.4</finalName>
+                                    <finalName>apache-tuscany-sca-repository-1.4.1-SNAPSHOT</finalName>
                                 </configuration>
                             </execution>
                         </executions>
