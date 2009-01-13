@@ -142,7 +142,7 @@ public class DeployableCompositeCollectionImpl implements ItemCollection, LocalI
         
         // Create contribution processor
         modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        contributionProcessor = new ContributionContentProcessor(modelFactories, modelResolvers, urlProcessor, staxProcessor, monitor);
+        contributionProcessor = new ContributionContentProcessor(extensionPoints, monitor);
         
         // Create contribution and composite builders
         contributionDependencyBuilder = new ContributionDependencyBuilderImpl(monitor);

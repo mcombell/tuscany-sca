@@ -67,9 +67,11 @@ public class DefaultURLArtifactProcessorExtensionPoint
         XMLOutputFactory outputFactory = modelFactories.getFactory(XMLOutputFactory.class);
         UtilityExtensionPoint utilities = this.extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
         MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
-        if (monitorFactory != null) 
-        	this.monitor = monitorFactory.createMonitor();
-        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        if (monitorFactory != null) {
+            this.monitor = monitorFactory.createMonitor();
+        }
+        StAXArtifactProcessorExtensionPoint staxProcessors =
+            extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, outputFactory, this.monitor);
     }
     
@@ -203,8 +205,8 @@ public class DefaultURLArtifactProcessorExtensionPoint
                             Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ModelFactoryExtensionPoint.class, StAXArtifactProcessor.class, Monitor.class);
                             processor = constructor.newInstance(modelFactories, staxProcessor, monitor);
                         } catch (NoSuchMethodException e2) {
-                            Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ExtensionPointRegistry.class, StAXArtifactProcessor.class, Monitor.class);
-                            processor = constructor.newInstance(extensionPoints, staxProcessor, monitor);
+                            Constructor<URLArtifactProcessor> constructor = processorClass.getConstructor(ExtensionPointRegistry.class, Monitor.class);
+                            processor = constructor.newInstance(extensionPoints, monitor);
                         }
                     }
                 } catch (Exception e) {

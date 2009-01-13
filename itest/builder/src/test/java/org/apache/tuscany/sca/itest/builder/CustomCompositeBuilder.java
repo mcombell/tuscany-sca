@@ -37,7 +37,6 @@ import org.apache.tuscany.sca.assembly.SCABindingFactory;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
-import org.apache.tuscany.sca.contribution.Artifact;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
@@ -63,6 +62,7 @@ import org.apache.tuscany.sca.workspace.builder.ContributionDependencyBuilder;
 import org.apache.tuscany.sca.workspace.builder.impl.ContributionDependencyBuilderImpl;
 
 public class CustomCompositeBuilder {
+    private ExtensionPointRegistry extensionPoints;
     private URLArtifactProcessor<Contribution> contributionProcessor;
     private ModelResolverExtensionPoint modelResolvers;
     private ModelFactoryExtensionPoint modelFactories;
@@ -85,7 +85,7 @@ public class CustomCompositeBuilder {
     private void init() {
         
         // Create extension point registry 
-        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        extensionPoints = new DefaultExtensionPointRegistry();
         
         // Create a monitor
         UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
@@ -137,7 +137,7 @@ public class CustomCompositeBuilder {
 
         // Create workspace model
         workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the test contribution
         URI artifactURI = URI.create(sourceURI);

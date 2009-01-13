@@ -250,7 +250,7 @@ public class ReallySmallRuntimeBuilder {
         ContributionService contributionService =
             new ContributionServiceImpl(repository, packageProcessor, documentProcessor, staxProcessor,
                                         contributionListener, policyDefinitionResolver, modelResolvers, modelFactories,
-                                        assemblyFactory, contributionFactory, inputFactory, policyDefinitions, monitor);
+                                        assemblyFactory, contributionFactory, inputFactory, policyDefinitions, registry, monitor);
         return contributionService;
     }
 

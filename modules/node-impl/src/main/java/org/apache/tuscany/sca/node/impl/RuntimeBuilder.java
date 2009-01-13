@@ -20,8 +20,6 @@
 package org.apache.tuscany.sca.node.impl;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -233,7 +231,7 @@ public class RuntimeBuilder {
         ContributionService contributionService =
             new ContributionServiceImpl(repository, packageProcessor, documentProcessor, staxProcessor,
                                         contributionListener, policyDefinitionResolver, modelResolvers, modelFactories,
-                                        assemblyFactory, contributionFactory, inputFactory, policyDefinitions, monitor);
+                                        assemblyFactory, contributionFactory, inputFactory, policyDefinitions, registry, monitor);
         return contributionService;
     }
 

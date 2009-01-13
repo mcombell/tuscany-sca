@@ -66,7 +66,7 @@ import org.apache.tuscany.sca.workspace.builder.impl.ContributionDependencyBuild
  * @version $Rev$ $Date$
  */
 public class ListComponents {
-    
+    private static ExtensionPointRegistry extensionPoints;
     private static URLArtifactProcessor<Contribution> contributionProcessor;
     private static ModelResolverExtensionPoint modelResolvers;
     private static ModelFactoryExtensionPoint modelFactories;
@@ -76,7 +76,7 @@ public class ListComponents {
     private static void init() {
         
         // Create extension point registry 
-        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        extensionPoints = new DefaultExtensionPointRegistry();
         
         // Initialize the Tuscany module activators
         ModuleActivatorExtensionPoint moduleActivators = extensionPoints.getExtensionPoint(ModuleActivatorExtensionPoint.class);
@@ -110,7 +110,7 @@ public class ListComponents {
 
         // Create workspace model
         Workspace workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the sample store contribution
         URI storeURI = URI.create("store");

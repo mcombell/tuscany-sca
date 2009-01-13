@@ -40,12 +40,12 @@ public class ExtensibleModelResolverTestCase extends TestCase {
     @Override
     protected void setUp() throws Exception {
         
-        ModelResolverExtensionPoint resolvers = new DefaultModelResolverExtensionPoint();
+        ModelResolverExtensionPoint resolvers = new DefaultModelResolverExtensionPoint(null);
         resolvers.addResolver(Model.class, TestModelResolver.class);
         
         ModelFactoryExtensionPoint factories = new DefaultModelFactoryExtensionPoint();
         
-        resolver = new ExtensibleModelResolver(null, resolvers, factories, null);
+        resolver = new ExtensibleModelResolver(null, null, resolvers, factories, null);
 
         factory = new DefaultContributionFactory();
     }

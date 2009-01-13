@@ -58,7 +58,7 @@ public abstract class AbstractWSDLTestCase extends TestCase {
         ContributionFactory contributionFactory = modelFactories.getFactory(ContributionFactory.class);
         Contribution contribution = contributionFactory.createContribution();
         ModelResolverExtensionPoint modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        resolver = new ExtensibleModelResolver(contribution, modelResolvers, modelFactories);
+        resolver = new ExtensibleModelResolver(contribution, extensionPoints);
         contribution.setModelResolver(resolver);
         
         URLArtifactProcessorExtensionPoint documentProcessors = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);

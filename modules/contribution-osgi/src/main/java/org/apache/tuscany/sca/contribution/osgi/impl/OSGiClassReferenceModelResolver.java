@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.Import;
-import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.osgi.runtime.OSGiRuntime;
 import org.osgi.framework.Bundle;
 
@@ -42,7 +42,7 @@ public class OSGiClassReferenceModelResolver implements ModelResolver {
     private boolean initialized;
     private boolean useOSGi;
 
-    public OSGiClassReferenceModelResolver(Contribution contribution, ModelFactoryExtensionPoint modelFactories) {
+    public OSGiClassReferenceModelResolver(Contribution contribution, ExtensionPointRegistry registry) {
         this.contribution = contribution;
     }
 

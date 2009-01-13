@@ -27,9 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.tuscany.sca.contribution.Contribution;
-import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.java.ContributionClassLoaderProvider;
+import org.apache.tuscany.sca.contribution.java.DefaultContributionClassLoaderProvider;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 
 /**
@@ -38,14 +41,16 @@ import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
  * @version $Rev: 557916 $ $Date: 2007-07-20 01:04:40 -0700 (Fri, 20 Jul 2007) $
  */
 public class ClassReferenceModelResolver implements ModelResolver {
-    private Contribution contribution;
+    private final ExtensionPointRegistry registry;
+    private final Contribution contribution;
     private WeakReference<ClassLoader> classLoader;
     private Map<String, ClassReference> map = new HashMap<String, ClassReference>();
 
     private ModelResolver osgiResolver;
 
-    public ClassReferenceModelResolver(final Contribution contribution, ModelFactoryExtensionPoint modelFactories) {
+    public ClassReferenceModelResolver(final Contribution contribution, ExtensionPointRegistry registry) {
         this.contribution = contribution;
+        this.registry = registry;
         if (this.contribution != null) {
             // Allow privileged access to get ClassLoader. Requires RuntimePermission in security policy.
             // ClassLoader cl = contribution.getClassLoader();
@@ -63,7 +68,18 @@ public class ClassReferenceModelResolver implements ModelResolver {
                 //    }
                 //});
                 ClassLoader contextClassLoader = ServiceDiscovery.getInstance().getServiceDiscoverer().getClass().getClassLoader();
-                cl = new ContributionClassLoader(contribution, contextClassLoader);
+                ContributionClassLoaderProvider provider = null;
+                try {
+                    provider =
+                        registry.getExtensionPoint(UtilityExtensionPoint.class)
+                            .getUtility(ContributionClassLoaderProvider.class);
+                } catch (Throwable e) {
+                    // Ignore errors
+                }
+                if (provider == null) {
+                    provider = new DefaultContributionClassLoaderProvider(registry);
+                }
+                cl = provider.getClassLoader(contribution, contextClassLoader);
                 contribution.setClassLoader(cl);
             }
             this.classLoader = new WeakReference<ClassLoader>(cl);
@@ -84,8 +100,8 @@ public class ClassReferenceModelResolver implements ModelResolver {
                 Class.forName("org.apache.tuscany.sca.contribution.osgi.impl.OSGiClassReferenceModelResolver");
             if (osgiResolverClass != null) {
                 Constructor constructor =
-                    osgiResolverClass.getConstructor(Contribution.class, ModelFactoryExtensionPoint.class);
-                this.osgiResolver = (ModelResolver)constructor.newInstance(contribution, modelFactories);
+                    osgiResolverClass.getConstructor(Contribution.class, ExtensionPointRegistry.class);
+                this.osgiResolver = (ModelResolver)constructor.newInstance(contribution, registry);
             }
         } catch (Throwable e) {
             // Ignore error, non-OSGi classloading is used in this case

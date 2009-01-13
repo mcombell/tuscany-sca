@@ -26,6 +26,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ContributionFactory;
@@ -35,8 +38,10 @@ import org.apache.tuscany.sca.contribution.DefaultImport;
 import org.apache.tuscany.sca.contribution.Export;
 import org.apache.tuscany.sca.contribution.Import;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleURLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
@@ -59,6 +64,7 @@ import org.apache.tuscany.sca.workspace.scanner.impl.JarContributionScanner;
  * @version $Rev$ $Date$
  */
 public class ContributionInfoProcessor implements URLArtifactProcessor<Contribution>{
+    private ExtensionPointRegistry extensionPoints;
     private ContributionFactory contributionFactory;
     private ModelResolverExtensionPoint modelResolvers;
     private ModelFactoryExtensionPoint modelFactories;
@@ -66,17 +72,23 @@ public class ContributionInfoProcessor implements URLArtifactProcessor<Contribut
     private URLArtifactProcessor<Object> artifactProcessor;
     private StAXArtifactProcessor<Object> extensionProcessor;
 
-    public ContributionInfoProcessor(ExtensionPointRegistry extensionPoints, StAXArtifactProcessor<Object> extensionProcessor, Monitor monitor) {
+    public ContributionInfoProcessor(ExtensionPointRegistry extensionPoints, Monitor monitor) {
+        this.extensionPoints = extensionPoints;
         this.modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
         this.modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
         hackResolvers(modelResolvers);
         URLArtifactProcessorExtensionPoint artifactProcessors = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
         this.artifactProcessors = artifactProcessors;
         this.artifactProcessor = new ExtensibleURLArtifactProcessor(artifactProcessors, monitor);
-        this.extensionProcessor = extensionProcessor;
+        // Get and initialize artifact processors
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        XMLInputFactory inputFactory = modelFactories.getFactory(XMLInputFactory.class);
+        XMLOutputFactory outputFactory = modelFactories.getFactory(XMLOutputFactory.class);
+        this.extensionProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, outputFactory, monitor);
         this.contributionFactory = modelFactories.getFactory(ContributionFactory.class);
     }
     
+    /*
     public ContributionInfoProcessor(ModelFactoryExtensionPoint modelFactories, ModelResolverExtensionPoint modelResolvers, URLArtifactProcessor<Object> artifactProcessor) {
         this.modelFactories = modelFactories;
         this.modelResolvers = modelResolvers;
@@ -84,6 +96,7 @@ public class ContributionInfoProcessor implements URLArtifactProcessor<Contribut
         this.artifactProcessor = artifactProcessor;
         this.contributionFactory = modelFactories.getFactory(ContributionFactory.class);
     }
+    */
     
     public String getArtifactType() {
         return ".contribution/info";
@@ -99,7 +112,7 @@ public class ContributionInfoProcessor implements URLArtifactProcessor<Contribut
         Contribution contribution = contributionFactory.createContribution();
         contribution.setURI(contributionURI.toString());
         contribution.setLocation(contributionURL.toString());
-        ModelResolver modelResolver = new ExtensibleModelResolver(contribution, modelResolvers, modelFactories);
+        ModelResolver modelResolver = new ExtensibleModelResolver(contribution, extensionPoints);
         contribution.setModelResolver(modelResolver);
         contribution.setUnresolved(true);
 

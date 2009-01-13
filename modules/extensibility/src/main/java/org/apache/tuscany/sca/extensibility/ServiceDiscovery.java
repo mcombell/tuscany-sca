@@ -57,7 +57,7 @@ public class ServiceDiscovery {
 
     public ServiceDiscoverer getServiceDiscoverer() {
         if (discoverer == null) {
-            discoverer = new ContextClassLoaderServiceDiscoverer();
+            discoverer = new ClassLoaderServiceDiscoverer();
         }
         return discoverer;
     }

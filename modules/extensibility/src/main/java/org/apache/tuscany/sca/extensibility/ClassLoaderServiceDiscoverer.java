@@ -44,10 +44,10 @@ import java.util.logging.Logger;
 /**
  * A ServiceDiscoverer that find META-INF/services/... using the Context ClassLoader.
  *
- * @version $Rev: $ $Date: $
+ * @version $Rev$ $Date$
  */
-public class ContextClassLoaderServiceDiscoverer implements ServiceDiscoverer {
-    private static final Logger logger = Logger.getLogger(ContextClassLoaderServiceDiscoverer.class.getName());
+public class ClassLoaderServiceDiscoverer implements ServiceDiscoverer {
+    private static final Logger logger = Logger.getLogger(ClassLoaderServiceDiscoverer.class.getName());
 
     public class ServiceDeclarationImpl implements ServiceDeclaration {
         private URL url;
@@ -107,11 +107,25 @@ public class ContextClassLoaderServiceDiscoverer implements ServiceDiscoverer {
 
     private WeakReference<ClassLoader> classLoaderReference;
 
-    public ContextClassLoaderServiceDiscoverer() {
+    /**
+     * Construct a service discoverer based on TCCL
+     */
+    public ClassLoaderServiceDiscoverer() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         this.classLoaderReference = new WeakReference<ClassLoader>(classLoader);
     }
 
+    /**
+     * Construct a service discoverer using the given classloader
+     * @param classLoader
+     */
+    public ClassLoaderServiceDiscoverer(ClassLoader classLoader) {
+        if (classLoader == null) {
+            classLoader = Thread.currentThread().getContextClassLoader();
+        }
+        this.classLoaderReference = new WeakReference<ClassLoader>(classLoader);
+    }
+    
     private List<URL> getResources(final String name, final boolean firstOnly) throws IOException {
         try {
             return AccessController.doPrivileged(new PrivilegedExceptionAction<List<URL>>() {

@@ -23,9 +23,9 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.tuscany.sca.assembly.Base;
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 
 /**
  * An implementation of an extensible model resolver which delegates to the
@@ -34,6 +34,7 @@ import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
  * @version $Rev$ $Date$
  */
 public class ExtensibleModelResolver implements ModelResolver {
+    private ExtensionPointRegistry extensionPoints;
     private final ModelResolverExtensionPoint resolverExtensions;
     private final ModelFactoryExtensionPoint modelFactories;
     private final Contribution contribution;
@@ -47,16 +48,18 @@ public class ExtensibleModelResolver implements ModelResolver {
      * Constructs an extensible model resolver
      * 
      * @param contribution
+     * @param extensionPoints TODO
      * @param resolverExtensions
      * @param modelFactories
      * @param defaultResolver
      */
     @Deprecated
     public ExtensibleModelResolver(Contribution contribution,
+                                   ExtensionPointRegistry extensionPoints,
                                    ModelResolverExtensionPoint resolverExtensions,
-                                   ModelFactoryExtensionPoint modelFactories,
-                                   ModelResolver defaultResolver) {
+                                   ModelFactoryExtensionPoint modelFactories, ModelResolver defaultResolver) {
         this.contribution = contribution;
+        this.extensionPoints = extensionPoints;
         this.resolverExtensions = resolverExtensions;
         this.modelFactories = modelFactories;
         //FIXME Remove this default resolver, this is currently used to resolve policy declarations
@@ -64,20 +67,16 @@ public class ExtensibleModelResolver implements ModelResolver {
         // defaultResolver hack.
         this.defaultResolver = defaultResolver;
     }
-
+    
     /**
-     * Constructs an extensible model resolver
-     * 
-     * @param resolverExtensions
      * @param contribution
-     * @param modelFactories
+     * @param extensionPoints
      */
-    public ExtensibleModelResolver(Contribution contribution,
-                                   ModelResolverExtensionPoint resolverExtensions,
-                                   ModelFactoryExtensionPoint modelFactories) {
+    public ExtensibleModelResolver(Contribution contribution, ExtensionPointRegistry extensionPoints) {
         this.contribution = contribution;
-        this.resolverExtensions = resolverExtensions;
-        this.modelFactories = modelFactories;
+        this.extensionPoints = extensionPoints;
+        this.resolverExtensions = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
+        this.modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
     }
 
     /**
@@ -116,15 +115,28 @@ public class ExtensibleModelResolver implements ModelResolver {
                     return resolverInstance;
                 }
                 try {
-                    Constructor<? extends ModelResolver> constructor =
-                        resolverClass
-                            .getConstructor(new Class[] {Contribution.class, ModelFactoryExtensionPoint.class});
-                    if (constructor != null) {
+                    try {
+                        Constructor<? extends ModelResolver> constructor =
+                            resolverClass.getConstructor(new Class[] {Contribution.class,
+                                                                      ModelFactoryExtensionPoint.class});
+                        if (constructor != null) {
 
-                        resolverInstance = constructor.newInstance(contribution, modelFactories);
-                        resolversByImplementationClass.put(resolverClass, resolverInstance);
-                        resolversByModelType.put(c, resolverInstance);
-                        return resolverInstance;
+                            resolverInstance = constructor.newInstance(contribution, modelFactories);
+                            resolversByImplementationClass.put(resolverClass, resolverInstance);
+                            resolversByModelType.put(c, resolverInstance);
+                            return resolverInstance;
+                        }
+                    } catch (NoSuchMethodException e) {
+                        Constructor<? extends ModelResolver> constructor =
+                            resolverClass.getConstructor(new Class[] {Contribution.class,
+                                                                      ExtensionPointRegistry.class});
+                        if (constructor != null) {
+
+                            resolverInstance = constructor.newInstance(contribution, extensionPoints);
+                            resolversByImplementationClass.put(resolverClass, resolverInstance);
+                            resolversByModelType.put(c, resolverInstance);
+                            return resolverInstance;
+                        }
                     }
                 } catch (Exception e) {
                     throw new IllegalStateException(e);

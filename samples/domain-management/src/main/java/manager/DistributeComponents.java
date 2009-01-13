@@ -49,7 +49,6 @@ import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
 import org.apache.tuscany.sca.assembly.builder.impl.CompositeBuilderImpl;
 import org.apache.tuscany.sca.binding.atom.AtomBindingFactory;
 import org.apache.tuscany.sca.contribution.Contribution;
-import org.apache.tuscany.sca.contribution.ContributionFactory;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
@@ -71,7 +70,6 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContractMapper;
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.MonitorFactory;
 import org.apache.tuscany.sca.policy.IntentAttachPointTypeFactory;
-import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.workspace.Workspace;
 import org.apache.tuscany.sca.workspace.WorkspaceFactory;
 import org.apache.tuscany.sca.workspace.builder.ContributionDependencyBuilder;
@@ -107,7 +105,7 @@ import org.xml.sax.SAXException;
  * @version $Rev$ $Date$
  */
 public class DistributeComponents {
-    
+    private static ExtensionPointRegistry extensionPoints;
     private static URLArtifactProcessor<Contribution> contributionProcessor;
     private static ModelResolverExtensionPoint modelResolvers;
     private static ModelFactoryExtensionPoint modelFactories;
@@ -126,7 +124,7 @@ public class DistributeComponents {
     private static void init() {
         
         // Create extension point registry 
-        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        extensionPoints = new DefaultExtensionPointRegistry();
         
         // Create a monitor
         UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
@@ -184,7 +182,7 @@ public class DistributeComponents {
 
         // Create workspace model
         Workspace workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the sample store contribution
         URI storeURI = URI.create("store");

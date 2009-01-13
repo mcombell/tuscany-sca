@@ -44,7 +44,6 @@ import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ExtensibleModelResolver;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-import org.apache.tuscany.sca.contribution.resolver.ModelResolverExtensionPoint;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ModuleActivator;
@@ -70,7 +69,6 @@ import org.junit.Test;
 public class EndpointTestCase {
 	
     private static URLArtifactProcessor<Contribution> contributionProcessor;
-    private static ModelResolverExtensionPoint modelResolvers;
     private static ModelFactoryExtensionPoint modelFactories;
     private static AssemblyFactory assemblyFactory;
     private static XMLOutputFactory outputFactory;
@@ -117,8 +115,7 @@ public class EndpointTestCase {
         contributionProcessor = docProcessorExtensions.getProcessor(Contribution.class);
         
         // Get the model resolvers
-        modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        modelResolver = new ExtensibleModelResolver(null, modelResolvers, modelFactories);
+        modelResolver = new ExtensibleModelResolver(null, extensionPoints);
                
         // Create a composite builder
         SCABindingFactory scaBindingFactory = modelFactories.getFactory(SCABindingFactory.class);

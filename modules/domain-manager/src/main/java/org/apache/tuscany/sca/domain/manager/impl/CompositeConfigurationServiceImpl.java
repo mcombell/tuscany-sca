@@ -115,6 +115,7 @@ public class CompositeConfigurationServiceImpl extends HttpServlet implements Se
     @Reference 
     public LocalItemCollection cloudCollection;    
 
+    private ExtensionPointRegistry extensionPoints;
     private ModelFactoryExtensionPoint modelFactories;
     private ModelResolverExtensionPoint modelResolvers;
     private AssemblyFactory assemblyFactory;
@@ -135,7 +136,7 @@ public class CompositeConfigurationServiceImpl extends HttpServlet implements Se
     @Init
     public void initialize() throws ParserConfigurationException {
         
-        ExtensionPointRegistry extensionPoints = domainManagerConfiguration.getExtensionPoints();
+        extensionPoints = domainManagerConfiguration.getExtensionPoints();
         
         // Create a monitor
         UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
@@ -160,7 +161,7 @@ public class CompositeConfigurationServiceImpl extends HttpServlet implements Se
         
         // Create contribution processor
         modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        contributionProcessor = new ContributionContentProcessor(modelFactories, modelResolvers, urlProcessor, staxProcessor, monitor);
+        contributionProcessor = new ContributionContentProcessor(extensionPoints, monitor);
         
         // Create contribution and composite builders
         DocumentBuilderFactory documentBuilderFactory = modelFactories.getFactory(DocumentBuilderFactory.class);
@@ -221,7 +222,7 @@ public class CompositeConfigurationServiceImpl extends HttpServlet implements Se
         
         // Populate the domain composite
         Workspace workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
         
         Map<String, Contribution> contributionMap = new HashMap<String, Contribution>(); 
         for (Entry<String, Item> domainEntry: domainEntries) {

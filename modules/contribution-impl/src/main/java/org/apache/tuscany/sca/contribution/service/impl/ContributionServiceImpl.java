@@ -55,13 +55,14 @@ import org.apache.tuscany.sca.contribution.service.ContributionService;
 import org.apache.tuscany.sca.contribution.service.ExtensibleContributionListener;
 import org.apache.tuscany.sca.contribution.service.util.IOHelper;
 import org.apache.tuscany.sca.contribution.xml.ContributionMetadataDocumentProcessor;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.definitions.SCADefinitions;
-import org.apache.tuscany.sca.policy.Intent;
-import org.apache.tuscany.sca.policy.IntentAttachPointType;
-import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.Problem;
 import org.apache.tuscany.sca.monitor.Problem.Severity;
+import org.apache.tuscany.sca.policy.Intent;
+import org.apache.tuscany.sca.policy.IntentAttachPointType;
+import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * Service interface that manages artifacts contributed to a Tuscany runtime.
@@ -69,6 +70,7 @@ import org.apache.tuscany.sca.monitor.Problem.Severity;
  * @version $Rev$ $Date$
  */
 public class ContributionServiceImpl implements ContributionService {
+    private ExtensionPointRegistry extensionPoints;
 
     /**
      * Repository where contributions are stored. Usually set by injection.
@@ -145,8 +147,10 @@ public class ContributionServiceImpl implements ContributionService {
                                    ContributionFactory contributionFactory,
                                    XMLInputFactory xmlFactory,
                                    List<SCADefinitions> policyDefinitions,
+                                   ExtensionPointRegistry extensionPoints, 
                                    Monitor monitor) {
         super();
+        this.extensionPoints = extensionPoints;
         this.contributionRepository = repository;
         this.packageProcessor = packageProcessor;
         this.artifactProcessor = documentProcessor;
@@ -341,7 +345,7 @@ public class ContributionServiceImpl implements ContributionService {
         if (modelResolver == null) {
             //FIXME Remove this domain resolver, visibility of policy declarations should be handled by
             // the contribution import/export mechanism instead of this domainResolver hack.
-            modelResolver = new ExtensibleModelResolver(contribution, modelResolvers, modelFactories, policyDefinitionsResolver);
+            modelResolver = new ExtensibleModelResolver(contribution, extensionPoints, modelResolvers, modelFactories, policyDefinitionsResolver);
         }
 
         //set contribution initial information

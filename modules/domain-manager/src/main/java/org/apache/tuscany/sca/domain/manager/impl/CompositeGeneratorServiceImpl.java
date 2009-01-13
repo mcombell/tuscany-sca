@@ -139,7 +139,7 @@ public class CompositeGeneratorServiceImpl extends HttpServlet implements Servle
         
         // Create contribution processor
         modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        contributionProcessor = new ContributionContentProcessor(modelFactories, modelResolvers, urlProcessor, staxProcessor, monitor);
+        contributionProcessor = new ContributionContentProcessor(extensionPoints, monitor);
     }
     
     @Override

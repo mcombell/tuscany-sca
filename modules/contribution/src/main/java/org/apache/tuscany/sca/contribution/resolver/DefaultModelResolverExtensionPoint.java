@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.extensibility.ServiceDeclaration;
 import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
 
@@ -33,14 +34,16 @@ import org.apache.tuscany.sca.extensibility.ServiceDiscovery;
  * @version $Rev$ $Date$
  */
 public class DefaultModelResolverExtensionPoint implements ModelResolverExtensionPoint {
-    
+    private final ExtensionPointRegistry registry;
     private final Map<Class<?>, Class<? extends ModelResolver>> resolvers = new HashMap<Class<?>, Class<? extends ModelResolver>>();
     private Map<String, ServiceDeclaration> loadedResolvers;
 
     /**
      * Constructs a new DefaultModelResolverExtensionPoint.
+     * @param registry The ExtensionPointRegistry
      */
-    public DefaultModelResolverExtensionPoint() {
+    public DefaultModelResolverExtensionPoint(ExtensionPointRegistry registry) {
+        this.registry = registry;
     }
 
     public void addResolver(Class<?> modelType, Class<? extends ModelResolver> resolver) {

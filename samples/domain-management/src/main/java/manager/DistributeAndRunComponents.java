@@ -94,7 +94,7 @@ import org.xml.sax.SAXException;
  * @version $Rev$ $Date$
  */
 public class DistributeAndRunComponents {
-    
+    private static ExtensionPointRegistry extensionPoints;
     private static URLArtifactProcessor<Contribution> contributionProcessor;
     private static ModelResolverExtensionPoint modelResolvers;
     private static ModelFactoryExtensionPoint modelFactories;
@@ -113,7 +113,7 @@ public class DistributeAndRunComponents {
     private static void init() {
         
         // Create extension point registry 
-        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        extensionPoints = new DefaultExtensionPointRegistry();
         
         // Create a monitor
         UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
@@ -171,7 +171,7 @@ public class DistributeAndRunComponents {
 
         // Create workspace model
         Workspace workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the sample store contribution
         URI storeURI = URI.create("store");

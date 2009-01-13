@@ -47,7 +47,6 @@ import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ValidationSchemaExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ExtensibleModelResolver;
-import org.apache.tuscany.sca.contribution.resolver.ModelResolverExtensionPoint;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ModuleActivator;
@@ -66,8 +65,8 @@ import org.apache.tuscany.sca.workspace.builder.ContributionDependencyBuilder;
 import org.apache.tuscany.sca.workspace.builder.impl.ContributionDependencyBuilderImpl;
 
 public class CustomCompositeBuilder {
+    private ExtensionPointRegistry extensionPoints;
     private URLArtifactProcessor<Contribution> contributionProcessor;
-    private ModelResolverExtensionPoint modelResolvers;
     private ModelFactoryExtensionPoint modelFactories;
     private WorkspaceFactory workspaceFactory;
     private AssemblyFactory assemblyFactory;
@@ -98,7 +97,7 @@ public class CustomCompositeBuilder {
     private void init() {
         
     	// Create extension point registry 
-        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        extensionPoints = new DefaultExtensionPointRegistry();
         
         // Create a monitor
         UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
@@ -136,9 +135,6 @@ public class CustomCompositeBuilder {
         URLArtifactProcessorExtensionPoint docProcessorExtensions = extensionPoints.getExtensionPoint(URLArtifactProcessorExtensionPoint.class);
         contributionProcessor = docProcessorExtensions.getProcessor(Contribution.class);
         
-        // Get the model resolvers
-        modelResolvers = extensionPoints.getExtensionPoint(ModelResolverExtensionPoint.class);
-        
         // Create a contribution dependency builder
         contributionDependencyBuilder = new ContributionDependencyBuilderImpl(monitor);
         
@@ -157,7 +153,7 @@ public class CustomCompositeBuilder {
 
         // Create workspace model
         workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the sample store contribution
         URI artifactURI = URI.create(sourceURI);
@@ -218,7 +214,7 @@ public class CustomCompositeBuilder {
 
         // Create workspace model
         workspace = workspaceFactory.createWorkspace();
-        workspace.setModelResolver(new ExtensibleModelResolver(workspace, modelResolvers, modelFactories));
+        workspace.setModelResolver(new ExtensibleModelResolver(workspace, extensionPoints));
 
         // Read the sample store contribution
         URI artifactURI = URI.create(sourceURI);
