@@ -38,7 +38,7 @@ import org.apache.tuscany.sca.monitor.Monitor;
  *
  * @version $Rev$ $Date$
  */
-public class AnyAttributeProcessor extends BaseStAXArtifactProcessor implements StAXAttributeProcessor<String> {
+public class AnyAttributeProcessor extends BaseStAXArtifactProcessor implements StAXAttributeProcessor<AnyAttributeWrapper> {
 	private static final QName ANY_ATTRIBUTE = new QName(Constants.XMLSCHEMA_NS, "anyAttribute");
 	
 	public AnyAttributeProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
@@ -49,21 +49,23 @@ public class AnyAttributeProcessor extends BaseStAXArtifactProcessor implements 
         return ANY_ATTRIBUTE;
     }
 
-    public Class<String> getModelType() {
-        return String.class;
+    public Class<AnyAttributeWrapper> getModelType() {
+        return AnyAttributeWrapper.class;
     }
 
-    public String read(QName attributeName, XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
-        return reader.getAttributeValue(attributeName.getNamespaceURI(), attributeName.getLocalPart());
+    public AnyAttributeWrapper read(QName attributeName, XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
+        AnyAttributeWrapper attributeWrapper = new AnyAttributeWrapper();
+        attributeWrapper.setQName(attributeName);
+        attributeWrapper.setValue(reader.getAttributeValue(attributeName.getNamespaceURI(), attributeName.getLocalPart()));
+    	return attributeWrapper; 
     }
 
-    public void write(String value, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
-    	writer.setPrefix(ANY_ATTRIBUTE.getPrefix(), ANY_ATTRIBUTE.getNamespaceURI());
-    	writer.writeAttribute(ANY_ATTRIBUTE.getLocalPart(), value);
+    public void write(AnyAttributeWrapper attributeWrapper, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
+    	writer.writeAttribute(attributeWrapper.getQName().getPrefix(), attributeWrapper.getQName().getNamespaceURI(), attributeWrapper.getQName().getLocalPart(), attributeWrapper.getValue().toString());
     } 
 
 
-    public void resolve(String arg0, ModelResolver arg1) throws ContributionResolveException {
+    public void resolve(AnyAttributeWrapper arg0, ModelResolver arg1) throws ContributionResolveException {
     	
     }
 }

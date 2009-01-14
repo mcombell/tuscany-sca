@@ -60,6 +60,7 @@ import org.apache.tuscany.sca.contribution.ContributionFactory;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
+import org.apache.tuscany.sca.contribution.processor.xml.AnyAttributeWrapper;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -136,8 +137,6 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
         this.extensionProcessor = (StAXArtifactProcessor<Object>)extensionProcessor;
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.monitor = monitor;
-        
-        //TODO - this constructor should take a monitor too. 
     }
     
     /**
@@ -870,8 +869,8 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
          	QName attributeName = reader.getAttributeName(a);
          	if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
              	if( ! elementName.getNamespaceURI().equals(attributeName.getNamespaceURI()) ) {
-             		String attributeExtension = (String) extensionAttributeProcessor.read(attributeName, reader);
-             		estensibleElement.getExtensions().add(attributeExtension);
+             		Object o = extensionAttributeProcessor.read(attributeName, reader);
+             		estensibleElement.getExtensions().add(o);
              	}
          	}
          }
@@ -889,8 +888,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
      */
     protected void writeExtendedAttributes(XMLStreamWriter writer, Extensible extensibleElement, StAXAttributeProcessor extensionAttributeProcessor) throws ContributionWriteException, XMLStreamException {
         for(Object o : extensibleElement.getExtensions()) {
-        	//FIXME How to identify it's a extended attribute ? 
-        	if(o instanceof String) {
+        	if(o instanceof AnyAttributeWrapper) {
         		extensionAttributeProcessor.write(o, writer);
         	}
         }

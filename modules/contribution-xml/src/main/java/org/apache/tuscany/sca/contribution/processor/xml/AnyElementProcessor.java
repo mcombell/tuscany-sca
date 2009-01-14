@@ -18,28 +18,23 @@
  */
 package org.apache.tuscany.sca.contribution.processor.xml;
 
+import static javax.xml.stream.XMLStreamConstants.CDATA;
+import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
-import static javax.xml.stream.XMLStreamConstants.COMMENT;
-import static javax.xml.stream.XMLStreamConstants.CDATA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.tuscany.sca.contribution.Constants;
@@ -49,11 +44,9 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.monitor.Monitor;
-import org.apache.tuscany.sca.contribution.processor.xml.XMLEventsStreamReader;
 
 public class AnyElementProcessor implements StAXArtifactProcessor<Object> {
-	private static final QName ANY_ELEMENT = new QName(Constants.XMLSCHEMA_NS,
-			"anyElement");
+	private static final QName ANY_ELEMENT = new QName(Constants.XMLSCHEMA_NS, "anyElement");
 
 	private XMLInputFactory xmlInputFactory;
 	@SuppressWarnings("unused")
