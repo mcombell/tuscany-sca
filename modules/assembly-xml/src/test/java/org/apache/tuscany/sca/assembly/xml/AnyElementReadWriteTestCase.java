@@ -40,7 +40,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class ReadWriteAnyElementTestCase {
+public class AnyElementReadWriteTestCase {
 	private static final String XML_RECURSIVE_EXTENDED_ELEMENT = 
 		"<?xml version='1.0' encoding='UTF-8'?>" +
 	    "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"RecursiveExtendedElement\">" +
@@ -111,8 +111,8 @@ public class ReadWriteAnyElementTestCase {
 		staxProcessor.write(composite, bos);
 
 		// used for debug comparison
-		//System.out.println(XML_UNKNOWN_IMPL);
-		//System.out.println(bos.toString());
+		System.out.println(XML_UNKNOWN_IMPL);
+		System.out.println(bos.toString());
 
 		assertEquals(XML_UNKNOWN_IMPL, bos.toString());
 		bos.close();

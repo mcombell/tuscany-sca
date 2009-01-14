@@ -47,7 +47,8 @@ public class TestAttributeProcessor extends BaseStAXArtifactProcessor implements
     }
 
     public void write(String value, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
-    	writer.writeAttribute(ATTRIBUTE.getPrefix(), ATTRIBUTE.getNamespaceURI(), ATTRIBUTE.getLocalPart(), value);
+    	writer.setPrefix(ATTRIBUTE.getPrefix(), ATTRIBUTE.getNamespaceURI());
+    	writer.writeAttribute(ATTRIBUTE.getLocalPart(), value);
     } 
 
     public Class<String> getModelType() {

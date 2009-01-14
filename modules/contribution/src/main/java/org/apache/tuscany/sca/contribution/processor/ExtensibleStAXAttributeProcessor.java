@@ -55,7 +55,7 @@ public class ExtensibleStAXAttributeProcessor
 
     private static final Logger logger = Logger.getLogger(ExtensibleStAXAttributeProcessor.class.getName()); 
     
-    private static final QName ANY_ATTRIBUTE = new QName(Constants.XMLSCHEMA_NS, "anyAttribute");
+    private static final QName UNKNOWN_ATTRIBUTE = new QName(Constants.SCA10_TUSCANY_NS, "unknown");
     
     private XMLInputFactory inputFactory;
     private XMLOutputFactory outputFactory;
@@ -149,13 +149,13 @@ public class ExtensibleStAXAttributeProcessor
         
         
         //handle extension attributes without processors
-        processor = (StAXAttributeProcessor<?>)processors.getProcessor(ANY_ATTRIBUTE);
+        processor = (StAXAttributeProcessor<?>)processors.getProcessor(UNKNOWN_ATTRIBUTE);
         if (processor == null) {
         	Location location = source.getLocation();
             if (logger.isLoggable(Level.WARNING)) {                
                 logger.warning("Could not find Default Attribute processor !");
             }
-            warning("DefaultAttributeProcessorNotAvailable", processors, ANY_ATTRIBUTE, location);            
+            warning("DefaultAttributeProcessorNotAvailable", processors, UNKNOWN_ATTRIBUTE, location);            
         }        	
         
         return processor == null ? null : processor.read(attributeName, source);
@@ -181,7 +181,7 @@ public class ExtensibleStAXAttributeProcessor
     	}
     	
     	 //handle extension attributes without processors
-        processor = (StAXAttributeProcessor<?>)processors.getProcessor(ANY_ATTRIBUTE);
+        processor = (StAXAttributeProcessor<?>)processors.getProcessor(UNKNOWN_ATTRIBUTE);
         if(processor == null) {
     		if (logger.isLoggable(Level.WARNING)) {
     			logger.warning("No Default StAX processor is configured to handle " + model.getClass());
