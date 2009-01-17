@@ -19,6 +19,9 @@
 
 package org.apache.tuscany.sca.assembly.xml;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -27,22 +30,22 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 
-import junit.framework.TestCase;
-
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
-import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessorExtensionPoint;
 import org.apache.tuscany.sca.core.DefaultExtensionPointRegistry;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test reading SCA XML assemblies.
  * 
  * @version $Rev$ $Date$
  */
-public class ReadWriteAnyAttributeTestCase extends TestCase {
+public class ReadWriteAnyAttributeTestCase {
 
     private XMLInputFactory inputFactory;
     private ExtensibleStAXArtifactProcessor staxProcessor;
@@ -77,7 +80,7 @@ public class ReadWriteAnyAttributeTestCase extends TestCase {
  	 	 	 "</component>"+
  	 	 	 "</composite>";
     
-    @Override
+    @Before
     public void setUp() throws Exception {
         ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
         inputFactory = XMLInputFactory.newInstance();
@@ -89,11 +92,12 @@ public class ReadWriteAnyAttributeTestCase extends TestCase {
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, XMLInputFactory.newInstance(), XMLOutputFactory.newInstance(), null);
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
     	
     }
 
+    @Test
     public void testReadComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("CalculatorExtended.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
@@ -102,6 +106,7 @@ public class ReadWriteAnyAttributeTestCase extends TestCase {
         is.close();
     }
     
+    @Test
     public void testWriteComposite() throws Exception {
         InputStream is = getClass().getResourceAsStream("CalculatorExtended.composite");
         XMLStreamReader reader = inputFactory.createXMLStreamReader(is);
