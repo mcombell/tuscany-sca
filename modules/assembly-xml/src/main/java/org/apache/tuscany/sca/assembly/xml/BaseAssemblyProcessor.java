@@ -882,8 +882,13 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
             QName attributeName = reader.getAttributeName(a);
             if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
                 if( ! elementName.getNamespaceURI().equals(attributeName.getNamespaceURI()) ) {
-                    String attributeValue = (String) extensionAttributeProcessor.read(attributeName, reader);
-                    Extension attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true); 
+                    Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
+                    Extension attributeExtension;
+                    if (attributeValue instanceof Extension) {
+                        attributeExtension = (Extension) attributeValue;
+                    } else {
+                        attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true);
+                    }
                     estensibleElement.getAttributeExtensions().add(attributeExtension);
                 }
             }
@@ -903,7 +908,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     protected void writeExtendedAttributes(XMLStreamWriter writer, Extensible extensibleElement, StAXAttributeProcessor extensionAttributeProcessor) throws ContributionWriteException, XMLStreamException {
         for(Extension extension : extensibleElement.getAttributeExtensions()) {
             if(extension.isAttribute()) {
-                extensionAttributeProcessor.write(extension.getValue(), writer);
+                extensionAttributeProcessor.write(extension, writer);
             }
         }
     }

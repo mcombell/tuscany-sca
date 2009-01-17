@@ -31,7 +31,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 
 /**
- * A Policy Processor used for testing.
+ * A Attribute Processor used for testing.
  *
  * @version $Rev$ $Date$
  */
@@ -51,7 +51,7 @@ public class TestAttributeProcessor extends BaseStAXArtifactProcessor implements
     } 
 
     public Class<String> getModelType() {
-        return String.class;
+        return null;
     }
 
     public void resolve(String arg0, ModelResolver arg1) throws ContributionResolveException {

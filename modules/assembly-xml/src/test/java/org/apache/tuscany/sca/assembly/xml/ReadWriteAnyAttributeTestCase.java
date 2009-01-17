@@ -47,19 +47,17 @@ import org.junit.Test;
  */
 public class ReadWriteAnyAttributeTestCase {
 
-    private static final QName ATTRIBUTE = new QName("http://test", "customAttribute");
+    private static final QName EXTENDED_ATTRIBUTE = new QName("http://test", "customAttribute");
     
-    // implementation.java for CalculatorServiceComponent appears in a strange place as the
-    // java implementation extension is not loaded and hence they are loaded as any elements
     private static final String XML = "<?xml version='1.0' encoding='UTF-8'?>"+
 		 	 "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" " +
 		 	            "xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" " +
 		 	            "targetNamespace=\"http://calc\" " +
 		 	            "name=\"Calculator\">"+
- 	 	 	  "<component name=\"AddServiceComponent\" xmlns:test=\"http://test\" test:customAttribute=\"customValue\">"+
- 	 	 	    "<implementation.java class=\"calculator.AddServiceImpl\" />"+
- 	 	 	  "</component>"+
- 	 	 	 "</composite>";
+ 	 	 	    "<component name=\"AddServiceComponent\" xmlns:test=\"http://test\" test:customAttribute=\"customValue\">"+
+ 	 	 	      "<implementation.java class=\"calculator.AddServiceImpl\" />"+
+ 	 	 	    "</component>"+
+ 	 	 	  "</composite>";
     
     private XMLInputFactory inputFactory;
     private ExtensibleStAXArtifactProcessor staxProcessor;
@@ -91,7 +89,6 @@ public class ReadWriteAnyAttributeTestCase {
      * @throws Exception
      */
     @Test
-    @Ignore
     public void testReadWriteCompositeWithAttributeProcessor() throws Exception {
     	init(new TestAttributeProcessor());
 
@@ -104,8 +101,8 @@ public class ReadWriteAnyAttributeTestCase {
     	staxProcessor.write(composite, bos);
 
     	// used for debug comparison
-    	System.out.println(XML);
-    	System.out.println(bos.toString());
+    	// System.out.println(XML);
+    	// System.out.println(bos.toString());
 
     	assertEquals(XML, bos.toString());    	
     }
@@ -116,7 +113,6 @@ public class ReadWriteAnyAttributeTestCase {
      * @throws Exception
      */
     @Test
-    @Ignore
     public void testDefaultReadWriteComposite() throws Exception {
     	init(null);
 
@@ -129,8 +125,8 @@ public class ReadWriteAnyAttributeTestCase {
     	staxProcessor.write(composite, bos);
 
     	// used for debug comparison
-    	System.out.println(XML);
-    	System.out.println(bos.toString());
+    	// System.out.println(XML);
+    	// System.out.println(bos.toString());
 
     	assertEquals(XML, bos.toString());
     }
