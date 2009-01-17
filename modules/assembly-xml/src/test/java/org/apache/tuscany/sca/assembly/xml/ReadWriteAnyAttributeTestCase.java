@@ -42,7 +42,7 @@ import org.apache.tuscany.sca.core.ExtensionPointRegistry;
  * 
  * @version $Rev$ $Date$
  */
-public class ReadWriteAttributeTestCase extends TestCase {
+public class ReadWriteAnyAttributeTestCase extends TestCase {
 
     private XMLInputFactory inputFactory;
     private ExtensibleStAXArtifactProcessor staxProcessor;
