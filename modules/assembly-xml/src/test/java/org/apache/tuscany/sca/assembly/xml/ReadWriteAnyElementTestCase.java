@@ -41,81 +41,78 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class ReadWriteAnyElementTestCase {
-	private static final String XML_RECURSIVE_EXTENDED_ELEMENT = 
-		"<?xml version='1.0' encoding='UTF-8'?>" +
-	    "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"RecursiveExtendedElement\">" +
-	    "<unknownElement>" +
-	    "<subUnknownElement1 attribute=\"anyAttribute\" />" +
-	    "<subUnknownElement2 />" +
-	    "</unknownElement>" +
-	    "</composite>";
-	
-
-	private static final String XML_UNKNOWN_IMPL = 
-		"<?xml version='1.0' encoding='UTF-8'?>" + 
-        "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"aaaa\" autowire=\"false\">" +
-        "<component name=\"unknownImpl\">" +
-        "<implementation.unknown class=\"raymond\" />"  +
-        "<service name= \"service\" requires=\"\">" +
-        "<binding.ws unknownAttribute=\"unknown\" />" +
-        "</service>" +
-        "</component>" +
+    private static final String XML_RECURSIVE_EXTENDED_ELEMENT =
+        "<?xml version='1.0' encoding='UTF-8'?>" +
+        "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"RecursiveExtendedElement\">" +
+         "<unknownElement>" +
+           "<subUnknownElement1 attribute=\"anyAttribute\" />" +
+           "<subUnknownElement2 />" +
+         "</unknownElement>" +
         "</composite>";
 
-	private XMLInputFactory inputFactory;
-	private ExtensibleStAXArtifactProcessor staxProcessor;
+    private static final String XML_UNKNOWN_IMPL =
+        "<?xml version='1.0' encoding='UTF-8'?>" + 
+        "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"aaaa\" autowire=\"false\">" +
+         "<component name=\"unknownImpl\">" +
+           "<implementation.unknown class=\"raymond\" />" +
+             "<service name= \"service\" requires=\"\">" +
+               "<binding.ws unknownAttribute=\"unknown\" />" +
+             "</service>" +
+         "</component>" +
+        "</composite>";
 
-	@Before
-	public void setUp() throws Exception {
-		ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
-		 ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
-		 inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
-		
-		StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints
-				.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
-		staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors,
-				inputFactory, XMLOutputFactory.newInstance(), null);
-	}
+    private XMLInputFactory inputFactory;
+    private ExtensibleStAXArtifactProcessor staxProcessor;
 
-	@After
-	public void tearDown() throws Exception {
-	}
-	
-	@Test
-	public void testReadWriteExtendedRecursiveElement() throws Exception {
-		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_RECURSIVE_EXTENDED_ELEMENT));
-		Composite composite = (Composite) staxProcessor.read(reader);
-		assertNotNull(composite);
-		reader.close();
-		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		staxProcessor.write(composite, bos);
-		
-		// used for debug comparison
-		//System.out.println(XML_RECURSIVE_EXTENDED_ELEMENT);
-		//System.out.println(bos.toString());
+    @Before
+    public void setUp() throws Exception {
+        ExtensionPointRegistry extensionPoints = new DefaultExtensionPointRegistry();
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
 
-		assertEquals(XML_RECURSIVE_EXTENDED_ELEMENT, bos.toString());
-		bos.close();	
-	}	
-	
-	//@Test
-	@Ignore()
-	public void testReadWriteUnknwonImpl() throws Exception {
-		XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_UNKNOWN_IMPL));
-		Composite composite = (Composite) staxProcessor.read(reader);
-		assertNotNull(composite);
-		reader.close();
+        StAXArtifactProcessorExtensionPoint staxProcessors = extensionPoints.getExtensionPoint(StAXArtifactProcessorExtensionPoint.class);
+        staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, XMLOutputFactory.newInstance(), null);
+    }
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		staxProcessor.write(composite, bos);
+    @After
+    public void tearDown() throws Exception {
+    }
 
-		// used for debug comparison
-		System.out.println(XML_UNKNOWN_IMPL);
-		System.out.println(bos.toString());
+    @Test
+    public void testReadWriteExtendedRecursiveElement() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_RECURSIVE_EXTENDED_ELEMENT));
+        Composite composite = (Composite)staxProcessor.read(reader);
+        assertNotNull(composite);
+        reader.close();
 
-		assertEquals(XML_UNKNOWN_IMPL, bos.toString());
-		bos.close();
-	}		
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        staxProcessor.write(composite, bos);
+
+        // used for debug comparison
+        System.out.println(XML_RECURSIVE_EXTENDED_ELEMENT);
+        System.out.println(bos.toString());
+
+        assertEquals(XML_RECURSIVE_EXTENDED_ELEMENT, bos.toString());
+        bos.close();
+    }
+
+    // @Test
+    @Ignore()
+    public void testReadWriteUnknwonImpl() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_UNKNOWN_IMPL));
+        Composite composite = (Composite)staxProcessor.read(reader);
+        assertNotNull(composite);
+        reader.close();
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        staxProcessor.write(composite, bos);
+
+        // used for debug comparison
+        // System.out.println(XML_UNKNOWN_IMPL);
+        // System.out.println(bos.toString());
+
+        assertEquals(XML_UNKNOWN_IMPL, bos.toString());
+        bos.close();
+    }
 
 }

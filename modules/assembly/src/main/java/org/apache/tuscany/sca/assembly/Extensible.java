@@ -33,5 +33,12 @@ public interface Extensible {
      * @return a list of extension objects container in this model object
      */
     List<Object> getExtensions();
+    
+    /**
+     * Returns a list of attribute extensions contained in this model object
+     * 
+     * @return a list of attribute extensions contained in this model object
+     */
+    List<Extension> getAttributeExtensions();
 
 }

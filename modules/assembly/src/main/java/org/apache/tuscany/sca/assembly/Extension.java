@@ -16,35 +16,50 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.assembly.impl;
+package org.apache.tuscany.sca.assembly;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.tuscany.sca.assembly.Extensible;
-import org.apache.tuscany.sca.assembly.Extension;
+import javax.xml.namespace.QName;
 
 /**
- * Convenience base class for extensible assembly model objects.
+ * Base interface for storing contents of extensible assembly model objects.
  * 
  * @version $Rev$ $Date$
  */
-public abstract class ExtensibleImpl extends BaseImpl implements Extensible {
-    private List<Object> extensions = new ArrayList<Object>();
-    private List<Extension> attributeExtensions = new ArrayList<Extension>();
+public interface Extension {
 
-    /**
-     * Constructs a new base model object.
-     */
-    protected ExtensibleImpl() {
-    }
-    
-    public List<Object> getExtensions() {
-        return extensions;
-    }
-    
-    public List<Extension> getAttributeExtensions() {
-        return attributeExtensions;
-    }
-
+	/**
+	 * Return QName for the extension
+	 * @return the extension QName
+	 */
+	QName getQName();
+	
+	/**
+	 * Set QName for the extension
+	 * @param qName the extension QName
+	 */
+	void setQName(QName qName);
+	
+	/**
+	 * Return the original extension value
+	 * @return the extension value
+	 */
+	Object getValue();
+	
+	/**
+	 * Set the original extension value
+	 * @param value the extension value
+	 */
+	void setValue(Object value);
+	
+	/**
+	 * Return whether or not the extension is an attribute
+	 * @return 
+	 */
+	boolean isAttribute();
+	
+	/**
+	 * Set whether or not the extension is an attribute
+	 * @param value
+	 */
+	void setIsAttribute(boolean isAttribute);
 }

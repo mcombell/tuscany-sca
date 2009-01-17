@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.Callback;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.interfacedef.DataType;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
@@ -179,6 +180,10 @@ public class TestRuntimeComponentService implements RuntimeComponentService {
     }
 
     public List<Object> getExtensions() {
+        return null;
+    }
+
+    public List<Extension> getAttributeExtensions() {
         return null;
     }
 

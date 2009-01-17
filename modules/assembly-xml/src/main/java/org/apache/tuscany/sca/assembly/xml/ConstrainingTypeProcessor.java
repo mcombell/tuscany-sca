@@ -33,6 +33,7 @@ import org.apache.tuscany.sca.assembly.AbstractReference;
 import org.apache.tuscany.sca.assembly.AbstractService;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -55,13 +56,16 @@ public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements 
 
     /**
      * Construct a new constrainingType processor.
-     * @param factory
+     * @param assemblyFactory
      * @param policyFactory
      * @param extensionProcessor
      */
-    public ConstrainingTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, 
-    								 StAXArtifactProcessor extensionProcessor, Monitor monitor) {
-        super(factory, policyFactory, extensionProcessor, monitor);
+    public ConstrainingTypeProcessor(AssemblyFactory assemblyFactory,
+                                     ExtensionFactory extensionFactory,
+                                     PolicyFactory policyFactory, 
+                                     StAXArtifactProcessor extensionProcessor, 
+                                     Monitor monitor) {
+        super(assemblyFactory, extensionFactory, policyFactory, extensionProcessor, monitor);
     }
 
     /**
@@ -71,10 +75,13 @@ public class ConstrainingTypeProcessor extends BaseAssemblyProcessor implements 
      * @param extensionProcessor
      */
     public ConstrainingTypeProcessor(ModelFactoryExtensionPoint modelFactories, 
-    								 StAXArtifactProcessor extensionProcessor,
-    								 Monitor monitor) {
+                                     StAXArtifactProcessor extensionProcessor,
+                                     Monitor monitor) {
         super(modelFactories.getFactory(AssemblyFactory.class),
-              modelFactories.getFactory(PolicyFactory.class), extensionProcessor, monitor);
+              modelFactories.getFactory(ExtensionFactory.class),
+              modelFactories.getFactory(PolicyFactory.class), 
+              extensionProcessor, 
+              monitor);
     }
     
     public ConstrainingType read(XMLStreamReader reader) throws ContributionReadException {

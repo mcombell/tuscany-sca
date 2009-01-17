@@ -16,35 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-package org.apache.tuscany.sca.assembly.impl;
+package org.apache.tuscany.sca.assembly;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.assembly.Extensible;
-import org.apache.tuscany.sca.assembly.Extension;
+public interface ExtensionFactory {
 
-/**
- * Convenience base class for extensible assembly model objects.
- * 
- * @version $Rev$ $Date$
- */
-public abstract class ExtensibleImpl extends BaseImpl implements Extensible {
-    private List<Object> extensions = new ArrayList<Object>();
-    private List<Extension> attributeExtensions = new ArrayList<Extension>();
-
-    /**
-     * Constructs a new base model object.
-     */
-    protected ExtensibleImpl() {
-    }
-    
-    public List<Object> getExtensions() {
-        return extensions;
-    }
-    
-    public List<Extension> getAttributeExtensions() {
-        return attributeExtensions;
-    }
-
+	Extension createExtension();
+	
+	Extension createExtension(QName qName, Object value, boolean isAttribute);
 }

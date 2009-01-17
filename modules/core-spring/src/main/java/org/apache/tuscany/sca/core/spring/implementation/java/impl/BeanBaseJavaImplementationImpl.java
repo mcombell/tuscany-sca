@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
@@ -30,8 +31,8 @@ import org.apache.tuscany.sca.implementation.java.BaseJavaImplementation;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 
 /**
@@ -46,6 +47,7 @@ public class BeanBaseJavaImplementationImpl extends GenericBeanDefinition implem
     private List<Service> services = new ArrayList<Service>();
     private ConstrainingType constrainingType;
     private List<Object> extensions = new ArrayList<Object>();
+    private List<Extension> attributeExtensions = new ArrayList<Extension>();
     private boolean unresolved;
     private BeanDefinitionRegistry beanRegistry;
     private String uri;
@@ -175,6 +177,10 @@ public class BeanBaseJavaImplementationImpl extends GenericBeanDefinition implem
 
     public List<Object> getExtensions() {
         return extensions;
+    }
+
+    public List<Extension> getAttributeExtensions() {
+        return attributeExtensions;
     }
 
     public boolean isUnresolved() {

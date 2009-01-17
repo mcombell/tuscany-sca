@@ -31,6 +31,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -251,6 +252,7 @@ public class DefaultStAXArtifactProcessorExtensionPoint extends
                     // Specific initialization for the DefaultBeanModelProcessor
                     ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
                     AssemblyFactory assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
+                    ExtensionFactory extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
                     PolicyFactory policyFactory = modelFactories.getFactory(PolicyFactory.class);
                     try {
                         Class<StAXArtifactProcessor> processorClass =
@@ -264,6 +266,7 @@ public class DefaultStAXArtifactProcessorExtensionPoint extends
                         }
                         Constructor<StAXArtifactProcessor> constructor =
                             processorClass.getConstructor(AssemblyFactory.class,
+                                                          ExtensionFactory.class,
                                                           PolicyFactory.class,
                                                           QName.class,
                                                           Class.class,
@@ -271,6 +274,7 @@ public class DefaultStAXArtifactProcessorExtensionPoint extends
                                                           Monitor.class);
                         processor =
                             constructor.newInstance(assemblyFactory,
+                                                    extensionFactory,
                                                     policyFactory,
                                                     artifactType,
                                                     getModelType(),

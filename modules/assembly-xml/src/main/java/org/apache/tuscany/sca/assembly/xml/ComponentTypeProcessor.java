@@ -33,6 +33,7 @@ import org.apache.tuscany.sca.assembly.Callback;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.Contract;
 import org.apache.tuscany.sca.assembly.Extensible;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
@@ -61,13 +62,15 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
     
     /**
      * Constructs a new componentType processor.
-     * @param factory
+     * @param assemblyFactory
      * @param policyFactory
      * @param registry
      */
-    public ComponentTypeProcessor(AssemblyFactory factory, PolicyFactory policyFactory, 
+    public ComponentTypeProcessor(AssemblyFactory assemblyFactory, 
+    		                      ExtensionFactory extensionFactory,
+    		                      PolicyFactory policyFactory, 
     							  StAXArtifactProcessor extensionProcessor, StAXAttributeProcessor extensionAttributeProcessor, Monitor monitor) {
-        super(factory, policyFactory, extensionProcessor, monitor);
+        super(assemblyFactory, extensionFactory, policyFactory, extensionProcessor, monitor);
     }
 
     /**
@@ -81,7 +84,10 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
     							  StAXAttributeProcessor extensionAttributeProcessor,
     							  Monitor monitor) {
         super(modelFactories.getFactory(AssemblyFactory.class),
-              modelFactories.getFactory(PolicyFactory.class), extensionProcessor, monitor);
+        	  modelFactories.getFactory(ExtensionFactory.class),
+              modelFactories.getFactory(PolicyFactory.class), 
+              extensionProcessor, 
+              monitor);
     }
     
     public ComponentType read(XMLStreamReader reader) throws ContributionReadException {

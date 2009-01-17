@@ -47,28 +47,32 @@ import org.apache.tuscany.sca.monitor.Monitor;
 public class ConstrainingTypeDocumentProcessor extends BaseAssemblyProcessor implements URLArtifactProcessor<ConstrainingType> {
     private XMLInputFactory inputFactory;
 
+
     /**
      * Construct a new constrainingType processor.
-     * @param factory
-     * @param policyFactory
+     * 
      * @param staxProcessor
+     * @param inputFactory
+     * @param monitor
      */
     public ConstrainingTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
-    									     XMLInputFactory inputFactory,
-    									     Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+                                             XMLInputFactory inputFactory,
+                                             Monitor monitor) {
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
     }
+
 
     /**
      * Constructs a new constrainingType processor.
      * @param modelFactories
      * @param staxProcessor
+     * @param monitor
      */
     public ConstrainingTypeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
-    										 StAXArtifactProcessor staxProcessor,
-    										 Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+                                             StAXArtifactProcessor staxProcessor,
+                                             Monitor monitor) {
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
     }
     

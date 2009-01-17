@@ -18,33 +18,46 @@
  */
 package org.apache.tuscany.sca.assembly.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.Extension;
 
-/**
- * Convenience base class for extensible assembly model objects.
- * 
- * @version $Rev$ $Date$
- */
-public abstract class ExtensibleImpl extends BaseImpl implements Extensible {
-    private List<Object> extensions = new ArrayList<Object>();
-    private List<Extension> attributeExtensions = new ArrayList<Extension>();
+public class ExtensionImpl implements Extension {
+	private QName qName;
+	private Object value;
+	boolean isAttribute = false;
 
-    /**
-     * Constructs a new base model object.
-     */
-    protected ExtensibleImpl() {
-    }
-    
-    public List<Object> getExtensions() {
-        return extensions;
-    }
-    
-    public List<Extension> getAttributeExtensions() {
-        return attributeExtensions;
-    }
+	public ExtensionImpl() {
+		
+	}
+	
+	public ExtensionImpl(QName qName, Object value, boolean isAttribute) {
+		this.qName = qName;
+		this.value = value;
+		this.isAttribute = isAttribute;
+	}
+	
+	public QName getQName() {
+		return qName;
+	}
 
+	public void setQName(QName qName) {
+		this.qName = qName;
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public boolean isAttribute() {
+		return isAttribute;
+	}
+
+	public void setIsAttribute(boolean isAttribute) {
+		this.isAttribute = isAttribute;
+	}
 }

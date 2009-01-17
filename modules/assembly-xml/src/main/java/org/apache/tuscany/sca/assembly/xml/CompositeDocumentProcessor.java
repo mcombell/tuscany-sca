@@ -63,43 +63,52 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
 
     /**
      * Construct a new composite processor
-     * @param assemblyFactory
-     * @param policyFactory
      * @param staxProcessor
+     * @param inputFactory
+     * @param scaDefnsSink
+     * @param monitor
      */
     @Deprecated
     public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
-                                                                  XMLInputFactory inputFactory,
-                                                                  List scaDefnsSink, Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+                                      XMLInputFactory inputFactory,
+                                      List scaDefnsSink, 
+                                      Monitor monitor) {
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
         this.scaDefnSink = scaDefnsSink;
     }
 
+
     /**
      * Construct a new composite processor
-     * @param assemblyFactory
-     * @param policyFactory
      * @param staxProcessor
+     * @param inputFactory
+     * @param documentBuilderFactory
+     * @param scaDefnsSink
+     * @param monitor
      */
     public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
-    								  XMLInputFactory inputFactory,
-    								  DocumentBuilderFactory documentBuilderFactory,
-    								  List scaDefnsSink, Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+    				      XMLInputFactory inputFactory,
+    				      DocumentBuilderFactory documentBuilderFactory,
+    				      List scaDefnsSink, 
+    				      Monitor monitor) {
+        super(null, null, null, staxProcessor, monitor);
         this.documentBuilderFactory = documentBuilderFactory;
         this.inputFactory = inputFactory;
         this.scaDefnSink = scaDefnsSink;
     }
 
+
     /**
-     * Constructs a new composite processor.
+     * Construct a new composite processor
      * @param modelFactories
      * @param staxProcessor
+     * @param monitor
      */
     public CompositeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
-    								  StAXArtifactProcessor staxProcessor, Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+    				      StAXArtifactProcessor staxProcessor, 
+    				      Monitor monitor) {
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
         this.documentBuilderFactory = modelFactories.getFactory(DocumentBuilderFactory.class);
     }
