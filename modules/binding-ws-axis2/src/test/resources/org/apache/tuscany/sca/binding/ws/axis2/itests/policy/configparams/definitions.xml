@@ -74,7 +74,7 @@
         		<items>Timestamp Signature</items>
         		<user>TuscanyWsUser</user>
         		<signaturePropFile>org/apache/tuscany/sca/binding/ws/axis2/itests/policy/configparams/security.properties</signaturePropFile>
-        		<passwordCallbackClass>org.apache.tuscany.sca.binding.ws.axis2.itests.policy.configparams.IntegrityPWCBHandler</passwordCallbackClass>" +
+        		<passwordCallbackClass>org.apache.tuscany.sca.binding.ws.axis2.itests.policy.configparams.IntegrityPWCBHandler</passwordCallbackClass>
         		<signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
       		</action>
     	</parameter>

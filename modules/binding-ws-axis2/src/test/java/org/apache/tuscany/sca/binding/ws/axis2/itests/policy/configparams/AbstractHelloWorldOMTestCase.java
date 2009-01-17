@@ -28,6 +28,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMText;
 import org.apache.tuscany.sca.binding.ws.axis2.itests.HelloWorldOM;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
+import org.apache.tuscany.sca.interfacedef.util.FaultException;
 
 public abstract class AbstractHelloWorldOMTestCase extends TestCase {
 
@@ -35,14 +36,21 @@ public abstract class AbstractHelloWorldOMTestCase extends TestCase {
     private HelloWorldOM helloWorld;
 
     public void testHelloWorld() throws Exception {
-        OMFactory fac = OMAbstractFactory.getOMFactory();
-        OMElement requestOM = fac.createOMElement("getGreetings", "http://helloworld-om", "helloworld");
-        OMElement parmE = fac.createOMElement("name", "http://helloworld-om", "helloworld");
-        requestOM.addChild(parmE);
-        parmE.addChild(fac.createOMText("petra"));
-        OMElement responseOM = helloWorld.getGreetings(requestOM);
-        OMElement child = (OMElement)responseOM.getFirstElement();
-        Assert.assertEquals("Hello petra", ((OMText)child.getFirstOMChild()).getText());
+    	try {
+	        OMFactory fac = OMAbstractFactory.getOMFactory();
+	        OMElement requestOM = fac.createOMElement("getGreetings", "http://helloworld-om", "helloworld");
+	        OMElement parmE = fac.createOMElement("name", "http://helloworld-om", "helloworld");
+	        requestOM.addChild(parmE);
+	        parmE.addChild(fac.createOMText("petra"));
+	        OMElement responseOM = helloWorld.getGreetings(requestOM);
+	        OMElement child = (OMElement)responseOM.getFirstElement();
+	        Assert.assertEquals("Hello petra", ((OMText)child.getFirstOMChild()).getText());
+    	} catch (Exception ex) {
+    		System.out.println(ex.getMessage());
+    		if (ex.getCause() instanceof FaultException){
+    			System.out.println(((FaultException)ex.getCause()).getFaultInfo().toString());
+    		}
+    	}
     }
 
     @Override
