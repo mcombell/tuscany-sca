@@ -36,7 +36,7 @@ import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
  * @version $Rev$ $Date$
  */
 public class TestAttributeProcessor extends BaseStAXArtifactProcessor implements StAXAttributeProcessor<String> {
-	private static final QName ATTRIBUTE = new QName("http://test", "customAttribute");
+	private static final QName ATTRIBUTE = new QName("http://test", "customAttribute", "test");
 	
     public QName getArtifactType() {
         return ATTRIBUTE;
@@ -47,12 +47,11 @@ public class TestAttributeProcessor extends BaseStAXArtifactProcessor implements
     }
 
     public void write(String value, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
-    	writer.setPrefix(ATTRIBUTE.getPrefix(), ATTRIBUTE.getNamespaceURI());
-    	writer.writeAttribute(ATTRIBUTE.getLocalPart(), value);
+    	writer.writeAttribute(ATTRIBUTE.getPrefix(), ATTRIBUTE.getNamespaceURI(),ATTRIBUTE.getLocalPart(), value);
     } 
 
     public Class<String> getModelType() {
-        return String.class;
+        return null;
     }
 
     public void resolve(String arg0, ModelResolver arg1) throws ContributionResolveException {

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
@@ -45,6 +46,7 @@ public class BeanBaseJavaImplementationImpl extends RootBeanDefinition implement
     private List<Service> services = new ArrayList<Service>();
     private ConstrainingType constrainingType;
     private List<Object> extensions = new ArrayList<Object>();
+    private List<Extension> attributeExtensions = new ArrayList<Extension>();
     private boolean unresolved;
     private BeanDefinitionRegistry beanRegistry;
     private String uri;
@@ -172,6 +174,10 @@ public class BeanBaseJavaImplementationImpl extends RootBeanDefinition implement
         return extensions;
     }
 
+    public List<Extension> getAttributeExtensions() {
+        return attributeExtensions;
+    }
+    
     public boolean isUnresolved() {
         return unresolved;
     }

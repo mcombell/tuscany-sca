@@ -49,6 +49,7 @@ import org.apache.tuscany.sca.assembly.CompositeService;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Contract;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.Property;
@@ -124,6 +125,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
         
     	super(modelFactories.getFactory(ContributionFactory.class),
             modelFactories.getFactory(AssemblyFactory.class),
+            modelFactories.getFactory(ExtensionFactory.class),
             modelFactories.getFactory(PolicyFactory.class),
             extensionProcessor, 
             monitor);
@@ -142,11 +144,12 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
      */
     public CompositeProcessor(ContributionFactory contributionFactory,
             AssemblyFactory assemblyFactory,
+            ExtensionFactory extensionFactory,
             PolicyFactory policyFactory,
             StAXArtifactProcessor extensionProcessor,
             StAXAttributeProcessor extensionAttributeProcessor,
             Monitor monitor) {
-        super(contributionFactory, assemblyFactory, policyFactory, extensionProcessor, monitor);
+        super(contributionFactory, assemblyFactory, extensionFactory, policyFactory, extensionProcessor, monitor);
     }    
 
     public Composite read(XMLStreamReader reader) throws ContributionReadException {

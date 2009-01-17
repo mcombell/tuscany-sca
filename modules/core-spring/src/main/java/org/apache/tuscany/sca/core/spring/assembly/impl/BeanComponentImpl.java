@@ -26,6 +26,7 @@ import org.apache.tuscany.sca.assembly.ComponentProperty;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentService;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
@@ -62,6 +63,7 @@ public class BeanComponentImpl extends ChildBeanDefinition implements Component,
     private List<Intent> requiredIntents = new ArrayList<Intent>();
     private List<PolicySet> policySets = new ArrayList<PolicySet>();
     private List<Object> extensions = new ArrayList<Object>();
+    private List<Extension> attributeExtensions = new ArrayList<Extension>();
     private boolean unresolved = false;
     private BeanDefinitionRegistry beanRegistry;
 
@@ -205,6 +207,10 @@ public class BeanComponentImpl extends ChildBeanDefinition implements Component,
         return extensions;
     }
 
+    public List<Extension> getAttributeExtensions() {
+        return attributeExtensions;
+    }
+    
     public boolean isUnresolved() {
         return unresolved;
     }

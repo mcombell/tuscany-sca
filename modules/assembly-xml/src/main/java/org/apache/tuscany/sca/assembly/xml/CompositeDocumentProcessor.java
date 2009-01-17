@@ -67,7 +67,7 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
      */
     public CompositeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
     								  XMLInputFactory inputFactory, List scaDefnsSink, Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
         this.scaDefnSink = scaDefnsSink;
     }
@@ -79,7 +79,7 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
      */
     public CompositeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
     								  StAXArtifactProcessor staxProcessor, Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
     }
     

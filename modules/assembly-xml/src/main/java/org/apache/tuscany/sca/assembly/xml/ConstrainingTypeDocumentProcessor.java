@@ -56,7 +56,7 @@ public class ConstrainingTypeDocumentProcessor extends BaseAssemblyProcessor imp
     public ConstrainingTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
     									     XMLInputFactory inputFactory,
     									     Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = inputFactory;
     }
 
@@ -68,7 +68,7 @@ public class ConstrainingTypeDocumentProcessor extends BaseAssemblyProcessor imp
     public ConstrainingTypeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
     										 StAXArtifactProcessor staxProcessor,
     										 Monitor monitor) {
-        super(null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, monitor);
         this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
     }
     
