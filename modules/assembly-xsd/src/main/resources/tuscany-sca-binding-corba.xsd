@@ -25,7 +25,7 @@
 
     <import namespace="http://www.osoa.org/xmlns/sca/1.0" schemaLocation="sca-core.xsd"/>
 
-    <element name="binding.gdata" type="t:CorbaBinding"/>
+    <element name="binding.corba" type="t:CorbaBinding"/>
     
     <complexType name="CorbaBinding">
         <complexContent>
