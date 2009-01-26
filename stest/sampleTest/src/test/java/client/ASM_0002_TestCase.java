@@ -20,12 +20,13 @@ package client;
 
 
 import test.ASM_0002_Client;
-import testClient.TestInvocation;
+import test.TestInvocation;
+
 
 /**
  * ASM_0002_TestCase
  */
-public class ASM_0002_TestCase extends BaseJAXWSTestCase {
+public class ASM_0002_TestCase extends BaseTestCase {
 
  
     protected TestConfiguration getTestConfiguration() {
