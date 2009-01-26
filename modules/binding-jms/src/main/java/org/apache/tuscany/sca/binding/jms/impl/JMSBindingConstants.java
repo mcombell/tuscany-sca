@@ -67,7 +67,7 @@ public interface JMSBindingConstants {
     String FAULT_PROPERTY = "org_apache_tuscany_sca_fault";
     
     String CALLBACK_ID_PROPERTY = "CallbackID";
-    String CALLBACK_Q_PROPERTY = "scaCallbackQueue ";
+    String CALLBACK_Q_PROPERTY = "scaCallbackQueue";
     String CONVERSATION_ID_PROPERTY = "scaConversationId";
     
     int MSG_CTXT_POSITION = 0;
