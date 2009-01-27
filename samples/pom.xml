@@ -86,7 +86,9 @@
                 <module>helloworld-ws-reference-secure</module>
                 <module>helloworld-ws-sdo</module>
                 <module>helloworld-ws-sdo-webapp</module>
+		<!--
                 <module>holder-ws-service</module>
+		-->
                 <module>implementation-composite</module>
                 <module>implementation-crud</module>
                 <module>implementation-crud-extension</module>
