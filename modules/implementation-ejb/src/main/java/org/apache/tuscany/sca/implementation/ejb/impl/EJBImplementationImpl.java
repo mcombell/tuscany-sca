@@ -116,6 +116,12 @@ class EJBImplementationImpl implements EJBImplementation, ComponentPreProcessor 
                 getProperties().add(createProperty(property));
             }
         }
+        
+        for(Service service : rtc.getServices()) {
+            if (getService(service.getName()) == null) {
+                getServices().add(createService(service));
+            }
+        }
     }
 
     protected Reference getReference(String name) {
@@ -154,5 +160,24 @@ class EJBImplementationImpl implements EJBImplementation, ComponentPreProcessor 
             throw new AssertionError(e); // should not ever happen
         }
         return newProperty;
+    }
+
+    protected Service getService(String name) {
+        for (Service service : getServices()) {
+            if (service.getName().equals(name)) {
+                return service;
+            }
+        }
+        return null;
+    }
+
+    protected Service createService(Service service) {
+        Service newService;
+        try {
+            newService = (Service)service.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e); // should not ever happen
+        }
+        return newService;
     }
 }
