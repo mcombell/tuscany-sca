@@ -216,4 +216,18 @@ public class ASFListener implements JMSServiceListener {
         return destination;
     }
 
+    public String getDestinationName() {
+        try {
+            if (destination instanceof Queue) {
+                return ((Queue)destination).getQueueName();
+            } else if (destination instanceof Topic) {
+                return ((Topic)destination).getTopicName();
+            } else {
+                return null;
+            }
+        } catch (JMSException e) {
+            throw new JMSBindingException(e);
+        }
+    }
+
 }
