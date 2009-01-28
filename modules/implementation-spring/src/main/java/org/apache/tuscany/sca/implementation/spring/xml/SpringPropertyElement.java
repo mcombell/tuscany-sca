@@ -50,12 +50,12 @@ public class SpringPropertyElement {
         this.ref = ref;
     }
     
-    public List<String> getProperties() {
-        return values;
+    public List<String> getValues() {
+        return this.values;
     }
 
-    public void addProperty(String value) {
-        values.add(value);
+    public void addValue(String value) {
+        this.values.add(value);
     }
 
 } // end class SpringPropertyElement

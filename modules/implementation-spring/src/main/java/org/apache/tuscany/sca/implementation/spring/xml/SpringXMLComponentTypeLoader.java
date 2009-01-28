@@ -139,7 +139,7 @@ public class SpringXMLComponentTypeLoader {
             reader = xmlFactory.createXMLStreamReader(resource.getInputStream());
 
             // System.out.println("Spring TypeLoader - starting to read context file");            
-            readBeanDefinition(reader, beans, services, references, scaproperties);            
+            readContextDefinition(reader, beans, services, references, scaproperties);            
 
         } catch (IOException e) {
             throw new ContributionReadException(e);
@@ -177,18 +177,16 @@ public class SpringXMLComponentTypeLoader {
     }    
     
     /**
-     * Method which reads the bean definitions from Spring application-context.xml file and identifies
-     * the defined beans, properties, services and references     
+     * Method which reads the spring context definitions from Spring application-context.xml 
+     * file and identifies the defined beans, properties, services and references     
      */
-    private void readBeanDefinition(XMLStreamReader reader, 
+    private void readContextDefinition(XMLStreamReader reader, 
             List<SpringBeanElement> beans,
             List<SpringSCAServiceElement> services,
             List<SpringSCAReferenceElement> references,
             List<SpringSCAPropertyElement> scaproperties) throws ContributionReadException {
         
         SpringBeanElement bean = null;
-        SpringPropertyElement property = null;
-        SpringConstructorArgElement constructorArg = null;
         
         try {
             boolean completed = false;
@@ -202,8 +200,8 @@ public class SpringXMLComponentTypeLoader {
                             String location = reader.getAttributeValue(null, "resource");
                             if (location != null) {
                                 XMLStreamReader ireader = getApplicationContextReader(location);
-                                // Read the bean definition for the identified imported resource
-                                readBeanDefinition(ireader, beans, services, references, scaproperties);
+                                // Read the context definition for the identified imported resource
+                                readContextDefinition(ireader, beans, services, references, scaproperties);
                             }
                         } else if (Constants.SERVICE_ELEMENT.equals(qname)) {
                             SpringSCAServiceElement service =
@@ -223,14 +221,59 @@ public class SpringXMLComponentTypeLoader {
                         } else if (Constants.BEAN_ELEMENT.equals(qname)) {
                             bean = new SpringBeanElement(reader.getAttributeValue(null, "id"), reader
                                     .getAttributeValue(null, "class"));
-                            //beans.add(bean);
+                            beans.add(bean);
+                            // Read the <bean> element and its child elements
+                            readBeanDefinition(reader, bean, beans, services, references, scaproperties);
+                        } // end if*/
+                        break;
+                    case END_ELEMENT:
+                        if (Constants.BEANS_ELEMENT.equals(reader.getName())) {
+                            //System.out.println("Spring TypeLoader - finished read of context file");
+                            completed = true;
+                            break;
+                        } // end if
+                } // end switch
+            } // end while
+        } catch (XMLStreamException e) {
+            throw new ContributionReadException(e);
+        }
+    }
+    
+    
+    /**
+     * Method which reads the bean definitions from Spring application-context.xml file and identifies
+     * the defined beans, properties, services and references     
+     */
+    private void readBeanDefinition(XMLStreamReader reader,
+    		SpringBeanElement bean,
+            List<SpringBeanElement> beans,
+            List<SpringSCAServiceElement> services,
+            List<SpringSCAReferenceElement> references,
+            List<SpringSCAPropertyElement> scaproperties) throws ContributionReadException {
+        
+    	SpringBeanElement innerbean = null;
+        SpringPropertyElement property = null;
+        SpringConstructorArgElement constructorArg = null;
+        
+        try {
+            boolean completed = false;
+            while (!completed) {
+                switch (reader.next()) {
+                    case START_ELEMENT:
+                        QName qname = reader.getName();
+                        if (Constants.BEAN_ELEMENT.equals(qname)) {
+                        	innerbean = new SpringBeanElement(reader.getAttributeValue(null, "id"), reader
+                                    .getAttributeValue(null, "class"));
+                            beans.add(innerbean);
+                            readBeanDefinition(reader, innerbean, beans, services, references, scaproperties);
                         } else if (Constants.PROPERTY_ELEMENT.equals(qname)) {
                             property = new SpringPropertyElement(reader.getAttributeValue(null, "name"), reader
                                     .getAttributeValue(null, "ref"));
-                            //bean.addProperty(property);
+                            bean.addProperty(property);
                         } else if (Constants.CONSTRUCTORARG_ELEMENT.equals(qname)) {
                             constructorArg = new SpringConstructorArgElement(reader.getAttributeValue(null, "ref"), 
-                                    reader.getAttributeValue(null, "type"));                            
+                                    reader.getAttributeValue(null, "type"));
+                            bean.addCustructorArgs(constructorArg);
                         } else if (Constants.REF_ELEMENT.equals(qname)) {
                             String ref = reader.getAttributeValue(null, "bean");
                             // Check if the parent element is a property 
@@ -239,6 +282,8 @@ public class SpringXMLComponentTypeLoader {
                             if (constructorArg != null) constructorArg.setRef(ref);
                         } else if (Constants.VALUE_ELEMENT.equals(qname)) {
                             String value = reader.getElementText();
+                            // Check if the parent element is a property 
+                            if (property != null) property.addValue(value);
                             // Check if the parent element is a constructor-arg
                             if (constructorArg != null) {
                                 constructorArg.addValue(value);                            
@@ -247,26 +292,20 @@ public class SpringXMLComponentTypeLoader {
                                     if ((bean.getClassName().indexOf(".ClassPathXmlApplicationContext") != -1) ||
                                         (bean.getClassName().indexOf(".FileSystemXmlApplicationContext") != -1)) {                                    
                                         XMLStreamReader creader = getApplicationContextReader(value);
-                                        // Read the bean definition for the constructor-arg resources
-                                        readBeanDefinition(creader, beans, services, references, scaproperties);
+                                        // Read the context definition for the constructor-arg resources
+                                        readContextDefinition(creader, beans, services, references, scaproperties);
                                     }
                                 }
                             }
                         } // end if
                         break;
                     case END_ELEMENT:
-                        if (Constants.BEANS_ELEMENT.equals(reader.getName())) {
-                            //System.out.println("Spring TypeLoader - finished read of context file");
+                        if (Constants.BEAN_ELEMENT.equals(reader.getName())) {
                             completed = true;
                             break;
-                        } else if (Constants.BEAN_ELEMENT.equals(reader.getName())) {
-                            beans.add(bean);
-                            bean = null;
                         } else if (Constants.PROPERTY_ELEMENT.equals(reader.getName())) {
-                            bean.addProperty(property);
                             property = null;
                         } else if (Constants.CONSTRUCTORARG_ELEMENT.equals(reader.getName())) {
-                            bean.addCustructorArgs(constructorArg);
                             constructorArg = null;
                         } // end if
                 } // end switch
