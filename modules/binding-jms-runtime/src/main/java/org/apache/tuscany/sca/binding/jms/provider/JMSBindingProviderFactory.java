@@ -21,14 +21,14 @@ package org.apache.tuscany.sca.binding.jms.provider;
 
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.host.jms.JMSHostExtensionPoint;
+import org.apache.tuscany.sca.host.jms.JMSServiceListenerFactory;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
-import org.apache.tuscany.sca.work.WorkScheduler;
 
 /**
  * A factory from creating the JMS binding provider.
@@ -37,20 +37,21 @@ import org.apache.tuscany.sca.work.WorkScheduler;
  */
 public class JMSBindingProviderFactory implements BindingProviderFactory<JMSBinding> {
 
-    private WorkScheduler workScheduler;
     private ExtensionPointRegistry extensionPoints;
     private JMSResourceFactoryExtensionPoint jmsRFEP;
+    private JMSServiceListenerFactory serviceListenerFactory;
 
     public JMSBindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         this.extensionPoints = extensionPoints;
-        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
-        workScheduler = utilities.getUtility(WorkScheduler.class);
 
         jmsRFEP = (JMSResourceFactoryExtensionPoint)extensionPoints.getExtensionPoint(JMSResourceFactoryExtensionPoint.class);
         if (jmsRFEP == null) {
             jmsRFEP = new DefaultJMSResourceFactoryExtensionPoint();
             extensionPoints.addExtensionPoint(jmsRFEP);
         }
+
+        JMSHostExtensionPoint jmsHostExtensionPoint = (JMSHostExtensionPoint)extensionPoints.getExtensionPoint(JMSHostExtensionPoint.class);
+        serviceListenerFactory = jmsHostExtensionPoint.getJMSServiceListenerFactory();
     }
 
     public ReferenceBindingProvider createReferenceBindingProvider(RuntimeComponent component, RuntimeComponentReference reference, JMSBinding binding) {
@@ -60,7 +61,7 @@ public class JMSBindingProviderFactory implements BindingProviderFactory<JMSBind
 
     public ServiceBindingProvider createServiceBindingProvider(RuntimeComponent component, RuntimeComponentService service, JMSBinding binding) {
         JMSResourceFactory jmsRF = jmsRFEP.createJMSResourceFactory(binding);
-        return new JMSBindingServiceBindingProvider(component, service, binding, binding, workScheduler, extensionPoints, jmsRF);
+        return new JMSBindingServiceBindingProvider(component, service, binding, binding, serviceListenerFactory, extensionPoints, jmsRF);
     }
 
     public Class<JMSBinding> getModelType() {
