@@ -24,4 +24,6 @@ public interface JMSServiceListener {
     void start();
     
     void stop();
+    
+    String getDestinationName();
 }
