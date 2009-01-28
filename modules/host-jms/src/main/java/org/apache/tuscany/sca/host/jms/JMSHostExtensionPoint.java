@@ -19,12 +19,9 @@
 
 package org.apache.tuscany.sca.host.jms;
 
-import javax.jms.MessageListener;
 
-import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
+public interface JMSHostExtensionPoint {
 
-public interface JMSServiceListenerFactory {
+    JMSServiceListenerFactory getJMSServiceListenerFactory();
     
-    JMSServiceListener createJMSServiceListener(String serviceName, boolean isCallbackService, JMSBinding jmsBinding, MessageListener listener);
-
 }
