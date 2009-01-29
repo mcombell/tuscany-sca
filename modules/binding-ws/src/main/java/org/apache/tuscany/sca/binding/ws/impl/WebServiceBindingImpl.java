@@ -29,7 +29,6 @@ import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
-import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.builder.BindingBuilder;
@@ -49,7 +48,7 @@ import org.w3c.dom.Element;
  *
  * @version $Rev$ $Date$
  */
-class WebServiceBindingImpl implements WebServiceBinding, PolicySetAttachPoint, Extensible, OperationsConfigurator {
+class WebServiceBindingImpl implements WebServiceBinding, PolicySetAttachPoint, OperationsConfigurator {
     private String name;
     private String uri;
     private boolean unresolved;

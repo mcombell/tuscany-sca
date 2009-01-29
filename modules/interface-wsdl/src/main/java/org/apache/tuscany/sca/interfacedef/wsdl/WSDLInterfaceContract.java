@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.interfacedef.wsdl;
 
+import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 
 
@@ -26,7 +27,7 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
  * 
  * @version $Rev$ $Date$
  */
-public interface WSDLInterfaceContract extends InterfaceContract {
+public interface WSDLInterfaceContract extends InterfaceContract, Extensible {
 
     /**
      * Sets the WSDL location. 

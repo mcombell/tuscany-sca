@@ -18,6 +18,10 @@
  */
 package org.apache.tuscany.sca.interfacedef.wsdl.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractImpl;
 import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract;
 
@@ -28,6 +32,9 @@ import org.apache.tuscany.sca.interfacedef.wsdl.WSDLInterfaceContract;
  */
 public class WSDLInterfaceContractImpl extends InterfaceContractImpl implements WSDLInterfaceContract {
     private String location;
+    private List<Object> extensions = new ArrayList<Object>();
+    private List<Extension> attributeExtensions = new ArrayList<Extension>();
+    
     
     protected WSDLInterfaceContractImpl() {
     }
@@ -39,6 +46,16 @@ public class WSDLInterfaceContractImpl extends InterfaceContractImpl implements 
     public void setLocation(String location) {
         this.location = location;
     }
+    
+
+    public List<Object> getExtensions() {
+        return extensions;
+    }
+    
+    public List<Extension> getAttributeExtensions() {
+        return attributeExtensions;
+    }
+    
 
     @Override
     public WSDLInterfaceContractImpl clone() throws CloneNotSupportedException {

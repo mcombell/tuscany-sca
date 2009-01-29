@@ -90,8 +90,6 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
     // FIXME: to be refactored
     private XPathFactory xPathFactory = XPathFactory.newInstance();
     
-    protected StAXAttributeProcessor<Object> extensionAttributeProcessor;
-    
     /**
      * Construct a new composite processor
      * 
@@ -128,6 +126,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
             modelFactories.getFactory(ExtensionFactory.class),
             modelFactories.getFactory(PolicyFactory.class),
             extensionProcessor, 
+            extensionAttributeProcessor,
             monitor);
         
         this.extensionAttributeProcessor = extensionAttributeProcessor;
@@ -149,7 +148,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
             StAXArtifactProcessor extensionProcessor,
             StAXAttributeProcessor extensionAttributeProcessor,
             Monitor monitor) {
-        super(contributionFactory, assemblyFactory, extensionFactory, policyFactory, extensionProcessor, monitor);
+        super(contributionFactory, assemblyFactory, extensionFactory, policyFactory, extensionProcessor, extensionAttributeProcessor, monitor);
     }    
 
     public Composite read(XMLStreamReader reader) throws ContributionReadException {
@@ -192,7 +191,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             }
                             
                             //handle extension attributes
-                            this.readExtendedAttributes(reader, name, composite, extensionAttributeProcessor);
+                            this.readExtendedAttributes(reader, composite);
     
                             composite.setLocal(getBoolean(reader, LOCAL));
                             composite.setConstrainingType(readConstrainingType(reader));
@@ -216,7 +215,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                                 componentService.setName(getString(reader, NAME));
                                 
                                 //handle extension attributes
-                                this.readExtendedAttributes(reader, name, componentService, extensionAttributeProcessor);
+                                this.readExtendedAttributes(reader, componentService);
     
                                 component.getServices().add(componentService);
                                 policyProcessor.readPolicies(contract, reader);
@@ -252,7 +251,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                                 }
     
                                 //handle extension attributes
-                                this.readExtendedAttributes(reader, name, compositeService, extensionAttributeProcessor);
+                                this.readExtendedAttributes(reader, compositeService);
     
                                 composite.getServices().add(compositeService);
                                 policyProcessor.readPolicies(contract, reader);
@@ -272,7 +271,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                                 componentReference.setWiredByImpl(getBoolean(reader, WIRED_BY_IMPL));
                                 
                                 //handle extension attributes
-                                this.readExtendedAttributes(reader, name, componentReference, extensionAttributeProcessor);
+                                this.readExtendedAttributes(reader, componentReference);
     
                                 component.getReferences().add(componentReference);
                                 policyProcessor.readPolicies(contract, reader);
@@ -296,7 +295,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                                 compositeReference.setWiredByImpl(getBoolean(reader, WIRED_BY_IMPL));
                                 
                                 //handle extension attributes
-                                this.readExtendedAttributes(reader, name, compositeReference, extensionAttributeProcessor);
+                                this.readExtendedAttributes(reader, compositeReference);
     
                                 composite.getReferences().add(compositeReference);                            
                                 policyProcessor.readPolicies(contract, reader);
@@ -340,7 +339,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                                 componentProperty.setFile(getString(reader, FILE));
                                 
                                 //handle extension attributes
-                                this.readExtendedAttributes(reader, name, componentProperty, extensionAttributeProcessor);
+                                this.readExtendedAttributes(reader, componentProperty);
     
                                 policyProcessor.readPolicies(property, reader);
                                 readAbstractProperty(componentProperty, reader);
@@ -384,7 +383,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             }
                             
                             //handle extension attributes
-                           this.readExtendedAttributes(reader, name, component, extensionAttributeProcessor);
+                           this.readExtendedAttributes(reader, component);
                             
                             component.setConstrainingType(readConstrainingType(reader));
                             composite.getComponents().add(component);
@@ -405,7 +404,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             wire.setTarget(target);
     
                             //handle extension attributes
-                            this.readExtendedAttributes(reader, name, wire, extensionAttributeProcessor);
+                            this.readExtendedAttributes(reader, wire);
     
                             composite.getWires().add(wire);
                             policyProcessor.readPolicies(wire, reader);
@@ -417,7 +416,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             contract.setCallback(callback);
                             
                             //handle extension attributes
-                            this.readExtendedAttributes(reader, name, callback, extensionAttributeProcessor);
+                            this.readExtendedAttributes(reader, callback);
                             
                             policyProcessor.readPolicies(callback, reader);
     
@@ -453,7 +452,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
                             implementation.setUnresolved(true);
                             
                             //handle extension attributes
-                            this.readExtendedAttributes(reader, name, implementation, extensionAttributeProcessor);
+                            this.readExtendedAttributes(reader, implementation);
     
                             component.setImplementation(implementation);
                             policyProcessor.readPolicies(implementation, reader);

@@ -36,6 +36,8 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
+import org.apache.tuscany.sca.assembly.Extension;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
@@ -46,6 +48,7 @@ import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.assembly.xml.PolicyAttachPointProcessor;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
@@ -71,22 +74,29 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
 public class JavaImplementationProcessor implements StAXArtifactProcessor<JavaImplementation>,
     JavaImplementationConstants {
 
-    private JavaImplementationFactory javaFactory;
     private AssemblyFactory assemblyFactory;
     private PolicyFactory policyFactory;
+    private ExtensionFactory extensionFactory;
+    private JavaImplementationFactory javaFactory;
     private PolicyAttachPointProcessor policyProcessor;
     private IntentAttachPointTypeFactory  intentAttachPointTypeFactory;
     private ConfiguredOperationProcessor configuredOperationProcessor;
+    private StAXAttributeProcessor<Object> extensionAttributeProcessor;
     private Monitor monitor;
 
-    public JavaImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+    public JavaImplementationProcessor(ModelFactoryExtensionPoint modelFactories, 
+    			                       StAXArtifactProcessor extensionProcessor,
+    		                           StAXAttributeProcessor extensionAttributeProcessor,
+    		                           Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
         this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
+        this.extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
         this.javaFactory = modelFactories.getFactory(JavaImplementationFactory.class);
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.intentAttachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
         this.monitor = monitor;
         this.configuredOperationProcessor = new ConfiguredOperationProcessor(modelFactories, this.monitor);
+        this.extensionAttributeProcessor = extensionAttributeProcessor;
     }
     
     /**
@@ -135,6 +145,24 @@ public class JavaImplementationProcessor implements StAXArtifactProcessor<JavaIm
         // Read policies
         policyProcessor.readPolicies(javaImplementation, reader);
 
+        // Handle extended attributes
+        for (int a = 0; a < reader.getAttributeCount(); a++) {
+            QName attributeName = reader.getAttributeName(a);
+            if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
+                if( (! Constants.SCA10_NS.equals(attributeName.getNamespaceURI()) && 
+                    (! Constants.SCA10_TUSCANY_NS.equals(attributeName.getNamespaceURI()) ))) {
+                    Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
+                    Extension attributeExtension;
+                    if (attributeValue instanceof Extension) {
+                        attributeExtension = (Extension) attributeValue;
+                    } else {
+                        attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true);
+                    }
+                    javaImplementation.getAttributeExtensions().add(attributeExtension);
+                }
+            }
+        }        
+        
         // read operation elements if exists or skip unto end element
         int event;
         ConfiguredOperation confOp = null;
@@ -170,6 +198,13 @@ public class JavaImplementationProcessor implements StAXArtifactProcessor<JavaIm
         if (javaImplementation.getName() != null) {
             writer.writeAttribute(CLASS, javaImplementation.getName());
         }
+
+        // Write extended attributes
+        for(Extension extension : javaImplementation.getAttributeExtensions()) {
+            if(extension.isAttribute()) {
+                extensionAttributeProcessor.write(extension, writer);
+            }
+        }        
 
         writer.writeEndElement();
     }

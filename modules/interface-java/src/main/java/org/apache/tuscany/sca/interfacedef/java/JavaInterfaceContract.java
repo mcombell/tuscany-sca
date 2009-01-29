@@ -19,6 +19,7 @@
 
 package org.apache.tuscany.sca.interfacedef.java;
 
+import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 
 /**
@@ -27,6 +28,6 @@ import org.apache.tuscany.sca.interfacedef.InterfaceContract;
  *
  * @version $Rev$ $Date$
  */
-public interface JavaInterfaceContract extends InterfaceContract {
+public interface JavaInterfaceContract extends InterfaceContract, Extensible {
 
 }

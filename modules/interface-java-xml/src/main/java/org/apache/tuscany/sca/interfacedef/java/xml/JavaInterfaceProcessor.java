@@ -26,10 +26,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.Extension;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ClassReference;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
@@ -50,10 +53,17 @@ import org.apache.tuscany.sca.monitor.Problem.Severity;
 public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfaceContract>, JavaConstants {
 
     private JavaInterfaceFactory javaFactory;
+    private ExtensionFactory extensionFactory;
+    private StAXAttributeProcessor<Object> extensionAttributeProcessor;
     private Monitor monitor;
 
-    public JavaInterfaceProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+    public JavaInterfaceProcessor(ModelFactoryExtensionPoint modelFactories, 
+                                  StAXArtifactProcessor extensionProcessor,
+                                  StAXAttributeProcessor extensionAttributeProcessor,
+                                  Monitor monitor) {
         this.javaFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+        this.extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
+        this.extensionAttributeProcessor = extensionAttributeProcessor;
         this.monitor = monitor;
     }
     
@@ -108,6 +118,23 @@ public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfa
             javaInterfaceContract.setCallbackInterface(javaCallbackInterface);
         }
 
+        // Handle extended attributes
+        for (int a = 0; a < reader.getAttributeCount(); a++) {
+            QName attributeName = reader.getAttributeName(a);
+            if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
+                if( (! Constants.SCA10_NS.equals(attributeName.getNamespaceURI()) && 
+                    (! Constants.SCA10_TUSCANY_NS.equals(attributeName.getNamespaceURI()) ))) {
+                    Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
+                    Extension attributeExtension;
+                    if (attributeValue instanceof Extension) {
+                        attributeExtension = (Extension) attributeValue;
+                    } else {
+                        attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true);
+                    }
+                    javaInterfaceContract.getAttributeExtensions().add(attributeExtension);
+                }
+            }
+        }        
         // Skip to end element
         while (reader.hasNext()) {
             if (reader.next() == END_ELEMENT && INTERFACE_JAVA_QNAME.equals(reader.getName())) {
@@ -131,6 +158,13 @@ public class JavaInterfaceProcessor implements StAXArtifactProcessor<JavaInterfa
         if (javaCallbackInterface != null && javaCallbackInterface.getName() != null) {
             writer.writeAttribute(CALLBACK_INTERFACE, javaCallbackInterface.getName());
         }
+
+        // Write extended attributes
+        for(Extension extension : javaInterfaceContract.getAttributeExtensions()) {
+            if(extension.isAttribute()) {
+                extensionAttributeProcessor.write(extension, writer);
+            }
+        } 
         
         writer.writeEndElement();
     }

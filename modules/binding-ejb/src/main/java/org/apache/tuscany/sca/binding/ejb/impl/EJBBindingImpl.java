@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.binding.ejb.impl;
 
+import org.apache.tuscany.sca.assembly.impl.ExtensibleImpl;
 import org.apache.tuscany.sca.binding.ejb.EJBBinding;
 
 /**
@@ -25,7 +26,7 @@ import org.apache.tuscany.sca.binding.ejb.EJBBinding;
  *
  * @version $Rev$ $Date$
  */
-public class EJBBindingImpl implements EJBBinding {
+public class EJBBindingImpl extends ExtensibleImpl implements EJBBinding {
 
     /**
      * CORBA location For example,

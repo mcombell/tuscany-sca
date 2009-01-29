@@ -18,6 +18,10 @@
  */
 package org.apache.tuscany.sca.interfacedef.java.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.interfacedef.impl.InterfaceContractImpl;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
 
@@ -27,6 +31,8 @@ import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
  * @version $Rev$ $Date$
  */
 public class JavaInterfaceContractImpl extends InterfaceContractImpl implements JavaInterfaceContract {
+    private List<Object> extensions = new ArrayList<Object>();
+    private List<Extension> attributeExtensions = new ArrayList<Extension>();
     
     protected JavaInterfaceContractImpl() {
     }
@@ -35,5 +41,14 @@ public class JavaInterfaceContractImpl extends InterfaceContractImpl implements 
     public JavaInterfaceContractImpl clone() throws CloneNotSupportedException {
         return (JavaInterfaceContractImpl) super.clone();
     }
+
+    public List<Object> getExtensions() {
+        return extensions;
+    }
+    
+    public List<Extension> getAttributeExtensions() {
+        return attributeExtensions;
+    }
+    
 
 }

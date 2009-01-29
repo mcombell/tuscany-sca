@@ -56,7 +56,7 @@ public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implem
     public ComponentTypeDocumentProcessor(StAXArtifactProcessor staxProcessor, 
     									  XMLInputFactory inputFactory, 
     									  Monitor monitor) {
-        super(null, null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, null, monitor);
         this.inputFactory = inputFactory;
     }
     
@@ -68,7 +68,7 @@ public class ComponentTypeDocumentProcessor extends BaseAssemblyProcessor implem
     public ComponentTypeDocumentProcessor(ModelFactoryExtensionPoint modelFactories, 
     									  StAXArtifactProcessor staxProcessor,
     									  Monitor monitor) {
-        super(null, null, null, staxProcessor, monitor);
+        super(null, null, null, staxProcessor, null, monitor);
         this.inputFactory = modelFactories.getFactory(ValidatingXMLInputFactory.class);
     }
     

@@ -27,10 +27,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.Extension;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -52,10 +55,17 @@ import org.apache.tuscany.sca.monitor.Problem.Severity;
 public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfaceContract>, WSDLConstants {
 
     private WSDLFactory wsdlFactory;
+    private ExtensionFactory extensionFactory;
+    private StAXAttributeProcessor<Object> extensionAttributeProcessor;    
     private Monitor monitor;
 
-    public WSDLInterfaceProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+    public WSDLInterfaceProcessor(ModelFactoryExtensionPoint modelFactories, 
+                                  StAXArtifactProcessor extensionProcessor,
+                                  StAXAttributeProcessor extensionAttributeProcessor,
+                                  Monitor monitor) {
         this.wsdlFactory = modelFactories.getFactory(WSDLFactory.class);
+        this.extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
+        this.extensionAttributeProcessor = extensionAttributeProcessor;        
         this.monitor = monitor;
     }
     
@@ -150,6 +160,24 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
             if (wsdlCallbackInterface != null)
                 wsdlInterfaceContract.setCallbackInterface(wsdlCallbackInterface);
         }
+        
+        // Handle extended attributes
+        for (int a = 0; a < reader.getAttributeCount(); a++) {
+            QName attributeName = reader.getAttributeName(a);
+            if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
+                if( (! Constants.SCA10_NS.equals(attributeName.getNamespaceURI()) && 
+                    (! Constants.SCA10_TUSCANY_NS.equals(attributeName.getNamespaceURI()) ))) {
+                    Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
+                    Extension attributeExtension;
+                    if (attributeValue instanceof Extension) {
+                        attributeExtension = (Extension) attributeValue;
+                    } else {
+                        attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true);
+                    }
+                    wsdlInterfaceContract.getAttributeExtensions().add(attributeExtension);
+                }
+            }
+        }                
             
         // Skip to end element
         while (reader.hasNext()) {
@@ -184,6 +212,13 @@ public class WSDLInterfaceProcessor implements StAXArtifactProcessor<WSDLInterfa
             writer.writeAttribute(WSDLI_NS, WSDL_LOCATION, wsdlInterfaceContract.getLocation());
         }
         
+        // Write extended attributes
+        for(Extension extension : wsdlInterfaceContract.getAttributeExtensions()) {
+            if(extension.isAttribute()) {
+                extensionAttributeProcessor.write(extension, writer);
+            }
+        } 
+                
         writer.writeEndElement();
     }
     

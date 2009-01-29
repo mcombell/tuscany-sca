@@ -22,6 +22,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.Base;
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.Extensible;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 
 /**
@@ -29,7 +30,7 @@ import org.apache.tuscany.sca.assembly.xml.Constants;
  *
  * @version $Rev$ $Date$
  */
-public interface EJBBinding extends Binding, Base {
+public interface EJBBinding extends Binding, Extensible, Base {
     // Constants used when describing the EJB binding
     // model and for setting up defaults
     String BINDING_EJB = "binding.ejb";
