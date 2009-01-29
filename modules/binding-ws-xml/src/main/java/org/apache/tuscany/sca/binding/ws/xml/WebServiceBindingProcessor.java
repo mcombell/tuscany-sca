@@ -235,11 +235,11 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
         wsBinding.setLocation(reader.getAttributeValue(WSDLI_NS, WSDL_LOCATION));
         
         // Handle extended attributes
-        QName elementName = reader.getName();
         for (int a = 0; a < reader.getAttributeCount(); a++) {
             QName attributeName = reader.getAttributeName(a);
             if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI() != WSDLI_NS && attributeName.getNamespaceURI().length() > 0) {
-                if( ! elementName.getNamespaceURI().equals(attributeName.getNamespaceURI()) ) {
+                if( (! Constants.SCA10_NS.equals(attributeName.getNamespaceURI()) && 
+                    (! Constants.SCA10_TUSCANY_NS.equals(attributeName.getNamespaceURI()) ))) {
                     Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
                     Extension attributeExtension;
                     if (attributeValue instanceof Extension) {
