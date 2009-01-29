@@ -35,12 +35,14 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
 
     Stack<List<String>[]> context = new Stack<List<String>[]>();
 
+    String characterEncodingScheme;
     List<String>[] contextList;
     List<String> prefixList;
     List<String> uriList;
 
     public TuscanyXMLStreamReader(XMLStreamReader reader) {
         super(reader);
+        this.saveCharacterEncodingScheme();
     }
 
     public void pushContext() throws XMLStreamException {
@@ -68,6 +70,10 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
     public void popContext() throws XMLStreamException {
         context.pop();
     }
+    
+    public void saveCharacterEncodingScheme() {
+        this.characterEncodingScheme = super.getCharacterEncodingScheme();
+    }
 
     /*
      * Overriding the next() method to perform PUSH and POP operations 
@@ -93,6 +99,7 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
     @Override
     public int nextTag() throws XMLStreamException {
         int event = super.nextTag();
+        
         if (event == START_ELEMENT) {
             pushContext();
         }
@@ -105,5 +112,11 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
     @Override
     public NamespaceContext getNamespaceContext() {
         return new TuscanyNamespaceContext((Stack<List<String>[]>)context.clone());
+    }
+    
+
+    @Override
+    public String getCharacterEncodingScheme() {
+        return characterEncodingScheme;
     }
 }
