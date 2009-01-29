@@ -86,7 +86,7 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
     private StAXAttributeProcessor<Object> extensionAttributeProcessor;
     private Monitor monitor;
     
-    public WebServiceBindingProcessor(ExtensionPointRegistry extensionPoints) {
+    public WebServiceBindingProcessor(ExtensionPointRegistry extensionPoints, Monitor monitor) {
         
         this.extensionPoints = extensionPoints;
         ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
@@ -96,11 +96,7 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
         this.extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.intentAttachPointTypeFactory = modelFactories.getFactory(IntentAttachPointTypeFactory.class);
-        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
-        MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
-        if (monitorFactory != null) {
-            this.monitor = monitorFactory.createMonitor();
-        }
+        this.monitor = monitor;
         this.configuredOperationProcessor = new ConfiguredOperationProcessor(modelFactories, this.monitor);
         this.extensionAttributeProcessor = extensionPoints.getExtensionPoint(ExtensibleStAXAttributeProcessor.class);
     }
@@ -351,6 +347,7 @@ public class WebServiceBindingProcessor implements StAXArtifactProcessor<WebServ
             writer.writeAttribute(WSDLI_NS, WSDL_LOCATION, wsBinding.getLocation());
         }
 
+        // Write extended attributes
         for(Extension extension : wsBinding.getAttributeExtensions()) {
             if(extension.isAttribute()) {
                 extensionAttributeProcessor.write(extension, writer);
