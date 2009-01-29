@@ -23,18 +23,25 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.Extension;
+import org.apache.tuscany.sca.assembly.ExtensionFactory;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.assembly.xml.PolicyAttachPointProcessor;
 import org.apache.tuscany.sca.binding.ejb.EJBBinding;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
+import org.apache.tuscany.sca.contribution.processor.StAXAttributeProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.core.UtilityExtensionPoint;
 import org.apache.tuscany.sca.policy.PolicyFactory;
 import org.apache.tuscany.sca.monitor.Monitor;
+import org.apache.tuscany.sca.monitor.MonitorFactory;
 import org.apache.tuscany.sca.monitor.Problem;
 import org.apache.tuscany.sca.monitor.Problem.Severity;
 
@@ -60,13 +67,24 @@ import org.apache.tuscany.sca.monitor.Problem.Severity;
  */
 public class EJBBindingProcessor implements StAXArtifactProcessor<EJBBindingImpl> {
     private PolicyFactory policyFactory;
+    private ExtensionFactory extensionFactory;
     private PolicyAttachPointProcessor policyProcessor;
+    private StAXAttributeProcessor<Object> extensionAttributeProcessor;
     private Monitor monitor;
 
-    public EJBBindingProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
+    public EJBBindingProcessor(ExtensionPointRegistry extensionPoints) {
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        
         this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
+        this.extensionFactory = modelFactories.getFactory(ExtensionFactory.class);
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
-        this.monitor = monitor;
+        this.extensionAttributeProcessor = extensionPoints.getExtensionPoint(ExtensibleStAXAttributeProcessor.class);
+        
+        UtilityExtensionPoint utilities = extensionPoints.getExtensionPoint(UtilityExtensionPoint.class);
+        MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
+        if (monitorFactory != null) {
+            this.monitor = monitorFactory.createMonitor();
+        }
     }
     
     /**
@@ -151,6 +169,24 @@ public class EJBBindingProcessor implements StAXArtifactProcessor<EJBBindingImpl
             ejbBinding.setRequires(requires);
         }
 
+        // Handle extended attributes
+        QName elementName = reader.getName();
+        for (int a = 0; a < reader.getAttributeCount(); a++) {
+            QName attributeName = reader.getAttributeName(a);
+            if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {
+                if( ! elementName.getNamespaceURI().equals(attributeName.getNamespaceURI()) ) {
+                    Object attributeValue = extensionAttributeProcessor.read(attributeName, reader);
+                    Extension attributeExtension;
+                    if (attributeValue instanceof Extension) {
+                        attributeExtension = (Extension) attributeValue;
+                    } else {
+                        attributeExtension = extensionFactory.createExtension(attributeName, attributeValue, true);
+                    }
+                    ejbBinding.getAttributeExtensions().add(attributeExtension);
+                }
+            }
+        }        
+        
         return ejbBinding;
     }
 
