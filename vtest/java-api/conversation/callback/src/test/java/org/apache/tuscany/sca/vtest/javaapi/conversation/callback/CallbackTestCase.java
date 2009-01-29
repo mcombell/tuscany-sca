@@ -174,25 +174,6 @@ public class CallbackTestCase {
     }
 
     /**
-     * Lines 534, 535
-     * <p>
-     * Callbacks may be used for both remotable and local services. Either both
-     * interfaces of a bidirectional service must be remotable, or both must be
-     * local. It is illegal to mix the two.
-     * <p>
-     * In this test configuration BServiceCallback is remotable and CService is
-     * not
-     */
-    @Test(expected = ServiceRuntimeException.class)
-    @Ignore("TUSCANY-2291")
-    public void statefulMixedCallback() throws Exception {
-        System.out.println("Setting up for mixed local/remote callback tests");
-        ServiceFinder.init("callback-mixed.composite");
-        aService = ServiceFinder.getService(AService.class, "AComponent");
-        aService.testCallback();
-    }
-
-    /**
      * Lines 613-615
      * <p>
      * A stateless callback interface is a callback whose interface is not

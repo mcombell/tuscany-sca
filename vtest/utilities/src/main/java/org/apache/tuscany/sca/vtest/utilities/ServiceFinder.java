@@ -53,7 +53,10 @@ public class ServiceFinder {
     }
 
     public static void cleanup() {
-        domain.close();
+        if (domain != null){
+            domain.close(); 
+        }
+      
         domain = null;
     }
 
