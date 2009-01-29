@@ -98,6 +98,7 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     protected ExtensionFactory extensionFactory;
     protected PolicyFactory policyFactory;
     protected StAXArtifactProcessor<Object> extensionProcessor;
+    protected StAXAttributeProcessor<Object> extensionAttributeProcessor;
     protected PolicyAttachPointProcessor policyProcessor;
     private DocumentBuilderFactory documentBuilderFactory;
     protected IntentAttachPointTypeFactory intentAttachPointTypeFactory;
@@ -119,12 +120,14 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
                                  ExtensionFactory extensionFactory,
                                  PolicyFactory policyFactory,
                                  StAXArtifactProcessor extensionProcessor,
+                                 StAXAttributeProcessor extensionAttributeProcessor,
                                  Monitor monitor) {
     	this.contributionFactory = contribFactory;
     	this.assemblyFactory = assemblyFactory;
         this.extensionFactory = extensionFactory;
         this.policyFactory = policyFactory;
         this.extensionProcessor = (StAXArtifactProcessor<Object>)extensionProcessor;
+        this.extensionAttributeProcessor = extensionAttributeProcessor;
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.intentAttachPointTypeFactory = new IntentAttachPointTypeFactoryImpl();
         this.monitor = monitor;
@@ -143,11 +146,13 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
     				 ExtensionFactory extensionFactory,
                                  PolicyFactory policyFactory,
                                  StAXArtifactProcessor extensionProcessor,
+                                 StAXAttributeProcessor extensionAttributeProcessor,
                                  Monitor monitor) {
         this.assemblyFactory = assemblyfactory;
         this.extensionFactory = extensionFactory;        
         this.policyFactory = policyFactory;
         this.extensionProcessor = (StAXArtifactProcessor<Object>)extensionProcessor;
+        this.extensionAttributeProcessor = extensionAttributeProcessor;
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.monitor = monitor;
     }
@@ -877,7 +882,8 @@ abstract class BaseAssemblyProcessor extends BaseStAXArtifactProcessor implement
      * @throws ContributionReadException
      * @throws XMLStreamException
      */
-    protected void readExtendedAttributes(XMLStreamReader reader, QName elementName, Extensible estensibleElement, StAXAttributeProcessor extensionAttributeProcessor) throws ContributionReadException, XMLStreamException {
+    protected void readExtendedAttributes(XMLStreamReader reader, Extensible estensibleElement) throws ContributionReadException, XMLStreamException {
+        QName elementName = reader.getName();
         for (int a = 0; a < reader.getAttributeCount(); a++) {
             QName attributeName = reader.getAttributeName(a);
             if( attributeName.getNamespaceURI() != null && attributeName.getNamespaceURI().length() > 0) {

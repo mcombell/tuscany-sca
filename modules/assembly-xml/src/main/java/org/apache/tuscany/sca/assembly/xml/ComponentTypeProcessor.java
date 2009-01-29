@@ -69,8 +69,10 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
     public ComponentTypeProcessor(AssemblyFactory assemblyFactory, 
     		                      ExtensionFactory extensionFactory,
     		                      PolicyFactory policyFactory, 
-    							  StAXArtifactProcessor extensionProcessor, StAXAttributeProcessor extensionAttributeProcessor, Monitor monitor) {
-        super(assemblyFactory, extensionFactory, policyFactory, extensionProcessor, monitor);
+    				      StAXArtifactProcessor extensionProcessor, 
+    				      StAXAttributeProcessor extensionAttributeProcessor, 
+    				      Monitor monitor) {
+        super(assemblyFactory, extensionFactory, policyFactory, extensionProcessor, extensionAttributeProcessor, monitor);
     }
 
     /**
@@ -80,13 +82,14 @@ public class ComponentTypeProcessor extends BaseAssemblyProcessor implements StA
      * @param extensionProcessor
      */
     public ComponentTypeProcessor(ModelFactoryExtensionPoint modelFactories, 
-    							  StAXArtifactProcessor extensionProcessor,
-    							  StAXAttributeProcessor extensionAttributeProcessor,
-    							  Monitor monitor) {
+    				  StAXArtifactProcessor extensionProcessor,
+    				  StAXAttributeProcessor extensionAttributeProcessor,
+    				  Monitor monitor) {
         super(modelFactories.getFactory(AssemblyFactory.class),
         	  modelFactories.getFactory(ExtensionFactory.class),
               modelFactories.getFactory(PolicyFactory.class), 
-              extensionProcessor, 
+              extensionProcessor,
+              extensionAttributeProcessor,
               monitor);
     }
     

@@ -67,7 +67,7 @@ public class DefaultBeanModelProcessor extends BaseAssemblyProcessor implements 
                                      Class<Implementation> modelClass,
                                      Object modelFactory,
                                      Monitor monitor) {
-        super(assemblyFactory, extensionFactory, policyFactory, null, monitor);
+        super(assemblyFactory, extensionFactory, policyFactory, null, null, monitor);
         this.artifactType = artifactType;
         this.modelClass = modelClass;
         this.modelFactory = modelFactory;
