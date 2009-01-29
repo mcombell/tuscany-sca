@@ -203,6 +203,11 @@ public class EJBBindingProcessor implements StAXArtifactProcessor<EJBBindingImpl
             writer.writeAttribute(EJBBinding.URI, ejbBinding.getURI());
         }        
         
+        for(Extension extension : ejbBinding.getAttributeExtensions()) {
+            if(extension.isAttribute()) {
+                extensionAttributeProcessor.write(extension, writer);
+            }
+        }
         
         // FIXME Implement the rest
 
