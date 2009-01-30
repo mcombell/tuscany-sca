@@ -117,6 +117,9 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  *     </operationProperties>*
  * </binding.jms>
  *
+ * Parsing error messages are recorded locally and reported as validation exceptions. Parsing
+ * warnings do not cause validation exceptions.
+ *
  * @version $Rev$ $Date$
  */
 
@@ -126,12 +129,14 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     private PolicyAttachPointProcessor policyProcessor;
     protected StAXArtifactProcessor<Object> extensionProcessor;
     private Monitor monitor;
+    protected String validationMessage;
 
     public JMSBindingProcessor(ModelFactoryExtensionPoint modelFactories, StAXArtifactProcessor<Object> extensionProcessor, Monitor monitor) {
         this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
         this.extensionProcessor = extensionProcessor;
         this.monitor = monitor;
+        this.validationMessage = null;
     }
     
     /**
@@ -149,7 +154,8 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     }
      
     /**
-      * Report a error.
+      * Report an error.
+      * One side effect is that error messages are saved for future validation calls.
       * 
       * @param problems
       * @param message
@@ -158,6 +164,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     private void error(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
             Problem problem = new ProblemImpl(this.getClass().getName(), "binding-jms-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+            validationMessage = problem.toString(); // Record error message for use in validation.
      	    monitor.problem(problem);
         }        
     }
@@ -172,6 +179,8 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
     public JMSBinding read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         JMSBinding jmsBinding = new JMSBinding();
+        // Reset validation message to keep track of validation issues.
+        this.validationMessage = null;
 
         // Read policies
         policyProcessor.readPolicies(jmsBinding, reader);
@@ -304,7 +313,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
             jmsBinding.setResponseWireFormat(jmsBinding.getRequestWireFormat());
          }
 
-        validate();
+        validate( jmsBinding );
 
         return jmsBinding;
     }
@@ -323,7 +332,6 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         	        jmsBinding.setConnectionFactoryName(s.substring(22));
         	    } else {
         	        error("UnknownTokenInURI", jmsBinding, s, uri);
-        	        //throw new JMSBindingException("unknown token '" + s + "' in uri: " + uri);
                  	return;
         	     }
         	}
@@ -377,13 +385,13 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
         String type = reader.getAttributeValue(null, "type");                
         if (type != null && type.length() > 0) {
-        	warning("DoesntProcessDestinationType", jmsBinding);
+            warning("DoesntProcessDestinationType", jmsBinding);
             if (JMSBindingConstants.DESTINATION_TYPE_QUEUE.equalsIgnoreCase(type)) {
                 jmsBinding.setDestinationType(JMSBindingConstants.DESTINATION_TYPE_QUEUE);
             } else if (JMSBindingConstants.DESTINATION_TYPE_TOPIC.equalsIgnoreCase(type)) {
                 jmsBinding.setDestinationType(JMSBindingConstants.DESTINATION_TYPE_TOPIC);
             } else {
-            	warning("InvalidDestinationType", reader, type);
+            	error("InvalidDestinationType", reader, type);
             }            
         }
 
@@ -398,17 +406,17 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         if (name != null && name.length() > 0) {
             jmsBinding.setConnectionFactoryName(name);
         } else {
-        	error("MissingConnectionFactoryName", reader);
+            error("MissingConnectionFactoryName", reader);
         }
     }
 
     private void parseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) {
         String name = reader.getAttributeValue(null, "name");        
         if (name != null && name.length() > 0) {
-        	warning("DoesntProcessActivationSpec", jmsBinding);
+            warning("DoesntProcessActivationSpec", jmsBinding);
             jmsBinding.setActivationSpecName(name);            
         } else {
-        	warning("MissingActivationSpecName", reader);
+            warning("MissingActivationSpecName", reader);
         }
     }
 
@@ -420,14 +428,14 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
         String type = reader.getAttributeValue(null, "type");        
         if (type != null && type.length() > 0) {
-        	warning("DoesntProcessResponseDestinationType", jmsBinding);
-        	if (JMSBindingConstants.DESTINATION_TYPE_QUEUE.equalsIgnoreCase(type)) {
+            warning("DoesntProcessResponseDestinationType", jmsBinding);
+            if (JMSBindingConstants.DESTINATION_TYPE_QUEUE.equalsIgnoreCase(type)) {
                 jmsBinding.setResponseDestinationType(JMSBindingConstants.DESTINATION_TYPE_QUEUE);
             } else if (JMSBindingConstants.DESTINATION_TYPE_TOPIC.equalsIgnoreCase(type)) {
                 jmsBinding.setResponseDestinationType(JMSBindingConstants.DESTINATION_TYPE_TOPIC);
             } else {
-            	warning("InvalidResponseDestinationType", reader, type);
-            }            
+                error("InvalidResponseDestinationType", reader, type);
+            }
         }
 
         String create = reader.getAttributeValue(null, "create");
@@ -439,20 +447,20 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     private void parseResponseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
-        	warning("DoesntProcessResponseConnectionFactory", jmsBinding);
+            warning("DoesntProcessResponseConnectionFactory", jmsBinding);
             jmsBinding.setResponseConnectionFactoryName(name);            
         } else {
-        	warning("MissingResponseConnectionFactory", reader);
+            warning("MissingResponseConnectionFactory", reader);
         }
     }
 
     private void parseResponseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
-        	warning("DoesntProcessResponseActivationSpec", jmsBinding);
+            warning("DoesntProcessResponseActivationSpec", jmsBinding);
             jmsBinding.setResponseActivationSpecName(name);            
         } else {
-        	warning("MissingResponseActivationSpec", reader);
+            warning("MissingResponseActivationSpec", reader);
         }
     }
 
@@ -514,7 +522,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
             } else if ("NON_PERSISTENT".equalsIgnoreCase(jmsDeliveryMode)) {
                 jmsBinding.setJMSDeliveryMode(false);
             } else {
-                warning("InvalidJMSDeliveryMode", jmsBinding, jmsDeliveryMode);
+                error("InvalidJMSDeliveryMode", jmsBinding, jmsDeliveryMode);
             }
         }
 
@@ -636,7 +644,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
             } else if ("NON_PERSISTENT".equalsIgnoreCase(jmsDeliveryMode)) {
                 jmsBinding.setOperationJMSDeliveryMode(opName, false);
             } else {
-                warning("InvalidOPJMSDeliveryMode", jmsBinding, jmsDeliveryMode);
+                error("InvalidOPJMSDeliveryMode", jmsBinding, jmsDeliveryMode);
             }
         }
 
@@ -707,20 +715,78 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     }
 
     /**
-     * The validation rules for the JMS model are relatively complicated to they all live together here
+     * Preserve an existing public method. The method validate() is a legacy method 
+     * that was called from reading am XML stream via the read(XMLStreamReader) method above.
+     * However read(XMLStreamReader) now calls validate(JMSBinding jmsBinding) and
+     * passes in the jmsBinding model.
+     * The older validate() now calls validate(JMSBinding jmsBinding) with a null model. 
      */
     public void validate() throws JMSBindingException {
-        /*
-         * first fix up anything now the model has been read
-         */
-
-        /*
-         * Now some cross field validation
-         */
-
-        // connection factory doesn't contradict destination type
-        // connection factory and activation Specification are mutually exclusive
-        // TODO check Specification for all validations
+        validate( null );
     }
+    
+    /**
+     * Validates JMS parsing and JMSBinding model.
+     * Validation rules are taken from the binding schema and the OSOA and OASIS specs:
+     *    http://www.oasis-open.org/committees/documents.php?wg_abbrev=sca-bindings
+     *    (sca-binding-jms-1.1-spec-cd01-rev4.pdf)
+     *    http://www.osoa.org/display/Main/Service+Component+Architecture+Specifications
+     *    (SCA JMS Binding V1.00 )
+     * @param jmsBinding an optional JMS binding model to check for validity.  
+     * @since 1.4
+     */
+    protected void validate( JMSBinding jmsBinding ) {
+        // Check validation message for issues that arise from parsing errors.
+        if ( validationMessage != null ) {
+            throw new JMSBindingException( validationMessage );
+        }
+        
+        // If no JMSBinding model is provided, that is all the validation we can do.
+        if ( jmsBinding == null ) {
+            return;
+        }
 
+        // Connection factory should not contradict destination type.
+        String connectionFactoryName = jmsBinding.getConnectionFactoryName();
+        if (( connectionFactoryName != null ) && ( connectionFactoryName.length() > 0 )) {
+            if (JMSBindingConstants.DESTINATION_TYPE_QUEUE == jmsBinding.getDestinationType()) {
+                if ( connectionFactoryName.contains( "topic" )) {
+                    error("DestinationQueueContradiction", jmsBinding, connectionFactoryName );
+                }
+            }
+            if (JMSBindingConstants.DESTINATION_TYPE_TOPIC == jmsBinding.getDestinationType()) {
+                if ( connectionFactoryName.contains( "queue" )) {
+                    error("DestinationTopicContradiction", jmsBinding, connectionFactoryName );
+                }
+            }
+        }
+        
+        // Connection factory and activation Specification are mutually exclusive.
+        if (( connectionFactoryName != null ) && ( connectionFactoryName.length() > 0 )) {
+            String activationSpecName = jmsBinding.getActivationSpecName();
+            if ((activationSpecName != null) && (activationSpecName.length() > 0 )) {
+                error("ConnectionFactoryActivationSpecContradiction", jmsBinding, connectionFactoryName, activationSpecName );                
+            }
+        }
+
+        // Given a response connection name attribute, there must not be a response element.
+        // 156 • /binding.jms/@responseConnection – identifies a binding.jms element that is present in a
+        // 157 definition document, whose response child element is used to define the values for this binding. In
+        // 158 this case this binding.jms element MUST NOT contain a response element.
+        String responseConnectionName = jmsBinding.getResponseConnectionName();
+        if (( responseConnectionName != null ) && ( responseConnectionName.length() > 0 )) {
+            String responseDestinationName = jmsBinding.getResponseDestinationName();
+            if (( responseDestinationName != null ) && (responseDestinationName.length() > 0)) {
+                error("ResponseAttrElement", jmsBinding, responseConnectionName, responseDestinationName );                               
+            }
+        }
+
+        // Other jmsBinding model validation may be added here.
+        
+        // Check validation message for issues that arise from internal model validation errors.
+        if ( validationMessage != null ) {
+            throw new JMSBindingException( validationMessage );
+        }
+
+    }
 }

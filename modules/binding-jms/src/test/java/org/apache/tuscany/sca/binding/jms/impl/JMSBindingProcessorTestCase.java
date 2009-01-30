@@ -121,6 +121,33 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
+    private static final String COMPOSITE_INVALID_URI =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms uri=\"invalidjms:testQueue\" />"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    // Invalid: contains both a response attribute and a response element.
+    private static final String COMPOSITE_INVALID_RESPONSE_ATTR_ELEMENT =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms uri=\"jms:testQueue\" responseConnection=\"responseConnectionAttrName\">"
+            + "             <response>"
+            + "                <destination name=\"responseConnectionElementName\"/>"
+            + "             </response>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
     private XMLInputFactory inputFactory;
     private StAXArtifactProcessor<Object> staxProcessor;
     private Monitor monitor;
@@ -207,5 +234,37 @@ public class JMSBindingProcessorTestCase extends TestCase {
         assertNotNull(binding);
 
         assertEquals("prop1 = 2", binding.getJMSSelector());
+    }
+
+    /** Test various parsing validation requirements. */
+    public void testParsingValidationErrors1() throws Exception {        
+        // Composite with malformed URI. 
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(COMPOSITE_INVALID_URI));
+
+        try {
+            Composite composite = (Composite)staxProcessor.read(reader);       
+        } catch(Exception e) {
+            // JMSBindingExceptions are expected with invalid composite.
+            if ( !e.getClass().isAssignableFrom( JMSBindingException.class ) )
+                throw e;
+            // Do assertion to make sure test registers results.
+            assertTrue( e.getClass().isAssignableFrom( JMSBindingException.class ) );
+        }
+    }
+
+    /** Test various model validation requirements. */
+    public void testValidationErrors1() throws Exception {
+        // Composite with response connection attr and element.
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(COMPOSITE_INVALID_RESPONSE_ATTR_ELEMENT));
+        
+        try {
+            Composite composite = (Composite)staxProcessor.read(reader);
+        } catch(Exception e) {
+            // JMSBindingExceptions are expected with invalid composite.
+            if ( !e.getClass().isAssignableFrom( JMSBindingException.class ) )
+                throw e;
+            // Do assertion to make sure test registers results.
+            assertTrue( e.getClass().isAssignableFrom( JMSBindingException.class ) );
+        }
     }
 }
