@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.binding.jms.transport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
@@ -117,8 +118,18 @@ public class TransportServiceInterceptor implements Interceptor {
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
             javax.jms.Message responseJMSMsg = msg.getBody();
             
+            Destination replyDest = requestJMSMsg.getJMSReplyTo();
+            if (replyDest == null) {
+                if (jmsBinding.getResponseDestinationName() != null) {
+                    try {
+                        replyDest = jmsResourceFactory.lookupDestination(jmsBinding.getResponseDestinationName());
+                    } catch (NamingException e) {
+                        throw new JMSBindingException("Exception lookingup response destination", e);
+                    }
+                }
+            }
 
-            if (requestJMSMsg.getJMSReplyTo() == null) {
+            if (replyDest == null) {
                 // assume no reply is expected
                 if (msg.getBody() != null) {
                     logger.log(Level.FINE, "JMS service '" + service.getName() + "' dropped response as request has no replyTo");
@@ -136,7 +147,7 @@ public class TransportServiceInterceptor implements Interceptor {
                 responseJMSMsg.setJMSCorrelationID(requestJMSMsg.getJMSCorrelationID());
             }                
                        
-            MessageProducer producer = session.createProducer(context.getReplyToDestination());
+            MessageProducer producer = session.createProducer(replyDest);
     
             producer.send((javax.jms.Message)msg.getBody());
     
