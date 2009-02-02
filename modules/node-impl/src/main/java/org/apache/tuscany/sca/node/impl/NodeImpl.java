@@ -723,6 +723,7 @@ public class NodeImpl implements SCANode, SCAClient {
         for (Component compositeComponent : composite.getComponents()) {
             if (compositeComponent.getName().equals(componentName)) {
                 component = compositeComponent;
+                break;
             }
         }
 
