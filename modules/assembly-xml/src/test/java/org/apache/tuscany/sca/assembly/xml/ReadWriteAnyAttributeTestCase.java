@@ -58,6 +58,26 @@ public class ReadWriteAnyAttributeTestCase {
  	 	 	    "</component>"+
  	 	 	  "</composite>";
     
+    private static final String XML_WITH_EXTENDED_ATTRIBUTES_IN_BINDINGS = 
+        "<?xml version='1.0' encoding='UTF-8'?>" +
+        "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" xmlns:ns1=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://temp\" name=\"myComposite\">" +
+          "<service name=\"service\">" +
+            "<interface.java interface=\"com.ibm.MyInterface\" xmlns:myPrefix=\"http://myPrefix\" myPrefix:myJavaInterfaceAnyAttribute=\"Java Interface Value\" />" +
+            "<binding.ws xmlns:myPrefix=\"http://myPrefix\" myPrefix:myWSAnyAttribute=\"WS Value\" />" + 
+            "<binding.ejb xmlns:myPrefix=\"http://myPrefix\" myPrefix:myEJBAnyAttribute=\"EJB Value\" />" +
+            "<binding.sca xmlns:myPrefix=\"http://myPrefix\" myPrefix:mySCAAnyAttribute=\"SCA Value\" />" +
+          "</service>" +
+          "<component name=\"component\">" +
+            "<implementation.java class=\"com.ibm.test.MyClass\" xmlns:myPrefix=\"http://myPrefix\" myPrefix:myJavaImplAnyAttribute=\"Java Impl Value\" />" +
+          "</component>" +
+          "<component name=\"component1\">" +
+             "<implementation.composite xmlns:ns2=\"http://temp\" name=\"ns2:myComposite\" xmlns:myPrefix=\"http://myPrefix\" myPrefix:myCompositeImplAnyAttribute=\"Composite Impl Value\" />" +
+          "</component>" +
+          "<reference name=\"reference\">" +
+             "<interface.wsdl interface=\"http://www.example.org/SpaceWarGame/#wsdl.interface(SpaceWarGame)\" xmlns:myPrefix=\"http://myPrefix\" myPrefix:myWSDLInterfaceAnyAttribute=\"WSDL Interface Value\" />" +
+          "</reference>" +
+          "</composite>";
+    
     private XMLInputFactory inputFactory;
     private ExtensibleStAXArtifactProcessor staxProcessor;
 
@@ -129,4 +149,26 @@ public class ReadWriteAnyAttributeTestCase {
 
     	assertEquals(XML, bos.toString());
     }
+    
+
+    @Test
+    //@Ignore()
+    public void testReadWriteCompositeWithBindings() throws Exception {
+        init(null);
+        
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(XML_WITH_EXTENDED_ATTRIBUTES_IN_BINDINGS));
+        Composite composite = (Composite)staxProcessor.read(reader);
+        assertNotNull(composite);
+        reader.close();
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        staxProcessor.write(composite, bos);
+
+        // used for debug comparison
+        // System.out.println(XML_WITH_EXTENDED_ATTRIBUTES_IN_BINDINGS);
+        // System.out.println(bos.toString());
+
+        assertEquals(XML_WITH_EXTENDED_ATTRIBUTES_IN_BINDINGS, bos.toString());
+        bos.close();
+    }    
 }
