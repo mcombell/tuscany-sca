@@ -78,8 +78,13 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
         javax.jms.Message jmsMsg = context.getJmsMsg();
 
         Object requestPayload = requestMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
-        msg.setBody(requestPayload);
-                 
+        
+        if (requestPayload != null && requestPayload.getClass().isArray()) {
+            msg.setBody(requestPayload);
+        } else {
+            msg.setBody(new Object[] {requestPayload});
+        }
+          
         return msg;
     }
     
@@ -92,7 +97,7 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
         if (msg.isFault()) {
             responseJMSMsg = responseMessageProcessor.createFaultMessage(session, (Throwable)msg.getBody());
         } else {
-            Object[] response = {msg.getBody()};
+            Object response = msg.getBody();
             responseJMSMsg = responseMessageProcessor.insertPayloadIntoJMSMessage(session, response);
         } 
     

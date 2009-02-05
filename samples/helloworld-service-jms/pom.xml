@@ -55,6 +55,12 @@
             <artifactId>tuscany-binding-jms-runtime</artifactId>
             <version>1.5-SNAPSHOT</version>
             <scope>runtime</scope>
+        </dependency> 
+
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-jms-asf</artifactId>
+            <version>1.5-SNAPSHOT</version>
         </dependency>   
 
         <dependency>

@@ -78,7 +78,13 @@ public class WireFormatJMSBytesReferenceInterceptor implements Interceptor {
             JMSBindingContext context = msg.getBindingContext();
             Session session = context.getJmsSession();
             
-            javax.jms.Message requestMsg = requestMessageProcessor.insertPayloadIntoJMSMessage(session, msg.getBody());
+            Object[] requestParams = msg.getBody();
+            javax.jms.Message requestMsg = null;
+            if (requestParams != null && requestParams.length > 0 ){
+                requestMsg = requestMessageProcessor.insertPayloadIntoJMSMessage(session, requestParams[0]);
+            } else {
+                requestMsg = requestMessageProcessor.insertPayloadIntoJMSMessage(session, null);
+            }
             msg.setBody(requestMsg);
             
             requestMsg.setJMSReplyTo(context.getReplyToDestination());
@@ -91,9 +97,9 @@ public class WireFormatJMSBytesReferenceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) {
         if (msg.getBody() != null){
-            Object[] response = (Object[])responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
-            if (response != null && response.length > 0){
-                msg.setBody(response[0]);
+            Object response = responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
+            if (response != null){
+                msg.setBody(response);
             } else {
                 msg.setBody(null);
             }

@@ -78,7 +78,7 @@ public class WireFormatJMSTextServiceInterceptor implements Interceptor {
         javax.jms.Message jmsMsg = context.getJmsMsg();
 
         Object requestPayload = requestMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
-        msg.setBody(requestPayload);
+        msg.setBody(new Object[]{requestPayload});
                  
         return msg;
     }
@@ -92,7 +92,7 @@ public class WireFormatJMSTextServiceInterceptor implements Interceptor {
         if (msg.isFault()) {
             responseJMSMsg = responseMessageProcessor.createFaultMessage(session, (Throwable)msg.getBody());
         } else {
-            Object[] response = {msg.getBody()};
+            Object response = msg.getBody();
             responseJMSMsg = responseMessageProcessor.insertPayloadIntoJMSMessage(session, response);
         }  
     

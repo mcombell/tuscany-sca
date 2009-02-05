@@ -38,14 +38,14 @@ public class TextMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object[] extractPayload(Message msg) {
+    protected Object extractPayload(Message msg) {
         try {
 
             if (!(msg instanceof TextMessage)) {
                 throw new IllegalStateException("expecting JMS TextMessage: " + msg);
             }
 
-            return new Object[] {((TextMessage)msg).getText()};
+            return ((TextMessage)msg).getText();
 
         } catch (JMSException e) {
             throw new JMSBindingException(e);

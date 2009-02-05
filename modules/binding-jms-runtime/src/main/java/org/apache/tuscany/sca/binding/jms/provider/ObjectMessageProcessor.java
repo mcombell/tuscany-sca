@@ -40,15 +40,10 @@ public class ObjectMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object[] extractPayload(Message msg) {
+    protected Object extractPayload(Message msg) {
         try {
 
-            Object o = ((ObjectMessage)msg).getObject();
-            if (o != null && o.getClass().isArray()) {
-                return (Object[])o;
-            } else {
-                return new Object[] { o};
-            }
+            return ((ObjectMessage)msg).getObject();
 
         } catch (JMSException e) {
             throw new JMSBindingException(e);

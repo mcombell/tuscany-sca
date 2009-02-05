@@ -116,7 +116,7 @@ public abstract class AbstractMessageProcessor implements JMSMessageProcessor {
         }
     }
 
-    protected abstract Object[] extractPayload(Message msg);
+    protected abstract Object extractPayload(Message msg);
 
     protected abstract Message createJMSMessage(Session session, Object o);
 

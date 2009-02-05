@@ -39,7 +39,7 @@ public class BytesMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object[] extractPayload(Message msg) {
+    protected Object extractPayload(Message msg) {
         try {
 
             if (!(msg instanceof BytesMessage)) {
@@ -49,7 +49,7 @@ public class BytesMessageProcessor extends AbstractMessageProcessor {
             long noOfBytes = ((BytesMessage)msg).getBodyLength();
             byte [] bytes = new byte[(int)noOfBytes];
             ((BytesMessage)msg).readBytes(bytes);
-            return new Object[] {bytes};
+            return bytes;
 
         } catch (JMSException e) {
             throw new JMSBindingException(e);
@@ -63,8 +63,7 @@ public class BytesMessageProcessor extends AbstractMessageProcessor {
             // TODO - an experiment. How to enforce a single
             //        byte array parameter
             BytesMessage message = session.createBytesMessage();
-            byte [] bytes = (byte[])((Object[])o)[0];
-            message.writeBytes(bytes); 
+            message.writeBytes((byte[])o); 
             return message;
 
         } catch (JMSException e) {

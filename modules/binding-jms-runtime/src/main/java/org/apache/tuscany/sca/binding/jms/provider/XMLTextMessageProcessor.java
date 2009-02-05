@@ -45,17 +45,17 @@ public class XMLTextMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object[] extractPayload(Message msg) {
+    protected Object extractPayload(Message msg) {
         try {
 
             String xml = ((TextMessage)msg).getText();
-            Object[] os;
+            Object os;
             if (xml != null) {
                 XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new StringReader(xml));
                 StAXOMBuilder builder = new StAXOMBuilder(reader);
-                os = new Object[] {builder.getDocumentElement()};
+                os = builder.getDocumentElement();
             } else {
-                os = new Object[] {};
+                os = null;
             }
             return os;
 

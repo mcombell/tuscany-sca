@@ -98,9 +98,9 @@ public class WireFormatJMSTextReferenceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) {
         if (msg.getBody() != null){
-            Object[] response = (Object[])responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
-            if (response != null && response.length > 0){
-                msg.setBody(response[0]);
+            Object response = responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
+            if (response != null ){
+                msg.setBody(response);
             } else {
                 msg.setBody(null);
             }

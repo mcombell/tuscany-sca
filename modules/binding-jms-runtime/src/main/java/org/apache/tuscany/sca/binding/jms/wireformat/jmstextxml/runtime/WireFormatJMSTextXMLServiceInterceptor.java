@@ -83,7 +83,7 @@ public class WireFormatJMSTextXMLServiceInterceptor implements Interceptor {
             msg.setBody(new Object[]{jmsMsg});
         } else {
             Object requestPayload = requestMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
-            msg.setBody(requestPayload);
+            msg.setBody(new Object[]{requestPayload});
         }
                 
         return msg;
