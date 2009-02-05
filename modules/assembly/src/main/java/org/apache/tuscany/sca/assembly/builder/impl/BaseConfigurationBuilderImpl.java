@@ -619,7 +619,7 @@ public abstract class BaseConfigurationBuilderImpl {
         }
         for (ComponentReference componentReference : component.getReferences()) {
             if (componentReferences.containsKey(componentReference.getName())) {
-                warning("DuplicateComponentReferenceName", component, component.getName(), componentReference.getName());
+                error("DuplicateComponentReferenceName", component, component.getName(), componentReference.getName());
             } else {
                 componentReferences.put(componentReference.getName(), componentReference);
             }
