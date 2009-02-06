@@ -30,7 +30,7 @@
         <implementation.java class="org.apache.tuscany.sca.itest.databindings.jaxb.impl.GenericsServiceClientImpl" />
         <reference name="genericsService">
             <interface.java interface="org.apache.tuscany.sca.itest.databindings.jaxb.GenericsService"/>
-            <binding.ws uri="http://localhost:8085/gs-ep"/>
+            <binding.ws uri="http://localhost:8085/gs-ep" requires="MTOM"/>
         </reference>
     </component>
 
@@ -58,7 +58,7 @@
         <implementation.java class="org.apache.tuscany.sca.itest.databindings.jaxb.impl.GenericsServiceImpl"/>
         <service name="GenericsService">
             <interface.java interface="org.apache.tuscany.sca.itest.databindings.jaxb.GenericsService"/>
-            <binding.ws uri="http://localhost:8085/gs-ep"/>
+            <binding.ws uri="http://localhost:8085/gs-ep" requires="MTOM"/>
             <binding.sca/>
         </service>
         <service name="GenericsLocalService">
