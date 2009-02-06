@@ -78,6 +78,9 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private String activationSpecCreate = null;
     private Map<String, BindingProperty> activationSpecProperties = new HashMap<String, BindingProperty>();
 
+    private String resourceAdapterName;;
+    private Map<String, BindingProperty> resourceAdapterProperties = new HashMap<String, BindingProperty>();
+    
     private String responseActivationSpecName = null;
     private String responseActivationSpecCreate = null;
     private Map<String, BindingProperty> responseActivationSpecProperties = new HashMap<String, BindingProperty>();
@@ -273,6 +276,14 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
 
     public void setConnectionFactoryCreate(String create) {
         this.connectionFactoryCreate = create;
+    }
+
+    public String getResourceAdapterName() {
+        return resourceAdapterName;
+    }
+
+    public void setResourceAdapterName(String name) {
+        resourceAdapterName = name;
     }
 
     public String getActivationSpecName() {
@@ -629,6 +640,10 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
 
     public Map<String, BindingProperty> getConnectionFactoryProperties() {
         return connectionFactoryProperties;
+    }
+
+    public Map<String, BindingProperty> getResourceAdapterProperties() {
+        return resourceAdapterProperties;
     }
 
     public Map<String, BindingProperty> getActivationSpecProperties() {

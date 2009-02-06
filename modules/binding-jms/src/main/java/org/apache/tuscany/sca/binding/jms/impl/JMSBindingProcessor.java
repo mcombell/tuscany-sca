@@ -498,7 +498,13 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     }
 
     private void parseResourceAdapter(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
-    	warning("DoesntProcessResourceAdapter", jmsBinding);
+        String name = reader.getAttributeValue(null, "name");        
+        if (name != null && name.length() > 0) {
+            jmsBinding.setResourceAdapterName(name);            
+        } else {
+            error("MissingResourceAdapterName", reader);
+        }
+        jmsBinding.getResourceAdapterProperties().putAll(parseBindingProperties(reader));
     }
 
     /**
