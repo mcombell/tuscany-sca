@@ -20,7 +20,9 @@
 package org.apache.tuscany.sca.binding.jms.impl;
 
 import java.io.StringReader;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -579,4 +581,39 @@ public class JMSBindingProcessorTestCase extends TestCase {
         assertEquals(null, bp2.getType());
         assertEquals("bla", bp2.getValue().toString().trim());
     }
+
+    /**
+     * Tests the APIs:
+     *     public Set<String> getOperationNames();
+     *     public Object getOperationProperty(String opName, String propName );
+     * @throws Exception
+     */
+    public void testOpProperties2() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(OP_PROPERTIES1));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+
+        Set<String> opNames = binding.getOperationNames();
+        assertEquals( 2, opNames.size() );
+        // Recall that order is not guaranteed iterating over a set.
+        for (Iterator<String> it=opNames.iterator(); it.hasNext(); ) {
+            String opName = it.next();
+            assertTrue( opName.equals( "op1") || opName.equals( "op2"));
+        }
+
+        Object value = binding.getOperationProperty( "op1", "p1" );
+        assertEquals("bla", value);
+        value = binding.getOperationProperty( "op1", "intProp" );
+        assertEquals(42, ((Integer)value).intValue());
+        
+        value = binding.getOperationProperty( "op2", "p2" );
+        assertEquals("op2bla", value);
+        value = binding.getOperationProperty( "op2", "intProp" );
+        assertEquals(77, ((Integer)value).intValue());
+    }
+
+
 }

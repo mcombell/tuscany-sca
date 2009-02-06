@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.tuscany.sca.assembly.BindingRRB;
 import org.apache.tuscany.sca.assembly.OperationSelector;
@@ -492,6 +493,17 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         properties.put(name, value);
     }
 
+    /**
+     * Provides key set of operation names in this binding.
+     * @return a Set<String> of operation names
+     */
+    public Set<String> getOperationNames() {
+        // Make a defensive copy since key changes affect map, map changes affect keys.
+        Set<String> opNames = operationProperties.keySet();
+        Set<String> opNamesCopy = new TreeSet<String>( opNames );
+        return opNamesCopy;
+    }
+    
     public Map<String, Object> getOperationProperties(String opName) {
         return operationProperties.get(opName);
     }
@@ -503,6 +515,21 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
             operationProperties.put(opName, props);
         }
         props.put(propName, value);
+    }
+
+    /**
+     * Provides the value of a property for a given operation
+     * @param opName is the name of the operation in this binding.
+     * @param propName is the key name for the property
+     * @return Object representing the property value for this property name. Returns
+     * null for non existant operation name or property name.
+     */
+    public Object getOperationProperty(String opName, String propName ) {
+        Map<String, Object> props = operationProperties.get(opName);
+        if (props == null) { 
+            return null;
+        }
+        return props.get(propName);
     }
 
     public boolean hasNativeOperationName(String opName) {
