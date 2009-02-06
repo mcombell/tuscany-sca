@@ -620,14 +620,24 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
                 case START_ELEMENT:
                     if (reader.getName().getLocalPart().equals("headers")) {
                         parseOperationHeaders(reader, jmsBinding, opName);
+                    } else if (reader.getName().getLocalPart().equals("property")) {
+                        jmsBinding.getOperationPropertiesProperties(opName).putAll(parseBindingProperties(reader));
                     }
-                    break;
+//                    break;
                 case END_ELEMENT:
-                    QName x = reader.getName();
-                    if (x.getLocalPart().equals("operationProperties")) {
-                        return;
-                    } else {
-                        error("UnexpectedResponseElement", reader, x.toString());
+                    if (reader.isEndElement()) {
+                        QName x = reader.getName();
+                        if (x.getLocalPart().equals("headers")) {
+                            break;
+                        }
+                        if (x.getLocalPart().equals("property")) {
+                            break;
+                        }
+                        if (x.getLocalPart().equals("operationProperties")) {
+                            return;
+                        } else {
+                            error("UnexpectedResponseElement", reader, x.toString());
+                        }
                     }
             }
         }
@@ -723,24 +733,30 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
     private Map<String, BindingProperty> parseBindingProperties(XMLStreamReader reader) throws XMLStreamException {
         Map<String, BindingProperty> props = new HashMap<String, BindingProperty>();
+        if ("property".equals(reader.getName().getLocalPart())) {
+            processProperty(reader, props);
+        }
         while (true) {
             switch (reader.next()) {
                 case START_ELEMENT:
-                    String elementName = reader.getName().getLocalPart();
-                    if ("property".equals(elementName)) {
-                        String name = reader.getAttributeValue(null, "name");
-                        if (name == null || name.length() < 1) {
-                            error("InvalidPropertyElement", reader, elementName);
-                        }
-                        String type = reader.getAttributeValue(null, "type");
-                        String value = reader.getElementText();
-                        props.put(name, new BindingProperty(name, type, value));
+                    if ("property".equals(reader.getName().getLocalPart())) {
+                        processProperty(reader, props);
                     }
                     break;
                 case END_ELEMENT:
                     return props;
             }
         }
+    }
+
+    private void processProperty(XMLStreamReader reader, Map<String, BindingProperty> props) throws XMLStreamException {
+        String name = reader.getAttributeValue(null, "name");
+        if (name == null || name.length() < 1) {
+            error("InvalidPropertyElement", reader);
+        }
+        String type = reader.getAttributeValue(null, "type");
+        String value = reader.getElementText();
+        props.put(name, new BindingProperty(name, type, value));
     }
 
     /**

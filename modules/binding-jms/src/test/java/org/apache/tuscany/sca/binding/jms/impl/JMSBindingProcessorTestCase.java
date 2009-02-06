@@ -274,6 +274,26 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
+    private static final String OP_PROPS_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <operationProperties name=\"op1\">"
+            + "                   <property name=\"xxx\" type=\"yyy\">"
+            + "                      some value text"
+            + "                   </property>"
+            + "                   <property name=\"two\">"
+            + "                      bla"
+            + "                   </property>"
+            + "             </operationProperties >" 
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
     private XMLInputFactory inputFactory;
     private StAXArtifactProcessor<Object> staxProcessor;
     private Monitor monitor;
@@ -498,6 +518,24 @@ public class JMSBindingProcessorTestCase extends TestCase {
         assertEquals("yyy", bp.getType());
         assertEquals("some value text", bp.getValue().toString().trim());
         BindingProperty bp2 = binding.getResponseActivationSpecProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testOperationPropertiesProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(OP_PROPS_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getOperationPropertiesProperties("op1"));
+        assertEquals(2, binding.getOperationPropertiesProperties("op1").size());
+        BindingProperty bp = binding.getOperationPropertiesProperties("op1").get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getOperationPropertiesProperties("op1").get("two");
         assertEquals("two", bp2.getName());
         assertEquals(null, bp2.getType());
         assertEquals("bla", bp2.getValue().toString().trim());

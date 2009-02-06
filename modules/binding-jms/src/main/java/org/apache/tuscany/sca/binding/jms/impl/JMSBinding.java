@@ -119,6 +119,8 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private Map<String, Boolean> operationJMSDeliveryModes = new HashMap<String, Boolean>();
     private Map<String, Long> operationJMSTimeToLives = new HashMap<String, Long>();
     private Map<String, Integer> operationJMSPriorities = new HashMap<String, Integer>();
+    private Map<String, Map<String, BindingProperty>> operationPropertiesProperties = new HashMap<String, Map<String,BindingProperty>>();
+
     private String jmsSelector;
     private String requestConnectionName;
     private String responseConnectionName;
@@ -643,6 +645,13 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
 
     public Map<String, BindingProperty> getResponseConnectionFactoryProperties() {
         return responseConnectionFactoryProperties;
+    }
+
+    public Map<String, BindingProperty> getOperationPropertiesProperties(String opName) {
+        if (operationPropertiesProperties.get(opName)==null) {
+            operationPropertiesProperties.put(opName, new HashMap<String, BindingProperty>());
+        }
+        return operationPropertiesProperties.get(opName);
     }
 
 }
