@@ -54,12 +54,16 @@ public class ObjectMessageProcessor extends AbstractMessageProcessor {
     protected Message createJMSMessage(Session session, Object o) {
         try {
 
-            if (!(o instanceof Serializable)) {
-                throw new IllegalStateException("JMS ObjectMessage payload not Serializable: " + o);
-            }
-
             ObjectMessage message = session.createObjectMessage();
-            message.setObject((Serializable)o);
+            
+            if (o != null){
+                if (!(o instanceof Serializable)) {
+                    throw new IllegalStateException("JMS ObjectMessage payload not Serializable: " + o);
+                }
+    
+                message.setObject((Serializable)o);
+            }
+            
             return message;
 
         } catch (JMSException e) {

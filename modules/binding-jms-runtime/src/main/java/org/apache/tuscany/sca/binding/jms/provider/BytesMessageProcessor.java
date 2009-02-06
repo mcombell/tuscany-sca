@@ -63,7 +63,11 @@ public class BytesMessageProcessor extends AbstractMessageProcessor {
             // TODO - an experiment. How to enforce a single
             //        byte array parameter
             BytesMessage message = session.createBytesMessage();
-            message.writeBytes((byte[])o); 
+            
+            if (o != null){
+                message.writeBytes((byte[])o); 
+            }
+            
             return message;
 
         } catch (JMSException e) {

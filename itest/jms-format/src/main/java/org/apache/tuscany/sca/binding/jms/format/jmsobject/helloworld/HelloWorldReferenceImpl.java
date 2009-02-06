@@ -31,8 +31,15 @@ public class HelloWorldReferenceImpl implements HelloWorldReference {
     	person.setFirstName(firstName);
     	person.setLastName(lastName);
         Person returnPerson =  helloWorldService.getGreetings(person); 
+        Person returnNullPerson = helloWorldService.getNullGreetings(person); 
         
-        return returnPerson.getFirstName() + " " + returnPerson.getLastName();
+        String returnString = returnPerson.getFirstName() + " " + returnPerson.getLastName();
+        
+        if (returnNullPerson == null){
+            returnString += " null";
+        }
+        
+        return returnString;
     }    
 }
 

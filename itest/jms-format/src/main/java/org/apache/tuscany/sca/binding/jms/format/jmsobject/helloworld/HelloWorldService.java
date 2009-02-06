@@ -27,6 +27,7 @@ import org.osoa.sca.annotations.Remotable;
 public interface HelloWorldService {
 
     public Person getGreetings(Person person);
+    public Person getNullGreetings(Person person);
     
 }
 

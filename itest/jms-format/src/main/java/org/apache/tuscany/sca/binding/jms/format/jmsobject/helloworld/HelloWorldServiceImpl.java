@@ -28,5 +28,9 @@ public class HelloWorldServiceImpl implements HelloWorldService {
     	
         return person;
     }
+    
+    public Person getNullGreetings(Person person){      
+        return null;
+    }    
 }
 

@@ -57,7 +57,11 @@ public class TextMessageProcessor extends AbstractMessageProcessor {
         try {
 
             TextMessage message = session.createTextMessage();
-            message.setText(String.valueOf(o));
+            
+            if (o != null){
+                message.setText(String.valueOf(o));
+            }
+            
             return message;
 
         } catch (JMSException e) {

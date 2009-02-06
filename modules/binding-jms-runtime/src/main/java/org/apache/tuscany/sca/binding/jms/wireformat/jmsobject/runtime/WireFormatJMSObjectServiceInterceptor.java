@@ -93,12 +93,11 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
         JMSBindingContext context = msg.getBindingContext();
         Session session = context.getJmsSession();
 
-        javax.jms.Message responseJMSMsg;
+        javax.jms.Message responseJMSMsg = null;
         if (msg.isFault()) {
             responseJMSMsg = responseMessageProcessor.createFaultMessage(session, (Throwable)msg.getBody());
         } else {
-            Object response = msg.getBody();
-            responseJMSMsg = responseMessageProcessor.insertPayloadIntoJMSMessage(session, response);
+            responseJMSMsg = responseMessageProcessor.insertPayloadIntoJMSMessage(session, msg.getBody());
         } 
     
         msg.setBody(responseJMSMsg);

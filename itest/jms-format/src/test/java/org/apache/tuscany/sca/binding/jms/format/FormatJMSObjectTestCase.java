@@ -52,7 +52,7 @@ public class FormatJMSObjectTestCase {
         HelloWorldReference helloWorldService = ((SCAClient) node).getService(
                 HelloWorldReference.class, "HelloWorldReferenceComponent");
 
-        assertEquals("Hello Fred Hello Bloggs", 
+        assertEquals("Hello Fred Hello Bloggs null", 
                      helloWorldService.getGreetings("Fred", "Bloggs"));
 
     }
