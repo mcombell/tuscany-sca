@@ -68,22 +68,28 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private String destinationName = JMSBindingConstants.DEFAULT_DESTINATION_NAME;
     private String destinationType = JMSBindingConstants.DESTINATION_TYPE_QUEUE;
     private String destinationCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
+    private Map<String, BindingProperty> destinationProperties = new HashMap<String, BindingProperty>();
 
     private String connectionFactoryName = JMSBindingConstants.DEFAULT_CONNECTION_FACTORY_NAME;
     private String connectionFactoryCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
+    private Map<String, BindingProperty> connectionFactoryProperties = new HashMap<String, BindingProperty>();
 
     private String activationSpecName = null;
     private String activationSpecCreate = null;
+    private Map<String, BindingProperty> activationSpecProperties = new HashMap<String, BindingProperty>();
 
     private String responseActivationSpecName = null;
     private String responseActivationSpecCreate = null;
+    private Map<String, BindingProperty> responseActivationSpecProperties = new HashMap<String, BindingProperty>();
 
     private String responseDestinationName = JMSBindingConstants.DEFAULT_RESPONSE_DESTINATION_NAME;
     private String responseDestinationType = JMSBindingConstants.DESTINATION_TYPE_QUEUE;
     private String responseDestinationCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
+    private Map<String, BindingProperty> responseDestinationProperties = new HashMap<String, BindingProperty>();
 
     private String responseConnectionFactoryName = JMSBindingConstants.DEFAULT_CONNECTION_FACTORY_NAME;
     private String responseConnectionFactoryCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
+    private Map<String, BindingProperty> responseConnectionFactoryProperties = new HashMap<String, BindingProperty>();
 
     // Provides the name of the factory that interfaces to the JMS API for us.
     private String jmsResourceFactoryName = JMSBindingConstants.DEFAULT_RF_CLASSNAME;
@@ -615,4 +621,28 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         this.intentAttachPointType = intentAttachPointType;
     }
      
+    public Map<String, BindingProperty> getDestinationProperties() {
+        return destinationProperties;
+    }
+
+    public Map<String, BindingProperty> getConnectionFactoryProperties() {
+        return connectionFactoryProperties;
+    }
+
+    public Map<String, BindingProperty> getActivationSpecProperties() {
+        return activationSpecProperties;
+    }
+
+    public Map<String, BindingProperty> getResponseActivationSpecProperties() {
+        return responseActivationSpecProperties;
+    }
+
+    public Map<String, BindingProperty> getResponseDestinationProperties() {
+        return responseDestinationProperties;
+    }
+
+    public Map<String, BindingProperty> getResponseConnectionFactoryProperties() {
+        return responseConnectionFactoryProperties;
+    }
+
 }

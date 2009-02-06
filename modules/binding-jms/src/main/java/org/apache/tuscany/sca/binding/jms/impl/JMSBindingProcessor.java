@@ -22,6 +22,7 @@ package org.apache.tuscany.sca.binding.jms.impl;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -399,25 +400,28 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         if (create != null && create.length() > 0) {
             jmsBinding.setDestinationCreate(create);
         }
+
+        jmsBinding.getDestinationProperties().putAll(parseBindingProperties(reader));
     }
 
-    private void parseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) {
+    private void parseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
             jmsBinding.setConnectionFactoryName(name);
         } else {
             error("MissingConnectionFactoryName", reader);
         }
+        jmsBinding.getConnectionFactoryProperties().putAll(parseBindingProperties(reader));
     }
 
-    private void parseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) {
+    private void parseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String name = reader.getAttributeValue(null, "name");        
         if (name != null && name.length() > 0) {
-            warning("DoesntProcessActivationSpec", jmsBinding);
             jmsBinding.setActivationSpecName(name);            
         } else {
             warning("MissingActivationSpecName", reader);
         }
+        jmsBinding.getActivationSpecProperties().putAll(parseBindingProperties(reader));
     }
 
     private void parseResponseDestination(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
@@ -442,9 +446,11 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         if (create != null && create.length() > 0) {
             jmsBinding.setResponseDestinationCreate(create);
         }
+
+        jmsBinding.getResponseDestinationProperties().putAll(parseBindingProperties(reader));
     }
 
-    private void parseResponseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) {
+    private void parseResponseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
             warning("DoesntProcessResponseConnectionFactory", jmsBinding);
@@ -452,16 +458,17 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         } else {
             warning("MissingResponseConnectionFactory", reader);
         }
+        jmsBinding.getResponseConnectionFactoryProperties().putAll(parseBindingProperties(reader));
     }
 
-    private void parseResponseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) {
+    private void parseResponseActivationSpec(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
-            warning("DoesntProcessResponseActivationSpec", jmsBinding);
             jmsBinding.setResponseActivationSpecName(name);            
         } else {
             warning("MissingResponseActivationSpec", reader);
         }
+        jmsBinding.getResponseActivationSpecProperties().putAll(parseBindingProperties(reader));
     }
 
     private void parseResponse(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
@@ -714,6 +721,28 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         }
     }
 
+    private Map<String, BindingProperty> parseBindingProperties(XMLStreamReader reader) throws XMLStreamException {
+        Map<String, BindingProperty> props = new HashMap<String, BindingProperty>();
+        while (true) {
+            switch (reader.next()) {
+                case START_ELEMENT:
+                    String elementName = reader.getName().getLocalPart();
+                    if ("property".equals(elementName)) {
+                        String name = reader.getAttributeValue(null, "name");
+                        if (name == null || name.length() < 1) {
+                            error("InvalidPropertyElement", reader, elementName);
+                        }
+                        String type = reader.getAttributeValue(null, "type");
+                        String value = reader.getElementText();
+                        props.put(name, new BindingProperty(name, type, value));
+                    }
+                    break;
+                case END_ELEMENT:
+                    return props;
+            }
+        }
+    }
+
     /**
      * Preserve an existing public method. The method validate() is a legacy method 
      * that was called from reading am XML stream via the read(XMLStreamReader) method above.
@@ -762,7 +791,8 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         }
         
         // Connection factory and activation Specification are mutually exclusive.
-        if (( connectionFactoryName != null ) && ( connectionFactoryName.length() > 0 )) {
+        if (( connectionFactoryName != null ) && ( connectionFactoryName.length() > 0 ) 
+            && !JMSBindingConstants.DEFAULT_CONNECTION_FACTORY_NAME.equals(connectionFactoryName) ) {
             String activationSpecName = jmsBinding.getActivationSpecName();
             if ((activationSpecName != null) && (activationSpecName.length() > 0 )) {
                 error("ConnectionFactoryActivationSpecContradiction", jmsBinding, connectionFactoryName, activationSpecName );                

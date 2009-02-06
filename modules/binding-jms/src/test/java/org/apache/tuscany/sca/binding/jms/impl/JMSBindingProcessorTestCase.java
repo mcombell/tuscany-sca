@@ -148,6 +148,132 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
+    private static final String DEST_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <destination name=\"foo\">"
+            + "                <property name=\"xxx\" type=\"yyy\">"
+            + "                   some value text"
+            + "                </property>"
+            + "                <property name=\"two\">"
+            + "                   bla"
+            + "                </property>"
+            + "             </destination>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    private static final String CF_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <connectionFactory name=\"foo\">"
+            + "                <property name=\"xxx\" type=\"yyy\">"
+            + "                   some value text"
+            + "                </property>"
+            + "                <property name=\"two\">"
+            + "                   bla"
+            + "                </property>"
+            + "             </connectionFactory>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    private static final String AS_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <activationSpec name=\"foo\">"
+            + "                <property name=\"xxx\" type=\"yyy\">"
+            + "                   some value text"
+            + "                </property>"
+            + "                <property name=\"two\">"
+            + "                   bla"
+            + "                </property>"
+            + "             </activationSpec>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    private static final String RESP_DEST_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <response>"
+            + "                <destination name=\"foo\">"
+            + "                   <property name=\"xxx\" type=\"yyy\">"
+            + "                      some value text"
+            + "                   </property>"
+            + "                   <property name=\"two\">"
+            + "                      bla"
+            + "                   </property>"
+            + "                </destination>"
+            + "             </response>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    private static final String RESP_CF_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <response>"
+            + "                <connectionFactory name=\"foo\">"
+            + "                   <property name=\"xxx\" type=\"yyy\">"
+            + "                      some value text"
+            + "                   </property>"
+            + "                   <property name=\"two\">"
+            + "                      bla"
+            + "                   </property>"
+            + "                </connectionFactory>"
+            + "             </response>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
+    private static final String RESP_AS_PROPS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms>"
+            + "             <response>"
+            + "                <activationSpec name=\"foo\">"
+            + "                   <property name=\"xxx\" type=\"yyy\">"
+            + "                      some value text"
+            + "                   </property>"
+            + "                   <property name=\"two\">"
+            + "                      bla"
+            + "                   </property>"
+            + "                </activationSpec>"
+            + "             </response>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
     private XMLInputFactory inputFactory;
     private StAXArtifactProcessor<Object> staxProcessor;
     private Monitor monitor;
@@ -266,5 +392,114 @@ public class JMSBindingProcessorTestCase extends TestCase {
             // Do assertion to make sure test registers results.
             assertTrue( e.getClass().isAssignableFrom( JMSBindingException.class ) );
         }
+    }
+
+    public void testDestinationProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(DEST_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getDestinationProperties());
+        assertEquals(2, binding.getDestinationProperties().size());
+        BindingProperty bp = binding.getDestinationProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getDestinationProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testConnectionFactoryProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(CF_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getConnectionFactoryProperties());
+        assertEquals(2, binding.getConnectionFactoryProperties().size());
+        BindingProperty bp = binding.getConnectionFactoryProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getConnectionFactoryProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testActivationSpecProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(AS_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getActivationSpecProperties());
+        assertEquals(2, binding.getActivationSpecProperties().size());
+        BindingProperty bp = binding.getActivationSpecProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getActivationSpecProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testResponseDestinationProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(RESP_DEST_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getResponseDestinationProperties());
+        assertEquals(2, binding.getResponseDestinationProperties().size());
+        BindingProperty bp = binding.getResponseDestinationProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getResponseDestinationProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testResponseConnectionFactoryProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(RESP_CF_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getResponseConnectionFactoryProperties());
+        assertEquals(2, binding.getResponseConnectionFactoryProperties().size());
+        BindingProperty bp = binding.getResponseConnectionFactoryProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getResponseConnectionFactoryProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
+    }
+    public void testResponseActivationSpecProperties() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(RESP_AS_PROPS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+        assertNotNull(binding.getResponseActivationSpecProperties());
+        assertEquals(2, binding.getResponseActivationSpecProperties().size());
+        BindingProperty bp = binding.getResponseActivationSpecProperties().get("xxx");
+        assertEquals("xxx", bp.getName());
+        assertEquals("yyy", bp.getType());
+        assertEquals("some value text", bp.getValue().toString().trim());
+        BindingProperty bp2 = binding.getResponseActivationSpecProperties().get("two");
+        assertEquals("two", bp2.getName());
+        assertEquals(null, bp2.getType());
+        assertEquals("bla", bp2.getValue().toString().trim());
     }
 }
