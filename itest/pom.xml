@@ -65,6 +65,7 @@
                 <module>callback-api</module>
                 <module>callback-basic</module>
                 <module>callback-complex-type</module>
+                <module>callback-composite-scope</module>
                 <module>callback-id</module>
                 <module>callback-multiple-wires</module>
                 <module>callback-separatethread</module>
