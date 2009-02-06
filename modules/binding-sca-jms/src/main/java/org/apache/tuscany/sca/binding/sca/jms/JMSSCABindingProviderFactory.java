@@ -28,6 +28,8 @@ import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactoryExtensionPo
 import org.apache.tuscany.sca.binding.sca.DistributedSCABinding;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.core.UtilityExtensionPoint;
+import org.apache.tuscany.sca.host.jms.JMSHostExtensionPoint;
+import org.apache.tuscany.sca.host.jms.JMSServiceListenerFactory;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -44,6 +46,7 @@ public class JMSSCABindingProviderFactory implements BindingProviderFactory<Dist
     private WorkScheduler workScheduler;
     private ExtensionPointRegistry extensionPoints;
     private JMSResourceFactoryExtensionPoint jmsRFEP;
+    private JMSServiceListenerFactory serviceListenerFactory;
 
     public JMSSCABindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         this.extensionPoints = extensionPoints;
@@ -54,6 +57,8 @@ public class JMSSCABindingProviderFactory implements BindingProviderFactory<Dist
         if (jmsRFEP == null) {
             jmsRFEP = new AMQResourceFactoryExtensionPoint();
         }
+        JMSHostExtensionPoint jmsHostExtensionPoint = (JMSHostExtensionPoint)extensionPoints.getExtensionPoint(JMSHostExtensionPoint.class);
+        serviceListenerFactory = jmsHostExtensionPoint.getJMSServiceListenerFactory();
     }    
 
     public ReferenceBindingProvider createReferenceBindingProvider(RuntimeComponent component,
@@ -77,7 +82,7 @@ public class JMSSCABindingProviderFactory implements BindingProviderFactory<Dist
         JMSBinding jmsBinding = createBinding(binding);
         jmsBinding.setDestinationCreate(JMSBindingConstants.CREATE_ALWAYS);
         JMSResourceFactory jmsRF = jmsRFEP.createJMSResourceFactory(jmsBinding);
-        return new JMSBindingServiceBindingProvider(component, service, binding.getSCABinding(), jmsBinding, workScheduler, extensionPoints, jmsRF);
+        return new JMSBindingServiceBindingProvider(component, service, binding.getSCABinding(), jmsBinding, serviceListenerFactory, extensionPoints, jmsRF);
     }
 
     private JMSBinding createBinding(DistributedSCABinding binding) {
