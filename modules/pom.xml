@@ -118,6 +118,8 @@
                 <module>host-ejb</module>
                 <module>host-embedded</module>
                 <module>host-http</module>
+                <module>host-jms</module>
+                <module>host-jms-asf</module>
                 <module>host-openejb</module>
                 <module>host-rmi</module>
                 <module>host-webapp</module>
