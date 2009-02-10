@@ -20,17 +20,35 @@ package org.apache.tuscany.sca.binding.ws.axis2.itests.mtom;
 
 import javax.activation.DataHandler;
 import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Service;
+import java.awt.Image;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.impl.llom.OMElementImpl;
+import javax.xml.transform.Source;
 
 /**
  * This client program shows how to create an SCA runtime, start it,
  * locate the FileTransfer service and invoke it.
  */
-public class FileTransferClient implements FileTransferService {
+@Service(FileTransferServiceClient.class)
+public class FileTransferClient implements FileTransferServiceClient {
     
-    @Reference
-    public FileTransferService fileTransferWS;
+	@Reference
+    public FileTransferService fileTransferService;
 
-    public String uploadFile(DataHandler attachment) throws Exception {        
-        return fileTransferWS.uploadFile(attachment);
+    public String uploadImageFileForward (Image attachment) throws Exception {
+    	return fileTransferService.uploadImageFile(attachment);
+    }
+    
+    public String uploadSourceFileForward (Source attachment) throws Exception {
+    	return fileTransferService.uploadSourceFile(attachment);
+    }
+    
+    public String uploadDataHandlerFileForward (DataHandler attachment) throws Exception {
+    	return fileTransferService.uploadDataHandlerFile(attachment);
+    }
+    
+    public String uploadOMElementFileForward (OMElement attachment) throws Exception {
+    	return fileTransferService.uploadOMElementFile(attachment);
     }
 }

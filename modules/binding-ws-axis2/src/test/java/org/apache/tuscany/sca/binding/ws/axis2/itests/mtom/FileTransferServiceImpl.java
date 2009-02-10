@@ -20,33 +20,35 @@ package org.apache.tuscany.sca.binding.ws.axis2.itests.mtom;
 
 import org.osoa.sca.annotations.Service;
 import javax.activation.DataHandler;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.awt.Image;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.transform.Source;
+import org.apache.axiom.om.OMElement;
 
 /**
  * This class implements the HelloWorld service.
  */
-@Service(FileTransferService.class)
+@Service(interfaces={FileTransferService.class})
 public class FileTransferServiceImpl implements FileTransferService {
-
-    public String uploadFile(DataHandler attachment) throws Exception {
-        
-        //OMText binaryNode = (OMText) (attachment.getFirstElement()).getFirstOMChild();
-        //DataHandler dataHandler = (DataHandler) binaryNode.getDataHandler();        
-        
-        // Use this code to save the file we have received.
-        /*DataHandler dataHandler = attachment;
-        
-        File file = new File("transferedfile.java");
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        dataHandler.writeTo(fileOutputStream);        
-        fileOutputStream.flush();
-        fileOutputStream.close();*/
-        
-        System.out.println("Content type = " + attachment.getContentType() + "\nContent = ");
-        //attachment.writeTo(System.out);
-        
+     
+    public String uploadImageFile(Image attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());        
         return "File uploaded Sucessfully";
     }
-
+    
+    public String uploadSourceFile(Source attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());        
+        return "File uploaded Sucessfully";
+    }
+    
+    public String uploadDataHandlerFile(DataHandler attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());        
+        return "File uploaded Sucessfully";
+    }
+    
+    //@XmlJavaTypeAdapter(value=OMElementXmlAdapter.class)
+    public String uploadOMElementFile(OMElement attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());        
+        return "File uploaded Sucessfully";
+    }
 }
