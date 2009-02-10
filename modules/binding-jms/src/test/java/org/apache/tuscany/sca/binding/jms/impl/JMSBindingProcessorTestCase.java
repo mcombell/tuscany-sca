@@ -110,6 +110,22 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
+    private static final String OP_NAMES_NO_PROPERTIES1 =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms uri=\"jms:testQueue\" >"
+            + "             <operationProperties name=\"op1\">"
+            + "             </operationProperties >" 
+            + "             <operationProperties name=\"op2\" nativeOperation=\"nativeOp2\" >"
+            + "             </operationProperties >" 
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
     private static final String SELECTOR =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
@@ -613,6 +629,29 @@ public class JMSBindingProcessorTestCase extends TestCase {
         assertEquals("op2bla", value);
         value = binding.getOperationProperty( "op2", "intProp" );
         assertEquals(77, ((Integer)value).intValue());
+    }
+
+    /**
+     * Tests the APIs:
+     *     public Set<String> getOperationNames();
+     * Provides no optional properties or sub elements
+     * @throws Exception
+     */
+    public void testOpProperties3() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(OP_NAMES_NO_PROPERTIES1));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        
+        assertNotNull(binding);
+
+        Set<String> opNames = binding.getOperationNames();
+        assertEquals( 2, opNames.size() );
+        // Recall that order is not guaranteed iterating over a set.
+        for (Iterator<String> it=opNames.iterator(); it.hasNext(); ) {
+            String opName = it.next();
+            assertTrue( opName.equals( "op1") || opName.equals( "op2"));
+        }
     }
 
 

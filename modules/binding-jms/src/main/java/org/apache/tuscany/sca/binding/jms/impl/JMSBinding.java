@@ -494,7 +494,19 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     }
 
     /**
-     * Provides key set of operation names in this binding.
+     * Adds an operationName to this binding.
+     * @param opName
+     */
+    public void addOperationName(String opName) {
+        Map<String, Object> props = operationProperties.get(opName);
+        if (props == null) {
+            props = new HashMap<String, Object>();
+            operationProperties.put(opName, props);
+        }
+    }
+    
+    /**
+     * Provides set of operation names in this binding.
      * @return a Set<String> of operation names
      */
     public Set<String> getOperationNames() {

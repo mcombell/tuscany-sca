@@ -616,7 +616,9 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
             warning("MissingJMSOperationPropertyName", jmsBinding);
             return;
         }
-        String nativeOpName = reader.getAttributeValue(null, "nativeOperation");
+        // Since nativeOpName, headers, and property elements are optional, must add opName.
+        jmsBinding.addOperationName(opName);
+        String nativeOpName = reader.getAttributeValue(null, "nativeOperation"); // optional
         if (nativeOpName != null && nativeOpName.length() > 0) {
             jmsBinding.setNativeOperationName(opName, nativeOpName);
         }
@@ -624,9 +626,9 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         while (true) {
             switch (reader.next()) {
                 case START_ELEMENT:
-                    if (reader.getName().getLocalPart().equals("headers")) {
+                    if (reader.getName().getLocalPart().equals("headers")) { // optional
                         parseOperationHeaders(reader, jmsBinding, opName);
-                    } else if (reader.getName().getLocalPart().equals("property")) {
+                    } else if (reader.getName().getLocalPart().equals("property")) { // optional
                         jmsBinding.getOperationPropertiesProperties(opName).putAll(parseBindingProperties(reader));
                     }
 //                    break;
