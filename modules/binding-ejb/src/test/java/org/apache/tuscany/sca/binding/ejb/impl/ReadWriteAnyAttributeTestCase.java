@@ -124,8 +124,8 @@ public class ReadWriteAnyAttributeTestCase {
         staxProcessor.write(composite, bos);
 
         // used for debug comparison
-        System.out.println(XML);
-        System.out.println(bos.toString());
+        // System.out.println(XML);
+        // System.out.println(bos.toString());
 
         assertEquals(XML, bos.toString());
         bos.close();
