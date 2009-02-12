@@ -38,6 +38,7 @@ import org.apache.tuscany.sca.assembly.DefaultAssemblyFactory;
 import org.apache.tuscany.sca.assembly.SCABinding;
 import org.apache.tuscany.sca.assembly.SCABindingFactory;
 import org.apache.tuscany.sca.assembly.builder.CompositeBuilder;
+import org.apache.tuscany.sca.assembly.impl.ExtensibleImpl;
 import org.apache.tuscany.sca.implementation.node.NodeImplementation;
 import org.apache.tuscany.sca.implementation.node.NodeImplementationFactory;
 import org.apache.tuscany.sca.implementation.node.impl.NodeImplementationFactoryImpl;
@@ -549,7 +550,7 @@ public class CalculateBindingURITestCase extends TestCase {
         }
     }
     
-    public class TestBindingImpl implements SCABinding {
+    public class TestBindingImpl extends ExtensibleImpl implements SCABinding {
         private String name;
         private String uri;
         private boolean unresolved;

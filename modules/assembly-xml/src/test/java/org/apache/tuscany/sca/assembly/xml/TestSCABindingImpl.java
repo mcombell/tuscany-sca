@@ -30,6 +30,7 @@ import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.OptimizableBinding;
 import org.apache.tuscany.sca.assembly.SCABinding;
+import org.apache.tuscany.sca.assembly.impl.ExtensibleImpl;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
@@ -40,7 +41,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * 
  * @version $Rev$ $Date$
  */
-public class TestSCABindingImpl implements SCABinding, OptimizableBinding, PolicySetAttachPoint, OperationsConfigurator {
+public class TestSCABindingImpl extends ExtensibleImpl implements SCABinding, OptimizableBinding, PolicySetAttachPoint, OperationsConfigurator {
     private String name;
     private String uri;
     private List<Object> extensions = new ArrayList<Object>();
