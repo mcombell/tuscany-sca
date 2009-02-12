@@ -20,6 +20,6 @@
 org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#authentication,model=org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicy
 org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#integrity,model=org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicy
 org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#confidentiality,model=org.apache.tuscany.sca.binding.ws.axis2.policy.configuration.Axis2ConfigParamPolicy
-#org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#authentication,model=org.apache.neethi.Policy
-#org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#integrity,model=org.apache.neethi.Policy
-#org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#confidentiality,model=org.apache.neethi.Policy
+org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#authentication,model=org.apache.neethi.Policy
+org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#integrity,model=org.apache.neethi.Policy
+org.apache.tuscany.sca.binding.ws.axis2.policy.wspolicy.WSSecurityPolicyHandler;intent=http://www.osoa.org/xmlns/sca/1.0#confidentiality,model=org.apache.neethi.Policy

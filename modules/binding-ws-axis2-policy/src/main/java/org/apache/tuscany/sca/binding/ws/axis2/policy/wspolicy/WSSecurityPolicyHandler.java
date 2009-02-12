@@ -41,6 +41,15 @@ public class WSSecurityPolicyHandler implements PolicyHandler {
                         Policy wsPolicy = (Policy)policy;
                         try {
                             configContext.getAxisConfiguration().applyPolicy(wsPolicy);
+                            
+                            // TUSCANY-2824
+                            // hack to make service side pick up rampart policies
+                            // "rampartPolicy" comes from RampartMessageData.KEY_RAMPART_POLICY
+                            // but I'm avoiding adding an explicit dependency just yet. 
+                            // There must be a proper way of getting rampart to recognize
+                            // these policies
+                            configContext.setProperty("rampartPolicy", wsPolicy);
+                            
                         } catch ( AxisFault e ) {
                             throw new RuntimeException(e);
                         }

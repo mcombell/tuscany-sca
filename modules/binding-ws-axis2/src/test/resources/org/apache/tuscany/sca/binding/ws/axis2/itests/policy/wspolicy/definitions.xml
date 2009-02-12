@@ -43,10 +43,11 @@
 				<ramp:passwordType>PasswordText</ramp:passwordType>
 				<ramp:passwordCallbackClass>org.apache.tuscany.sca.binding.ws.axis2.itests.policy.wspolicy.ClientPWCBHandler</ramp:passwordCallbackClass>
 			</ramp:RampartConfig>
-			</wsp:All>
+	       </wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
  </sca:policySet>
+ 
  
   <!-- A policyset that uses WS Policy --> 
  <sca:policySet name="wsSecurityPolicyForIntegrity"
