@@ -46,10 +46,15 @@ public class JMSResourceFactoryImpl implements JMSResourceFactory {
     protected Connection connection;
     protected Context context;
     protected boolean isConnectionStarted;
+    private Connection responseConnection;
+    private String responseConnectionFactoryName;
 
-    public JMSResourceFactoryImpl(String connectionFactoryName, String initialContextFactoryName, String jndiURL) {
+    public JMSResourceFactoryImpl(String connectionFactoryName, String responseConnectionFactoryName, String initialContextFactoryName, String jndiURL) {
         if (connectionFactoryName != null && connectionFactoryName.trim().length() > 0) {
             this.connectionFactoryName = connectionFactoryName.trim();
+        }
+        if (responseConnectionFactoryName != null && responseConnectionFactoryName.trim().length() > 0) {
+            this.responseConnectionFactoryName = responseConnectionFactoryName.trim();
         }
         if (initialContextFactoryName != null && initialContextFactoryName.trim().length() > 0) {
             this.initialContextFactoryName = initialContextFactoryName.trim();
@@ -220,4 +225,25 @@ public class JMSResourceFactoryImpl implements JMSResourceFactory {
         }
         return o;
     }
+
+    public Session createResponseSession() throws JMSException, NamingException {
+        return getResponseConnection().createSession(false, Session.AUTO_ACKNOWLEDGE);
+    }
+
+    public Connection getResponseConnection() throws NamingException, JMSException {
+        if (responseConnection == null) {
+            if (responseConnectionFactoryName != null) {
+                ConnectionFactory connectionFactory = (ConnectionFactory)jndiLookUp(responseConnectionFactoryName);
+                if (connectionFactory == null) {
+                    throw new JMSBindingException("connection factory not found: " + responseConnectionFactoryName);
+                }
+                responseConnection = connectionFactory.createConnection();
+            } else {
+                // if no response connection is defined in the SCDL use the request connection
+                responseConnection = getConnection();
+            }
+        }
+        return responseConnection;
+    }
+
 }

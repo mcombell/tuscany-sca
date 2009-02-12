@@ -19,6 +19,7 @@
 package org.apache.tuscany.sca.binding.jms.provider;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -36,6 +37,7 @@ import org.osoa.sca.ServiceRuntimeException;
  * @version $Rev$ $Date$
  */
 public abstract class AbstractMessageProcessor implements JMSMessageProcessor {
+    private static final Logger logger = Logger.getLogger(AbstractMessageProcessor.class.getName());
 
     protected String operationPropertyName;
     protected boolean xmlFormat = true;
@@ -100,6 +102,10 @@ public abstract class AbstractMessageProcessor implements JMSMessageProcessor {
     }
 
     public Message createFaultMessage(Session session, Throwable o) {
+        if (session == null) {
+            logger.fine("no response session to create fault message: " + String.valueOf(o));
+            return null;
+        }
         try {
 
             ObjectMessage message = session.createObjectMessage();

@@ -18,6 +18,8 @@
  */
 package org.apache.tuscany.sca.binding.jms.provider;
 
+import java.util.logging.Logger;
+
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -33,6 +35,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
  * @version $Rev$ $Date$
  */
 public class BytesMessageProcessor extends AbstractMessageProcessor {
+    private static final Logger logger = Logger.getLogger(AbstractMessageProcessor.class.getName());
 
     public BytesMessageProcessor(JMSBinding jmsBinding) {
         super(jmsBinding);
@@ -58,6 +61,10 @@ public class BytesMessageProcessor extends AbstractMessageProcessor {
 
     @Override
     protected Message createJMSMessage(Session session, Object o) {
+        if (session == null) {
+            logger.fine("no response session to create message: " + String.valueOf(o));
+            return null;
+        }
         try {
 
             // TODO - an experiment. How to enforce a single

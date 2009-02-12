@@ -91,7 +91,7 @@ public class TransportServiceInterceptor implements Interceptor {
         try {
             JMSBindingContext context = msg.getBindingContext();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
-            context.setJmsSession(context.getJmsResourceFactory().createSession());
+            context.setJmsSession(context.getJmsResourceFactory().createResponseSession());
             
             EndpointReference from = new EndpointReferenceImpl(null);
             msg.setFrom(from);

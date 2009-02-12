@@ -19,6 +19,7 @@
 package org.apache.tuscany.sca.binding.jms.provider;
 
 import java.io.StringReader;
+import java.util.logging.Logger;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -39,6 +40,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
  * @version $Rev$ $Date$
  */
 public class XMLTextMessageProcessor extends AbstractMessageProcessor {
+    private static final Logger logger = Logger.getLogger(XMLTextMessageProcessor.class.getName());
 
     public XMLTextMessageProcessor(JMSBinding jmsBinding) {
         super(jmsBinding);
@@ -68,6 +70,10 @@ public class XMLTextMessageProcessor extends AbstractMessageProcessor {
 
     @Override
     protected Message createJMSMessage(Session session, Object o) {
+        if (session == null) {
+            logger.fine("no response session to create message: " + String.valueOf(o));
+            return null;
+        }
         try {
 
             TextMessage message = session.createTextMessage();

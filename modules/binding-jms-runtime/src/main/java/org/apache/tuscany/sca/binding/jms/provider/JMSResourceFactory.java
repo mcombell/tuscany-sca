@@ -64,4 +64,20 @@ public interface JMSResourceFactory {
      */
     public abstract Destination createDestination(String jndiName) throws NamingException;
 
+    /*
+     * This is a simple implementation where a connection is created per binding Ideally the resource factory should be
+     * able to leverage the host environment to provide connection pooling if it can. E.g. if Tuscany is running inside 
+     * an AppServer Then we could leverage the JMS resources it provides
+     * 
+     * @see org.apache.tuscany.binding.jms.JMSResourceFactory#getConnection()
+     */
+    public abstract Connection getResponseConnection() throws NamingException, JMSException;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.tuscany.binding.jms.JMSResourceFactory#createSession()
+     */
+    public abstract Session createResponseSession() throws JMSException, NamingException;
+
 }
