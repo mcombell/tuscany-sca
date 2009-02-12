@@ -188,6 +188,7 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
         try {
             // populate the message context with JMS binding information
             JMSBindingContext context = new JMSBindingContext();
+            context.setJmsResourceFactory(jmsResourceFactory);
             tuscanyMsg.setBindingContext(context);
             
             // get a jms session to cover the creation and sending of the message
@@ -195,7 +196,6 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
 
             context.setRequestDestination(getRequestDestination(tuscanyMsg, session));
             context.setReplyToDestination(getReplyToDestination(session));
-            context.setJmsResourceFactory(jmsResourceFactory);
             
             try {
                 tuscanyMsg = runtimeWire.getBindingInvocationChain().getHeadInvoker().invoke(tuscanyMsg);
