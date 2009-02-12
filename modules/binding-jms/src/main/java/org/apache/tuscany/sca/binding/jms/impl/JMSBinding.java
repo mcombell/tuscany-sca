@@ -20,6 +20,7 @@ package org.apache.tuscany.sca.binding.jms.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,6 +109,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     // If the operation selector is derived automatically from the service interface it's stored here
     private String operationSelectorName = null;
 
+    private boolean containsHeaders = false;
     private String replyTo;
     private String jmsType;
     private String jmsCorrelationId;
@@ -435,6 +437,14 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         this.operationSelectorName = operationSelectorName;
     }
 
+    public void setHeaders( boolean containsHeaders ) {
+        this.containsHeaders = containsHeaders;
+    }
+
+    public boolean containsHeaders() {
+        return this.containsHeaders;
+    }
+
     public String getReplyTo() {
         return replyTo;
     }
@@ -447,6 +457,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         return jmsType;
     }
     public void setJMSType(String jmsType) {
+        setHeaders( true );
         this.jmsType = jmsType;
     }
 
@@ -455,6 +466,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     }
     
     public void setJMSCorrelationId(String jmsCorrelationId) {
+        setHeaders( true );
         this.jmsCorrelationId = jmsCorrelationId;
     }
 
@@ -462,6 +474,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         return deliveryModePersistent;
     }
     public void setJMSDeliveryMode(boolean persistent) {
+        setHeaders( true );
         this.deliveryModePersistent = Boolean.valueOf(persistent);
     }
 
@@ -470,14 +483,16 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     }
 
     public void setJMSPriority(int jmsPriority) {
+        setHeaders( true );
         this.jmsPriority = Integer.valueOf(jmsPriority);
     }
 
     public Long getJMSTimeToLive() {
-        return timeToLive.longValue();
+        return timeToLive;
     }
 
     public void setJMSTimeToLive(long timeToLive) {
+        setHeaders( true );
         this.timeToLive = Long.valueOf(timeToLive);
     }
 
@@ -493,6 +508,10 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         properties.put(name, value);
     }
 
+    protected Map<String, Object> getProperties() {
+        return properties;
+    }
+    
     /**
      * Adds an operationName to this binding.
      * @param opName
@@ -708,4 +727,115 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         return operationPropertiesProperties.get(opName);
     }
 
+    @Override
+    public boolean equals( Object object ) {
+        return ( object instanceof JMSBinding ) && equals( (JMSBinding) object );
+    }
+
+    /**
+     * Compares two JMS bindings for equality.
+     * Because of the many fields, this comparison is rather large O(n).
+     * @param binding test binding for equality comparison 
+     * @return boolean stating whether objects are equal
+     */
+    public boolean equals( JMSBinding binding ) {
+        // Test all fields for equality.
+        // First test simple fields to quickly weed out mismatches.
+        if ( !optStringEquals( this.uri, binding.getURI() )) return false;
+        if ( !optStringEquals( this.name, binding.getName() )) return false;
+        if ( !optStringEquals( this.destinationName, binding.getDestinationName() )) return false;
+        if ( !optStringEquals( this.correlationScheme, binding.getCorrelationScheme() )) return false;
+        if ( !optStringEquals( this.initialContextFactoryName, binding.getInitialContextFactoryName() )) return false;
+        if ( !optStringEquals( this.jndiURL, binding.getJndiURL() )) return false;
+        if ( !optStringEquals( this.requestConnectionName, binding.getRequestConnectionName() )) return false;
+        if ( !optStringEquals( this.responseConnectionName, binding.getResponseConnectionName() )) return false;
+        if ( !optStringEquals( this.jmsSelector, binding.getJMSSelector() )) return false;
+        if ( !equals( properties, binding.getProperties()) )
+            return false;
+
+        // Test operation properties
+        Set<String> operationNamesA = this.getOperationNames();
+        Set<String> operationNamesB = binding.getOperationNames();
+        if ( operationNamesA != null && operationNamesB != null ) {
+            if ( operationNamesA == null && operationNamesB != null ) return false;     
+            if ( operationNamesA != null && operationNamesB == null ) return false;     
+            if ( operationNamesA.size() != operationNamesB.size() ) return false;     
+            for(Iterator<String> it=operationNamesA.iterator(); it.hasNext(); ) {
+                String opName = it.next();
+                if ( !operationNamesB.contains( opName )) {
+                    return false;
+                }
+            }        
+        }
+
+        // Destination properties
+        if ( !optStringEquals( this.getDestinationName(), binding.getDestinationName() )) return false;
+        if ( !optStringEquals( this.getDestinationType(), binding.getDestinationType() )) return false;
+
+        // Connection factory properties
+        if ( !optStringEquals( this.getConnectionFactoryName(), binding.getConnectionFactoryName() )) return false;
+
+        // Activation spec properties
+        if ( !optStringEquals( this.getActivationSpecName(), binding.getActivationSpecName() )) return false;
+
+        // Response properties
+        if ( !optStringEquals( this.getResponseDestinationName(), binding.getResponseDestinationName() )) return false;
+        if ( !optStringEquals( this.getResponseActivationSpecName(), binding.getResponseActivationSpecName() )) return false;
+        if ( !optStringEquals( this.getResponseConnectionFactoryName(), binding.getResponseConnectionFactoryName() )) return false;
+
+        // Resource adapter
+        if ( !optStringEquals( this.getResourceAdapterName(), binding.getResourceAdapterName() )) return false;
+
+        // Other fields could also be checked for equality. See class fields for details.
+        return true;
+    }
+    
+    /**
+     * Tests if Strings are equal. 
+     * Either one may be null. This will match true if both
+     * are null or both are non-null and equal.
+     * @param p1 property list 1
+     * @param p2 property list 2
+     * @return whether or not properties are equal
+     */
+    public static boolean optStringEquals( String s1, String s2 ) {
+        if ( s1 == null && s2 == null ) return true;
+        if ( s1 != null && s2 == null ) return false;
+        if ( s1 == null && s2 != null ) return false;
+        return s1.equals( s2 );
+    }
+    
+    /**
+     * Tests if two property lists are equal.
+     * Either one may be null. This will match true if both
+     * are null or both are non-null and equal.
+     * @param p1 property list 1
+     * @param p2 property list 2
+     * @return whether or not properties are equal
+     */
+    public static boolean equals( Map<String, Object> p1, Map<String, Object> p2 ) {
+        if ( p1 == null && p2 == null)
+            return true;
+        if ( p1 == null || p2 == null)
+            return false;
+        if ( p1.size() != p2.size())
+            return false;
+
+        // For both the keys and values of a map
+        for (Iterator it=p1.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry entry = (Map.Entry)it.next();
+            Object k1 = entry.getKey();
+            Object v1 = entry.getValue();            
+            Object v2 = p2.get( k1 );
+            
+            if ( v1 == null && v2 != null )
+                return false;
+            if ( v1 != null && v2 == null )
+                return false;
+            if ( !v1.equals( v2 ))
+                return false;            
+        }
+        
+        return true;
+    }
 }

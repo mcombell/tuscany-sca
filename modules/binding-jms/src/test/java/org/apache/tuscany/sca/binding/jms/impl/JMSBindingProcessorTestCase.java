@@ -44,8 +44,9 @@ import org.apache.tuscany.sca.monitor.impl.DefaultMonitorFactoryImpl;
  * Tests for JMS binding xml
  */
 public class JMSBindingProcessorTestCase extends TestCase {
-    
-    private static final String COMPOSITE =
+    // Note: If you are adding new JMS binding read test cases,
+    // consider adding a similar test case to JMSBindingProcessorWriteTestCase.
+    public static final String COMPOSITE =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -56,21 +57,21 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String HEADERS1 =
+    public static final String HEADERS1 =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
             + "   <implementation.java class=\"services.HelloWorld\"/>"
             + "      <service name=\"HelloWorldService\">"
             + "          <binding.jms uri=\"jms:testQueue\" >"
-            + "             <headers JMSType=\"myType\" JMSCorrelationID=\"myCorrelId\" JMSDeliveryMode=\"PERSISTENT\" JMSTimeToLive=\"54321\" JMSPriority=\"5\" >"
+            + "             <headers JMSType=\"myType\" JMSCorrelationID=\"myCorrelId\" JMSDeliveryMode=\"PERSISTENT\" JMSTimeToLive=\"54321\" JMSPriority=\"5\">"
             + "             </headers>" 
             + "          </binding.jms>"
             + "      </service>"
             + " </component>"
             + "</composite>";
 
-    private static final String PROPERTIES1 =
+    public static final String PROPERTIES1 =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -86,7 +87,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
     
-    private static final String OP_PROPERTIES1 =
+    public static final String OP_PROPERTIES1 =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -110,7 +111,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String OP_NAMES_NO_PROPERTIES1 =
+    public static final String OP_NAMES_NO_PROPERTIES1 =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -126,7 +127,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String SELECTOR =
+    public static final String SELECTOR =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -139,7 +140,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String COMPOSITE_INVALID_URI =
+    public static final String COMPOSITE_INVALID_URI =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -151,7 +152,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + "</composite>";
 
     // Invalid: contains both a response attribute and a response element.
-    private static final String COMPOSITE_INVALID_RESPONSE_ATTR_ELEMENT =
+    public static final String COMPOSITE_INVALID_RESPONSE_ATTR_ELEMENT =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -166,7 +167,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String DEST_PROPS =
+    public static final String DEST_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -186,7 +187,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String CF_PROPS =
+    public static final String CF_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -206,7 +207,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String AS_PROPS =
+    public static final String AS_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -226,7 +227,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String RESP_DEST_PROPS =
+    public static final String RESP_DEST_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -248,7 +249,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String RESP_CF_PROPS =
+    public static final String RESP_CF_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -270,7 +271,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String RESP_AS_PROPS =
+    public static final String RESP_AS_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -292,7 +293,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String OP_PROPS_PROPS =
+    public static final String OP_PROPS_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -312,7 +313,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
-    private static final String RES_ADPT_PROPS =
+    public static final String RES_ADPT_PROPS =
         "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
         + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
             + " <component name=\"HelloWorldComponent\">"
@@ -653,6 +654,5 @@ public class JMSBindingProcessorTestCase extends TestCase {
             assertTrue( opName.equals( "op1") || opName.equals( "op2"));
         }
     }
-
 
 }

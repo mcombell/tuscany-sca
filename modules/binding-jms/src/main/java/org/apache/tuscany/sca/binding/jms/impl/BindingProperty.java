@@ -42,4 +42,30 @@ public class BindingProperty {
     public Object getValue() {
         return value;
     }
+    
+    @Override
+    public boolean equals( Object object ) {
+        return ( object instanceof BindingProperty ) && equals( (BindingProperty) object );
+    }
+
+    /**
+     * Test whether this and another Binding Property are equal.
+     * @param property
+     * @return true if all fields of property match.
+     */
+    public boolean equals( BindingProperty property ) {
+        if ( name == null && property.getName() != null )
+            return false;
+        else if ( !name.equals( property.getName() ))
+            return false;
+        else if ( type == null && property.getType() != null )
+            return false;
+        else if ( !type.equals( property.getType() ))
+            return false;
+        else if ( value == null && property.getValue() != null )
+            return false;
+        else if ( !value.equals( property.getValue() ))
+                return false;
+        return true;
+    }
 }

@@ -70,5 +70,8 @@ public interface JMSBindingConstants {
     String CALLBACK_Q_PROPERTY = "scaCallbackQueue";
     String CONVERSATION_ID_PROPERTY = "scaConversationId";
     
+    // XML element and attribute names
+    String HEADERS = "headers";
+    
     int MSG_CTXT_POSITION = 0;
 }
