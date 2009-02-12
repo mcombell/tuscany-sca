@@ -121,7 +121,7 @@ public class NonSCAClientTestCase {
     }
 
     protected static void sendTextMessage(String destName, String payload) throws JMSException, NamingException {
-        JMSResourceFactory rf = new JMSResourceFactoryImpl(null, null, "tcp://localhost:61618");
+        JMSResourceFactory rf = new JMSResourceFactoryImpl(null, null, null, "tcp://localhost:61618");
         Session session = rf.getConnection().createSession(false, Session.AUTO_ACKNOWLEDGE);
         MessageProducer p = session.createProducer(rf.lookupDestination(destName));
         rf.getConnection().start();
@@ -131,7 +131,7 @@ public class NonSCAClientTestCase {
     }
 
     protected static void sendObjectMessage(String destName, Object payload) throws JMSException, NamingException {
-        JMSResourceFactory rf = new JMSResourceFactoryImpl(null, null, "tcp://localhost:61618");
+        JMSResourceFactory rf = new JMSResourceFactoryImpl(null, null, null, "tcp://localhost:61618");
         Session session = rf.getConnection().createSession(false, Session.AUTO_ACKNOWLEDGE);
         MessageProducer p = session.createProducer(rf.lookupDestination(destName));
         rf.getConnection().start();

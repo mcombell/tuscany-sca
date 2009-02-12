@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,20 +15,27 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- -->
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-           name="SimpleServiceComposite">
+ */
+package org.apache.tuscany.sca.binding.jms;
 
-    <component name="HelloWorldService">
-        <implementation.java class="org.apache.tuscany.sca.binding.jms.HelloWorldServiceImpl"/>
-        <service name="HelloWorldService">
-            <binding.jms>
-               <destination name="DestQueueA" create="always"/>
-               <response>
-                  <destination name="RespQueueA" create="always"/>
-               </response>
-            </binding.jms>  
-        </service> 
-    </component>       
+import org.osoa.sca.annotations.Reference;
+import org.osoa.sca.annotations.Service;
 
-</composite>
+/**
+ * This class implements the HelloWorld service.
+ */
+@Service(HelloWorldService.class)
+public class HelloWorldClientImpl implements HelloWorldService {
+
+    private HelloWorldService serviceA;
+
+    @Reference
+    public void setServiceA(HelloWorldService service) {
+        this.serviceA = service;
+    }
+
+    public String sayHello(String name) {
+        return serviceA.sayHello(name);
+    }
+
+}

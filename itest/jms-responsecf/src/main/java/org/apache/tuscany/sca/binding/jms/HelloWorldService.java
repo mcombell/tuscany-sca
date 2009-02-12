@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,24 +15,12 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- -->
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
-           name="SimpleClientComposite">
+ */
+package org.apache.tuscany.sca.binding.jms;
 
-    <component name="HelloWorldClient">
-        <implementation.java class="org.apache.tuscany.sca.binding.jms.HelloWorldClientImpl"/>
-        <reference name="serviceA" />
-    </component>
+import org.osoa.sca.annotations.Remotable;
 
-    <reference name="serviceA" promote="HelloWorldClient/serviceA">
-        <interface.java interface="org.apache.tuscany.sca.binding.jms.HelloWorldService" />
-        <binding.jms>
-            <destination name="DestQueueA"/>
-            <response>
-               <connectionFactory name="ResponseCF"/>
-               <destination name="RespQueueA"/>
-            </response>
-        </binding.jms>  
-    </reference>
-
-</composite>
+@Remotable
+public interface HelloWorldService {
+    String sayHello(String name);
+}
