@@ -150,6 +150,13 @@ public abstract class SCANodeFactory {
     }
 
     /**
+     * Create a SCA node based on the discovery of the contribution on the classpath.
+     * 
+     * @return a new SCA node.
+     */
+    public abstract SCANode createSCANode();
+
+    /**
      * Create a SCA node based on the discovery of the contribution on the classpath for the 
      * given classloader. This method should be treated a convinient shortcut with the following
      * assumptions:

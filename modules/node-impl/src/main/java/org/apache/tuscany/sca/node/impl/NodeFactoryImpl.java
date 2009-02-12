@@ -52,4 +52,9 @@ public class NodeFactoryImpl extends SCANodeFactory {
         return new NodeImpl(compositeURI, compositeContent, contributions);
     }
 
+    @Override
+    public SCANode createSCANode() {
+        return new NodeImpl();
+    }
+
 }

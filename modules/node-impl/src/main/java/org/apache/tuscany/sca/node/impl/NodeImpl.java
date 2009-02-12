@@ -145,6 +145,27 @@ public class NodeImpl implements SCANode, SCAClient {
     }
 
     /**
+     * Construct a node by discovering the node configuration on the classpath
+     * @param classLoader
+     * @param compositeURI
+     */
+    NodeImpl() {
+        configurationName = "default";
+        logger.log(Level.INFO, "Creating node: " + configurationName);
+
+        try {
+            initRuntime();
+
+            ConfiguredNodeImplementation config = findNodeConfiguration(null, null);
+            configureNode(config);
+        } catch (ServiceRuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new ServiceRuntimeException(e);
+        }
+    }
+
+    /**
      * Construct a node by discovering the node configuration (composite+contrbutions) on the classpath
      * @param classLoader
      * @param compositeURI
