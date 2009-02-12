@@ -453,7 +453,6 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     private void parseResponseConnectionFactory(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String name = reader.getAttributeValue(null, "name");
         if (name != null && name.length() > 0) {
-            warning("DoesntProcessResponseConnectionFactory", jmsBinding);
             jmsBinding.setResponseConnectionFactoryName(name);            
         } else {
             warning("MissingResponseConnectionFactory", reader);
