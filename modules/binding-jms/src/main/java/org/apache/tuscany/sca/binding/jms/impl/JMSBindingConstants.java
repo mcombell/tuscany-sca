@@ -48,8 +48,6 @@ public interface JMSBindingConstants {
     String CREATE_ALWAYS = "always";
     String CREATE_NEVER = "never";
     String CREATE_IF_NOT_EXIST = "ifnotexist";
-    String DEFAULT_DESTINATION_NAME = "NODESTINATION";
-    String DEFAULT_RESPONSE_DESTINATION_NAME = "NORESPONSEDESTINATION";
     String DEFAULT_CONNECTION_FACTORY_NAME = "ConnectionFactory";
     String DEFAULT_CONTEXT_FACTORY_NAME = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
     String DEFAULT_JNDI_URL = "tcp://localhost:61616";

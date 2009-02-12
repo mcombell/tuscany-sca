@@ -868,7 +868,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
         String dest = jmsBinding.getDestinationName();
         if (dest != null) {
-            if ( !dest.equals( JMSBindingConstants.DEFAULT_DESTINATION_NAME ) ) {
+            if ( dest != null ) {
                writer.writeAttribute("uri", "jms:" + jmsBinding.getDestinationName());
             }
         }
@@ -914,7 +914,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         String responseDestName = jmsBinding.getResponseDestinationName();
         String responseCFName = jmsBinding.getResponseConnectionFactoryName();
         String responseASName = jmsBinding.getResponseActivationSpecName();
-        if (( responseDestName != null && !responseDestName.equals(JMSBindingConstants.DEFAULT_RESPONSE_DESTINATION_NAME)) || 
+        if (( responseDestName != null ) || 
              (responseCFName != null && !responseCFName.equals(JMSBindingConstants.DEFAULT_CONNECTION_FACTORY_NAME)) ||
              responseASName != null ) {
             
@@ -1193,7 +1193,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         if (destinationName == null || (destinationName.length() < 1)) {
             return;
         }
-        if (destinationName.equals(JMSBindingConstants.DEFAULT_DESTINATION_NAME)) {
+        if (destinationName == null) {
             return;
         }
 
@@ -1302,7 +1302,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         if (destinationName == null || (destinationName.length() < 1)) {
             return;
         }
-        if (destinationName.equals(JMSBindingConstants.DEFAULT_RESPONSE_DESTINATION_NAME)) {
+        if (destinationName == null) {
             return;
         }
 

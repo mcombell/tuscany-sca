@@ -163,7 +163,7 @@ public class JMSResourceFactoryImpl implements JMSResourceFactory {
      * @see org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory#lookupDestination(java.lang.String)
      */
     public Destination lookupDestination(String destName) throws NamingException {
-        if (JMSBindingConstants.DEFAULT_DESTINATION_NAME.equals(destName)) {
+        if (destName == null) {
             return null;
         }
         

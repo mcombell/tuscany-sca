@@ -163,7 +163,7 @@ public class ASFListener implements JMSServiceListener {
      */
     private Destination lookupDestinationQueue() throws NamingException, JMSBindingException {
 
-        if (isCallbackService && JMSBindingConstants.DEFAULT_DESTINATION_NAME.equals(jmsBinding.getDestinationName())) {
+        if (isCallbackService && (jmsBinding.getDestinationName() == null)) {
             // if its a callback service returning null indicates to use a temporary queue
             return null;
         }

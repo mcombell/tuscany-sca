@@ -92,7 +92,7 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
 
     public Invoker createInvoker(Operation operation) {
 
-        if (jmsBinding.getDestinationName().equals(JMSBindingConstants.DEFAULT_DESTINATION_NAME)) {
+        if (jmsBinding.getDestinationName() == null) {
             if (!reference.isCallback()) {
                 throw new JMSBindingException("No destination specified for reference " + reference.getName());
             }

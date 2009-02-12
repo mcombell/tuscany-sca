@@ -67,7 +67,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private String initialContextFactoryName;
     private String jndiURL;
 
-    private String destinationName = JMSBindingConstants.DEFAULT_DESTINATION_NAME;
+    private String destinationName = null;
     private String destinationType = JMSBindingConstants.DESTINATION_TYPE_QUEUE;
     private String destinationCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
     private Map<String, BindingProperty> destinationProperties = new HashMap<String, BindingProperty>();
@@ -87,7 +87,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private String responseActivationSpecCreate = null;
     private Map<String, BindingProperty> responseActivationSpecProperties = new HashMap<String, BindingProperty>();
 
-    private String responseDestinationName = JMSBindingConstants.DEFAULT_RESPONSE_DESTINATION_NAME;
+    private String responseDestinationName = null;
     private String responseDestinationType = JMSBindingConstants.DESTINATION_TYPE_QUEUE;
     private String responseDestinationCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
     private Map<String, BindingProperty> responseDestinationProperties = new HashMap<String, BindingProperty>();

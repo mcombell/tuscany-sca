@@ -129,7 +129,7 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
             queueName = jmsBinding.getResponseDestinationName();
             queueType = "JMS Response Destination ";
             qCreateMode = jmsBinding.getResponseDestinationCreate();
-            if (JMSBindingConstants.DEFAULT_RESPONSE_DESTINATION_NAME.equals(queueName)) {
+            if (queueName == null) {
                 return null;
             }
         } else {
