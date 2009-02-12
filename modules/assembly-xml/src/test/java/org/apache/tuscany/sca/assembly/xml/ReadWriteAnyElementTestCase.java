@@ -56,7 +56,8 @@ public class ReadWriteAnyElementTestCase {
          "<component name=\"unknownImpl\">" +
            "<implementation.unknown class=\"raymond\" />" +
            "<service name=\"service\">" +
-             "<binding.ws />" +
+             "<binding.ws name=\"wsName\" />" +
+             "<binding.new name=\"newName\" />" +
            "</service>" +
          "</component>" +
         "</composite>";
