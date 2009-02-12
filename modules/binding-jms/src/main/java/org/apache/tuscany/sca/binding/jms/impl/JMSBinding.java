@@ -91,7 +91,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     private String responseDestinationCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
     private Map<String, BindingProperty> responseDestinationProperties = new HashMap<String, BindingProperty>();
 
-    private String responseConnectionFactoryName = JMSBindingConstants.DEFAULT_CONNECTION_FACTORY_NAME;
+    private String responseConnectionFactoryName = null;
     private String responseConnectionFactoryCreate = JMSBindingConstants.CREATE_IF_NOT_EXIST;
     private Map<String, BindingProperty> responseConnectionFactoryProperties = new HashMap<String, BindingProperty>();
 

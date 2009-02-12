@@ -91,7 +91,7 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
     public Message invokeResponse(Message msg) {
         // get the jms context
         JMSBindingContext context = msg.getBindingContext();
-        Session session = context.getJmsSession();
+        Session session = context.getJmsResponseSession();
 
         javax.jms.Message responseJMSMsg = null;
         if (msg.isFault()) {

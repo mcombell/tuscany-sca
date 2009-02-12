@@ -105,7 +105,7 @@ public class TransportReferenceInterceptor implements Interceptor {
         try {
             // get the jms context
             JMSBindingContext context = msg.getBindingContext();
-            Session session = context.getJmsSession();
+            Session session = context.getJmsResponseSession();
             
             javax.jms.Message requestMessage = (javax.jms.Message)msg.getBody();
                       

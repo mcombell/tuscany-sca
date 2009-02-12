@@ -186,14 +186,13 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
 
     public org.apache.tuscany.sca.invocation.Message invoke(org.apache.tuscany.sca.invocation.Message tuscanyMsg) {
         try {
-            // create a jms session to cover the creation and sending of the message
-            Session session = jmsResourceFactory.createSession();
-            
             // populate the message context with JMS binding information
             JMSBindingContext context = new JMSBindingContext();
             tuscanyMsg.setBindingContext(context);
             
-            context.setJmsSession(session);
+            // get a jms session to cover the creation and sending of the message
+            Session session = context.getJmsSession();
+
             context.setRequestDestination(getRequestDestination(tuscanyMsg, session));
             context.setReplyToDestination(getReplyToDestination(session));
             context.setJmsResourceFactory(jmsResourceFactory);

@@ -19,9 +19,12 @@
 package org.apache.tuscany.sca.binding.jms.context;
 
 import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.naming.NamingException;
 
+import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 
 
@@ -34,6 +37,7 @@ public class JMSBindingContext {
 
     private Message jmsMsg;
     private Session jmsSession;
+    private Session jmsResponseSession;
     private Destination requestDestination;
     private Destination replyToDestination;
     private JMSResourceFactory jmsResourceFactory;
@@ -47,12 +51,26 @@ public class JMSBindingContext {
         this.jmsMsg = jmsMsg;
     }
     
-    public Session getJmsSession() {
+    public synchronized Session getJmsSession() {
+        if (jmsSession == null) {
+            try {
+                jmsSession = getJmsResourceFactory().createSession();
+            } catch (Exception e) {
+                throw new JMSBindingException(e);
+            }
+        }
         return jmsSession;
     }
-    
-    public void setJmsSession(Session jmsSession) {
-        this.jmsSession = jmsSession;
+
+    public synchronized Session getJmsResponseSession() {
+        if (jmsResponseSession == null) {
+            try {
+                jmsResponseSession = getJmsResourceFactory().createResponseSession();
+            } catch (Exception e) {
+                throw new JMSBindingException(e);
+            }
+        }
+        return jmsResponseSession;
     }
     
     public Destination getRequestDestination() {

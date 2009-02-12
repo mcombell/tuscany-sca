@@ -79,7 +79,7 @@ public class TransportServiceInterceptor implements Interceptor {
         } catch (Throwable e) {
             logger.log(Level.SEVERE, "Exception invoking service '" + service.getName(), e);
             JMSBindingContext context = msg.getBindingContext();
-            javax.jms.Message replyJMSMsg = responseMessageProcessor.createFaultMessage(context.getJmsSession(), 
+            javax.jms.Message replyJMSMsg = responseMessageProcessor.createFaultMessage(context.getJmsResponseSession(), 
                                                                                         (Throwable)e);
             msg.setBody(replyJMSMsg);
             invokeResponse(msg);
@@ -91,7 +91,6 @@ public class TransportServiceInterceptor implements Interceptor {
         try {
             JMSBindingContext context = msg.getBindingContext();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
-            context.setJmsSession(context.getJmsResourceFactory().createResponseSession());
             
             EndpointReference from = new EndpointReferenceImpl(null);
             msg.setFrom(from);
@@ -106,15 +105,13 @@ public class TransportServiceInterceptor implements Interceptor {
             return msg;
         } catch (JMSException e) {
             throw new JMSBindingException(e);
-        } catch (NamingException e) {
-            throw new JMSBindingException(e);
         } 
     }
     
     public Message invokeResponse(Message msg) { 
         try {
             JMSBindingContext context = msg.getBindingContext();
-            Session session = context.getJmsSession();
+            Session session = context.getJmsResponseSession();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();
             javax.jms.Message responseJMSMsg = msg.getBody();
             
