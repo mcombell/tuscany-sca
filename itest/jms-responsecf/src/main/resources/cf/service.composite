@@ -24,10 +24,9 @@
         <implementation.java class="org.apache.tuscany.sca.binding.jms.HelloWorldServiceImpl"/>
         <service name="HelloWorldService">
             <binding.jms>
-               <destination name="DestQueueA" create="always"/>
+               <destination name="DestQueueA"/>
                <response>
                   <connectionFactory name="ResponseCF"/>
-                  <destination name="RespQueueA" create="always"/>
                </response>
             </binding.jms>  
         </service> 
