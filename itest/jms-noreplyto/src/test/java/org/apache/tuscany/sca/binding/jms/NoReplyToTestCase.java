@@ -85,9 +85,7 @@ public class NoReplyToTestCase {
         if (m == null) {
             throw new RuntimeException("No reply message received");
         }
-        Serializable o = ((ObjectMessage)m).getObject();
-        // TODO: investigate if its correct that the response is an Object[]
-        return ((Object[])o)[0].toString();
+        return ((ObjectMessage)m).getObject().toString();
     }
 
     @After
