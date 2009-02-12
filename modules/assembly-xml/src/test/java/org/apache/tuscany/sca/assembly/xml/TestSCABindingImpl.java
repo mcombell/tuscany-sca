@@ -35,12 +35,14 @@ import org.apache.tuscany.sca.policy.IntentAttachPointType;
 import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
 
+import org.apache.tuscany.sca.assembly.impl.ExtensibleImpl;
+
 /**
  * A test cheel for the SCA binding.
  * 
  * @version $Rev$ $Date$
  */
-public class TestSCABindingImpl implements SCABinding, OptimizableBinding, PolicySetAttachPoint, OperationsConfigurator {
+public class TestSCABindingImpl extends ExtensibleImpl implements SCABinding, OptimizableBinding, PolicySetAttachPoint, OperationsConfigurator {
     private String name;
     private String uri;
     private List<Object> extensions = new ArrayList<Object>();
