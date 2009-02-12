@@ -27,8 +27,8 @@ import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactoryImpl;
 
 public class AMQJMSResourceFactory extends JMSResourceFactoryImpl {
 
-    public AMQJMSResourceFactory(String connectionFactoryName, String initialContextFactoryName, String jndiURL) {
-        super(connectionFactoryName, initialContextFactoryName, jndiURL);
+    public AMQJMSResourceFactory(String connectionFactoryName, String responseConnectionFactoryName, String initialContextFactoryName, String jndiURL) {
+        super(connectionFactoryName, responseConnectionFactoryName, initialContextFactoryName, jndiURL);
     }
 
     @Override

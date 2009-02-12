@@ -26,7 +26,7 @@ import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactoryExtensionPo
 public class AMQResourceFactoryExtensionPoint implements JMSResourceFactoryExtensionPoint{
 
     public JMSResourceFactory createJMSResourceFactory(JMSBinding binding) {
-        return new AMQJMSResourceFactory(binding.getConnectionFactoryName(), binding.getInitialContextFactoryName(), binding.getJndiURL());
+        return new AMQJMSResourceFactory(binding.getConnectionFactoryName(), binding.getResponseConnectionFactoryName(), binding.getInitialContextFactoryName(), binding.getJndiURL());
     }
 
 }
