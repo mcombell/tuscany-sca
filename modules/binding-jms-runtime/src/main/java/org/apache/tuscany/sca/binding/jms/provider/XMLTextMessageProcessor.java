@@ -71,6 +71,15 @@ public class XMLTextMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
+    public Object extractPayloadFromJMSMessage(Message msg) {
+        if (msg instanceof TextMessage) {
+            return extractPayload(msg);
+        } else {
+            return super.extractPayloadFromJMSMessage(msg);
+        }
+    }
+
+    @Override
     protected Message createJMSMessage(Session session, Object o) {
         if (session == null) {
             logger.fine("no response session to create message: " + String.valueOf(o));
@@ -116,4 +125,5 @@ public class XMLTextMessageProcessor extends AbstractMessageProcessor {
             return super.createFaultMessage(session, o);
         }
     }
+
 }

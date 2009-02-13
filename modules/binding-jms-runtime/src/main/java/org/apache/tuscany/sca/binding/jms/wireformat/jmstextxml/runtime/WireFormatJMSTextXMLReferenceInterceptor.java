@@ -21,31 +21,23 @@ package org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.runtime;
 
 
 
-import java.util.Map;
-
-import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Session;
+import javax.xml.namespace.QName;
 
-import org.apache.tuscany.sca.assembly.Reference;
-import org.apache.tuscany.sca.assembly.WireFormat;
+import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
-import org.apache.tuscany.sca.binding.jms.provider.JMSBindingServiceBindingProvider;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
-import org.apache.tuscany.sca.interfacedef.Operation;
-import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
+import org.apache.tuscany.sca.interfacedef.util.FaultException;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
-import org.apache.tuscany.sca.runtime.ReferenceParameters;
-import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
-import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 
 /**
@@ -104,9 +96,20 @@ public class WireFormatJMSTextXMLReferenceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) {
         if (msg.getBody() != null){
-            Object response = responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
+            javax.jms.Message jmsMsg = (javax.jms.Message)msg.getBody();
+            Object response = responseMessageProcessor.extractPayloadFromJMSMessage(jmsMsg);
             if (response != null ){
                 msg.setBody(response);
+                try {
+                    if (jmsMsg.getBooleanProperty(JMSBindingConstants.FAULT_PROPERTY)) {
+                        FaultException e = new FaultException("remote exception", response);
+                        OMElement om = (OMElement) response;
+                        e.setFaultName(new QName(om.getNamespace().getNamespaceURI(), om.getLocalName()));
+                        msg.setFaultBody(e);
+                    }
+                } catch (JMSException e) {
+                    throw new JMSBindingException(e);
+                }
             } else {
                 msg.setBody(null);
             }
