@@ -37,6 +37,10 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.osoa.sca.ServiceRuntimeException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This shows how to test the JMS binding using a simple HelloWorld application.
@@ -53,72 +57,85 @@ public class ExceptionsTestCase {
         scaDomain = SCADomain.newInstance("http://localhost", "/", "exceptions/service.composite");
     }
 
-    @Test
-    public void testTextChecked() throws NamingException, JMSException {
-            sendJMSTextRequest("throwChecked");
-            Message m = receiveJMSResponse();
-//            assertEquals("foo", e.getMessage());
-    }
-    @Test
-    public void testObjectChecked() throws NamingException, JMSException {
-            sendJMSObjectRequest("throwChecked");
-            Message m = receiveJMSResponse();
-            ((ObjectMessage)m).getObject();
-//            assertEquals("foo", e.getMessage());
-    }
+//    @Test
+//    public void testTextChecked() throws NamingException, JMSException {
+//            sendJMSTextRequest("throwChecked");
+//            Message m = receiveJMSResponse();
+////            ((TextMessage)m).getText();
+////            assertEquals("foo", e.getMessage());
+//    }
+//    @Test
+//    public void testTextCheckedNoArgs() throws NamingException, JMSException {
+//        sendJMSTextRequest("throwCheckedNoArgs");
+//        Message m = receiveJMSResponse();
+//    }
+//    @Test
+//    public void testTextChecked2Args() throws NamingException, JMSException {
+//        sendJMSTextRequest("throwChecked2Args");
+//        Message m = receiveJMSResponse();
+////            assertEquals("foo", e.getMessage());
+////            assertNotNull(e.getCause());
+////            assertEquals("bla", e.getCause().getMessage());
+//    }
+//
+//    @Test
+//    public void testTextCheckedChained() throws NamingException, JMSException {
+//        sendJMSTextRequest("throwCheckedChained");
+//        Message m = receiveJMSResponse();
+////            assertEquals("bla", e.getCause().getMessage());
+//    }
+//
+//    @Test
+//    public void testTextUnChecked() throws NamingException, JMSException {
+//        sendJMSTextRequest("throwUnChecked");
+//        Message m = receiveJMSResponse();
+////            assertEquals("bla", e.getCause().getCause().getMessage());
+//    }
 
     @Test
-    public void testTextCheckedNoArgs() throws NamingException, JMSException {
-        sendJMSTextRequest("throwCheckedNoArgs");
+    public void testObjectChecked() throws NamingException, JMSException {
+        sendJMSObjectRequest("throwChecked");
         Message m = receiveJMSResponse();
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof CheckedExcpetion);
+        assertEquals("foo", ((CheckedExcpetion)o).getMessage());
     }
+
     @Test
     public void testObjectCheckedNoArgs() throws NamingException, JMSException {
         sendJMSObjectRequest("throwCheckedNoArgs");
         Message m = receiveJMSResponse();
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof CheckedExcpetionNoArgs);
     }
 
-    @Test
-    public void testTextChecked2Args() throws NamingException, JMSException {
-        sendJMSTextRequest("throwChecked2Args");
-        Message m = receiveJMSResponse();
-//            assertEquals("foo", e.getMessage());
-//            assertNotNull(e.getCause());
-//            assertEquals("bla", e.getCause().getMessage());
-    }
     @Test
     public void testObjectChecked2Args() throws NamingException, JMSException {
         sendJMSObjectRequest("throwChecked2Args");
         Message m = receiveJMSResponse();
-//            assertEquals("foo", e.getMessage());
-//            assertNotNull(e.getCause());
-//            assertEquals("bla", e.getCause().getMessage());
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof CheckedExcpetion2Args);
+        assertEquals("foo", ((CheckedExcpetion2Args)o).getMessage());
+        assertEquals("bla", ((CheckedExcpetion2Args)o).getCause().getMessage());
     }
 
-    @Test
-    public void testTextCheckedChained() throws NamingException, JMSException {
-        sendJMSTextRequest("throwCheckedChained");
-        Message m = receiveJMSResponse();
-//            assertEquals("bla", e.getCause().getMessage());
-    }
     @Test
     public void testObjectCheckedChained() throws NamingException, JMSException {
         sendJMSObjectRequest("throwCheckedChained");
         Message m = receiveJMSResponse();
-//            assertEquals("bla", e.getCause().getMessage());
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof CheckedExcpetionChained);
+        assertEquals("bla", ((CheckedExcpetionChained)o).getCause().getMessage());
     }
 
-    @Test
-    public void testTextUnChecked() throws NamingException, JMSException {
-        sendJMSTextRequest("throwUnChecked");
-        Message m = receiveJMSResponse();
-//            assertEquals("bla", e.getCause().getCause().getMessage());
-    }
     @Test
     public void testObjectUnChecked() throws NamingException, JMSException {
         sendJMSObjectRequest("throwUnChecked");
         Message m = receiveJMSResponse();
-//            assertEquals("bla", e.getCause().getCause().getMessage());
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof ServiceRuntimeException);
+        assertTrue(((ServiceRuntimeException)o).getCause() instanceof RuntimeException);
+        assertEquals("bla", ((ServiceRuntimeException)o).getCause().getMessage());
     }
 
     @After
