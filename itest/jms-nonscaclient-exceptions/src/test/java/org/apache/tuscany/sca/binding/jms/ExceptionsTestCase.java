@@ -95,13 +95,16 @@ public class ExceptionsTestCase {
         Message m = receiveJMSResponse();
         assertXMLEqual(CHECKED_CHAINED_XML, ((TextMessage)m).getText());
     }
-//
-//    @Test
-//    public void testTextUnChecked() throws NamingException, JMSException, SAXException, IOException {
-//        sendJMSTextRequest("throwUnChecked");
-//        Message m = receiveJMSResponse();
-//        assertXMLEqual(CHECKED_XML, ((TextMessage)m).getText());
-//    }
+
+    @Test
+    public void testTextUnChecked() throws NamingException, JMSException, SAXException, IOException {
+        sendJMSTextRequest("throwUnChecked");
+        Message m = receiveJMSResponse();
+        
+        // FIXME: what should the response message be for unchecked exceptions with wireFormat.textXML???
+        Object o = ((ObjectMessage)m).getObject();
+        assertTrue(o instanceof ServiceRuntimeException);
+    }
 
     @Test
     public void testObjectChecked() throws NamingException, JMSException {
