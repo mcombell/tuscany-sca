@@ -70,7 +70,7 @@ public class ExceptionsTestCase {
             fail();
         } catch (CheckedExcpetion2Args e) {
             assertEquals("foo", e.getMessage());
-// FIXME: lost the cause!            
+// FIXME: TUSCANY-2848: lost the cause!            
 //            assertNotNull(e.getCause());
 //            assertEquals("bla", e.getCause().getMessage());
         }
@@ -83,7 +83,7 @@ public class ExceptionsTestCase {
             service.throwCheckedChained();
             fail();
         } catch (CheckedExcpetionChained e) {
-         // FIXME: lost the cause!            
+         // FIXME: TUSCANY-2848: lost the cause!            
 //            assertNotNull(e.getCause());
 //            assertEquals("bla", e.getCause().getMessage());
         }
