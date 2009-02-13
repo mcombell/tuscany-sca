@@ -32,7 +32,9 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
+import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
+import org.apache.tuscany.sca.interfacedef.util.FaultException;
 
 /**
  * MessageProcessor for sending/receiving XML javax.jms.TextMessage with the JMSBinding.
@@ -92,5 +94,26 @@ public class XMLTextMessageProcessor extends AbstractMessageProcessor {
             throw new JMSBindingException(e);
         }
     }
+    
+    @Override
+    public Message createFaultMessage(Session session, Throwable o) {
+        if (session == null) {
+            logger.fine("no response session to create fault message: " + String.valueOf(o));
+            return null;
+        }
+        if (o instanceof FaultException) {
+            try {
 
+                TextMessage message = session.createTextMessage();
+                message.setText(String.valueOf(((FaultException)o).getFaultInfo()));
+                message.setBooleanProperty(JMSBindingConstants.FAULT_PROPERTY, true);
+                return message;
+
+            } catch (JMSException e) {
+                throw new JMSBindingException(e);
+            }
+        } else {
+            return super.createFaultMessage(session, o);
+        }
+    }
 }
