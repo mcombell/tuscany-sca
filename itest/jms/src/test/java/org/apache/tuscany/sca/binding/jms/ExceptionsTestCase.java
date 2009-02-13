@@ -41,7 +41,6 @@ public class ExceptionsTestCase {
     }
 
     @Test
-//    @Ignore // TUSCANY-2593, currently fails for some jaxws reason?
     public void testChecked() {
         ExceptionService service = scaDomain.getService(ExceptionService.class, "ExceptionServiceClient");
         try {
