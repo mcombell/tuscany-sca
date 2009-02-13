@@ -18,6 +18,11 @@
  */
 package org.apache.tuscany.sca.binding.jms;
 
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.jms.Connection;
@@ -38,9 +43,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.osoa.sca.ServiceRuntimeException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.xml.sax.SAXException;
 
 /**
  * This shows how to test the JMS binding using a simple HelloWorld application.
@@ -52,44 +55,52 @@ public class ExceptionsTestCase {
     private InitialContext context;
     private Connection connection;
 
+    private static final String CHECKED_XML =
+        "<ns2:CheckedExcpetion xmlns:ns2=\"http://jms.binding.sca.tuscany.apache.org/\"><message>foo</message></ns2:CheckedExcpetion>";
+    private static final String CHECKED_NOARGS_XML = "<ns2:CheckedExcpetionNoArgs xmlns:ns2=\"http://jms.binding.sca.tuscany.apache.org/\" />";
+    private static final String CHECKED_2ARGS_XML =
+        "<ns2:CheckedExcpetion2Args xmlns:ns2=\"http://jms.binding.sca.tuscany.apache.org/\"><message>foo</message></ns2:CheckedExcpetion2Args>";
+    private static final String CHECKED_CHAINED_XML =
+        "<ns2:CheckedExcpetionChained xmlns:ns2=\"http://jms.binding.sca.tuscany.apache.org/\"><message>java.lang.Exception: bla</message></ns2:CheckedExcpetionChained>";
+
     @Before
     public void init() {
         scaDomain = SCADomain.newInstance("http://localhost", "/", "exceptions/service.composite");
     }
 
-//    @Test
-//    public void testTextChecked() throws NamingException, JMSException {
-//            sendJMSTextRequest("throwChecked");
-//            Message m = receiveJMSResponse();
-////            ((TextMessage)m).getText();
-////            assertEquals("foo", e.getMessage());
-//    }
-//    @Test
-//    public void testTextCheckedNoArgs() throws NamingException, JMSException {
-//        sendJMSTextRequest("throwCheckedNoArgs");
-//        Message m = receiveJMSResponse();
-//    }
-//    @Test
-//    public void testTextChecked2Args() throws NamingException, JMSException {
-//        sendJMSTextRequest("throwChecked2Args");
-//        Message m = receiveJMSResponse();
-////            assertEquals("foo", e.getMessage());
-////            assertNotNull(e.getCause());
-////            assertEquals("bla", e.getCause().getMessage());
-//    }
+    @Test
+    public void testTextChecked() throws NamingException, JMSException, SAXException, IOException {
+        sendJMSTextRequest("throwChecked");
+        Message m = receiveJMSResponse();
+        assertXMLEqual(CHECKED_XML, ((TextMessage)m).getText());
+    }
+
+    @Test
+    public void testTextCheckedNoArgs() throws NamingException, JMSException, SAXException, IOException {
+        sendJMSTextRequest("throwCheckedNoArgs");
+        Message m = receiveJMSResponse();
+        assertXMLEqual(CHECKED_NOARGS_XML, ((TextMessage)m).getText());
+    }
+
+    @Test
+    public void testTextChecked2Args() throws NamingException, JMSException, SAXException, IOException {
+        sendJMSTextRequest("throwChecked2Args");
+        Message m = receiveJMSResponse();
+        assertXMLEqual(CHECKED_2ARGS_XML, ((TextMessage)m).getText());
+    }
+
+    @Test
+    public void testTextCheckedChained() throws NamingException, JMSException, SAXException, IOException {
+        sendJMSTextRequest("throwCheckedChained");
+        Message m = receiveJMSResponse();
+        assertXMLEqual(CHECKED_CHAINED_XML, ((TextMessage)m).getText());
+    }
 //
 //    @Test
-//    public void testTextCheckedChained() throws NamingException, JMSException {
-//        sendJMSTextRequest("throwCheckedChained");
-//        Message m = receiveJMSResponse();
-////            assertEquals("bla", e.getCause().getMessage());
-//    }
-//
-//    @Test
-//    public void testTextUnChecked() throws NamingException, JMSException {
+//    public void testTextUnChecked() throws NamingException, JMSException, SAXException, IOException {
 //        sendJMSTextRequest("throwUnChecked");
 //        Message m = receiveJMSResponse();
-////            assertEquals("bla", e.getCause().getCause().getMessage());
+//        assertXMLEqual(CHECKED_XML, ((TextMessage)m).getText());
 //    }
 
     @Test
@@ -156,7 +167,7 @@ public class ExceptionsTestCase {
 
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination toDest = (Destination)context.lookup("TextExceptionService");
-        
+
         TextMessage m = session.createTextMessage();
         m.setStringProperty("scaOperationName", operationName);
         m.setJMSReplyTo((Destination)context.lookup("ResponseQueue"));
@@ -174,7 +185,7 @@ public class ExceptionsTestCase {
 
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination toDest = (Destination)context.lookup("ObjectExceptionService");
-        
+
         ObjectMessage m = session.createObjectMessage();
         m.setStringProperty("scaOperationName", operationName);
         m.setJMSReplyTo((Destination)context.lookup("ResponseQueue"));
