@@ -100,6 +100,7 @@
                 <module>jms-format</module>
                 <module>jms-oneway-nocf</module>
                 <module>jms-noreplyto</module>
+                <module>itest-jms-nonscaclient-exceptions</module>
                 <module>jms-selectors</module>
                 <module>large-sdo-ws</module>
                 <module>late-reference-resolution</module>
