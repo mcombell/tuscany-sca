@@ -101,7 +101,7 @@ public class SpringInvoker implements Invoker {
             }
             return ret;
         } catch (InvocationTargetException e) {
-            throw new SpringInvocationException("Spring invoker invoke method '"+ theMethod.getName()+"' error.",e);
+            throw new SpringInvocationException("Spring invoker invoke method '"+ theMethod.getName()+"' error.",e.getCause());
         } catch (Exception e) {
             throw new SpringInvocationException("Spring invoker invoke method '"+ theMethod.getName()+"' error.",e);
         }
