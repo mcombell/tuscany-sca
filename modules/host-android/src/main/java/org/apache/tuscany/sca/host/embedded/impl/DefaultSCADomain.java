@@ -110,7 +110,7 @@ public class DefaultSCADomain extends SCADomain {
         try {
             StringBuffer xml =
                 new StringBuffer("<sca:composite xmlns:sca=\"http://www.osoa.org/xmlns/sca/1.0\"")
-                    .append(" targetNamespace=\"http://tempuri.org\" name=\"aggregated\">\n");
+                    .append(" targetNamespace=\"http://tuscany.apache.org/xmlns/sca/1.0\" name=\"aggregated\">\n");
             XMLInputFactory factory = XMLInputFactory.newInstance();
             for (int i = 0; i < composites.length; i++) {
                 URL url = classLoader.getResource(composites[i]);
@@ -161,7 +161,7 @@ public class DefaultSCADomain extends SCADomain {
                 contributions.add(new SCAContribution(location, location));
             }
             node =
-                factory.createSCANode("http://tempuri.org/aggregated", content, contributions
+                factory.createSCANode("http://tuscany.apache.org/xmlns/sca/1.0/aggregated", content, contributions
                     .toArray(new SCAContribution[contributions.size()]));
         } else {
             for (String location : contributionURLs) {

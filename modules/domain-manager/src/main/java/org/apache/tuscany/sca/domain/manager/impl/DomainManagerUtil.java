@@ -229,7 +229,7 @@ public final class DomainManagerUtil {
         try {
     
             Composite composite = assemblyFactory.createComposite();
-            composite.setName(new QName("http://tempuri.org", "default"));
+            composite.setName(new QName("http://tuscany.apache.org/xmlns/sca/1.0", "default"));
             RuntimeComponent component = (RuntimeComponent)assemblyFactory.createComponent();
             component.setName("default");
             component.setURI("default");

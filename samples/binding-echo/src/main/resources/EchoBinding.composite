@@ -25,7 +25,7 @@
 
     <service name="EchoService" promote="EchoComponent">
         <interface.java interface="echo.Echo"/>
-        <e:binding.echo uri="http://tempuri.org" />
+        <e:binding.echo uri="http://example.com/temp" />
     </service>
 
     <component name="EchoComponent">
@@ -34,7 +34,7 @@
     
     <reference name="EchoReference" promote="EchoComponent/echoReference">
         <interface.java interface="echo.Echo"/>
-        <e:binding.echo uri="http://tempuri.org" />
+        <e:binding.echo uri="http://example.com/temp" />
     </reference>
     
 </composite>

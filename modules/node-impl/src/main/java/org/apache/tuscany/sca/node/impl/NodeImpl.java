@@ -578,8 +578,8 @@ public class NodeImpl implements SCANode, SCAClient {
         // This is temporary to make the activator happy
         AssemblyFactory assemblyFactory = runtime.getAssemblyFactory();
         Composite tempComposite = assemblyFactory.createComposite();
-        tempComposite.setName(new QName("http://tempuri.org", "temp"));
-        tempComposite.setURI("http://tempuri.org");
+        tempComposite.setName(new QName("http://tuscany.apache.org/xmlns/sca/1.0", "temp"));
+        tempComposite.setURI("http://tuscany.apache.org/xmlns/sca/1.0");
 
         // Include the node composite in the top-level composite 
         tempComposite.getIncludes().add(composite);
@@ -608,8 +608,8 @@ public class NodeImpl implements SCANode, SCAClient {
             // Include all composites
             AssemblyFactory assemblyFactory = runtime.getAssemblyFactory();
             Composite aggregated = assemblyFactory.createComposite();
-            aggregated.setName(new QName("http://tempuri.org", "aggregated"));
-            aggregated.setURI("http://tempuri.org/aggregated");
+            aggregated.setName(new QName("http://tuscany.apache.org/xmlns/sca/1.0", "aggregated"));
+            aggregated.setURI("http://tuscany.apache.org/xmlns/sca/1.0/aggregated");
             aggregated.getIncludes().addAll(composites);
             composite = aggregated;
         }
