@@ -42,7 +42,6 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.osoa.sca.ServiceRuntimeException;
 import org.xml.sax.SAXException;
 
 /**
@@ -103,7 +102,9 @@ public class ExceptionsTestCase {
         
         // FIXME: what should the response message be for unchecked exceptions with wireFormat.textXML???
         Object o = ((ObjectMessage)m).getObject();
-        assertTrue(o instanceof ServiceRuntimeException);
+        assertTrue(o instanceof RuntimeException);
+        assertTrue("java.lang.RuntimeException".equals(o.getClass().getName()));
+        assertEquals("java.lang.RuntimeException: bla", ((RuntimeException)o).getMessage());
     }
 
     @Test
@@ -147,9 +148,9 @@ public class ExceptionsTestCase {
         sendJMSObjectRequest("throwUnChecked");
         Message m = receiveJMSResponse();
         Object o = ((ObjectMessage)m).getObject();
-        assertTrue(o instanceof ServiceRuntimeException);
-        assertTrue(((ServiceRuntimeException)o).getCause() instanceof RuntimeException);
-        assertEquals("bla", ((ServiceRuntimeException)o).getCause().getMessage());
+        assertTrue(o instanceof RuntimeException);
+        assertTrue("java.lang.RuntimeException".equals(o.getClass().getName()));
+        assertEquals("java.lang.RuntimeException: bla", ((RuntimeException)o).getMessage());
     }
 
     @After
