@@ -28,6 +28,8 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
 import javax.xml.stream.EventFilter;
@@ -58,7 +60,7 @@ import org.xml.sax.SAXParseException;
  * @version $Rev$ $Date$
  */
 public class DefaultValidatingXMLInputFactory extends ValidatingXMLInputFactory {
-    
+    private static final Logger logger = Logger.getLogger(DefaultValidatingXMLInputFactory.class.getName());
     private XMLInputFactory inputFactory;
     private ValidationSchemaExtensionPoint schemas;
     private Monitor monitor;
@@ -87,9 +89,11 @@ public class DefaultValidatingXMLInputFactory extends ValidatingXMLInputFactory 
      */
      private void error(String message, Object model, Exception ex) {
     	 if (monitor != null) {
-    		 Problem problem = new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model, message, ex);
-    	     monitor.problem(problem);
-    	 }        
+            Problem problem =
+                new ProblemImpl(this.getClass().getName(), "contribution-validation-messages", Severity.ERROR, model,
+                                message, ex);
+            monitor.problem(problem);
+        }        
      }
     
     /**
@@ -126,7 +130,7 @@ public class DefaultValidatingXMLInputFactory extends ValidatingXMLInputFactory 
                         }
                     });
                 } catch (PrivilegedActionException e) {
-                	error("PrivilegedActionException", url, (IOException)e.getException());
+                    error("PrivilegedActionException", url, (IOException)e.getException());
                     throw (IOException)e.getException();
                 }
                 sources[i] = new StreamSource(urlStream, uri);
@@ -149,14 +153,14 @@ public class DefaultValidatingXMLInputFactory extends ValidatingXMLInputFactory 
 
         } catch (Error e) {
             // FIXME Log this, some old JDKs don't support XMLSchema validation
-            //e.printStackTrace();
+            logger.log(Level.WARNING, "XML Schema validation is not supported: " + e.getMessage());
         } catch (SAXParseException e) {
-        	IllegalStateException ie = new IllegalStateException(e);
-        	error("IllegalStateException", schemas, ie);
+            IllegalStateException ie = new IllegalStateException(e);
+            error("IllegalStateException", schemas, ie);
             throw ie;
         } catch (Exception e) {
             //FIXME Log this, some old JDKs don't support XMLSchema validation
-            e.printStackTrace();
+            logger.log(Level.WARNING, "XML Schema validation is not supported: " + e.getMessage());
         }
     }
 
