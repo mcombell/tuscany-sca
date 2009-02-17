@@ -35,6 +35,7 @@ import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
@@ -110,6 +111,14 @@ public class TransportServiceInterceptor implements Interceptor {
     
     public Message invokeResponse(Message msg) { 
         try {
+
+            //if operation is oneway, return back.
+            Operation operation = msg.getOperation();
+            if (operation != null && operation.isNonBlocking()) {
+                jmsResourceFactory.closeConnection();
+                return msg;
+            }
+
             JMSBindingContext context = msg.getBindingContext();
             Session session = context.getJmsResponseSession();
             javax.jms.Message requestJMSMsg = context.getJmsMsg();

@@ -18,18 +18,15 @@
  */
 package org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.runtime;
 
-import javax.jms.JMSException;
 import javax.jms.Session;
 
-import org.apache.tuscany.sca.assembly.WireFormat;
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
 import org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.WireFormatJMSBytes;
+import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
@@ -65,6 +62,12 @@ public class WireFormatJMSBytesServiceInterceptor implements Interceptor {
         
         msg = getNext().invoke(msg);
         
+        //if it's oneway return back
+        Operation operation = msg.getOperation();
+        if (operation != null && operation.isNonBlocking()) {
+            return msg;
+        }
+
         if (jmsBinding.getResponseWireFormat() instanceof WireFormatJMSBytes){
             msg = invokeResponse(msg);
         }
