@@ -122,6 +122,7 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
     public void stop() {
         try {
             jmsResourceFactory.closeConnection();
+            jmsResourceFactory.closeResponseConnection();
         } catch (JMSException e) {
             throw new JMSBindingException(e);
         }

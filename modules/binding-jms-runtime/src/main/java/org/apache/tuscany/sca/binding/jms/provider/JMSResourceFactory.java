@@ -80,4 +80,6 @@ public interface JMSResourceFactory {
      */
     public abstract Session createResponseSession() throws JMSException, NamingException;
 
+    
+    public abstract void closeResponseConnection() throws JMSException;
 }
