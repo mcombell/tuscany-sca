@@ -246,7 +246,7 @@ public class JMSResourceFactoryImpl implements JMSResourceFactory {
     }
 
     public void closeResponseConnection() throws JMSException {
-        if (responseConnection != null) {
+        if (responseConnection != null && !responseConnection.equals(connection)) {
             try {
                 responseConnection.close();
             } catch (JMSException e) {
