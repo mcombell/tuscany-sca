@@ -23,7 +23,6 @@ import org.osoa.sca.annotations.Reference;
 import org.osoa.sca.annotations.Service;
 import java.awt.Image;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.llom.OMElementImpl;
 import javax.xml.transform.Source;
 
 /**
@@ -50,5 +49,9 @@ public class FileTransferClient implements FileTransferServiceClient {
     
     public String uploadOMElementFileForward (OMElement attachment) throws Exception {
     	return fileTransferService.uploadOMElementFile(attachment);
+    }
+    
+    public String sendMyExceptionForward (MyException attachment) throws Exception {
+    	return fileTransferService.sendMyException(attachment);
     }
 }

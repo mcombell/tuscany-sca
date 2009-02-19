@@ -18,25 +18,9 @@
  */
 package org.apache.tuscany.sca.binding.ws.axis2.itests.mtom;
 
-import javax.activation.DataHandler;
-import java.awt.Image;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.transform.Source;
-import org.apache.axiom.om.OMElement;
-
-/**
- * This is the client interface of the File Transfer service.
- */
-public interface FileTransferServiceClient {
-
-    public String uploadImageFileForward (Image attachment) throws Exception;
-    
-    public String uploadSourceFileForward (Source attachment) throws Exception;
-    
-    public String uploadDataHandlerFileForward (DataHandler attachment) throws Exception;    
-    
-    public String uploadOMElementFileForward (OMElement attachment) throws Exception;
-    
-    public String sendMyExceptionForward (MyException attachment) throws Exception;
+public class MyExceptionImpl extends Exception implements MyException {
+	
+	public String getMessage() {
+		return "good job......";
+	}
 }
-

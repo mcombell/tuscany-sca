@@ -20,8 +20,6 @@ package org.apache.tuscany.sca.binding.ws.axis2.itests.mtom;
 
 import org.osoa.sca.annotations.Remotable;
 import javax.activation.DataHandler;
-import javax.jws.soap.SOAPBinding;
-
 import java.awt.Image;
 import javax.xml.transform.Source;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -30,7 +28,6 @@ import org.apache.axiom.om.OMElement;
 /**
  * This is the business interface of the MTOM FileTransfer service.
  */
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT)
 @Remotable
 public interface FileTransferService {
 
@@ -38,9 +35,12 @@ public interface FileTransferService {
     
     public String uploadSourceFile(Source attachment) throws Exception;
     
-    public String uploadDataHandlerFile(DataHandler attachment) throws Exception;
+    public String uploadDataHandlerFile(DataHandler attachment) throws Exception;    
     
-    //@XmlJavaTypeAdapter(value=OMElementXmlAdapter.class)
     public String uploadOMElementFile(OMElement attachment) throws Exception;
+    
+    //This method uses an user defined interface MyException as parameter type.
+    public String sendMyException(@XmlJavaTypeAdapter(MyExceptionAdapter.class) MyException attachment) 
+    																				throws Exception;
 }
 

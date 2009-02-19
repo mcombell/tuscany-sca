@@ -21,7 +21,6 @@ package org.apache.tuscany.sca.binding.ws.axis2.itests.mtom;
 import org.osoa.sca.annotations.Service;
 import javax.activation.DataHandler;
 import java.awt.Image;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.transform.Source;
 import org.apache.axiom.om.OMElement;
 
@@ -44,11 +43,15 @@ public class FileTransferServiceImpl implements FileTransferService {
     public String uploadDataHandlerFile(DataHandler attachment) throws Exception {
     	System.out.println("Content type = " + attachment.toString());        
         return "File uploaded Sucessfully";
+    }    
+    
+    public String uploadOMElementFile(OMElement attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());       
+    	return "File uploaded Sucessfully";
     }
     
-    //@XmlJavaTypeAdapter(value=OMElementXmlAdapter.class)
-    public String uploadOMElementFile(OMElement attachment) throws Exception {
-    	System.out.println("Content type = " + attachment.toString());        
-        return "File uploaded Sucessfully";
+    public String sendMyException(MyException attachment) throws Exception {
+    	System.out.println("Content type = " + attachment.toString());       
+    	return "File uploaded Sucessfully";
     }
 }

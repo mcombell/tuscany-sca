@@ -27,11 +27,11 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.llom.OMElementImpl;
 import org.apache.axiom.om.OMText;
 import javax.xml.transform.dom.DOMSource;
 import org.apache.axiom.om.OMFactory;
 import java.awt.image.BufferedImage;
+
 import junit.framework.TestCase;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.binding.ws.axis2.itests.mtom.FileTransferServiceClient;
@@ -43,6 +43,7 @@ import org.junit.Test;
 public class FileTransferMTOMTestCase extends TestCase {
 
     private SCADomain domain;
+    private FileTransferServiceClient filetransfer;
     
     /**
      * Runs once before the tests
@@ -50,6 +51,7 @@ public class FileTransferMTOMTestCase extends TestCase {
     @BeforeClass
     protected void setUp() throws Exception {
     	domain = SCADomain.newInstance("org/apache/tuscany/sca/binding/ws/axis2/itests/mtom/filetransferservice.composite");
+    	filetransfer = domain.getService(FileTransferServiceClient.class, "FileTransferClientComponent");
     }
    
     /**
@@ -64,8 +66,6 @@ public class FileTransferMTOMTestCase extends TestCase {
     public void testImageFileTransfer() throws Exception {
         try {        	
             Image image = new BufferedImage(80, 24, BufferedImage.TYPE_INT_RGB);
-            
-            FileTransferServiceClient filetransfer = domain.getService(FileTransferServiceClient.class, "FileTransferClientComponent");
             assertEquals("File uploaded Sucessfully", filetransfer.uploadImageFileForward(image));            
         } catch (Exception ex){
             ex.printStackTrace();
@@ -77,8 +77,6 @@ public class FileTransferMTOMTestCase extends TestCase {
         try {        	 
         	String xml = "<a>A<b>B</b><c>C</c></a>";
             Source source = new DOMSource(new String2Node().transform(xml, null));
-            
-            FileTransferServiceClient filetransfer = domain.getService(FileTransferServiceClient.class, "FileTransferClientComponent");
             assertEquals("File uploaded Sucessfully", filetransfer.uploadSourceFileForward(source));            
         } catch (Exception ex){
             ex.printStackTrace();
@@ -88,10 +86,8 @@ public class FileTransferMTOMTestCase extends TestCase {
     @Test
     public void testDataHandlerFileTransfer() throws Exception {
         try {            
-            // For testing purpose lets try uploading FileTransferClient.java file.
+            // For testing purpose lets try uploading LICENSE file.
             DataHandler dataHandler = new DataHandler(new FileDataSource("./LICENSE"));
-            
-            FileTransferServiceClient filetransfer = domain.getService(FileTransferServiceClient.class, "FileTransferClientComponent");
             assertEquals("File uploaded Sucessfully", filetransfer.uploadDataHandlerFileForward(dataHandler));            
         } catch (Exception ex){
             ex.printStackTrace();
@@ -102,17 +98,23 @@ public class FileTransferMTOMTestCase extends TestCase {
     public void testOMElementFileTransfer() throws Exception {
         try {        	
         	OMFactory factory = OMAbstractFactory.getOMFactory();                        
-            OMElement imageElement = factory.createOMElement(new QName("image"));   
+            OMElement imageElement = factory.createOMElement(new QName("image"));          
             
-            // For testing purpose lets try uploading FileTransferClient.java file.
             DataHandler dataHandler = new DataHandler(new FileDataSource("./LICENSE"));
             
             OMText textData = factory.createOMText(dataHandler, true);
             imageElement.addChild(textData);
-                       
-            FileTransferServiceClient filetransfer = domain.getService(FileTransferServiceClient.class, "FileTransferClientComponent");
             assertEquals("File uploaded Sucessfully", filetransfer.uploadOMElementFileForward(imageElement));
-            
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testSendMyException() throws Exception {
+        try {        	
+            MyException exp = new MyExceptionImpl();
+            assertEquals("File uploaded Sucessfully", filetransfer.sendMyExceptionForward(exp));            
         } catch (Exception ex){
             ex.printStackTrace();
         }

@@ -40,7 +40,7 @@
             <element name="uploadImageFileResponse">
                 <complexType>
                     <sequence>
-                        <element name="uploadFileReturn" type="xsd:string"/>
+                        <element name="uploadImageFileReturn" type="xsd:string"/>
                     </sequence>
                 </complexType>
             </element>
@@ -54,7 +54,7 @@
             <element name="uploadSourceFileResponse">
                 <complexType>
                     <sequence>
-                        <element name="uploadFileReturn" type="xsd:string"/>
+                        <element name="uploadSourceFileReturn" type="xsd:string"/>
                     </sequence>
                 </complexType>
             </element>
@@ -68,7 +68,7 @@
             <element name="uploadDataHandlerFileResponse">
                 <complexType>
                     <sequence>
-                        <element name="uploadFileReturn" type="xsd:string"/>
+                        <element name="uploadDataHandlerFileReturn" type="xsd:string"/>
                     </sequence>
                 </complexType>
             </element>
@@ -82,7 +82,21 @@
             <element name="uploadOMElementFileResponse">
                 <complexType>
                     <sequence>
-                        <element name="uploadFileReturn" type="xsd:string"/>
+                        <element name="uploadOMElementFileReturn" type="xsd:string"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="sendMyException">
+                <complexType>
+                    <sequence>
+                        <element name="attachment" type="xsd:anyType"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="sendMyExceptionResponse">
+                <complexType>
+                    <sequence>
+                        <element name="sendMyExceptionReturn" type="xsd:string"/>
                     </sequence>
                 </complexType>
             </element>
@@ -117,6 +131,13 @@
     <wsdl:message name="uploadOMElementFileResponse">
         <wsdl:part element="tns:uploadOMElementFileResponse" name="parameters"/>
     </wsdl:message>
+    
+    <wsdl:message name="sendMyExceptionRequest">
+        <wsdl:part element="tns:sendMyException" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="sendMyExceptionResponse">
+        <wsdl:part element="tns:sendMyExceptionResponse" name="parameters"/>
+    </wsdl:message>
 
     <wsdl:portType name="FileTransfer">
         <wsdl:operation name="uploadImageFile">
@@ -134,6 +155,10 @@
         <wsdl:operation name="uploadOMElementFile">
             <wsdl:input message="tns:uploadOMElementFileRequest" name="uploadOMElementFileRequest" wsaw:Action="attachment"/>
             <wsdl:output message="tns:uploadOMElementFileResponse" name="uploadOMElementFileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sendMyException">
+            <wsdl:input message="tns:sendMyExceptionRequest" name="sendMyExceptionRequest"/>
+            <wsdl:output message="tns:sendMyExceptionResponse" name="sendMyExceptionResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -172,6 +197,15 @@
                 <wsdlsoap:body use="literal"/>
             </wsdl:input>
             <wsdl:output name="uploadOMElementFileResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendMyException">
+            <wsdlsoap:operation soapAction="" style="document"/>
+            <wsdl:input name="sendMyExceptionRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="sendMyExceptionResponse">
                 <wsdlsoap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
