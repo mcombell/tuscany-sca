@@ -24,6 +24,7 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -33,10 +34,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.Extension;
 import org.apache.tuscany.sca.assembly.OperationSelector;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.WireFormat;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
+import org.apache.tuscany.sca.assembly.xml.ConfiguredOperationProcessor;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.assembly.xml.PolicyAttachPointProcessor;
 import org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault.OperationSelectorJMSDefault;
@@ -130,16 +134,21 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
 public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     private PolicyFactory policyFactory;
     private PolicyAttachPointProcessor policyProcessor;
+    private ConfiguredOperationProcessor configuredOperationProcessor;
     protected StAXArtifactProcessor<Object> extensionProcessor;
     private Monitor monitor;
     protected String validationMessage;
 
+    private ModelFactoryExtensionPoint modelFactories; // DOB
     public JMSBindingProcessor(ModelFactoryExtensionPoint modelFactories, StAXArtifactProcessor<Object> extensionProcessor, Monitor monitor) {
         this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
         this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
+        this.configuredOperationProcessor = 
+            new ConfiguredOperationProcessor(modelFactories, this.monitor);
         this.extensionProcessor = extensionProcessor;
         this.monitor = monitor;
         this.validationMessage = null;
+        this.modelFactories = modelFactories;
     }
     
     /**
@@ -277,6 +286,11 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
                         parseOperationProperties(reader, jmsBinding);
                     } else if ("SubscriptionHeaders".equals(elementName)) {
                         parseSubscriptionHeaders(reader, jmsBinding);
+                    } else if (Constants.OPERATION_QNAME.equals(reader.getName())) {
+                        ConfiguredOperation confOp = configuredOperationProcessor.read(reader);
+                        if (confOp != null) {
+                            ((OperationsConfigurator)jmsBinding).getConfiguredOperations().add(confOp);
+                        }
                     } else {
                         Object extension = extensionProcessor.read(reader);
                         if (extension != null) {
@@ -929,6 +943,8 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         
         writeResourceAdapterProperties( jmsBinding, writer );
         
+        writeConfiguredOperations( jmsBinding, writer );
+        
         writer.writeEndElement();
     }
 
@@ -1424,6 +1440,28 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         writeBindingProperties( cfProperties, writer );            
 
         writer.writeEndElement();
+        // Strange bug. Without white space, headers end tag improperly read.
+        writer.writeCharacters(" ");
+    }
+    
+    /**
+     * Writes configured operations if there are any.
+     *  <binding.jms uri=\"jms:testQueue\" >"
+     *      <operationProperties name=\"op1\">"
+     *      </operationProperties >" 
+     *       <operation name=\"op1\" requires=\"IntentOne IntentTwo\"/>"
+     *   </binding.jms>"
+     */
+    private void writeConfiguredOperations( JMSBinding jmsBinding, XMLStreamWriter writer) throws XMLStreamException, ContributionWriteException {       
+        List<ConfiguredOperation> configOps = jmsBinding.getConfiguredOperations();
+        if (configOps == null || (configOps.size() < 1)) {
+            return;
+        }
+
+        for( Iterator<ConfiguredOperation> it = configOps.iterator(); it.hasNext();) {
+           configuredOperationProcessor.write(it.next(), writer);
+        }
+
         // Strange bug. Without white space, headers end tag improperly read.
         writer.writeCharacters(" ");
     }

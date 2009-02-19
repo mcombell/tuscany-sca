@@ -19,8 +19,10 @@
 
 package org.apache.tuscany.sca.binding.jms.impl;
 
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +32,8 @@ import javax.xml.stream.XMLStreamReader;
 import junit.framework.TestCase;
 
 import org.apache.tuscany.sca.assembly.Composite;
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
@@ -333,6 +337,21 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + " </component>"
             + "</composite>";
 
+    public static final String CONFIGURED_OPERATIONS =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms uri=\"jms:testQueue\" >"
+            + "             <operationProperties name=\"op1\">"
+            + "             </operationProperties >" 
+            + "             <operation name=\"op1\" requires=\"IntentOne IntentTwo\"/>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";
+
     private XMLInputFactory inputFactory;
     private StAXArtifactProcessor<Object> staxProcessor;
     private Monitor monitor;
@@ -350,6 +369,7 @@ public class JMSBindingProcessorTestCase extends TestCase {
         }
         StAXArtifactProcessorExtensionPoint staxProcessors = new DefaultStAXArtifactProcessorExtensionPoint(extensionPoints);
         staxProcessor = new ExtensibleStAXArtifactProcessor(staxProcessors, inputFactory, null, monitor);
+
     }
 
     /**
@@ -653,6 +673,23 @@ public class JMSBindingProcessorTestCase extends TestCase {
             String opName = it.next();
             assertTrue( opName.equals( "op1") || opName.equals( "op2"));
         }
+    }
+
+    /**
+     * Tests the APIs:
+     *     public Set<String> getOperationNames();
+     * Provides no optional properties or sub elements
+     * @throws Exception
+     */
+    public void testConfiguredOperations1() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(CONFIGURED_OPERATIONS));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);        
+        assertNotNull(binding);
+        
+        OperationsConfigurator opConfig = ((OperationsConfigurator)binding);
+        assertEquals(opConfig.getConfiguredOperations().get(0).getRequiredIntents().size(), 2);
     }
 
 }

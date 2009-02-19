@@ -27,7 +27,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.tuscany.sca.assembly.BindingRRB;
+import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.OperationSelector;
+import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.assembly.WireFormat;
 import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.IntentAttachPointType;
@@ -40,7 +42,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * @version $Rev$ $Date$
  */
 
-public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
+public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsConfigurator {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -60,6 +62,9 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
     // properties required by IntentAttachPoint 
     private List<Intent> requiredIntents = new ArrayList<Intent>();
     private IntentAttachPointType intentAttachPointType;
+
+    // properties required to describe configured operations
+    private List<ConfiguredOperation>  configuredOperations = new ArrayList<ConfiguredOperation>();
     
     // Properties required to describe the JMS binding model
 
@@ -727,6 +732,14 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         return operationPropertiesProperties.get(opName);
     }
 
+    public List<ConfiguredOperation> getConfiguredOperations() {
+        return configuredOperations;
+    }
+
+    public void setConfiguredOperations(List<ConfiguredOperation> configuredOperations) {
+        this.configuredOperations = configuredOperations;
+    }    
+    
     @Override
     public boolean equals( Object object ) {
         return ( object instanceof JMSBinding ) && equals( (JMSBinding) object );
@@ -786,6 +799,9 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint {
         // Resource adapter
         if ( !optStringEquals( this.getResourceAdapterName(), binding.getResourceAdapterName() )) return false;
 
+        // Configured operations
+        if ( this.configuredOperations.size() != binding.getConfiguredOperations().size() ) return false;
+        
         // Other fields could also be checked for equality. See class fields for details.
         return true;
     }
