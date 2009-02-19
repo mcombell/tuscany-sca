@@ -18,10 +18,12 @@
  */
 package org.apache.tuscany.sca.contribution.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -304,6 +306,22 @@ public class ContributionServiceImpl implements ContributionService {
 
         return contributionMetadata;
     }
+    
+    private static boolean isDirectory(URL url) {
+        if ("file".equals(url.getProtocol())) {
+            try {
+                final URI uri = url.toURI();
+                return AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+                    public Boolean run() {
+                        return new File(uri).isDirectory();
+                    }
+                });
+            } catch (URISyntaxException e) {
+                // Ignore 
+            }
+        }
+        return false;
+    }
 
     /**
      * Note:
@@ -358,18 +376,23 @@ public class ContributionServiceImpl implements ContributionService {
         //NOTE: if a contribution is stored on the repository
         //the stream would be consumed at this point
         if (storeInRepository || contributionStream == null) {
-            URLConnection connection = sourceURL.openConnection();
-            connection.setUseCaches(false);
-            // Allow access to open URL stream. Add FilePermission to added to security policy file.
-            final URLConnection finalConnection = connection;
-            try {
-                contributionStream = AccessController.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
-                    public InputStream run() throws IOException {
-                        return finalConnection.getInputStream();
-                    }
-                });
-            } catch (PrivilegedActionException e) {
-                throw (IOException)e.getException();
+            if (isDirectory(sourceURL)) {
+                // TUSCANY-2702: This is a directory
+                contributionStream = null;
+            } else {
+                URLConnection connection = sourceURL.openConnection();
+                connection.setUseCaches(false);
+                // Allow access to open URL stream. Add FilePermission to added to security policy file.
+                final URLConnection finalConnection = connection;
+                try {
+                    contributionStream = AccessController.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
+                        public InputStream run() throws IOException {
+                            return finalConnection.getInputStream();
+                        }
+                    });
+                } catch (PrivilegedActionException e) {
+                    throw (IOException)e.getException();
+                }
             }
             
             try {
