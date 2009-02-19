@@ -20,6 +20,7 @@
 package org.apache.tuscany.sca.assembly.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -141,6 +142,22 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
                     transformedArtifactContent =
                         PolicyComputationUtils.addApplicablePolicySets(scdlStream, domainPolicySets, documentBuilderFactory);
                     scdlStream = new ByteArrayInputStream(transformedArtifactContent);
+                    
+                    // For debugging purposes, write out the XML with applicablePolicySets added
+/*                    
+                    try {
+                        scdlStream.mark(0);
+                        ByteArrayOutputStream tmpOutput = new ByteArrayOutputStream();
+                        while(scdlStream.available()!= 0){
+                            tmpOutput.write(scdlStream.read());
+                        }
+                        System.out.println(tmpOutput);
+                        scdlStream.reset();
+                        
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+*/                    
                 } 
             } catch ( IOException e ) {
             	ContributionReadException ce = new ContributionReadException(e);
@@ -163,22 +180,24 @@ public class CompositeDocumentProcessor extends BaseAssemblyProcessor implements
             }
 
             // For debugging purposes, write it back to XML
-//            if (composite != null) {
-//                try {
-//                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                    XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-//                    outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
-//                    extensionProcessor.write(composite, outputFactory.createXMLStreamWriter(bos));
-//                    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bos.toByteArray()));
-//                    OutputFormat format = new OutputFormat();
-//                    format.setIndenting(true);
-//                    format.setIndent(2);
-//                    XMLSerializer serializer = new XMLSerializer(System.out, format);
-//                    serializer.serialize(document);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
+/*
+            if (composite != null) {
+                try {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+                    outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
+                    extensionProcessor.write(composite, outputFactory.createXMLStreamWriter(bos));
+                    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bos.toByteArray()));
+                    OutputFormat format = new OutputFormat();
+                    format.setIndenting(true);
+                    format.setIndent(2);
+                    XMLSerializer serializer = new XMLSerializer(System.out, format);
+                    serializer.serialize(document);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+ */
             
             return composite;
             
