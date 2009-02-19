@@ -84,6 +84,8 @@ public class WireFormatJMSObjectServiceInterceptor implements Interceptor {
         
         if (requestPayload != null && requestPayload.getClass().isArray()) {
             msg.setBody(requestPayload);
+        } else if (requestPayload == null) {
+            msg.setBody(new Object[0]);
         } else {
             msg.setBody(new Object[] {requestPayload});
         }
