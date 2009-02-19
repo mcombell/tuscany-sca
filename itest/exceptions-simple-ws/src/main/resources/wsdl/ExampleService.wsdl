@@ -69,6 +69,10 @@
             <wsdl:fault message="ns0:BusinessException" name="BusinessException"
                 wsaw:Action="urn:helloBusinessException" />
         </wsdl:operation>
+        <wsdl:operation name="helloUnchecked">
+            <wsdl:input message="ns0:helloRequest" wsaw:Action="urn:hello" />
+            <wsdl:output message="ns0:helloResponse" wsaw:Action="urn:helloResponse" />
+        </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="ExampleServiceSOAP11Binding" type="ns0:ExampleServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
@@ -84,6 +88,15 @@
                 <soap:fault use="literal" name="BusinessException" />
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="helloUnchecked">
+            <soap:operation soapAction="urn:helloUnchecked" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>        
     </wsdl:binding>
     <wsdl:binding name="ExampleServiceSOAP12Binding" type="ns0:ExampleServicePortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
@@ -99,6 +112,15 @@
                 <soap12:fault use="literal" name="BusinessException" />
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="helloUnchecked">
+            <soap12:operation soapAction="urn:helloUnchecked" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>        
     </wsdl:binding>
     <wsdl:binding name="ExampleServiceHttpBinding" type="ns0:ExampleServicePortType">
         <http:binding verb="POST" />
@@ -111,6 +133,15 @@
                 <mime:content type="text/xml" part="hello" />
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="helloUnchecked">
+            <http:operation location="ExampleService/helloUnchecked" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="hello" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="hello" />
+            </wsdl:output>
+        </wsdl:operation>        
     </wsdl:binding>
     <wsdl:service name="ExampleService">
         <wsdl:port name="ExampleServiceSOAP11port_http" binding="ns0:ExampleServiceSOAP11Binding">

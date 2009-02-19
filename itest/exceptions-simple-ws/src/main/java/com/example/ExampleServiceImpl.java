@@ -18,9 +18,15 @@
  */
 package com.example;
 
+import org.osoa.sca.ServiceRuntimeException;
+
 public class ExampleServiceImpl implements ExampleService {
     public String hello(String name) throws BusinessException {
         throw new BusinessException("bad news", name);
         // return "Hello, " + name;
+    }
+    
+    public String helloUnchecked(String name){
+        throw new ServiceRuntimeException("bad unchecked news");
     }
 }

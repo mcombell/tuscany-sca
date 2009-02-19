@@ -40,5 +40,12 @@ public class ExampleClientImpl implements ExampleClient {
         } catch (BusinessException e) {
             System.out.println("caught exception from hello(): " + e.getMessage() + " for " + e.getClientName());
         }
+        
+        try {
+            Object result = myService.helloUnchecked("John");
+            System.out.println("myService returned " + result.getClass().getName());
+        } catch (Exception e) {
+            System.out.println("caught exception from helloUnchecked(): " + e.getMessage());
+        }
     }
 }

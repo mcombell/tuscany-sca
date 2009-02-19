@@ -24,4 +24,5 @@ import org.osoa.sca.annotations.Remotable;
 public interface ExampleService {
 
 	String hello(String name) throws BusinessException;
+	String helloUnchecked(String name);
 }
