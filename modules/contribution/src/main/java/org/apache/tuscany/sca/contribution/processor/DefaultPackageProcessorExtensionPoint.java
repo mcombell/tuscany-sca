@@ -60,7 +60,7 @@ public class DefaultPackageProcessorExtensionPoint implements PackageProcessorEx
         return processors.get(contentType);
     }
 
-    private void loadProcessors() {
+    private synchronized void loadProcessors() {
         if (loaded)
             return;
 

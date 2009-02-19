@@ -59,7 +59,7 @@ public class DefaultSCADefinitionsProviderExtensionPoint implements
         return scaDefnsProviders;
     }
 
-    private void loadProviders() {
+    private synchronized void loadProviders() {
         // Get the provider service declarations
         Set<ServiceDeclaration> defnProviderDecls;
         SCADefinitionsProvider aProvider = null;
