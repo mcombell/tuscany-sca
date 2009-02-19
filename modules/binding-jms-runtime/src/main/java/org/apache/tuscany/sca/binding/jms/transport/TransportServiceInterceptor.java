@@ -115,7 +115,6 @@ public class TransportServiceInterceptor implements Interceptor {
             //if operation is oneway, return back.
             Operation operation = msg.getOperation();
             if (operation != null && operation.isNonBlocking()) {
-                jmsResourceFactory.closeConnection();
                 return msg;
             }
 
