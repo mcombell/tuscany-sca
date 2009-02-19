@@ -31,6 +31,7 @@ import org.apache.tuscany.sca.core.databinding.transformers.Exception2ExceptionT
 import org.apache.tuscany.sca.core.databinding.transformers.Input2InputTransformer;
 import org.apache.tuscany.sca.core.databinding.transformers.Output2OutputTransformer;
 import org.apache.tuscany.sca.core.databinding.transformers.XMLStreamReader2CallableReference;
+import org.apache.tuscany.sca.core.databinding.transformers.OMElementXMLAdapter;
 import org.apache.tuscany.sca.core.databinding.wire.DataBindingRuntimeWireProcessor;
 import org.apache.tuscany.sca.databinding.DataBindingExtensionPoint;
 import org.apache.tuscany.sca.databinding.TransformerExtensionPoint;
@@ -43,6 +44,7 @@ import org.apache.tuscany.sca.interfacedef.java.jaxws.JAXWSFaultExceptionMapper;
 import org.apache.tuscany.sca.interfacedef.java.jaxws.JAXWSJavaInterfaceProcessor;
 import org.apache.tuscany.sca.runtime.RuntimeWireProcessorExtensionPoint;
 import org.osoa.sca.CallableReference;
+import org.apache.axiom.om.OMElement;
 
 /**
  * @version $Rev$ $Date$
@@ -55,6 +57,7 @@ public class DataBindingModuleActivator implements ModuleActivator {
 
         XMLAdapterExtensionPoint xmlAdapterExtensionPoint = registry.getExtensionPoint(XMLAdapterExtensionPoint.class);
         xmlAdapterExtensionPoint.addAdapter(CallableReference.class, CallableReferenceXMLAdapter.class);
+        xmlAdapterExtensionPoint.addAdapter(OMElement.class, OMElementXMLAdapter.class);
         FaultExceptionMapper faultExceptionMapper = new JAXWSFaultExceptionMapper(dataBindings, xmlAdapterExtensionPoint);
         
         MediatorImpl mediator = new MediatorImpl(dataBindings, transformers);
