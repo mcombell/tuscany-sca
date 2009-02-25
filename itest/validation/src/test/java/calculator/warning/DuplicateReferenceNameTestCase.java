@@ -33,6 +33,7 @@ import org.apache.tuscany.sca.node.SCAContribution;
 import org.apache.tuscany.sca.node.SCANode;
 import org.apache.tuscany.sca.node.SCANodeFactory;
 import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.osoa.sca.ServiceRuntimeException;
 
 /**
  * This shows how to test the Calculator service component.
@@ -41,31 +42,32 @@ public class DuplicateReferenceNameTestCase extends TestCase {
 
     private CalculatorService calculatorService;
     private SCANode node;
+    private boolean duplicateReferenceException = false;
 
     @Override
     protected void setUp() throws Exception {
-        SCANodeFactory nodeFactory = SCANodeFactory.newInstance();
-        node = nodeFactory.createSCANode(new File("src/main/resources/DuplicateReferenceName/Calculator.composite").toURL().toString(),
-        		                 new SCAContribution("TestContribution", 
-        		                                     new File("src/main/resources/DuplicateReferenceName").toURL().toString()));
-        node.start();
-        calculatorService = ((SCAClient)node).getService(CalculatorService.class, "CalculatorServiceComponent");
+        try {
+            SCANodeFactory nodeFactory = SCANodeFactory.newInstance();
+            node = nodeFactory.createSCANode(new File("src/main/resources/DuplicateReferenceName/Calculator.composite").toURL().toString(),
+            		                 new SCAContribution("TestContribution", 
+            		                                     new File("src/main/resources/DuplicateReferenceName").toURL().toString()));
+            node.start();
+            calculatorService = ((SCAClient)node).getService(CalculatorService.class, "CalculatorServiceComponent");
+        } catch (ServiceRuntimeException ex) {
+            if (ex.getMessage().equals("org.osoa.sca.ServiceRuntimeException: Duplicate component reference name: Component = CalculatorServiceComponent Reference = addService")){
+                duplicateReferenceException = true;
+            }
+        }
     }
 
     @Override
     protected void tearDown() throws Exception {
-        node.stop();
+        if (node != null){
+            node.stop();
+        }
     }
 
     public void testCalculator() throws Exception {
-        ExtensionPointRegistry registry = ((NodeImpl)node).getExtensionPointRegistry();
-        UtilityExtensionPoint utilities = registry.getExtensionPoint(UtilityExtensionPoint.class);
-        MonitorFactory monitorFactory = utilities.getUtility(MonitorFactory.class);
-        Monitor monitor = monitorFactory.createMonitor();
-        Problem problem = ((DefaultMonitorImpl)monitor).getLastLoggedProblem();
-        
-        assertNotNull(problem);
-        assertEquals("DuplicateComponentReferenceName", problem.getMessageId());
- 
+        assertTrue(duplicateReferenceException); 
     }
 }

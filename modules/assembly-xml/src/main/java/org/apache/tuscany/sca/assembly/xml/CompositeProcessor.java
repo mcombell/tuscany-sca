@@ -575,7 +575,7 @@ public class CompositeProcessor extends BaseAssemblyProcessor implements StAXArt
         }
         catch (XMLStreamException e) {
             ContributionReadException ex = new ContributionReadException(e);
-            error("XMLStreamException", reader, ex);
+            error("ContributionReadException", reader, ex);
         }
         
         return composite;

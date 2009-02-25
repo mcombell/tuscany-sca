@@ -18,6 +18,7 @@
  * under the License.    
  -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           targetNamespace="http://test"
            name="RPCComposite">
 
     <component name="HelloWorldService">
@@ -31,6 +32,7 @@
                <resourceAdapter name="resource">
                   <property name="resourceName" type="jms"/>
                </resourceAdapter>
+               <UnexpectedElement/>
             </binding.jms>  
         </service> 
     </component>       

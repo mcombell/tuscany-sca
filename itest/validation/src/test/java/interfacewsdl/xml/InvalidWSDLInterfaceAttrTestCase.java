@@ -52,7 +52,7 @@ public class InvalidWSDLInterfaceAttrTestCase extends TestCase {
 
     public void testCalculator() {
     	Monitor monitor = customDomain.getMonitorInstance();
-    	Problem problem = ((DefaultMonitorImpl)monitor).getLastLoggedProblem();
+    	Problem problem = ((DefaultMonitorImpl)monitor).getProblems().get(0);
         
     	assertNotNull(problem);
         assertEquals("InvalidWSDLInterfaceAttr", problem.getMessageId());  
