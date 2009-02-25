@@ -56,8 +56,8 @@
 
    <complexType name="Destination">
       <sequence>
-         <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
+         <element name="property" type="sca:BindingProperty"
+			minOccurs="0" maxOccurs="unbounded"/>
       </sequence>
       <attribute name="name" type="anyURI" use="required"/>
       <attribute name="type" use="optional" default="queue">
@@ -72,19 +72,20 @@
                  use="optional" default="ifnotexist"/>
    </complexType>
 
-   <complexType name="ConnectionFactory">
-    	<sequence>          <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
-    	</sequence>
-    	<attribute name="name" type="anyURI" use="required"/>
-    	<attribute name="create" type="sca:CreateResource" 
-                 use="optional" default="ifnotexist"/>
-   </complexType>
+	<complexType name="ConnectionFactory">
+		<sequence>
+			<element name="property" type="sca:BindingProperty"
+				minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="anyURI" use="required"/>
+		<attribute name="create" type="sca:CreateResource" use="optional" 
+			default="ifnotexist"/>
+	</complexType>
 
    <complexType name="ActivationSpec">
       <sequence>
-         <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
+			<element name="property" type="sca:BindingProperty"
+				minOccurs="0" maxOccurs="unbounded"/>
       </sequence>
       <attribute name="name" type="anyURI" use="required"/>
       <attribute name="create" type="sca:CreateResource"
@@ -102,8 +103,8 @@
 
    <complexType name="Headers">
       <sequence>
-         <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
+			<element name="property" type="sca:BindingProperty"
+				minOccurs="0" maxOccurs="unbounded"/>
       </sequence>
       <attribute name="JMSType" type="string"/>
       <attribute name="JMSCorrelationID" type="string"/>
@@ -114,23 +115,32 @@
 
    <complexType name="ResourceAdapter">
       <sequence>
-         <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
+			<element name="property" type="sca:BindingProperty"
+				minOccurs="0" maxOccurs="unbounded"/>
       </sequence>
       <attribute name="name" type="string" use="required"/>
    </complexType>
 
-   <complexType name="OperationProperties">
-      <sequence>
-         <element name="property" type="string" 
-                  minOccurs="0" maxOccurs="unbounded"/>
-         <element name="headers" type="sca:Headers"/>
-      </sequence>
-      <attribute name="name" type="string" use="required"/>
-      <attribute name="nativeOperation" type="string"/>
-   </complexType>
+	<complexType name="OperationProperties">
+		<sequence>
+			<element name="property" type="sca:BindingProperty"
+				minOccurs="0" maxOccurs="unbounded"/>
+			<element name="headers" type="sca:Headers"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="nativeOperation" type="string"/>
+	</complexType>
 
    <element name="binding.jms" type="sca:JMSBinding" 
             substitutionGroup="sca:binding"/>
+
+    <complexType name="BindingProperty">
+        <simpleContent>
+            <extension base="string">
+                <attribute name="name" type="NMTOKEN"/>
+                <attribute name="type" type="string" use="optional" default="xs:string"/>
+            </extension>
+        </simpleContent>
+    </complexType>
                        
 </schema>
