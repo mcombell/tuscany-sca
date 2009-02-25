@@ -33,7 +33,7 @@
         <reference name="b" target="ServiceComponent/MyService">       
         </reference>
         
-        <reference name="bService" target="ServiceComponent/MyService">
+        <reference name="bServiceX" target="ServiceComponent/MyService">
         </reference>
         
     </component> 

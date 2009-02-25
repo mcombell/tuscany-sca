@@ -28,6 +28,7 @@ import org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientE;
 import org.apache.tuscany.sca.vtest.utilities.ServiceFinder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.osoa.sca.ServiceRuntimeException;
 
 /**
  * Test the reference name, wire, wireByImpl, autowire and so on.
@@ -87,15 +88,17 @@ public class ComponentReferenceTestCase {
      * The @name attribute of a reference element of a <component/> MUST be unique amongst the 
      * reference elements of that <component/>
      */
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDuplicateComponentReferenceName() {
     	//for this case, the reference of "b" in MyClientImpl is null.
-    	initDomain("referencename.composite");    	
-    	MyClientA service = ServiceFinder.getService(MyClientA.class, "ClientComponent2/MyClientA");
-    	Assert.assertEquals("MyService:::MyService" , service.callOtherServices()) ;
+        try {
+        	initDomain("referenceduplicatename.composite"); 
+        } catch (ServiceRuntimeException ex){
+            Assert.assertEquals("Duplicate component reference name: Component = ClientComponent2 Reference = b", ex.getMessage());
+            return;
+        }
+        Assert.fail();         
         cleanupDomain();
-    	
-    	
     }
     
     /**
@@ -111,12 +114,17 @@ public class ComponentReferenceTestCase {
      * the name of the reference. Has to match a name of a reference defined by the implementation.
      * 
      */    
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testComponentReferenceNameValid() {
     	
-    	initDomain("referencename.composite");    	
-    	MyClientA service = ServiceFinder.getService(MyClientA.class, "ClientComponent1/MyClientA");    	
-    	Assert.assertEquals("MyService" , service.callInvalidReference()) ;    	
+        try {
+            initDomain("referencenamemissmatch.composite");   
+        } catch (ServiceRuntimeException ex){
+            Assert.assertEquals("Reference not found for component reference: Component = ClientComponent1 Reference = bServiceX", ex.getMessage());
+            return;
+        }
+    	   	
+    	Assert.fail();    	
         cleanupDomain();
     	
     }

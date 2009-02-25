@@ -36,7 +36,23 @@
         <reference name="bService" target="ServiceComponent/MyService">
         </reference>
         
-    </component> 
+    </component>
+    
+    
+    <component name="ClientComponent2">        
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientAImpl"/>
+        
+        <service name="MyClientA">
+           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientA"/>         
+        </service>
+        
+        <reference name="b" target="ServiceComponent/MyService">
+        </reference>
+        
+        <reference name="b" target="ServiceComponent/MyService"> 
+        </reference>
+        
+    </component>   
     
         
     <component name="ServiceComponent">        
