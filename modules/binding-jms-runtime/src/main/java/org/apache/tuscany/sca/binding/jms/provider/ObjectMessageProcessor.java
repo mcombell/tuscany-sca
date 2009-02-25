@@ -19,6 +19,7 @@
 package org.apache.tuscany.sca.binding.jms.provider;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import javax.jms.JMSException;
@@ -28,6 +29,7 @@ import javax.jms.Session;
 
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
+import org.osoa.sca.ServiceRuntimeException;
 
 /**
  * MessageProcessor for sending/receiving Serializable objects with the JMSBinding.
@@ -77,4 +79,21 @@ public class ObjectMessageProcessor extends AbstractMessageProcessor {
         }
     }
 
+    @Override
+    public Object extractPayloadFromJMSMessage(Message msg) {
+        try {
+            Object o = ((ObjectMessage)msg).getObject();
+            if (o instanceof Throwable ) {
+                if (o instanceof RuntimeException) {
+                    throw new ServiceRuntimeException("remote service exception, see nested exception", (RuntimeException)o);
+                } else {
+                    return new InvocationTargetException((Throwable) o);
+                }
+            }
+        } catch (JMSException e) {
+            throw new JMSBindingException(e);
+        }
+        return extractPayload(msg);
+    }
+    
 }

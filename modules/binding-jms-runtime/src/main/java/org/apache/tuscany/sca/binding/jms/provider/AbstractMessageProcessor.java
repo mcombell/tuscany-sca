@@ -93,7 +93,12 @@ public abstract class AbstractMessageProcessor implements JMSMessageProcessor {
     public Object extractPayloadFromJMSMessage(Message msg) {
         try {
             if (msg.getBooleanProperty(JMSBindingConstants.FAULT_PROPERTY)) {
-                throw new ServiceRuntimeException("remote service exception, see nested exception", (Throwable)((ObjectMessage)msg).getObject());
+                Object exc = ((ObjectMessage)msg).getObject();
+                if (exc instanceof RuntimeException) {
+                    throw new ServiceRuntimeException("remote service exception, see nested exception", (Throwable)exc);
+                } else {
+                    return new InvocationTargetException((Throwable) exc);
+                }
             }
         } catch (JMSException e) {
             throw new JMSBindingException(e);

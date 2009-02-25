@@ -19,6 +19,7 @@
 package org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.runtime;
 
 
+import java.lang.reflect.InvocationTargetException;
 import javax.jms.JMSException;
 import javax.jms.Session;
 
@@ -98,10 +99,14 @@ public class WireFormatJMSBytesReferenceInterceptor implements Interceptor {
     public Message invokeResponse(Message msg) {
         if (msg.getBody() != null){
             Object response = responseMessageProcessor.extractPayloadFromJMSMessage((javax.jms.Message)msg.getBody());
-            if (response != null){
-                msg.setBody(response);
+            if (response instanceof InvocationTargetException) {
+                msg.setFaultBody(((InvocationTargetException) response).getCause());
             } else {
-                msg.setBody(null);
+                if (response != null){
+                    msg.setBody(response);
+                } else {
+                    msg.setBody(null);
+                }
             }
         }
 
