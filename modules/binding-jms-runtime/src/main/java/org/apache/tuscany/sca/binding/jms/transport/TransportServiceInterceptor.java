@@ -153,6 +153,12 @@ public class TransportServiceInterceptor implements Interceptor {
             }                
                        
             MessageProducer producer = session.createProducer(replyDest);
+            
+            // Set jms header attributes in producer, not message.
+            int deliveryMode = requestJMSMsg.getJMSDeliveryMode();
+            producer.setDeliveryMode(deliveryMode);
+            int deliveryPriority = requestJMSMsg.getJMSPriority();
+            producer.setPriority(deliveryPriority);
     
             producer.send((javax.jms.Message)msg.getBody());
     

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import javax.jms.DeliveryMode;
+import javax.jms.Message;
 
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
@@ -49,19 +50,16 @@ public class PolicyHeadersTestCase {
         // wait for up to 5 seconds but should wake up as soon as done
         synchronized(MsgServiceImpl.lock) {
             if (MsgServiceImpl.msg == null) {
-                MsgServiceImpl.lock.wait(5000);
+                MsgServiceImpl.lock.wait(5000); // For debugging set higher.
             }
         }
         assertNotNull(MsgServiceImpl.msg);
 
-
-        assertEquals(4, MsgServiceImpl.msg.getJMSPriority()); // Doesn't seem to work with ActiveMQ
-        /*
         assertEquals("myType", MsgServiceImpl.msg.getJMSType());
         assertEquals("xyz", MsgServiceImpl.msg.getJMSCorrelationID());
         assertEquals(DeliveryMode.PERSISTENT, MsgServiceImpl.msg.getJMSDeliveryMode());
+        assertEquals(7, MsgServiceImpl.msg.getJMSPriority());
         assertEquals("myHeadP1", MsgServiceImpl.msg.getStringProperty("headP1"));
-        */
     }
 
     @Test
@@ -81,8 +79,8 @@ public class PolicyHeadersTestCase {
 
         assertEquals("op2Type", MsgServiceImpl.msg.getJMSType());
         assertEquals("op2CID", MsgServiceImpl.msg.getJMSCorrelationID());
-        // assertEquals(DeliveryMode.NON_PERSISTENT, MsgServiceImpl.msg.getJMSDeliveryMode()); // Doesn't seem to work with ActiveMQ
-        // assertEquals(3, MsgServiceImpl.msg.getJMSPriority()); // Doesn't seem to work with ActiveMQ
+        assertEquals(DeliveryMode.NON_PERSISTENT, MsgServiceImpl.msg.getJMSDeliveryMode());
+        assertEquals(3, MsgServiceImpl.msg.getJMSPriority());
         assertEquals("myHeadP1", MsgServiceImpl.msg.getStringProperty("headP1"));
         assertEquals("foo", MsgServiceImpl.msg.getStringProperty("op2P2"));
         assertEquals("nativeOp2", MsgServiceImpl.msg.getStringProperty("scaOperationName"));

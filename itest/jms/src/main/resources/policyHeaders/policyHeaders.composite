@@ -25,13 +25,13 @@
         <implementation.java class="org.apache.tuscany.sca.binding.jms.MsgClientImpl" />
         <reference name="myService" requires="priority.medium">
             <binding.jms uri="jms:ServiceQueue">
-               <!-- headers JMSType="myType"
+               <headers JMSType="myType"
                         JMSCorrelationID="xyz"
                         JMSDeliveryMode="PERSISTENT"
                         JMSTimeToLive="4321"	
                         JMSPriority="7">
                   <property name="headP1">myHeadP1</property>    
-               </headers-->
+               </headers>
             </binding.jms>
         </reference>
     </component>

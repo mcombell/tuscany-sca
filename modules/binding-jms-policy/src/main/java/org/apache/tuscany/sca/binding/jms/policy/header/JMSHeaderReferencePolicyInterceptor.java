@@ -81,53 +81,14 @@ public class JMSHeaderReferencePolicyInterceptor implements Interceptor {
     }
 
     public Message invoke(Message msg) {
-        try {
             // get the jms context
             JMSBindingContext context = msg.getBindingContext();
 
             javax.jms.Message jmsMsg = msg.getBody();
-            String operationName = msg.getOperation().getName();
     
-            if ((jmsHeaderPolicy != null) && 
-                (jmsHeaderPolicy.getDeliveryModePersistent() != null)) {
-                if (jmsHeaderPolicy.getDeliveryModePersistent()) {
-                    jmsMsg.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
-                } else {
-                    jmsMsg.setJMSDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                }
-                
-            } 
-    
-            if ((jmsHeaderPolicy != null) && 
-                (jmsHeaderPolicy.getJmsCorrelationId() != null)) {
-                jmsMsg.setJMSCorrelationID(jmsHeaderPolicy.getJmsCorrelationId());
-            } 
-    
-            if ((jmsHeaderPolicy != null) && 
-                (jmsHeaderPolicy.getJmsPriority() != null)) {
-                jmsMsg.setJMSPriority(jmsHeaderPolicy.getJmsPriority());
-            } 
-    
-            if ((jmsHeaderPolicy != null) && 
-                (jmsHeaderPolicy.getJmsType() != null)) {
-                jmsMsg.setJMSType(jmsHeaderPolicy.getJmsType());
-            } 
-           
-            if (jmsHeaderPolicy != null){
-                for (String propName : jmsHeaderPolicy.getProperties().keySet()) {
-                    jmsMsg.setObjectProperty(propName, jmsHeaderPolicy.getProperties().get(propName));
-                }
-            }
-            
-            if (jmsHeaderPolicy != null && 
-                jmsHeaderPolicy.getTimeToLive() != null) {
-                    context.setTimeToLive(jmsHeaderPolicy.getTimeToLive());
-            }            
+            // JMS header attrs set on MessageProducer via interceptors.
                         
             return getNext().invoke(msg);
-        } catch (JMSException e) {
-            throw new JMSBindingException(e);
-        } 
     }
 
     public Invoker getNext() {

@@ -86,10 +86,23 @@ public class TransportReferenceInterceptor implements Interceptor {
             
             MessageProducer producer = session.createProducer(context.getRequestDestination());
     
+            // Set JMS header attributes in producer, not message.
+            String opName = msg.getOperation().getName();
             if (jmsBinding.getOperationJMSTimeToLive(msg.getOperation().getName()) != null) {
                 producer.setTimeToLive(jmsBinding.getOperationJMSTimeToLive(msg.getOperation().getName()));
             }
-    
+            Integer priority = jmsBinding.getOperationJMSPriority( opName );
+            if (priority != null) {
+               producer.setPriority(priority.intValue());
+            }  
+            Boolean deliveryModePersistent = jmsBinding.getOperationJMSDeliveryMode(opName);
+            if (deliveryModePersistent != null) {
+                if (deliveryModePersistent.booleanValue())
+                    producer.setDeliveryMode(javax.jms.DeliveryMode.PERSISTENT);
+                else
+                    producer.setDeliveryMode(javax.jms.DeliveryMode.NON_PERSISTENT);
+            }
+            
             try {
                 producer.send((javax.jms.Message)msg.getBody());
             } finally {
