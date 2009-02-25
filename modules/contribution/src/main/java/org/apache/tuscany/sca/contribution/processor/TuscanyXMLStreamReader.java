@@ -75,22 +75,25 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
         this.characterEncodingScheme = super.getCharacterEncodingScheme();
     }
 
+    // A flag to indicate if the next() is called from nextTag()
+    private boolean withinNextTagMethod = false;
+   
     /*
      * Overriding the next() method to perform PUSH and POP operations 
      * for the NamespaceContext for the current element
      */
-
     @Override
     public int next() throws XMLStreamException {
-        // POP the context if the element ends
-        if (this.getEventType() == END_ELEMENT) {
+        // POP the namespaces if the reader leaves the end element
+        if (!withinNextTagMethod && this.getEventType() == END_ELEMENT) {
             popContext();
         }
 
-        //get the next event 
+        // get the next event 
         int nextEvent = super.next();
-        //PUSH the events info onto the Stack 
-        if (nextEvent == START_ELEMENT) {
+        
+        // PUSH the namespaces onto the stack as the reader enters the start element
+        if (!withinNextTagMethod && nextEvent == START_ELEMENT) {
             pushContext();
         }
         return nextEvent;
@@ -98,14 +101,20 @@ public class TuscanyXMLStreamReader extends StreamReaderDelegate implements XMLS
 
     @Override
     public int nextTag() throws XMLStreamException {
+        withinNextTagMethod = true;
+        // POP the namespaces out of the stack if the reader leaves the end element
+        if (this.getEventType() == END_ELEMENT) {
+            popContext();
+        }        
+        
+        // REVIEW: what if nextTag() calls next()?
         int event = super.nextTag();
         
+        // PUSH the namespaces onto the stack as the reader enters the start element
         if (event == START_ELEMENT) {
             pushContext();
         }
-        if (event == END_ELEMENT) {
-            popContext();
-        }
+        withinNextTagMethod = false;
         return event;
     }
 
