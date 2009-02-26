@@ -41,6 +41,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
 import org.apache.tuscany.sca.host.http.DefaultResourceServlet;
+import org.apache.tuscany.sca.host.http.SecurityContext;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletMappingException;
 import org.apache.tuscany.sca.work.WorkScheduler;
@@ -66,7 +67,7 @@ public class JettyServer implements ServletHost {
 
     private final Object joinLock = new Object();
     private String trustStore;
-    private String truststorePassword;
+    private String trustStorePassword;
     private String keyStore;
     private String keyStorePassword;
 
@@ -77,6 +78,7 @@ public class JettyServer implements ServletHost {
     private boolean sendServerVersion;
     private WorkScheduler workScheduler;
     private int defaultPort = 8080;
+    private int defaultSSLPort = 443;
 
     /**
      * Represents a port and the server that serves it.
@@ -113,7 +115,7 @@ public class JettyServer implements ServletHost {
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
             public Object run() {
                 trustStore = System.getProperty("javax.net.ssl.trustStore");
-                truststorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
+                trustStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
                 keyStore = System.getProperty("javax.net.ssl.keyStore");
                 keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword");
 
@@ -155,14 +157,24 @@ public class JettyServer implements ServletHost {
         }
     }
     
-    private void configureSSL(SslSocketConnector connector) {
+    private void configureSSL(SslSocketConnector connector, SecurityContext securityContext) {
         connector.setProtocol("TLS");
+        
+        if (securityContext != null) {
+            keyStoreType = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
+            keyStore = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStore");
+            keyStorePassword = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStorePassword");
+
+            trustStoreType = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStoreType", KeyStore.getDefaultType());
+            trustStore = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStore");
+            trustStorePassword = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStorePassword");
+        }
         connector.setKeystore(keyStore);
         connector.setKeyPassword(keyStorePassword);
         connector.setKeystoreType(keyStoreType);
 
         connector.setTruststore(trustStore);
-        connector.setTrustPassword(truststorePassword);
+        connector.setTrustPassword(trustStorePassword);
         connector.setTruststoreType(trustStoreType);
 
         connector.setPassword(keyStorePassword);
@@ -173,16 +185,30 @@ public class JettyServer implements ServletHost {
     }
 
     public void addServletMapping(String suri, Servlet servlet) throws ServletMappingException {
+        addServletMapping(suri, servlet, null);
+    }
+    
+    public void addServletMapping(String suri, Servlet servlet, final SecurityContext securityContext) throws ServletMappingException {
         URI uri = URI.create(suri);
         
         // Get the URI scheme and port
-        String scheme = uri.getScheme();
-        if (scheme == null) {
-            scheme = "http";
+        String scheme = null;
+        if(securityContext != null && securityContext.isSSLEnabled()) {
+            scheme = "https";
+        } else {
+            scheme = uri.getScheme();
+            if (scheme == null) {
+                scheme = "http";
+            }            
         }
+        
         int portNumber = uri.getPort();
         if (portNumber == -1) {
-            portNumber = defaultPort;
+            if ("http".equals(scheme)) {
+                portNumber = defaultPort;
+            } else {
+                portNumber = defaultPort;
+            }
         }
 
         // Get the port object associated with the given port number
@@ -198,7 +224,7 @@ public class JettyServer implements ServletHost {
 //                    httpConnector.setPort(portNumber);
                     SslSocketConnector sslConnector = new SslSocketConnector();
                     sslConnector.setPort(portNumber);
-                    configureSSL(sslConnector);
+                    configureSSL(sslConnector, securityContext);
                     server.setConnectors(new Connector[] {sslConnector});
                 } else {
                     SelectChannelConnector selectConnector = new SelectChannelConnector();

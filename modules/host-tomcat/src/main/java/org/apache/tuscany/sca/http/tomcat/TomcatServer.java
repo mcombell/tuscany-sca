@@ -58,6 +58,7 @@ import org.apache.tomcat.util.buf.MessageBytes;
 import org.apache.tomcat.util.http.mapper.MappingData;
 import org.apache.tomcat.util.net.JIoEndpoint;
 import org.apache.tuscany.sca.host.http.DefaultResourceServlet;
+import org.apache.tuscany.sca.host.http.SecurityContext;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletMappingException;
 import org.apache.tuscany.sca.work.WorkScheduler;
@@ -72,6 +73,7 @@ public class TomcatServer implements ServletHost {
     private static final Logger logger = Logger.getLogger(TomcatServer.class.getName());
 
     private int defaultPortNumber = 8080;
+    private int defaultSSLPortNumber = 443;
 
     private final class TuscanyLoader implements Loader {
         private final ClassLoader tccl;
@@ -209,16 +211,35 @@ public class TomcatServer implements ServletHost {
             }
         }
     }
-
+    
     public void addServletMapping(String suri, Servlet servlet) {
+        addServletMapping(suri, servlet, null);
+    }
+
+    public void addServletMapping(String suri, Servlet servlet, final SecurityContext securityContext) {
         URI uri = URI.create(suri);
 
         // Get the URI scheme and port
-        String scheme = uri.getScheme();
-        if (scheme == null) {
-            scheme = "http";
+        String scheme = null;
+        if(securityContext != null && securityContext.isSSLEnabled()) {
+            scheme = "https";
+        } else {
+            scheme = uri.getScheme();
+            if (scheme == null) {
+                scheme = "http";
+            }            
         }
-        final int portNumber = (uri.getPort() == -1 ? defaultPortNumber : uri.getPort());
+        
+        int tmpPortNumber = uri.getPort();
+        if (tmpPortNumber == -1) {
+            if ("http".equals(scheme)) {
+                tmpPortNumber = defaultPortNumber;
+            } else {
+                tmpPortNumber = defaultPortNumber;
+            }
+        }
+        
+        final int portNumber = tmpPortNumber;
 
         // Get the port object associated with the given port number
         Port port = ports.get(portNumber);
@@ -287,7 +308,7 @@ public class TomcatServer implements ServletHost {
                         customConnector.setContainer(engine);
 
                         if ("https".equalsIgnoreCase(protocol)) {
-                            configureSSL(customConnector);
+                            configureSSL(customConnector, securityContext);
                             ((Http11Protocol) customConnector.getProtocolHandler()).setSSLEnabled(true);
                         }
                         customConnector.initialize();
@@ -295,21 +316,39 @@ public class TomcatServer implements ServletHost {
                         return customConnector;
                     }
 
-                    private void configureSSL(CustomConnector customConnector) {
-                        String trustStore = System.getProperty("javax.net.ssl.trustStore");
-                        String trustStorePass = System.getProperty("javax.net.ssl.trustStorePassword");
-                        String keyStore = System.getProperty("javax.net.ssl.keyStore");
-                        String keyStorePass = System.getProperty("javax.net.ssl.keyStorePassword");
+                    private void configureSSL(CustomConnector customConnector, SecurityContext securityContext) {
+                        String keyStoreType;
+                        String keyStore;
+                        String keyStorePass;
 
+                        String trustStoreType;
+                        String trustStore;
+                        String trustStorePass;
+
+                        if(securityContext == null) {
+                            keyStoreType = System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
+                            keyStore = System.getProperty("javax.net.ssl.keyStore");
+                            keyStorePass = System.getProperty("javax.net.ssl.keyStorePassword");
+
+                            trustStoreType = System.getProperty("javax.net.ssl.trustStoreType", KeyStore.getDefaultType());
+                            trustStore = System.getProperty("javax.net.ssl.trustStore");
+                            trustStorePass = System.getProperty("javax.net.ssl.trustStorePassword");
+                        } else {
+                            keyStoreType = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
+                            keyStore = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStore");
+                            keyStorePass = securityContext.getSSLProperties().getProperty("javax.net.ssl.keyStorePassword");
+
+                            trustStoreType = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStoreType", KeyStore.getDefaultType());
+                            trustStore = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStore");
+                            trustStorePass = securityContext.getSSLProperties().getProperty("javax.net.ssl.trustStorePassword");
+                        }
+                        
                         customConnector.setProperty("protocol", "TLS");
 
+                        customConnector.setProperty("keytype", keyStoreType);
                         customConnector.setProperty("keystore", keyStore);
                         customConnector.setProperty("keypass", keyStorePass);
-                        String keyStoreType =
-                            System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
-                        String trustStoreType =
-                            System.getProperty("javax.net.ssl.trustStoreType", KeyStore.getDefaultType());
-                        customConnector.setProperty("keytype", keyStoreType);
+
                         customConnector.setProperty("trusttype", trustStoreType);
                         customConnector.setProperty("truststore", trustStore);
                         customConnector.setProperty("trustpass", trustStorePass);

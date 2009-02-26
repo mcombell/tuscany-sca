@@ -19,15 +19,21 @@
 
 package org.apache.tuscany.sca.binding.http.provider;
 
+import java.util.List;
+
 import javax.servlet.Servlet;
 
 import org.apache.tuscany.sca.binding.http.HTTPBinding;
+import org.apache.tuscany.sca.host.http.SecurityContext;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.policy.PolicySet;
+import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.policy.confidentiality.ConfidentialityPolicy;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -118,7 +124,29 @@ public class HTTPServiceBindingProvider implements ServiceBindingProvider {
         if (!servletMapping.endsWith("*")) {
             servletMapping += "*";
         }
-        servletHost.addServletMapping(servletMapping, servlet);
+        
+
+        SecurityContext securityContext = new SecurityContext();
+        
+        // find out which policies are active
+        if (binding instanceof PolicySetAttachPoint) {
+            List<PolicySet> policySets = ((PolicySetAttachPoint)binding).getApplicablePolicySets();
+            for (PolicySet ps : policySets) {
+                for (Object p : ps.getPolicies()) {
+                    if (ConfidentialityPolicy.class.isInstance(p)) {
+                        ConfidentialityPolicy confidentialityPolicy = (ConfidentialityPolicy)p;                        
+                        
+                        securityContext.setSSLEnabled(true);
+                        securityContext.setSSLProperties(confidentialityPolicy.toProperties());
+                    } else {
+                        // etc. check for other types of policy being present
+                    }
+                }
+            }
+        }        
+        
+        
+        servletHost.addServletMapping(servletMapping, servlet, securityContext);
     }
 
     public void stop() {        

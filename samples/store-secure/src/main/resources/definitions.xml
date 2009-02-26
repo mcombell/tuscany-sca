@@ -24,8 +24,7 @@
  			xmlns:store="http://store">
 
  
- <!-- WS Security POLICY SETS -->
-  <sca:policySet name="widgetBindingAuthenticationPolicySet"
+   <sca:policySet name="widgetBindingAuthenticationPolicySet"
  	provides="sca:authentication"
  	appliesTo="tuscany:binding.http">
         <tuscany:basicAuthentication>
@@ -37,8 +36,7 @@
         </tuscany:basicAuthentication>
   </sca:policySet>
   
- <!-- WS Security POLICY SETS -->
-  <sca:policySet name="widgetServiceAuthenticationPolicySet"
+   <sca:policySet name="widgetServiceAuthenticationPolicySet"
  	provides="sca:authentication"
  	appliesTo="sca:service">
         <tuscany:basicAuthentication>
@@ -49,5 +47,18 @@
           </tuscany:authorizedUsers>
         </tuscany:basicAuthentication>
   </sca:policySet>  
+  
+   <sca:policySet name="widgetConfidentialityConfigurationPolicySet"
+ 	provides="sca:confidentiality"
+ 	appliesTo="tuscany:binding.http">
+        <tuscany:confidentiality>
+          <tuscany:keyStore type="JKS" file="target/classes/tuscany.keyStore" password="apache"/>
+          <tuscany:trustStore type="" file="" password=""/>
+        </tuscany:confidentiality>
+  </sca:policySet>  
+  
+  
+  
+  
  
  </sca:definitions>
