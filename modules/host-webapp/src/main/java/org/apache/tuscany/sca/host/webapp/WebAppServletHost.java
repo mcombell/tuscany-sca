@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.apache.tuscany.sca.host.embedded.SCADomain;
+import org.apache.tuscany.sca.host.http.SecurityContext;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletMappingException;
 
@@ -79,6 +80,10 @@ public class WebAppServletHost implements ServletHost {
     }
 
     public void addServletMapping(String suri, Servlet servlet) throws ServletMappingException {
+        addServletMapping(suri, servlet, null);
+    }
+    
+    public void addServletMapping(String suri, Servlet servlet, SecurityContext securityContext) throws ServletMappingException {
         URI pathURI = URI.create(suri);
 
         // Make sure that the path starts with a /
