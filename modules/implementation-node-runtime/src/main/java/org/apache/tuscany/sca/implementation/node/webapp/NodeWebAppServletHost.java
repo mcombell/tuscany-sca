@@ -43,6 +43,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.host.http.SecurityContext;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.host.http.ServletMappingException;
@@ -133,6 +134,10 @@ public class NodeWebAppServletHost implements ServletHost, Filter {
     }
 
     public void addServletMapping(String suri, Servlet servlet) throws ServletMappingException {
+        addServletMapping(suri, servlet, null);
+    }
+    
+    public void addServletMapping(String suri, Servlet servlet, SecurityContext securityContext) throws ServletMappingException {
         URI pathURI = URI.create(suri);
 
         // Make sure that the path starts with a /
