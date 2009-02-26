@@ -151,7 +151,6 @@ public class ConfidentialityPolicyProcessor implements StAXArtifactProcessor<Con
     }
 
     public void resolve(ConfidentialityPolicy model, ModelResolver resolver) throws ContributionResolveException {
-        // TODO Auto-generated method stub
 
     }
 

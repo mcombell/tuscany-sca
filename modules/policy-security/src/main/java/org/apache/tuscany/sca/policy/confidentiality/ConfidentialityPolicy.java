@@ -46,13 +46,23 @@ import org.apache.tuscany.sca.policy.Policy;
 public class ConfidentialityPolicy implements Policy {
     public static final QName NAME = new QName(Constants.SCA10_TUSCANY_NS, "confidentiality");
 
+    private String trustStoreType;
     private String trustStore;
     private String trustStorePassword;
+    
+    private String keyStoreType;
     private String keyStore;
     private String keyStorePassword;
-    private String keyStoreType;
-    private String trustStoreType;
-     
+    
+    
+    public String getTrustStoreType() {
+        return trustStoreType;
+    }
+
+    public void setTrustStoreType(String trustStoreType) {
+        this.trustStoreType = trustStoreType;
+    }
+    
     public String getTrustStore() {
         return trustStore;
     }
@@ -69,6 +79,14 @@ public class ConfidentialityPolicy implements Policy {
         this.trustStorePassword = trustStorePassword;
     }
 
+    public String getKeyStoreType() {
+        return keyStoreType;
+    }
+
+    public void setKeyStoreType(String keyStoreType) {
+        this.keyStoreType = keyStoreType;
+    }
+    
     public String getKeyStore() {
         return keyStore;
     }
@@ -83,22 +101,6 @@ public class ConfidentialityPolicy implements Policy {
 
     public void setKeyStorePassword(String keyStorePassword) {
         this.keyStorePassword = keyStorePassword;
-    }
-
-    public String getKeyStoreType() {
-        return keyStoreType;
-    }
-
-    public void setKeyStoreType(String keyStoreType) {
-        this.keyStoreType = keyStoreType;
-    }
-
-    public String getTrustStoreType() {
-        return trustStoreType;
-    }
-
-    public void setTrustStoreType(String trustStoreType) {
-        this.trustStoreType = trustStoreType;
     }
 
     public QName getSchemaName() {
