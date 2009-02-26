@@ -61,17 +61,14 @@ public class ComponentReferenceTestCase {
      * reference elements of that <component/>
      */
     @Test
-    public void testComponentReferenceName() {
+    public void testReferenceNameUnique() {
     	
-    	initDomain("referencename.composite");
+    	initDomain("referencename_1.composite");
     	
     	MyClientA service = ServiceFinder.getService(MyClientA.class, "ClientComponent1/MyClientA");
-//    	System.out.println(service.callOtherServices());
     	Assert.assertEquals("MyService:::MyService" , service.callOtherServices()) ;
     	
         cleanupDomain();
-    	
-    	
     }
     
     /**
@@ -89,10 +86,10 @@ public class ComponentReferenceTestCase {
      * reference elements of that <component/>
      */
     @Test
-    public void testDuplicateComponentReferenceName() {
+    public void testReferenceNameDuplicated() {
     	//for this case, the reference of "b" in MyClientImpl is null.
         try {
-        	initDomain("referenceduplicatename.composite"); 
+        	initDomain("referencename_2.composite"); 
         } catch (ServiceRuntimeException ex){
             Assert.assertEquals("Duplicate component reference name: Component = ClientComponent2 Reference = b", ex.getMessage());
             return;
@@ -114,13 +111,34 @@ public class ComponentReferenceTestCase {
      * the name of the reference. Has to match a name of a reference defined by the implementation.
      * 
      */    
+     @Test
+     public void testComponentReferenceNameMatched() {     
+         initDomain("referencename_3.composite");        
+         MyClientA service = ServiceFinder.getService(MyClientA.class, "ClientComponent1/MyClientA");           
+         Assert.assertEquals("MyService:::MyService" , service.callOtherServices()) ;    
+         cleanupDomain();
+    }
+     
+     /**
+      * Line 192-193:
+      * <p>
+      * OSOA:
+      * the name of the reference. Has to match a name of a reference
+      *  defined by the implementation.
+      * <p>
+      * ASM50008
+      * <p>
+      * OASIS:
+      * the name of the reference. Has to match a name of a reference defined by the implementation.
+      * 
+      */    
     @Test
     public void testComponentReferenceNameValid() {
     	
         try {
-            initDomain("referencenamemissmatch.composite");   
+            initDomain("referencename_4.composite");   
         } catch (ServiceRuntimeException ex){
-            Assert.assertEquals("Reference not found for component reference: Component = ClientComponent1 Reference = bServiceX", ex.getMessage());
+            Assert.assertEquals("Reference not found for component reference: Component = ClientComponent1 Reference = bb", ex.getMessage());
             return;
         }
     	   	
@@ -139,13 +157,14 @@ public class ComponentReferenceTestCase {
      * wired statically within a composite, but left unwired
      */
     @Test
-    @Ignore("Not implemented now.")
+    @Ignore("Not implemented in SCA 1.x codebase.")
     public void testWiredByImpl() {
     	initDomain("reference_wiredbyimpl.composite");    	
     	MyClientA service = ServiceFinder.getService(MyClientA.class, "ClientComponent/MyClientA");    	
     	Assert.assertEquals("MyService:::MyService" , service.callOtherServices()) ;    	
         cleanupDomain();
     }
+    
     
     /**
      * Line 208:

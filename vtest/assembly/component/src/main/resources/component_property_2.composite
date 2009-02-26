@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,31 +20,33 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assemby-component">
+	name="Assemby-component--Composite">
 
-	<component name="ClientComponent">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientCImpl"/>
-        
-        <service name="MyClientC">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientC"/>          
-        </service>        
-        
-        <reference name="service1" multiplicity="0..1">
-        </reference>       
-        
-        <reference name="service2" multiplicity="0..n"> 
-        </reference>
-        
-    </component>
-    
-        
-    <component name="ServiceComponent">        
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyServiceImpl"/>
-		<service name="MyService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyService"/>           
-        </service>
-    </component>   
-    
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.example.com/Customer" targetNamespace="http://www.example.com/Customer">
 
+    <xsd:element name="customer" type="Customer"/>
+    <xsd:complexType name="Customer">
+        <xsd:sequence>
+            <xsd:element name="firstName"  type="xsd:string"/>
+            <xsd:element name="middleName" type="xsd:string"/>
+            <xsd:element name="lastName"   type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+   </xsd:schema>
+ 
+    <component name="CComponent">
+	    <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.property.ServiceCImpl"/>
+	    <!--
+	    <property name="customerInfo" xsi:type="Customer">
+	    
+		    <firstName>Ku</firstName>
+		    <middleName>Jun</middleName>
+		    <lastName>Guo</lastName>
+	    
+	    </property>	  
+	    -->  
+	    
+     </component>
+    
 </composite>
-

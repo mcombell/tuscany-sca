@@ -18,10 +18,13 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
+<!--to test the reference name not matched with implementation-->
+
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assemby-component">
+	name="Assemby-component-reference">
+
 
     <component name="ClientComponent1">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientAImpl"/>
@@ -30,7 +33,7 @@
            <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientA"/>          
         </service>
         
-        <reference name="b" target="ServiceComponent/MyService">       
+        <reference name="bb" target="ServiceComponent/MyService">       
         </reference>
         
         <reference name="bService" target="ServiceComponent/MyService">
@@ -38,21 +41,6 @@
         
     </component>
     
-    
-    <component name="ClientComponent2">        
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientAImpl"/>
-        
-        <service name="MyClientA">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientA"/>         
-        </service>
-        
-        <reference name="b" target="ServiceComponent/MyService">
-        </reference>
-        
-        <reference name="b" target="ServiceComponent/MyService"> 
-        </reference>
-        
-    </component>   
     
         
     <component name="ServiceComponent">        

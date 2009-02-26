@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,29 +20,16 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assemby-component">
-
-    <component name="ClientComponent1">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientAImpl"/>
-        
-        <service name="MyClientA">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyClientA"/>          
-        </service>
-        
-        <reference name="b" target="ServiceComponent/MyService">       
-        </reference>
-        
-        <reference name="bServiceX" target="ServiceComponent/MyService">
-        </reference>
-        
-    </component> 
+	name="Assemby-component-Composite">
     
-        
-    <component name="ServiceComponent">        
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.reference.MyServiceImpl"/>
-		<service name="MyService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.component.reference.MyService"/>           
-        </service>
-    </component>
-
+ 	<component name="AComponent">
+	    <implementation.java class="org.apache.tuscany.sca.vtest.assembly.component.property.ServiceAImpl"/>
+	    
+	    <property name="strProperty">value1</property>
+	    <property name="strProperty">value2</property>
+	    	    
+	    
+     </component>
+     
+     
 </composite>
