@@ -23,6 +23,20 @@ import test.ASM_0002_Client;
 import testClient.TestInvocation;
 
 /**
+ * Line 1379-1381:
+ * <p>
+ * OSOA:
+ * Note that a binding element may specify an endpoint which is the target of
+ * that binding. A reference must not mix the use of endpoints specified via 
+ * binding elements with target endpoints specified via the target attribute.
+ * <p>
+ * [ASM50015] 
+ * <p>
+ * OASIS:
+ * If a binding element has a value specified for a target service using 
+ * its @uri attribute, * the binding element MUST NOT identify target 
+ * services using binding specific attributes or elements.
+ *
  * Client for ASM_0018_TestCase, which tests that where a <reference/> 
  * of a <component/> has a <binding/> child element and the 
  * corresponding <reference/> element in the componentType has 
@@ -44,4 +58,4 @@ public class ASM_0018_TestCase extends BaseJAXWSTestCase {
     	return config;
     }
     
-} // end class Test_ASM_0003
+} // end class ASM_0018_TestCase
