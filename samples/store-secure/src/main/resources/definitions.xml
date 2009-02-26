@@ -27,26 +27,12 @@
    <sca:policySet name="widgetBindingAuthenticationPolicySet"
  	provides="sca:authentication"
  	appliesTo="tuscany:binding.http">
-        <tuscany:basicAuthentication>
-          <tuscany:authorizedUsers>
-             <tuscany:user name="user1" password="pwd1" role="admin"/>
-             <tuscany:user name="user2" password="pwd2" role="user"/>
-             <tuscany:user name="user3" password="pwd3" role="user"/>
-          </tuscany:authorizedUsers>
-        </tuscany:basicAuthentication>
+        <tuscany:authenticationConfiguration>
+             <tuscany:user username="admin" password="tuscany" roles="admin"/>
+             <tuscany:user username="user1" password="tuscany" roles="user"/>
+             <tuscany:user username="user2" password="tuscany" roles="user"/>
+        </tuscany:authenticationConfiguration>
   </sca:policySet>
-  
-   <sca:policySet name="widgetServiceAuthenticationPolicySet"
- 	provides="sca:authentication"
- 	appliesTo="sca:service">
-        <tuscany:basicAuthentication>
-          <tuscany:authorizedUsers>
-             <tuscany:user name="user1" password="pwd1" role="admin"/>
-             <tuscany:user name="user2" password="pwd2" role="user"/>
-             <tuscany:user name="user3" password="pwd3" role="user"/>
-          </tuscany:authorizedUsers>
-        </tuscany:basicAuthentication>
-  </sca:policySet>  
   
    <sca:policySet name="widgetConfidentialityConfigurationPolicySet"
  	provides="sca:confidentiality"

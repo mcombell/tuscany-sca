@@ -17,3 +17,4 @@
 
 # Implementation class for the artifact processor extension
 org.apache.tuscany.sca.policy.confidentiality.ConfidentialityPolicyProcessor;qname=http://tuscany.apache.org/xmlns/sca/1.0#confidentiality,model=org.apache.tuscany.sca.policy.confidentiality.ConfidentialityPolicy
+org.apache.tuscany.sca.policy.authentication.AuthenticationConfigurationPolicyProcessor;qname=http://tuscany.apache.org/xmlns/sca/1.0#authenticationConfiguration,model=org.apache.tuscany.sca.policy.authentication.AuthenticationConfigurationPolicy

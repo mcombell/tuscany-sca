@@ -21,44 +21,48 @@ package org.apache.tuscany.sca.host.http;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
- * A class to store policy context to enable Security QoS to 
- * HTTP binding  
+ * Model class used to define list of users and it's roles
+ * 
+ * These info is used to configure authentication/authorization 
+ * in embedded http servers 
+ *
+ * @version $Rev$ $Date$
  */
-public class SecurityContext {
-    private boolean isSSLEnabled = false;
-    private Properties sslProperties;
+public class UserContext {
+    private String username;
+    private String password;
+    private List<String> roles = new ArrayList<String>();
     
-    private boolean isAuthenticationEnabled = false;
-    private List<UserContext> users = new ArrayList<UserContext>(); 
     
-    public boolean isSSLEnabled() {
-        return isSSLEnabled;
+    public UserContext() {
+        
     }
     
-    public void setSSLEnabled(boolean value) {
-        this.isSSLEnabled = value;
+    public UserContext(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
     
-    public Properties getSSLProperties() {
-        return sslProperties;
+    public String getUsername() {
+        return this.username;
     }
     
-    public void setSSLProperties(Properties sslProperties) {
-        this.sslProperties = sslProperties;
+    public void setUsername(String username) {
+        this.username = username;
     }
     
-    public boolean isAuthenticationEnabled() {
-        return this.isAuthenticationEnabled;
+    public String getPassword() {
+        return this.password;
     }
     
-    public void setAuthenticationEnabled(boolean value) {
-        this.isAuthenticationEnabled = value;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
-    public List<UserContext> getUsers() {
-        return this.users;
+    public List<String> getRoles() {
+        return this.roles;
     }
+    
 }

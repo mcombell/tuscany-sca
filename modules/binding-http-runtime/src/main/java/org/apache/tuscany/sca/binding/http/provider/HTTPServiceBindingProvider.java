@@ -22,6 +22,7 @@ package org.apache.tuscany.sca.binding.http.provider;
 import java.util.List;
 
 import javax.servlet.Servlet;
+import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.binding.http.HTTPBinding;
 import org.apache.tuscany.sca.host.http.SecurityContext;
@@ -31,8 +32,10 @@ import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.policy.Intent;
 import org.apache.tuscany.sca.policy.PolicySet;
 import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
+import org.apache.tuscany.sca.policy.authentication.AuthenticationConfigurationPolicy;
 import org.apache.tuscany.sca.policy.confidentiality.ConfidentialityPolicy;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -45,6 +48,9 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
  * @version $Rev$ $Date$
  */
 public class HTTPServiceBindingProvider implements ServiceBindingProvider {
+    private static final QName AUTEHTICATION_INTENT = new QName("http://www.osoa.org/xmlns/sca/1.0","authentication");
+    private static final QName CONFIDENTIALITY_INTENT = new QName("http://www.osoa.org/xmlns/sca/1.0","confidentiality");
+    
     private RuntimeComponentService service;  
     private HTTPBinding binding;
     private MessageFactory messageFactory;
@@ -127,19 +133,37 @@ public class HTTPServiceBindingProvider implements ServiceBindingProvider {
         
 
         SecurityContext securityContext = new SecurityContext();
+        boolean isConfidentialityRequired = false;
+        boolean isAuthenticationRequired = false;
+        
         
         // find out which policies are active
         if (binding instanceof PolicySetAttachPoint) {
+            List<Intent> intents = ((PolicySetAttachPoint)binding).getRequiredIntents();
+            for(Intent intent : intents) {
+                if (intent.getName().equals(AUTEHTICATION_INTENT)) {
+                    isAuthenticationRequired = true;
+                } else if (intent.getName().equals(CONFIDENTIALITY_INTENT)) {
+                    isConfidentialityRequired = true;
+                }
+            }
+            
             List<PolicySet> policySets = ((PolicySetAttachPoint)binding).getApplicablePolicySets();
             for (PolicySet ps : policySets) {
                 for (Object p : ps.getPolicies()) {
-                    if (ConfidentialityPolicy.class.isInstance(p)) {
+                    if (ConfidentialityPolicy.class.isInstance(p) && isConfidentialityRequired) {
+                        //Handle enabling and configuring SSL
                         ConfidentialityPolicy confidentialityPolicy = (ConfidentialityPolicy)p;                        
                         
                         securityContext.setSSLEnabled(true);
                         securityContext.setSSLProperties(confidentialityPolicy.toProperties());
-                    } else {
-                        // etc. check for other types of policy being present
+                    } else if(AuthenticationConfigurationPolicy.class.isInstance(p) && isAuthenticationRequired) {
+                        // Handle authentication and user configuration
+                        AuthenticationConfigurationPolicy authenticationConfiguration = (AuthenticationConfigurationPolicy)p;
+                        
+                        securityContext.setAuthenticationEnabled(true);
+                        securityContext.getUsers().clear();
+                        securityContext.getUsers().addAll(authenticationConfiguration.getUsers());
                     }
                 }
             }
