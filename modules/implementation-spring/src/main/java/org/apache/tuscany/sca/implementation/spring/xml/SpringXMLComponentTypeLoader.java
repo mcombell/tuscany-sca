@@ -325,12 +325,12 @@ public class SpringXMLComponentTypeLoader {
                                        List<SpringSCAReferenceElement> references,
                                        List<SpringSCAPropertyElement> scaproperties) throws ContributionReadException {
         /*
-         * 1. Each service becomes a service in the component type
-         * 2. Each reference becomes a reference in the component type
+         * 1. Each sca:service becomes a service in the component type
+         * 2. Each sca:reference becomes a reference in the component type
          * 3. IF there are no explicit service elements, each bean becomes a service
          * 4. Each bean property which is a reference not pointing at another bean in the 
          *    application context becomes a reference unless it is pointing at one of the references
-         * 5. Each scaproperty becomes a property in the component type
+         * 5. Each sca:property becomes a property in the component type
          * 6. Each bean property which is not a reference and which is not pointing 
          *    at another bean in the application context becomes a property in the component type
          */
@@ -430,9 +430,22 @@ public class SpringXMLComponentTypeLoader {
                                     } // end if
                                 } // end for
                                 if (!resolved) {
-                                    // If the bean property is not already resolved as a reference
+                                	// If the bean property is not already resolved as a reference
+                                    // then it may be an SCA reference OR a SCA property, it really depends
+                                	// on how the SCDL has defined references and properties for this component. 
+                                	// So lets assume all unresolved bean properties as references.
+                                	for (Property scaproperty : beanProperties) {
+                                        if (propertyElement.getName().equals(scaproperty.getName())) {
+                                        	Class<?> interfaze = cl.loadClass((propertyMap.get(propertyElement.getName()).getType()).getName());                                            
+                                            Reference theReference = createReference(interfaze, propertyElement.getRef());
+                                            implementation.setUnresolvedBeanRef(propertyElement.getRef(), theReference);
+                                            resolved = true;
+                                        }
+                                	}                                    
+                                	
+                                    /*// If the bean property is not already resolved as a reference
                                     // then it must be an SCA property...
-                                    for (Property scaproperty : beanProperties) {
+                                	for (Property scaproperty : beanProperties) {
                                         if (propertyElement.getName().equals(scaproperty.getName())) {
                                             // The name of the reference in this case is the string in
                                             // the @ref attribute of the Spring property element, NOT the
@@ -440,11 +453,12 @@ public class SpringXMLComponentTypeLoader {
                                             scaproperty.setName(propertyElement.getRef());
                                             componentType.getProperties().add(scaproperty);
                                             // Fetch and store the type of the property
-                                            implementation.setPropertyClass(scaproperty.getName(), propertyMap
-                                                .get(scaproperty.getName()).getType());
+                                            implementation.setPropertyClass(propertyElement.getRef(), propertyMap
+                                                .get(propertyElement.getName()).getType());
                                             resolved = true;
                                         } // end if
-                                    } // end for
+                                    } // end for */
+                                	
                                 } // end if
                             } // end if
                         } // end while 
