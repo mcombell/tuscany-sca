@@ -24,8 +24,8 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/sca http://www.osoa.org/xmlns/sca/1.0/spring-sca.xsd">
 
-    <!-- <sca:service name="AccountService"
-        type="bigbank.account.AccountService" target="AccountServiceBean"/> -->
+    <sca:service name="AccountService"
+        type="bigbank.account.AccountService" target="AccountServiceBean"/>
     
     <bean id="AccountServiceBean" class="bigbank.account.AccountServiceImpl">     
         <property name="calculatorService" ref="calculatorService"/>
@@ -46,8 +46,8 @@
     
     <sca:reference name="stockQuoteService" type="bigbank.stockquote.StockQuoteService"/>
     
-    <!-- <sca:reference name="savingsAccountServiceRef" type="bigbank.account.savings.SavingsAccountService"/>-->
+    <!-- <sca:reference name="savingsAccountService" type="bigbank.account.savings.SavingsAccountService"/>-->
     
-    <!-- <sca:reference name="stockAccountServiceRef" type="bigbank.account.stock.StockAccountService"/>-->
+    <!-- <sca:reference name="stockAccountService" type="bigbank.account.stock.StockAccountService"/>-->
 
 </beans>
