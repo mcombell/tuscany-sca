@@ -32,6 +32,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.assembly.DefinitionElement;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -123,6 +124,8 @@ public class SCADefinitionsProcessor extends BaseStAXArtifactProcessor implement
                                 definitions.getPolicySets().add(policySet);
                             } else if ( extension instanceof Binding ) {
                                 Binding binding = (Binding)extension;
+                                if (binding instanceof DefinitionElement)
+                                    ((DefinitionElement)binding).setTargetNamespace(targetNamespace);
                                 definitions.getBindings().add(binding);
                             } else if ( extension instanceof IntentAttachPointType ) {
                                 IntentAttachPointType type = (IntentAttachPointType)extension;
@@ -217,6 +220,10 @@ public class SCADefinitionsProcessor extends BaseStAXArtifactProcessor implement
             resolver.addModel(implType);
         }
         
+        for (Object binding : scaDefns.getBindings() ) {
+            resolver.addModel(binding);
+        }
+
         // now resolve everything to ensure that any references between
         // artifacts are satisfied
         

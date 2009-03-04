@@ -24,9 +24,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.xml.namespace.QName;
 import java.util.TreeSet;
 
 import org.apache.tuscany.sca.assembly.BindingRRB;
+import org.apache.tuscany.sca.assembly.DefinitionElement;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.OperationSelector;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
@@ -42,7 +44,7 @@ import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
  * @version $Rev$ $Date$
  */
 
-public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsConfigurator {
+public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsConfigurator, DefinitionElement {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -66,6 +68,9 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
     // properties required to describe configured operations
     private List<ConfiguredOperation>  configuredOperations = new ArrayList<ConfiguredOperation>();
     
+    // properties required by DefinitionElement @575803A
+    private String targetNamespace;
+
     // Properties required to describe the JMS binding model
 
     private String correlationScheme = JMSBindingConstants.CORRELATE_MSG_ID;
@@ -133,8 +138,8 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
     private Map<String, Map<String, BindingProperty>> operationPropertiesProperties = new HashMap<String, Map<String,BindingProperty>>();
 
     private String jmsSelector;
-    private String requestConnectionName;
-    private String responseConnectionName;
+    private QName requestConnectionName;
+    private QName responseConnectionName;
     private JMSBinding requestConnectionBinding;
     private JMSBinding responseConnectionBinding;
     
@@ -646,18 +651,19 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
         this.jmsSelector = jmsSelector;
     }
 
-    public String getRequestConnectionName() {
+    public QName getRequestConnectionName() {
         return requestConnectionName;
     }
 
-    public void setRequestConnectionName(String requestConnectionName) {
+    public void setRequestConnectionName(QName requestConnectionName) {
         this.requestConnectionName = requestConnectionName;
     }
 
-    public void setResponseConnectionName(String responseConnectionName) {
+    public void setResponseConnectionName(QName responseConnectionName) {
         this.responseConnectionName = responseConnectionName;
     }
-    public String getResponseConnectionName() {
+
+    public QName getResponseConnectionName() {
         return responseConnectionName;
     }
 
@@ -740,6 +746,21 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
         this.configuredOperations = configuredOperations;
     }    
     
+    public String getTargetNamespace() {
+        return targetNamespace;
+    }
+
+    public void setTargetNamespace(String ns) {
+        targetNamespace = ns;
+    }
+
+    // hashCode() is here because binding elements in definitions documents are added
+    // to the model resolver hashmap.  The namespace and name are keys.
+    @Override
+    public int hashCode() {
+        return (String.valueOf(getTargetNamespace()) + String.valueOf(getName())).hashCode();
+    }
+
     @Override
     public boolean equals( Object object ) {
         return ( object instanceof JMSBinding ) && equals( (JMSBinding) object );
@@ -752,10 +773,20 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
      * @return boolean stating whether objects are equal
      */
     public boolean equals( JMSBinding binding ) {
+        // If the target namespace is set, this binding came from a definitions document.
+        // The target namespace and name are used as keys for doing model resolver hashmap lookups.
+        // Only the target namespace and name can be compared.
+        if (this.targetNamespace != null) {
+            if ( !optStringEquals( this.targetNamespace, binding.getTargetNamespace() )) return false;
+            if ( !optStringEquals( this.name, binding.getName() )) return false;
+            return true;
+        }
+
         // Test all fields for equality.
         // First test simple fields to quickly weed out mismatches.
         if ( !optStringEquals( this.uri, binding.getURI() )) return false;
         if ( !optStringEquals( this.name, binding.getName() )) return false;
+        if ( !optStringEquals( this.targetNamespace, binding.getTargetNamespace() )) return false;
         if ( !optStringEquals( this.destinationName, binding.getDestinationName() )) return false;
         if ( !optStringEquals( this.correlationScheme, binding.getCorrelationScheme() )) return false;
         if ( !optStringEquals( this.initialContextFactoryName, binding.getInitialContextFactoryName() )) return false;
@@ -814,7 +845,7 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
      * @param p2 property list 2
      * @return whether or not properties are equal
      */
-    public static boolean optStringEquals( String s1, String s2 ) {
+    public static boolean optStringEquals( Object s1, Object s2 ) {
         if ( s1 == null && s2 == null ) return true;
         if ( s1 != null && s2 == null ) return false;
         if ( s1 == null && s2 != null ) return false;

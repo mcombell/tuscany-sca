@@ -48,6 +48,7 @@ import org.apache.tuscany.sca.binding.jms.wireformat.jmsobject.WireFormatJMSObje
 import org.apache.tuscany.sca.binding.jms.wireformat.jmstext.WireFormatJMSText;
 import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.DefaultModelResolver;
 import org.apache.tuscany.sca.contribution.resolver.ExtensibleModelResolver;
@@ -131,7 +132,7 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  * @version $Rev$ $Date$
  */
 
-public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
+public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements StAXArtifactProcessor<JMSBinding> {
     private PolicyFactory policyFactory;
     private PolicyAttachPointProcessor policyProcessor;
     private ConfiguredOperationProcessor configuredOperationProcessor;
@@ -256,11 +257,11 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
         String requestConnectionName = reader.getAttributeValue(null, "requestConnection");
         if (requestConnectionName != null && requestConnectionName.length() > 0) {
-            jmsBinding.setRequestConnectionName(requestConnectionName);
+            jmsBinding.setRequestConnectionName(getQNameValue(reader, requestConnectionName));
         }
         String responseConnectionName = reader.getAttributeValue(null, "responseConnection");
         if (responseConnectionName != null && responseConnectionName.length() > 0) {
-            jmsBinding.setResponseConnectionName(responseConnectionName);
+            jmsBinding.setResponseConnectionName(getQNameValue(reader, responseConnectionName));
         }
 
         // Read sub-elements of binding.jms
@@ -361,28 +362,23 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
 
     public void resolve(JMSBinding model, ModelResolver resolver) throws ContributionResolveException {
         if (model.getRequestConnectionName() != null) {
-            model.setRequestConnectionBinding(getConnectionBinding(model.getRequestConnectionName(), resolver));
+            model.setRequestConnectionBinding(getConnectionBinding(model, "requestConnection", model.getRequestConnectionName(), resolver));
         }
         if (model.getResponseConnectionName() != null) {
-            model.setResponseConnectionBinding(getConnectionBinding(model.getResponseConnectionName(), resolver));
+            model.setResponseConnectionBinding(getConnectionBinding(model, "responseConnection", model.getResponseConnectionName(), resolver));
         }
     }
 
     @SuppressWarnings("unchecked")
-    private JMSBinding getConnectionBinding(String bindingName, ModelResolver resolver) {
-        if (resolver instanceof ExtensibleModelResolver) {
-            DefaultModelResolver dr = (DefaultModelResolver)((ExtensibleModelResolver) resolver).getDefaultModelResolver();
-            Map models = dr.getModels();
-            for (Object o : models.keySet()) {
-                if (o instanceof JMSBinding) {
-                    JMSBinding binding = (JMSBinding) o;
-                    if (bindingName.equals(binding.getName())) {
-                        return binding;
-                    }
-                }
-            }
-        }
-        return null;
+    private JMSBinding getConnectionBinding(JMSBinding model, String attrName, QName bindingName, ModelResolver resolver) {
+        JMSBinding binding = new JMSBinding();
+        binding.setTargetNamespace(bindingName.getNamespaceURI());
+        binding.setName(bindingName.getLocalPart());
+        binding.setUnresolved(true);
+        binding = resolver.resolveModel(JMSBinding.class, binding);
+        if (binding.isUnresolved())
+            error("BindingNotFound", model, attrName, bindingName);
+        return binding;
     }
 
     private void parseDestination(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
@@ -833,8 +829,8 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         // 156 • /binding.jms/@responseConnection – identifies a binding.jms element that is present in a
         // 157 definition document, whose response child element is used to define the values for this binding. In
         // 158 this case this binding.jms element MUST NOT contain a response element.
-        String responseConnectionName = jmsBinding.getResponseConnectionName();
-        if (( responseConnectionName != null ) && ( responseConnectionName.length() > 0 )) {
+        QName responseConnectionName = jmsBinding.getResponseConnectionName();
+        if (( responseConnectionName != null ) && ( responseConnectionName.getLocalPart().length() > 0 )) {
             String responseDestinationName = jmsBinding.getResponseDestinationName();
             if (( responseDestinationName != null ) && (responseDestinationName.length() > 0)) {
                 error("ResponseAttrElement", jmsBinding, responseConnectionName, responseDestinationName );                               
@@ -870,7 +866,9 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
     public void write(JMSBinding jmsBinding, XMLStreamWriter writer) throws ContributionWriteException,
         XMLStreamException {
         // Write a <binding.jms>
-        writer.writeStartElement(Constants.SCA10_NS, JMSBindingConstants.BINDING_JMS);
+        writeStart(writer, Constants.SCA10_NS, JMSBindingConstants.BINDING_JMS,
+                   new XAttr("requestConnection", jmsBinding.getRequestConnectionName()),
+                   new XAttr("responseConnection", jmsBinding.getResponseConnectionName()));
 
         if (jmsBinding.getName() != null) {
             writer.writeAttribute("name", jmsBinding.getName());
@@ -900,14 +898,6 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         
         if ( jmsBinding.getJndiURL() != null ) {
             writer.writeAttribute("jndiURL", jmsBinding.getJndiURL());            
-        }
-        
-        if ( jmsBinding.getRequestConnectionName() != null ) {
-            writer.writeAttribute("requestConnection", jmsBinding.getRequestConnectionName());            
-        }
-        
-        if ( jmsBinding.getResponseConnectionName() != null ) {
-            writer.writeAttribute("responseConnection", jmsBinding.getResponseConnectionName());            
         }
         
         if ( jmsBinding.containsHeaders() ) {
@@ -945,7 +935,7 @@ public class JMSBindingProcessor implements StAXArtifactProcessor<JMSBinding> {
         
         writeConfiguredOperations( jmsBinding, writer );
         
-        writer.writeEndElement();
+        writeEnd(writer);
     }
 
     /**
