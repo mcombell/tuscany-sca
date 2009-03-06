@@ -85,22 +85,33 @@ public class AggregatorImpl implements org.apache.tuscany.sca.binding.atom.colle
         if (atomFeed1 != null) {
             try {
                 entries.addAll(atomFeed1.getFeed().getEntries());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                int x = 0;
+            }
         }
         if (atomFeed2 != null) {
             try {
                 entries.addAll(atomFeed2.getFeed().getEntries());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                int x = 0;
+                
+            }
         }
         if (rssFeed1 != null) {
             try {
                 entries.addAll(atomFeed(rssFeed1.getFeed()).getEntries());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                int x = 0;
+
+            }
         }
         if (rssFeed2 != null) {
             try {
                 entries.addAll(atomFeed(rssFeed2.getFeed()).getEntries());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                int x = 0;
+                
+            }
         }
 
         // Sort entries by updated date
