@@ -201,7 +201,7 @@
     </transportReceiver>
     
      <!-- Added by Tuscany -->
-     <transportReceiver name="jms" class="org.apache.axis2.transport.jms.JMSListener">
+     <!-- transportReceiver name="jms" class="org.apache.axis2.transport.jms.JMSListener"-->
         <!--  These configuation parameters now come from the binding.ws uri
               or from a policy set
         <parameter name="myTopicConnectionFactory">
@@ -222,7 +222,7 @@
             <parameter name="transport.jms.ConnectionFactoryJNDIName">QueueConnectionFactory</parameter>
         </parameter>
         -->
-     </transportReceiver>
+     <!-- /transportReceiver-->
 
     <!-- ================================================= -->
     <!-- Non-blocking http/s Transport Listener  -->

@@ -43,13 +43,13 @@ public class HelloWorldJmsServerTestCase{
             scaDomain = SCADomain.newInstance("helloworldwsjms.composite");
 	}
 
-        protected void startBroker() throws Exception {
-            jmsBroker = new BrokerService(); 
-            jmsBroker.setPersistent(false);
-            jmsBroker.setUseJmx(false);
-            jmsBroker.addConnector("tcp://localhost:61619");
-            jmsBroker.start();
-        }
+    protected void startBroker() throws Exception {
+        jmsBroker = new BrokerService(); 
+        jmsBroker.setPersistent(false);
+        jmsBroker.setUseJmx(false);
+        jmsBroker.addConnector("tcp://localhost:61619");
+        jmsBroker.start();
+    }
     
     @Test
     public void testServiceCall() throws IOException {

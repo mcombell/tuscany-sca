@@ -328,6 +328,10 @@ public class Axis2ServiceProvider {
                     jmsSender = new JMSSender();
                     ListenerManager listenerManager = configContext.getListenerManager();
                     TransportInDescription trsIn = configContext.getAxisConfiguration().getTransportIn(Constants.TRANSPORT_JMS);
+                    
+                    if (trsIn == null){
+                        trsIn = new TransportInDescription(Constants.TRANSPORT_JMS);
+                    }
                                     
                     // get JMS transport parameters from the computed URL
                     Map<String, String> jmsProps = JMSUtils.getProperties(endpointURL);
@@ -482,6 +486,13 @@ public class Axis2ServiceProvider {
         Definition definition = wsBinding.getWSDLDocument();
         QName serviceQName = wsBinding.getService().getQName();
         Definition def = getDefinition(definition, serviceQName);
+        
+        // TUSCANY-2824 fix the target namespace of the definition to be the same as 
+        // that for the port. Without this Axis fails during policy application
+        // when it tries to match binding operation names to port type operation
+        // names
+        //def.setTargetNamespace(port.getBinding().getPortType().getQName().getNamespaceURI());
+        
 
         final WSDLToAxisServiceBuilder builder = new WSDL11ToAxisServiceBuilder(def, serviceQName, port.getName());
         builder.setServerSide(true);
