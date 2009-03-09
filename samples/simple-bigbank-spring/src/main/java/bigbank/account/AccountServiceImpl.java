@@ -35,17 +35,22 @@ import bigbank.calculator.CalculatorService;
  */
 public class AccountServiceImpl implements AccountService {
 
-	protected SavingsAccountService savingsAccountService;
+	private SavingsAccountService savingsAccountService;
     
-	protected CheckingAccountService checkingAccountService;
+	private CheckingAccountService checkingAccountService;
     
-	protected StockAccountService stockAccountService;
+	private StockAccountService stockAccountService;
     
-	protected CalculatorService calculatorService;
+	private CalculatorService calculatorService;
     
-	protected StockQuoteService stockQuoteService;
+	private StockQuoteService stockQuoteService;
     
-	protected String currency;
+	private String currency;
+	
+	/*public AccountServiceImpl(SavingsAccountService savingsAccountService, StockAccountService stockAccountService) {
+		this.savingsAccountService = savingsAccountService;
+		this.stockAccountService = stockAccountService;
+	}*/
 
     public AccountReport getAccountReport(String customerID) {
 
