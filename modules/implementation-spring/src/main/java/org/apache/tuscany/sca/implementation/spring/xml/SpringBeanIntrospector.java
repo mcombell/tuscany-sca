@@ -18,8 +18,6 @@
  */
 package org.apache.tuscany.sca.implementation.spring.xml;
 
-import java.util.Map;
-
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -27,7 +25,6 @@ import org.apache.tuscany.sca.implementation.java.DefaultJavaImplementationFacto
 import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
-import org.apache.tuscany.sca.implementation.java.impl.JavaElementImpl;
 import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.AllowsPassByReferenceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.BaseJavaClassVisitor;
@@ -47,7 +44,6 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.ScopeProcessor
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ServiceProcessor;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
-import org.apache.tuscany.sca.implementation.spring.SpringImplementation;
 
 /**
  * Provides introspection functions for Spring beans
@@ -89,7 +85,7 @@ public class SpringBeanIntrospector {
                                         new ResourceProcessor(assemblyFactory),
                                         new ScopeProcessor(assemblyFactory),
                                         new ServiceProcessor(assemblyFactory, javaFactory),
-                                        new HeuristicPojoProcessor(assemblyFactory, javaFactory),
+                                        new SpringBeanPojoProcessor(assemblyFactory, javaFactory),
                                         new PolicyProcessor(assemblyFactory, policyFactory)};
         for (JavaClassVisitor extension : extensions) {
             javaImplementationFactory.addClassVisitor(extension);
@@ -107,8 +103,7 @@ public class SpringBeanIntrospector {
      * Spring Bean or its componentType
      *
      */
-    public Map<String, JavaElementImpl> introspectBean(Class<?> beanClass, ComponentType componentType,
-                                                       SpringImplementation springImplementation) throws ContributionResolveException 
+    public JavaImplementation introspectBean(Class<?> beanClass, ComponentType componentType) throws ContributionResolveException 
     {
         if (componentType == null)
             throw new ContributionResolveException("Introspect Spring bean: supplied componentType is null");
@@ -126,21 +121,17 @@ public class SpringBeanIntrospector {
             componentType.getReferences().addAll(javaImplementation.getReferences());
             componentType.getProperties().addAll(javaImplementation.getProperties());
             
-            springImplementation.setInitMethod(javaImplementation.getInitMethod());
-            springImplementation.setDestroyMethod(javaImplementation.getDestroyMethod());
-            springImplementation.setConstructor(javaImplementation.getConstructor());
-            
         } catch (IntrospectionException e) {
             throw new ContributionResolveException(e);
         } // end try
 
-        //List<Service> services = javaImplementation.getServices();
-        //for (Service service : services) {
-            //String name = service.getName();
-            //System.out.println("Spring Bean: found service with name: " + name);
-        //} // end for
-
-        return javaImplementation.getPropertyMembers();
+        /* List<Service> services = javaImplementation.getServices();
+        for (Service service : services) {
+            String name = service.getName();
+            System.out.println("Spring Bean: found service with name: " + name);
+        } // end for */
+        
+        return javaImplementation;
 
     } // end method introspectBean
 

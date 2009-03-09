@@ -18,9 +18,7 @@
  */
 package org.apache.tuscany.sca.implementation.spring;
 
-import java.lang.reflect.Method;
 import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Component;
@@ -33,7 +31,6 @@ import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.assembly.builder.ComponentPreProcessor;
-import org.apache.tuscany.sca.implementation.java.impl.JavaConstructorImpl;
 import org.apache.tuscany.sca.implementation.spring.xml.SpringBeanElement;
 import org.apache.tuscany.sca.policy.util.PolicyHandlerTuple;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -58,13 +55,6 @@ public class SpringImplementation extends ImplementationImpl implements Implemen
     private List<PolicyHandlerTuple> policyHandlerClassNames = null;
     // List of unresolved bean property references
     private Hashtable<String, Reference> unresolvedBeanRef;
-    
-    // Method marked with @Init annotation
-    private Method initMethod = null;
-    // Method marked with @Destroy annotation
-    private Method destroyMethod = null;
-    // Method marked with @Constructor annotation
-    private JavaConstructorImpl<?> constructorDefinition = null;
 
     protected SpringImplementation() {
         this.location = null;
@@ -95,30 +85,6 @@ public class SpringImplementation extends ImplementationImpl implements Implemen
 
     public Resource getResource() {
         return resource;
-    }
-    
-    public JavaConstructorImpl<?> getConstructor() {
-        return constructorDefinition;
-    }
-
-    public void setConstructor(JavaConstructorImpl<?> definition) {
-        this.constructorDefinition = definition;
-    }
-    
-    public Method getInitMethod() {
-        return initMethod;
-    }
-
-    public void setInitMethod(Method initMethod) {
-        this.initMethod = initMethod;
-    }
-
-    public Method getDestroyMethod() {
-        return destroyMethod;
-    }
-
-    public void setDestroyMethod(Method destroyMethod) {
-        this.destroyMethod = destroyMethod;
     }
 
     /* 
@@ -219,16 +185,6 @@ public class SpringImplementation extends ImplementationImpl implements Implemen
         
         RuntimeComponent rtc = (RuntimeComponent) component;
         
-        // Check if the SCDL is properly configured for all the services
-        // exposed by Spring application context, otherwise report a error
-        /*Enumeration<SpringBeanElement> itr = serviceMap.elements();
-        while (itr.hasMoreElements()) {
-        	SpringBeanElement beanElement = itr.nextElement();
-        	if (!rtc.getServices().contains(beanElement.getId())) {
-        		throw new AssertionError("Configuration Error:");
-        	}
-        }*/
-        
         for (Reference reference : rtc.getReferences()) {
             if (unresolvedBeanRef.containsKey(reference.getName())) {
             	Reference ref = unresolvedBeanRef.get(reference.getName());
@@ -244,23 +200,7 @@ public class SpringImplementation extends ImplementationImpl implements Implemen
         		this.setPropertyClass(property.getName(), property.getClass());
         		unresolvedBeanRef.remove(property.getName());
             }
-        }
-        
-        // Check if the SCDL is properly configured for all the SCA references
-        // used in the Spring application context, otherwise report a error
-        /*for (Reference reference: componentType.getReferences()) {
-        	if (!rtc.getReferences().contains(reference.getName())) {
-        		throw new AssertionError("Configuration Error:");
-        	}
-        }*/
-        
-        // Check if the SCDL is properly configured for all the SCA property
-        // used in the Spring application context, otherwise report a error
-        /*for (Property property: componentType.getProperties()) {
-        	if (!rtc.getProperties().contains(property.getName())) {
-        		throw new AssertionError("Configuration Error:");
-        	}
-        }*/      
+        }      
     }
     
     protected Reference createReference(Reference reference, InterfaceContract interfaze) {

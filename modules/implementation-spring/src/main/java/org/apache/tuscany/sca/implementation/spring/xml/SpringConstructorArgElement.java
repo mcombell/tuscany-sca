@@ -31,6 +31,7 @@ public class SpringConstructorArgElement {
     
     private String ref;
     private String type;
+    private int index;
     private List<String> values = new ArrayList<String>();
 
     public SpringConstructorArgElement(String ref, String type) {
@@ -48,6 +49,14 @@ public class SpringConstructorArgElement {
     
     public void setRef(String ref) {
         this.ref = ref;
+    }
+    
+    public int getIndex() {
+        return this.index;
+    }
+    
+    public void setIndex(int index) {
+        this.index = index;
     }
     
     public List<String> getValues() {

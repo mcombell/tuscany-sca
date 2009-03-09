@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-
 package org.apache.tuscany.sca.implementation.spring;
 
 import java.util.List;
+import java.util.Iterator;
 
 import org.apache.tuscany.sca.core.invocation.ProxyFactory;
 import org.apache.tuscany.sca.implementation.java.injection.JavaPropertyValueObjectFactory;
@@ -30,16 +30,22 @@ import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.apache.tuscany.sca.implementation.spring.processor.InitDestroyAnnotationProcessor;
 import org.apache.tuscany.sca.implementation.spring.processor.ReferenceAnnotationProcessor;
 import org.apache.tuscany.sca.implementation.spring.processor.PropertyAnnotationProcessor;
 import org.apache.tuscany.sca.implementation.spring.processor.ConstructorAnnotationProcessor;
 import org.apache.tuscany.sca.implementation.spring.processor.ComponentNameAnnotationProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor; 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConstructorArgumentValues;
+import org.springframework.beans.factory.config.TypedStringValue;
+import org.springframework.beans.factory.support.ManagedList;
 
-// TODO - create a working version of this class...
 /**
  * A provider class for runtime Spring implementation instances
  * @version $Rev: 511195 $ $Date: 2007-02-24 02:29:46 +0000 (Sat, 24 Feb 2007) $ 
@@ -51,6 +57,8 @@ public class SpringImplementationProvider implements ImplementationProvider {
     private AbstractApplicationContext springContext;
     
     private SpringImplementation implementation;
+    
+    private JavaPropertyValueObjectFactory propertyValueObjectFactory;
 
     /**
      * Constructor for the provider - takes a component definition and a Spring implementation
@@ -66,24 +74,15 @@ public class SpringImplementationProvider implements ImplementationProvider {
         super();
         this.implementation = implementation;
         this.component = component;
+        this.propertyValueObjectFactory = propertyValueObjectFactory;
         this.implementation.setPolicyHandlerClassNames(policyHandlerClassNames);
         
         SCAParentApplicationContext scaParentContext =
             new SCAParentApplicationContext(component, implementation, proxyService, propertyValueObjectFactory);
-        //springContext = new SCAApplicationContext(scaParentContext, implementation.getResource());
+        //springContext = new SCAApplicationContext(scaParentContext, implementation.getResource());        
         
         XmlBeanFactory beanFactory = new XmlBeanFactory(implementation.getResource());
-        BeanPostProcessor initDestroyProcessor = new InitDestroyAnnotationProcessor();
-        beanFactory.addBeanPostProcessor(initDestroyProcessor);
-        BeanPostProcessor referenceProcessor = new ReferenceAnnotationProcessor(component);
-        beanFactory.addBeanPostProcessor(referenceProcessor);
-        BeanPostProcessor propertyProcessor = new PropertyAnnotationProcessor(propertyValueObjectFactory, component);
-        beanFactory.addBeanPostProcessor(propertyProcessor);
-        BeanPostProcessor componentNameProcessor = new ComponentNameAnnotationProcessor(component);
-        beanFactory.addBeanPostProcessor(componentNameProcessor);
-        BeanPostProcessor constructorProcessor = new ConstructorAnnotationProcessor();
-        beanFactory.addBeanPostProcessor(constructorProcessor);
-        springContext = new GenericApplicationContext(beanFactory, scaParentContext);
+        springContext = createApplicationContext(beanFactory, scaParentContext);        
         
     } // end constructor
 
@@ -110,10 +109,93 @@ public class SpringImplementationProvider implements ImplementationProvider {
      * Stop this implementation instance
      */
     public void stop() {
-        // TODO - complete 
-        springContext.close();
-        springContext.stop();
+        // TODO - complete
+    	springContext.close();
+    	if (springContext instanceof GenericApplicationContext)
+    		springContext.stop();
         //System.out.println("SpringImplementationProvider: Spring context stopped");
     } // end method stop
-
+    
+    
+    /**
+     * Include BeanPostProcessor to deal with SCA Annotations in Spring Bean
+     */
+    private void includeAnnotationProcessors(ConfigurableListableBeanFactory beanFactory) {
+    	
+    	// Processor to deal with @Init and @Destroy SCA Annotations
+    	BeanPostProcessor initDestroyProcessor = new InitDestroyAnnotationProcessor();
+        beanFactory.addBeanPostProcessor(initDestroyProcessor);
+        
+        // Processor to deal with @Reference SCA Annotations
+        BeanPostProcessor referenceProcessor = new ReferenceAnnotationProcessor(component);
+        beanFactory.addBeanPostProcessor(referenceProcessor);
+        
+        // Processor to deal with @Property SCA Annotations
+        BeanPostProcessor propertyProcessor = new PropertyAnnotationProcessor(propertyValueObjectFactory, component);
+        beanFactory.addBeanPostProcessor(propertyProcessor);
+        
+        // Processor to deal with @ComponentName SCA Annotations
+        BeanPostProcessor componentNameProcessor = new ComponentNameAnnotationProcessor(component);
+        beanFactory.addBeanPostProcessor(componentNameProcessor);
+        
+        // Processor to deal with @Constructor SCA Annotations
+        BeanPostProcessor constructorProcessor = new ConstructorAnnotationProcessor();
+        beanFactory.addBeanPostProcessor(constructorProcessor);    	
+    }
+    
+    
+    /**
+     * Include BeanPostProcessor to deal with SCA Annotations in Spring Bean
+     */
+    private AbstractApplicationContext createApplicationContext(XmlBeanFactory beanFactory,
+    															SCAParentApplicationContext scaParentContext) {
+    	AbstractApplicationContext appContext = null;
+    	
+    	for (String bean : beanFactory.getBeanDefinitionNames()) {
+    		String beanClassName = (beanFactory.getType(bean)).getName();
+    		if (beanClassName.indexOf(".ClassPathXmlApplicationContext") != -1 || 
+    				beanClassName.indexOf(".FileSystemXmlApplicationContext") != -1) 
+    		{
+    			BeanDefinition beanDef = beanFactory.getBeanDefinition(bean);    			
+    			String[] listValues = null;
+    			List<ConstructorArgumentValues.ValueHolder> conArgs = 
+    				beanDef.getConstructorArgumentValues().getGenericArgumentValues();
+    			for (ConstructorArgumentValues.ValueHolder conArg : conArgs) {
+    				if (conArg.getValue() instanceof TypedStringValue) {
+	    				TypedStringValue value = (TypedStringValue) conArg.getValue();
+	    				if (value.getValue().indexOf(".xml") != -1)
+	    					listValues = new String[]{value.getValue()};
+	    			}
+	    			if (conArg.getValue() instanceof ManagedList) {
+	    				Iterator itml = ((ManagedList)conArg.getValue()).iterator();
+	    				StringBuffer values = new StringBuffer();
+	    				while (itml.hasNext()) {
+	    					TypedStringValue next = (TypedStringValue)itml.next();
+	    					if (next.getValue().indexOf(".xml") != -1) {
+	    						values.append(next.getValue());
+	    						values.append("~");
+	    					}
+	    				}
+	    				listValues = (values.toString()).split("~");	    				
+	    			}
+    			}
+    			
+    			if (beanClassName.indexOf(".ClassPathXmlApplicationContext") != -1) {    				    				
+    				appContext = new ClassPathXmlApplicationContext(listValues, false, scaParentContext);    				
+    				//includeAnnotationProcessors(appContext.getBeanFactory());
+					return appContext;
+    			} else {
+    				appContext = new FileSystemXmlApplicationContext(listValues, false, scaParentContext);    				
+    				//includeAnnotationProcessors(appContext.getBeanFactory());
+					return appContext;
+    			}
+    		}    		
+    	}
+    	
+    	// use the generic application context as default 
+        includeAnnotationProcessors(beanFactory);
+        appContext = new GenericApplicationContext(beanFactory, scaParentContext);
+        return appContext;
+    }
+    
 } // end class SpringImplementationProvider

@@ -32,6 +32,7 @@ public class SpringBeanElement {
 
     private String id;
     private String className;
+    private boolean innerBean = false;
     private List<SpringPropertyElement> properties = new ArrayList<SpringPropertyElement>();
     private List<SpringConstructorArgElement> constructorargs = new ArrayList<SpringConstructorArgElement>();
 
@@ -62,6 +63,14 @@ public class SpringBeanElement {
 
     public void addCustructorArgs(SpringConstructorArgElement args) {
         constructorargs.add(args);
+    }
+    
+    public boolean isInnerBean() {
+        return innerBean;
+    }
+    
+    public void setInnerBean(boolean innerBean) {
+        this.innerBean = innerBean;
     }
 
 } // end class SpringBeanElement
