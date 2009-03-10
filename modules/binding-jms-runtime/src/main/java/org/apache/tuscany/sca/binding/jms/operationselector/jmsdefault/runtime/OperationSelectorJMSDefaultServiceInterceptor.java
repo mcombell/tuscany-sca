@@ -18,15 +18,24 @@
  */
 package org.apache.tuscany.sca.binding.jms.operationselector.jmsdefault.runtime;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.util.List;
 
+import javax.jms.BytesMessage;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
+import javax.jms.TextMessage;
 import javax.jms.Session;
 import javax.jms.Topic;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.tuscany.sca.binding.jms.context.JMSBindingContext;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
@@ -34,6 +43,7 @@ import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessor;
 import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
 import org.apache.tuscany.sca.core.assembly.EndpointReferenceImpl;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
@@ -85,7 +95,7 @@ public class OperationSelectorJMSDefaultServiceInterceptor implements Intercepto
             javax.jms.Message jmsMsg = context.getJmsMsg();
             
             String operationName = requestMessageProcessor.getOperationName(jmsMsg);
-            Operation operation = getTargetOperation(operationName);
+            Operation operation = getTargetOperation(operationName, jmsMsg);
             msg.setOperation(operation);
             
             ReferenceParameters parameters = msg.getFrom().getReferenceParameters();
@@ -120,7 +130,7 @@ public class OperationSelectorJMSDefaultServiceInterceptor implements Intercepto
         }
     }  
     
-    protected Operation getTargetOperation(String operationName) {
+    protected Operation getTargetOperation(String operationName, javax.jms.Message jmsMsg) {
         Operation operation = null;
 
         if (serviceOperations.size() == 1) {
@@ -137,18 +147,65 @@ public class OperationSelectorJMSDefaultServiceInterceptor implements Intercepto
                     break;
                 }
             }
+        } else if (jmsBinding.getRequestWireFormat() instanceof WireFormatJMSTextXML) {
 
-        } else {
+            OMElement rootElement;
+            String operationFromPayload;
 
-            // SCA JMS Binding Specification - Rule 1.5.1 line 207
-            for (Operation op : serviceOperations) {
-                if (op.getName().equals(ON_MESSAGE_METHOD_NAME)) {
-                    operation = op;
-                    break;
+            try {
+                if (jmsMsg instanceof TextMessage) {
+                    String xmlPayload = ((TextMessage) jmsMsg).getText();
+
+                    if (xmlPayload != null) {
+                        XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new StringReader(xmlPayload));
+                        StAXOMBuilder builder = new StAXOMBuilder(reader);
+                        rootElement = builder.getDocumentElement();
+                        operationFromPayload = rootElement.getLocalName();
+                        for (Operation op : serviceOperations) {
+                            if (op.getName().equals(operationFromPayload)) {
+                                operation = op;
+                                break;
+                            }
+                        }
+                    }
+                } else if (jmsMsg instanceof BytesMessage) {
+                    long noOfBytes = ((BytesMessage) jmsMsg).getBodyLength();
+                    byte[] bytes = new byte[(int) noOfBytes];
+                    ((BytesMessage) jmsMsg).readBytes(bytes);
+
+                    if (bytes != null) {
+                        XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new ByteArrayInputStream(bytes));
+                        StAXOMBuilder builder = new StAXOMBuilder(reader);
+                        rootElement = builder.getDocumentElement();
+                        operationFromPayload = rootElement.getLocalName();
+                        for (Operation op : serviceOperations) {
+                            if (op.getName().equals(operationFromPayload)) {
+                                operation = op;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            } catch (XMLStreamException e) {
+                //let's ignore this in case the client doesn't want to use a wrapped xml message
+            } catch (JMSException e) {
+                throw new JMSBindingException(e);
+            }
+
+            // If operation is still null we attempt the last rule
+            if (operation == null) {
+
+                // SCA JMS Binding Specification - Rule 1.5.1 line 207
+                for (Operation op : serviceOperations) {
+                    if (op.getName().equals(ON_MESSAGE_METHOD_NAME)) {
+                        operation = op;
+                        break;
+                    }
                 }
             }
         }
-
+        
         if (operation == null) {
             throw new JMSBindingException("Can't find operation " + (operationName != null ? operationName : ON_MESSAGE_METHOD_NAME));
         }
