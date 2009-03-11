@@ -231,6 +231,17 @@ class WidgetImplementationInvoker implements Invoker {
                     // be generating proxies that communicate with other hosts (if a proxy needs to
                     // communicate with another host it should be generated on and served by
                     // that particular host)
+                    
+                    /*
+                    URI targetURI = URI.create(binding.getURI());
+                    String targetPath;
+                    if(targetURI.getScheme() == null) {
+                        targetPath = targetURI.getPath();
+                    } else {
+                        targetPath = targetURI.toString();
+                    }
+                     */
+
                     URI targetURI = URI.create(binding.getURI());
                     String targetPath = targetURI.getPath();
                     
