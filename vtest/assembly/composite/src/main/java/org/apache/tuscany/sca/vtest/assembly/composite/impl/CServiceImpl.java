@@ -19,7 +19,12 @@
 
 package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
-public class CServiceImpl {
+import org.osoa.sca.annotations.Service;
+import org.apache.tuscany.sca.vtest.assembly.composite.CService;
+
+@Service(CService.class)
+
+public class CServiceImpl implements CService{
 
     private String state = "Some State";
     private String name = "CServiceImpl";

@@ -23,7 +23,7 @@ import org.osoa.sca.annotations.Remotable;
 /**
  * 
  */
-public interface CService {
+public interface CService extends CSubService{
 
     public String getState();
     public String getName();

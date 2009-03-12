@@ -19,23 +19,24 @@
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:assembly-tests="http://assembly-tests"
 	targetNamespace="http://assembly-tests"
-	name="Assembly-non-unique-service-inner-Composite">
-    
-    <service name="BCService" promote="CComponent"/>  
-    <service name="BCService" promote="BComponent"/>
-	
-	<component name="BComponent">
+	xmlns:assembly-tests="http://assembly-tests"
+	name="Assembly-reference-outer--Composite">
+
+    <component name="TestReferenceComponent">
+	    <implementation.composite name="assembly-tests:Assembly-reference-inner--Composite"/>
+        <reference name="b" target="BComponent"/>
+        <reference name="c" target="CComponent"/> 	
+     </component>
+
+    <component name="BComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.BServiceImpl"/>
         <property name="someProperty">some b component value</property>
     </component>
     
+    
     <component name="CComponent">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>
-        <service name="CService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService"/>
-        </service>
-    </component> 
-   
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>        
+    </component>
+
 </composite>

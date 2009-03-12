@@ -20,11 +20,11 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assemby-composite--Composite">
+	name="Assembly-composite--Composite">
 
    <component name="CComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>
-        <service name="CServiceImpl">
+        <service name="CService">
            <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService"/>
         </service>
     </component>  

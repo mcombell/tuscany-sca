@@ -39,5 +39,4 @@
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>        
     </component>
 
-               
 </composite>

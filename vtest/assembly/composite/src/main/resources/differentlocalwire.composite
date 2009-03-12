@@ -20,40 +20,34 @@
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://assembly-tests"
-	name="Assembly-non-unique-reference--Composite">
+	name="Assembly-different-local-wire--Composite">
 
     <component name="FComponent">
 	    <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.FServiceImpl"/>
-	    <reference name="e" />
-	    <reference name="d" />
+	    <reference name="d">
+	    	<interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.DLocalSubService" />
+	    </reference>
+	    <reference name="c">
+	    	<interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService" />
+	    </reference>
+     </component>
 
+	<component name="CComponent">
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>
+        <service name="CService">	
+            <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService"/>
+        </service>     
     </component>
+    
     
     <component name="DComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.DServiceImpl"/>
-        <service name="DService">
-       		<interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.DService"/>
-			<binding.ws uri="http://localhost:8085/DService"/>
-		</service>
+        <service name="DService">	
+            <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.DService" />
+        </service>        
     </component>
     
-    <component name="EComponent">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.EServiceImpl"/>
-        <service name="EService">
-       		<interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.EService"/>
-			<binding.ws uri="http://localhost:8085/EService"/>
-		</service>
-    </component>
+    <wire source="FComponent/d" target="DComponent" />
+    <wire source="FComponent/c" target="CComponent" />
     
-   <reference name="NonUniqueReference" promote="FComponent/e">
-        <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.EService" />
-        <binding.ws uri="http://localhost:8085/EService"/>
-   </reference>     
-   
-   <reference name="NonUniqueReference" promote="FComponent/d">
-        <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.DService" />
-        <binding.ws uri="http://localhost:8085/DService"/>
-    </reference>   
-
-               
 </composite>

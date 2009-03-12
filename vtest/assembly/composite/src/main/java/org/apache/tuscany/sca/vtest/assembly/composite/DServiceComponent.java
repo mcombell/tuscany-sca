@@ -32,6 +32,10 @@ public class DServiceComponent implements DService {
     public String getGreetings(String name) {
         return helloWorldService.getGreetings(name);
     }
+    
+    public String getSomeProperty() {
+        return helloWorldService.getSomeProperty();
+    }
 
     public DService getHelloWorldService() {
         return helloWorldService;

@@ -21,21 +21,21 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:assembly-tests="http://assembly-tests"
 	targetNamespace="http://assembly-tests"
-	name="Assembly-non-unique-service-inner-Composite">
+	name="Assembly-sub-reference-interface-outer-Composite">
+
+    <component name="SubReferenceInterfaceComponent">
+        <implementation.composite name="assembly-tests:Assembly-sub-reference-interface-inner-Composite"/>
+        <reference name="c" target="CComponent"/>
+        <reference name="b" target="BComponent"/>
+     </component>
+
+    <component name="CComponent">
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CSuperServiceImpl"/>
+    </component>
     
-    <service name="BCService" promote="CComponent"/>  
-    <service name="BCService" promote="BComponent"/>
-	
-	<component name="BComponent">
+    <component name="BComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.BServiceImpl"/>
         <property name="someProperty">some b component value</property>
     </component>
     
-    <component name="CComponent">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>
-        <service name="CService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService"/>
-        </service>
-    </component> 
-   
 </composite>

@@ -17,7 +17,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:assembly-tests="http://assembly-tests"
 	targetNamespace="http://assembly-tests" 
-	name="Assembly-non-unique-reference-inner--Composite">
+	name="Assembly-reference-inner--Composite">
 
     <service name="AService" promote="AComponent"/>
     
@@ -28,7 +28,7 @@
 		<reference name="c" />
 	</component>
 
-	<reference name="NonUniqueReference" promote="AComponent/b" />
-	<reference name="NonUniqueReference" promote="AComponent/c" /> 
-
+	<reference name="b" promote="AComponent/b" />
+	<reference name="c" promote="AComponent/c" /> 
+		
 </composite>

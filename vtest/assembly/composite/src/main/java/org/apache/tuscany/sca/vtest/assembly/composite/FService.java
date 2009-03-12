@@ -18,9 +18,12 @@
  */
 package org.apache.tuscany.sca.vtest.assembly.composite;
 
+import org.osoa.sca.annotations.Remotable;
+
 /**
  * Simple Remotable Service
  */
+@Remotable
 public interface FService {
 
     public String getString(String a);

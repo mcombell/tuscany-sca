@@ -19,28 +19,25 @@
 
 package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
-import org.apache.tuscany.sca.vtest.assembly.composite.FService;
-import org.apache.tuscany.sca.vtest.assembly.composite.CService;
-import org.apache.tuscany.sca.vtest.assembly.composite.DService;
-import org.osoa.sca.annotations.Reference;
+
+import org.apache.tuscany.sca.vtest.assembly.composite.DSuperService;
 import org.osoa.sca.annotations.Service;
 
-@Service(FService.class)
-public class FServiceImpl implements FService {
+@Service(DSuperService.class)
+public class DSuperServiceImpl implements DSuperService {
 
-    @Reference
-    protected CService c;
-    
-    @Reference
-    protected DService d;
-    
-    public String getString(String a) {
-        return c.getState();
+    public String getGreetings(String name) {
+        return "Hello, " + name;
     }
     
-    public String getGreetings(String name) {
-        return d.getSomeProperty();
+    public String getSomeProperty()
+    {
+        return "DProperty";
+    }
+
+    public String getString() {
+        // TODO Auto-generated method stub
+        return "DSuperServiceImpl";
     }
 
 }
-

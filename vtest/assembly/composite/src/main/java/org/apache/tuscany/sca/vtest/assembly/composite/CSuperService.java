@@ -16,31 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
+package org.apache.tuscany.sca.vtest.assembly.composite;
 
-package org.apache.tuscany.sca.vtest.assembly.composite.impl;
+import org.osoa.sca.annotations.Remotable;
 
-import org.apache.tuscany.sca.vtest.assembly.composite.FService;
-import org.apache.tuscany.sca.vtest.assembly.composite.CService;
-import org.apache.tuscany.sca.vtest.assembly.composite.DService;
-import org.osoa.sca.annotations.Reference;
-import org.osoa.sca.annotations.Service;
+/**
+ * 
+ */
+public interface CSuperService extends CService{
 
-@Service(FService.class)
-public class FServiceImpl implements FService {
-
-    @Reference
-    protected CService c;
+    public String getState();
+    public String getName();
+    public String getString();
     
-    @Reference
-    protected DService d;
-    
-    public String getString(String a) {
-        return c.getState();
-    }
-    
-    public String getGreetings(String name) {
-        return d.getSomeProperty();
-    }
-
 }
-

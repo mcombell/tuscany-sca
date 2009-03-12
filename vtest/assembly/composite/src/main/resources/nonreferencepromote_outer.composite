@@ -21,21 +21,24 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:assembly-tests="http://assembly-tests"
 	targetNamespace="http://assembly-tests"
-	name="Assembly-non-unique-service-inner-Composite">
-    
-    <service name="BCService" promote="CComponent"/>  
-    <service name="BCService" promote="BComponent"/>
-	
-	<component name="BComponent">
+	name="Assembly-non-reference-promote-outer-Composite">
+
+    <component name="TestNonPromoteComponent">
+
+        <implementation.composite name="assembly-tests:Assembly-non-reference-promote-inner-Composite"/>
+        <reference name="referenceB" target="BComponent"/>
+        <reference name="referenceC" target="CComponent"/> 	
+     </component>
+
+    <component name="BComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.BServiceImpl"/>
         <property name="someProperty">some b component value</property>
     </component>
     
+    
     <component name="CComponent">
-        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>
-        <service name="CService">
-           <interface.java interface="org.apache.tuscany.sca.vtest.assembly.composite.CService"/>
-        </service>
-    </component> 
-   
+        <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.CServiceImpl"/>        
+    </component>
+      
 </composite>
+    

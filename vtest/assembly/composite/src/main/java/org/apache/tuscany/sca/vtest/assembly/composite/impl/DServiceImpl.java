@@ -27,5 +27,10 @@ public class DServiceImpl implements DService {
     public String getGreetings(String name) {
         return "Hello, " + name;
     }
+    
+    public String getSomeProperty()
+    {
+        return "DProperty";
+    }
 
 }

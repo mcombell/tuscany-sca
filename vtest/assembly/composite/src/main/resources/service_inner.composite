@@ -21,10 +21,11 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:assembly-tests="http://assembly-tests"
 	targetNamespace="http://assembly-tests"
-	name="Assembly-non-unique-service-inner-Composite">
+	name="Assembly-service-inner-Composite">
     
-    <service name="BCService" promote="CComponent"/>  
-    <service name="BCService" promote="BComponent"/>
+    <service name="CService" promote="CComponent"/>  
+    <service name="BService" promote="BComponent"/>
+  	     
 	
 	<component name="BComponent">
         <implementation.java class="org.apache.tuscany.sca.vtest.assembly.composite.impl.BServiceImpl"/>

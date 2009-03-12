@@ -16,31 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.    
  */
-
 package org.apache.tuscany.sca.vtest.assembly.composite.impl;
 
-import org.apache.tuscany.sca.vtest.assembly.composite.FService;
-import org.apache.tuscany.sca.vtest.assembly.composite.CService;
-import org.apache.tuscany.sca.vtest.assembly.composite.DService;
-import org.osoa.sca.annotations.Reference;
+import org.apache.tuscany.sca.vtest.assembly.composite.DSubService;
 import org.osoa.sca.annotations.Service;
 
-@Service(FService.class)
-public class FServiceImpl implements FService {
+@Service(DSubService.class)
+public class DSubServiceImpl implements DSubService {
 
-    @Reference
-    protected CService c;
-    
-    @Reference
-    protected DService d;
-    
-    public String getString(String a) {
-        return c.getState();
-    }
-    
-    public String getGreetings(String name) {
-        return d.getSomeProperty();
+    public String getSomeProperty()
+    {
+        return "DProperty";
     }
 
 }
-
