@@ -22,33 +22,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import junit.framework.Assert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Link;
-import org.apache.abdera.protocol.client.AbderaClient;
-import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.util.BaseRequestEntity;
-import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.parser.Parser;
-
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.tuscany.sca.host.embedded.SCADomain;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests use of server provided entry entity tags for Atom binding in Tuscany.
@@ -104,7 +96,7 @@ public class MediaCollectionTestCase {
 		
 		// Testing of entry creation
 		String receiptName = "Auto Repair Bill";
-		String fileName = "ReceiptToms.gif";
+		String fileName = "target/test-classes/ReceiptToms.gif";
 		File input = new File( fileName );
 		boolean exists = input.exists();
 		Assert.assertTrue( exists );		
@@ -115,8 +107,7 @@ public class MediaCollectionTestCase {
         post.addRequestHeader( "Content-Type", "image/gif" );
         post.addRequestHeader( "Title", "Title " + receiptName + "" );
         post.addRequestHeader( "Slug", "Slug " + receiptName + "" );
-        post.setRequestEntity( 
-        	new InputStreamRequestEntity( new FileInputStream( input ), "image/gif" ) );
+        post.setRequestEntity( new InputStreamRequestEntity( new FileInputStream( input ), "image/gif" ) );
 		
         // Get HTTP client
         HttpClient httpclient = new HttpClient();
@@ -208,7 +199,7 @@ public class MediaCollectionTestCase {
     	// Pseudo Code (see APP (http://tools.ietf.org/html/rfc5023#section-9.6)
 		// Testing of entry update
 		String receiptName = "Value Autoglass Bill";
-		String fileName = "ReceiptValue.jpg";
+		String fileName = "target/test-classes/ReceiptValue.jpg";
 		File input = new File( fileName );
 		boolean exists = input.exists();
 		Assert.assertTrue( exists );		
@@ -249,7 +240,7 @@ public class MediaCollectionTestCase {
     	// Pseudo Code (see APP (http://tools.ietf.org/html/rfc5023#section-9.6)
 		// Testing of entry update
 		String receiptName = "Value Autoglass Bill";
-		String fileName = "ReceiptValue.jpg";
+		String fileName = "target/test-classes/ReceiptValue.jpg";
 		File input = new File( fileName );
 		boolean exists = input.exists();
 		Assert.assertTrue( exists );		
