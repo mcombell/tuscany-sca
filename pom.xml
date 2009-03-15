@@ -28,7 +28,7 @@
     <groupId>org.apache.tuscany.sca</groupId>
     <artifactId>tuscany-sca</artifactId>
     <packaging>pom</packaging>
-    <name>Apache Tuscany SCA Implementation Project</name>
+    <name>Apache Tuscany SCA Implementation Project (1.x)</name>
     <url>http://tuscany.apache.org</url>
     <version>1.5-SNAPSHOT</version>
 
