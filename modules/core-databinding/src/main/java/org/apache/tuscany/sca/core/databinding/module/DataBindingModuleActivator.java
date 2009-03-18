@@ -42,6 +42,7 @@ import org.apache.tuscany.sca.interfacedef.FaultExceptionMapper;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.interfacedef.java.jaxws.JAXWSFaultExceptionMapper;
 import org.apache.tuscany.sca.interfacedef.java.jaxws.JAXWSJavaInterfaceProcessor;
+import org.apache.tuscany.sca.interfacedef.java.jaxws.WebServiceInterfaceProcessor;
 import org.apache.tuscany.sca.runtime.RuntimeWireProcessorExtensionPoint;
 import org.osoa.sca.CallableReference;
 import org.apache.axiom.om.OMElement;
@@ -86,12 +87,12 @@ public class DataBindingModuleActivator implements ModuleActivator {
 
         ModelFactoryExtensionPoint modelFactories = registry.getExtensionPoint(ModelFactoryExtensionPoint.class);
         JavaInterfaceFactory javaFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
-
-        // [rfeng] The JAX-WS processor should come before the Databinding processor to make sure @WebService
-        // is honored as Remoteable
+        // Add the WebServiceInterfaceProcessor to mark the interface remotable 
+        javaFactory.addInterfaceVisitor(new WebServiceInterfaceProcessor());
+        // Introspect the data types
+        javaFactory.addInterfaceVisitor(new DataBindingJavaInterfaceProcessor(dataBindings));
         javaFactory.addInterfaceVisitor(new JAXWSJavaInterfaceProcessor(dataBindings, faultExceptionMapper, xmlAdapterExtensionPoint));
 
-        javaFactory.addInterfaceVisitor(new DataBindingJavaInterfaceProcessor(dataBindings));
 
         RuntimeWireProcessorExtensionPoint wireProcessorExtensionPoint = registry.getExtensionPoint(RuntimeWireProcessorExtensionPoint.class);
         if (wireProcessorExtensionPoint != null) {
