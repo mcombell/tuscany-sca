@@ -1,18 +1,3 @@
-package org.apache.tuscany.sca.contribution.jee.impl;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-
-import org.apache.tuscany.sca.contribution.jee.JavaEEIntrospector;
-import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
-import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
-import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
-import org.apache.tuscany.sca.contribution.service.ContributionReadException;
-import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
-import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.monitor.Monitor;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,6 +16,21 @@ import org.apache.tuscany.sca.monitor.Monitor;
  * specific language governing permissions and limitations
  * under the License.    
  */
+package org.apache.tuscany.sca.contribution.jee.impl;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+
+import org.apache.tuscany.sca.contribution.jee.JavaEEIntrospector;
+import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
+import org.apache.tuscany.sca.contribution.processor.URLArtifactProcessor;
+import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
+import org.apache.tuscany.sca.contribution.service.ContributionReadException;
+import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
+import org.apache.tuscany.sca.core.ExtensionPointRegistry;
+import org.apache.tuscany.sca.monitor.Monitor;
+
 public class WebArchiveProcessor implements URLArtifactProcessor<WebModuleInfo> {
     private JavaEEIntrospector jeeIntrospector;
     
