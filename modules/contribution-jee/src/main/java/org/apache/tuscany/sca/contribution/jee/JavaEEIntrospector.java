@@ -20,11 +20,15 @@ package org.apache.tuscany.sca.contribution.jee;
 
 import java.net.URL;
 
+import org.apache.tuscany.sca.contribution.service.ContributionReadException;
+
 /**
- * Instrospect JavaEE modules and applications.
+ * Introspect JavaEE modules and applications.
+ * 
+ * @version $Rev$ $Date$
  */
 public interface JavaEEIntrospector {
-    WebModuleInfo introspectWebArchive(URL artifactURL);
-    EjbModuleInfo introspectEjbArchive(URL artifactURL);
-    JavaEEApplicationInfo introspectJeeArchive(URL artifactURL);
+    WebModuleInfo introspectWebArchive(URL artifactURL) throws ContributionReadException;
+    EjbModuleInfo introspectEjbArchive(URL artifactURL) throws ContributionReadException;
+    JavaEEApplicationInfo introspectJeeArchive(URL artifactURL) throws ContributionReadException;
 }
