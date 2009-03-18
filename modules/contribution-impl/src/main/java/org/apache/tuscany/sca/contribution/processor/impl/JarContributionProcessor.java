@@ -52,8 +52,10 @@ public class JarContributionProcessor implements PackageProcessor {
     public URL getArtifactURL(URL sourceURL, URI artifact) throws MalformedURLException {
         if (sourceURL.toString().startsWith("jar:")) {
             return new URL(sourceURL, artifact.toString());
-        } else {
+        } else if(!artifact.toString().equals("")) {
             return new URL("jar:" + sourceURL.toExternalForm() + "!/" + artifact);
+        } else {
+            return sourceURL;
         }
     }
 
