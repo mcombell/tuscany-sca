@@ -20,6 +20,8 @@ package org.apache.tuscany.sca.implementation.ejb.xml;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 
+import java.net.URI;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -30,6 +32,10 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.jee.EjbModuleInfo;
+import org.apache.tuscany.sca.contribution.jee.JavaEEExtension;
+import org.apache.tuscany.sca.contribution.jee.JavaEEOptionalExtension;
+import org.apache.tuscany.sca.contribution.jee.impl.EjbModuleInfoImpl;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -54,10 +60,14 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
     private AssemblyFactory assemblyFactory;
     private EJBImplementationFactory implementationFactory;
     private Monitor monitor;
+    private JavaEEExtension jeeExtension;
+    private JavaEEOptionalExtension jeeOptionalExtension;
     
     public EJBImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
         this.implementationFactory = modelFactories.getFactory(EJBImplementationFactory.class);
+        this.jeeExtension = modelFactories.getFactory(JavaEEExtension.class);
+        this.jeeOptionalExtension = modelFactories.getFactory(JavaEEOptionalExtension.class);
         this.monitor = monitor;
     }
     
@@ -122,7 +132,26 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
         
         // Resolve the component type
         String uri = implementation.getURI();
+        String ejbLink = implementation.getEJBLink();
         if (uri != null) {
+            EjbModuleInfo ejbModuleInfo = new EjbModuleInfoImpl();
+            ejbModuleInfo.setUri(URI.create(uri));
+            ejbModuleInfo = resolver.resolveModel(EjbModuleInfo.class, ejbModuleInfo);
+            
+            if(jeeExtension != null) {
+                ComponentType ct = jeeExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
+                implementation.getServices().addAll(ct.getServices());
+            }
+
+            if(jeeOptionalExtension != null) {
+                ComponentType ct = jeeOptionalExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
+                implementation.getReferences().addAll(ct.getReferences());
+                implementation.getProperties().addAll(ct.getProperties());
+            }
+
+            // TODO: Introspection of bean class
+            
+            // Process componentType side file
             ComponentType componentType = assemblyFactory.createComponentType();
             componentType.setURI(uri + ".componentType");
             componentType = resolver.resolveModel(ComponentType.class, componentType);
