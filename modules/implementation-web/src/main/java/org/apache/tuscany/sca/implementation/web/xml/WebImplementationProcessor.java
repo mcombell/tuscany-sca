@@ -20,6 +20,9 @@ package org.apache.tuscany.sca.implementation.web.xml;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 
+import java.net.URI;
+import java.util.List;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -29,6 +32,10 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
+import org.apache.tuscany.sca.contribution.jee.JavaEEExtension;
+import org.apache.tuscany.sca.contribution.jee.JavaEEOptionalExtension;
+import org.apache.tuscany.sca.contribution.jee.impl.WebModuleInfoImpl;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -49,10 +56,14 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
     private AssemblyFactory assemblyFactory;
     private WebImplementationFactory implementationFactory;
     private Monitor monitor;
+    private JavaEEExtension jeeExtension;
+    private JavaEEOptionalExtension jeeOptionalExtension;
     
     public WebImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
         this.implementationFactory = modelFactories.getFactory(WebImplementationFactory.class);
+        this.jeeExtension = modelFactories.getFactory(JavaEEExtension.class);
+        this.jeeOptionalExtension = modelFactories.getFactory(JavaEEOptionalExtension.class);
         this.monitor = monitor;
     }
 
@@ -77,7 +88,8 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
         if (webURI != null) {
             implementation.setWebURI(webURI);
 
-            // Set the URI of the component type 
+            // Set the URI of the component type
+            // TODO: This should point to the base uri of the WAR file
             implementation.setURI(webURI);
         }
 
@@ -96,6 +108,20 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
         // Resolve the component type
         String uri = implementation.getURI();
         if (uri != null) {
+            WebModuleInfo webModuleInfo = new WebModuleInfoImpl();
+            webModuleInfo.setUri(URI.create(uri));
+            webModuleInfo = resolver.resolveModel(WebModuleInfo.class, webModuleInfo);
+            if(jeeOptionalExtension != null) {
+                ComponentType ct = jeeOptionalExtension.createImplementationWebComponentType(webModuleInfo);
+                implementation.getReferences().addAll(ct.getReferences());
+                implementation.getProperties().addAll(ct.getProperties());
+            }
+            
+            // TODO: Introspection of classes
+
+            // TODO: Introspection of JSPs
+            
+            // Process componentType side file
             ComponentType componentType = assemblyFactory.createComponentType();
             componentType.setURI("web.componentType");
             componentType = resolver.resolveModel(ComponentType.class, componentType);
