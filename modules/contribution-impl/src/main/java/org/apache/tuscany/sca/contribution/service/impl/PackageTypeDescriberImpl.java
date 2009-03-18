@@ -49,8 +49,9 @@ public class PackageTypeDescriberImpl implements TypeDescriber {
      * Initialize contentType registry with know types based on known file extensions
      */
     private void init() {
+        contentTypeRegistry.put("EAR", PackageType.EAR);
         contentTypeRegistry.put("JAR", PackageType.JAR);
-        contentTypeRegistry.put("WAR", PackageType.JAR);
+        contentTypeRegistry.put("WAR", PackageType.WAR);
         contentTypeRegistry.put("ZIP", PackageType.ZIP);
     }
 
