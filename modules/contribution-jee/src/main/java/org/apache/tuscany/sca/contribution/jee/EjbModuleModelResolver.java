@@ -58,7 +58,7 @@ public class EjbModuleModelResolver implements ModelResolver {
             if (resolved != null) {
                 return modelClass.cast(resolved);
             } else {
-                uri = URI.create(contribution.getLocation());
+                uri = URI.create("");
                 resolved = (EjbModuleInfo) map.get(uri);
                 if (resolved != null) {
                     return modelClass.cast(resolved);

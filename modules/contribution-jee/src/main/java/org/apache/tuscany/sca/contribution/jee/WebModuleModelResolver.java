@@ -58,7 +58,7 @@ public class WebModuleModelResolver implements ModelResolver {
             if (resolved != null) {
                 return modelClass.cast(resolved);
             } else {
-                uri = URI.create(contribution.getLocation());
+                uri = URI.create("");
                 resolved = (WebModuleInfo) map.get(uri);
                 if (resolved != null) {
                     return modelClass.cast(resolved);
