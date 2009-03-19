@@ -37,7 +37,6 @@ import java.util.List;
 
 /**
  * A class that handles the deploy.xml file required for each BPEL process by the ODE runtime
- * @author Mike Edwards
  * 
  * An explanation of the structure of the ODE deploy file:
  * 

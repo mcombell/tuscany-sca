@@ -580,7 +580,6 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
      * Given an Object, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
      * @param testClass
      * @return boolean stating whether Object is a Holder type.
-     * @author DOB
      */
     protected static boolean isHolder( Object object ) {
         String objectName = object.getClass().getName();

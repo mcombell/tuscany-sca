@@ -275,7 +275,6 @@ public class JavaImplementationInvoker implements Invoker, DataExchangeSemantics
      * Given a Class, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
      * @param testClass
      * @return
-     * @author DOB
      */
     public static boolean isHolder( Class testClass ) {
         if ( testClass.getName().equals( "javax.xml.ws.Holder" )) {
