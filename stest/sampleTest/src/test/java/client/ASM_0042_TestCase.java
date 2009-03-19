@@ -21,12 +21,14 @@ package client;
 
 import test.ASM_0002_Client;
 import testClient.TestInvocation;
+import org.junit.Test;
+
 
 /**
  * test if @wiredByImpl="true", 
  * No <wire/> elements have the <reference/> element declared as the @source for the wire.
  */
-@Ignore("TUSCANY-2925")
+// @Ignore("TUSCANY-2925")
 public class ASM_0042_TestCase extends BaseJAXWSTestCase {
 
  
