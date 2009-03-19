@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.security.auth.Subject;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -95,6 +96,12 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
         } else {
             try {
                 handleServiceRequest(request, response);
+                
+            } catch(RuntimeException re) {
+                if (re.getCause() instanceof javax.security.auth.login.LoginException) {
+                    response.setHeader("WWW-Authenticate", "BASIC realm=\"" + "ldap-realm" + "\"");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                }
             } finally {
                 HttpSession session = request.getSession(false);
                 if (session != null) {
@@ -104,8 +111,7 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
         }
     }
 
-    private void handleServiceRequest(HttpServletRequest request, HttpServletResponse response)
-        throws IOException {
+    private void handleServiceRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Encode using UTF-8, although We are actually ASCII clean as
         // all unicode data is JSON escaped using backslash u. This is
         // less data efficient for foreign character sets but it is
@@ -238,42 +244,48 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
         Operation jsonOperation = findOperation(method);
         Object result = null;
       
+
+        // Invoke the get operation on the service implementation
+        Message requestMessage = messageFactory.createMessage();
+        requestMessage.setOperation(jsonOperation);
+
+        requestMessage.getHeaders().add(request);
+
+        requestMessage.setBody(args);
+
+        //result = wire.invoke(jsonOperation, args);
+        Message responseMessage = null;
         try {
-            // Invoke the get operation on the service implementation
-            Message requestMessage = messageFactory.createMessage();
-            requestMessage.setOperation(jsonOperation);
-
-            //store http request as a parameter to the message
-            requestMessage.getHeaders().add(request);
-            
-            requestMessage.setBody(args);
-
-        	//result = wire.invoke(jsonOperation, args);
-            Message responseMessage = wire.getInvocationChain(jsonOperation).getHeadInvoker().invoke(requestMessage);
-            
-            if (!responseMessage.isFault()) {
-            	//successful execution of the invocation
-            	try {
-            		result = responseMessage.getBody();
-                	JSONObject jsonResponse = new JSONObject();
-                    jsonResponse.put("result", result);
-                    jsonResponse.putOpt("id", id);
-                    //get response to send to client
-                    return jsonResponse.toString().getBytes("UTF-8");
-                } catch (Exception e) {
-                    throw new ServiceRuntimeException("Unable to create JSON response", e);
-                }
+            responseMessage = wire.getInvocationChain(jsonOperation).getHeadInvoker().invoke(requestMessage);
+        } catch (RuntimeException re) {
+            if (re.getCause() instanceof javax.security.auth.login.LoginException) {
+                throw re;
             } else {
-            	//exception thrown while executing the invocation
-            	Throwable exception = (Throwable)responseMessage.getBody();
-            	JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, exception );
+                //some other exception
+                JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, re);
                 return errorResult.toString().getBytes("UTF-8");
             }
-        } catch(RuntimeException e) {
-        	 //some other exception
-             JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, e);
-             return errorResult.toString().getBytes("UTF-8");
         }
+
+        if (!responseMessage.isFault()) {
+            //successful execution of the invocation
+            try {
+                result = responseMessage.getBody();
+                JSONObject jsonResponse = new JSONObject();
+                jsonResponse.put("result", result);
+                jsonResponse.putOpt("id", id);
+                //get response to send to client
+                return jsonResponse.toString().getBytes("UTF-8");
+            } catch (Exception e) {
+                throw new ServiceRuntimeException("Unable to create JSON response", e);
+            }
+        } else {
+            //exception thrown while executing the invocation
+            Throwable exception = (Throwable)responseMessage.getBody();
+            JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, exception );
+            return errorResult.toString().getBytes("UTF-8");
+        }
+ 
    }
 
     /**
@@ -300,5 +312,5 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
         }
 
         return result;
-    }
+    }    
 }
