@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.policy.security.jaas;
 
 import java.util.List;
 
+import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 
@@ -61,11 +62,12 @@ public class JaasAuthenticationInterceptor implements Interceptor {
     public Message invoke(Message msg) {
         try {
             for (JaasAuthenticationPolicy policy : authenticationPolicies) {
-                CallbackHandler callbackHandler =
-                    (CallbackHandler)policy.getCallbackHandlerClass().newInstance();
+                CallbackHandler callbackHandler = (CallbackHandler)policy.getCallbackHandlerClass().newInstance();
                 LoginContext lc = new LoginContext(policy.getConfigurationName(), callbackHandler);
                 lc.login();
-                // Subject subject = lc.getSubject();
+                //
+                Subject subject = lc.getSubject();
+                System.out.println(">>> Security subject:" + subject.toString());
             }
         } catch (Exception e) {
             throw new ServiceRuntimeException(e);

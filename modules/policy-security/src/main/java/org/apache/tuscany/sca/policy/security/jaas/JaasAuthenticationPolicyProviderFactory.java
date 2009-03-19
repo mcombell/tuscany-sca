@@ -59,7 +59,7 @@ public class JaasAuthenticationPolicyProviderFactory implements PolicyProviderFa
     public PolicyProvider createServicePolicyProvider(RuntimeComponent component,
                                                       RuntimeComponentService service,
                                                       Binding binding) {
-        return null;
+        return new JaasAuthenticationServicePolicyProvider(component, service, binding);
     }
 
     /**
