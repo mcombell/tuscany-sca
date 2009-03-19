@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
-import org.apache.tuscany.sca.assembly.Implementation;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
