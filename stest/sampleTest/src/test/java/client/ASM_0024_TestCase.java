@@ -23,37 +23,35 @@ import test.ASM_0002_Client;
 import testClient.TestInvocation;
 
 /**
- * Client for ASM_0025_TestCase, which tests that where a <component/> 
- * <property/> has its value set by means of a child <value/> element, 
- * that the type of the <value/> element matches the type declared for 
- * the <property/> element   
+ * Client for ASM_0024_TestCase, which tests that where a <component/> 
+ * <reference/> has @target set to some service, that the reference 
+ * can have no child <binding/> elements   
  */
-public class ASM_0025_TestCase extends BaseJAXWSTestCase {
+public class ASM_0024_TestCase extends BaseJAXWSTestCase {
 
-    public static void main(String[] args) throws Exception {
-        ASM_0025_TestCase test = new ASM_0025_TestCase(); 
-        test.setUp();
-        test.tearDown();
-    }
  
 	/**
 	 * <p>
-	 * OSOA
-	 * No @value subelement in OSOA specification
+	 * OSOA 
+	 * Line 1379~1381
+	 * Note that a binding element may specify an endpoint which is the target of that binding. A 
+	 * reference must not mix the use of endpoints specified via binding elements with target endpoints
+	 * specified via the target attribute.
 	 * <p>
 	 * OASIS
+	 * ASM50026
+	 * If a reference has a value specified for one or more target services in its @target attribute, 
+	 * there MUST NOT be any child <binding/> elements declared for that reference.
 	 * <p>
-	 * ASM50028
-	 * If the value subelement of a component property is specified, 
-	 * the type of the property MUST be an XML Schema simple type or an 
-	 * XML schema complex type
+	 * Jira issue:
+	 * https://issues.apache.org/jira/browse/TUSCANY-2920
 	 */
     protected TestConfiguration getTestConfiguration() {
     	TestConfiguration config = new TestConfiguration();
-    	config.testName 		= "ASM_0025";
+    	config.testName 		= "ASM_0024";
     	config.input 			= "request";
-    	config.output 			= "ASM_0025 request service1 operation1 invokedcomplex1complex2";
-    	config.composite 		= "Test_ASM_0025.composite";
+    	config.output 			= "exception";
+    	config.composite 		= "Test_ASM_0024.composite";
     	config.testServiceName 	= "TestClient";
     	config.testClass 		= ASM_0002_Client.class;
     	config.serviceInterface = TestInvocation.class;

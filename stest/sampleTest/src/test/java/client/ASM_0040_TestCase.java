@@ -23,41 +23,36 @@ import test.ASM_0002_Client;
 import testClient.TestInvocation;
 
 /**
- * Client for ASM_0025_TestCase, which tests that where a <component/> 
- * <property/> has its value set by means of a child <value/> element, 
- * that the type of the <value/> element matches the type declared for 
- * the <property/> element   
+ * For the cases where it is valid for the reference to have no target service specified, 
+ * the component implementation language specification needs to define the programming model 
+ * for interacting with an untargetted reference.
+ * So the SCA runtime should throw an exception if it is using an untargetted reference.
  */
-public class ASM_0025_TestCase extends BaseJAXWSTestCase {
+public class ASM_0040_TestCase extends BaseJAXWSTestCase {
 
-    public static void main(String[] args) throws Exception {
-        ASM_0025_TestCase test = new ASM_0025_TestCase(); 
-        test.setUp();
-        test.tearDown();
-    }
  
 	/**
 	 * <p>
 	 * OSOA
-	 * No @value subelement in OSOA specification
+	 * No corresponding statements in OSOA specification.
 	 * <p>
 	 * OASIS
-	 * <p>
-	 * ASM50028
-	 * If the value subelement of a component property is specified, 
-	 * the type of the property MUST be an XML Schema simple type or an 
-	 * XML schema complex type
+	 * ASM50024
+	 * Some reference multiplicity errors can only be checked at runtime, 
+	 * where the rules defined in ASM50018, ASM50019, ASM50020, ASM50021 are violated.
+	 * In these cases, the SCA runtime MUST generate an error no later than when the reference is
+	 * invoked by the component implementation.
 	 */
     protected TestConfiguration getTestConfiguration() {
     	TestConfiguration config = new TestConfiguration();
-    	config.testName 		= "ASM_0025";
+    	config.testName 		= "ASM_0040";
     	config.input 			= "request";
-    	config.output 			= "ASM_0025 request service1 operation1 invokedcomplex1complex2";
-    	config.composite 		= "Test_ASM_0025.composite";
+    	config.output 			= "exception";
+    	config.composite 		= "Test_ASM_0040.composite";
     	config.testServiceName 	= "TestClient";
     	config.testClass 		= ASM_0002_Client.class;
     	config.serviceInterface = TestInvocation.class;
     	return config;
     }
     
-} // end class Test_ASM_0003
+} // end class Test_ASM_0040

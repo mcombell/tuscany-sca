@@ -23,41 +23,38 @@ import test.ASM_0002_Client;
 import testClient.TestInvocation;
 
 /**
- * Client for ASM_0025_TestCase, which tests that where a <component/> 
- * <property/> has its value set by means of a child <value/> element, 
- * that the type of the <value/> element matches the type declared for 
- * the <property/> element   
+ * test if @wiredByImpl="true", 
+ * No <wire/> elements have the <reference/> element declared as the @source for the wire.
  */
-public class ASM_0025_TestCase extends BaseJAXWSTestCase {
+@Ignore("TUSCANY-2925")
+public class ASM_0042_TestCase extends BaseJAXWSTestCase {
 
-    public static void main(String[] args) throws Exception {
-        ASM_0025_TestCase test = new ASM_0025_TestCase(); 
-        test.setUp();
-        test.tearDown();
-    }
  
 	/**
 	 * <p>
 	 * OSOA
-	 * No @value subelement in OSOA specification
+	 * Line 220~221
+	 * If "true" is set, then the reference should not be wired 
+	 * statically within a composite, but left unwired.
 	 * <p>
 	 * OASIS
+	 * ASM50013
+	 * If @wiredByImpl="true", 
+	 * other methods of specifying the target service MUST NOT be used.
 	 * <p>
-	 * ASM50028
-	 * If the value subelement of a component property is specified, 
-	 * the type of the property MUST be an XML Schema simple type or an 
-	 * XML schema complex type
+	 * Jira issue:
+	 * https://issues.apache.org/jira/browse/TUSCANY-2913
 	 */
     protected TestConfiguration getTestConfiguration() {
     	TestConfiguration config = new TestConfiguration();
-    	config.testName 		= "ASM_0025";
+    	config.testName 		= "ASM_0042";
     	config.input 			= "request";
-    	config.output 			= "ASM_0025 request service1 operation1 invokedcomplex1complex2";
-    	config.composite 		= "Test_ASM_0025.composite";
+    	config.output 			= "exception";
+    	config.composite 		= "Test_ASM_0042.composite";
     	config.testServiceName 	= "TestClient";
     	config.testClass 		= ASM_0002_Client.class;
     	config.serviceInterface = TestInvocation.class;
     	return config;
     }
     
-} // end class Test_ASM_0003
+} // end class Test_ASM_0042
