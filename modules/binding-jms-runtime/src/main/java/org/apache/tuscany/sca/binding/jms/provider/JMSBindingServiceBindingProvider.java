@@ -94,7 +94,11 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
         this.extensionPoints = extensionPoints;
         this.jmsResourceFactory = jmsResourceFactory;
 
-        if (jmsBinding.getDestinationName() == null) {
+        // Set the default destination when using a connection factory.
+        // If an activation spec is being used, do not set the destination
+        // because the activation spec provides the destination.
+        if (jmsBinding.getDestinationName() == null &&
+            (jmsBinding.getActivationSpecName() == null || jmsBinding.getActivationSpecName().equals(""))) {
             if (!service.isCallback()) {
                 // use the SCA service name as the default destination name
                 jmsBinding.setDestinationName(service.getName());

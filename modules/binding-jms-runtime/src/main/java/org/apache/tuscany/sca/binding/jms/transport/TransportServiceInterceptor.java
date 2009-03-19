@@ -85,6 +85,13 @@ public class TransportServiceInterceptor implements Interceptor {
             msg.setBody(replyJMSMsg);
             invokeResponse(msg);
             return msg;
+        } finally {
+            try {
+                ((JMSBindingContext)msg.getBindingContext()).closeJmsResponseSession();
+                if (jmsResourceFactory.isConnectionClosedAfterUse())
+                    jmsResourceFactory.closeResponseConnection(); 
+            } catch (JMSException e) {
+            }
         }
     }    
     
@@ -163,13 +170,13 @@ public class TransportServiceInterceptor implements Interceptor {
             producer.send((javax.jms.Message)msg.getBody());
     
             producer.close();
-            session.close();
+            context.closeJmsResponseSession();
             
             return msg;
     
         } catch (JMSException e) {
             throw new JMSBindingException(e);
-        } 
+        }
     }    
     
     public Invoker getNext() {

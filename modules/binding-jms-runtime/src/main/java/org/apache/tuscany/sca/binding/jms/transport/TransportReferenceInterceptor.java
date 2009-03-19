@@ -115,9 +115,8 @@ public class TransportReferenceInterceptor implements Interceptor {
     }
     
     public Message invokeResponse(Message msg) {
+        JMSBindingContext context = msg.getBindingContext();
         try {
-            // get the jms context
-            JMSBindingContext context = msg.getBindingContext();
             Session session = context.getJmsResponseSession();
             
             javax.jms.Message requestMessage = (javax.jms.Message)msg.getBody();
@@ -148,7 +147,14 @@ public class TransportReferenceInterceptor implements Interceptor {
             throw new JMSBindingException(e);
         } catch (NamingException e) {
             throw new JMSBindingException(e);
-        } 
+        } finally {
+            try {
+                context.closeJmsResponseSession();
+                if (jmsResourceFactory.isConnectionClosedAfterUse())
+                    jmsResourceFactory.closeResponseConnection();
+            } catch (JMSException e) {
+            }
+        }
     } 
     
     public Invoker getNext() {

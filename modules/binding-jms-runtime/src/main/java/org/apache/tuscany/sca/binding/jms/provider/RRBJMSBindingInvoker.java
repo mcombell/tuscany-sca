@@ -69,7 +69,13 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
         this.responseMessageProcessor = JMSMessageProcessorUtil.getResponseMessageProcessor(jmsBinding);
         
         try {
-            bindingRequestDest = lookupDestination();
+            // If this is a callback reference, the destination is determined dynamically based on
+            // properties of the inbound service request.  We should not look for or require a
+            // statically-configured destination unless a message is received that does not have
+            // the necessary properties.  
+            if (!reference.isCallback()) {
+                bindingRequestDest = lookupDestination();
+            }
             bindingReplyDest = lookupResponseDestination();
         } catch (NamingException e) {
             throw new JMSBindingException(e);
@@ -216,7 +222,10 @@ public class RRBJMSBindingInvoker implements Invoker, DataExchangeSemantics {
             } catch (Throwable e) {
                 tuscanyMsg.setFaultBody(e);
             } finally {
-                session.close();
+                context.closeJmsSession();
+                if (jmsResourceFactory.isConnectionClosedAfterUse()) {
+                    jmsResourceFactory.closeConnection();
+                }
             }
             
             return tuscanyMsg;

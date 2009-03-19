@@ -82,4 +82,11 @@ public interface JMSResourceFactory {
 
     
     public abstract void closeResponseConnection() throws JMSException;
+
+    /*
+     * Indicates whether connections obtained using getConnection() or getResponseConnection()
+     * must be closed after each use.  This is necessary in environments where connections are
+     * shared with other users, or where connections cannot be held across transaction boundaries.
+     */
+    public abstract boolean isConnectionClosedAfterUse();
 }

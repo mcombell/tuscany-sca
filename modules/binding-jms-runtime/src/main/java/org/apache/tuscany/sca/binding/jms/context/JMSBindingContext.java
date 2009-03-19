@@ -62,6 +62,18 @@ public class JMSBindingContext {
         return jmsSession;
     }
 
+    public synchronized void closeJmsSession() {
+        if (jmsSession != null) {
+            try {
+                jmsSession.close();
+            } catch (Exception e) {
+                throw new JMSBindingException(e);
+            } finally {
+                jmsSession = null;
+            }
+        }
+    }
+
     public synchronized Session getJmsResponseSession() {
         if (jmsResponseSession == null) {
             try {
@@ -72,7 +84,19 @@ public class JMSBindingContext {
         }
         return jmsResponseSession;
     }
-    
+
+    public synchronized void closeJmsResponseSession() {
+        if (jmsResponseSession != null) {
+            try {
+                jmsResponseSession.close();
+            } catch (Exception e) {
+                throw new JMSBindingException(e);
+            } finally {
+                jmsResponseSession = null;
+            }
+        }
+    }
+
     public Destination getRequestDestination() {
         return requestDestination;
     }

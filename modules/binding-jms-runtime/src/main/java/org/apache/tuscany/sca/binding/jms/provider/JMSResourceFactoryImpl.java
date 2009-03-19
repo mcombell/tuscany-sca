@@ -260,4 +260,10 @@ public class JMSResourceFactoryImpl implements JMSResourceFactory {
         }
     }
 
+    public boolean isConnectionClosedAfterUse() {
+        // It is assumed this resource factory is used in an environment
+        // where the connection can be held for the life of the binding.
+        return false;
+    }
+
 }
