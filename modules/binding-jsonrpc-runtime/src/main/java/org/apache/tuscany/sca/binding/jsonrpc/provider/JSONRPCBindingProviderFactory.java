@@ -20,9 +20,11 @@
 package org.apache.tuscany.sca.binding.jsonrpc.provider;
 
 import org.apache.tuscany.sca.binding.jsonrpc.JSONRPCBinding;
+import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
+import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.BindingProviderFactory;
 import org.apache.tuscany.sca.provider.ReferenceBindingProvider;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
@@ -37,11 +39,15 @@ import org.apache.tuscany.sca.runtime.RuntimeComponentService;
  */
 public class JSONRPCBindingProviderFactory implements BindingProviderFactory<JSONRPCBinding> {
 
+	private MessageFactory messageFactory;
     private ServletHost servletHost;
     
     public JSONRPCBindingProviderFactory(ExtensionPointRegistry extensionPoints) {
         ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
         this.servletHost = servletHosts.getServletHosts().get(0);
+        
+        ModelFactoryExtensionPoint modelFactories = extensionPoints.getExtensionPoint(ModelFactoryExtensionPoint.class);
+        messageFactory = modelFactories.getFactory(MessageFactory.class);
     }
     
     public ReferenceBindingProvider createReferenceBindingProvider(RuntimeComponent component,
@@ -54,7 +60,7 @@ public class JSONRPCBindingProviderFactory implements BindingProviderFactory<JSO
     public ServiceBindingProvider createServiceBindingProvider(RuntimeComponent component,
                                                                RuntimeComponentService service,
                                                                JSONRPCBinding binding) {
-        return new JSONRPCServiceBindingProvider(component, service, binding, servletHost);
+        return new JSONRPCServiceBindingProvider(component, service, binding, messageFactory, servletHost);
     }
 
     public Class<JSONRPCBinding> getModelType() {

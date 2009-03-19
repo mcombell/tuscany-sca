@@ -35,6 +35,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.invocation.Message;
+import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 import org.apache.tuscany.sca.runtime.RuntimeWire;
 import org.json.JSONArray;
@@ -55,6 +57,8 @@ import com.metaparadigm.jsonrpc.JSONRPCServlet;
 public class JSONRPCServiceServlet extends JSONRPCServlet {
     private static final long serialVersionUID = 1L;
 
+    transient MessageFactory messageFactory;
+    
     transient Binding binding;
     transient String serviceName;
     transient Object serviceInstance;
@@ -62,12 +66,14 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
     transient InterfaceContract serviceContract;
     transient Class<?> serviceInterface;
 
-    public JSONRPCServiceServlet(Binding binding,
+    public JSONRPCServiceServlet(MessageFactory messageFactory, 
+    		                     Binding binding,
                                  RuntimeComponentService componentService,
                                  InterfaceContract serviceContract,
                                  Class<?> serviceInterface,
                                  Object serviceInstance) {
-        this.binding = binding;
+        this.messageFactory = messageFactory;
+    	this.binding = binding;
         this.serviceName = binding.getName();
         this.componentService = componentService;
         this.serviceContract = serviceContract;
@@ -234,21 +240,38 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
         Object result = null;
       
         try {
-        	JSONObject jsonResponse = new JSONObject();
-        	result = wire.invoke(jsonOperation, args);
+            // Invoke the get operation on the service implementation
+            Message requestMessage = messageFactory.createMessage();
+            requestMessage.setOperation(jsonOperation);
 
-        	try {
-                jsonResponse.put("result", result);
-                jsonResponse.putOpt("id", id);
-                //get response to send to client
-                return jsonResponse.toString().getBytes("UTF-8");
-            } catch (Exception e) {
-                throw new ServiceRuntimeException("Unable to create JSON response", e);
+            //store http request as a parameter to the message
+            requestMessage.getHeaders().add(request);
+            
+            requestMessage.setBody(args);
+
+        	//result = wire.invoke(jsonOperation, args);
+            Message responseMessage = wire.getInvocationChain(jsonOperation).getHeadInvoker().invoke(requestMessage);
+            
+            if (responseMessage.isFault()) {
+            	throw new RuntimeException((Throwable)responseMessage.getBody());
+            } else {
+            	try {
+            		result = responseMessage.getBody();
+                	JSONObject jsonResponse = new JSONObject();
+                    jsonResponse.put("result", result);
+                    jsonResponse.putOpt("id", id);
+                    //get response to send to client
+                    return jsonResponse.toString().getBytes("UTF-8");
+                } catch (Exception e) {
+                    throw new ServiceRuntimeException("Unable to create JSON response", e);
+                }
             }
-        } catch (InvocationTargetException e) {
+
+        	
+        }/* catch (InvocationTargetException e) {
            	 JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, e.getCause() );
              return errorResult.toString().getBytes("UTF-8");
-        } catch(RuntimeException e) {
+        }*/ catch(RuntimeException e) {
              JSONRPCResult errorResult = new JSONRPCResult(JSONRPCResult.CODE_REMOTE_EXCEPTION, id, e.getCause());
              return errorResult.toString().getBytes("UTF-8");
         }

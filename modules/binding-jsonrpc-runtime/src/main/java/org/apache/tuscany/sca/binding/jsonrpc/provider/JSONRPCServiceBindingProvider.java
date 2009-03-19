@@ -32,6 +32,7 @@ import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
+import org.apache.tuscany.sca.invocation.MessageFactory;
 import org.apache.tuscany.sca.provider.ServiceBindingProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -48,6 +49,8 @@ public class JSONRPCServiceBindingProvider implements ServiceBindingProvider {
     //       the same for clients using either the ajax or jsonrpc binding
     private static final String SCA_DOMAIN_SCRIPT = "/SCADomain/scaDomain.js";
     
+    private MessageFactory messageFactory;
+    
     private RuntimeComponent component;
     private RuntimeComponentService service;
     private InterfaceContract serviceContract;
@@ -59,10 +62,12 @@ public class JSONRPCServiceBindingProvider implements ServiceBindingProvider {
     public JSONRPCServiceBindingProvider(RuntimeComponent component,
                                          RuntimeComponentService service,
                                          JSONRPCBinding binding,
+                                         MessageFactory messageFactory,
                                          ServletHost servletHost) {
         this.component = component;
         this.service = service;
         this.binding = binding;
+        this.messageFactory = messageFactory;
         this.servletHost = servletHost;
         
         //clone the service contract to avoid databinding issues
@@ -95,7 +100,7 @@ public class JSONRPCServiceBindingProvider implements ServiceBindingProvider {
 
         // Create and register a Servlet for this service
         JSONRPCServiceServlet serviceServlet =
-            new JSONRPCServiceServlet(binding, service, serviceContract, serviceInterface, proxy);
+            new JSONRPCServiceServlet(messageFactory, binding, service, serviceContract, serviceInterface, proxy);
         String mapping = binding.getURI();
         if (!mapping.endsWith("/")) {
             mapping += "/";
