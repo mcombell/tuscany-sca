@@ -32,7 +32,6 @@ import org.junit.Test;
 import service.generated.SomeServiceService;
 
 /**
- * @author pxk3
  *
  */
 public class SomeComponentTestCase {
