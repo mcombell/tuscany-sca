@@ -106,7 +106,7 @@ public class HTTPBindingListenerServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if(requiresAuthentication) {
-            if(! hasAuthenticationHeader(request, response)) {
+            if(! hasAuthorization(request, response)) {
                 response.setHeader("WWW-Authenticate", "BASIC realm=\"Tuscany\"");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
@@ -503,7 +503,7 @@ public class HTTPBindingListenerServlet extends HttpServlet {
      */
     
 
-    private boolean hasAuthenticationHeader(HttpServletRequest request, ServletResponse response) {
+    private boolean hasAuthorization(HttpServletRequest request, ServletResponse response) {
         boolean result = false;
         if(request.getHeader("Authorization") != null) {
             result = true;
