@@ -138,7 +138,6 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
     private ConfiguredOperationProcessor configuredOperationProcessor;
     protected StAXArtifactProcessor<Object> extensionProcessor;
     private Monitor monitor;
-    protected String validationMessage;
 
     private ModelFactoryExtensionPoint modelFactories; // DOB
     public JMSBindingProcessor(ModelFactoryExtensionPoint modelFactories, StAXArtifactProcessor<Object> extensionProcessor, Monitor monitor) {
@@ -148,7 +147,6 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
             new ConfiguredOperationProcessor(modelFactories, this.monitor);
         this.extensionProcessor = extensionProcessor;
         this.monitor = monitor;
-        this.validationMessage = null;
         this.modelFactories = modelFactories;
     }
     
@@ -177,7 +175,6 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
     private void error(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
             Problem problem = new ProblemImpl(this.getClass().getName(), "binding-jms-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
-            validationMessage = problem.toString(); // Record error message for use in validation.
      	    monitor.problem(problem);
         }        
     }
@@ -193,7 +190,6 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
     public JMSBinding read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
         JMSBinding jmsBinding = new JMSBinding();
         // Reset validation message to keep track of validation issues.
-        this.validationMessage = null;
 
         // Read policies
         policyProcessor.readPolicies(jmsBinding, reader);
@@ -797,7 +793,7 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
      * passes in the jmsBinding model.
      * The older validate() now calls validate(JMSBinding jmsBinding) with a null model. 
      */
-    public void validate() throws JMSBindingException {
+    public void validate() {
         validate( null );
     }
     
@@ -811,12 +807,7 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
      * @param jmsBinding an optional JMS binding model to check for validity.  
      * @since 1.4
      */
-    protected void validate( JMSBinding jmsBinding ) {
-        // Check validation message for issues that arise from parsing errors.
-        if ( validationMessage != null ) {
-            throw new JMSBindingException( validationMessage );
-        }
-        
+    protected void validate( JMSBinding jmsBinding ) {        
         // If no JMSBinding model is provided, that is all the validation we can do.
         if ( jmsBinding == null ) {
             return;
@@ -859,11 +850,6 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
         }
 
         // Other jmsBinding model validation may be added here.
-        
-        // Check validation message for issues that arise from internal model validation errors.
-        if ( validationMessage != null ) {
-            throw new JMSBindingException( validationMessage );
-        }
 
     }
 
