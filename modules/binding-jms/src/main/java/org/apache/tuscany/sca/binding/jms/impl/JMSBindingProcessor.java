@@ -304,10 +304,15 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
                             }
                         }
                     }
-                    reader.next();
+                    //reader.next();
                     break;
                 case END_ELEMENT:
                     QName x = reader.getName();
+                    if (Constants.OPERATION.equals(x.getLocalPart())) break;
+                    if (x.getLocalPart().equals("wireFormat.jmsBytes") || x.getLocalPart().equals("wireFormat.jmsText")
+                    		|| x.getLocalPart().equals("wireFormat.jmsObject") || x.getLocalPart().equals("wireFormat.jmsTextXML")) {
+                        break;
+                    }
                     if (x.equals(JMSBindingConstants.BINDING_JMS_QNAME)) {
                         endFound = true;
                     } else {
@@ -486,7 +491,7 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
                     } else if ("activationSpec".equals(elementName)) {
                         parseResponseActivationSpec(reader, jmsBinding);
                     }
-                    reader.next();
+                    //reader.next();
                     break;
                 case END_ELEMENT:
                     QName x = reader.getName();
@@ -625,15 +630,16 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
             jmsBinding.setNativeOperationName(opName, nativeOpName);
         }
 
+        Map<String, BindingProperty> props = new HashMap<String, BindingProperty>();
         while (true) {
             switch (reader.next()) {
                 case START_ELEMENT:
                     if (reader.getName().getLocalPart().equals("headers")) { // optional
                         parseOperationHeaders(reader, jmsBinding, opName);
                     } else if (reader.getName().getLocalPart().equals("property")) { // optional
-                        jmsBinding.getOperationPropertiesProperties(opName).putAll(parseBindingProperties(reader));
+                    	processProperty(reader, props);
                     }
-//                    break;
+                break;
                 case END_ELEMENT:
                     if (reader.isEndElement()) {
                         QName x = reader.getName();
@@ -644,6 +650,7 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
                             break;
                         }
                         if (x.getLocalPart().equals("operationProperties")) {
+                        	jmsBinding.getOperationPropertiesProperties(opName).putAll(props);
                             return;
                         } else {
                             error("UnexpectedResponseElement", reader, x.toString());
@@ -734,29 +741,43 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
         }
     }
 
-    private void parseSubscriptionHeaders(XMLStreamReader reader, JMSBinding jmsBinding) {
+    private void parseSubscriptionHeaders(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
         String jmsSelector = reader.getAttributeValue(null, "JMSSelector");
         if (jmsSelector != null && jmsSelector.length() > 0) {
             jmsBinding.setJMSSelector(jmsSelector);
         }
+        
+        // Skip to end element
+        while (reader.hasNext()) {
+            if (reader.next() == END_ELEMENT && "SubscriptionHeaders".equals(reader.getName().getLocalPart())) {
+                break;
+            }
+        } // end while
     }
 
     private Map<String, BindingProperty> parseBindingProperties(XMLStreamReader reader) throws XMLStreamException {
-        Map<String, BindingProperty> props = new HashMap<String, BindingProperty>();
-        if ("property".equals(reader.getName().getLocalPart())) {
-            processProperty(reader, props);
-        }
-        while (true) {
+    	Map<String, BindingProperty> props = new HashMap<String, BindingProperty>();
+    	String parentName = reader.getName().getLocalPart();        
+        // Parse for all the properties within this element, until the end of
+        // the element is reached.
+    	boolean completed = false;
+        while (!completed) {
             switch (reader.next()) {
                 case START_ELEMENT:
-                    if ("property".equals(reader.getName().getLocalPart())) {
-                        processProperty(reader, props);
+                    String elementName = reader.getName().getLocalPart();
+                    if ("property".equals(elementName)) {
+                    	processProperty(reader, props);
                     }
                     break;
                 case END_ELEMENT:
-                    return props;
+                	String endName = reader.getName().getLocalPart();
+                	if (parentName.equals(endName)) {
+                		completed = true;
+                        break;
+                	}
             }
-        }
+        }        
+        return props;
     }
 
     private void processProperty(XMLStreamReader reader, Map<String, BindingProperty> props) throws XMLStreamException {
