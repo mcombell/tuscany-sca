@@ -20,6 +20,8 @@ package org.apache.tuscany.sca.implementation.jee.xml;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 
+import java.net.URI;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -29,6 +31,14 @@ import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.jee.EjbModuleInfo;
+import org.apache.tuscany.sca.contribution.jee.JavaEEExtension;
+import org.apache.tuscany.sca.contribution.jee.JavaEEOptionalExtension;
+import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
+import org.apache.tuscany.sca.contribution.jee.JavaEEApplicationInfo;
+import org.apache.tuscany.sca.contribution.jee.impl.EjbModuleInfoImpl;
+import org.apache.tuscany.sca.contribution.jee.impl.WebModuleInfoImpl;
+import org.apache.tuscany.sca.contribution.jee.impl.JavaEEApplicationInfoImpl;
 import org.apache.tuscany.sca.contribution.processor.BaseStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
@@ -49,11 +59,15 @@ public class JEEImplementationProcessor extends BaseStAXArtifactProcessor implem
     
     private AssemblyFactory assemblyFactory;
     private JEEImplementationFactory implementationFactory;
+    private JavaEEExtension jeeExtension;
+    private JavaEEOptionalExtension jeeOptionalExtension;
     private Monitor monitor;
     
     public JEEImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
         this.implementationFactory = modelFactories.getFactory(JEEImplementationFactory.class);
+        this.jeeExtension = modelFactories.getFactory(JavaEEExtension.class);
+        this.jeeOptionalExtension = modelFactories.getFactory(JavaEEOptionalExtension.class);
         this.monitor = monitor;
     }
 
@@ -95,15 +109,48 @@ public class JEEImplementationProcessor extends BaseStAXArtifactProcessor implem
     public void resolve(JEEImplementation implementation, ModelResolver resolver) throws ContributionResolveException {
         // Resolve the component type
         String uri = implementation.getURI();
+        String archive = implementation.getArchive();
         if (uri != null) {
-            ComponentType componentType = assemblyFactory.createComponentType();
-            componentType.setURI(uri + ".componentType");
-            componentType = resolver.resolveModel(ComponentType.class, componentType);
-            if (!componentType.isUnresolved()) {
-                // Initialize the implementation's services, references and properties
-                implementation.getServices().addAll(componentType.getServices());
-                implementation.getReferences().addAll(componentType.getReferences());
-                implementation.getProperties().addAll(componentType.getProperties());
+            if(uri.endsWith(".war")) {
+                WebModuleInfo webModuleInfo = new WebModuleInfoImpl();
+                webModuleInfo.setUri(URI.create(archive));
+                webModuleInfo = resolver.resolveModel(WebModuleInfo.class, webModuleInfo);
+                if(jeeOptionalExtension != null) {
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(webModuleInfo);
+                    implementation.getReferences().addAll(ct.getReferences());
+                    implementation.getProperties().addAll(ct.getProperties());
+                }
+                // TODO: check for web composite
+            } else if(uri.endsWith(".jar")) {
+                EjbModuleInfo ejbModuleInfo = new EjbModuleInfoImpl();
+                ejbModuleInfo.setUri(URI.create(archive));
+                ejbModuleInfo = resolver.resolveModel(EjbModuleInfo.class, ejbModuleInfo);
+                if(jeeExtension != null) {
+                    ComponentType ct = jeeExtension.createImplementationJeeComponentType(ejbModuleInfo);
+                    implementation.getServices().addAll(ct.getServices());
+                }
+                if(jeeOptionalExtension != null) {
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(ejbModuleInfo);
+                    implementation.getServices().addAll(ct.getServices());
+                    implementation.getReferences().addAll(ct.getReferences());
+                    implementation.getProperties().addAll(ct.getProperties());
+                }
+                // TODO: check for ejb-jar composite
+            } else if(uri.endsWith(".ear")) {
+                JavaEEApplicationInfo appInfo = new JavaEEApplicationInfoImpl();
+                appInfo.setUri(URI.create(archive));
+                appInfo = resolver.resolveModel(JavaEEApplicationInfo.class, appInfo);
+                if(jeeExtension != null) {
+                    ComponentType ct = jeeExtension.createImplementationJeeComponentType(appInfo);
+                    implementation.getServices().addAll(ct.getServices());
+                }
+                if(jeeOptionalExtension != null) {
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(appInfo);
+                    implementation.getServices().addAll(ct.getServices());
+                    implementation.getReferences().addAll(ct.getReferences());
+                    implementation.getProperties().addAll(ct.getProperties());
+                }
+                // TODO: check for application composite
             }
         }
         implementation.setUnresolved(false);
