@@ -76,7 +76,7 @@ public class AuthenticationConfigurationPolicyProcessor implements StAXArtifactP
      */
     private void error(String message, Object model, Object... messageParameters) {
         if (monitor != null) {
-            Problem problem = new ProblemImpl(this.getClass().getName(), "policy-security-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
+            Problem problem = new ProblemImpl(this.getClass().getName(), "policy-security-http-validation-messages", Severity.ERROR, model, message, (Object[])messageParameters);
             monitor.problem(problem);
         }        
     }    
