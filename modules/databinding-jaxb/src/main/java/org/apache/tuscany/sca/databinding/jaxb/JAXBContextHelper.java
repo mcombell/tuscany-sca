@@ -148,7 +148,7 @@ public class JAXBContextHelper {
             element = value;
         }
         if (element == null) {
-            element = new JAXBElement(name, type, value);
+            element = new JAXBElement(name, Object.class, value);
         }
         return element;
     }
