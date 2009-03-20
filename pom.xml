@@ -33,8 +33,8 @@
     <version>2.0-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tuscany/java/sca</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tuscany/java/sca</developerConnection>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tuscany/sandbox/ant/sca/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tuscany/sandbox/ant/sca/trunk</developerConnection>
         <url>http://svn.apache.org/repos/asf/tuscany/java/sca</url>
     </scm>
 
