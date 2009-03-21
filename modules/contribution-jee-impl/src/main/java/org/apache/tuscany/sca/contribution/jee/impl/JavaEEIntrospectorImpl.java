@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.openejb.config.AppModule;
 import org.apache.openejb.config.EjbModule;
+import org.apache.openejb.config.UnknownModuleTypeException;
 import org.apache.openejb.config.WebModule;
 import org.apache.openejb.jee.EjbJar;
 import org.apache.openejb.jee.EjbRef;
@@ -206,9 +207,20 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         }
         
         JavaEEModuleHelper jmh = new JavaEEModuleHelper();
-        EjbModule em = jmh.getMetadataCompleteModules(tempFile.getAbsolutePath()).getEjbModules().get(0);
-        if(!tempFile.delete()) {
-            tempFile.deleteOnExit();
+        EjbModule em;
+        try {
+            em = jmh.getMetadataCompleteModules(tempFile.getAbsolutePath()).getEjbModules().get(0);
+        } catch(ContributionReadException e) {
+            if(e.getCause() instanceof UnknownModuleTypeException) {
+                // Not an EJB jar
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if(!tempFile.delete()) {
+                tempFile.deleteOnExit();
+            }
         }
         return createEjbModuleInfo(em);
     }
