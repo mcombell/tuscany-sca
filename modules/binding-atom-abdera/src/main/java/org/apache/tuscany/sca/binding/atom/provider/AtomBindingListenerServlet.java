@@ -347,7 +347,14 @@ class AtomBindingListenerServlet extends HttpServlet {
             requestMessage.setBody(new Object[] {id});
             Message responseMessage = getInvoker.invoke(requestMessage);
             if (responseMessage.isFault()) {
-                throw new ServletException((Throwable)responseMessage.getBody());
+            	Object body = responseMessage.getBody();
+            	 if (body.getClass().getName().endsWith(".NotFoundException")) {
+                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                     return;
+                 } else {
+                     throw new ServletException((Throwable)responseMessage.getBody());
+                 }
+              
             }
             if (supportsFeedEntries) {
                 // The service implementation returns a feed entry 
@@ -538,7 +545,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length() + request.getContextPath().length()), "UTF-8");
 
         if (path == null || path.length() == 0 || path.equals("/")) {
             org.apache.abdera.model.Entry createdFeedEntry = null;
@@ -749,7 +756,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(request.getRequestURI().substring(request.getContextPath().length() + request.getServletPath().length()), "UTF-8");
 
         String id;
         if (path != null && path.startsWith("/")) {
