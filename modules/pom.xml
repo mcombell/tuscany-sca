@@ -86,6 +86,7 @@
                 <module>contribution-resource</module>
                 <module>contribution-xml</module>
                 <module>contribution-jee</module>
+                <module>contribution-jee-impl</module>
                 <module>core</module>
                 <module>core-databinding</module>
                 <module>core-spi</module>
