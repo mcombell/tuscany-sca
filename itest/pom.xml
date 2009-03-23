@@ -77,6 +77,7 @@
                 <module>contribution-import-export</module>
               <!--  
  <module>contribution-classloader</module> -->
+                <module>contribution-jee</module>
                 <module>conversations</module>
                 <module>corba</module>
                 <module>conversations-ws</module>
