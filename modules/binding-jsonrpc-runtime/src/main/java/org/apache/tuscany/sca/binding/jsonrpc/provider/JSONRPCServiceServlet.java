@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.security.auth.Subject;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,13 +66,13 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
     transient Class<?> serviceInterface;
 
     public JSONRPCServiceServlet(MessageFactory messageFactory, 
-    		                     Binding binding,
+                                 Binding binding,
                                  RuntimeComponentService componentService,
                                  InterfaceContract serviceContract,
                                  Class<?> serviceInterface,
                                  Object serviceInstance) {
         this.messageFactory = messageFactory;
-    	this.binding = binding;
+        this.binding = binding;
         this.serviceName = binding.getName();
         this.componentService = componentService;
         this.serviceContract = serviceContract;
@@ -170,8 +169,7 @@ public class JSONRPCServiceServlet extends JSONRPCServlet {
     /**
      * handles requests for the SMD descriptor for a service
      */
-    protected void handleSMDRequest(HttpServletRequest request, HttpServletResponse response) throws IOException,
-        UnsupportedEncodingException {
+    protected void handleSMDRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, UnsupportedEncodingException {
         String serviceUrl = request.getRequestURL().toString();
         String smd = JavaToSmd.interfaceToSmd(serviceInterface, serviceUrl);
 
