@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo;
 import org.apache.tuscany.sca.contribution.jee.EnvEntryInfo;
+import org.apache.tuscany.sca.contribution.jee.JspReferenceTagInfo;
 import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
 
 public class WebModuleInfoImpl implements WebModuleInfo {
@@ -37,6 +38,8 @@ public class WebModuleInfoImpl implements WebModuleInfo {
     private Collection<Class<?>> listenerClasses = new ArrayList<Class<?>>();
     private Collection<Class<?>> filterClasses = new ArrayList<Class<?>>();
     private Collection<Class<?>> jsfClasses = new ArrayList<Class<?>>();
+    
+    private Collection<JspReferenceTagInfo> jspReferenceTags = new ArrayList<JspReferenceTagInfo>();
     
     private Map<String, EjbReferenceInfo> ejbReferences = new HashMap<String, EjbReferenceInfo>();
     private Map<String, EnvEntryInfo> envEntries = new HashMap<String, EnvEntryInfo>();
@@ -57,6 +60,10 @@ public class WebModuleInfoImpl implements WebModuleInfo {
 
     public Collection<Class<?>> getJSFClasses() {
         return jsfClasses;
+    }
+    
+    public Collection<JspReferenceTagInfo> getJspReferenceTags() {
+        return jspReferenceTags;
     }
 
     public EjbReferenceInfo getEjbReference(String ejbRefName) {

@@ -18,30 +18,13 @@
  */
 package org.apache.tuscany.sca.contribution.jee;
 
-import java.net.URI;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @version $Rev$ $Date$
+ * 
+ * Information on SCA reference tags in JSP pages.
  */
-public interface WebModuleInfo {
-    URI getUri();
-    void setUri(URI uri);
-    
-    String getModuleName();
-    void setModuleName(String moduleName);
-    
-    Map<String, EjbReferenceInfo> getEjbReferences();
-    Map<String, EnvEntryInfo> getEnvEntries();
-    
-    EjbReferenceInfo getEjbReference(String ejbRefName);
-    EnvEntryInfo getEnvEntry(String envEntryName);
-    
-    Collection<Class<?>> getServletClasses();
-    Collection<Class<?>> getListenerClasses();
-    Collection<Class<?>> getFilterClasses();
-    Collection<Class<?>> getJSFClasses();
-
-    Collection<JspReferenceTagInfo> getJspReferenceTags();
+public class JspReferenceTagInfo {
+    public String name;
+    public Class<?> type;
 }
