@@ -40,8 +40,10 @@ class AtomServiceBindingProvider implements ServiceBindingProvider {
     private AtomBinding binding;
     private ServletHost servletHost;
     private MessageFactory messageFactory;
-    private String servletMapping;
     private Mediator mediator;
+    
+    private String servletMapping;
+    private String bindingURI;
 
     AtomServiceBindingProvider(RuntimeComponent component,
                                       RuntimeComponentService service,
@@ -79,9 +81,17 @@ class AtomServiceBindingProvider implements ServiceBindingProvider {
             servletMapping += "*";
         }
         servletHost.addServletMapping(servletMapping, servlet);
+        
+        bindingURI = binding.getURI();
+        if (!bindingURI.endsWith("/")) {
+            bindingURI += "/";
+        }
+
+        servletHost.addServletMapping(bindingURI, servlet);
     }
 
     public void stop() {
         servletHost.removeServletMapping(servletMapping);
+        servletHost.removeServletMapping(bindingURI);
     }
 }
