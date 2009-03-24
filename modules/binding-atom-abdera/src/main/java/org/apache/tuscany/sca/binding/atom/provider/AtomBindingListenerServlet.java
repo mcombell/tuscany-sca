@@ -25,12 +25,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
@@ -47,7 +44,6 @@ import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Service;
@@ -55,14 +51,13 @@ import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.writer.WriterFactory;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.tuscany.sca.binding.http.HTTPCacheContext;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.databinding.Mediator;
 import org.apache.tuscany.sca.interfacedef.DataType;
-import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.Operation;
+import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
 import org.apache.tuscany.sca.interfacedef.util.XMLType;
 import org.apache.tuscany.sca.invocation.InvocationChain;
 import org.apache.tuscany.sca.invocation.Invoker;
@@ -87,7 +82,7 @@ class AtomBindingListenerServlet extends HttpServlet {
     private static final String LOCATION = "Location";    
     private static final String CONTENTLOCATION = "Content-Location";    
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss Z" ); // RFC 822 date time
-    
+
     private RuntimeWire wire;
     private Invoker getFeedInvoker;
     private Invoker getAllInvoker;
@@ -117,7 +112,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         this.messageFactory = messageFactory;
         this.mediator = mediator;
         this.title = title;
-        
+
         // Get the invokers for the supported operations
         Operation getOperation = null;
         for (InvocationChain invocationChain : this.wire.getInvocationChains()) {
@@ -156,31 +151,31 @@ class AtomBindingListenerServlet extends HttpServlet {
         QName qname = outputType.getLogical().getElementName();
         qname = new QName(qname.getNamespaceURI(), itemClass.getSimpleName());
         itemClassType = new DataTypeImpl<XMLType>("java:complexType", itemClass, new XMLType(qname, null));
-        
+
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // No authentication required for a get request
-    	
-    	// Test for any cache info in the request
- 	    HTTPCacheContext cacheContext = null;    	
-    	try { 
-    	   cacheContext = HTTPCacheContext.getCacheContextFromRequest( request );
-    	} catch ( java.text.ParseException e ) {    
-    	}
-    	// System.out.println( "AtomBindingListener.doGet cache context=" + cacheContext );
-    	
+
+        // Test for any cache info in the request
+        HTTPCacheContext cacheContext = null;    	
+        try { 
+            cacheContext = HTTPCacheContext.getCacheContextFromRequest( request );
+        } catch ( java.text.ParseException e ) {    
+        }
+        // System.out.println( "AtomBindingListener.doGet cache context=" + cacheContext );
+
         // Get the request path
-    	int servletPathLength = request.getContextPath().length() + request.getServletPath().length();
+        int servletPathLength = request.getContextPath().length() + request.getServletPath().length();
         String path = URLDecoder.decode(request.getRequestURI().substring(servletPathLength), "UTF-8");
 
         logger.fine("get " + request.getRequestURI());
 
         // Handle an Atom request
         if (path != null && path.equals("/atomsvc")) {
-                /*
+            /*
              <?xml version='1.0' encoding='UTF-8'?>
              <service xmlns="http://www.w3.org/2007/app" xmlns:atom="http://www.w3.org/2005/Atom">
                 <workspace>
@@ -192,56 +187,59 @@ class AtomBindingListenerServlet extends HttpServlet {
                    </collection>
                 </workspace>
              </service>
-                 */
-                
+             */
+
             // Return the Atom service document
             response.setContentType("application/atomsvc+xml; charset=utf-8");
-            
+
             String href = request.getRequestURL().toString();
             href = href.substring(0, href.length() - "/atomsvc".length());
 
             String workspaceURL = new String( href );
             int pathIndex = workspaceURL.indexOf( request.getServletPath() );
-            if ( -1 != pathIndex )
-            	workspaceURL = workspaceURL.substring( 0, pathIndex ) + "/";
+            if ( -1 != pathIndex ) {
+                workspaceURL = workspaceURL.substring( 0, pathIndex ) + "/";
+            }
 
             Service service = abderaFactory.newService();
             //service.setText("service");
-            
+
             Workspace workspace = abderaFactory.newWorkspace();
-            if ( title != null )
+            if ( title != null ) {
                 workspace.setTitle(title);
-            else
-                workspace.setTitle("workspace"); 
+            } else {
+                workspace.setTitle("workspace");
+            }
             workspace.setBaseUri( new IRI( workspaceURL ));
-            
-        	Collection collection = workspace.addCollection("collection", href );
+
+            Collection collection = workspace.addCollection("collection", href );
             Feed feed = getFeed( request );
             if ( feed != null ) {
-            	String title = feed.getTitle();
-            	if ( title != null )
-            		collection.setTitle(title);
-            	else
-                	collection.setTitle("entries");
-            	collection.addAccepts("application/atom+xml;type=feed");
-            	collection.addAccepts("application/json;type=feed");
-            	collection.addAccepts("application/atom+xml;type=entry");
-            	collection.addAccepts("application/json;type=entry");
-            	List<Category> categories = feed.getCategories();
-            	if ( categories != null ) {
-                   	collection.addCategories(categories, false, null); 
-            	} else
-                	collection.addCategories().setFixed(false);                        		
-            	
-            } else {
-            	collection.setTitle("entries");
-            	// collection.addAccepts("application/atom+xml;type=feed");
-            	collection.addAccepts("application/atom+xml; type=entry");
-            	collection.addAccepts("application/json;type=entry");
-            	collection.addCategories().setFixed(false);            
-            }
-        	workspace.addCollection(collection);
+                String title = feed.getTitle();
+                if ( title != null ) {
+                    collection.setTitle(title);
+                } else {
+                    collection.setTitle("entries");
+                }
+                collection.addAccepts("application/atom+xml;type=feed");
+                collection.addAccepts("application/json;type=feed");
+                collection.addAccepts("application/atom+xml;type=entry");
+                collection.addAccepts("application/json;type=entry");
+                List<Category> categories = feed.getCategories();
+                if ( categories != null ) {
+                    collection.addCategories(categories, false, null); 
+                } else {
+                    collection.addCategories().setFixed(false);
+                }
 
+            } else {
+                collection.setTitle("entries");
+                // collection.addAccepts("application/atom+xml;type=feed");
+                collection.addAccepts("application/atom+xml; type=entry");
+                collection.addAccepts("application/json;type=entry");
+                collection.addCategories().setFixed(false);            
+            }
+            workspace.addCollection(collection);
             service.addWorkspace(workspace);
 
             //FIXME add prettyPrint support
@@ -258,85 +256,87 @@ class AtomBindingListenerServlet extends HttpServlet {
             if (feed != null) {
                 String feedETag = null;
                 if (feed.getId() != null)
-                	feedETag = feed.getId().toString();
+                    feedETag = feed.getId().toString();
                 Date feedUpdated = feed.getUpdated();
                 // Test request for predicates.
                 String predicate = request.getHeader( "If-Match" );
                 if (( predicate != null ) && ( !predicate.equals(feedETag) )) {
-                	// No match, should short circuit
+                    // No match, should short circuit
                     response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
                     return;
                 }
                 predicate = request.getHeader( "If-None-Match" );
                 if (( predicate != null ) && ( predicate.equals(feedETag) )) {
-                	// Match, should short circuit
+                    // Match, should short circuit
                     response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
                 }
                 if ( feedUpdated != null ) {
-                	predicate = request.getHeader( "If-Unmodified-Since" );                
-                	if ( predicate != null ) {
-                		try {
-                			Date predicateDate = dateFormat.parse( predicate ); 
-                			if ( predicateDate.compareTo( feedUpdated ) < 0 ) {
-                				// Match, should short circuit
-                				response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-                				return;
-                			}             		
-                		} catch ( java.text.ParseException e ) {
-                			// Ignore and move on
-                		}
-                	}
-                	predicate = request.getHeader( "If-Modified-Since" );                
-                	if ( predicate != null ) {
-                		try {
-                			Date predicateDate = dateFormat.parse( predicate ); 
-                			if ( predicateDate.compareTo( feedUpdated ) > 0 ) {
-                				// Match, should short circuit
-                				response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-                				return;
-                			}             		
-                		} catch ( java.text.ParseException e ) {
-                			// Ignore and move on
-                		}
-                	}
+                    predicate = request.getHeader( "If-Unmodified-Since" );                
+                    if ( predicate != null ) {
+                        try {
+                            Date predicateDate = dateFormat.parse( predicate ); 
+                            if ( predicateDate.compareTo( feedUpdated ) < 0 ) {
+                                // Match, should short circuit
+                                response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                                return;
+                            }             		
+                        } catch ( java.text.ParseException e ) {
+                            // Ignore and move on
+                        }
+                    }
+                    predicate = request.getHeader( "If-Modified-Since" );                
+                    if ( predicate != null ) {
+                        try {
+                            Date predicateDate = dateFormat.parse( predicate ); 
+                            if ( predicateDate.compareTo( feedUpdated ) > 0 ) {
+                                // Match, should short circuit
+                                response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                                return;
+                            }             		
+                        } catch ( java.text.ParseException e ) {
+                            // Ignore and move on
+                        }
+                    }
                 }
                 // Provide Etag based on Id and time if given.
                 // Ignore if not given. (Browser may cache if trivial ETag is given.)
-                if ( feedETag != null )
-        		   response.addHeader(ETAG, feedETag );
-        		if ( feedUpdated != null )
-        			response.addHeader(LASTMODIFIED, dateFormat.format( feedUpdated ));
-        		
+                if ( feedETag != null ) {
+                    response.addHeader(ETAG, feedETag );
+                }
+                if ( feedUpdated != null ) {
+                    response.addHeader(LASTMODIFIED, dateFormat.format( feedUpdated ));
+                }
+
                 // Content negotiation
-            	String acceptType = request.getHeader( "Accept" );
-            	String preferredType = getContentPreference( acceptType ); 
-            	if (( preferredType != null ) && ((preferredType.indexOf( "json") > -1) || (preferredType.indexOf( "JSON") > -1 ))) {
-            		// JSON response body
+                String acceptType = request.getHeader( "Accept" );
+                String preferredType = getContentPreference( acceptType ); 
+                if (( preferredType != null ) && ((preferredType.indexOf( "json") > -1) || (preferredType.indexOf( "JSON") > -1 ))) {
+                    // JSON response body
                     response.setContentType("application/json;type=feed");
-                    
+
                     try {
-                		Abdera abdera = new Abdera();
-                		WriterFactory wf = abdera.getWriterFactory();
-                		org.apache.abdera.writer.Writer json = wf.getWriter("json");
-                    	feed.writeTo(json, response.getWriter());
+                        Abdera abdera = new Abdera();
+                        WriterFactory wf = abdera.getWriterFactory();
+                        org.apache.abdera.writer.Writer json = wf.getWriter("json");
+                        feed.writeTo(json, response.getWriter());
                     } catch (Exception e) {
                         throw new ServletException(e);
                     }           		
 
-            	} else {
-            		// Write the Atom feed
-            		response.setContentType("application/atom+xml;type=feed");
-            		try {
-            			feed.getDocument().writeTo(response.getOutputStream());
-            		} catch (IOException ioe) {
-            			throw new ServletException(ioe);
-            		}
-            	}
+                } else {
+                    // Write the Atom feed
+                    response.setContentType("application/atom+xml;type=feed");
+                    try {
+                        feed.getDocument().writeTo(response.getOutputStream());
+                    } catch (IOException ioe) {
+                        throw new ServletException(ioe);
+                    }
+                }
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
-            
+
         } else if (path.startsWith("/")) {
             // Return a specific entry in the collection
             org.apache.abdera.model.Entry feedEntry;
@@ -347,14 +347,14 @@ class AtomBindingListenerServlet extends HttpServlet {
             requestMessage.setBody(new Object[] {id});
             Message responseMessage = getInvoker.invoke(requestMessage);
             if (responseMessage.isFault()) {
-            	Object body = responseMessage.getBody();
-            	 if (body.getClass().getName().endsWith(".NotFoundException")) {
-                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                     return;
-                 } else {
-                     throw new ServletException((Throwable)responseMessage.getBody());
-                 }
-              
+                Object body = responseMessage.getBody();
+                if (body.getClass().getName().endsWith(".NotFoundException")) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                } else {
+                    throw new ServletException((Throwable)responseMessage.getBody());
+                }
+
             }
             if (supportsFeedEntries) {
                 // The service implementation returns a feed entry 
@@ -369,94 +369,96 @@ class AtomBindingListenerServlet extends HttpServlet {
             if (feedEntry != null) {
                 String entryETag = null;
                 if (feedEntry.getId() != null)
-                	entryETag = feedEntry.getId().toString();
+                    entryETag = feedEntry.getId().toString();
                 Date entryUpdated = feedEntry.getUpdated();
                 if ( entryUpdated != null )
-                   response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
+                    response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
                 // TODO Check If-Modified-Since If-Unmodified-Since predicates against LASTMODIFIED. 
                 // If true return 304 and null body.
-                
+
                 Link link = feedEntry.getSelfLink();
                 if (link != null) {
                     response.addHeader(LOCATION, link.getHref().toString());
                 } else {
-                   link = feedEntry.getLink( "Edit" );
-                   if (link != null) {
-                      response.addHeader(LOCATION, link.getHref().toString());
-                   }
+                    link = feedEntry.getLink( "Edit" );
+                    if (link != null) {
+                        response.addHeader(LOCATION, link.getHref().toString());
+                    }
                 }
 
                 // Test request for predicates.
                 String predicate = request.getHeader( "If-Match" );
                 if (( predicate != null ) && ( !predicate.equals(entryETag) )) {
-                	// No match, should short circuit
+                    // No match, should short circuit
                     response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
                     return;
                 }
                 predicate = request.getHeader( "If-None-Match" );
                 if (( predicate != null ) && ( predicate.equals(entryETag) )) {
-                	// Match, should short circuit
+                    // Match, should short circuit
                     response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
                 }
                 if ( entryUpdated != null ) {
-                	predicate = request.getHeader( "If-Unmodified-Since" );                
-                	if ( predicate != null ) {
-                		try {
-                			Date predicateDate = dateFormat.parse( predicate ); 
-                			if ( predicateDate.compareTo( entryUpdated ) < 0 ) {
-                				// Match, should short circuit
-                				response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-                				return;
-                			}             		
-                		} catch ( java.text.ParseException e ) {
-                			// Ignore and move on
-                		}
-                	}
-                	predicate = request.getHeader( "If-Modified-Since" );                
-                	if ( predicate != null ) {
-                		try {
-                			Date predicateDate = dateFormat.parse( predicate ); 
-                			if ( predicateDate.compareTo( entryUpdated ) > 0 ) {
-                				// Match, should short circuit
-                				response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-                				return;
-                			}             		
-                		} catch ( java.text.ParseException e ) {
-                			// Ignore and move on
-                		}
-                	}
+                    predicate = request.getHeader( "If-Unmodified-Since" );                
+                    if ( predicate != null ) {
+                        try {
+                            Date predicateDate = dateFormat.parse( predicate ); 
+                            if ( predicateDate.compareTo( entryUpdated ) < 0 ) {
+                                // Match, should short circuit
+                                response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                                return;
+                            }             		
+                        } catch ( java.text.ParseException e ) {
+                            // Ignore and move on
+                        }
+                    }
+                    predicate = request.getHeader( "If-Modified-Since" );                
+                    if ( predicate != null ) {
+                        try {
+                            Date predicateDate = dateFormat.parse( predicate ); 
+                            if ( predicateDate.compareTo( entryUpdated ) > 0 ) {
+                                // Match, should short circuit
+                                response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                                return;
+                            }             		
+                        } catch ( java.text.ParseException e ) {
+                            // Ignore and move on
+                        }
+                    }
                 }
                 // Provide Etag based on Id and time if given.
                 // Ignore if not given. (Browser may cache if trivial ETag is given.)
-                if (entryETag != null)
-                	response.addHeader(ETAG, entryETag );
-                if ( entryUpdated != null )
-                	response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
-        		
+                if (entryETag != null) {
+                    response.addHeader(ETAG, entryETag );
+                }
+                if ( entryUpdated != null ) {
+                    response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
+                }
+
                 // Content negotiation
                 String acceptType = request.getHeader( "Accept" );
-            	String preferredType = getContentPreference( acceptType ); 
-            	if (( preferredType != null ) && ((preferredType.indexOf( "json") > -1) || (preferredType.indexOf( "JSON") > -1 ))) {
-            		// JSON response body
+                String preferredType = getContentPreference( acceptType ); 
+                if (( preferredType != null ) && ((preferredType.indexOf( "json") > -1) || (preferredType.indexOf( "JSON") > -1 ))) {
+                    // JSON response body
                     response.setContentType("application/json;type=entry");
                     try {
-                		Abdera abdera = new Abdera();
-                		WriterFactory wf = abdera.getWriterFactory();
-                		org.apache.abdera.writer.Writer json = wf.getWriter("json");
-                    	feedEntry.writeTo(json, response.getWriter());
+                        Abdera abdera = new Abdera();
+                        WriterFactory wf = abdera.getWriterFactory();
+                        org.apache.abdera.writer.Writer json = wf.getWriter("json");
+                        feedEntry.writeTo(json, response.getWriter());
                     } catch (Exception e) {
                         throw new ServletException(e);
                     }           		
-            	} else {
-            		// XML response body 
-            		response.setContentType("application/atom+xml;type=entry");
-            		try {
-            			feedEntry.writeTo(getWriter(response));
-            		} catch (IOException ioe) {
-            			throw new ServletException(ioe);
-            		}
-            	}
+                } else {
+                    // XML response body 
+                    response.setContentType("application/atom+xml;type=entry");
+                    try {
+                        feedEntry.writeTo(getWriter(response));
+                    } catch (IOException ioe) {
+                        throw new ServletException(ioe);
+                    }
+                }
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -464,79 +466,80 @@ class AtomBindingListenerServlet extends HttpServlet {
             // Path doesn't match any known pattern
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        
+
     }
 
-	protected Feed getFeed( HttpServletRequest request ) throws ServletException {
-		if (supportsFeedEntries) {
-		    // The service implementation supports feed entries, invoke its getFeed operation
-		    Message requestMessage = messageFactory.createMessage();
-		    Message responseMessage;
-		    if (request.getQueryString() != null) {
-		        requestMessage.setBody(new Object[] {request.getQueryString()});
-		        responseMessage = queryInvoker.invoke(requestMessage);
-		    } else {
-		        responseMessage = getFeedInvoker.invoke(requestMessage);
-		    }
-		    if (responseMessage.isFault()) {
-		        throw new ServletException((Throwable)responseMessage.getBody());
-		    }
-		    return (Feed)responseMessage.getBody();		    
-		} else {
+    protected Feed getFeed( HttpServletRequest request ) throws ServletException {
+        if (supportsFeedEntries) {
+            // The service implementation supports feed entries, invoke its getFeed operation
+            Message requestMessage = messageFactory.createMessage();
+            Message responseMessage;
+            if (request.getQueryString() != null) {
+                requestMessage.setBody(new Object[] {request.getQueryString()});
+                responseMessage = queryInvoker.invoke(requestMessage);
+            } else {
+                responseMessage = getFeedInvoker.invoke(requestMessage);
+            }
+            if (responseMessage.isFault()) {
+                throw new ServletException((Throwable)responseMessage.getBody());
+            }
+            return (Feed)responseMessage.getBody();		    
+        } else {
 
-		    // The service implementation does not support feed entries,
-		    // invoke its getAll operation to get the data item collection, then create
-		    // feed entries from the items
-		    Message requestMessage = messageFactory.createMessage();
-		    Message responseMessage;
-		    if (request.getQueryString() != null) {
-		        requestMessage.setBody(new Object[] {request.getQueryString()});
-		        responseMessage = queryInvoker.invoke(requestMessage);
-		    } else {
-		        responseMessage = getAllInvoker.invoke(requestMessage);
-		    }
-		    if (responseMessage.isFault()) {
-		        throw new ServletException((Throwable)responseMessage.getBody());
-		    }
-		    Entry<Object, Object>[] collection =
-		        (Entry<Object, Object>[])responseMessage.getBody();
-		    if (collection != null) {
-		        
-		        // Create the feed
-		        Feed feed = abderaFactory.newFeed();
-		        
-		        // Set the feed title
-		        if (title != null) {
-		            feed.setTitle(title);
-		        } else {
-		            feed.setTitle("Feed");
-		        }
-		        // All feeds must provide Id and updated elements.
-		        // However, some do not, so provide some program protection.
-		        feed.setId( "Feed" + feed.hashCode());
-		        Date responseLastModified = new Date( 0 );
-		        
-		        // Add entries to the feed
-		        for (Entry<Object, Object> entry: collection) {
-		            org.apache.abdera.model.Entry feedEntry = feedEntry(entry, itemClassType, itemXMLType, mediator, abderaFactory);
-		            // Use the most recent entry update as the feed update
-		            Date entryUpdated = feedEntry.getUpdated();
-		            if (( entryUpdated != null ) && (entryUpdated.compareTo( responseLastModified  ) > 0 ))
-		            	responseLastModified = entryUpdated;
-		            feed.addEntry(feedEntry);
-		        }
-		        // If no entries were newly updated,
-		        if ( responseLastModified.compareTo( new Date( 0 ) ) == 0 ) 
-		        	responseLastModified = new Date();
-				return feed;
-		    }
-		}
-		return null;
-	}
+            // The service implementation does not support feed entries,
+            // invoke its getAll operation to get the data item collection, then create
+            // feed entries from the items
+            Message requestMessage = messageFactory.createMessage();
+            Message responseMessage;
+            if (request.getQueryString() != null) {
+                requestMessage.setBody(new Object[] {request.getQueryString()});
+                responseMessage = queryInvoker.invoke(requestMessage);
+            } else {
+                responseMessage = getAllInvoker.invoke(requestMessage);
+            }
+            if (responseMessage.isFault()) {
+                throw new ServletException((Throwable)responseMessage.getBody());
+            }
+            Entry<Object, Object>[] collection = (Entry<Object, Object>[])responseMessage.getBody();
+            if (collection != null) {
+
+                // Create the feed
+                Feed feed = abderaFactory.newFeed();
+
+                // Set the feed title
+                if (title != null) {
+                    feed.setTitle(title);
+                } else {
+                    feed.setTitle("Feed");
+                }
+                // All feeds must provide Id and updated elements.
+                // However, some do not, so provide some program protection.
+                feed.setId( "Feed" + feed.hashCode());
+                Date responseLastModified = new Date( 0 );
+
+                // Add entries to the feed
+                for (Entry<Object, Object> entry: collection) {
+                    org.apache.abdera.model.Entry feedEntry = feedEntry(entry, itemClassType, itemXMLType, mediator, abderaFactory);
+                    // Use the most recent entry update as the feed update
+                    Date entryUpdated = feedEntry.getUpdated();
+                    if (( entryUpdated != null ) && (entryUpdated.compareTo( responseLastModified  ) > 0 )) {
+                        responseLastModified = entryUpdated;
+                    }
+                    feed.addEntry(feedEntry);
+                }
+                // If no entries were newly updated,
+                if ( responseLastModified.compareTo( new Date( 0 ) ) == 0 ) {
+                    responseLastModified = new Date();
+                }
+                return feed;
+            }
+        }
+        return null;
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-        IOException {
+    IOException {
         // Authenticate the user
         String user = processAuthorizationHeader(request);
         if (user == null) {
@@ -557,15 +560,15 @@ class AtomBindingListenerServlet extends HttpServlet {
                 // Read the entry from the request
                 org.apache.abdera.model.Entry feedEntry;
                 try {
-                        Document<org.apache.abdera.model.Entry> doc = abderaParser.parse(request.getReader());
-                        feedEntry = doc.getRoot();
+                    Document<org.apache.abdera.model.Entry> doc = abderaParser.parse(request.getReader());
+                    feedEntry = doc.getRoot();
                 } catch (ParseException pe) {
                     throw new ServletException(pe);
                 }
 
                 // Let the component implementation create it
                 if (supportsFeedEntries) {
-                    
+
                     // The service implementation supports feed entries, pass the entry to it
                     Message requestMessage = messageFactory.createMessage();
                     requestMessage.setBody(new Object[] {feedEntry});
@@ -575,7 +578,7 @@ class AtomBindingListenerServlet extends HttpServlet {
                     }
                     createdFeedEntry = responseMessage.getBody();
                 } else {
-                    
+
                     // The service implementation does not support feed entries, pass the data item to it
                     Message requestMessage = messageFactory.createMessage();
                     Entry<Object, Object> entry = entry(feedEntry, itemClassType, itemXMLType, mediator);
@@ -603,12 +606,12 @@ class AtomBindingListenerServlet extends HttpServlet {
                     throw new ServletException((Throwable)responseMessage.getBody());
                 }
                 createdFeedEntry = responseMessage.getBody();
-                
+
                 // Transfer media info to response header.
                 // Summary is a comma separated list of header properties.
                 String summary = createdFeedEntry.getSummary();
-               	addPropertiesToHeader( response, summary );
-                
+                addPropertiesToHeader( response, summary );
+
             } else {
                 response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             }
@@ -617,11 +620,13 @@ class AtomBindingListenerServlet extends HttpServlet {
             if (createdFeedEntry != null) {
                 // Set location of the created entry in the Location header
                 IRI feedId = createdFeedEntry.getId();
-                if ( feedId != null )
-                   response.addHeader(ETAG, "\"" + feedId.toString() + "\"" );
+                if ( feedId != null ) {
+                    response.addHeader(ETAG, "\"" + feedId.toString() + "\"" );
+                }
                 Date entryUpdated = createdFeedEntry.getUpdated();
-                if ( entryUpdated != null )
-                   response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
+                if ( entryUpdated != null ) {
+                    response.addHeader(LASTMODIFIED, dateFormat.format( entryUpdated ));
+                }
                 Link link = createdFeedEntry.getSelfLink();
                 if (link != null) {
                     response.addHeader(LOCATION, link.getHref().toString());
@@ -639,7 +644,7 @@ class AtomBindingListenerServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_CREATED);
                 response.setContentType("application/atom+xml;type=entry");
                 try {
-                        createdFeedEntry.writeTo(getWriter(response));
+                    createdFeedEntry.writeTo(getWriter(response));
                 } catch (ParseException pe) {
                     throw new ServletException(pe);
                 }
@@ -680,8 +685,8 @@ class AtomBindingListenerServlet extends HttpServlet {
                 // Read the entry from the request
                 org.apache.abdera.model.Entry feedEntry;
                 try {
-                        Document<org.apache.abdera.model.Entry> doc = abderaParser.parse(request.getReader());
-                        feedEntry = doc.getRoot();
+                    Document<org.apache.abdera.model.Entry> doc = abderaParser.parse(request.getReader());
+                    feedEntry = doc.getRoot();
                 } catch (ParseException pe) {
                     throw new ServletException(pe);
                 }
@@ -724,7 +729,7 @@ class AtomBindingListenerServlet extends HttpServlet {
                 Message requestMessage = messageFactory.createMessage();
                 requestMessage.setBody(new Object[] {id, contentType, request.getInputStream()});
                 Message responseMessage = putMediaInvoker.invoke(requestMessage);
-                
+
                 Object body = responseMessage.getBody();
                 if (responseMessage.isFault()) {
                     if (body.getClass().getName().endsWith(".NotFoundException")) {
@@ -733,9 +738,9 @@ class AtomBindingListenerServlet extends HttpServlet {
                         throw new ServletException((Throwable)responseMessage.getBody());
                     }
                 }
-                
+
                 // Transfer content to response header.
-                
+
             } else {
                 response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             }
@@ -745,8 +750,7 @@ class AtomBindingListenerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException,  IOException {
 
         // Authenticate the user
         String user = processAuthorizationHeader(request);
@@ -787,11 +791,11 @@ class AtomBindingListenerServlet extends HttpServlet {
      * @throws ServletException
      */
     private String processAuthorizationHeader(HttpServletRequest request) throws ServletException {
-        
+
         // FIXME temporarily disabling this as it doesn't work with all browsers 
         if (true)
             return "admin";
-        
+
         try {
             String authorization = request.getHeader("Authorization");
             if (authorization != null) {
@@ -841,14 +845,20 @@ class AtomBindingListenerServlet extends HttpServlet {
         response.setHeader("WWW-Authenticate", "BASIC realm=\"Tuscany\"");
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
-    
+
+    /**
+     * Get content-type preference using application/atom-xml as default
+     * @param acceptType content-type preference using application/atom-xml as default
+     * @return
+     */
     public static String getContentPreference( String acceptType ) {
-    	if (( acceptType == null ) || ( acceptType.length() < 1 )) {
+        if (( acceptType == null ) || ( acceptType.length() < 1 )) {
             return "application/atom+xml";    		
-    	}
-    	StringTokenizer st = new StringTokenizer( acceptType, "," );
-    	if ( st.hasMoreTokens() )
-    		return st.nextToken();    		
+        }
+        StringTokenizer st = new StringTokenizer( acceptType, "," );
+        if ( st.hasMoreTokens() ) {
+            return st.nextToken(); 
+        }
         return "application/atom+xml";
     }
 
@@ -857,22 +867,22 @@ class AtomBindingListenerServlet extends HttpServlet {
      * @param response
      * @param properties
      */
-	public static void addPropertiesToHeader( HttpServletResponse response, String properties  ) {
-		if ( properties == null ) return; 
-    	StringTokenizer props = new StringTokenizer( properties, ",");
-    	while( props.hasMoreTokens()) {
-    		String prop = props.nextToken();
-    		StringTokenizer keyVal = new StringTokenizer( prop, "=");
-    		String key = null;
-    		String val = null;
-    		if ( keyVal.hasMoreTokens() )
-    			key = keyVal.nextToken();
-    		if ( keyVal.hasMoreTokens() )
-    			val = keyVal.nextToken();
-    		if (( key != null ) && ( val != null )) {
+    public static void addPropertiesToHeader( HttpServletResponse response, String properties  ) {
+        if ( properties == null ) return; 
+        StringTokenizer props = new StringTokenizer( properties, ",");
+        while( props.hasMoreTokens()) {
+            String prop = props.nextToken();
+            StringTokenizer keyVal = new StringTokenizer( prop, "=");
+            String key = null;
+            String val = null;
+            if ( keyVal.hasMoreTokens() )
+                key = keyVal.nextToken();
+            if ( keyVal.hasMoreTokens() )
+                val = keyVal.nextToken();
+            if (( key != null ) && ( val != null )) {
                 response.addHeader(key, val);                			
-    		}
-    	}
-	}
+            }
+        }
+    }
 
 }
