@@ -32,14 +32,31 @@ public class WebModuleInfoImpl implements WebModuleInfo {
     
     private URI uri;
     private String moduleName;
-    private Collection<Class<?>> classesToScan = new ArrayList<Class<?>>();
+    
+    private Collection<Class<?>> servletClasses = new ArrayList<Class<?>>();
+    private Collection<Class<?>> listenerClasses = new ArrayList<Class<?>>();
+    private Collection<Class<?>> filterClasses = new ArrayList<Class<?>>();
+    private Collection<Class<?>> jsfClasses = new ArrayList<Class<?>>();
+    
     private Map<String, EjbReferenceInfo> ejbReferences = new HashMap<String, EjbReferenceInfo>();
     private Map<String, EnvEntryInfo> envEntries = new HashMap<String, EnvEntryInfo>();
 
     public WebModuleInfoImpl() {
     }
-    public Collection<Class<?>> getClassesToScan() {
-        return classesToScan;
+    public Collection<Class<?>> getServletClasses() {
+        return servletClasses;
+    }
+
+    public Collection<Class<?>> getListenerClasses() {
+        return listenerClasses;
+    }
+
+    public Collection<Class<?>> getFilterClasses() {
+        return filterClasses;
+    }
+
+    public Collection<Class<?>> getJSFClasses() {
+        return jsfClasses;
     }
 
     public EjbReferenceInfo getEjbReference(String ejbRefName) {

@@ -38,6 +38,9 @@ public interface WebModuleInfo {
     EjbReferenceInfo getEjbReference(String ejbRefName);
     EnvEntryInfo getEnvEntry(String envEntryName);
     
-    Collection<Class<?>> getClassesToScan();
+    Collection<Class<?>> getServletClasses();
+    Collection<Class<?>> getListenerClasses();
+    Collection<Class<?>> getFilterClasses();
+    Collection<Class<?>> getJSFClasses();
     //TODO: JSP tags?
 }

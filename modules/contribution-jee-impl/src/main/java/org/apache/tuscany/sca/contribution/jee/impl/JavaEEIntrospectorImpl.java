@@ -126,7 +126,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         // Process Servlets
         for(Servlet servlet: webApp.getServlet()) {
             try {
-                wmInfo.getClassesToScan().add(classLoader.loadClass(servlet.getServletClass()));
+                wmInfo.getServletClasses().add(classLoader.loadClass(servlet.getServletClass()));
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -136,7 +136,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         // Process Filters
         for(Filter filter: webApp.getFilter()) {
             try {
-                wmInfo.getClassesToScan().add(classLoader.loadClass(filter.getFilterClass()));
+                wmInfo.getFilterClasses().add(classLoader.loadClass(filter.getFilterClass()));
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -146,7 +146,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         // Process Listeners
         for(Listener listener: webApp.getListener()) {
             try {
-                wmInfo.getClassesToScan().add(classLoader.loadClass(listener.getListenerClass()));
+                wmInfo.getListenerClasses().add(classLoader.loadClass(listener.getListenerClass()));
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
