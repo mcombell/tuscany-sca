@@ -19,6 +19,7 @@
 
 package org.apache.tuscany.sca.host.embedded.impl;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -41,11 +42,13 @@ import org.apache.tuscany.sca.core.assembly.RuntimeComponentImpl;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.apache.tuscany.sca.host.embedded.management.ComponentListener;
 import org.apache.tuscany.sca.host.embedded.management.ComponentManager;
+import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.node.SCAClient;
 import org.apache.tuscany.sca.node.SCAContribution;
 import org.apache.tuscany.sca.node.SCANode;
 import org.apache.tuscany.sca.node.SCANodeFactory;
 import org.apache.tuscany.sca.node.impl.NodeImpl;
+import org.apache.tuscany.sca.node.impl.RuntimeBootStrapper;
 import org.osoa.sca.CallableReference;
 import org.osoa.sca.ServiceReference;
 
@@ -178,10 +181,23 @@ public class DefaultSCADomain extends SCADomain {
         client = (SCAClient)node;
         compositeActivator = ((NodeImpl)node).getCompositeActivator();
         components = new HashMap<String, Component>();
+        
+        setDefaultPort();
 
         node.start();
 
         getComponents(compositeActivator.getDomainComposite());
+    }
+
+    private void setDefaultPort() {
+        URI uri = URI.create(domainURI);
+        if (uri.getPort() > -1) {
+            RuntimeBootStrapper rt = ((NodeImpl)node).getRuntime();
+            ServletHostExtensionPoint sh = rt.getExtensionPointRegistry().getExtensionPoint(ServletHostExtensionPoint.class);
+            if (sh != null && sh.getServletHosts() != null && !sh.getServletHosts().isEmpty()) {
+                sh.getServletHosts().get(0).setDefaultPort(uri.getPort());
+            }
+        }
     }
 
     private void getComponents(Composite composite) {

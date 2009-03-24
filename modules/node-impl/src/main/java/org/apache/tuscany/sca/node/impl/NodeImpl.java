@@ -850,5 +850,9 @@ public class NodeImpl implements SCANode, SCAClient {
     public CompositeActivator getCompositeActivator() {
         return compositeActivator;
     }
+    
+    public RuntimeBootStrapper getRuntime() {
+        return runtime;
+    }
 
 }
