@@ -137,9 +137,16 @@ class WidgetImplementationInvoker implements Invoker {
             }
         }
         
+        //define tuscany.sca namespace
+        generateJavaScriptNamespace(pw);
+
+        pw.println();
+        
         //process properties
         generateJavaScriptPropertyFunction(pw);
-        
+
+        pw.println();
+
         //process references
         generateJavaScriptReferenceFunction(pw);
         
@@ -171,22 +178,30 @@ class WidgetImplementationInvoker implements Invoker {
         pw.println();
     }
     
+    private void generateJavaScriptNamespace(PrintWriter pw) throws IOException {
+        pw.println("if (!tuscany) { \n" +
+        		"var tuscany = {}; \n" +
+        		"}");
+        pw.println("if (!tuscany.sca) { \n" +
+        		"tuscany.sca = {}; \n" +
+        		"}");
+    }
+    
     /**
      * Generate JavaScript code to inject SCA Properties
      * @param pw
      * @throws IOException
      */
-    private void generateJavaScriptPropertyFunction(PrintWriter pw) throws IOException {
-
-        pw.println("var propertyMap = new String();");
+    private void generateJavaScriptPropertyFunction(PrintWriter pw) throws IOException {        
+        pw.println("tuscany.sca.propertyMap = new String();");
         for(ComponentProperty property : component.getProperties()) {
             String propertyName = property.getName();
 
-            pw.println("propertyMap." + propertyName + " = \"" + getPropertyValue(property) + "\"");
+            pw.println("tuscany.sca.propertyMap." + propertyName + " = \"" + getPropertyValue(property) + "\"");
         }
         
-        pw.println("function Property(name) {");
-        pw.println("    return propertyMap[name];");
+        pw.println("tuscany.sca.Property = function (name) {");
+        pw.println("    return tuscany.sca.propertyMap[name];");
         pw.println("}");
     }
     
@@ -217,7 +232,7 @@ class WidgetImplementationInvoker implements Invoker {
      */
     private void generateJavaScriptReferenceFunction (PrintWriter pw) throws IOException, URISyntaxException {
         
-        pw.println("var referenceMap = new Object();");
+        pw.println("tuscany.sca.referenceMap = new Object();");
         for(ComponentReference reference : component.getReferences()) {
             String referenceName = reference.getName();
             Binding binding = reference.getBindings().get(0);
@@ -246,18 +261,17 @@ class WidgetImplementationInvoker implements Invoker {
                     String targetPath = targetURI.getPath();
                     
                     if(proxyClient.equals("JSONRpcClient")) {
-                        //FIXME Proxies should follow the same pattern, saving us from having to test
-                        // for JSONRpc here
-                        pw.println("referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\").Service;");
+                        //FIXME Proxies should follow the same pattern, saving us from having to test for JSONRpc here
+                        pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\").Service;");
                     } else {
-                        pw.println("referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\");");
+                        pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\");");
                     }
                 }                
             }
         }
         
-        pw.println("function Reference(name) {");
-        pw.println("    return referenceMap[name];");
+        pw.println("tuscany.sca.Reference = function (name) {");
+        pw.println("    return tuscany.sca.referenceMap[name];");
         pw.println("}");
     }
 
