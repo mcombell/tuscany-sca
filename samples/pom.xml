@@ -53,7 +53,7 @@
                 <module>calculator-corba-service</module>
                 <module>calculator-lean</module>
                 <module>calculator-distributed</module>
-		    <module>calculator-implementation-policies</module>
+                <module>calculator-implementation-policies</module>
                 <module>calculator-rmi-reference</module>
                 <module>calculator-rmi-service</module>
                 <module>calculator-script</module>
@@ -106,6 +106,7 @@
                 <module>simple-callback</module>
                 <module>simple-callback-ws</module>
                 <module>store</module>
+                <module>store-webapp</module>
                 <module>store-secure</module>
                 <module>store-distributed</module>
                 <module>supplychain</module>
