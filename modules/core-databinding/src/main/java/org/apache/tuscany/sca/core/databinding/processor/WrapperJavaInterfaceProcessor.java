@@ -95,9 +95,11 @@ public class WrapperJavaInterfaceProcessor implements JavaInterfaceVisitor {
 
         opDataTypes.addAll(operation.getInputType().getLogical());
         opDataTypes.add(operation.getOutputType());
+/*
         for (DataType<DataType> ft : operation.getFaultTypes()) {
             opDataTypes.add(ft.getLogical());
         }
+*/
 
         for (DataType<?> d : opDataTypes) {
             if (d != null) {

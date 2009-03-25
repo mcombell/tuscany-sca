@@ -125,6 +125,7 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                 }
                 dataBindingRegistry.introspectType(d, operation);
             }
+            /* It's now done in the JAXWS java interface processor
             for (org.apache.tuscany.sca.interfacedef.DataType<?> d : operation.getFaultTypes()) {
                 if (d.getDataBinding() == null) {
                     d.setDataBinding(dataBindingId);
@@ -132,6 +133,7 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                     dataBindingRegistry.introspectType(d, operation);
                 }
             }
+            */
         }
     }
 }
