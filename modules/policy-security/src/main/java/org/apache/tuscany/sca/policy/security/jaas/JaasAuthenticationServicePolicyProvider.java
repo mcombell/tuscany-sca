@@ -105,6 +105,6 @@ public class JaasAuthenticationServicePolicyProvider implements PolicyProvider {
     }
 
     public String getPhase() {
-        return Phase.SERVICE_BINDING_POLICY;
+        return Phase.SERVICE_POLICY;
     }
 }
