@@ -35,6 +35,8 @@ import javax.naming.NamingException;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
+import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
+import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactoryImpl;
 import org.apache.tuscany.sca.host.jms.JMSServiceListener;
 import org.apache.tuscany.sca.work.WorkScheduler;
 
@@ -52,7 +54,7 @@ public class ASFListener implements JMSServiceListener {
     private JMSBinding jmsBinding;
     private WorkScheduler workScheduler;
 
-    private JMSResourceFactoryImpl jmsResourceFactory;
+    private JMSResourceFactory jmsResourceFactory;
     private MessageConsumer consumer;
     private boolean running;
 
@@ -64,7 +66,7 @@ public class ASFListener implements JMSServiceListener {
         this.isCallbackService = isCallbackService;
         this.jmsBinding = jmsBinding;
         this.workScheduler = workScheduler;
-        this.jmsResourceFactory = new JMSResourceFactoryImpl(jmsBinding.getConnectionFactoryName(), jmsBinding.getInitialContextFactoryName(), jmsBinding.getJndiURL());
+        this.jmsResourceFactory = new JMSResourceFactoryImpl(jmsBinding.getConnectionFactoryName(), jmsBinding.getResponseConnectionFactoryName(), jmsBinding.getInitialContextFactoryName(), jmsBinding.getJndiURL());
     }
     
     public void start() {

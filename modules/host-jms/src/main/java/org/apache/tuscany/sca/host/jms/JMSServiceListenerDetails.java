@@ -19,9 +19,22 @@
 
 package org.apache.tuscany.sca.host.jms;
 
+import org.apache.tuscany.sca.assembly.Binding;
+import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
+import org.apache.tuscany.sca.invocation.MessageFactory;
+import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.runtime.RuntimeComponentService;
 
-public interface JMSServiceListenerFactory {
-    
-    JMSServiceListener createJMSServiceListener(JMSServiceListenerDetails jmsServiceBindingProvider);
+public interface JMSServiceListenerDetails {
+
+    JMSBinding getJmsBinding();
+
+    Binding getTargetBinding();
+
+    RuntimeComponentService getService();
+
+    RuntimeComponent getComponent();
+
+    MessageFactory getMessageFactory();
 
 }

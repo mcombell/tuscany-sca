@@ -21,20 +21,14 @@ package org.apache.tuscany.sca.binding.jms.provider;
 
 import java.util.logging.Logger;
 
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageListener;
-import javax.jms.Queue;
-import javax.jms.Topic;
-
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
-import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingException;
 import org.apache.tuscany.sca.binding.jms.transport.TransportServiceInterceptor;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.host.jms.JMSServiceListener;
+import org.apache.tuscany.sca.host.jms.JMSServiceListenerDetails;
 import org.apache.tuscany.sca.host.jms.JMSServiceListenerFactory;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
 import org.apache.tuscany.sca.invocation.InvocationChain;
@@ -55,7 +49,7 @@ import org.apache.tuscany.sca.runtime.RuntimeWire;
  * 
  * @version $Rev$ $Date$
  */
-public class JMSBindingServiceBindingProvider implements ServiceBindingProviderRRB {
+public class JMSBindingServiceBindingProvider implements ServiceBindingProviderRRB, JMSServiceListenerDetails {
     private static final Logger logger = Logger.getLogger(JMSBindingServiceBindingProvider.class.getName());
 
     private RuntimeComponentService service;
@@ -142,8 +136,7 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
     public void start() {
         try {
 
-            MessageListener listener = new RRBJMSBindingListener(jmsBinding, jmsResourceFactory, service, targetBinding, messageFactory);
-            this.serviceListener = serviceListenerFactory.createJMSServiceListener(service.getName(), service.isCallback(), jmsBinding, listener);
+            this.serviceListener = serviceListenerFactory.createJMSServiceListener(this);
             serviceListener.start();
             
         } catch (Exception e) {
@@ -190,4 +183,25 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
                                         responseWireFormatProvider.createInterceptor());
         }
     }
+
+    public RuntimeComponent getComponent() {
+        return component;
+    }
+
+    public RuntimeComponentService getService() {
+        return service;
+    }
+
+    public Binding getTargetBinding() {
+        return targetBinding;
+    }
+
+    public JMSBinding getJmsBinding() {
+        return jmsBinding;
+    }
+
+    public MessageFactory getMessageFactory() {
+        return messageFactory;
+    }
+
 }
