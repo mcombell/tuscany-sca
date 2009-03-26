@@ -32,7 +32,7 @@ public class ASM_0004_TestCase extends BaseJAXWSTestCase {
     	TestConfiguration config = new TestConfiguration();
     	config.testName 		= "ASM_0004";
     	config.input 			= "request";
-    	config.output 			= "exception";
+    	config.output 			= "org.osoa.sca.ServiceRuntimeException: Too many targets on reference: reference1";
     	config.composite 		= "Test_ASM_0004.composite";
     	config.testServiceName 	= "TestClient";
     	config.testClass 		= ASM_0002_Client.class;
@@ -40,4 +40,4 @@ public class ASM_0004_TestCase extends BaseJAXWSTestCase {
     	return config;
     }
     
-} // end class Test_ASM_0003
+} // end class Test_ASM_0004

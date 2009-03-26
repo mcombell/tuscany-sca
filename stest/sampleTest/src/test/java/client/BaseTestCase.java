@@ -20,6 +20,7 @@ package client;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -62,7 +63,11 @@ public class BaseTestCase {
             // If the SCA runtime refuses to start an invalid contribution, then this is also
             // regarded as a successful outcome
             System.out.println( "Exception received - detail: " + e.getMessage() );
-            assertEquals( testConfiguration.getExpectedOutput(), "exception" );
+            if (e.getCause() instanceof InvocationTargetException){
+                assertEquals( testConfiguration.getExpectedOutput(), ((InvocationTargetException)e.getCause()).getCause().getMessage() );
+            } else {
+                assertEquals( testConfiguration.getExpectedOutput(), "exception" );
+            }
             System.out.println("Test " + testConfiguration.getTestName() + " completed successfully");
             // Mark this test as not to proceed further
             proceed = false;
