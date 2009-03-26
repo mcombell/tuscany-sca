@@ -205,7 +205,7 @@ public class WSDLModelResolver implements ModelResolver {
                 }
                 latestImportURI = url.toString();
                 return XMLDocumentHelper.getInputSource(url);
-            } catch (Exception e) {
+            } catch (IOException e) {            	
                 throw new ContributionRuntimeException(e);
             }
         }
@@ -247,18 +247,18 @@ public class WSDLModelResolver implements ModelResolver {
      * @param definitions A list of the WSDL definitions under the same target namespace
      * @return The aggregated WSDL definition
      */
-    private WSDLDefinition aggregate(List<WSDLDefinition> definitions) {
+    private WSDLDefinition aggregate(List<WSDLDefinition> definitions) throws ContributionReadException {
         if (definitions == null || definitions.size() == 0) {
             return null;
         }
         if (definitions.size() == 1) {
             WSDLDefinition d = definitions.get(0);
-            loadOnDemand(d);
+            loadDefinition(d);
             return d;
         }
         WSDLDefinition aggregated = wsdlFactory.createWSDLDefinition();
         for (WSDLDefinition d : definitions) {
-            loadOnDemand(d);
+        	loadDefinition(d);
         }
         Definition facade = wsdl4jFactory.newDefinition();
         String ns = definitions.get(0).getNamespace();
@@ -290,7 +290,12 @@ public class WSDLModelResolver implements ModelResolver {
             return modelClass.cast(unresolved);
         }
         List<WSDLDefinition> list = map.get(namespace);
-        WSDLDefinition resolved = aggregate(list);
+        WSDLDefinition resolved = null;
+        try {
+            resolved = aggregate(list);
+        } catch (ContributionReadException e) {
+        	throw new RuntimeException(e);
+        }
         if (resolved != null && !resolved.isUnresolved()) {
             return modelClass.cast(resolved);
         }
@@ -322,23 +327,37 @@ public class WSDLModelResolver implements ModelResolver {
         }
         return modelClass.cast(unresolved);
     }
-
-    /**
-     * Load the WSDL definition on demand
-     * @param def
-     */
-    private void loadOnDemand(WSDLDefinition def) {
-        if (def.getDefinition() == null && def.getLocation() != null) {
-            // Load the definition on-demand
+    
+    // Use non-sca mechanism to resolve the import location, if not 
+    // found then use the sca mechanism
+    private <T> T resolveImports (Class<T> modelClass, WSDLDefinition unresolved) {
+    	
+    	WSDLDefinition resolved = null;
+    	if (unresolved.getDefinition() == null && unresolved.getLocation() != null) {            
             try {
-                loadDefinition(def);
+            	// Load the definition using non-sca mechanism.
+            	List<WSDLDefinition> list = new ArrayList<WSDLDefinition>();
+                list.add(unresolved);
+                map.put(unresolved.getNamespace(), list);            	
+            	resolved = aggregate(list);            	
+            	// if no exception then its resolved.
+            	if (unresolved.getNamespace().equals(resolved.getDefinition().getTargetNamespace())) {
+            		resolved.setNamespace(resolved.getDefinition().getTargetNamespace());
+            		resolved.setUnresolved(false);
+            		resolved.setURI(resolved.getLocation());
+            		return modelClass.cast(resolved);
+            	}
             } catch (ContributionReadException e) {
-                throw new RuntimeException(e);
+            	// Load the definition using sca mechanism.
+            	resolved = resolveModel(WSDLDefinition.class, unresolved);
+            	if (resolved != null && !resolved.isUnresolved()) {
+                    return modelClass.cast(resolved);
+                }
             }
         }
-    }
-
-    // private Map<String, WSDLDefinition> loadedDefinitions = new Hashtable<String, WSDLDefinition>();
+        
+        return modelClass.cast(unresolved);
+    }    
 
     /**
      * Load the WSDL definition and inline schemas
@@ -373,7 +392,30 @@ public class WSDLModelResolver implements ModelResolver {
                     WSDLDefinition wsdlDefinition = wsdlFactory.createWSDLDefinition();
                     wsdlDefinition.setUnresolved(true);
                     wsdlDefinition.setNamespace(entry.getKey());
-                    WSDLDefinition resolved = resolveModel(WSDLDefinition.class, wsdlDefinition);
+                    WSDLDefinition resolved = null;
+                    for (javax.wsdl.Import imp : entry.getValue()) {
+                    	try {
+                    		wsdlDefinition.setLocation(new URI(imp.getDefinition().getDocumentBaseURI()));                    		
+                    		resolved = resolveImports(WSDLDefinition.class, wsdlDefinition);
+                    		if (!resolved.isUnresolved()) {
+                    			if (resolved.getDefinition().getDocumentBaseURI().equals(imp.getDefinition().getDocumentBaseURI())) {
+                                    // this WSDLDefinition contains the imported document
+                                    wsdlDef.getImportedDefinitions().add(resolved);
+                                } else {
+                                    // this is a facade, so look in its imported definitions
+                                    for (WSDLDefinition def : resolved.getImportedDefinitions()) {
+                                        if (def.getDefinition().getDocumentBaseURI().equals(imp.getDefinition().getDocumentBaseURI())) {
+                                            wsdlDef.getImportedDefinitions().add(def);
+                                            break;
+                                        }
+                                    }
+                                }
+                    		}
+                    	} catch (Exception e) {
+                    		throw new ContributionReadException(e);
+                    	}
+                    }
+                    /*resolved = resolveImports(WSDLDefinition.class, wsdlDefinition);
                     if (!resolved.isUnresolved()) {
                         for (javax.wsdl.Import imp : entry.getValue()) {
                             if (resolved.getDefinition().getDocumentBaseURI().equals(imp.getDefinition().getDocumentBaseURI())) {
@@ -389,7 +431,7 @@ public class WSDLModelResolver implements ModelResolver {
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
             }
 
