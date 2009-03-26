@@ -33,6 +33,7 @@ import org.example.quote.Quote;
 import org.example.quote.QuoteResponse;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import commonj.sdo.DataObject;
@@ -62,6 +63,7 @@ import commonj.sdo.DataObject;
  *    total price 
  *  4. SDO is used for data interchange
  */
+@Ignore("Broken, see TUSCANY-2943")
 public class XQueryQuoteClientTestCase {
 
     public static boolean SHOW_DEBUG_MSG = false;
