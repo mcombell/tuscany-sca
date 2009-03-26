@@ -48,12 +48,15 @@ public class EjbArchiveProcessor implements URLArtifactProcessor<EjbModuleInfo> 
     }
 
     public EjbModuleInfo read(URL contributionURL, URI artifactURI, URL artifactURL) throws ContributionReadException {
-        EjbModuleInfo ejbModuleInfo = jeeIntrospector.introspectEjbArchive(artifactURL);
-        if(ejbModuleInfo != null) {
-            ejbModuleInfo.setUri(artifactURI);
-            ejbModuleInfo.setModuleName(new File(artifactURL.getFile()).getName());
+        if (jeeIntrospector != null) {
+            EjbModuleInfo ejbModuleInfo = jeeIntrospector.introspectEjbArchive(artifactURL);
+            if(ejbModuleInfo != null) {
+                ejbModuleInfo.setUri(artifactURI);
+                ejbModuleInfo.setModuleName(new File(artifactURL.getFile()).getName());
+            }
+            return ejbModuleInfo;
         }
-        return ejbModuleInfo;
+        return null;
     }
 
     public Class<EjbModuleInfo> getModelType() {
