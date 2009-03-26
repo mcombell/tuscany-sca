@@ -18,6 +18,7 @@
  */
 package org.apache.tuscany.sca.implementation.spring.xml;
 
+import java.util.List;
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
@@ -26,21 +27,17 @@ import org.apache.tuscany.sca.implementation.java.IntrospectionException;
 import org.apache.tuscany.sca.implementation.java.JavaImplementation;
 import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.apache.tuscany.sca.implementation.java.introspect.JavaClassVisitor;
-import org.apache.tuscany.sca.implementation.java.introspect.impl.AllowsPassByReferenceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.BaseJavaClassVisitor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ComponentNameProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ConstructorProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ContextProcessor;
-import org.apache.tuscany.sca.implementation.java.introspect.impl.ConversationProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.DestroyProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.EagerInitProcessor;
-import org.apache.tuscany.sca.implementation.java.introspect.impl.HeuristicPojoProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.InitProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.PolicyProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.PropertyProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ReferenceProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ResourceProcessor;
-import org.apache.tuscany.sca.implementation.java.introspect.impl.ScopeProcessor;
 import org.apache.tuscany.sca.implementation.java.introspect.impl.ServiceProcessor;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.policy.PolicyFactory;
@@ -65,7 +62,8 @@ public class SpringBeanIntrospector {
      */
     public SpringBeanIntrospector(AssemblyFactory assemblyFactory,
                                   JavaInterfaceFactory javaFactory,
-                                  PolicyFactory policyFactory) {
+                                  PolicyFactory policyFactory,
+                                  List<SpringConstructorArgElement> conArgs) {
 
         javaImplementationFactory = new DefaultJavaImplementationFactory();
         
@@ -73,19 +71,16 @@ public class SpringBeanIntrospector {
         BaseJavaClassVisitor[] extensions =
             new BaseJavaClassVisitor[] {
                                         new ConstructorProcessor(assemblyFactory),
-                                        new AllowsPassByReferenceProcessor(assemblyFactory),
                                         new ComponentNameProcessor(assemblyFactory),
                                         new ContextProcessor(assemblyFactory),
-                                        new ConversationProcessor(assemblyFactory),
                                         new DestroyProcessor(assemblyFactory),
                                         new EagerInitProcessor(assemblyFactory),
                                         new InitProcessor(assemblyFactory),
                                         new PropertyProcessor(assemblyFactory),
                                         new ReferenceProcessor(assemblyFactory, javaFactory),
                                         new ResourceProcessor(assemblyFactory),
-                                        new ScopeProcessor(assemblyFactory),
                                         new ServiceProcessor(assemblyFactory, javaFactory),
-                                        new SpringBeanPojoProcessor(assemblyFactory, javaFactory),
+                                        new SpringBeanPojoProcessor(assemblyFactory, javaFactory, conArgs),
                                         new PolicyProcessor(assemblyFactory, policyFactory)};
         for (JavaClassVisitor extension : extensions) {
             javaImplementationFactory.addClassVisitor(extension);

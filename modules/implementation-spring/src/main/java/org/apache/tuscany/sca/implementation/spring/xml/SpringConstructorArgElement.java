@@ -31,7 +31,8 @@ public class SpringConstructorArgElement {
     
     private String ref;
     private String type;
-    private int index;
+    private int autoIndex = -1;
+    private int index = -1;
     private List<String> values = new ArrayList<String>();
 
     public SpringConstructorArgElement(String ref, String type) {
@@ -57,6 +58,14 @@ public class SpringConstructorArgElement {
     
     public void setIndex(int index) {
         this.index = index;
+    }
+    
+    public int getAutoIndex() {
+        return this.autoIndex;
+    }
+    
+    public void setAutoIndex(int index) {
+        this.autoIndex = index;
     }
     
     public List<String> getValues() {

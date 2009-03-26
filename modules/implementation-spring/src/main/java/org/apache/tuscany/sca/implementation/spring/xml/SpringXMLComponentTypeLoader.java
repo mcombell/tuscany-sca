@@ -72,6 +72,7 @@ public class SpringXMLComponentTypeLoader {
 
     private AssemblyFactory assemblyFactory;
     private JavaInterfaceFactory javaFactory;
+    private PolicyFactory policyFactory;
     private ClassLoader cl;
 
     private SpringBeanIntrospector beanIntrospector;
@@ -83,8 +84,7 @@ public class SpringXMLComponentTypeLoader {
         super();
         this.assemblyFactory = assemblyFactory;
         this.javaFactory = javaFactory;
-        beanIntrospector =
-            new SpringBeanIntrospector(assemblyFactory, javaFactory, policyFactory);
+        this.policyFactory = policyFactory;
     }
 
     protected Class<SpringImplementation> getImplementationClass() {
@@ -260,6 +260,7 @@ public class SpringXMLComponentTypeLoader {
     	SpringBeanElement innerbean = null;
         SpringPropertyElement property = null;
         SpringConstructorArgElement constructorArg = null;
+        int autoConstructorIndex = -1;
         
         try {
             boolean completed = false;
@@ -280,6 +281,8 @@ public class SpringXMLComponentTypeLoader {
                         } else if (Constants.CONSTRUCTORARG_ELEMENT.equals(qname)) {
                             constructorArg = new SpringConstructorArgElement(reader.getAttributeValue(null, "ref"), 
                                     reader.getAttributeValue(null, "type"));
+                            autoConstructorIndex++;
+                            constructorArg.setAutoIndex(autoConstructorIndex);
                             if (reader.getAttributeValue(null, "index") != null)
                             	constructorArg.setIndex((new Integer(reader.getAttributeValue(null, "index"))).intValue());
                             if (reader.getAttributeValue(null, "value") != null) {
@@ -413,7 +416,9 @@ public class SpringXMLComponentTypeLoader {
                     if (beanElement.isInnerBean()) continue;
                     // Load the Spring bean class
                     Class<?> beanClass = cl.loadClass(beanElement.getClassName());
-                    // Introspect the bean 
+                    // Introspect the bean
+                    beanIntrospector =
+                        new SpringBeanIntrospector(assemblyFactory, javaFactory, policyFactory, beanElement.getCustructorArgs());
                     ComponentType beanComponentType = assemblyFactory.createComponentType();
                     javaImplementation = beanIntrospector.introspectBean(beanClass, beanComponentType);
                     // Get the service interface defined by this Spring Bean and add to
@@ -435,7 +440,9 @@ public class SpringXMLComponentTypeLoader {
                 	continue;
                 
                 Class<?> beanClass = cl.loadClass(beanElement.getClassName());
-                // Introspect the bean 
+                // Introspect the bean
+                beanIntrospector =
+                    new SpringBeanIntrospector(assemblyFactory, javaFactory, policyFactory, beanElement.getCustructorArgs());
                 ComponentType beanComponentType = assemblyFactory.createComponentType();
                 javaImplementation = beanIntrospector.introspectBean(beanClass, beanComponentType);
                 Map<String, JavaElementImpl> propertyMap = javaImplementation.getPropertyMembers();
@@ -482,98 +489,27 @@ public class SpringXMLComponentTypeLoader {
                     		String paramType = parameter.getType().getName();
                     		Class<?> interfaze = cl.loadClass(paramType);
                     		// Create a component type reference/property if the constructor-arg element has a
-                            // type attribute declared...
-                    		if (conArgElement.getType() != null && paramType.equals(conArgElement.getType())) {
+                            // type attribute OR index attribute declared...
+                    		if ((conArgElement.getType() != null && paramType.equals(conArgElement.getType())) || 
+                    		    (conArgElement.getIndex() != -1 && (conArgElement.getIndex() == parameter.getIndex())) || 
+                    		    (conArgElement.getAutoIndex() == parameter.getIndex())) 
+                    		{
                     			if (parameter.getClassifer().getName().equals("org.osoa.sca.annotations.Reference")) {
                     				Reference theReference = createReference(interfaze, conArgElement.getRef());
                     				componentType.getReferences().add(theReference);
                     			}
                     			if (parameter.getClassifer().getName().equals("org.osoa.sca.annotations.Property")) {
-                    				Property theProperty = assemblyFactory.createProperty();
-                                    theProperty.setName(conArgElement.getRef());
-                                    theProperty.setXSDType(JavaXMLMapper.getXMLType(interfaze));
-                                    componentType.getProperties().add(theProperty);
-                                    // Remember the Java Class (ie the type) for this property
-                                    implementation.setPropertyClass(theProperty.getName(), interfaze);
+                    				// Store the unresolved references as unresolvedBeanRef in the Spring Implementation type
+                                	// we might need to verify with the component definition later.
+                    				Reference theReference = createReference(interfaze, conArgElement.getRef());
+                        			implementation.setUnresolvedBeanRef(conArgElement.getRef(), theReference);
                     			}
-                    		}
-                    		
-                    		// Store the unresolved references as unresolvedBeanRef in the Spring Implementation type
-                    		// if the type attribute is absent in the contructor-arg element...
-                    		if (conArgElement.getType() == null) {                    			                                            
-                    			Reference theReference = createReference(interfaze, conArgElement.getRef());
-                    			implementation.setUnresolvedBeanRef(conArgElement.getRef(), theReference);
-                    		}
-                        } // end for
+                    		}                        	
+                    	} // end for                        
                     } // end if
                 } // end while
                 
             } // end while
-            
-            
-            // Now check to see if there are any more references from beans that are not satisfied
-            /*itb = beans.iterator();
-            while (itb.hasNext()) {
-                SpringBeanElement beanElement = itb.next();
-                boolean unresolvedProperties = false;
-                if (!beanElement.getProperties().isEmpty()) {
-                    // Scan through the properties
-                    Iterator<SpringPropertyElement> itp = beanElement.getProperties().iterator();
-                    while (itp.hasNext()) {
-                        SpringPropertyElement propertyElement = itp.next();
-                        if (propertyRefUnresolved(propertyElement.getRef(), beans, references, scaproperties)) {
-                            // This means an unresolved reference from the spring bean...
-                            unresolvedProperties = true;
-                        } // end if
-                    } // end while 
-                    // If there are unresolved properties, then find which ones are references
-                    if (unresolvedProperties) {
-                        Class<?> beanClass = cl.loadClass(beanElement.getClassName());
-                        // Introspect the bean 
-                        ComponentType beanComponentType = assemblyFactory.createComponentType();
-                        javaImplementation = beanIntrospector.introspectBean(beanClass, beanComponentType);
-                        Map<String, JavaElementImpl> propertyMap = javaImplementation.getPropertyMembers();
-                        // Get the references by this Spring Bean and add the unresolved ones to
-                        // the component type of the Spring Assembly
-                        List<Reference> beanReferences = beanComponentType.getReferences();
-                        List<Property> beanProperties = beanComponentType.getProperties();
-                        itp = beanElement.getProperties().iterator();
-                        while (itp.hasNext()) {
-                            SpringPropertyElement propertyElement = itp.next();
-                            if (propertyRefUnresolved(propertyElement.getRef(), beans, references, scaproperties)) {
-                                boolean resolved = false;
-                                // This means an unresolved reference from the spring bean...add it to
-                                // the references for the Spring application context
-                                for (Reference reference : beanReferences) {
-                                    if (propertyElement.getName().equals(reference.getName())) {
-                                        // The name of the reference in this case is the string in
-                                        // the @ref attribute of the Spring property element, NOT the
-                                        // name of the field in the Spring bean....
-                                        reference.setName(propertyElement.getRef());
-                                        componentType.getReferences().add(reference);
-                                        resolved = true;
-                                    } // end if
-                                } // end for
-                                if (!resolved) {
-                                	// If the bean property is not already resolved as a reference
-                                    // then it may be an SCA reference OR a SCA property, it really depends
-                                	// on how the SCDL has defined references and properties for this component. 
-                                	// So lets assume all unresolved bean properties as references.
-                                	for (Property scaproperty : beanProperties) {
-                                        if (propertyElement.getName().equals(scaproperty.getName())) {
-                                        	Class<?> interfaze = cl.loadClass((propertyMap.get(propertyElement.getName()).getType()).getName());                                            
-                                            Reference theReference = createReference(interfaze, propertyElement.getRef());
-                                            implementation.setUnresolvedBeanRef(propertyElement.getRef(), theReference);
-                                            resolved = true;
-                                        }
-                                	}
-                                	
-                                } // end if
-                            } // end if
-                        } // end while 
-                    } // end if
-                } // end if
-            } // end while*/
 
         } catch (ClassNotFoundException e) {
             // Means that either an interface class, property class or a bean was not found

@@ -81,10 +81,12 @@ import org.apache.tuscany.sca.implementation.java.introspect.impl.Resource;
  */
 public class SpringBeanPojoProcessor extends BaseJavaClassVisitor {
     private JavaInterfaceFactory javaFactory;
+    private List<SpringConstructorArgElement> conArgs;
 
-    public SpringBeanPojoProcessor(AssemblyFactory assemblyFactory, JavaInterfaceFactory javaFactory) {
+    public SpringBeanPojoProcessor(AssemblyFactory assemblyFactory, JavaInterfaceFactory javaFactory, List<SpringConstructorArgElement> conArgs) {
         super(assemblyFactory);
         this.javaFactory = javaFactory;
+        this.conArgs = conArgs;
     }
 
     @Override
@@ -280,6 +282,8 @@ public class SpringBeanPojoProcessor extends BaseJavaClassVisitor {
     private <T> void evaluateConstructor(JavaImplementation type, Class<T> clazz) throws IntrospectionException {
         // determine constructor if one is not annotated
         JavaConstructorImpl<?> definition = type.getConstructor();
+        Map<String, JavaElementImpl> props = type.getPropertyMembers();
+        Map<String, JavaElementImpl> refs = type.getReferenceMembers();        
         Constructor constructor;
         boolean explict = false;
         if (definition != null && definition.getConstructor()
@@ -298,37 +302,41 @@ public class SpringBeanPojoProcessor extends BaseJavaClassVisitor {
                 // Only one constructor, take it
                 constructor = constructors[0];
             } else {
-                // FIXME multiple constructors, none yet done
-                Constructor<T> selected = null;
-                int sites = type.getPropertyMembers().size() + type.getReferenceMembers().size();
+                // multiple constructors scenario
+                Constructor<T> selected = null;                
                 for (Constructor<T> ctor : constructors) {
                     if (ctor.getParameterTypes().length == 0) {
                         selected = ctor;
-                    }
-                    if (ctor.getParameterTypes().length == sites) {
-                        // TODO finish
-                        // selected = constructor;
-                        // select constructor
-                        // break;
+                    } else if (ctor.getParameterTypes().length == conArgs.size()) {
+                        // we will find a constructor which has atleast one
+                    	// reference or property as its parameter types.
+                    	Class<?>[] parametersTypes = ctor.getParameterTypes();
+                		for (Class<?> pType: parametersTypes) {
+                			for (JavaElementImpl property : props.values()) {            				
+                				if (pType.equals(property.getType())) 
+                					selected = ctor;
+                			}
+                			for (JavaElementImpl reference : refs.values()) {
+                				if (pType.equals(reference.getType())) 
+                					selected = ctor;
+                			}               			           			
+                		}
                     }
                 }
                 if (selected == null) {
                     throw new NoConstructorException();
                 }
                 constructor = selected;
-                definition = type.getConstructors().get(selected);
-                type.setConstructor(definition);
-                // return;
             }
             definition = type.getConstructors().get(constructor);
             type.setConstructor(definition);
         }
+        
         JavaParameterImpl[] parameters = definition.getParameters();
         if (parameters.length == 0) {
             return;
         }
-        Map<String, JavaElementImpl> props = type.getPropertyMembers();
-        Map<String, JavaElementImpl> refs = type.getReferenceMembers();
+        
         Annotation[][] annotations = constructor.getParameterAnnotations();
         if (!explict) {
             // the constructor wasn't defined by an annotation, so check to see
