@@ -40,6 +40,8 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 /**
  * Test ?wsdl works and that the returned WSDL has the correct endpoint
+ * 
+ * ********* Currently broken, see TUSCANY-2942
  *
  * @version $Rev: 660340 $ $Date: 2008-05-27 01:08:32 +0100 (Tue, 27 May 2008) $
  */
