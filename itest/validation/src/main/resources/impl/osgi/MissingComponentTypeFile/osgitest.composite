@@ -18,6 +18,7 @@
     * under the License.    
 -->
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0" 
+           targetNamespace="http://tuscany.apache.org/validation"
            xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
            name="OSGiTestComposite">

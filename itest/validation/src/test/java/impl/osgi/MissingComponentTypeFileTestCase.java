@@ -44,6 +44,8 @@ public class MissingComponentTypeFileTestCase extends TestCase {
               customDomain.loadContribution("src/main/resources/impl/osgi/MissingComponentTypeFile/osgitest.composite", 
                         "TestContribution", "src/main/resources/impl/osgi/MissingComponentTypeFile/");
         } catch (Exception ex){
+            System.out.println(ex.toString());
+            ex.printStackTrace();
             //throw ex;
         }
     }
@@ -59,6 +61,6 @@ public class MissingComponentTypeFileTestCase extends TestCase {
     	Problem problem = ((DefaultMonitorImpl)monitor).getLastLoggedProblem();
         
     	assertNotNull(problem);
-       assertEquals("MissingComponentTypeFile", problem.getMessageId());
+        assertEquals("MissingComponentTypeFile", problem.getMessageId());
     }
 }
