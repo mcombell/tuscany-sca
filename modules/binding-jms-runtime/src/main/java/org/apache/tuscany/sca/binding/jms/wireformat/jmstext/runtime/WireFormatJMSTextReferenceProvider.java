@@ -69,11 +69,7 @@ public class WireFormatJMSTextReferenceProvider implements WireFormatProvider {
         // databinding transformation takes place
         interfaceContract = reference.getInterfaceContract();
     }
-    
-    public InterfaceContract getWireFormatInterfaceContract() {
-        return interfaceContract;
-    }
-    
+       
     public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
         
         if (this.interfaceContract != null ) {

@@ -68,10 +68,6 @@ public class WireFormatJMSObjectReferenceProvider implements WireFormatProvider 
         interfaceContract = reference.getInterfaceContract();
     }
     
-    public InterfaceContract getWireFormatInterfaceContract() {
-        return interfaceContract;
-    }
-    
     public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
         
         if (this.interfaceContract != null ) {

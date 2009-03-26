@@ -63,12 +63,15 @@ public class WireFormatJMSTextXMLServiceProvider implements WireFormatProvider {
         // currently maintaining the message processor structure which 
         // contains the details of jms message processing so set the message
         // type here if not set explicitly in SCDL
+        // defaults to JMSBindingConstants.XML_MP_CLASSNAME so no need to set it 
+/*        
         if (this.binding.getRequestWireFormat() instanceof WireFormatJMSTextXML){
             this.binding.setRequestMessageProcessorName(JMSBindingConstants.XML_MP_CLASSNAME);
         }
         if (this.binding.getResponseWireFormat() instanceof WireFormatJMSTextXML){
             this.binding.setResponseMessageProcessorName(JMSBindingConstants.XML_MP_CLASSNAME);
         }
+*/
         
         // create a local interface contract that is configured specifically to 
         // deal with the data format that this wire format is expecting to sent to 
@@ -88,10 +91,6 @@ public class WireFormatJMSTextXMLServiceProvider implements WireFormatProvider {
             return false;
         }
         return "onMessage".equals(ic.getInterface().getOperations().get(0).getName());
-    }
-        
-    public InterfaceContract getWireFormatInterfaceContract() {
-        return interfaceContract;
     }
     
     public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){

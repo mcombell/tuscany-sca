@@ -67,11 +67,7 @@ public class WireFormatJMSBytesServiceProvider implements WireFormatProvider {
         // databinding transformation takes place
         interfaceContract = service.getInterfaceContract();
     }
-    
-    public InterfaceContract getWireFormatInterfaceContract() {
-        return interfaceContract;
-    }
-    
+       
     public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
         
         if (this.interfaceContract != null ) {

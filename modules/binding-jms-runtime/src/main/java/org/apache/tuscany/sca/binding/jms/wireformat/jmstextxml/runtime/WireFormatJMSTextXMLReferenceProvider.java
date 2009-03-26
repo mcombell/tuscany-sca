@@ -90,11 +90,7 @@ public class WireFormatJMSTextXMLReferenceProvider implements WireFormatProvider
         }
         return "onMessage".equals(ic.getInterface().getOperations().get(0).getName());
     }
-    
-    public InterfaceContract getWireFormatInterfaceContract() {
-        return interfaceContract;
-    }
-    
+       
     public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
         
         if (this.interfaceContract != null &&
