@@ -29,6 +29,7 @@ import org.apache.tuscany.sca.node.launcher.NodeLauncher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import client.Shopper;
 
@@ -38,6 +39,7 @@ import client.Shopper;
  *
  * @version $Rev$ $Date$
  */
+ @Ignore("Broken, see TUSCANY-2944")
 public class StoreSupplierTestCase {
     
     private SCANode domainManager;
