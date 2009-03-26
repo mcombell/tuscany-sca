@@ -32,19 +32,19 @@
         <property name="stockQuoteService" ref="stockQuoteService"/>
         <property name="checkingAccountService" ref="checkingAccountService"/>
         
-        <!-- Here are some implicit references & properties - a property with a ref not satisifed 
-        * within the Spring application context.
-         -->
-        <property name="savingsAccountService" ref="savingsAccountService"/>
-        <property name="stockAccountService" ref="stockAccountService"/>              
+        <!-- Here are some implicit references & properties - a property with a ref 
+        not satisifed within the Spring application context. -->        
+        <!-- property name="savingsAccountService" ref="savingsAccountService"/>
+        <property name="stockAccountService" ref="stockAccountService"/ -->              
         <property name="currency" value="EURO"/>
         
-        <!-- constructor-arg type="bigbank.account.savings.SavingsAccountService">
+        <!-- Demonstration of injecting references with constructors -->
+        <constructor-arg type="bigbank.account.savings.SavingsAccountService">
         	<ref bean="savingsAccountService"/>
         </constructor-arg>
         <constructor-arg type="bigbank.account.stock.StockAccountService">
         	<ref bean="stockAccountService"/>
-        </constructor-arg -->
+        </constructor-arg>
     </bean>
     
     <sca:reference name="checkingAccountService" type="bigbank.account.checking.CheckingAccountService"/>

@@ -47,10 +47,10 @@ public class AccountServiceImpl implements AccountService {
     
 	private String currency;
 	
-	/*public AccountServiceImpl(SavingsAccountService savingsAccountService, StockAccountService stockAccountService) {
+	public AccountServiceImpl(SavingsAccountService savingsAccountService, StockAccountService stockAccountService) {
 		this.savingsAccountService = savingsAccountService;
 		this.stockAccountService = stockAccountService;
-	}*/
+	}
 
     public AccountReport getAccountReport(String customerID) {
 
@@ -97,13 +97,13 @@ public class AccountServiceImpl implements AccountService {
         }
     }
     
-    public SavingsAccountService getSavingsAccountService() {
+    /*public SavingsAccountService getSavingsAccountService() {
         return savingsAccountService;
     }
 
     public void setSavingsAccountService(SavingsAccountService savingsAccountService) {
         this.savingsAccountService = savingsAccountService;
-    }
+    }*/
     
     public CheckingAccountService getCheckingAccountService() {
         return checkingAccountService;
@@ -113,13 +113,13 @@ public class AccountServiceImpl implements AccountService {
         this.checkingAccountService = checkingAccountService;
     }
     
-    public StockAccountService getStockAccountService() {
+    /*public StockAccountService getStockAccountService() {
         return stockAccountService;
     }
 
     public void setStockAccountService(StockAccountService stockAccountService) {
         this.stockAccountService = stockAccountService;
-    }
+    }*/
 
     public String getCurrency() {
         return currency;
