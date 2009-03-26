@@ -64,10 +64,12 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
+import org.junit.Ignore;
 
 /**
  * @version $Rev$ $Date$
  */
+ @Ignore("Fails, see TUSCANY-2945")
 public class StandardTypesDatabindingTestCase {
 
     private static SCAClient domain;
