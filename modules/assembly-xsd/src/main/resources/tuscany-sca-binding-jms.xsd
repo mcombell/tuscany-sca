@@ -24,7 +24,10 @@
         elementFormDefault="qualified">
 
    <import namespace="http://www.osoa.org/xmlns/sca/1.0" schemaLocation="sca-binding-jms.xsd"/>
-            
+        
+   <complexType name="WireFormatJMSDefaultType"/>
+   <element name="wireFormat.jmsDefault" type="t:WireFormatJMSDefaultType"/>
+               
    <complexType name="WireFormatJMSTextXMLType"/>
    <element name="wireFormat.jmsTextXML" type="t:WireFormatJMSTextXMLType"/>
    

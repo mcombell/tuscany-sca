@@ -41,8 +41,12 @@ public class XMLBeansWrapperHandler implements WrapperHandler<XmlObject> {
      * @see org.apache.tuscany.sca.databinding.WrapperHandler#create(org.apache.tuscany.sca.interfacedef.Operation, boolean)
      */
     public XmlObject create(Operation operation, boolean input) {
-        WrapperInfo wrapperInfo = operation.getWrapper();
-        ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+
+        ElementInfo element = input ? inputWrapperInfo.getWrapperElement() : 
+            outputWrapperInfo.getWrapperElement();
+        
         return null;
     }
 
@@ -52,8 +56,12 @@ public class XMLBeansWrapperHandler implements WrapperHandler<XmlObject> {
     public List getChildren(XmlObject wrapper, Operation operation, boolean input) {
         List<Object> children = new ArrayList<Object>();
 
-        List<ElementInfo> childElements =
-            input ? operation.getWrapper().getInputChildElements() : operation.getWrapper().getOutputChildElements();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+
+        List<ElementInfo> childElements = input? inputWrapperInfo.getChildElements():
+            outputWrapperInfo.getChildElements();
+        
         for (ElementInfo e : childElements) {
             XmlObject[] objects = wrapper.selectChildren(e.getQName());
             if (objects != null && objects.length == 1) {
@@ -80,8 +88,12 @@ public class XMLBeansWrapperHandler implements WrapperHandler<XmlObject> {
      * @see org.apache.tuscany.sca.databinding.WrapperHandler#isInstance(java.lang.Object, org.apache.tuscany.sca.interfacedef.Operation, boolean)
      */
     public boolean isInstance(Object wrapper, Operation operation, boolean input) {
-        WrapperInfo wrapperInfo = operation.getWrapper();
-        ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+
+        ElementInfo element = input ? inputWrapperInfo.getWrapperElement() : 
+            outputWrapperInfo.getWrapperElement();
+        
         return true;
     }
 
@@ -89,8 +101,12 @@ public class XMLBeansWrapperHandler implements WrapperHandler<XmlObject> {
      * @see org.apache.tuscany.sca.databinding.WrapperHandler#setChildren(java.lang.Object, java.lang.Object[], org.apache.tuscany.sca.interfacedef.Operation, boolean)
      */
     public void setChildren(XmlObject wrapper, Object[] childObjects, Operation operation, boolean input) {
-        List<ElementInfo> childElements =
-            input ? operation.getWrapper().getInputChildElements() : operation.getWrapper().getOutputChildElements();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+
+        List<ElementInfo> childElements = input? inputWrapperInfo.getChildElements():
+            outputWrapperInfo.getChildElements();
+        
         int i = 0;
         for (ElementInfo c : childElements) {
             SchemaProperty property = wrapper.schemaType().getElementProperty(c.getQName());

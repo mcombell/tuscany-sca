@@ -27,6 +27,7 @@ import org.apache.activemq.broker.BrokerService;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -58,6 +59,17 @@ public class HelloWorldJmsServerTestCase{
         
         assertEquals("Hello Smith", helloWorldService.getGreetings("Smith"));
     }
+    
+    @Ignore
+    @Test
+    public void testWaitForInput() {
+        System.out.println("Press a key to end");
+        try {
+            System.in.read();
+        } catch (Exception ex) {
+        }
+        System.out.println("Shutting down");
+    }      
 
 	@After
 	public void stopServer() throws Exception {

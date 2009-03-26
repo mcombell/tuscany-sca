@@ -85,7 +85,11 @@ public class DataBindingRuntimeWireProcessor implements RuntimeWireProcessor {
             return false;
         }
 
-        if (source.isWrapperStyle() != target.isWrapperStyle()) {
+        if (source.isInputWrapperStyle() != target.isInputWrapperStyle()) {
+            return true;
+        }
+        
+        if (source.isOutputWrapperStyle() != target.isOutputWrapperStyle()) {
             return true;
         }
 

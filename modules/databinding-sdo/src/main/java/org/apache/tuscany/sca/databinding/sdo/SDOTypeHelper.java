@@ -185,13 +185,14 @@ public class SDOTypeHelper implements XMLTypeHelper {
     private static List<DataType> getDataTypes(Interface intf) {
         List<DataType> dataTypes = new ArrayList<DataType>();
         for (Operation op : intf.getOperations()) {
-            WrapperInfo wrapper = op.getWrapper();
-            if (wrapper != null) {
-                DataType dt1 = wrapper.getInputWrapperType();
+            WrapperInfo inputWrapperInfo = op.getInputWrapper();
+            WrapperInfo outputWrapperInfo = op.getOutputWrapper();
+            if (inputWrapperInfo != null && outputWrapperInfo != null) {
+                DataType dt1 = inputWrapperInfo.getWrapperType();
                 if (dt1 != null) {
                     dataTypes.add(dt1);
                 }
-                DataType dt2 = wrapper.getOutputWrapperType();
+                DataType dt2 = outputWrapperInfo.getWrapperType();
                 if (dt2 != null) {
                     dataTypes.add(dt2);
                 }

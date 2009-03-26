@@ -302,13 +302,17 @@ public class JAXBContextHelper {
     }
 
     private static void getDataTypes(List<DataType> dataTypes, Operation op, boolean useWrapper) {
-        WrapperInfo wrapper = op.getWrapper();
-        if (useWrapper && wrapper != null) {
-            DataType dt1 = wrapper.getInputWrapperType();
+        WrapperInfo inputWrapperInfo = op.getInputWrapper();
+        WrapperInfo outputWrapperInfo = op.getOutputWrapper();
+        
+        if (useWrapper && (inputWrapperInfo != null)) {
+            DataType dt1 = inputWrapperInfo.getWrapperType();
             if (dt1 != null) {
                 dataTypes.add(dt1);
             }
-            DataType dt2 = wrapper.getOutputWrapperType();
+        }
+        if (useWrapper && (outputWrapperInfo != null)) {
+            DataType dt2 = outputWrapperInfo.getWrapperType();
             if (dt2 != null) {
                 dataTypes.add(dt2);
             }

@@ -87,14 +87,14 @@ public class InterfaceContractMapperImpl implements InterfaceContractMapper {
 
         boolean checkSourceWrapper = true;
         List<DataType> sourceInputType = source.getInputType().getLogical();
-        if (source.isWrapperStyle() && source.getWrapper() != null) {
-            sourceInputType = source.getWrapper().getUnwrappedInputType().getLogical();
+        if (source.isInputWrapperStyle() && source.getInputWrapper() != null) {
+            sourceInputType = source.getInputWrapper().getUnwrappedInputType().getLogical();
             checkSourceWrapper = false;
         }
         boolean checkTargetWrapper = true;
         List<DataType> targetInputType = target.getInputType().getLogical();
-        if (target.isWrapperStyle() && target.getWrapper() != null) {
-            targetInputType = target.getWrapper().getUnwrappedInputType().getLogical();
+        if (target.isInputWrapperStyle() && target.getInputWrapper() != null) {
+            targetInputType = target.getInputWrapper().getUnwrappedInputType().getLogical();
             checkTargetWrapper = false;
         }
 

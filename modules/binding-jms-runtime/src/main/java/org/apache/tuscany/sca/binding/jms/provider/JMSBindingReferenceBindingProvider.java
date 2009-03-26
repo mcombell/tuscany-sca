@@ -52,7 +52,6 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
 
     private RuntimeComponentReference reference;
     private JMSBinding jmsBinding;
-    private List<JMSBindingInvoker> jmsBindingInvokers = new ArrayList<JMSBindingInvoker>();
     private JMSResourceFactory jmsResourceFactory;
     private RuntimeComponent component;
     private InterfaceContract interfaceContract; 
@@ -87,7 +86,18 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
             (WireFormatProviderFactory)providerFactories.getProviderFactory(jmsBinding.getResponseWireFormat().getClass());
         if (this.responseWireFormatProviderFactory != null){
             this.responseWireFormatProvider = responseWireFormatProviderFactory.createReferenceWireFormatProvider(component, reference, jmsBinding);
-        }      
+        } 
+        
+        // create an interface contract that reflects both request and response
+        // wire formats
+        try {
+            interfaceContract = (InterfaceContract)reference.getInterfaceContract().clone();
+            
+            requestWireFormatProvider.configureWireFormatInterfaceContract(interfaceContract);
+            responseWireFormatProvider.configureWireFormatInterfaceContract(interfaceContract);
+        } catch (CloneNotSupportedException ex){
+            interfaceContract = reference.getInterfaceContract();
+        }
     }
 
     public Invoker createInvoker(Operation operation) {
@@ -109,9 +119,6 @@ public class JMSBindingReferenceBindingProvider implements ReferenceBindingProvi
     }
 
     public InterfaceContract getBindingInterfaceContract() {
-        if (interfaceContract == null){
-            interfaceContract = this.requestWireFormatProvider.getWireFormatInterfaceContract();
-        }
         return interfaceContract;
     }
 

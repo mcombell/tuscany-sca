@@ -19,27 +19,14 @@
 
 package org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.runtime;
 
-import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
-import org.apache.tuscany.sca.binding.jms.provider.JMSMessageProcessorUtil;
-import org.apache.tuscany.sca.binding.jms.provider.XMLTextMessageProcessor;
-import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
-import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
-import org.apache.tuscany.sca.binding.ws.WebServiceBindingFactory;
-import org.apache.tuscany.sca.binding.ws.wsdlgen.BindingWSDLGenerator;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.WireFormatJMSBytes;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
-import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Phase;
-import org.apache.tuscany.sca.policy.PolicySet;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
-import org.apache.tuscany.sca.policy.util.PolicyHandler;
-import org.apache.tuscany.sca.provider.PolicyProvider;
 import org.apache.tuscany.sca.provider.WireFormatProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentReference;
@@ -69,8 +56,12 @@ public class WireFormatJMSBytesReferenceProvider implements WireFormatProvider {
         // currently maintaining the message processor structure which 
         // contains the details of jms message processing however overried 
         // any message processors specied in the SCDL in this case
-        this.binding.setRequestMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
-        this.binding.setResponseMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
+        if (this.binding.getRequestWireFormat() instanceof WireFormatJMSBytes){
+            this.binding.setRequestMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
+        }
+        if (this.binding.getResponseWireFormat() instanceof WireFormatJMSBytes){
+            this.binding.setResponseMessageProcessorName(JMSBindingConstants.BYTES_MP_CLASSNAME);
+        } 
         
         // just point to the reference interface contract so no 
         // databinding transformation takes place
@@ -80,6 +71,22 @@ public class WireFormatJMSBytesReferenceProvider implements WireFormatProvider {
     public InterfaceContract getWireFormatInterfaceContract() {
         return interfaceContract;
     }
+    
+    public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
+        
+        if (this.interfaceContract != null ) {
+            if (this.binding.getRequestWireFormat() instanceof WireFormatJMSBytes){
+                // set the request data transformation
+                interfaceContract.getInterface().resetInterfaceInputTypes(this.interfaceContract.getInterface());
+            }
+            if (this.binding.getResponseWireFormat() instanceof WireFormatJMSBytes){
+                // set the response data transformation
+                interfaceContract.getInterface().resetInterfaceOutputTypes(this.interfaceContract.getInterface());
+            }
+        }
+        
+        return interfaceContract;
+    }     
 
     public Interceptor createInterceptor() {
         return new WireFormatJMSBytesReferenceInterceptor(binding, 

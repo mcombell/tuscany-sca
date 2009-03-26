@@ -46,9 +46,10 @@ public class JAXBWrapperHandler implements WrapperHandler<Object> {
     private JAXBWrapperHelper helper = new JAXBWrapperHelper();
 
     public Object create(Operation operation, boolean input) {
-        WrapperInfo wrapperInfo = operation.getWrapper();
-        ElementInfo element = input ? wrapperInfo.getInputWrapperElement() : wrapperInfo.getOutputWrapperElement();
-        final Class<?> wrapperClass = input ? wrapperInfo.getInputWrapperClass() : wrapperInfo.getOutputWrapperClass();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+        ElementInfo element = input ? inputWrapperInfo.getWrapperElement() : outputWrapperInfo.getWrapperElement();
+        final Class<?> wrapperClass = input ? inputWrapperInfo.getWrapperClass() : outputWrapperInfo.getWrapperClass();
         try {
             if (wrapperClass == null) {
                 return null;
@@ -65,7 +66,7 @@ public class JAXBWrapperHandler implements WrapperHandler<Object> {
 
     public void setChildren(Object wrapper, Object[] childObjects, Operation operation, boolean input) {
         List<ElementInfo> childElements =
-            input ? operation.getWrapper().getInputChildElements() : operation.getWrapper().getOutputChildElements();
+            input ? operation.getInputWrapper().getChildElements() : operation.getOutputWrapper().getChildElements();
         List<String> childNames = new ArrayList<String>();
         Map<String, Object> values = new HashMap<String, Object>();
         for (int i = 0; i < childElements.size(); i++) {
@@ -121,8 +122,8 @@ public class JAXBWrapperHandler implements WrapperHandler<Object> {
      * @see org.apache.tuscany.sca.databinding.WrapperHandler#getChildren(java.lang.Object, Operation, boolean)
      */
     public List getChildren(Object wrapper, Operation operation, boolean input) {
-        List<ElementInfo> childElements = input? operation.getWrapper().getInputChildElements():
-            operation.getWrapper().getOutputChildElements();
+        List<ElementInfo> childElements = input? operation.getInputWrapper().getChildElements():
+            operation.getOutputWrapper().getChildElements();
 
         List<String> childNames = new ArrayList<String>();
         for (ElementInfo e : childElements) {
@@ -135,8 +136,9 @@ public class JAXBWrapperHandler implements WrapperHandler<Object> {
      * @see org.apache.tuscany.sca.databinding.WrapperHandler#getWrapperType(Operation, boolean)
      */
     public DataType getWrapperType(Operation operation, boolean input) {
-        WrapperInfo wrapper = operation.getWrapper();
-        DataType dt = input ? wrapper.getInputWrapperType() : wrapper.getOutputWrapperType();
+        WrapperInfo inputWrapperInfo = operation.getInputWrapper();
+        WrapperInfo outputWrapperInfo = operation.getOutputWrapper();
+        DataType dt = input ? inputWrapperInfo.getWrapperType() : outputWrapperInfo.getWrapperType();
         return dt;
     }
 
@@ -145,7 +147,7 @@ public class JAXBWrapperHandler implements WrapperHandler<Object> {
      */
     public boolean isInstance(Object wrapper, Operation operation, boolean input) {
         Class<?> wrapperClass =
-            input ? operation.getWrapper().getInputWrapperClass() : operation.getWrapper().getOutputWrapperClass();
+            input ? operation.getInputWrapper().getWrapperClass() : operation.getOutputWrapper().getWrapperClass();
         return wrapperClass == null ? false : wrapperClass.isInstance(wrapper);
     }
 }

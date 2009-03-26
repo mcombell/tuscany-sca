@@ -98,6 +98,8 @@
          <element name="connectionFactory" type="sca:ConnectionFactory" 
                   minOccurs="0"/>
          <element name="activationSpec" type="sca:ActivationSpec" minOccurs="0"/>
+         <any namespace="##other" processContents="lax" 
+                  minOccurs="0" maxOccurs="unbounded"/>         
       </sequence>
    </complexType>
 

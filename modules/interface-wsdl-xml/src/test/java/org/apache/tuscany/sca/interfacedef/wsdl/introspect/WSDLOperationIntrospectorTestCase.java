@@ -67,13 +67,13 @@ public class WSDLOperationIntrospectorTestCase extends AbstractWSDLTestCase {
                             outputType.getLogical().getElementName());
         Assert.assertTrue(op.isWrapperStyle());
 
-        DataType<List<DataType>> unwrappedInputType = op.getWrapper().getWrapperInfo().getUnwrappedInputType();
+        DataType<List<DataType>> unwrappedInputType = op.getWrapper().getInputWrapperInfo().getUnwrappedInputType();
         List<DataType> childTypes = unwrappedInputType.getLogical();
         Assert.assertEquals(1, childTypes.size());
         DataType<XMLType> childType = childTypes.get(0);
         Assert.assertEquals(new QName(null, "tickerSymbol"), childType.getLogical().getElementName());
 
-        childType = op.getWrapper().getWrapperInfo().getUnwrappedOutputType();
+        childType = op.getWrapper().getOutputWrapperInfo().getUnwrappedOutputType();
         Assert.assertEquals(new QName(null, "price"), childType.getLogical().getElementName());
     }
 

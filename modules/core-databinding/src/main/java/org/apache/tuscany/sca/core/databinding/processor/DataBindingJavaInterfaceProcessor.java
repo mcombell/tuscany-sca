@@ -74,7 +74,8 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
             }
             if (dataBindingId != null) {
                 op.setDataBinding(dataBindingId);
-                op.setWrapperStyle(wrapperStyle);
+                op.setInputWrapperStyle(wrapperStyle);
+                op.setOutputWrapperStyle(wrapperStyle);
             }
         }
         for (Method method : clazz.getMethods()) {
@@ -95,7 +96,8 @@ public class DataBindingJavaInterfaceProcessor implements JavaInterfaceVisitor {
                 dataBindingId = dataBinding.value();
                 wrapperStyle = dataBinding.wrapped();
                 operation.setDataBinding(dataBindingId);
-                operation.setWrapperStyle(wrapperStyle);
+                operation.setInputWrapperStyle(wrapperStyle);
+                operation.setOutputWrapperStyle(wrapperStyle);
             }
 
             // FIXME: We need a better way to identify simple java types

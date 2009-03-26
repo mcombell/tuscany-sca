@@ -104,6 +104,8 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  *         <activationSpec name="xs:anyURI" create="string"?>
  *             <property name="NMTOKEN" type="NMTOKEN">*
  *         </activationSpec>?
+ *         
+ *         <wireFormat.someWireFormat/>?
  *     </response>?
  * 
  *     <complexType name="SubscriptionHeaders"> 
@@ -124,6 +126,8 @@ import org.apache.tuscany.sca.policy.PolicyFactory;
  *             <property name="NMTOKEN" type="NMTOKEN">*
  *         </headers>?
  *     </operationProperties>*
+ *     
+ *     <wireFormat.someWireFormat/>?
  * </binding.jms>
  *
  * Parsing error messages are recorded locally and reported as validation exceptions. Parsing
@@ -474,7 +478,7 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
         jmsBinding.getResponseActivationSpecProperties().putAll(parseBindingProperties(reader));
     }
 
-    private void parseResponse(XMLStreamReader reader, JMSBinding jmsBinding) throws XMLStreamException {
+    private void parseResponse(XMLStreamReader reader, JMSBinding jmsBinding) throws ContributionReadException, XMLStreamException {
         // Read sub-elements of response
         while (true) {
             switch (reader.next()) {
@@ -486,6 +490,16 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
                         parseResponseConnectionFactory(reader, jmsBinding);
                     } else if ("activationSpec".equals(elementName)) {
                         parseResponseActivationSpec(reader, jmsBinding);
+                    } else {
+                        Object extension = extensionProcessor.read(reader);
+                        if (extension != null) {
+                            if (extension instanceof WireFormat) {
+                                jmsBinding.setResponseWireFormat((WireFormat)extension);
+                            } else {
+                                error("UnexpectedElement", reader, extension.toString());
+                            }
+                        }
+                        reader.next();
                     }
                     //reader.next();
                     break;

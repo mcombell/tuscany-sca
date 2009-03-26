@@ -132,26 +132,47 @@ public interface Operation extends Cloneable, PolicySetAttachPoint {
      * Set the operation to be non-blocking
      */
     void setNonBlocking(boolean nonBlocking);
+        
+    /**
+     * @return the inputWrapperInfo
+     */
+    WrapperInfo getInputWrapper();
+
+    /**
+     * @param wrapperInfo the inputWrapperInfo to set
+     */
+    void setInputWrapper(WrapperInfo wrapperInfo);
     
     /**
-     * @return the wrapperInfo
+     * @return the outputWrapperInfo
      */
-    WrapperInfo getWrapper();
+    WrapperInfo getOutputWrapper();
 
     /**
-     * @param wrapperInfo the wrapperInfo to set
+     * @param wrapperInfo the outputWrapperInfo to set
      */
-    void setWrapper(WrapperInfo wrapperInfo);
+    // TODO - WI
+    void setOutputWrapper(WrapperInfo wrapperInfo);    
 
     /**
-     * @return the wrapperStyle
+     * @return the inputWrapperStyle
      */
-    boolean isWrapperStyle();
+    boolean isInputWrapperStyle();
 
     /**
-     * @param wrapperStyle the wrapperStyle to set
+     * @param inputWrapperStyle the wrapperStyle to set
      */
-    void setWrapperStyle(boolean wrapperStyle);
+    void setInputWrapperStyle(boolean wrapperStyle);
+    
+    /**
+     * @return the outputWrapperStyle
+     */
+    boolean isOutputWrapperStyle();
+
+    /**
+     * @param outputWrapperStyle the wrapperStyle to set
+     */
+    void setOutputWrapperStyle(boolean wrapperStyle);
     
     /**
      * @deprecated This should be the WrapperInfo.getDataBinding()

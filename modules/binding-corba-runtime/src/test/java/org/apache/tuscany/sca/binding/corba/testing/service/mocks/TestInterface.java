@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.tuscany.sca.interfacedef.Interface;
 import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
 import org.apache.tuscany.sca.policy.Intent;
@@ -60,6 +61,14 @@ public class TestInterface implements JavaInterface {
 
     public void resetDataBinding(String dataBinding) {
 
+    }
+    
+    public void resetInterfaceInputTypes(Interface newInterface) {
+        
+    }
+    
+    public void resetInterfaceOutputTypes(Interface newInterface) {
+        
     }
 
     public void setConversational(boolean conversational) {

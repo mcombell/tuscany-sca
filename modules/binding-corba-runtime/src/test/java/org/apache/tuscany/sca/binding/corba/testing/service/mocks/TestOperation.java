@@ -75,7 +75,11 @@ public class TestOperation implements Operation {
         return outputType;
     }
 
-    public WrapperInfo getWrapper() {
+    public WrapperInfo getInputWrapper() {
+        return null;
+    }
+    
+    public WrapperInfo getOutputWrapper() {
         return null;
     }
 
@@ -91,7 +95,11 @@ public class TestOperation implements Operation {
         return false;
     }
 
-    public boolean isWrapperStyle() {
+    public boolean isInputWrapperStyle() {
+        return false;
+    }
+    
+    public boolean isOutputWrapperStyle() {
         return false;
     }
 
@@ -139,11 +147,19 @@ public class TestOperation implements Operation {
 
     }
 
-    public void setWrapper(WrapperInfo wrapperInfo) {
+    public void setInputWrapper(WrapperInfo wrapperInfo) {
+
+    }
+    
+    public void setOutputWrapper(WrapperInfo wrapperInfo) {
 
     }
 
-    public void setWrapperStyle(boolean wrapperStyle) {
+    public void setInputWrapperStyle(boolean wrapperStyle) {
+
+    }
+    
+    public void setOutputWrapperStyle(boolean wrapperStyle) {
 
     }
 

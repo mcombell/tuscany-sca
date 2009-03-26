@@ -50,8 +50,12 @@ public class OperationImpl implements Operation {
     private Interface interfaze;
     private ConversationSequence conversationSequence = ConversationSequence.CONVERSATION_NONE;
     private boolean nonBlocking;
-    private boolean wrapperStyle;
-    private WrapperInfo wrapper;
+    // TODO - WI
+    //private WrapperInfo wrapper;
+    private boolean inputWrapperStyle;
+    private boolean outputWrapperStyle;
+    private WrapperInfo inputWrapper;
+    private WrapperInfo outputWrapper;
     private boolean dynamic;
     private Map<QName, List<DataType<XMLType>>> faultBeans;
     
@@ -238,38 +242,76 @@ public class OperationImpl implements Operation {
     /**
      * @return the wrapperInfo
      */
-    public WrapperInfo getWrapper() {
-        return wrapper;
-    }
+    // TODO - WI
+    //public WrapperInfo getWrapper() {
+    //    return wrapper;
+    //}
 
     /**
      * @param wrapperInfo the wrapperInfo to set
      */
-    public void setWrapper(WrapperInfo wrapperInfo) {
-        this.wrapper = wrapperInfo;
+    // TODO - WI
+    //public void setWrapper(WrapperInfo wrapperInfo) {
+    //    this.wrapper = wrapperInfo;
+    //}
+    
+    public WrapperInfo getInputWrapper() {
+        return inputWrapper;
+    }
+    
+    public void setInputWrapper(WrapperInfo inputWrapper) {
+        this.inputWrapper = inputWrapper;
+    }
+    
+    public WrapperInfo getOutputWrapper() {
+        return outputWrapper;
+    }
+    
+    public void setOutputWrapper(WrapperInfo outputWrapper) {
+        this.outputWrapper = outputWrapper;
     }
 
     /**
-     * @return the wrapperStyle
+     * @return the inputWrapperStyle
      */
-    public boolean isWrapperStyle() {
-        return wrapperStyle;
+    public boolean isInputWrapperStyle() {
+        return inputWrapperStyle;
     }
 
     /**
-     * @param wrapperStyle the wrapperStyle to set
+     * @param inputWrapperStyle the wrapperStyle to set
      */
-    public void setWrapperStyle(boolean wrapperStyle) {
-        this.wrapperStyle = wrapperStyle;
+    public void setInputWrapperStyle(boolean wrapperStyle) {
+        this.inputWrapperStyle = wrapperStyle;
+    }
+    
+    /**
+     * @return the outputWrapperStyle
+     */
+    public boolean isOutputWrapperStyle() {
+        return inputWrapperStyle;
     }
 
+    /**
+     * @param outputWrapperStyle the wrapperStyle to set
+     */
+    public void setOutputWrapperStyle(boolean wrapperStyle) {
+        this.inputWrapperStyle = wrapperStyle;
+    }    
+    
+    // TODO - WI
+    // These are deprecated and are a little awkward now that
+    // we split input wrapper from output wrapper
     public String getDataBinding() {
-        return wrapper != null ? wrapper.getDataBinding() : null;
+        return inputWrapper != null ? inputWrapper.getDataBinding() : null;
     }
 
     public void setDataBinding(String dataBinding) {
-        if (wrapper != null) {
-            wrapper.setDataBinding(dataBinding);
+        if (inputWrapper != null) {
+            inputWrapper.setDataBinding(dataBinding);
+        }
+        if (outputWrapper != null) {
+            outputWrapper.setDataBinding(dataBinding);
         }
     }
 

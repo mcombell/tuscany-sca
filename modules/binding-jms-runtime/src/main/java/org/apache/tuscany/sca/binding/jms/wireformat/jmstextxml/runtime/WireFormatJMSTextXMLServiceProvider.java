@@ -19,25 +19,19 @@
 
 package org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.runtime;
 
-import java.util.List;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBinding;
 import org.apache.tuscany.sca.binding.jms.impl.JMSBindingConstants;
 import org.apache.tuscany.sca.binding.jms.provider.JMSResourceFactory;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmstextxml.WireFormatJMSTextXML;
 import org.apache.tuscany.sca.binding.ws.WebServiceBinding;
 import org.apache.tuscany.sca.binding.ws.WebServiceBindingFactory;
 import org.apache.tuscany.sca.binding.ws.wsdlgen.BindingWSDLGenerator;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
 import org.apache.tuscany.sca.interfacedef.InterfaceContract;
-import org.apache.tuscany.sca.interfacedef.Operation;
 import org.apache.tuscany.sca.invocation.Interceptor;
 import org.apache.tuscany.sca.invocation.Phase;
-import org.apache.tuscany.sca.policy.PolicySet;
-import org.apache.tuscany.sca.policy.PolicySetAttachPoint;
-import org.apache.tuscany.sca.policy.util.PolicyHandler;
-import org.apache.tuscany.sca.provider.PolicyProvider;
 import org.apache.tuscany.sca.provider.WireFormatProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
@@ -69,23 +63,23 @@ public class WireFormatJMSTextXMLServiceProvider implements WireFormatProvider {
         // currently maintaining the message processor structure which 
         // contains the details of jms message processing so set the message
         // type here if not set explicitly in SCDL
-        if (this.binding.getRequestMessageProcessorName().equals(JMSBindingConstants.XML_MP_CLASSNAME) ){
+        if (this.binding.getRequestWireFormat() instanceof WireFormatJMSTextXML){
             this.binding.setRequestMessageProcessorName(JMSBindingConstants.XML_MP_CLASSNAME);
+        }
+        if (this.binding.getResponseWireFormat() instanceof WireFormatJMSTextXML){
             this.binding.setResponseMessageProcessorName(JMSBindingConstants.XML_MP_CLASSNAME);
         }
         
-        // set the binding interface contract to represent the WSDL for the 
-        // xml messages that will be sent
-        if (service.getInterfaceContract() != null &&
-            !isOnMessage()) {
-            WebServiceBindingFactory wsFactory = registry.getExtensionPoint(WebServiceBindingFactory.class);
-            WebServiceBinding wsBinding = wsFactory.createWebServiceBinding();
-            BindingWSDLGenerator.generateWSDL(component, service, wsBinding, registry, null);
-            interfaceContract = wsBinding.getBindingInterfaceContract();
-            interfaceContract.getInterface().resetDataBinding(OMElement.class.getName());   
-        } else {
-            interfaceContract = service.getInterfaceContract();
-        }
+        // create a local interface contract that is configured specifically to 
+        // deal with the data format that this wire format is expecting to sent to 
+        // and receive from the databinding interceptor. The request/response parts of 
+        // this interface contract will be copied into the binding interface contract
+        // as required
+        WebServiceBindingFactory wsFactory = registry.getExtensionPoint(WebServiceBindingFactory.class);
+        WebServiceBinding wsBinding = wsFactory.createWebServiceBinding();
+        BindingWSDLGenerator.generateWSDL(component, service, wsBinding, registry, null);
+        interfaceContract = wsBinding.getBindingInterfaceContract();
+        interfaceContract.getInterface().resetDataBinding(OMElement.class.getName());       
     }
     
     protected boolean isOnMessage() {
@@ -99,7 +93,24 @@ public class WireFormatJMSTextXMLServiceProvider implements WireFormatProvider {
     public InterfaceContract getWireFormatInterfaceContract() {
         return interfaceContract;
     }
-
+    
+    public InterfaceContract configureWireFormatInterfaceContract(InterfaceContract interfaceContract){
+        
+        if (this.interfaceContract != null &&
+            !isOnMessage()) {
+            if (this.binding.getRequestWireFormat() instanceof WireFormatJMSTextXML){
+                // set the request data transformation
+                interfaceContract.getInterface().resetInterfaceInputTypes(this.interfaceContract.getInterface());
+            }
+            if (this.binding.getResponseWireFormat() instanceof WireFormatJMSTextXML){
+                // set the response data transformation
+                interfaceContract.getInterface().resetInterfaceOutputTypes(this.interfaceContract.getInterface());
+            }
+        }
+        
+        return interfaceContract;
+    }
+    
     public Interceptor createInterceptor() {
         return new WireFormatJMSTextXMLServiceInterceptor((JMSBinding)binding,
                                                           jmsResourceFactory,

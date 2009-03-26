@@ -60,9 +60,9 @@ public class JAXWSJavaInterfaceProcessorTestCase extends TestCase {
 
         interfaceProcessor.visitInterface(contract);
         Operation op = contract.getOperations().get(0);
-        Assert.assertTrue(!op.isWrapperStyle());
-        Assert.assertEquals(new QName("http://www.example.com/stock", "stockQuoteOffer"), op.getWrapper().getInputWrapperElement().getQName());
-        Assert.assertEquals(new QName("http://www.example.com/stock", "stockQuoteOfferResponse"), op.getWrapper().getOutputWrapperElement().getQName());
+        Assert.assertTrue(!op.isInputWrapperStyle());
+        Assert.assertEquals(new QName("http://www.example.com/stock", "stockQuoteOffer"), op.getInputWrapper().getWrapperElement().getQName());
+        Assert.assertEquals(new QName("http://www.example.com/stock", "stockQuoteOfferResponse"), op.getOutputWrapper().getWrapperElement().getQName());
     }
 
     /**
@@ -90,14 +90,14 @@ public class JAXWSJavaInterfaceProcessorTestCase extends TestCase {
             op = op2;
         }
 
-        assertTrue(!op.isWrapperStyle() && op.getWrapper() == null);
+        assertTrue(!op.isInputWrapperStyle() && op.getInputWrapper() == null);
 
         if ("M2".equals(op2.getName())) {
             op = op2;
         } else {
             op = op1;
         }
-        assertTrue(!op.isWrapperStyle() && op.getWrapper() != null);
+        assertTrue(!op.isInputWrapperStyle() && op.getInputWrapper() != null);
 
     }
 

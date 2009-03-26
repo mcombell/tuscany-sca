@@ -151,10 +151,11 @@ public class InterfaceImpl implements Interface {
 
                     }
                 }
-                if (op.isWrapperStyle()) {
-                    WrapperInfo wrapper = op.getWrapper();
-                    if (wrapper != null) {
-                        DataType<List<DataType>> unwrappedInputType = wrapper.getUnwrappedInputType();
+                
+                if (op.isInputWrapperStyle()) {
+                    WrapperInfo inputWrapperInfo = op.getInputWrapper();                   
+                    if (inputWrapperInfo != null) {
+                        DataType<List<DataType>> unwrappedInputType = inputWrapperInfo.getUnwrappedInputType();
                         if (unwrappedInputType != null) {
                             for (DataType d : unwrappedInputType.getLogical()) {
                                 if (d.getDataBinding() == null) {
@@ -162,7 +163,13 @@ public class InterfaceImpl implements Interface {
                                 }
                             }
                         }
-                        DataType unwrappedOutputType = wrapper.getUnwrappedOutputType();
+                    }
+                }
+                
+                if (op.isOutputWrapperStyle()) {
+                    WrapperInfo outputWrapperInfo = op.getOutputWrapper();
+                    if (outputWrapperInfo != null){
+                        DataType unwrappedOutputType = outputWrapperInfo.getUnwrappedOutputType();
                         if (unwrappedOutputType != null && unwrappedOutputType.getDataBinding() == null) {
                             unwrappedOutputType.setDataBinding(dataBinding);
                         }
@@ -177,6 +184,54 @@ public class InterfaceImpl implements Interface {
             setDataBinding((DataType)dataType.getLogical(), dataBinding);
         } else {
             dataType.setDataBinding(dataBinding);
+        }
+    }
+    
+    public void resetInterfaceInputTypes(Interface newInterface){
+        for (int i = 0; i < getOperations().size(); i++) {
+            // TODO - same operation order is assumed. How to really
+            //        find the right operation when we know that the 
+            //        data types will be different
+            Operation oldOperation = getOperations().get(i);
+            Operation newOperation = newInterface.getOperations().get(i);
+            
+            if (!oldOperation.getName().equals(newOperation.getName())){
+                break;
+            }
+                      
+            // set input types
+            oldOperation.setInputType(newOperation.getInputType());
+            
+            // set wrapper
+            if (newOperation.isInputWrapperStyle()) {
+                oldOperation.setInputWrapperStyle(true);
+                oldOperation.setInputWrapper(newOperation.getInputWrapper());
+            }
+        }
+    }
+    
+    public void resetInterfaceOutputTypes(Interface newInterface){
+        for (int i = 0; i < getOperations().size(); i++) {
+            // TODO - same operation order is assumed. How to really
+            //        find the right operation when we know that the 
+            //        data types will be different
+            Operation oldOperation = getOperations().get(i);
+            Operation newOperation = newInterface.getOperations().get(i);
+            
+            if (!oldOperation.getName().equals(newOperation.getName())){
+                break;
+            }
+            
+            // set output types
+            oldOperation.setOutputType(newOperation.getOutputType());
+            
+            // set fault types
+            oldOperation.setFaultTypes(newOperation.getFaultTypes());
+            
+            // set wrapper
+            if (newOperation.isOutputWrapperStyle()) {
+                oldOperation.setOutputWrapper(newOperation.getOutputWrapper());
+            }
         }
     }
 
@@ -200,16 +255,23 @@ public class InterfaceImpl implements Interface {
                     setDataBinding((DataType) d.getLogical(), dataBinding);
                 }
             }
-            if (op.isWrapperStyle()) {
-                WrapperInfo wrapper = op.getWrapper();
-                if (wrapper != null) {
-                    DataType<List<DataType>> unwrappedInputType = wrapper.getUnwrappedInputType();
+            
+            if (op.isInputWrapperStyle()) {
+                WrapperInfo inputWrapperInfo = op.getInputWrapper();               
+                if (inputWrapperInfo != null) {
+                    DataType<List<DataType>> unwrappedInputType = inputWrapperInfo.getUnwrappedInputType();
                     if (unwrappedInputType != null) {
                         for (DataType d : unwrappedInputType.getLogical()) {
                             setDataBinding(d, dataBinding);
                         }
                     }
-                    DataType unwrappedOutputType = wrapper.getUnwrappedOutputType();
+                }
+            }
+                
+            if (op.isOutputWrapperStyle()) {
+                WrapperInfo outputWrapperInfo = op.getOutputWrapper();
+                if (outputWrapperInfo != null){
+                    DataType unwrappedOutputType = outputWrapperInfo.getUnwrappedOutputType();
                     if (unwrappedOutputType != null) {
                         setDataBinding(unwrappedOutputType, dataBinding);
                     }

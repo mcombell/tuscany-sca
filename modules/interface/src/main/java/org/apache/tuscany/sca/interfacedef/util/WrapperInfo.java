@@ -31,7 +31,7 @@ import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
  * A WSDL operation qualifies for wrapper style mapping only if the following
  * criteria are met:
  * <ul>
- * <li>(i) The operation�s input and output messages (if present) each contain
+ * <li>(i) The operation is input and output messages (if present) each contain
  * only a single part
  * <li>(ii) The input message part refers to a global element declaration whose
  * localname is equal to the operation name
@@ -48,76 +48,61 @@ import org.apache.tuscany.sca.interfacedef.impl.DataTypeImpl;
  * @version $Rev$ $Date$
  */
 public class WrapperInfo {
-    private ElementInfo inputWrapperElement;
+    private String dataBinding;
+    private ElementInfo wrapperElement;
+    private List<ElementInfo> childElements;
+    private DataType<XMLType> wrapperType;
 
-    private ElementInfo outputWrapperElement;
-
-    private List<ElementInfo> inputChildElements;
-
-    private List<ElementInfo> outputChildElements;
-
-    // The data type of the unwrapped input child elements 
+    // A cache for the derived data type of the unwrapped 
+    // input child elements 
     private DataType<List<DataType>> unwrappedInputType;
 
-    // The data type of the unwrapped output child element (we only supports one child)
+    // A cache for the derived data type of the unwrapped 
+    // output child element (we only support one child)
     private DataType<XMLType> unwrappedOutputType;
 
-    // The data for the input/output wrappers
-    private String dataBinding;
-
-    // The data type for the input (request) wrapper bean
-    private DataType<XMLType> inputWrapperType;
-    // The data type for the output (response) wrapper bean
-    private DataType<XMLType> outputWrapperType;
-
     public WrapperInfo(String dataBinding,
-                       ElementInfo inputWrapperElement,
-                       ElementInfo outputWrapperElement,
-                       List<ElementInfo> inputElements,
-                       List<ElementInfo> outputElements) {
+                       ElementInfo wrapperElement,
+                       List<ElementInfo> childElements) {
         super();
         this.dataBinding = dataBinding;
-        this.inputWrapperElement = inputWrapperElement;
-        this.outputWrapperElement = outputWrapperElement;
-        this.inputChildElements = inputElements;
-        this.outputChildElements = outputElements;
+        this.wrapperElement = wrapperElement;
+        this.childElements = childElements;
     }
 
-    /**
-     * @return the inputElements
-     */
-    public List<ElementInfo> getInputChildElements() {
-        return inputChildElements;
+    public List<ElementInfo> getChildElements() {
+        return childElements;
     }
 
-    /**
-     * @return the inputWrapperElement
-     */
-    public ElementInfo getInputWrapperElement() {
-        return inputWrapperElement;
+    public ElementInfo getWrapperElement() {
+        return wrapperElement;
     }
 
-    /**
-     * @return the outputElements
-     */
-    public List<ElementInfo> getOutputChildElements() {
-        return outputChildElements;
+    public String getDataBinding() {
+        return dataBinding;
     }
 
-    /**
-     * @return the outputWrapperElement
-     */
-    public ElementInfo getOutputWrapperElement() {
-        return outputWrapperElement;
+    public void setDataBinding(String dataBinding) {
+        this.dataBinding = dataBinding;
     }
 
-    /**
-     * @return the unwrappedInputType
-     */
+    public DataType<XMLType> getWrapperType() {
+        return wrapperType;
+    }
+
+    public void setWrapperType(DataType<XMLType> wrapperType) {
+        this.wrapperType = wrapperType;
+    }
+    
+    public Class<?> getWrapperClass() {
+        return wrapperType == null ? null : wrapperType.getPhysical();
+    }    
+
+
     public DataType<List<DataType>> getUnwrappedInputType() {
         if (unwrappedInputType == null) {
             List<DataType> childTypes = new ArrayList<DataType>();
-            for (ElementInfo element : getInputChildElements()) {
+            for (ElementInfo element : getChildElements()) {
                 DataType type = getDataType(element);
                 childTypes.add(type);
             }
@@ -126,23 +111,9 @@ public class WrapperInfo {
         return unwrappedInputType;
     }
 
-    private DataType getDataType(ElementInfo element) {
-        DataType type = null;
-        if (element.isMany()) {
-            DataType logical = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
-            type = new DataTypeImpl<DataType>("java:array", Object[].class, logical);
-        } else {
-            type = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
-        }
-        return type;
-    }
-
-    /**
-     * @return the unwrappedOutputType
-     */
     public DataType getUnwrappedOutputType() {
         if (unwrappedOutputType == null) {
-            List<ElementInfo> elements = getOutputChildElements();
+            List<ElementInfo> elements = getChildElements();
             if (elements != null && elements.size() > 0) {
                 if (elements.size() > 1) {
                     // We don't support output with multiple parts
@@ -155,36 +126,15 @@ public class WrapperInfo {
         }
         return unwrappedOutputType;
     }
-
-    public Class<?> getInputWrapperClass() {
-        return inputWrapperType == null ? null : inputWrapperType.getPhysical();
-    }
-
-    public Class<?> getOutputWrapperClass() {
-        return outputWrapperType == null ? null : outputWrapperType.getPhysical();
-    }
-
-    public String getDataBinding() {
-        return dataBinding;
-    }
-
-    public void setDataBinding(String dataBinding) {
-        this.dataBinding = dataBinding;
-    }
-
-    public DataType<XMLType> getInputWrapperType() {
-        return inputWrapperType;
-    }
-
-    public void setInputWrapperType(DataType<XMLType> inputWrapperType) {
-        this.inputWrapperType = inputWrapperType;
-    }
-
-    public DataType<XMLType> getOutputWrapperType() {
-        return outputWrapperType;
-    }
-
-    public void setOutputWrapperType(DataType<XMLType> outputWrapperType) {
-        this.outputWrapperType = outputWrapperType;
-    }
+    
+    private DataType getDataType(ElementInfo element) {
+        DataType type = null;
+        if (element.isMany()) {
+            DataType logical = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+            type = new DataTypeImpl<DataType>("java:array", Object[].class, logical);
+        } else {
+            type = new DataTypeImpl<XMLType>(dataBinding, Object.class, new XMLType(element));
+        }
+        return type;
+    }    
 }

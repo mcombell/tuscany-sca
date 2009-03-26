@@ -59,12 +59,9 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
     private JMSServiceListenerFactory serviceListenerFactory;
     private JMSServiceListener serviceListener;
 
-    private ExtensionPointRegistry extensionPoints;
-
     private RuntimeComponent component;
-    private InterfaceContract wsdlInterfaceContract;
+    private InterfaceContract interfaceContract;
     
-
     private ProviderFactoryExtensionPoint providerFactories;
     private ModelFactoryExtensionPoint modelFactories;
     
@@ -85,7 +82,6 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
         this.jmsBinding = binding;
         this.serviceListenerFactory = serviceListenerFactory;
         this.targetBinding = targetBinding;
-        this.extensionPoints = extensionPoints;
         this.jmsResourceFactory = jmsResourceFactory;
 
         // Set the default destination when using a connection factory.
@@ -123,10 +119,21 @@ public class JMSBindingServiceBindingProvider implements ServiceBindingProviderR
         if (this.responseWireFormatProviderFactory != null){
             this.responseWireFormatProvider = responseWireFormatProviderFactory.createServiceWireFormatProvider(component, service, jmsBinding);
         }
+        
+        // create an interface contract that reflects both request and response
+        // wire formats
+        try {
+            interfaceContract = (InterfaceContract)service.getInterfaceContract().clone();
+            
+            requestWireFormatProvider.configureWireFormatInterfaceContract(interfaceContract);
+            responseWireFormatProvider.configureWireFormatInterfaceContract(interfaceContract);
+        } catch (CloneNotSupportedException ex){
+            interfaceContract = service.getInterfaceContract();
+        }
     }
 
     public InterfaceContract getBindingInterfaceContract() {
-        return requestWireFormatProvider.getWireFormatInterfaceContract();
+        return interfaceContract;
     }
 
     public boolean supportsOneWayInvocation() {
