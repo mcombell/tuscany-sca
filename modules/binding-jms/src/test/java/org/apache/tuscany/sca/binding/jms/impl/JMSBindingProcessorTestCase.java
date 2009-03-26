@@ -34,6 +34,9 @@ import junit.framework.TestCase;
 import org.apache.tuscany.sca.assembly.Composite;
 import org.apache.tuscany.sca.assembly.ConfiguredOperation;
 import org.apache.tuscany.sca.assembly.OperationsConfigurator;
+import org.apache.tuscany.sca.assembly.WireFormat;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmsbytes.WireFormatJMSBytes;
+import org.apache.tuscany.sca.binding.jms.wireformat.jmsobject.WireFormatJMSObject;
 import org.apache.tuscany.sca.contribution.processor.DefaultStAXArtifactProcessorExtensionPoint;
 import org.apache.tuscany.sca.contribution.processor.ExtensibleStAXArtifactProcessor;
 import org.apache.tuscany.sca.contribution.processor.StAXArtifactProcessor;
@@ -351,6 +354,23 @@ public class JMSBindingProcessorTestCase extends TestCase {
             + "      </service>"
             + " </component>"
             + "</composite>";
+    
+    public static final String WIRE_FORMAT =
+        "<?xml version=\"1.0\" encoding=\"ASCII\"?>" 
+        + "<composite xmlns=\"http://www.osoa.org/xmlns/sca/1.0\" targetNamespace=\"http://binding-jms\" xmlns:tuscany=\"http://tuscany.apache.org/xmlns/sca/1.0\" name=\"binding-jms\">"
+            + " <component name=\"HelloWorldComponent\">"
+            + "   <implementation.java class=\"services.HelloWorld\"/>"
+            + "      <service name=\"HelloWorldService\">"
+            + "          <binding.jms uri=\"jms:testQueue\" >"
+            + "              <response>" 
+            + "                  <destination name=\"responseConnectionElementName\"/>"            
+            + "                  <tuscany:wireFormat.jmsBytes/>"            
+            + "              </response>"            
+            + "              <tuscany:wireFormat.jmsObject/>"
+            + "          </binding.jms>"
+            + "      </service>"
+            + " </component>"
+            + "</composite>";     
 
     private XMLInputFactory inputFactory;
     private StAXArtifactProcessor<Object> staxProcessor;
@@ -692,4 +712,24 @@ public class JMSBindingProcessorTestCase extends TestCase {
         assertEquals(opConfig.getConfiguredOperations().get(0).getRequiredIntents().size(), 2);
     }
 
+    /**
+     * Tests the APIs:
+     *     public WireFormat getRequstWireFormat();
+     *     public WireFormat getResponseWireFormat();
+     * 
+     * @throws Exception
+     */
+    public void testWireFormat() throws Exception {
+        XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(WIRE_FORMAT));
+        
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)   composite.getComponents().get(0).getServices().get(0).getBindings().get(0);        
+        assertNotNull(binding);
+        
+        WireFormat requestWireFormat = binding.getRequestWireFormat();
+        assertEquals(WireFormatJMSObject.class, requestWireFormat.getClass());
+        
+        WireFormat responseWireFormat = binding.getResponseWireFormat();
+        assertEquals(WireFormatJMSBytes.class, responseWireFormat.getClass());
+    }    
 }

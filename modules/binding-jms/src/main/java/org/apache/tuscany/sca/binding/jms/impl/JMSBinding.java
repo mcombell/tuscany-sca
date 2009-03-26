@@ -833,6 +833,14 @@ public class JMSBinding implements BindingRRB, PolicySetAttachPoint, OperationsC
         // Configured operations
         if ( this.configuredOperations.size() != binding.getConfiguredOperations().size() ) return false;
         
+        // wire format
+        if ( this.getRequestWireFormat().getClass() != binding.getRequestWireFormat().getClass()) return false;
+        if ( this.getResponseWireFormat().getClass() != binding.getResponseWireFormat().getClass()) return false;
+        
+        // operation selector
+        if ( this.getOperationSelector().getClass() != binding.getOperationSelector().getClass()) return false;
+        
+        
         // Other fields could also be checked for equality. See class fields for details.
         return true;
     }

@@ -947,6 +947,12 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
            writeResponseDestinationProperties( jmsBinding, writer );       
            writeResponseConnectionFactoryProperties( jmsBinding, writer );        
            writeResponseActivationSpecProperties( jmsBinding, writer );
+           
+           if ((jmsBinding.getResponseWireFormat() != null) &&
+               !(jmsBinding.getResponseWireFormat() instanceof WireFormatJMSTextXML)){
+               writeWireFormat(jmsBinding.getResponseWireFormat(), writer);
+           }
+           
            writer.writeEndElement();
            // Strange bug. Without white space, headers end tag improperly read. 
            writer.writeCharacters( " " ); 
@@ -955,6 +961,16 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
         writeResourceAdapterProperties( jmsBinding, writer );
         
         writeConfiguredOperations( jmsBinding, writer );
+        
+        if ((jmsBinding.getRequestWireFormat() != null) &&
+            !(jmsBinding.getRequestWireFormat() instanceof WireFormatJMSTextXML)){
+            writeWireFormat(jmsBinding.getRequestWireFormat(), writer);
+        }
+        
+        if ((jmsBinding.getOperationSelector() != null) &&
+            !(jmsBinding.getOperationSelector() instanceof OperationSelectorJMSDefault)){
+            writeOperationSelector(jmsBinding.getOperationSelector(), writer);
+        }
         
         writeEnd(writer);
     }
@@ -1475,6 +1491,28 @@ public class JMSBindingProcessor extends BaseStAXArtifactProcessor implements St
 
         // Strange bug. Without white space, headers end tag improperly read.
         writer.writeCharacters(" ");
+    }
+    
+    /**
+     * Wire out a request or response wire format element. Uses extension processors
+     * to do this as wire format is an extension point
+     * 
+     * @param wireFormat
+     * @param writer
+     */
+    private void writeWireFormat(WireFormat wireFormat, XMLStreamWriter writer ) throws XMLStreamException, ContributionWriteException {
+        extensionProcessor.write(wireFormat, writer);
+    }
+    
+    /**
+     * Wire out an operation selector element. Uses extension processors
+     * to do this as operation selector is an extension point
+     * 
+     * @param operationSeletor
+     * @param writer
+     */
+    private void writeOperationSelector(OperationSelector operationSeletor, XMLStreamWriter writer ) throws XMLStreamException, ContributionWriteException{
+        extensionProcessor.write(operationSeletor, writer);        
     }
     
 }

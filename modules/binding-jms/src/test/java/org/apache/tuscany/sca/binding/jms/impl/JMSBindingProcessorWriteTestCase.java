@@ -361,4 +361,25 @@ public class JMSBindingProcessorWriteTestCase extends TestCase {
         // Compare initial binding to written binding.
         assertEquals(binding, binding2);
     }
+    
+    public void testWireFormat() throws Exception {
+        XMLStreamReader reader =
+            inputFactory.createXMLStreamReader(new StringReader(JMSBindingProcessorTestCase.WIRE_FORMAT));
+        Composite composite = (Composite)staxProcessor.read(reader);
+        JMSBinding binding = (JMSBinding)composite.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        assertNotNull(binding);
+
+        // Write out JMSBinding model to stream.
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        staxProcessor.write(composite, outputFactory.createXMLStreamWriter(bos));
+
+        // Read written JMSBinding to a different JMSBinding model.
+        XMLStreamReader reader2 = inputFactory.createXMLStreamReader(new StringReader(bos.toString()));
+        Composite composite2 = (Composite)staxProcessor.read(reader2);
+        JMSBinding binding2 = (JMSBinding)composite2.getComponents().get(0).getServices().get(0).getBindings().get(0);
+        assertNotNull(binding2);
+
+        // Compare initial binding to written binding.
+        assertEquals(binding, binding2);
+    }    
 }
