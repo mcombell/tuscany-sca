@@ -20,6 +20,7 @@
 package org.apache.tuscany.sca.binding.atom.js;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import javax.xml.namespace.QName;
@@ -31,7 +32,8 @@ import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
 
 public class AtomBindingJavascriptProxyFactoryImpl implements JavascriptProxyFactory {
     private static final QName NAME = new QName("http://tuscany.apache.org/xmlns/sca/1.0", "binding.atom");
-    
+    private static final String JAVASCRIPT_FILE_NAME = "binding-atom.js";
+        
     public Class<?> getModelType() {
         return AtomBinding.class;
     }
@@ -39,8 +41,21 @@ public class AtomBindingJavascriptProxyFactoryImpl implements JavascriptProxyFac
     public QName getQName() {
         return NAME;
     }
+    
+    public String getJavascriptProxyFile() {
+        return JAVASCRIPT_FILE_NAME;
+    }
 
-    public String scriptReference(ComponentReference componentReference) throws IOException {
+    public InputStream getJavascriptProxyFileAsStream() throws IOException {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(JAVASCRIPT_FILE_NAME);
+        if (is == null) {
+            throw new IOException("Could not find Javascript '" + JAVASCRIPT_FILE_NAME + "'" );
+        }
+        
+        return is;
+    }
+
+    public String createJavascriptReference(ComponentReference componentReference) throws IOException {
         Binding binding = componentReference.getBindings().get(0);
         URI targetURI = URI.create(binding.getURI());
         String targetPath = targetURI.getPath();

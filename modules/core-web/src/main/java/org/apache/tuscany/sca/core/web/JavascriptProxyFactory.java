@@ -20,6 +20,7 @@
 package org.apache.tuscany.sca.core.web;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.namespace.QName;
 
@@ -46,10 +47,23 @@ public interface JavascriptProxyFactory {
     QName getQName();
     
     /**
+     * Get the Javascript proxy client file name
+     * @return the javascript file name
+     */
+    String getJavascriptProxyFile();
+    
+    /**
+     * Get the Javascript proxy client contents as a stream
+     * @return
+     */
+    InputStream getJavascriptProxyFileAsStream() throws IOException;
+
+    
+    /**
      * Create a JavaScript Proxy for a given reference
      * @param componentReference The reference
      * @return the javascript proxy code
      * @throws IOException
      */
-    String scriptReference(ComponentReference componentReference) throws IOException;
+    String createJavascriptReference(ComponentReference componentReference) throws IOException;
 }

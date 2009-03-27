@@ -20,6 +20,7 @@
 package org.apache.tuscany.sca.binding.jsonrpc.js;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import javax.xml.namespace.QName;
@@ -31,6 +32,7 @@ import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
 
 public class JSONRPCBindingJavascriptProxyFactoryImpl implements JavascriptProxyFactory {
     private static final QName NAME = new QName("http://tuscany.apache.org/xmlns/sca/1.0", "binding.jsonrpc");
+    private static final String JAVASCRIPT_FILE_NAME = "binding-jsonrpc.js";
     
     public Class<?> getModelType() {
         return JSONRPCBinding.class;
@@ -40,7 +42,20 @@ public class JSONRPCBindingJavascriptProxyFactoryImpl implements JavascriptProxy
         return NAME;
     }
 
-    public String scriptReference(ComponentReference componentReference) throws IOException {
+    public String getJavascriptProxyFile() {
+        return JAVASCRIPT_FILE_NAME;
+    }
+
+    public InputStream getJavascriptProxyFileAsStream() throws IOException {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(JAVASCRIPT_FILE_NAME);
+        if (is == null) {
+            throw new IOException("Could not find Javascript '" + JAVASCRIPT_FILE_NAME + "'" );
+        }
+        
+        return is;
+    }
+    
+    public String createJavascriptReference(ComponentReference componentReference) throws IOException {
         Binding binding = componentReference.getBindings().get(0);
         URI targetURI = URI.create(binding.getURI());
         String targetPath = targetURI.getPath();

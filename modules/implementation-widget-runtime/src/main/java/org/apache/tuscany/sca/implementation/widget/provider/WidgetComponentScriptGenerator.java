@@ -74,20 +74,18 @@ public class WidgetComponentScriptGenerator {
 
         for(ComponentReference reference : component.getReferences()) {
             for(Binding binding : reference.getBindings()) {
-                String [] bindingProxyNames = WidgetProxyHelper.getJavaScriptProxyFile(binding.getClass().getName());
+                JavascriptProxyFactory jsProxyFactory = javascriptProxyFactories.getProxyFactory(binding.getClass());
+
+                String bindingProxyName = jsProxyFactory.getJavascriptProxyFile();
                 //check if binding client code was already processed and inject to the generated script
-                if ( bindingProxyNames != null ) {
-                    for ( int i = 0; i < bindingProxyNames.length; i++ ) {
-                        String bindingProxyName = bindingProxyNames[ i ];
-                        if(bindingProxyName != null) {
-                            Boolean processedFlag = bindingClientProcessed.get(bindingProxyName);
-                            if( processedFlag == null || processedFlag.booleanValue() == false) {
-                                generateJavaScriptBindingProxy(pw,bindingProxyName);
-                                bindingClientProcessed.put(bindingProxyName, Boolean.TRUE);
-                            }
-                        }
+                if(bindingProxyName != null) {
+                    Boolean processedFlag = bindingClientProcessed.get(bindingProxyName);
+                    if( processedFlag == null || processedFlag.booleanValue() == false) {
+                        generateJavaScriptBindingProxy(jsProxyFactory, pw);
+                        bindingClientProcessed.put(bindingProxyName, Boolean.TRUE);
                     }
                 }
+
             }
         }
 
@@ -124,9 +122,8 @@ public class WidgetComponentScriptGenerator {
      * Retrieve the binding proxy based on the bind name
      * and embedded the JavaScript into this js
      */
-    private static void generateJavaScriptBindingProxy(PrintWriter pw, String bindingProxyName) throws IOException {
-        //FIXME: Handle the case where the JavaScript binding client is not found
-        InputStream is = WidgetComponentScriptGenerator.class.getClassLoader().getResourceAsStream(bindingProxyName);
+    private static void generateJavaScriptBindingProxy(JavascriptProxyFactory javascriptProxyFactory, PrintWriter pw) throws IOException {
+        InputStream is = javascriptProxyFactory.getJavascriptProxyFileAsStream();
         if (is != null) {
             int i;
             while ((i = is.read()) != -1) {
@@ -208,7 +205,7 @@ public class WidgetComponentScriptGenerator {
                 String referenceName = reference.getName();
                 JavascriptProxyFactory jsProxyFactory = javascriptProxyFactories.getProxyFactory(binding.getClass());
                 
-                pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + jsProxyFactory.scriptReference(reference) + ";");
+                pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + jsProxyFactory.createJavascriptReference(reference) + ";");
                 
             }
         }
