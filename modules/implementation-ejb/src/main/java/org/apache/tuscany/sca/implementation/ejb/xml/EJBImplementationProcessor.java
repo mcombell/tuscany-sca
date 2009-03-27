@@ -140,13 +140,21 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
             
             if(jeeExtension != null) {
                 ComponentType ct = jeeExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
-                implementation.getServices().addAll(ct.getServices());
+                // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
+                //        ct is null if there is no EJBInfo 
+                if (ct != null){
+                    implementation.getServices().addAll(ct.getServices());
+                }
             }
 
             if(jeeOptionalExtension != null) {
                 ComponentType ct = jeeOptionalExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
-                implementation.getReferences().addAll(ct.getReferences());
-                implementation.getProperties().addAll(ct.getProperties());
+                // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
+                //              ct is null if there is no EJBInfo  
+                if (ct != null){
+                    implementation.getReferences().addAll(ct.getReferences());
+                    implementation.getProperties().addAll(ct.getProperties());
+                }
             }
 
             // TODO: Introspection of bean class

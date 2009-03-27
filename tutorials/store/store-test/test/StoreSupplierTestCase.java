@@ -19,6 +19,8 @@
 
 package test;
 
+import java.io.IOException;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -28,6 +30,7 @@ import org.apache.tuscany.sca.node.launcher.DomainManagerLauncher;
 import org.apache.tuscany.sca.node.launcher.NodeLauncher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -75,6 +78,18 @@ public class StoreSupplierTestCase {
         storeClientNode.stop();
         domainManager.stop();
     }
+    
+/*    
+    @Test
+    public void testWaitForInput() {
+        try {
+            System.out.println("press enter to continue)");
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+*/
     
     @Test
     public void testShop() {
