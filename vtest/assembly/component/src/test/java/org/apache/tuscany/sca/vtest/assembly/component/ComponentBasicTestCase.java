@@ -28,6 +28,7 @@ import junit.framework.Assert;
 import org.apache.tuscany.sca.vtest.assembly.component.callback.MyClient;
 import org.apache.tuscany.sca.vtest.utilities.ServiceFinder;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.osoa.sca.ServiceRuntimeException;
 
 /**
@@ -305,6 +306,7 @@ public class ComponentBasicTestCase {
      * equivalent service in the componentType of the implementation.
      */
     @Test
+    @Ignore("broken, see TUSCANY-2946")
     public void testServiceBinding() throws Exception {
     	
     	initDomain("binding_resolution.composite");	
