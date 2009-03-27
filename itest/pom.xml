@@ -98,7 +98,7 @@
                 <module>jms-args</module>
                 <module>jms-callbacks</module>
                 <module>jms-definitions</module>
-                <module>jms-format</module>
+                <!-- module>jms-format</module   removed for now see TUSCANY-2948 -->
                 <module>jms-oneway-nocf</module>
                 <module>jms-noreplyto</module>
                 <module>jms-nonscaclient-exceptions</module>
