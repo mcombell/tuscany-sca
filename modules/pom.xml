@@ -52,6 +52,7 @@
                 <module>binding-feed</module>
                 <!-- new bindings -->
                 <module>binding-atom</module>
+                <module>binding-atom-js</module>
                 <module>binding-atom-abdera</module>
                 <module>binding-gdata</module>
                 <module>binding-gdata-runtime</module>
@@ -61,6 +62,7 @@
                 <module>binding-jms-runtime</module>
                 <module>binding-jms-policy</module>
                 <module>binding-jsonrpc</module>
+                <module>binding-jsonrpc-js</module>
                 <module>binding-jsonrpc-runtime</module>
                 <module>binding-notification</module>
                 <module>binding-rmi</module>
@@ -91,6 +93,7 @@
                 <module>core-databinding</module>
                 <module>core-spi</module>
                 <module>core-spring</module>
+                <module>core-web</module>
                 <module>data-api</module>
                 <module>databinding</module>
                 <module>databinding-axiom</module>
