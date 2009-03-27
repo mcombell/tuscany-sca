@@ -92,8 +92,7 @@ public class FeedAggregatorTestCase {
         Assert.assertNotNull(client);
     }
 
-    // @Test
-    @Ignore("TUSCANY-2937")
+    @Test
     public void testFeedBasics() throws Exception {
         System.out.println(">>>FeedAggregatorTest.testFeedBasics");
         RequestOptions opts = new RequestOptions();
