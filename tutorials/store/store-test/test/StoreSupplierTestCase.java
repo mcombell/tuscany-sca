@@ -42,7 +42,6 @@ import client.Shopper;
  *
  * @version $Rev$ $Date$
  */
- @Ignore("Broken, see TUSCANY-2944")
 public class StoreSupplierTestCase {
     
     private SCANode domainManager;
