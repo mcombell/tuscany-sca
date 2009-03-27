@@ -25,11 +25,31 @@ import javax.xml.namespace.QName;
 
 import org.apache.tuscany.sca.assembly.ComponentReference;
 
+/**
+ * Javascript Proxy Factory used to allow Web related bindings to generate 
+ * client js proxyies
+ * 
+ * @version $Rev$ $Date$
+ */
 public interface JavascriptProxyFactory {
 
+    /**
+     * The binding model type associated with this factory
+     * @return the binding model type
+     */
     Class<?> getModelType(); 
     
+    /**
+     * The binding qname associated with this factory
+     * @return the binding qname
+     */
     QName getQName();
     
+    /**
+     * Create a JavaScript Proxy for a given reference
+     * @param componentReference The reference
+     * @return the javascript proxy code
+     * @throws IOException
+     */
     String scriptReference(ComponentReference componentReference) throws IOException;
 }
