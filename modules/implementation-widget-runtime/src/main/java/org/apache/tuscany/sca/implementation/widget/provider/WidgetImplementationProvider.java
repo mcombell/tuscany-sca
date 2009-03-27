@@ -23,6 +23,7 @@ import java.net.URI;
 import javax.servlet.Servlet;
 
 import org.apache.tuscany.sca.assembly.ComponentService;
+import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.implementation.widget.WidgetImplementation;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -41,6 +42,7 @@ class WidgetImplementationProvider implements ImplementationProvider {
     
     private RuntimeComponent component;
     
+    private JavascriptProxyFactoryExtensionPoint javascriptProxyFactories;
     private ServletHost servletHost;
     
     private String widgetLocationURL;
@@ -52,9 +54,13 @@ class WidgetImplementationProvider implements ImplementationProvider {
     /**
      * Constructs a new resource implementation provider.
      */
-    WidgetImplementationProvider(RuntimeComponent component, WidgetImplementation implementation, ServletHost servletHost) {
+    WidgetImplementationProvider(RuntimeComponent component, 
+                                 WidgetImplementation implementation, 
+                                 JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, 
+                                 ServletHost servletHost) {
         this.component = component;
         
+        this.javascriptProxyFactories = javascriptProxyFactories;
         this.servletHost = servletHost;
         
         widgetLocationURL = implementation.getLocationURL().toString();
@@ -65,7 +71,7 @@ class WidgetImplementationProvider implements ImplementationProvider {
     }
 
     public Invoker createInvoker(RuntimeComponentService service, Operation operation) {
-        WidgetImplementationInvoker invoker = new WidgetImplementationInvoker(component, widgetName, widgetFolderURL, widgetLocationURL);
+        WidgetImplementationInvoker invoker = new WidgetImplementationInvoker(component, javascriptProxyFactories, widgetName, widgetFolderURL, widgetLocationURL);
         return invoker;
     }
     
@@ -74,8 +80,6 @@ class WidgetImplementationProvider implements ImplementationProvider {
     }
 
     public void start() {
-        System.out.println(">>> Starting component : " + this.component.getName());
-        
         String contextRoot = getContextRoot();
 
         // get the ScaDomainScriptServlet, if it doesn't yet exist create one
@@ -84,7 +88,7 @@ class WidgetImplementationProvider implements ImplementationProvider {
         Servlet servlet = servletHost.getServletMapping(scriptURI);
         if (servlet == null /*|| servlet instanceof HTTPGetListenerServlet*/) {
             WidgetComponentScriptServlet widgetScriptServlet;
-            widgetScriptServlet = new WidgetComponentScriptServlet(this.component);
+            widgetScriptServlet = new WidgetComponentScriptServlet(this.component, javascriptProxyFactories);
             servletHost.addServletMapping(scriptURI, widgetScriptServlet);
         } else {
             System.out.println(">>>Servlet::" + servlet.getClass().toString());
@@ -101,6 +105,10 @@ class WidgetImplementationProvider implements ImplementationProvider {
     }
     
 
+    /**
+     * Get the contextRoot considering the HTTP Binding URI when in a embedded environment
+     * @return
+     */
     private String getContextRoot() {
         String contextRoot = null;
         

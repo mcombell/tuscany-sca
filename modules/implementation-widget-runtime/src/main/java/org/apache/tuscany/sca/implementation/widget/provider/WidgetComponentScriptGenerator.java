@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +32,8 @@ import java.util.Map;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentProperty;
 import org.apache.tuscany.sca.assembly.ComponentReference;
+import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
+import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,22 +44,20 @@ import org.w3c.dom.Element;
  * @version $Rev: 665897 $ $Date: 2008-06-09 14:31:03 -0700 (Mon, 09 Jun 2008) $
  */
 public class WidgetComponentScriptGenerator {
-
-    private static final long serialVersionUID = 1L;
     
-    public static InputStream generateWidgetCode(RuntimeComponent component) throws IOException, URISyntaxException {
+    public static InputStream generateWidgetCode(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories) throws IOException, URISyntaxException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(bos);
      
-        generateWidgetCode(component, pw);
+        generateWidgetCode(component, javascriptProxyFactories, pw);
         
         return new ByteArrayInputStream(bos.toByteArray());
     }
     
-    public static void generateWidgetCode(RuntimeComponent component, OutputStream os) throws IOException, URISyntaxException {
+    public static void generateWidgetCode(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, OutputStream os) throws IOException, URISyntaxException {
         PrintWriter pw = new PrintWriter(os);
         
-        generateWidgetCode(component, pw);
+        generateWidgetCode(component, javascriptProxyFactories, pw);
     }
             
 
@@ -66,7 +65,7 @@ public class WidgetComponentScriptGenerator {
      * This helper class concatenates the necessary JavaScript client code into a
      * single JavaScript per component
      */
-    public static void generateWidgetCode(RuntimeComponent component, PrintWriter pw) throws IOException, URISyntaxException {
+    public static void generateWidgetCode(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, PrintWriter pw) throws IOException, URISyntaxException {
         pw.println();
         pw.println("/* Apache Tuscany SCA Widget header */");
         pw.println();
@@ -108,7 +107,7 @@ public class WidgetComponentScriptGenerator {
         pw.println();
 
         //process references
-        generateJavaScriptReferenceFunction(component, pw);
+        generateJavaScriptReferenceFunction(component, javascriptProxyFactories,pw);
 
 
         pw.println();
@@ -198,43 +197,19 @@ public class WidgetComponentScriptGenerator {
      * @param pw
      * @throws IOException
      */
-    private static void generateJavaScriptReferenceFunction (RuntimeComponent component, PrintWriter pw) throws IOException, URISyntaxException {
+    private static void generateJavaScriptReferenceFunction (RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, PrintWriter pw) throws IOException, URISyntaxException {
         
         pw.println("tuscany.sca.referenceMap = new Object();");
         for(ComponentReference reference : component.getReferences()) {
-            String referenceName = reference.getName();
             Binding binding = reference.getBindings().get(0);
+           
             if (binding != null) {
-                
-                String proxyClient = WidgetProxyHelper.getJavaScriptProxyClient(binding.getClass().getName());
-                if(proxyClient != null) {
-                    
-                    // Generate the JavaScript proxy configuration code
-                    // Proxies are configured with the target URI path, as at this point we shouldn't
-                    // be generating proxies that communicate with other hosts (if a proxy needs to
-                    // communicate with another host it should be generated on and served by
-                    // that particular host)
-                    
-                    /*
-                    URI targetURI = URI.create(binding.getURI());
-                    String targetPath;
-                    if(targetURI.getScheme() == null) {
-                        targetPath = targetURI.getPath();
-                    } else {
-                        targetPath = targetURI.toString();
-                    }
-                     */
 
-                    URI targetURI = URI.create(binding.getURI());
-                    String targetPath = targetURI.getPath();
-                    
-                    if(proxyClient.equals("JSONRpcClient")) {
-                        //FIXME Proxies should follow the same pattern, saving us from having to test for JSONRpc here
-                        pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\").Service;");
-                    } else {
-                        pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + proxyClient + "(\"" + targetPath + "\");");
-                    }
-                }                
+                String referenceName = reference.getName();
+                JavascriptProxyFactory jsProxyFactory = javascriptProxyFactories.getProxyFactory(binding.getClass());
+                
+                pw.println("tuscany.sca.referenceMap." + referenceName + " = new " + jsProxyFactory.scriptReference(reference) + ";");
+                
             }
         }
         

@@ -35,6 +35,12 @@
             <artifactId>tuscany-implementation-widget</artifactId>
             <version>1.5-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-core-web</artifactId>
+            <version>1.5-SNAPSHOT</version>
+        </dependency>           
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>

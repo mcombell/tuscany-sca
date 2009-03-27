@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -37,12 +38,14 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  */
 class WidgetImplementationInvoker implements Invoker {
     private RuntimeComponent component;
+    private JavascriptProxyFactoryExtensionPoint javascriptProxyFactories;
     private String widgetName;
     private String widgetFolderURL;
     private String widgetLocationURL;
     
-    WidgetImplementationInvoker(RuntimeComponent component, String widgetName, String widgetFolderURL, String widgetLocationURL) {
+    WidgetImplementationInvoker(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, String widgetName, String widgetFolderURL, String widgetLocationURL) {
         this.component = component;
+        this.javascriptProxyFactories = javascriptProxyFactories;
         this.widgetName = widgetName + ".js";
         this.widgetFolderURL = widgetFolderURL;
         this.widgetLocationURL = widgetLocationURL;
@@ -64,7 +67,7 @@ class WidgetImplementationInvoker implements Invoker {
             } else if (id.equals(widgetName)) {
                 
                 // Generate JavaScript header for use in the Widget
-                InputStream is = WidgetComponentScriptGenerator.generateWidgetCode(component);
+                InputStream is = WidgetComponentScriptGenerator.generateWidgetCode(component, javascriptProxyFactories);
                 msg.setBody(is);
                 
             } else {

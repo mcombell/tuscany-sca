@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
+import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
+
 
 /**
  * Servlet to handle requests for the widget component .js script.
@@ -38,6 +40,7 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 public class WidgetComponentScriptServlet extends HttpServlet {
     private static final long serialVersionUID = 2454705532282398190L;
     
+    private transient JavascriptProxyFactoryExtensionPoint javascriptProxyFactories;
     private transient RuntimeComponent component;
     
     
@@ -45,15 +48,16 @@ public class WidgetComponentScriptServlet extends HttpServlet {
      * Constructor receiving the runtimeComponent reference that is going to be used to generate the widget client js
      * @param component
      */
-    public WidgetComponentScriptServlet(RuntimeComponent component) {
-        this.component = component;        
+    public WidgetComponentScriptServlet(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories) {
+        this.component = component;
+        this.javascriptProxyFactories = javascriptProxyFactories;
     }
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             ServletOutputStream os = response.getOutputStream();
-            WidgetComponentScriptGenerator.generateWidgetCode(component, os);
+            WidgetComponentScriptGenerator.generateWidgetCode(component, javascriptProxyFactories, os);
         }catch(URISyntaxException e) {
             throw new IOException("Invalid uri creating JavaScript resource");
         }
