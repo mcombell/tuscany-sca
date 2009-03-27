@@ -256,7 +256,7 @@ class AtomBindingListenerServlet extends HttpServlet {
             if (feed != null) {
                 String feedETag = null;
                 if (feed.getId() != null)
-                    feedETag = feed.getId().toString();
+                    feedETag = "\"" + feed.getId().toString() + "\"";
                 Date feedUpdated = feed.getUpdated();
                 // Test request for predicates.
                 String predicate = request.getHeader( "If-Match" );
@@ -302,7 +302,7 @@ class AtomBindingListenerServlet extends HttpServlet {
                 // Provide Etag based on Id and time if given.
                 // Ignore if not given. (Browser may cache if trivial ETag is given.)
                 if ( feedETag != null ) {
-                    response.addHeader(ETAG, feedETag );
+                    response.addHeader(ETAG, feedETag);
                 }
                 if ( feedUpdated != null ) {
                     response.addHeader(LASTMODIFIED, dateFormat.format( feedUpdated ));
