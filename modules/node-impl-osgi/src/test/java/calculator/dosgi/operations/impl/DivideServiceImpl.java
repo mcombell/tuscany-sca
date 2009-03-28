@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,10 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
--->
-<scr:component name="DivideComponent" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
-    <implementation class="calculator.dosgi.operations.DivideServiceImpl" />
-    <service>
-        <provide interface="calculator.dosgi.operations.DivideService" />
-    </service>
-</scr:component>
+ */
+package calculator.dosgi.operations.impl;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import calculator.dosgi.operations.DivideService;
+
+/**
+ * An implementation of the Divide service.
+ */
+public class DivideServiceImpl implements DivideService {
+
+    public double divide(double n1, double n2) {
+        Logger logger = Logger.getLogger("calculator");
+        logger.log(Level.INFO, "Dividing " + n1 + " with " + n2);
+        return n1 / n2;
+    }
+
+}

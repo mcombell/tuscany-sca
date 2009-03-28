@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,10 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
--->
-<scr:component name="AddComponent" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
-    <implementation class="calculator.dosgi.operations.AddServiceImpl" />
-    <service>
-        <provide interface="calculator.dosgi.operations.AddService" />
-    </service>
-</scr:component>
+ */
+package calculator.dosgi.operations.impl;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import calculator.dosgi.operations.MultiplyService;
+
+/**
+ * An implementation of the Multiply service.
+ */
+public class MultiplyServiceImpl implements MultiplyService {
+
+    public double multiply(double n1, double n2) {
+        Logger logger = Logger.getLogger("calculator");
+        logger.log(Level.INFO, "Multiplying " + n1 + " with " + n2);
+        return n1 * n2;
+    }
+
+}

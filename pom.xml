@@ -33,9 +33,9 @@
     <version>2.0-M2-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tuscany/branches/sca-java-2.0-M2</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tuscany/branches/sca-java-2.0-M2</developerConnection>
-        <url>http://svn.apache.org/repos/asf/tuscany/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tuscany/java/sca</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tuscany/java/sca</developerConnection>
+        <url>http://svn.apache.org/repos/asf/tuscany/java/sca</url>
     </scm>
 
     <prerequisites>
@@ -72,6 +72,18 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <!-- Tuscany repository to hold artifacts that are not published in the public maven repos -->
+        <repository>
+            <id>tuscany.repo</id>
+            <name>Tuscany Maven 2.x Repository</name>
+            <url>http://svn.apache.org/repos/asf/tuscany/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
             </snapshots>
         </repository>
         <repository>

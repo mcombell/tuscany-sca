@@ -89,7 +89,7 @@
                 </configuration>
             </plugin>
             
-            <!-- plugin>
+            <!-- comment out of M2 as plugin not released plugin>
                 <groupId>org.apache.tuscany.maven.plugins</groupId>
                 <artifactId>maven-osgi-junit-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
@@ -100,8 +100,8 @@
                         <goals>
                             <goal>test</goal>
                         </goals>
+                        <configuration></configuration>
                     </execution>
-                    <configuration></configuration>
                 </executions>
             </plugin -->
         </plugins>
