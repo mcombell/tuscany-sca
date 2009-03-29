@@ -18,7 +18,6 @@
  */
 package org.apache.tuscany.sca.binding.jms.format.jmstextxmlinjmsobjectout.helloworld;
 
-import org.apache.tuscany.sca.binding.jms.format.jmstextxml.helloworld.Person;
 import org.osoa.sca.annotations.Reference;
 
 
@@ -31,11 +30,9 @@ public class HelloWorldReferenceImpl implements HelloWorldService {
         return helloWorldService1.getGreetings(name).toString();
     }
     
-    /*
     public String getPersonGreetings(Person person){
-        return null;
-    }  
-    */   
+        return helloWorldService1.getPersonGreetings(person).toString();
+    }   
          
 }
 

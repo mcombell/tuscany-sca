@@ -57,7 +57,7 @@ public class FormatJMSTextXMLInJMSObjectOutTestCase {
         Person person = new Person();
         person.setFirstName("Fred");
         person.setLastName("Bloggs");
-        //assertEquals("Hello Fred Bloggs Hello Fred Bloggs Hello Fred Bloggs", helloWorldService.getPersonGreetings(person));
+        assertEquals("Hello Fred Bloggs", helloWorldService.getPersonGreetings(person));
     }
 
     @After

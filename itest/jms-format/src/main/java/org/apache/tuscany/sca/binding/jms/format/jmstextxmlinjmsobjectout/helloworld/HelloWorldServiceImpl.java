@@ -26,12 +26,10 @@ public class HelloWorldServiceImpl implements HelloWorldService {
         return response;
     }
     
-    /*
     public String getPersonGreetings(Person person){
         String response =  "Hello " + person.getFirstName() + " " + person.getLastName();
         System.out.println("getPersonGreetings: " + response);
         return response;
     }
-    */
 }
 

@@ -189,13 +189,19 @@ public class InterfaceImpl implements Interface {
     
     public void resetInterfaceInputTypes(Interface newInterface){
         for (int i = 0; i < getOperations().size(); i++) {
-            // TODO - same operation order is assumed. How to really
-            //        find the right operation when we know that the 
-            //        data types will be different
+            // only remote interfaces only have a data type model defined  
+            // and in this case operations cannot be overloaded so match
+            // operations by name
             Operation oldOperation = getOperations().get(i);
-            Operation newOperation = newInterface.getOperations().get(i);
+            Operation newOperation = null;
             
-            if (!oldOperation.getName().equals(newOperation.getName())){
+            for (Operation tmpOperation : newInterface.getOperations()){
+                if (tmpOperation.getName().equals(oldOperation.getName())){
+                    newOperation = tmpOperation;
+                }
+            }
+            
+            if (newOperation == null){
                 break;
             }
                       
@@ -212,13 +218,19 @@ public class InterfaceImpl implements Interface {
     
     public void resetInterfaceOutputTypes(Interface newInterface){
         for (int i = 0; i < getOperations().size(); i++) {
-            // TODO - same operation order is assumed. How to really
-            //        find the right operation when we know that the 
-            //        data types will be different
+            // only remote interfaces only have a data type model defined  
+            // and in this case operations cannot be overloaded so match
+            // operations by name
             Operation oldOperation = getOperations().get(i);
-            Operation newOperation = newInterface.getOperations().get(i);
+            Operation newOperation = null;
             
-            if (!oldOperation.getName().equals(newOperation.getName())){
+            for (Operation tmpOperation : newInterface.getOperations()){
+                if (tmpOperation.getName().equals(oldOperation.getName())){
+                    newOperation = tmpOperation;
+                }
+            }
+            
+            if (newOperation == null){
                 break;
             }
             
