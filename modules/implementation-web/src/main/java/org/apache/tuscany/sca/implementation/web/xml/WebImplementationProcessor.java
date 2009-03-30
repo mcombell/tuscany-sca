@@ -21,6 +21,7 @@ package org.apache.tuscany.sca.implementation.web.xml;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -29,9 +30,11 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.tuscany.sca.assembly.AssemblyFactory;
+import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.jee.JspReferenceTagInfo;
 import org.apache.tuscany.sca.contribution.jee.WebModuleInfo;
 import org.apache.tuscany.sca.contribution.jee.JavaEEExtension;
 import org.apache.tuscany.sca.contribution.jee.JavaEEOptionalExtension;
@@ -42,8 +45,18 @@ import org.apache.tuscany.sca.contribution.resolver.ModelResolver;
 import org.apache.tuscany.sca.contribution.service.ContributionReadException;
 import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
+import org.apache.tuscany.sca.implementation.java.DefaultJavaImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.IntrospectionException;
+import org.apache.tuscany.sca.implementation.java.JavaImplementation;
+import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
 import org.apache.tuscany.sca.implementation.web.WebImplementation;
 import org.apache.tuscany.sca.implementation.web.WebImplementationFactory;
+import org.apache.tuscany.sca.implementation.web.introspect.PropertyProcessor;
+import org.apache.tuscany.sca.implementation.web.introspect.ReferenceProcessor;
+import org.apache.tuscany.sca.interfacedef.InvalidInterfaceException;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterface;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceContract;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.monitor.Monitor;
 
 
@@ -58,6 +71,8 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
     private Monitor monitor;
     private JavaEEExtension jeeExtension;
     private JavaEEOptionalExtension jeeOptionalExtension;
+    private JavaImplementationFactory javaImplementationFactory;
+    private JavaInterfaceFactory javaInterfaceFactory;
     
     public WebImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
@@ -65,6 +80,11 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
         this.jeeExtension = modelFactories.getFactory(JavaEEExtension.class);
         this.jeeOptionalExtension = modelFactories.getFactory(JavaEEOptionalExtension.class);
         this.monitor = monitor;
+        
+        this.javaImplementationFactory = new DefaultJavaImplementationFactory();
+        this.javaInterfaceFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+        javaImplementationFactory.addClassVisitor(new ReferenceProcessor(assemblyFactory, javaInterfaceFactory));
+        javaImplementationFactory.addClassVisitor(new PropertyProcessor(assemblyFactory));
     }
 
     public QName getArtifactType() {
@@ -117,9 +137,38 @@ public class WebImplementationProcessor extends BaseStAXArtifactProcessor implem
                 implementation.getProperties().addAll(ct.getProperties());
             }
             
-            // TODO: Introspection of classes
+            // Introspection of classes
+            List<Class<?>> webArtifacts = new ArrayList<Class<?>>();
+            webArtifacts.addAll(webModuleInfo.getServletClasses());
+            webArtifacts.addAll(webModuleInfo.getFilterClasses());
+            webArtifacts.addAll(webModuleInfo.getListenerClasses());
+            webArtifacts.addAll(webModuleInfo.getJSFClasses());
+            JavaImplementation ji = javaImplementationFactory.createJavaImplementation();
+            for(Class<?> clazz : webArtifacts) {
+                try {
+                    javaImplementationFactory.createJavaImplementation(ji, clazz);
+                } catch (IntrospectionException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            implementation.getReferences().addAll(ji.getReferences());
+            implementation.getProperties().addAll(ji.getProperties());
 
-            // TODO: Introspection of JSPs
+            // SCA References in JSP Tags
+            for(JspReferenceTagInfo jspRefTag : webModuleInfo.getJspReferenceTags()) {
+                ComponentReference ref = assemblyFactory.createComponentReference();
+                ref.setName(jspRefTag.name);
+                JavaInterfaceContract intfContract = javaInterfaceFactory.createJavaInterfaceContract();
+                try {
+                    intfContract.setInterface(javaInterfaceFactory.createJavaInterface(jspRefTag.type));
+                } catch (InvalidInterfaceException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                ref.setInterfaceContract(intfContract);
+                implementation.getReferences().add(ref);
+            }
             
             // Process componentType side file
             ComponentType componentType = assemblyFactory.createComponentType();
