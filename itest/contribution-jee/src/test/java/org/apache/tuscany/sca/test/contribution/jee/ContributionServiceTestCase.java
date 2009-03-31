@@ -51,7 +51,7 @@ public class ContributionServiceTestCase {
     private static final String JAR_CONTRIBUTION = "/repository/helloworld-service.jar";
     private static final String EJB_JAR_CONTRIBUTION = "/repository/helloworld-ejb.jar";
     private static final String EJB_JAR_W_DEPLOYABLE_CONTRIBUTION = "/repository/helloworld-ejb-w-dep.jar";
-    private static final String WAR_CONTRIBUTION = "/repository/helloworld-servlet.war";
+    private static final String WAR_CONTRIBUTION = "/repository/helloworld-web.war";
     private static final String WAR_W_DEPLOYABLE_CONTRIBUTION = "/repository/helloworld-web-w-dep.war";
     private static final String EAR_CONTRIBUTION = "/repository/helloworld-ejb.ear";
 
@@ -82,7 +82,6 @@ public class ContributionServiceTestCase {
      * This method tests a non Java EE contribution.
      */
     @Test
-//    @Ignore
     public void testContributeJAR() throws Exception {
         URL contributionLocation = getClass().getResource(JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
@@ -94,7 +93,6 @@ public class ContributionServiceTestCase {
      * This method tests an EJB jar as a contribution.
      */
     @Test
-//    @Ignore
     public void testContributeEJBJAR() throws Exception {
         URL contributionLocation = getClass().getResource(EJB_JAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
@@ -121,7 +119,6 @@ public class ContributionServiceTestCase {
      * This method tests an EJB jar with sca-contribution.xml as a contribution.
      */
     @Test
-//    @Ignore
     public void testContributeEJBJARwDeployable() throws Exception {
         URL contributionLocation = getClass().getResource(EJB_JAR_W_DEPLOYABLE_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
@@ -159,7 +156,6 @@ public class ContributionServiceTestCase {
      * This method tests WAR as a contribution.
      */
     @Test
-    //@Ignore
     public void testContributeWAR() throws Exception {
         URL contributionLocation = getClass().getResource(WAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
@@ -190,7 +186,6 @@ public class ContributionServiceTestCase {
      * This method tests WAR with sca-contribution.xml as a contribution.
      */
     @Test
-//    @Ignore
     public void testContributeWARwDeployable() throws Exception {
         URL contributionLocation = getClass().getResource(WAR_W_DEPLOYABLE_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
@@ -236,7 +231,7 @@ public class ContributionServiceTestCase {
      * This method test EAR as a contribution.
      */
     @Test
-//    @Ignore
+    @Ignore
     public void testContributeEAR() throws Exception {
         URL contributionLocation = getClass().getResource(EAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
