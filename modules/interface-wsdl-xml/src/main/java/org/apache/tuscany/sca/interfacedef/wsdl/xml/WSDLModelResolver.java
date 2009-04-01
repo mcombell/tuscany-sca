@@ -178,9 +178,11 @@ public class WSDLModelResolver implements ModelResolver {
 
         public InputSource getImportInputSource(String parentLocation, String importLocation) {
             try {
-                if (importLocation == null) {
+                if (importLocation == null)
                     throw new IllegalArgumentException("Required attribute 'location' is missing.");
-                }
+                
+                if (importLocation.trim().equals(""))
+                	throw new IllegalArgumentException("Required attribute 'location' is empty.");
 
                 URL url = null;
                 if (importLocation.startsWith("/")) {
@@ -394,6 +396,9 @@ public class WSDLModelResolver implements ModelResolver {
                     wsdlDefinition.setNamespace(entry.getKey());
                     WSDLDefinition resolved = null;
                     for (javax.wsdl.Import imp : entry.getValue()) {
+                    	if (imp.getDefinition() == null)
+                            throw new IllegalArgumentException("Required attribute 'location' is missing.");
+                        
                     	try {
                     		wsdlDefinition.setLocation(new URI(imp.getDefinition().getDocumentBaseURI()));                    		
                     		resolved = resolveImports(WSDLDefinition.class, wsdlDefinition);
@@ -415,23 +420,6 @@ public class WSDLModelResolver implements ModelResolver {
                     		throw new ContributionReadException(e);
                     	}
                     }
-                    /*resolved = resolveImports(WSDLDefinition.class, wsdlDefinition);
-                    if (!resolved.isUnresolved()) {
-                        for (javax.wsdl.Import imp : entry.getValue()) {
-                            if (resolved.getDefinition().getDocumentBaseURI().equals(imp.getDefinition().getDocumentBaseURI())) {
-                                // this WSDLDefinition contains the imported document
-                                wsdlDef.getImportedDefinitions().add(resolved);
-                            } else {
-                                // this is a facade, so look in its imported definitions
-                                for (WSDLDefinition def : resolved.getImportedDefinitions()) {
-                                    if (def.getDefinition().getDocumentBaseURI().equals(imp.getDefinition().getDocumentBaseURI())) {
-                                        wsdlDef.getImportedDefinitions().add(def);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }*/
                 }
             }
 
