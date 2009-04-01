@@ -33,7 +33,6 @@ import org.junit.Ignore;
 /**
  * @version $Rev$ $Date$
  */
- @Ignore("Fails, see TUSCANY-2945")
 public class PrimitivesDatabindingTestCase {
 
     private static SCAClient domain;

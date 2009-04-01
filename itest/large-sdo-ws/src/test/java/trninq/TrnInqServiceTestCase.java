@@ -38,7 +38,6 @@ import org.junit.Ignore;
  * 
  * @version $Rev$ $Date$
  */
- @Ignore("Broken currently, see TUSCANY-2947")
 public class TrnInqServiceTestCase extends TestCase {
 
     private static SCADomain scaDomain;
