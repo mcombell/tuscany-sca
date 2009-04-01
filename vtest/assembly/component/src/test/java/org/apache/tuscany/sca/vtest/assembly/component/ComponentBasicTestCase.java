@@ -208,7 +208,7 @@ public class ComponentBasicTestCase {
      * <implementation/> child element of the component.
      * <p>
      * For the service name, OSOA says(1598-1500):
-     * name (required) – the name of the service, the name MUST BE unique across all the 
+     * name (required) - the name of the service, the name MUST BE unique across all the 
      * composite services in the composite. The name of the composite service can be different
      * from the name of the promoted component service.
      */
@@ -306,7 +306,7 @@ public class ComponentBasicTestCase {
      * equivalent service in the componentType of the implementation.
      */
     @Test
-    @Ignore("broken, see TUSCANY-2946")
+  //  @Ignore("broken, see TUSCANY-2946")
     public void testServiceBinding() throws Exception {
     	
     	initDomain("binding_resolution.composite");	
