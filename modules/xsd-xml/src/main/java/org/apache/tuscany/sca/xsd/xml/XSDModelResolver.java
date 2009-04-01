@@ -85,24 +85,7 @@ public class XSDModelResolver implements ModelResolver {
     public <T> T resolveModel(Class<T> modelClass, T unresolved) {
 
         XSDefinition definition = (XSDefinition)unresolved;
-        String namespace = definition.getNamespace();
-        XSDefinition resolved = null;
-        
-        // Lookup for a definition using the non-sca mechanism
-        if (definition.getDocument() != null) {
-	        try {
-	        	List<XSDefinition> list = new ArrayList<XSDefinition>();
-	        	list.add(definition);
-	            map.put(namespace, list);
-	            resolved = aggregate(list);
-	        	// no exception thrown, then its resolved.
-	            if (resolved != null && !resolved.isUnresolved()) {	            	
-	            	return modelClass.cast(resolved);
-	            }
-	        } catch (ContributionRuntimeException e) {
-	        	// do nothing, lookup using sca mechanism
-	        }
-        }
+        String namespace = definition.getNamespace();        
         
         // Lookup a definition for the given namespace within the
         // current contribution.
@@ -115,7 +98,14 @@ public class XSDModelResolver implements ModelResolver {
                 modelXSD = list.get(index);
                 modelXSD.setDocument(definition.getDocument());
             }
-        }        
+        }
+        if (list == null && definition.getDocument() != null) {
+        	// Hit for the 1st time
+        	list = new ArrayList<XSDefinition>();
+        	list.add(definition);
+        	map.put(namespace, list);
+        }
+        XSDefinition resolved = null;
         try {
             resolved = aggregate(list);
         } catch (ContributionRuntimeException e) {
@@ -167,14 +157,6 @@ public class XSDModelResolver implements ModelResolver {
             String uri = null;
             if (definition.getLocation() != null) {
                 uri = definition.getLocation().toString();
-            }            
-            for (XmlSchema d : schemaCollection.getXmlSchemas()) {
-                if (d.getSourceURI() != null && d.getSourceURI().equals(uri)) {
-                	definition.setSchemaCollection(schemaCollection);
-                    definition.setSchema(d);
-                    definition.setUnresolved(false);
-                	return;
-                }
             }
             XmlSchema schema = null;
             try {
