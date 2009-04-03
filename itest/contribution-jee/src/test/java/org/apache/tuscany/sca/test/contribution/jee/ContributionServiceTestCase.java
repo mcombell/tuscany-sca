@@ -57,6 +57,7 @@ public class ContributionServiceTestCase {
     private static final String EAR_CONTRIBUTION = "/repository/helloworld-ejb.ear";
     private static final String EAR_NONENHANCED_CONTRIBUTION = "/repository/simple-app-ear.jar";
     private static final String EAR_ENHANCED_16_CONTRIBUTION = "/repository/simple-app.ear";
+    private static final String EAR_ENHANCED_19_CONTRIBUTION = "/repository/enhanced-app.ear";
  
 
     private ClassLoader cl;
@@ -284,5 +285,43 @@ public class ContributionServiceTestCase {
         JEEImplementation jeeImpl = (JEEImplementation)component.getImplementation();
         Assert.assertEquals("Number of services", 2, jeeImpl.getServices().size());
         Assert.assertEquals("Number of references", 1, jeeImpl.getReferences().size());
+    }
+
+    /**
+     * This method tests an EAR as a contribution.
+     * Enhanced EAR w application composite containing non-enhanced WAR, non-enhanced EJB JAR.
+     */
+    @Test
+    public void testContributeEAR_Enhanced19() throws Exception {
+        URL contributionLocation = getClass().getResource(EAR_ENHANCED_19_CONTRIBUTION);
+        String contributionId = CONTRIBUTION_001_ID;
+        contributionService.contribute(contributionId, contributionLocation, false);
+        Contribution contribution = contributionService.getContribution(contributionId);
+        Assert.assertNotNull(contribution);
+
+        List<Artifact> artifacts = contribution.getArtifacts();
+        for(Artifact artifact : artifacts) {
+            if(artifact.getURI().toString().equals("META-INF/application.composite")) {
+                Composite composite = (Composite)artifact.getModel();
+                Assert.assertEquals("Number of components", 3, composite.getComponents().size());
+                for(Component component : composite.getComponents()) {
+                    if(component.getName().equals("webComponent")) {
+                        Assert.assertTrue(component.getImplementation() instanceof WebImplementation);
+                        WebImplementation webImpl = (WebImplementation)component.getImplementation();
+                        Assert.assertEquals("Number of references", 1, webImpl.getReferences().size());
+                    } else if(component.getName().equals("ejbComponent1")) {
+                        Assert.assertTrue(component.getImplementation() instanceof EJBImplementation);
+                        EJBImplementation ejbImpl = (EJBImplementation)component.getImplementation();
+                        Assert.assertEquals("Number of services", 1, ejbImpl.getServices().size());
+                        Assert.assertEquals("Number of references", 0, ejbImpl.getReferences().size());
+                    } else if(component.getName().equals("ejbComponent2")) {
+                        Assert.assertTrue(component.getImplementation() instanceof EJBImplementation);
+                        EJBImplementation ejbImpl = (EJBImplementation)component.getImplementation();
+                        Assert.assertEquals("Number of services", 1, ejbImpl.getServices().size());
+                        Assert.assertEquals("Number of references", 1, ejbImpl.getReferences().size());
+                    }
+                }
+            }
+        }
     }
 }
