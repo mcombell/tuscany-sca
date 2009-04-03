@@ -39,6 +39,12 @@ import org.apache.tuscany.sca.monitor.MonitorFactory;
 import org.apache.tuscany.sca.monitor.Problem;
 import org.apache.tuscany.sca.monitor.Problem.Severity;
 
+
+/**
+ * Default extension point for widget component script generator
+ * 
+ * @version $Rev$ $Date$
+ */
 public class DefaultComponentJavaScriptGeneratorExtensionPoint implements ComponentJavaScriptGeneratorExtensionPoint {
     private final List<ComponentJavaScriptGenerator> generators = new ArrayList<ComponentJavaScriptGenerator>();
     private final Map<QName, ComponentJavaScriptGenerator> generatorsByQName = new HashMap<QName, ComponentJavaScriptGenerator>();
@@ -90,12 +96,12 @@ public class DefaultComponentJavaScriptGeneratorExtensionPoint implements Compon
     
 
     public ComponentJavaScriptGenerator getComponentJavaScriptGenerator(QName bindingName) {
-        loadFacories();
+        loadFactories();
         return generatorsByQName.get(bindingName);
     }
     
     public List<ComponentJavaScriptGenerator> getComponentJavaScriptGenerators() {
-        loadFacories();
+        loadFactories();
         return this.generators;
     }
     
@@ -108,7 +114,7 @@ public class DefaultComponentJavaScriptGeneratorExtensionPoint implements Compon
      * Lazily load artifact processors registered in the extension point.
      */
     @SuppressWarnings("unchecked")
-    private synchronized void loadFacories() {
+    private synchronized void loadFactories() {
         if (loaded) {
             return;
         }

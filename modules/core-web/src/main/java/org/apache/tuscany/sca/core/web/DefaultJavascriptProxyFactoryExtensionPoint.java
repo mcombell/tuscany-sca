@@ -38,6 +38,11 @@ import org.apache.tuscany.sca.monitor.MonitorFactory;
 import org.apache.tuscany.sca.monitor.Problem;
 import org.apache.tuscany.sca.monitor.Problem.Severity;
 
+/**
+ * Default extension point for javascript proxy factories
+ * 
+ * @version $Rev$ $Date$
+ */
 public class DefaultJavascriptProxyFactoryExtensionPoint implements JavascriptProxyFactoryExtensionPoint {
     private final Map<QName, JavascriptProxyFactory> factoriesByQName = new HashMap<QName, JavascriptProxyFactory>();
     private final Map<Class<?>, JavascriptProxyFactory> factoriesByType = new HashMap<Class<?>, JavascriptProxyFactory>();
@@ -87,12 +92,12 @@ public class DefaultJavascriptProxyFactoryExtensionPoint implements JavascriptPr
     }
 
     public JavascriptProxyFactory getProxyFactory(QName bindingName) {
-        loadFacories();
+        loadFactories();
         return factoriesByQName.get(bindingName);
     }
 
     public JavascriptProxyFactory getProxyFactory(Class<?> bindingType) {
-        loadFacories();
+        loadFactories();
         Class<?>[] classes = bindingType.getInterfaces();
         for (Class<?> c : classes) {
             JavascriptProxyFactory proxyFactory = factoriesByType.get(c);
@@ -175,7 +180,7 @@ public class DefaultJavascriptProxyFactoryExtensionPoint implements JavascriptPr
     /**
      * Lazily load artifact processors registered in the extension point.
      */
-    private synchronized void loadFacories() {
+    private synchronized void loadFactories() {
         if (loaded) {
             return;
         }
