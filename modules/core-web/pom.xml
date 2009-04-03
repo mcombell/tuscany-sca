@@ -54,9 +54,9 @@
                 <configuration>
                     <instructions>
                         <Bundle-Version>${tuscany.version}</Bundle-Version>
-                        <Bundle-SymbolicName>org.apache.tuscany.sca.web.js</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>org.apache.tuscany.sca.core.web</Bundle-SymbolicName>
                         <Bundle-Description>${pom.name}</Bundle-Description>
-                        <Export-Package>org.apache.tuscany.sca.binding.atom.js*</Export-Package>
+                        <Export-Package>org.apache.tuscany.sca.core.web</Export-Package>
                         <Import-Package>org.apache.tuscany.sca.assembly.xml;version="1.4", *</Import-Package>
                     </instructions>
                 </configuration>
