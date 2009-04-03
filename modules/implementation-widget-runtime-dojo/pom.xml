@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-implementation-widget-runtime-dojo</artifactId>
-    <name>Apache Tuscany SCA Atom Feed Binding JavaScript</name>
+    <name>Apache Tuscany SCA Widget Implementation Runtime (Dojo)</name>
 
 	<dependencies>
 		<dependency>

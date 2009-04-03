@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-implementation-widget-runtime-tuscany</artifactId>
-    <name>Apache Tuscany SCA Atom Feed Binding JavaScript</name>
+    <name>Apache Tuscany SCA Widget Implementation Runtime (Tuscany)</name>
 
 	<dependencies>
 		<dependency>
@@ -35,7 +35,49 @@
 			<artifactId>tuscany-implementation-widget-runtime</artifactId>
 			<version>1.5-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-http-runtime</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-atom-abdera</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+       <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version> <!-- to keep compatible with older servlet containers --> 
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-embedded</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+               
+        <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-host-jetty</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>   
+        
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
