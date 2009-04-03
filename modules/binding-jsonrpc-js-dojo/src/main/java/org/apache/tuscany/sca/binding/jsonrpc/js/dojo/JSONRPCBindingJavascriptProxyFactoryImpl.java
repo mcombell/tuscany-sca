@@ -54,7 +54,7 @@ public class JSONRPCBindingJavascriptProxyFactoryImpl implements JavascriptProxy
         URI targetURI = URI.create(binding.getURI());
         String targetPath = targetURI.getPath();
         
-        return "dojo.rpc.JsonService(\"" + targetPath + "?smd\").Service";        
+        return "dojo.rpc.JsonService(\"" + targetPath + "?smd\")";        
     }
 
 }
