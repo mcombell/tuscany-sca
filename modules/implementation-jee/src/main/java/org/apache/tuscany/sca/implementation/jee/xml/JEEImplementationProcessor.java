@@ -111,41 +111,75 @@ public class JEEImplementationProcessor extends BaseStAXArtifactProcessor implem
         String uri = implementation.getURI();
         String archive = implementation.getArchive();
         if (uri != null) {
-            if(uri.endsWith(".war")) {
+            Object moduleInfo = null;
+            if(uri.equals("")) {
+                if(moduleInfo == null) {
+                    WebModuleInfo unresolved = new WebModuleInfoImpl();
+                    unresolved.setUri(URI.create(archive));
+                    WebModuleInfo resolved = resolver.resolveModel(WebModuleInfo.class, unresolved);
+                    if(unresolved != resolved) {
+                        moduleInfo = resolved;
+                    }
+                }
+                if(moduleInfo == null) {
+                    EjbModuleInfo unresolved = new EjbModuleInfoImpl();
+                    unresolved.setUri(URI.create(archive));
+                    EjbModuleInfo resolved = resolver.resolveModel(EjbModuleInfo.class, unresolved);
+                    if(unresolved != resolved) {
+                        moduleInfo = resolved;
+                    }
+                }
+                if(moduleInfo == null) {
+                    JavaEEApplicationInfo unresolved = new JavaEEApplicationInfoImpl();
+                    unresolved.setUri(URI.create(archive));
+                    JavaEEApplicationInfo resolved = resolver.resolveModel(JavaEEApplicationInfo.class, unresolved);
+                    if(unresolved != resolved) {
+                        moduleInfo = resolved;
+                    }
+                }
+            } else if(uri.endsWith(".war")) {
                 WebModuleInfo webModuleInfo = new WebModuleInfoImpl();
                 webModuleInfo.setUri(URI.create(archive));
                 webModuleInfo = resolver.resolveModel(WebModuleInfo.class, webModuleInfo);
-                if(jeeOptionalExtension != null) {
-                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(webModuleInfo);
-                    implementation.getReferences().addAll(ct.getReferences());
-                    implementation.getProperties().addAll(ct.getProperties());
-                }
-                // TODO: check for web composite
+                moduleInfo = webModuleInfo;
             } else if(uri.endsWith(".jar")) {
                 EjbModuleInfo ejbModuleInfo = new EjbModuleInfoImpl();
                 ejbModuleInfo.setUri(URI.create(archive));
                 ejbModuleInfo = resolver.resolveModel(EjbModuleInfo.class, ejbModuleInfo);
+                moduleInfo = ejbModuleInfo;
+            } else if(uri.endsWith(".ear")) {
+                JavaEEApplicationInfo appInfo = new JavaEEApplicationInfoImpl();
+                appInfo.setUri(URI.create(archive));
+                appInfo = resolver.resolveModel(JavaEEApplicationInfo.class, appInfo);
+                moduleInfo = appInfo;
+            }
+            
+            if(moduleInfo instanceof WebModuleInfo) {
+                if(jeeOptionalExtension != null) {
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType((WebModuleInfo)moduleInfo);
+                    implementation.getReferences().addAll(ct.getReferences());
+                    implementation.getProperties().addAll(ct.getProperties());
+                }
+                // TODO: check for web composite
+            } else if(moduleInfo instanceof EjbModuleInfo) {
                 if(jeeExtension != null) {
-                    ComponentType ct = jeeExtension.createImplementationJeeComponentType(ejbModuleInfo);
+                    ComponentType ct = jeeExtension.createImplementationJeeComponentType((EjbModuleInfo)moduleInfo);
                     implementation.getServices().addAll(ct.getServices());
                 }
                 if(jeeOptionalExtension != null) {
-                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(ejbModuleInfo);
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType((EjbModuleInfo)moduleInfo);
                     implementation.getServices().addAll(ct.getServices());
                     implementation.getReferences().addAll(ct.getReferences());
                     implementation.getProperties().addAll(ct.getProperties());
                 }
                 // TODO: check for ejb-jar composite
-            } else if(uri.endsWith(".ear")) {
-                JavaEEApplicationInfo appInfo = new JavaEEApplicationInfoImpl();
-                appInfo.setUri(URI.create(archive));
-                appInfo = resolver.resolveModel(JavaEEApplicationInfo.class, appInfo);
+            } else if(moduleInfo instanceof JavaEEApplicationInfo) {
                 if(jeeExtension != null) {
-                    ComponentType ct = jeeExtension.createImplementationJeeComponentType(appInfo);
+                    ComponentType ct = jeeExtension.createImplementationJeeComponentType((JavaEEApplicationInfo)moduleInfo);
                     implementation.getServices().addAll(ct.getServices());
                 }
                 if(jeeOptionalExtension != null) {
-                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType(appInfo);
+                    ComponentType ct = jeeOptionalExtension.createImplementationJeeComponentType((JavaEEApplicationInfo)moduleInfo);
                     implementation.getServices().addAll(ct.getServices());
                     implementation.getReferences().addAll(ct.getReferences());
                     implementation.getProperties().addAll(ct.getProperties());
