@@ -1,0 +1,39 @@
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+           targetNamespace="http://sample"
+           xmlns:sample="http://sample"
+           name="ErlangReferenceBinding">
+    
+	<component name="ReferenceTest">
+        <implementation.java class="org.apache.tuscany.sca.binding.erlang.testing.ReferenceTestComponentImpl" />
+        <reference name="mboxReference">
+        	<tuscany:binding.erlang node="MboxServer" mbox="true"/>
+        </reference>
+
+        <reference name="timeoutMboxReference">
+        	<tuscany:binding.erlang node="MboxServer" mbox="true" timeout="500"/>
+        </reference>
+        
+        <reference name="cookieMboxReference">
+        	<tuscany:binding.erlang node="MboxServer" mbox="true" cookie="cookie"/>
+        </reference>
+        
+        <reference name="moduleReference">
+        	<tuscany:binding.erlang node="RPCServer" module="hello"/>
+        </reference>
+        
+        <reference name="cookieModuleReference">
+        	<tuscany:binding.erlang node="RPCServerCookie" module="hello_cookie" cookie="cookie"/>
+        </reference>
+        
+        <reference name="invalidCookieModuleReference">
+        	<tuscany:binding.erlang node="RPCServerCookie" module="hello_cookie" cookie="invalid_cookie"/>
+        </reference>
+        
+        <reference name="timeoutModuleReference">
+        	<tuscany:binding.erlang node="RPCServerTimeout" module="hello_timeout" timeout="500"/>
+        </reference>
+        
+    </component>
+	
+</composite>

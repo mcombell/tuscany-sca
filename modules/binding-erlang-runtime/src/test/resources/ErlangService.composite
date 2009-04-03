@@ -1,0 +1,35 @@
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+           targetNamespace="http://sample"
+           xmlns:sample="http://sample"
+           name="ErlangServiceBinding">
+    
+	<component name="ServiceTest">
+        <implementation.java class="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponentImpl" />
+    </component>
+    <service name="ServiceTest" promote="ServiceTest">
+    	<interface.java interface="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponent" />
+       	<tuscany:binding.erlang node="RPCServer" module="hello"/>
+    </service>
+    <service name="ServiceTestMbox" promote="ServiceTest">
+    	<interface.java interface="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponent" />
+       	<tuscany:binding.erlang node="RPCServerMbox" mbox="true"/>
+    </service>
+    
+	<component name="ServiceTestTimeout">
+        <implementation.java class="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponentImplTimeout" />
+    </component>    
+    <service name="ServiceTestTimeout" promote="ServiceTestTimeout">
+    	<interface.java interface="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponent" />
+       	<tuscany:binding.erlang node="RPCServerTimeout" module="hello_timeout" timeout="500"/>
+    </service>
+    
+    <component name="ServiceTestCookie">
+        <implementation.java class="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponentImpl" />
+    </component>    
+    <service name="ServiceTestCookie" promote="ServiceTestCookie">
+    	<interface.java interface="org.apache.tuscany.sca.binding.erlang.testing.ServiceTestComponent" />
+       	<tuscany:binding.erlang node="RPCServerCookie" module="hello_cookie" cookie="cookie"/>
+    </service>
+	
+</composite>
