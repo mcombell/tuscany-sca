@@ -44,6 +44,13 @@ public class ErlangBindingProcessor implements
 	private PolicyFactory policyFactory;
 	private PolicyAttachPointProcessor policyProcessor;
 
+	private static final String ATTR_COOKIE = "cookie";
+	private static final String ATTR_MBOX = "mbox";
+	private static final String ATTR_MODULE = "module";
+	private static final String ATTR_NODE = "node";
+	private static final String ATTR_SERVICE_THREAD_POOL = "serviceThreadPool";
+	private static final String ATTR_TIMEOUT = "timeout";
+
 	public ErlangBindingProcessor(ModelFactoryExtensionPoint modelFactories) {
 		this.policyFactory = modelFactories.getFactory(PolicyFactory.class);
 		this.policyProcessor = new PolicyAttachPointProcessor(policyFactory);
@@ -65,23 +72,34 @@ public class ErlangBindingProcessor implements
 
 		// Read the policies
 		policyProcessor.readPolicies(binding, reader);
-		binding.setNode(reader.getAttributeValue(null, "node"));
-		String mboxValue = reader.getAttributeValue(null, "mbox");
+
+		binding.setNode(reader.getAttributeValue(null, ATTR_NODE));
+
+		String mboxValue = reader.getAttributeValue(null, ATTR_MBOX);
+
 		if (mboxValue != null && mboxValue.length() > 0) {
 			try {
-				boolean boolMboxValue = Boolean.parseBoolean(mboxValue);
-				binding.setMbox(boolMboxValue);
+				binding.setMbox(Boolean.parseBoolean(mboxValue));
 			} catch (Exception e) {
 			}
 		}
-		String timeoutValue = reader.getAttributeValue(null, "timeout");
+
 		try {
-			long longTimeoutValue = Long.parseLong(timeoutValue);
-			binding.setTimeout(longTimeoutValue);
+			binding.setTimeout(Long.parseLong(reader.getAttributeValue(null,
+					ATTR_TIMEOUT)));
 		} catch (NumberFormatException e) {
 		}
-		binding.setModule(reader.getAttributeValue(null, "module"));
-		binding.setCookie(reader.getAttributeValue(null, "cookie"));
+
+		binding.setModule(reader.getAttributeValue(null, ATTR_MODULE));
+
+		binding.setCookie(reader.getAttributeValue(null, ATTR_COOKIE));
+
+		try {
+			binding.setServiceThreadPool(Integer.parseInt(reader
+					.getAttributeValue(null, ATTR_SERVICE_THREAD_POOL)));
+		} catch (NumberFormatException e) {
+		}
+
 		return binding;
 	}
 
@@ -91,8 +109,36 @@ public class ErlangBindingProcessor implements
 	 */
 	public void write(ErlangBinding model, XMLStreamWriter writer)
 			throws ContributionWriteException, XMLStreamException {
+		
+		
 		writer.writeStartElement(Constants.SCA10_TUSCANY_NS, "binding.erlang");
-		// TODO: implement writing binding element
+		
+		if (model.getCookie() != null && model.getCookie().length() > 0) {
+			writer.writeAttribute(ATTR_COOKIE, model.getCookie());
+		}
+
+		if (model.isMbox()) {
+			writer.writeAttribute(ATTR_MBOX, Boolean.TRUE.toString());
+		}
+
+		if (model.getModule() != null && model.getModule().length() > 0) {
+			writer.writeAttribute(ATTR_MODULE, model.getModule());
+		}
+
+		if (model.getNode() != null && model.getNode().length() > 0) {
+			writer.writeAttribute(ATTR_NODE, model.getNode());
+		}
+
+		if (!model.isDefaultServiceThreadPool()) {
+			writer.writeAttribute(ATTR_SERVICE_THREAD_POOL, Integer
+					.toString(model.getServiceThreadPool()));
+		}
+
+		if (!model.isDefaultTimeout()) {
+			writer.writeAttribute(ATTR_TIMEOUT, Long.toString(model
+					.getTimeout()));
+		}
+
 		writer.writeEndElement();
 	}
 

@@ -37,7 +37,7 @@ public class MboxListener implements Runnable {
 	public MboxListener(OtpMbox mbox, Object response) {
 		this(mbox, response, 0);
 	}
-	
+
 	public MboxListener(OtpMbox mbox, Object response, long duration) {
 		this.mbox = mbox;
 		this.response = response;
@@ -59,6 +59,20 @@ public class MboxListener implements Runnable {
 	}
 
 	public OtpMsg getMsg() {
+		// Sometimes clients tries to get message which isn't fully received.
+		// If so - give it more tries. This sometimes caused
+		// NullPointerException in
+		// ReferenceServiceTestCase.testMultipleArguments().
+		for (int i = 0; i < 3; i++) {
+			if (msg != null) {
+				return msg;
+			} else {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
 		return msg;
 	}
 

@@ -37,6 +37,10 @@ public class ErlangBindingImpl implements ErlangBinding, PolicySetAttachPoint {
 	private String module;
 	private boolean mbox;
 	private String cookie;
+	private int serviceThreadPool = DEFAULT_THREAD_POOL;
+	
+	private boolean defaultTimeout = true;
+	private boolean defaultThreads = true;
 
 	private List<Intent> requiredIntents = new ArrayList<Intent>();
 	private List<PolicySet> policySets = new ArrayList<PolicySet>();
@@ -121,6 +125,9 @@ public class ErlangBindingImpl implements ErlangBinding, PolicySetAttachPoint {
 	public void setTimeout(long timeout) {
 		// NOTE: not setting timeout or setting it to 0 will cause no timeout
 		this.timeout = timeout;
+		if (timeout != 0) {
+			defaultTimeout = false;
+		}
 	}
 
 	public String getCookie() {
@@ -137,6 +144,23 @@ public class ErlangBindingImpl implements ErlangBinding, PolicySetAttachPoint {
 
 	public boolean hasCookie() {
 		return cookie != null && cookie.length() > 0;
+	}
+
+	public int getServiceThreadPool() {
+		return serviceThreadPool;
+	}
+
+	public void setServiceThreadPool(int threads) {
+		this.serviceThreadPool = threads;
+		this.defaultThreads = false;
+	}
+
+	public boolean isDefaultServiceThreadPool() {
+		return defaultThreads;
+	}
+
+	public boolean isDefaultTimeout() {
+		return defaultTimeout;
 	}
 
 }

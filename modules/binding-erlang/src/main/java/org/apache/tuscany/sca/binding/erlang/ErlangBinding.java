@@ -30,6 +30,8 @@ import org.apache.tuscany.sca.assembly.xml.Constants;
 public interface ErlangBinding extends Binding {
 
 	final long NO_TIMEOUT = 0;
+	// NOTE: default thread pool size
+	final int DEFAULT_THREAD_POOL = 20;
 	
     QName BINDING_ERLANG_QNAME = new QName(Constants.SCA10_TUSCANY_NS, "binding.erlang");
 
@@ -56,5 +58,13 @@ public interface ErlangBinding extends Binding {
     boolean hasTimeout();
     
     boolean hasCookie();
+    
+    int getServiceThreadPool();
+    
+    void setServiceThreadPool(int threads);
+
+    boolean isDefaultTimeout();
+    
+    boolean isDefaultServiceThreadPool();
 
 }

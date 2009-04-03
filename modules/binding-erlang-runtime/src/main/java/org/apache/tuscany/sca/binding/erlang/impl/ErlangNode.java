@@ -75,8 +75,7 @@ public class ErlangNode implements Runnable {
 	}
 
 	public void run() {
-		// FIXME: add configurable thread pools
-		executors = Executors.newFixedThreadPool(10);
+		executors = Executors.newFixedThreadPool(nodeElement.getBinding().getServiceThreadPool());
 		while (!stopRequested) {
 			try {
 				OtpConnection connection = self.accept();
@@ -92,6 +91,7 @@ public class ErlangNode implements Runnable {
 				logger.log(Level.WARNING, "Error while authenticating client", e);
 			}
 		}
+		executors.shutdownNow();
 	}
 
 	private void registerBinding(ErlangBinding binding,

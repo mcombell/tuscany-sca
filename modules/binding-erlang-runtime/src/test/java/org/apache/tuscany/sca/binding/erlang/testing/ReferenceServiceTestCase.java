@@ -284,7 +284,6 @@ public class ReferenceServiceTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	// TODO: this test fails sometime
 	@Test(timeout = 1000)
 	public void testMultipleArguments() throws Exception {
 		MboxListener mboxListener = new MboxListener(serMbox, true);
