@@ -21,12 +21,13 @@
 <title>Store</title>
 
 <script type="text/javascript" src="/dojo/dojo.js"></script>
-<script type="text/javascript" src="store.js"></script>
 
 <script type="text/javascript">
     	dojo.require("dojo.rpc.JsonService");
     	dojo.require("tuscany.AtomService");
 </script>
+<script type="text/javascript" src="store.js"></script>
+
 
 <script language="JavaScript">
 
@@ -127,10 +128,9 @@
 	}	
 
 	function init() {
-			
 			try	{
-				catalog.get(catalog_getResponse);
-				shoppingCart.get("", shoppingCart_getResponse);
+				catalog.get().addCallback(catalog_getResponse);
+				shoppingCart.get("").addCallback(shoppingCart_getResponse);
 			}
 			catch(e){
 				alert(e);
