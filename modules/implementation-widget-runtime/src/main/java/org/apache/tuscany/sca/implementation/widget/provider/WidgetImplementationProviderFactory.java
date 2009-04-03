@@ -19,7 +19,8 @@
 package org.apache.tuscany.sca.implementation.widget.provider;
 
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
+import org.apache.tuscany.sca.core.web.ComponentJavaScriptGeneratorExtensionPoint;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.implementation.widget.WidgetImplementation;
@@ -34,9 +35,8 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  */
 public class WidgetImplementationProviderFactory implements ImplementationProviderFactory<WidgetImplementation> {
     private ServletHost servletHost;
-    private JavascriptProxyFactoryExtensionPoint javascriptProxyFactories;
-    
-
+    private ComponentJavaScriptGenerator javaScriptGenerator;
+        
     /**
      * Constructs a resource implementation.
      */
@@ -44,11 +44,13 @@ public class WidgetImplementationProviderFactory implements ImplementationProvid
         ServletHostExtensionPoint servletHosts = extensionPoints.getExtensionPoint(ServletHostExtensionPoint.class);
         this.servletHost = servletHosts.getServletHosts().get(0);
         
-        this.javascriptProxyFactories = extensionPoints.getExtensionPoint(JavascriptProxyFactoryExtensionPoint.class);
+        ComponentJavaScriptGeneratorExtensionPoint javascriptGeneratorExtensionPoint = extensionPoints.getExtensionPoint(ComponentJavaScriptGeneratorExtensionPoint.class);
+        javaScriptGenerator = javascriptGeneratorExtensionPoint.getComponentJavaScriptGenerators().get(0);
+        
     }
 
     public ImplementationProvider createImplementationProvider(RuntimeComponent component, WidgetImplementation implementation) {
-        return new WidgetImplementationProvider(component, implementation, javascriptProxyFactories, servletHost);
+        return new WidgetImplementationProvider(component, implementation, javaScriptGenerator, servletHost);
     }
     
     public Class<WidgetImplementation> getModelType() {

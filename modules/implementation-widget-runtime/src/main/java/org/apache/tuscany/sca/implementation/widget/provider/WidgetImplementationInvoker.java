@@ -19,13 +19,15 @@
 
 package org.apache.tuscany.sca.implementation.widget.provider;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
+import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
@@ -38,14 +40,14 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  */
 class WidgetImplementationInvoker implements Invoker {
     private RuntimeComponent component;
-    private JavascriptProxyFactoryExtensionPoint javascriptProxyFactories;
+    private ComponentJavaScriptGenerator javaScriptGenerator;
     private String widgetName;
     private String widgetFolderURL;
     private String widgetLocationURL;
     
-    WidgetImplementationInvoker(RuntimeComponent component, JavascriptProxyFactoryExtensionPoint javascriptProxyFactories, String widgetName, String widgetFolderURL, String widgetLocationURL) {
+    WidgetImplementationInvoker(RuntimeComponent component, ComponentJavaScriptGenerator javaScriptGenerator, String widgetName, String widgetFolderURL, String widgetLocationURL) {
         this.component = component;
-        this.javascriptProxyFactories = javascriptProxyFactories;
+        this.javaScriptGenerator = javaScriptGenerator;
         this.widgetName = widgetName + ".js";
         this.widgetFolderURL = widgetFolderURL;
         this.widgetLocationURL = widgetLocationURL;
@@ -67,7 +69,13 @@ class WidgetImplementationInvoker implements Invoker {
             } else if (id.equals(widgetName)) {
                 
                 // Generate JavaScript header for use in the Widget
-                InputStream is = WidgetComponentScriptGenerator.generateWidgetCode(component, javascriptProxyFactories);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                PrintWriter pw = new PrintWriter(bos);
+             
+                javaScriptGenerator.generateJavaScriptCode(component, pw);
+                
+                InputStream is = new ByteArrayInputStream(bos.toByteArray());
+                
                 msg.setBody(is);
                 
             } else {
@@ -79,11 +87,6 @@ class WidgetImplementationInvoker implements Invoker {
                 msg.setBody(is);
             }
         } catch (MalformedURLException e) {
-
-            // Report exception as a fault
-            msg.setFaultBody(e);
-            
-        } catch (URISyntaxException e) {
 
             // Report exception as a fault
             msg.setFaultBody(e);
