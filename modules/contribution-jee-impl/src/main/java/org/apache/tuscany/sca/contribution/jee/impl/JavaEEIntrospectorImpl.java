@@ -306,6 +306,10 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         ejbInfo.ejbType = bean.getSessionType().equals(SessionType.STATEFUL) ? org.apache.tuscany.sca.contribution.jee.EjbInfo.EjbType.SESSION_STATEFUL : bean.getSessionType().equals(SessionType.STATELESS) ? org.apache.tuscany.sca.contribution.jee.EjbInfo.EjbType.SESSION_STATELESS : org.apache.tuscany.sca.contribution.jee.EjbInfo.EjbType.SESSION_UNKNOWN;
 
         ejbInfo.mappedName = bean.getMappedName();
+        //FIXME: Is it ok to use beanName when mapped name is null?
+        if(ejbInfo.mappedName == null) {
+            ejbInfo.mappedName = ejbInfo.beanName;
+        }
 
         // Process Remote Business interfaces of the SessionBean
         for (String intfName : bean.getBusinessRemote()) {
