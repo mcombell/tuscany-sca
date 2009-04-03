@@ -46,7 +46,11 @@ public class DojoResourceServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path = URLDecoder.decode(request.getRequestURI(), "UTF-8");
         
-        if( path.startsWith("/")) {
+        if( path.startsWith("/dojo")) {
+        	//this is a workaround where we need to have dojo files in its own folder
+        	//to avoid clean target to clean other non dojo resources
+        	path = "dojo" + path;
+        } else if( path.startsWith("/")) {
             path = path.substring(1);
         }
         
