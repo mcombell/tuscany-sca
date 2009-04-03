@@ -231,7 +231,6 @@ public class ContributionServiceTestCase {
      * This method test EAR as a contribution.
      */
     @Test
-    @Ignore
     public void testContributeEAR() throws Exception {
         URL contributionLocation = getClass().getResource(EAR_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
