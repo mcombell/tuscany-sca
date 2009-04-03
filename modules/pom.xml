@@ -97,8 +97,6 @@
                 <module>core-databinding</module>
                 <module>core-spi</module>
                 <module>core-spring</module>
-                <module>core-web</module>
-                <module>core-web-dojo</module>
                 <module>data-api</module>
                 <module>databinding</module>
                 <module>databinding-axiom</module>
@@ -192,6 +190,8 @@
                 <!--module>runtime-war</module-->
                 <module>sca-api</module>
                 <module>sca-api-extension</module>
+                <module>web-javascript</module>
+                <module>web-javascript-dojo</module>                
                 <module>workspace</module>
                 <module>workspace-impl</module>
                 <module>workspace-xml</module>

@@ -57,7 +57,7 @@
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-core-web-dojo</artifactId>
+            <artifactId>tuscany-web-javascript-dojo</artifactId>
             <version>1.5-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
