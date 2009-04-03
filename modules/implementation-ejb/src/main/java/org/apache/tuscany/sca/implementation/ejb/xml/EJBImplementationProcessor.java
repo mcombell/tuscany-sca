@@ -44,6 +44,14 @@ import org.apache.tuscany.sca.contribution.service.ContributionResolveException;
 import org.apache.tuscany.sca.contribution.service.ContributionWriteException;
 import org.apache.tuscany.sca.implementation.ejb.EJBImplementation;
 import org.apache.tuscany.sca.implementation.ejb.EJBImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.DefaultJavaImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.IntrospectionException;
+import org.apache.tuscany.sca.implementation.java.JavaImplementation;
+import org.apache.tuscany.sca.implementation.java.JavaImplementationFactory;
+import org.apache.tuscany.sca.implementation.java.introspect.impl.PropertyProcessor;
+import org.apache.tuscany.sca.implementation.java.introspect.impl.ReferenceProcessor;
+import org.apache.tuscany.sca.implementation.java.introspect.impl.ServiceProcessor;
+import org.apache.tuscany.sca.interfacedef.java.JavaInterfaceFactory;
 import org.apache.tuscany.sca.monitor.Monitor;
 import org.apache.tuscany.sca.monitor.Problem;
 import org.apache.tuscany.sca.monitor.Problem.Severity;
@@ -62,6 +70,8 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
     private Monitor monitor;
     private JavaEEExtension jeeExtension;
     private JavaEEOptionalExtension jeeOptionalExtension;
+    private JavaImplementationFactory javaImplementationFactory;
+    private JavaInterfaceFactory javaInterfaceFactory;
     
     public EJBImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
@@ -69,6 +79,12 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
         this.jeeExtension = modelFactories.getFactory(JavaEEExtension.class);
         this.jeeOptionalExtension = modelFactories.getFactory(JavaEEOptionalExtension.class);
         this.monitor = monitor;
+
+        this.javaImplementationFactory = new DefaultJavaImplementationFactory();
+        this.javaInterfaceFactory = modelFactories.getFactory(JavaInterfaceFactory.class);
+        javaImplementationFactory.addClassVisitor(new ReferenceProcessor(assemblyFactory, javaInterfaceFactory));
+        javaImplementationFactory.addClassVisitor(new PropertyProcessor(assemblyFactory));
+        javaImplementationFactory.addClassVisitor(new ServiceProcessor(assemblyFactory, javaInterfaceFactory));
     }
     
     /**
@@ -133,13 +149,15 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
         // Resolve the component type
         String uri = implementation.getURI();
         String ejbLink = implementation.getEJBLink();
-        if (uri != null) {
+        if (ejbLink != null) {
+            String module = ejbLink.indexOf('#') != -1 ? ejbLink.substring(0, ejbLink.indexOf('#')) : "";
+            String beanName =  ejbLink.indexOf('#') != -1 ? ejbLink.substring(ejbLink.indexOf('#')+1) : ejbLink;
             EjbModuleInfo ejbModuleInfo = new EjbModuleInfoImpl();
-            ejbModuleInfo.setUri(URI.create(uri));
+            ejbModuleInfo.setUri(URI.create(module));
             ejbModuleInfo = resolver.resolveModel(EjbModuleInfo.class, ejbModuleInfo);
             
             if(jeeExtension != null) {
-                ComponentType ct = jeeExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
+                ComponentType ct = jeeExtension.createImplementationEjbComponentType(ejbModuleInfo, beanName);
                 // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
                 //        ct is null if there is no EJBInfo 
                 if (ct != null){
@@ -148,7 +166,7 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
             }
 
             if(jeeOptionalExtension != null) {
-                ComponentType ct = jeeOptionalExtension.createImplementationEjbComponentType(ejbModuleInfo, ejbLink);
+                ComponentType ct = jeeOptionalExtension.createImplementationEjbComponentType(ejbModuleInfo, beanName);
                 // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
                 //              ct is null if there is no EJBInfo  
                 if (ct != null){
@@ -157,7 +175,17 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
                 }
             }
 
-            // TODO: Introspection of bean class
+            // Introspection of bean class
+            Class<?> beanClass = ejbModuleInfo.getEjbInfo(uri).beanClass;
+            try {
+                JavaImplementation ji = javaImplementationFactory.createJavaImplementation(beanClass);
+                implementation.getReferences().addAll(ji.getReferences());
+                implementation.getProperties().addAll(ji.getProperties());
+                implementation.getServices().addAll(ji.getServices());
+            } catch (IntrospectionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
             // Process componentType side file
             ComponentType componentType = assemblyFactory.createComponentType();
