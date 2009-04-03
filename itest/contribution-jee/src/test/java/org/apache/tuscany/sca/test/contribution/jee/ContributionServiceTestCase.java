@@ -56,6 +56,7 @@ public class ContributionServiceTestCase {
     private static final String WAR_W_DEPLOYABLE_CONTRIBUTION = "/repository/helloworld-web-w-dep.war";
     private static final String EAR_CONTRIBUTION = "/repository/helloworld-ejb.ear";
     private static final String EAR_NONENHANCED_CONTRIBUTION = "/repository/simple-app-ear.jar";
+    private static final String EAR_ENHANCED_16_CONTRIBUTION = "/repository/simple-app.ear";
  
 
     private ClassLoader cl;
@@ -248,6 +249,28 @@ public class ContributionServiceTestCase {
     @Test
     public void testContributeEAR_NonEnhanced() throws Exception {
         URL contributionLocation = getClass().getResource(EAR_NONENHANCED_CONTRIBUTION);
+        String contributionId = CONTRIBUTION_001_ID;
+        contributionService.contribute(contributionId, contributionLocation, false);
+        Contribution contribution = contributionService.getContribution(contributionId);
+        Assert.assertNotNull(contribution);
+        List<Composite> deployables = contribution.getDeployables();
+        Assert.assertEquals("Deployable composites", 1, deployables.size());
+        Composite composite = deployables.get(0);
+        Assert.assertEquals("Number of components", 1, composite.getComponents().size());
+        Component component = composite.getComponents().get(0);
+        Assert.assertTrue("Component with implementation.jee", component.getImplementation() instanceof JEEImplementation);
+        JEEImplementation jeeImpl = (JEEImplementation)component.getImplementation();
+        Assert.assertEquals("Number of services", 2, jeeImpl.getServices().size());
+        Assert.assertEquals("Number of references", 1, jeeImpl.getReferences().size());
+    }
+
+    /**
+     * This method tests an EAR as a contribution.
+     * Enhanced EAR containing non-enhanced WAR, non-enhanced EJB JAR.
+     */
+    @Test
+    public void testContributeEAR_Enhanced16() throws Exception {
+        URL contributionLocation = getClass().getResource(EAR_ENHANCED_16_CONTRIBUTION);
         String contributionId = CONTRIBUTION_001_ID;
         contributionService.contribute(contributionId, contributionLocation, false);
         Contribution contribution = contributionService.getContribution(contributionId);
