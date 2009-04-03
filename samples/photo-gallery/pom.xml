@@ -57,7 +57,7 @@
 
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-widget-runtime</artifactId>
+            <artifactId>tuscany-implementation-widget-runtime-tuscany</artifactId>
             <version>1.5-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>

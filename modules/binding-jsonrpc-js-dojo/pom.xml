@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>tuscany-binding-jsonrpc-js-dojo</artifactId>
-    <name>Apache Tuscany SCA JSON-RPC Binding JavaScript</name>
+    <name>Apache Tuscany SCA JSON-RPC Binding JavaScript using Dojo</name>
 
     <dependencies>
         <dependency>

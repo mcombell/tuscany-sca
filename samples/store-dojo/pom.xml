@@ -64,13 +64,6 @@
         
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-widget-runtime</artifactId>
-            <version>1.5-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-widget-runtime-dojo</artifactId>
             <version>1.5-SNAPSHOT</version>
             <scope>runtime</scope>
