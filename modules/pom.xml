@@ -53,6 +53,7 @@
                 <!-- new bindings -->
                 <module>binding-atom</module>
                 <module>binding-atom-js</module>
+                <module>binding-atom-js-dojo</module>
                 <module>binding-atom-abdera</module>
                 <module>binding-gdata</module>
                 <module>binding-gdata-runtime</module>
@@ -63,6 +64,7 @@
                 <module>binding-jms-policy</module>
                 <module>binding-jsonrpc</module>
                 <module>binding-jsonrpc-js</module>
+                <module>binding-jsonrpc-js-dojo</module>
                 <module>binding-jsonrpc-runtime</module>
                 <module>binding-notification</module>
                 <module>binding-rmi</module>
@@ -94,6 +96,7 @@
                 <module>core-spi</module>
                 <module>core-spring</module>
                 <module>core-web</module>
+                <module>core-web-dojo</module>
                 <module>data-api</module>
                 <module>databinding</module>
                 <module>databinding-axiom</module>
@@ -139,7 +142,6 @@
                 <module>interface-wsdl-xml</module>
                 <module>implementation-bpel</module>
                 <module>implementation-bpel-ode</module>
-                <module>implementation-bpel-jbpm</module>
                 <module>implementation-das</module>
                 <module>implementation-data-xml</module>
                 <module>implementation-ejb</module>
@@ -159,6 +161,8 @@
                 <module>implementation-web-runtime</module>
                 <module>implementation-widget</module>
                 <module>implementation-widget-runtime</module>
+                <module>implementation-widget-runtime-tuscany</module>
+                <module>implementation-widget-runtime-dojo</module>
                 <module>implementation-xquery</module>
                 <module>monitor</module>
                 <module>node-api</module>

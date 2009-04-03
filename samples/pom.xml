@@ -106,6 +106,7 @@
                 <module>simple-callback</module>
                 <module>simple-callback-ws</module>
                 <module>store</module>
+                <module>store-dojo</module>
                 <module>store-webapp</module>
                 <module>store-secure</module>
                 <module>store-distributed</module>
