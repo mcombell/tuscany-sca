@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.sca.contribution.jee.impl;
 
@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.openejb.config.AppModule;
 import org.apache.openejb.config.EjbModule;
 import org.apache.openejb.config.UnknownModuleTypeException;
+import org.apache.openejb.config.UnsupportedModuleTypeException;
 import org.apache.openejb.config.WebModule;
 import org.apache.openejb.jee.EjbJar;
 import org.apache.openejb.jee.EjbRef;
@@ -57,7 +58,7 @@ import org.apache.tuscany.sca.contribution.service.util.IOHelper;
  * @version $Rev$ $Date$
  */
 public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
-    
+
     public WebModuleInfo introspectWebArchive(URL artifactURL) throws ContributionReadException {
         // Create a temporary file since openejb extracts the archive to process
         InputStream inp = null;
@@ -74,7 +75,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         } catch (IOException e) {
             throw new ContributionReadException(e);
         }
-        
+
         JavaEEModuleHelper jmh = new JavaEEModuleHelper();
         WebModule wm = jmh.getMetadataCompleteModules(tempFile.getAbsolutePath()).getWebModules().get(0);
         if(!tempFile.delete()) {
@@ -85,10 +86,10 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
 
     private WebModuleInfo createWebModuleInfo(WebModule webModule) {
         WebModuleInfo wmInfo = new WebModuleInfoImpl();
-        
+
         WebApp webApp = webModule.getWebApp();
         ClassLoader classLoader = webModule.getClassLoader();
-        
+
         // Process Remote EJB References
         for (Map.Entry<String, EjbRef> entry : webApp.getEjbRefMap().entrySet()) {
             EjbRef ejbRef = entry.getValue();
@@ -116,12 +117,12 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 e.printStackTrace();
             }
         }
-        
+
         // Process env-entries to compute properties
         for (Map.Entry<String, EnvEntry> entry : webApp.getEnvEntryMap().entrySet()) {
             EnvEntry envEntry = entry.getValue();
             wmInfo.getEnvEntries().put(envEntry.getEnvEntryName(), createEnvEntryInfo(envEntry));
-        }        
+        }
 
         // Process Servlets
         for(Servlet servlet: webApp.getServlet()) {
@@ -152,26 +153,26 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 e.printStackTrace();
             }
         }
-        
+
         // TODO: Process JSF Managed beans
-        
+
         // TODO: Process JSP pages
-        
+
         return wmInfo;
     }
-    
+
     private org.apache.tuscany.sca.contribution.jee.EnvEntryInfo createEnvEntryInfo(EnvEntry envEntry) {
         org.apache.tuscany.sca.contribution.jee.EnvEntryInfo envEntryInfo = new org.apache.tuscany.sca.contribution.jee.EnvEntryInfo();
         envEntryInfo.name = envEntry.getEnvEntryName();
         envEntryInfo.type = envEntry.getEnvEntryType();
         envEntryInfo.value = envEntry.getEnvEntryValue();
-        
+
         return envEntryInfo;
     }
 
     private org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo createEjbReferenceInfo(EjbRef ejbRef, ClassLoader classLoader) throws ClassNotFoundException {
         org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo ejbReferenceInfo = new org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo();
-        
+
         ejbReferenceInfo.referenceName = ejbRef.getEjbRefName();
         ejbReferenceInfo.referenceType = ejbRef.getRefType().compareTo(EjbReference.Type.REMOTE) == 0 ? org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo.RefType.REMOTE : ejbRef.getRefType().compareTo(EjbReference.Type.LOCAL) == 0 ? org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo.RefType.LOCAL : org.apache.tuscany.sca.contribution.jee.EjbReferenceInfo.RefType.UNKNOWN;
         ejbReferenceInfo.businessInterface = classLoader.loadClass(ejbRef.getInterface());
@@ -182,10 +183,10 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 ejbReferenceInfo.ejbType = EjbType.SESSION_UNKNOWN;
             }
         }
-        
+
         ejbReferenceInfo.ejbLink = ejbRef.getEjbLink();
         ejbReferenceInfo.mappedName = ejbRef.getMappedName();
-        
+
         return ejbReferenceInfo;
     }
 
@@ -205,13 +206,14 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         } catch (IOException e) {
             throw new ContributionReadException(e);
         }
-        
+
         JavaEEModuleHelper jmh = new JavaEEModuleHelper();
         EjbModule em;
         try {
             em = jmh.getMetadataCompleteModules(tempFile.getAbsolutePath()).getEjbModules().get(0);
         } catch(ContributionReadException e) {
-            if(e.getCause() instanceof UnknownModuleTypeException) {
+            if((e.getCause() instanceof UnknownModuleTypeException) ||
+                (e.getCause() instanceof UnsupportedModuleTypeException)) {
                 // Not an EJB jar
                 return null;
             } else {
@@ -254,7 +256,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 ejbModuleInfo.getEjbInfos().put(bean.getEjbName(), ejbInfo);
             }
         }
-        
+
         return ejbModuleInfo;
     }
 
@@ -268,9 +270,9 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
             // Should not happen
         }
         EjbInfo ejbInfo = new EjbInfo();
-        
+
         ejbInfo.beanName = bean.getEjbName();
-        
+
         try {
             ejbInfo.beanClass = classLoader.loadClass(bean.getEjbClass());
         } catch (ClassNotFoundException e) {
@@ -279,7 +281,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         }
 
         ejbInfo.ejbType = org.apache.tuscany.sca.contribution.jee.EjbInfo.EjbType.MESSAGE_DRIVEN;
-        
+
         ejbInfo.mappedName = bean.getMappedName();
 
         processReferencesEnvEntries(bean, classLoader, ejbInfo);
@@ -293,9 +295,9 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
             return null;
         }
         EjbInfo ejbInfo = new EjbInfo();
-        
+
         ejbInfo.beanName = bean.getEjbName();
-        
+
         try {
             ejbInfo.beanClass = classLoader.loadClass(bean.getEjbClass());
         } catch (ClassNotFoundException e) {
@@ -319,7 +321,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }        
+        }
 
         // Process Local Business interfaces of the SessionBean
         for (String intfName : bean.getBusinessLocal()) {
@@ -329,10 +331,10 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }        
+        }
 
         processReferencesEnvEntries(bean, classLoader, ejbInfo);
-        
+
         return ejbInfo;
     }
 
@@ -363,12 +365,12 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }    
+        }
 
         // Process env-entries
         for (Map.Entry<String, EnvEntry> entry : bean.getEnvEntryMap().entrySet()) {
             EnvEntry envEntry = entry.getValue();
-            
+
             ejbInfo.envEntries.put(envEntry.getEnvEntryName(), createEnvEntryInfo(envEntry));
         }
     }
@@ -389,7 +391,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
         } catch (IOException e) {
             throw new ContributionReadException(e);
         }
-        
+
         JavaEEModuleHelper jmh = new JavaEEModuleHelper();
         AppModule appModule = jmh.getMetadataCompleteModules(tempFile.getAbsolutePath());
         if(!tempFile.delete()) {
@@ -411,7 +413,7 @@ public class JavaEEIntrospectorImpl implements JavaEEIntrospector {
             webModuleInfo.setModuleName(wm.getModuleId());
             appInfo.getWebModuleInfos().put(wm.getModuleId(), webModuleInfo);
         }
-        
+
         return appInfo;
     }
 }

@@ -6,21 +6,22 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.sca.implementation.ejb.xml;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 
 import java.net.URI;
+import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -32,6 +33,7 @@ import org.apache.tuscany.sca.assembly.ComponentType;
 import org.apache.tuscany.sca.assembly.builder.impl.ProblemImpl;
 import org.apache.tuscany.sca.assembly.xml.Constants;
 import org.apache.tuscany.sca.contribution.ModelFactoryExtensionPoint;
+import org.apache.tuscany.sca.contribution.jee.EjbInfo;
 import org.apache.tuscany.sca.contribution.jee.EjbModuleInfo;
 import org.apache.tuscany.sca.contribution.jee.JavaEEExtension;
 import org.apache.tuscany.sca.contribution.jee.JavaEEOptionalExtension;
@@ -64,7 +66,8 @@ import org.apache.tuscany.sca.monitor.Problem.Severity;
  */
 public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implements StAXArtifactProcessor<EJBImplementation> {
     private static final QName IMPLEMENTATION_EJB = new QName(Constants.SCA10_NS, "implementation.ejb");
-    
+    private static final Logger logger = Logger.getLogger(EJBImplementationProcessor.class.getName());
+
     private AssemblyFactory assemblyFactory;
     private EJBImplementationFactory implementationFactory;
     private Monitor monitor;
@@ -72,7 +75,7 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
     private JavaEEOptionalExtension jeeOptionalExtension;
     private JavaImplementationFactory javaImplementationFactory;
     private JavaInterfaceFactory javaInterfaceFactory;
-    
+
     public EJBImplementationProcessor(ModelFactoryExtensionPoint modelFactories, Monitor monitor) {
         this.assemblyFactory = modelFactories.getFactory(AssemblyFactory.class);
         this.implementationFactory = modelFactories.getFactory(EJBImplementationFactory.class);
@@ -86,7 +89,7 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
         javaImplementationFactory.addClassVisitor(new PropertyProcessor(assemblyFactory));
         javaImplementationFactory.addClassVisitor(new ServiceProcessor(assemblyFactory, javaInterfaceFactory));
     }
-    
+
     /**
      * Report a error.
      *
@@ -112,7 +115,7 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
     }
 
     public EJBImplementation read(XMLStreamReader reader) throws ContributionReadException, XMLStreamException {
-        
+
         // Read an <implementation.ejb> element
         EJBImplementation implementation = implementationFactory.createEJBImplementation();
         implementation.setUnresolved(true);
@@ -121,8 +124,8 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
         String ejbLink = getString(reader, "ejb-link");
         if (ejbLink != null) {
             implementation.setEJBLink(ejbLink);
-            
-            // Set the URI of the component type 
+
+            // Set the URI of the component type
             //implementation.setURI(ejbLink.replace('#', '/'));
             int hashPosition = ejbLink.indexOf('#');
             if (hashPosition >= 0) {
@@ -140,12 +143,12 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
                 break;
             }
         }
-        
+
         return implementation;
     }
 
     public void resolve(EJBImplementation implementation, ModelResolver resolver) throws ContributionResolveException {
-        
+
         // Resolve the component type
         String uri = implementation.getURI();
         String ejbLink = implementation.getEJBLink();
@@ -155,11 +158,11 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
             EjbModuleInfo ejbModuleInfo = new EjbModuleInfoImpl();
             ejbModuleInfo.setUri(URI.create(module));
             ejbModuleInfo = resolver.resolveModel(EjbModuleInfo.class, ejbModuleInfo);
-            
+
             if(jeeExtension != null) {
                 ComponentType ct = jeeExtension.createImplementationEjbComponentType(ejbModuleInfo, beanName);
                 // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
-                //        ct is null if there is no EJBInfo 
+                //        ct is null if there is no EJBInfo
                 if (ct != null){
                     implementation.getServices().addAll(ct.getServices());
                 }
@@ -168,46 +171,54 @@ public class EJBImplementationProcessor extends BaseStAXArtifactProcessor implem
             if(jeeOptionalExtension != null) {
                 ComponentType ct = jeeOptionalExtension.createImplementationEjbComponentType(ejbModuleInfo, beanName);
                 // TODO - SL - TUSCANY-2944 - these new JEE processors are causing problems with existing contributions
-                //              ct is null if there is no EJBInfo  
+                //              ct is null if there is no EJBInfo
                 if (ct != null){
                     implementation.getReferences().addAll(ct.getReferences());
                     implementation.getProperties().addAll(ct.getProperties());
                 }
             }
 
-            // Introspection of bean class
-            Class<?> beanClass = ejbModuleInfo.getEjbInfo(uri).beanClass;
-            try {
-                JavaImplementation ji = javaImplementationFactory.createJavaImplementation(beanClass);
-                implementation.getReferences().addAll(ji.getReferences());
-                implementation.getProperties().addAll(ji.getProperties());
-                implementation.getServices().addAll(ji.getServices());
-            } catch (IntrospectionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            EjbInfo ejbInfo = ejbModuleInfo.getEjbInfo(uri);
+            if (ejbInfo == null) {
+                // FIXME:
+                logger.severe("EJB " + uri + " is not found in the module");
+                // throw new ContributionResolveException("EJB " + uri + " is not found in the module");
+            } else {
+                // Introspection of bean class
+                Class<?> beanClass = ejbInfo.beanClass;
+                try {
+                    JavaImplementation ji = javaImplementationFactory.createJavaImplementation(beanClass);
+                    implementation.getReferences().addAll(ji.getReferences());
+                    implementation.getProperties().addAll(ji.getProperties());
+                    implementation.getServices().addAll(ji.getServices());
+                } catch (IntrospectionException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
-            
+
             // Process componentType side file
             ComponentType componentType = assemblyFactory.createComponentType();
             componentType.setURI(uri + ".componentType");
             componentType = resolver.resolveModel(ComponentType.class, componentType);
             if (!componentType.isUnresolved()) {
-                
+
                 // Initialize the implementation's services, references and properties
                 implementation.getServices().addAll(componentType.getServices());
                 implementation.getReferences().addAll(componentType.getReferences());
                 implementation.getProperties().addAll(componentType.getProperties());
             }
         }
+
         implementation.setUnresolved(false);
     }
 
     public void write(EJBImplementation implementation, XMLStreamWriter writer) throws ContributionWriteException, XMLStreamException {
-        
+
         // Write <implementation.ejb>
         writeStart(writer, IMPLEMENTATION_EJB.getNamespaceURI(), IMPLEMENTATION_EJB.getLocalPart(),
                                  new XAttr("ejb-link", implementation.getEJBLink()));
-        
+
         writeEnd(writer);
     }
 }
