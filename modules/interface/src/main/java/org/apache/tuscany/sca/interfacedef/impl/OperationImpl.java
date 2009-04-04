@@ -289,14 +289,14 @@ public class OperationImpl implements Operation {
      * @return the outputWrapperStyle
      */
     public boolean isOutputWrapperStyle() {
-        return inputWrapperStyle;
+        return outputWrapperStyle;
     }
 
     /**
      * @param outputWrapperStyle the wrapperStyle to set
      */
     public void setOutputWrapperStyle(boolean wrapperStyle) {
-        this.inputWrapperStyle = wrapperStyle;
+        this.outputWrapperStyle = wrapperStyle;
     }    
     
     // TODO - WI
