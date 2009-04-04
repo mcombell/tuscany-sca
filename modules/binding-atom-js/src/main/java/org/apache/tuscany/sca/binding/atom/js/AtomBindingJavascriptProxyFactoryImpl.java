@@ -28,7 +28,7 @@ import javax.xml.namespace.QName;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.binding.atom.AtomBinding;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
+import org.apache.tuscany.sca.web.javascript.JavascriptProxyFactory;
 
 public class AtomBindingJavascriptProxyFactoryImpl implements JavascriptProxyFactory {
     private static final QName NAME = new QName("http://tuscany.apache.org/xmlns/sca/1.0", "binding.atom");

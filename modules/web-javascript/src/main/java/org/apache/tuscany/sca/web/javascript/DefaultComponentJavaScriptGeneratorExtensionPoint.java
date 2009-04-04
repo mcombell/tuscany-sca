@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.core.web;
+package org.apache.tuscany.sca.web.javascript;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -73,7 +73,7 @@ public class DefaultComponentJavaScriptGeneratorExtensionPoint implements Compon
     */
     private void error(String message, Object model, Exception ex) {
         if (monitor != null) {
-            Problem problem = new ProblemImpl(this.getClass().getName(), "core-web-validation-messages", Severity.ERROR, model, message, ex);
+            Problem problem = new ProblemImpl(this.getClass().getName(), "web-javascript-validation-messages", Severity.ERROR, model, message, ex);
             monitor.problem(problem);
         }        
     }

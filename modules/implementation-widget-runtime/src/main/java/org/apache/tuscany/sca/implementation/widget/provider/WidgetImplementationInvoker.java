@@ -27,10 +27,10 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
 import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.invocation.Message;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.web.javascript.ComponentJavaScriptGenerator;
 
 
 /**

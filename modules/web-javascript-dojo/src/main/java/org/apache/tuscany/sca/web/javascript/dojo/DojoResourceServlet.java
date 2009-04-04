@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.core.web.dojo;
+package org.apache.tuscany.sca.web.javascript.dojo;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -19,14 +19,14 @@
 package org.apache.tuscany.sca.implementation.widget.provider;
 
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
-import org.apache.tuscany.sca.core.web.ComponentJavaScriptGeneratorExtensionPoint;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.host.http.ServletHostExtensionPoint;
 import org.apache.tuscany.sca.implementation.widget.WidgetImplementation;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.provider.ImplementationProviderFactory;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.web.javascript.ComponentJavaScriptGenerator;
+import org.apache.tuscany.sca.web.javascript.ComponentJavaScriptGeneratorExtensionPoint;
 
 /**
  * The model representing a resource implementation in an SCA assembly model.

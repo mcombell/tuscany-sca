@@ -23,7 +23,6 @@ import java.net.URI;
 import javax.servlet.Servlet;
 
 import org.apache.tuscany.sca.assembly.ComponentService;
-import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
 import org.apache.tuscany.sca.host.http.ServletHost;
 import org.apache.tuscany.sca.implementation.widget.WidgetImplementation;
 import org.apache.tuscany.sca.interfacedef.Operation;
@@ -31,6 +30,7 @@ import org.apache.tuscany.sca.invocation.Invoker;
 import org.apache.tuscany.sca.provider.ImplementationProvider;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 import org.apache.tuscany.sca.runtime.RuntimeComponentService;
+import org.apache.tuscany.sca.web.javascript.ComponentJavaScriptGenerator;
 
 
 /**

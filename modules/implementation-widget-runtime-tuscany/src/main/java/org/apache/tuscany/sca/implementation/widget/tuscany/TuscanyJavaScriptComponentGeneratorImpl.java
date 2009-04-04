@@ -31,10 +31,10 @@ import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentProperty;
 import org.apache.tuscany.sca.assembly.ComponentReference;
 import org.apache.tuscany.sca.core.ExtensionPointRegistry;
-import org.apache.tuscany.sca.core.web.ComponentJavaScriptGenerator;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.web.javascript.ComponentJavaScriptGenerator;
+import org.apache.tuscany.sca.web.javascript.JavascriptProxyFactory;
+import org.apache.tuscany.sca.web.javascript.JavascriptProxyFactoryExtensionPoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

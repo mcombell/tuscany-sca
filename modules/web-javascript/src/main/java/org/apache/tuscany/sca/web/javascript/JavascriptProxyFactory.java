@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.core.web;
+package org.apache.tuscany.sca.web.javascript;
 
 import java.io.IOException;
 import java.io.InputStream;

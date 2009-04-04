@@ -32,16 +32,16 @@ import java.util.Map;
 import org.apache.tuscany.sca.assembly.Binding;
 import org.apache.tuscany.sca.assembly.ComponentProperty;
 import org.apache.tuscany.sca.assembly.ComponentReference;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactory;
-import org.apache.tuscany.sca.core.web.JavascriptProxyFactoryExtensionPoint;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
+import org.apache.tuscany.sca.web.javascript.JavascriptProxyFactory;
+import org.apache.tuscany.sca.web.javascript.JavascriptProxyFactoryExtensionPoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * This helper class concatenates the necessary JavaScript client code into a
  * single JavaScript per component
- * @version $Rev: 665897 $ $Date: 2008-06-09 14:31:03 -0700 (Mon, 09 Jun 2008) $
+ * @version $Rev$ $Date$
  */
 public class WidgetComponentScriptGenerator {
     
