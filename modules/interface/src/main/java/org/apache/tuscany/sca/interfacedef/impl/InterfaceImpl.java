@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 package org.apache.tuscany.sca.interfacedef.impl;
 
@@ -32,7 +32,7 @@ import org.apache.tuscany.sca.policy.PolicySet;
 
 /**
  * Represents a service interface.
- * 
+ *
  * @version $Rev$ $Date$
  */
 public class InterfaceImpl implements Interface {
@@ -151,9 +151,9 @@ public class InterfaceImpl implements Interface {
 
                     }
                 }
-                
+
                 if (op.isInputWrapperStyle()) {
-                    WrapperInfo inputWrapperInfo = op.getInputWrapper();                   
+                    WrapperInfo inputWrapperInfo = op.getInputWrapper();
                     if (inputWrapperInfo != null) {
                         DataType<List<DataType>> unwrappedInputType = inputWrapperInfo.getUnwrappedInputType();
                         if (unwrappedInputType != null) {
@@ -165,7 +165,7 @@ public class InterfaceImpl implements Interface {
                         }
                     }
                 }
-                
+
                 if (op.isOutputWrapperStyle()) {
                     WrapperInfo outputWrapperInfo = op.getOutputWrapper();
                     if (outputWrapperInfo != null){
@@ -186,28 +186,28 @@ public class InterfaceImpl implements Interface {
             dataType.setDataBinding(dataBinding);
         }
     }
-    
+
     public void resetInterfaceInputTypes(Interface newInterface){
         for (int i = 0; i < getOperations().size(); i++) {
-            // only remote interfaces only have a data type model defined  
+            // only remote interfaces only have a data type model defined
             // and in this case operations cannot be overloaded so match
             // operations by name
             Operation oldOperation = getOperations().get(i);
             Operation newOperation = null;
-            
+
             for (Operation tmpOperation : newInterface.getOperations()){
                 if (tmpOperation.getName().equals(oldOperation.getName())){
                     newOperation = tmpOperation;
                 }
             }
-            
+
             if (newOperation == null){
                 break;
             }
-                      
+
             // set input types
             oldOperation.setInputType(newOperation.getInputType());
-            
+
             // set wrapper
             if (newOperation.isInputWrapperStyle()) {
                 oldOperation.setInputWrapperStyle(true);
@@ -215,33 +215,34 @@ public class InterfaceImpl implements Interface {
             }
         }
     }
-    
+
     public void resetInterfaceOutputTypes(Interface newInterface){
         for (int i = 0; i < getOperations().size(); i++) {
-            // only remote interfaces only have a data type model defined  
+            // only remote interfaces only have a data type model defined
             // and in this case operations cannot be overloaded so match
             // operations by name
             Operation oldOperation = getOperations().get(i);
             Operation newOperation = null;
-            
+
             for (Operation tmpOperation : newInterface.getOperations()){
                 if (tmpOperation.getName().equals(oldOperation.getName())){
                     newOperation = tmpOperation;
                 }
             }
-            
+
             if (newOperation == null){
                 break;
             }
-            
+
             // set output types
             oldOperation.setOutputType(newOperation.getOutputType());
-            
+
             // set fault types
             oldOperation.setFaultTypes(newOperation.getFaultTypes());
-            
+
             // set wrapper
             if (newOperation.isOutputWrapperStyle()) {
+                oldOperation.setOutputWrapperStyle(true);
                 oldOperation.setOutputWrapper(newOperation.getOutputWrapper());
             }
         }
@@ -267,9 +268,9 @@ public class InterfaceImpl implements Interface {
                     setDataBinding((DataType) d.getLogical(), dataBinding);
                 }
             }
-            
+
             if (op.isInputWrapperStyle()) {
-                WrapperInfo inputWrapperInfo = op.getInputWrapper();               
+                WrapperInfo inputWrapperInfo = op.getInputWrapper();
                 if (inputWrapperInfo != null) {
                     DataType<List<DataType>> unwrappedInputType = inputWrapperInfo.getUnwrappedInputType();
                     if (unwrappedInputType != null) {
@@ -279,7 +280,7 @@ public class InterfaceImpl implements Interface {
                     }
                 }
             }
-                
+
             if (op.isOutputWrapperStyle()) {
                 WrapperInfo outputWrapperInfo = op.getOutputWrapper();
                 if (outputWrapperInfo != null){
@@ -295,7 +296,7 @@ public class InterfaceImpl implements Interface {
     public boolean isDynamic() {
         return false;
     }
-    
+
     public List<PolicySet> getApplicablePolicySets() {
         return applicablePolicySets;
     }
