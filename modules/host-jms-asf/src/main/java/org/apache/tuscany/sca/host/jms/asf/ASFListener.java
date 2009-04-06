@@ -113,7 +113,7 @@ public class ASFListener implements JMSServiceListener {
             consumer.setMessageListener(listener);
             jmsResourceFactory.startConnection();
 
-        } catch (javax.jms.IllegalStateException e) {
+        } catch (javax.jms.JMSException e) {
 
             // setMessageListener not allowed in JEE container so use Tuscany threads
 
