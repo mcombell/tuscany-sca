@@ -25,10 +25,12 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.tuscany.sca.contribution.Contribution;
 import org.apache.tuscany.sca.contribution.Export;
@@ -57,7 +59,10 @@ public class ContributionClassLoader extends URLClassLoader {
         if (contribution.getLocation() != null) {
             try {
                 this.addURL(new URL(contribution.getLocation()));
-            } catch (MalformedURLException e) {
+                for (URL url : ContributionHelper.getNestedJarUrls(contribution)) {
+                    this.addURL(url);
+                }
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

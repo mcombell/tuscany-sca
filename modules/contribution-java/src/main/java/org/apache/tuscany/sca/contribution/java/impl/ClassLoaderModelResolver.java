@@ -55,8 +55,15 @@ public class ClassLoaderModelResolver extends URLClassLoader implements ModelRes
         return parentClassLoader;
     }
     
-    public ClassLoaderModelResolver(final Contribution contribution, ModelFactoryExtensionPoint modelFactories) throws MalformedURLException {
-        super(new URL[] {new URL(contribution.getLocation())}, parentClassLoader());
+    private static URL[] getContributionURLs(final Contribution contribution) throws IOException {
+        List<URL> urls = new ArrayList<URL>();
+        urls.add(new URL(contribution.getLocation()));
+        urls.addAll(ContributionHelper.getNestedJarUrls(contribution));
+        return urls.toArray(new URL[urls.size()]);
+    }
+
+    public ClassLoaderModelResolver(final Contribution contribution, ModelFactoryExtensionPoint modelFactories) throws IOException {
+        super(getContributionURLs(contribution), parentClassLoader());
         this.contribution = contribution;
         
         // Index Java import resolvers by package name
