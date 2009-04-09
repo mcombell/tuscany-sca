@@ -357,7 +357,13 @@ class AtomBindingInvoker implements Invoker {
                 if (status == 200) {
                     Document<Feed> doc = abderaParser.parse(new InputStreamReader(getMethod.getResponseBodyAsStream()));
                     parsing = true;
-                    Feed feed = doc.getRoot();
+                    
+                    Feed feed = null;
+                    try {
+                       feed = doc.getRoot();
+                    } catch(Exception e) {
+                        throw new IllegalArgumentException("Invalid feed format :" + uri);
+                    }
 
                     if (provider.supportsFeedEntries()) {
                         
