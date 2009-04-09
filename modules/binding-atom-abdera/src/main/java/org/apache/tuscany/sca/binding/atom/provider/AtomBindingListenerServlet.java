@@ -168,9 +168,11 @@ class AtomBindingListenerServlet extends HttpServlet {
         // System.out.println( "AtomBindingListener.doGet cache context=" + cacheContext );
 
         // Get the request path
-        int servletPathLength = request.getContextPath().length() + request.getServletPath().length();
-        String path = URLDecoder.decode(request.getRequestURI().substring(servletPathLength), "UTF-8");
+        //int servletPathLength = request.getContextPath().length() + request.getServletPath().length();
+        //String path = URLDecoder.decode(request.getRequestURI().substring(servletPathLength), "UTF-8");
 
+        String path = URLDecoder.decode(getRequestPath(request), "UTF-8");
+        
         logger.fine("get " + request.getRequestURI());
 
         // Handle an Atom request
@@ -548,7 +550,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getServletPath().length() + request.getContextPath().length()), "UTF-8");
+        String path = URLDecoder.decode(getRequestPath(request), "UTF-8");
 
         if (path == null || path.length() == 0 || path.equals("/")) {
             org.apache.abdera.model.Entry createdFeedEntry = null;
@@ -673,7 +675,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = request.getRequestURI().substring(request.getServletPath().length());
+        String path = URLDecoder.decode(getRequestPath(request), "UTF-8");
 
         if (path != null && path.startsWith("/")) {
             String id = path.substring(1);
@@ -760,7 +762,7 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
 
         // Get the request path
-        String path = URLDecoder.decode(request.getRequestURI().substring(request.getContextPath().length() + request.getServletPath().length()), "UTF-8");
+        String path = URLDecoder.decode(getRequestPath(request), "UTF-8");
 
         String id;
         if (path != null && path.startsWith("/")) {
@@ -783,6 +785,26 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
     }
 
+    
+    /**
+     * 
+     * @param request
+     * @return
+     */
+    private static String getRequestPath(HttpServletRequest request) {
+        // Get the request path
+        String contextPath = request.getContextPath();
+        String servletPath = request.getServletPath();
+        String requestURI = request.getRequestURI();
+        
+        int contextPathLength = request.getContextPath().length();
+        int servletPathLenght = servletPath.contains(contextPath) ? servletPath.length() - contextPath.length() : servletPath.length();
+        
+        String requestPath = requestURI.substring(contextPathLength + servletPathLenght);
+        
+        return requestPath;
+    }
+    
     /**
      * Process the authorization header
      * 
@@ -851,7 +873,7 @@ class AtomBindingListenerServlet extends HttpServlet {
      * @param acceptType content-type preference using application/atom-xml as default
      * @return
      */
-    public static String getContentPreference( String acceptType ) {
+    private static String getContentPreference( String acceptType ) {
         if (( acceptType == null ) || ( acceptType.length() < 1 )) {
             return "application/atom+xml";    		
         }
@@ -867,7 +889,7 @@ class AtomBindingListenerServlet extends HttpServlet {
      * @param response
      * @param properties
      */
-    public static void addPropertiesToHeader( HttpServletResponse response, String properties  ) {
+    private static void addPropertiesToHeader( HttpServletResponse response, String properties  ) {
         if ( properties == null ) return; 
         StringTokenizer props = new StringTokenizer( properties, ",");
         while( props.hasMoreTokens()) {
@@ -885,4 +907,5 @@ class AtomBindingListenerServlet extends HttpServlet {
         }
     }
 
+    
 }
