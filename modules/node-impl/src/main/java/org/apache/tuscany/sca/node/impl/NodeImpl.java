@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
@@ -175,7 +176,9 @@ public class NodeImpl implements SCANode, SCAClient {
         logger.log(Level.INFO, "Creating node: " + configurationName);
 
         if (compositeURI != null) {
-            URI uri = URI.create(compositeURI);
+            //URI uri = URI.create(compositeURI);
+            URI uri = createURI(compositeURI);
+            
             if (uri.isAbsolute()) {
                 throw new IllegalArgumentException("Composite URI must be a resource name: " + compositeURI);
             }
@@ -264,10 +267,12 @@ public class NodeImpl implements SCANode, SCAClient {
         try {
             String url = contributionArtifactURL.toExternalForm();
             String protocol = contributionArtifactURL.getProtocol();
+            String escapedContributionArtifactPath = new URI(null, contributionArtifactPath, null).toASCIIString();
+            
             if ("file".equals(protocol)) {
                 // directory contribution
-                if (url.endsWith(contributionArtifactPath)) {
-                    final String location = url.substring(0, url.lastIndexOf(contributionArtifactPath));
+                if (url.endsWith(escapedContributionArtifactPath)) {
+                    final String location = url.substring(0, url.lastIndexOf(escapedContributionArtifactPath));
                     // workaround from evil URL/URI form Maven
                     // contributionURL = FileHelper.toFile(new URL(location)).toURI().toURL();
                     // Allow privileged access to open URL stream. Add FilePermission to added to
@@ -309,6 +314,8 @@ public class NodeImpl implements SCANode, SCAClient {
             }
         } catch (MalformedURLException mfe) {
             throw new IllegalArgumentException(mfe);
+        } catch (URISyntaxException use) {
+            throw new IllegalArgumentException(use);
         }
         return contributionURL;
     }
