@@ -89,7 +89,11 @@ public class FolderContributionProcessor implements PackageProcessor {
                 if (uri.endsWith("/")) {
                     uri = uri.substring(0, uri.length() - 1);
                 }
-                fileList.add(URI.create(uri));
+                try {
+                    fileList.add(new URI(null, uri, null));
+                } catch (URISyntaxException e) {
+                    throw new IllegalArgumentException("Invalid artifact uri:" + uri);
+                }
 
                 // Allow privileged access to list files. Requires FilePermission in security
                 // policy.

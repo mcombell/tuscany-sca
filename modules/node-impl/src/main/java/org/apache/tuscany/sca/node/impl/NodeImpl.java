@@ -177,7 +177,12 @@ public class NodeImpl implements SCANode, SCAClient {
 
         if (compositeURI != null) {
             //URI uri = URI.create(compositeURI);
-            URI uri = createURI(compositeURI);
+            URI uri;
+            try {
+                uri = new URI(null, compositeURI, null);
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException("Invalid Composite URI: " + compositeURI, e);
+            }
             
             if (uri.isAbsolute()) {
                 throw new IllegalArgumentException("Composite URI must be a resource name: " + compositeURI);
