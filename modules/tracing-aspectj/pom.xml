@@ -7,15 +7,15 @@
     * to you under the Apache License, Version 2.0 (the
     * "License"); you may not use this file except in compliance
     * with the License.  You may obtain a copy of the License at
-    * 
+    *
     *   http://www.apache.org/licenses/LICENSE-2.0
-    * 
+    *
     * Unless required by applicable law or agreed to in writing,
     * software distributed under the License is distributed on an
     * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     * KIND, either express or implied.  See the License for the
     * specific language governing permissions and limitations
-    * under the License.    
+    * under the License.
 -->
 <project>
     <modelVersion>4.0.0</modelVersion>
@@ -31,17 +31,19 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.6.1</version>
+            <version>1.6.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjlib</artifactId>
-            <version>1.6.1</version>
+            <version>1.6.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.6.1</version>
+            <version>1.6.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -65,7 +67,7 @@
                                 <artifactItem>
                                     <groupId>org.aspectj</groupId>
                                     <artifactId>aspectjweaver</artifactId>
-                                    <version>1.6.1</version>
+                                    <version>1.6.2</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/dependency
@@ -75,7 +77,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>        
+            </plugin>
             <!-- surefire plugin configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -88,9 +90,9 @@
                     <reportFormat>brief</reportFormat>
                     <useFile>false</useFile>
                     <forkMode>once</forkMode>
-                        <!--  I hit a bug in maven-surefire-plugin 
+                        <!--  I hit a bug in maven-surefire-plugin
                         http://jira.codehaus.org/browse/SUREFIRE-128 -->
-                    <argLine>-ea -Xmx128m -javaagent:target/dependency/aspectjweaver-1.6.1.jar</argLine>
+                    <argLine>-ea -Xmx128m -javaagent:target/dependency/aspectjweaver-1.6.2.jar</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -103,6 +105,14 @@
                         <Bundle-Description>${pom.description}</Bundle-Description>
                         <Export-Package></Export-Package>
                     </instructions>
+                </configuration>
+            </plugin>
+            <!-- http://jira.codehaus.org/browse/MECLIPSE-544 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <ajdtVersion>none</ajdtVersion>
                 </configuration>
             </plugin>
         </plugins>
