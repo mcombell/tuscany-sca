@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -114,7 +115,11 @@ public class JarContributionProcessor implements PackageProcessor {
             // Return list of URIs
             List<URI> artifacts = new ArrayList<URI>();
             for (String name: names) {
-                artifacts.add(URI.create(name));
+                try {
+                    artifacts.add(new URI(null, name, null));
+                } catch (URISyntaxException e) {
+                    throw new IllegalArgumentException("Invalid artifact uri:" + name);
+                }
             }
             return artifacts;
             
