@@ -22,7 +22,6 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import account.Customer;
@@ -44,11 +43,12 @@ public class EJBReferenceTestCase {
 
         scaDomain = SCADomain.newInstance("account/account.composite");
 
-        // To capture the network traffic for the MockServer, uncomment the next line
-        // new Thread(new SocketTracer(MOCK_PORT, OPENEJB_PORT)).start();
+        // To capture the network traffic for the MockServer, uncomment the next two lines (A) and comment out B
+        // int OPENEJB_PORT = 4201; // A
+        // new Thread(new SocketTracer(MOCK_PORT, OPENEJB_PORT)).start(); // A
 
         // Start the mock server to simulate the remote EJB
-        new Thread(new MockServer(MOCK_PORT)).start();
+        new Thread(new MockServer(MOCK_PORT)).start(); // B
 
         // Wait enough for the server to be started
         Thread.sleep(500);
@@ -59,7 +59,6 @@ public class EJBReferenceTestCase {
         scaDomain.close();
     }
 
-    @Ignore("TUSCANY-2957")
     @Test
     public void testCalculator() throws Exception {
         Customer customer = scaDomain.getService(Customer.class, "CustomerComponent");
