@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.tuscany.sca.core.invocation;
@@ -23,12 +23,12 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.xml.ws.Holder;
 
 import org.apache.tuscany.sca.core.assembly.RuntimeWireImpl;
 import org.apache.tuscany.sca.core.context.CallableReferenceImpl;
@@ -59,10 +59,6 @@ import org.osoa.sca.CallableReference;
 import org.osoa.sca.ConversationEndedException;
 import org.osoa.sca.ServiceReference;
 import org.osoa.sca.ServiceRuntimeException;
-
-import java.util.Iterator;
-import javax.xml.ws.Holder;
-
 
 /**
  * @version $Rev$ $Date$
@@ -156,22 +152,21 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
             throw new IllegalArgumentException("No matching operation is found: " + method);
         }
 
-        // Holder pattern. Items stored in a Holder<T> are promoted to T.
-        // After the invoke, the returned data <T> are placed back in Holder<T>.
-        Object [] promotedArgs = promoteHolderArgs( args );
-        
-        Object result = invoke(chain, promotedArgs, wire, source);
+        Object result = invoke(chain, args, wire, source);
 
-        // Returned Holder data <T> are placed back in Holder<T>.
-        Class [] parameters = method.getParameterTypes();
-        if ( parameters != null ) {
-            for ( int i = 0; i < parameters.length; i++ ) {
-               Class parameterType = parameters[ i ];              
-               if ( isHolder( parameterType ) ) {
-                  // Pop results and place in holder (demote).
-                  Holder holder = (Holder) args[ i ]; 
-                  holder.value = result;
-               }            
+        Operation operation = chain.getTargetOperation();
+        if (operation != null && operation.getInterface().isRemotable()) {
+            // Returned Holder data <T> are placed back in Holder<T>.
+            Class<?>[] parameters = method.getParameterTypes();
+            if (parameters != null) {
+                for (int i = 0; i < parameters.length; i++) {
+                    Class<?> parameterType = parameters[i];
+                    if (Holder.class == parameterType) {
+                        // Pop results and place in holder (demote).
+                        Holder holder = (Holder)args[i];
+                        holder.value = result;
+                    }
+                }
             }
         }
 
@@ -205,7 +200,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
 
     /**
      * Determines if the given operation matches the given method
-     * 
+     *
      * @return true if the operation matches, false if does not
      */
     // FIXME: Should it be in the InterfaceContractMapper?
@@ -226,7 +221,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
             }
         }
 
-        // For remotable interface, operation is not overloaded. 
+        // For remotable interface, operation is not overloaded.
         if (operation.getInterface().isRemotable()) {
             return true;
         }
@@ -284,7 +279,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
     }
 
     protected Object invoke(InvocationChain chain, Object[] args, RuntimeWire wire, EndpointReference source)
-                         throws Throwable {
+        throws Throwable {
         Message msg = messageFactory.createMessage();
         msg.setFrom(source);
         if (target != null) {
@@ -294,9 +289,15 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
         }
         Invoker headInvoker = chain.getHeadInvoker();
         Operation operation = chain.getTargetOperation();
-        
-        msg.setOperation(operation);       
-        msg.setBody( args );
+
+        msg.setOperation(operation);
+
+        // Holder pattern. Items stored in a Holder<T> are promoted to T.
+        // After the invoke, the returned data <T> are placed back in Holder<T>.
+        if (operation != null && operation.getInterface().isRemotable()) {
+            args = promoteHolderArgs(args);
+        }
+        msg.setBody(args);
 
         Message msgContext = ThreadMessageContext.getMessageContext();
         Object currentConversationID = msgContext.getFrom().getReferenceParameters().getConversationID();
@@ -311,23 +312,23 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
             Object body = resp.getBody();
             if (resp.isFault()) {
                 // mark the conversation as ended if the exception is not a business exception
-                if (currentConversationID != null ){
+                if (currentConversationID != null) {
                     try {
                         boolean businessException = false;
-                        
-                        for (DataType dataType : operation.getFaultTypes()){
-                            if (dataType.getPhysical() == ((Throwable)body).getClass()){
+
+                        for (DataType dataType : operation.getFaultTypes()) {
+                            if (dataType.getPhysical() == ((Throwable)body).getClass()) {
                                 businessException = true;
                                 break;
                             }
                         }
-                        
-                        if (businessException == false){
+
+                        if (businessException == false) {
                             abnormalEndConversation = true;
                         }
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         // TODO - sure what the best course of action is here. We have
-                        //        a system exception in the middle of a business exception 
+                        //        a system exception in the middle of a business exception
                     }
                 }
                 throw (Throwable)body;
@@ -356,7 +357,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
         parameters.setCallbackReference(msg.getFrom().getCallbackEndpoint());
 
         // If we are passing out a callback target
-        // register the calling component instance against this 
+        // register the calling component instance against this
         // new conversation id so that stateful callbacks will be
         // able to find it
         Object callbackObject = getCallbackObject();
@@ -383,7 +384,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
                     } else {
                         if (!(callbackObject instanceof Serializable)) {
                             throw new IllegalArgumentException(
-                                          "Callback object for stateful callback is not Serializable");
+                                                               "Callback object for stateful callback is not Serializable");
                         }
                         ScopeContainer scopeContainer = getConversationalScopeContainer(wire);
                         if (scopeContainer != null) {
@@ -413,25 +414,25 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
         if (conversation == null || conversation.getState() == ConversationState.ENDED) {
 
             conversation = conversationManager.startConversation(getConversationID());
-            
-            // if this is a local wire then set up the conversation timeouts here based on the 
+
+            // if this is a local wire then set up the conversation timeouts here based on the
             // parameters from the component
-            if (wire.getTarget().getComponent() != null){
+            if (wire.getTarget().getComponent() != null) {
                 conversation.initializeConversationAttributes(wire.getTarget().getComponent());
             }
-            
+
             // connect the conversation to the CallableReference so it can be retrieve in the future
             if (callableReference != null) {
                 ((CallableReferenceImpl)callableReference).attachConversation(conversation);
             }
         } else if (conversation.isExpired()) {
-            throw new ConversationEndedException("Conversation " +  conversation.getConversationID() + " has expired.");
+            throw new ConversationEndedException("Conversation " + conversation.getConversationID() + " has expired.");
         }
 
         // if this is a local wire then schedule conversation timeouts based on the timeout
         // parameters from the service implementation. If this isn't a local wire then
         // the RuntimeWireInvoker will take care of this
-        if (wire.getTarget().getComponent() != null){
+        if (wire.getTarget().getComponent() != null) {
             conversation.updateLastReferencedTime();
         }
 
@@ -447,14 +448,13 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
      */
     @SuppressWarnings("unchecked")
     private void conversationPostInvoke(Message msg, RuntimeWire wire, boolean abnormalEndConversation)
-                     throws TargetDestructionException {
+        throws TargetDestructionException {
         Operation operation = msg.getOperation();
         ConversationSequence sequence = operation.getConversationSequence();
         // We check that conversation has not already ended as there is only one
-        // conversation manager in the runtime and so, in the case of remote bindings, 
+        // conversation manager in the runtime and so, in the case of remote bindings,
         // the conversation will already have been stopped when we get back to the client
-        if ((sequence == ConversationSequence.CONVERSATION_END || abnormalEndConversation) &&
-            (conversation.getState() != ConversationState.ENDED)) {
+        if ((sequence == ConversationSequence.CONVERSATION_END || abnormalEndConversation) && (conversation.getState() != ConversationState.ENDED)) {
 
             // remove conversation id from scope container
             ScopeContainer scopeContainer = getConversationalScopeContainer(wire);
@@ -486,7 +486,7 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
 
     /**
      * Creates a new conversation id
-     * 
+     *
      * @return the conversation id
      */
     private Object createConversationID() {
@@ -536,58 +536,40 @@ public class JDKInvocationHandler implements InvocationHandler, Serializable {
 
     }
 
-    
     /**
      * Creates a copy of arguments. Holder<T> values are promoted to T.
      * Note. It is essential that arg Holders not be destroyed here.
      * PromotedArgs should not destroy holders. They are used on response return.
      * @param args containing Holders and other objects.
-     * @return Object [] 
+     * @return Object []
      */
-    protected static Object [] promoteHolderArgs( Object [] args ) {
-       if ( args == null )
-           return args;
-       Object [] promotedArgs = new Object[ args.length ];
-       
-       for ( int i = 0; i < args.length; i++ ) {
-          Object argument = args[ i ];
-          if ( argument != null ) {
-              if ( isHolder( argument ) ) {
-                 promotedArgs[ i ] = ((Holder)argument).value;      
-              } else {
-                 promotedArgs[ i ] = args[ i ];
-              }
-              
-          }
-       }
-       return promotedArgs;
-    }
+    protected static Object[] promoteHolderArgs(Object[] args) {
+        if (args == null)
+            return args;
 
-    /**
-     * Given a Class, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
-     * @param testClass
-     * @return boolean whether class is Holder type.
-     */
-    protected static boolean isHolder( Class testClass ) {
-        if ( testClass.getName().startsWith( "javax.xml.ws.Holder" )) {
-            return true;
+        Object[] promotedArgs = new Object[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            Object argument = args[i];
+            if (argument != null) {
+                if (isHolder(argument)) {
+                    promotedArgs[i] = ((Holder)argument).value;
+                } else {
+                    promotedArgs[i] = args[i];
+                }
+
+            }
         }
-        return false;        
+        return promotedArgs;
     }
 
-     
     /**
      * Given an Object, tells if it is a Holder by comparing to "javax.xml.ws.Holder"
      * @param testClass
      * @return boolean stating whether Object is a Holder type.
      */
-    protected static boolean isHolder( Object object ) {
-        String objectName = object.getClass().getName();
-        if ( object instanceof javax.xml.ws.Holder ) {
-            return true;
-        }
-        return false;        
+    protected static boolean isHolder(Object object) {
+        return Holder.class.isInstance(object);
     }
-
 
 }
