@@ -22,31 +22,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import junit.framework.Assert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.apache.tuscany.sca.host.embedded.SCADomain;
-import org.apache.tuscany.sca.binding.atom.collection.Collection;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Service;
+import org.apache.abdera.parser.Parser;
 import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.parser.Parser;
+import org.apache.tuscany.sca.binding.atom.collection.Collection;
+import org.apache.tuscany.sca.host.embedded.SCADomain;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests use of service documents provided by atom binding based collections.

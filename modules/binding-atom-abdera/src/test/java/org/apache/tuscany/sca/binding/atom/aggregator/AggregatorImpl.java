@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.data.collection;
+package org.apache.tuscany.sca.binding.atom.aggregator;
 
 import java.util.ArrayList;
 import java.util.List;

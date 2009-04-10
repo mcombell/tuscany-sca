@@ -22,29 +22,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import junit.framework.Assert;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.apache.tuscany.sca.binding.atom.collection.Collection;
-import org.apache.tuscany.sca.host.embedded.SCADomain;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.model.Base;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Service;
-import org.apache.abdera.protocol.Response.ResponseType;
+import org.apache.abdera.parser.Parser;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
-import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.parser.Parser;
+import org.apache.tuscany.sca.host.embedded.SCADomain;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests use of server provided entry entity tags for Atom binding in Tuscany.

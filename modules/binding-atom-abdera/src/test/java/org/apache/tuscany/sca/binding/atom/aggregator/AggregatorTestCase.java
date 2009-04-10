@@ -17,10 +17,12 @@
  * under the License.    
  */
 
-package org.apache.tuscany.sca.data.collection;
+package org.apache.tuscany.sca.binding.atom.aggregator;
 
 import java.net.Socket;
 
+import org.apache.tuscany.sca.data.collection.Entry;
+import org.apache.tuscany.sca.data.collection.Item;
 import org.apache.tuscany.sca.host.embedded.SCADomain;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -35,7 +37,7 @@ public class AggregatorTestCase {
 
     @BeforeClass
     public static void init() throws Exception {
-        domain = SCADomain.newInstance("org/apache/tuscany/sca/data/collection/FeedAggregator.composite");
+        domain = SCADomain.newInstance("org/apache/tuscany/sca/binding/atom/aggregator/FeedAggregator.composite");
         Assert.assertNotNull(domain);
         aggregatorService = domain.getService(Aggregator.class, "AtomAggregator");
         Assert.assertNotNull(aggregatorService);
@@ -54,6 +56,7 @@ public class AggregatorTestCase {
     }
     
     @Ignore("TUSCANY-2939")
+    //@Test
     public void testAggregator() throws Exception {
         Entry<String, Item>[] entries = aggregatorService.getAll();
         
