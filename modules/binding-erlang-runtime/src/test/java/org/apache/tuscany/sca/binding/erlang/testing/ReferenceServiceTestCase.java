@@ -130,7 +130,7 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		String testResult = mboxReference.sendArgs(strArg);
-		assertEquals(strArg, ((OtpErlangString) mboxListener.getMsg().getMsg())
+		assertEquals(strArg, ((OtpErlangString) mboxListener.getMsg())
 				.stringValue());
 		assertEquals(strResult, testResult);
 	}
@@ -148,8 +148,8 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		boolean testResult = mboxReference.sendArgs(booleanArg);
-		assertEquals(booleanArg, ((OtpErlangAtom) mboxListener.getMsg()
-				.getMsg()).booleanValue());
+		assertEquals(booleanArg, ((OtpErlangAtom) mboxListener.getMsg())
+				.booleanValue());
 		assertEquals(booleanResult, testResult);
 	}
 
@@ -166,8 +166,8 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		float testResult = mboxReference.sendArgs(floatArg);
-		assertEquals(floatArg, ((OtpErlangDouble) mboxListener.getMsg()
-				.getMsg()).doubleValue(), 0);
+		assertEquals(floatArg, ((OtpErlangDouble) mboxListener.getMsg())
+				.doubleValue(), 0);
 		assertEquals(floatResult, testResult, 0);
 	}
 
@@ -184,8 +184,8 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		double testResult = mboxReference.sendArgs(doubleArg);
-		assertEquals(doubleArg, ((OtpErlangDouble) mboxListener.getMsg()
-				.getMsg()).doubleValue(), 0);
+		assertEquals(doubleArg, ((OtpErlangDouble) mboxListener.getMsg())
+				.doubleValue(), 0);
 		assertEquals(doubleResult, testResult, 0);
 	}
 
@@ -202,7 +202,7 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		long testResult = mboxReference.sendArgs(longArg);
-		assertEquals(longArg, ((OtpErlangLong) mboxListener.getMsg().getMsg())
+		assertEquals(longArg, ((OtpErlangLong) mboxListener.getMsg())
 				.longValue(), 0);
 		assertEquals(longResult, testResult, 0);
 	}
@@ -220,8 +220,8 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		int testResult = mboxReference.sendArgs(intArg);
-		assertEquals(intArg, ((OtpErlangLong) mboxListener.getMsg().getMsg())
-				.intValue(), 0);
+		assertEquals(intArg,
+				((OtpErlangLong) mboxListener.getMsg()).intValue(), 0);
 		assertEquals(intResult, testResult, 0);
 	}
 
@@ -238,7 +238,7 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		char testResult = mboxReference.sendArgs(charArg);
-		assertEquals(charArg, ((OtpErlangLong) mboxListener.getMsg().getMsg())
+		assertEquals(charArg, ((OtpErlangLong) mboxListener.getMsg())
 				.charValue(), 0);
 		assertEquals(charResult, testResult, 0);
 	}
@@ -256,7 +256,7 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		short testResult = mboxReference.sendArgs(shortArg);
-		assertEquals(shortArg, ((OtpErlangLong) mboxListener.getMsg().getMsg())
+		assertEquals(shortArg, ((OtpErlangLong) mboxListener.getMsg())
 				.shortValue(), 0);
 		assertEquals(shortResult, testResult, 0);
 	}
@@ -274,7 +274,7 @@ public class ReferenceServiceTestCase {
 		Thread mboxThread = new Thread(mboxListener);
 		mboxThread.start();
 		byte testResult = mboxReference.sendArgs(byteArg);
-		assertEquals(byteArg, ((OtpErlangLong) mboxListener.getMsg().getMsg())
+		assertEquals(byteArg, ((OtpErlangLong) mboxListener.getMsg())
 				.byteValue(), 0);
 		assertEquals(byteResult, testResult, 0);
 	}
@@ -293,10 +293,10 @@ public class ReferenceServiceTestCase {
 		int testInt = 10;
 		mboxReference.sendArgs(testInt, testString);
 		assertEquals(testInt, ((OtpErlangLong) ((OtpErlangTuple) mboxListener
-				.getMsg().getMsg()).elementAt(0)).longValue());
+				.getMsg()).elementAt(0)).longValue());
 		assertEquals(testString,
-				((OtpErlangString) ((OtpErlangTuple) mboxListener.getMsg()
-						.getMsg()).elementAt(1)).stringValue());
+				((OtpErlangString) ((OtpErlangTuple) mboxListener.getMsg())
+						.elementAt(1)).stringValue());
 	}
 
 	/**
@@ -321,8 +321,7 @@ public class ReferenceServiceTestCase {
 		testArg.arg1.arg2 = "Arg2b";
 		StructuredTuple testResult = mboxReference.sendArgs(testArg);
 		assertEquals(tupleResult, testResult);
-		OtpErlangTuple received = (OtpErlangTuple) mboxListener.getMsg()
-				.getMsg();
+		OtpErlangTuple received = (OtpErlangTuple) mboxListener.getMsg();
 		assertEquals(testArg.arg1.arg1,
 				((OtpErlangLong) ((OtpErlangTuple) received.elementAt(0))
 						.elementAt(0)).longValue());
@@ -351,8 +350,7 @@ public class ReferenceServiceTestCase {
 		for (int i = 0; i < testArg.length; i++) {
 			assertEquals(testArg[i], testResult[i]);
 		}
-		OtpErlangBinary received = (OtpErlangBinary) mboxListener.getMsg()
-				.getMsg();
+		OtpErlangBinary received = (OtpErlangBinary) mboxListener.getMsg();
 		assertEquals(testArg.length, received.size());
 		for (int i = 0; i < testArg.length; i++) {
 			assertEquals(testArg[i], received.binaryValue()[i]);
@@ -375,7 +373,7 @@ public class ReferenceServiceTestCase {
 		for (int i = 0; i < testArg.length; i++) {
 			assertEquals(testArg[i], testResult[i]);
 		}
-		OtpErlangList received = (OtpErlangList) mboxListener.getMsg().getMsg();
+		OtpErlangList received = (OtpErlangList) mboxListener.getMsg();
 		assertEquals(testArg.length, received.arity());
 		for (int i = 0; i < testArg.length; i++) {
 			assertEquals(testArg[i], ((OtpErlangString) received.elementAt(i))
@@ -402,7 +400,7 @@ public class ReferenceServiceTestCase {
 				assertEquals(testArg[i][j], testResult[i][j]);
 			}
 		}
-		OtpErlangList received = (OtpErlangList) mboxListener.getMsg().getMsg();
+		OtpErlangList received = (OtpErlangList) mboxListener.getMsg();
 		assertEquals(testArg.length, received.arity());
 		for (int i = 0; i < testArg.length; i++) {
 			for (int j = 0; j < testArg[i].length; j++) {
@@ -631,19 +629,22 @@ public class ReferenceServiceTestCase {
 			assertEquals(ErlangException.class, e.getClass());
 		}
 	}
-	
+
 	/**
 	 * Tests mbox with retrieving and answering with basic arguments
 	 * 
 	 * @throws Exception
 	 */
-	@Test(timeout = 1000)
+	@Test(timeout = 2000)
 	public void testMbox() throws Exception {
 		OtpErlangObject[] args = new OtpErlangObject[2];
 		args[0] = new OtpErlangString("world");
 		args[1] = new OtpErlangString("!");
 		OtpErlangTuple tuple = new OtpErlangTuple(args);
-		refMbox.send("sayHello", "RPCServerMbox", tuple);
+		OtpErlangObject[] argsWithSender = new OtpErlangObject[2];
+		argsWithSender[0] = refMbox.self();
+		argsWithSender[1] = tuple;
+		refMbox.send("sayHello", "RPCServerMbox", new OtpErlangTuple(argsWithSender));
 		OtpErlangString result = (OtpErlangString) refMbox.receiveMsg()
 				.getMsg();
 		assertEquals("Hello world !", result.stringValue());
@@ -679,7 +680,10 @@ public class ReferenceServiceTestCase {
 		argsContent[0] = structuredTuple;
 		argsContent[1] = list;
 		OtpErlangTuple args = new OtpErlangTuple(argsContent);
-		refMbox.send("passComplexArgs", "RPCServerMbox", args);
+		OtpErlangObject[] withSender = new OtpErlangObject[2];
+		withSender[0] = refMbox.self();
+		withSender[1] = args;
+		refMbox.send("passComplexArgs", "RPCServerMbox", new OtpErlangTuple(withSender));
 		OtpErlangObject result = refMbox.receiveMsg().getMsg();
 		assertEquals(arg1,
 				((OtpErlangLong) ((OtpErlangTuple) ((OtpErlangTuple) result)
@@ -766,6 +770,7 @@ public class ReferenceServiceTestCase {
 
 	/**
 	 * Tests timeout feature for service side bindings
+	 * 
 	 * @throws Exception
 	 */
 	@Test(timeout = 4000)
@@ -811,5 +816,5 @@ public class ReferenceServiceTestCase {
 		cookieModuleReference.sayHellos();
 
 	}
-	
+
 }

@@ -81,9 +81,12 @@ public class ErlangInvoker implements Invoker {
 			}
 			tmpMbox = node.createMbox();
 			Object[] args = msg.getBody();
-			OtpErlangObject msgPayload = TypeHelpersProxy.toErlang(args);
+			// create and send msg with self pid in the beginning
+			OtpErlangObject[] argsArray = { tmpMbox.self(),
+					TypeHelpersProxy.toErlang(args) };
+			OtpErlangObject otpArgs = new OtpErlangTuple(argsArray);
 			tmpMbox.send(msg.getOperation().getName(), binding.getNode(),
-					msgPayload);
+					otpArgs);
 			if (msg.getOperation().getOutputType() != null) {
 				OtpMsg resultMsg = null;
 				if (binding.hasTimeout()) {
@@ -149,12 +152,8 @@ public class ErlangInvoker implements Invoker {
 				reportProblem(msg, e);
 				msg.setBody(null);
 			} else if (msg.getOperation().getOutputType() != null) {
-				if (result.getClass().equals(OtpErlangTuple.class)) {
-					OtpErlangObject resultBody = ((OtpErlangTuple) result)
-							.elementAt(1);
-					msg.setBody(TypeHelpersProxy.toJava(resultBody, msg
-							.getOperation().getOutputType().getPhysical()));
-				}
+				msg.setBody(TypeHelpersProxy.toJava(result, msg.getOperation()
+						.getOutputType().getPhysical()));
 			}
 		} catch (OtpAuthException e) {
 			// TODO: externalize message?

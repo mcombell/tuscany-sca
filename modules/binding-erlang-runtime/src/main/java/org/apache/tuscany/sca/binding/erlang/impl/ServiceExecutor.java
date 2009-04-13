@@ -43,9 +43,7 @@ import com.ericsson.otp.erlang.OtpErlangPid;
 import com.ericsson.otp.erlang.OtpErlangRef;
 import com.ericsson.otp.erlang.OtpErlangString;
 import com.ericsson.otp.erlang.OtpErlangTuple;
-import com.ericsson.otp.erlang.OtpMbox;
 import com.ericsson.otp.erlang.OtpMsg;
-import com.ericsson.otp.erlang.OtpNode;
 
 /**
  * @version $Rev$ $Date$
@@ -72,15 +70,16 @@ public class ServiceExecutor implements Runnable {
 	private void sendMessage(OtpConnection connection, OtpErlangPid pid,
 			OtpErlangRef ref, OtpErlangAtom head, OtpErlangObject message)
 			throws IOException {
-		OtpErlangTuple tResult = new OtpErlangTuple(new OtpErlangObject[] {
-				head, message });
+		OtpErlangObject tResult = null;
+		if (head != null) {
+			tResult = new OtpErlangTuple(
+					new OtpErlangObject[] { head, message });
+		} else {
+			tResult = message;
+		}
 		OtpErlangObject msg = null;
 		msg = new OtpErlangTuple(new OtpErlangObject[] { ref, tResult });
 		connection.send(pid, msg);
-	}
-
-	private String getResponseClientNodeName(OtpErlangPid pid) {
-		return "_response_connector_to_" + pid + System.currentTimeMillis();
 	}
 
 	private void handleRpc(OtpMsg msg) {
@@ -148,8 +147,8 @@ public class ServiceExecutor implements Runnable {
 							Object[] arrArg = new Object[] { result };
 							response = TypeHelpersProxy.toErlang(arrArg);
 						}
-						sendMessage(connection, senderPid, senderRef,
-								MessageHelper.ATOM_OK, response);
+						sendMessage(connection, senderPid, senderRef, null,
+								response);
 					} catch (Exception e) {
 						if ((e.getClass().equals(
 								InvocationTargetException.class) && e
@@ -207,8 +206,24 @@ public class ServiceExecutor implements Runnable {
 	private void handleMsg(OtpMsg msg) {
 		Operation matchedOperation = null;
 		Object args[] = null;
+		OtpErlangPid senderPid = null;
+		OtpErlangObject msgNoSender = null;
 		List<Operation> operations = groupedOperations.get(msg
 				.getRecipientName());
+		try {
+			if (msg.getMsg().getClass().equals(OtpErlangTuple.class)
+					&& (((OtpErlangTuple) msg.getMsg()).elementAt(0))
+							.getClass().equals(OtpErlangPid.class)) {
+				senderPid = (OtpErlangPid) ((OtpErlangTuple) msg.getMsg())
+						.elementAt(0);
+				msgNoSender = ((OtpErlangTuple) msg.getMsg()).elementAt(1);
+			} else {
+				msgNoSender = msg.getMsg();
+			}
+		} catch (Exception e) {
+
+		}
+
 		if (operations == null) {
 			// TODO: externalize message?
 			// NOTE: I assume in Erlang sender doesn't get confirmation so
@@ -224,7 +239,7 @@ public class ServiceExecutor implements Runnable {
 					forClasses[i] = iTypes.get(i).getPhysical();
 				}
 				try {
-					args = TypeHelpersProxy.toJavaAsArgs(msg.getMsg(),
+					args = TypeHelpersProxy.toJavaAsArgs(msgNoSender,
 							forClasses);
 					matchedOperation = operation;
 					break;
@@ -247,11 +262,12 @@ public class ServiceExecutor implements Runnable {
 						Object[] arrArg = new Object[] { result };
 						response = TypeHelpersProxy.toErlang(arrArg);
 					}
-					if (response != null) {
-						OtpNode node = new OtpNode(
-								getResponseClientNodeName(msg.getSenderPid()));
-						OtpMbox mbox = node.createMbox();
-						mbox.send(msg.getSenderPid(), response);
+					if (response != null && senderPid != null) {
+						connection.send(senderPid, response);
+					} else if (response != null && senderPid == null) {
+						// FIXME: cannot send reply - sender didn't provided
+						// pid. Use PID obtained by jinteface or log this error?
+						// connection.send(msg.getSenderPid(), response);
 					}
 				} catch (InvocationTargetException e) {
 					// FIXME: use linking feature? send some error?
@@ -262,17 +278,11 @@ public class ServiceExecutor implements Runnable {
 					e.printStackTrace();
 				}
 			} else {
-				try {
-					// TODO: externalize message?
-					// NOTE: don't send error message if mapping not found
-					logger.log(Level.WARNING,
-							"No mapping for such arguments in '"
-									+ msg.getRecipientName()
-									+ "' operation in '" + name
-									+ "' node. Recevied arguments: "
-									+ msg.getMsg());
-				} catch (OtpErlangDecodeException e) {
-				}
+				// TODO: externalize message?
+				// NOTE: don't send error message if mapping not found
+				logger.log(Level.WARNING, "No mapping for such arguments in '"
+						+ msg.getRecipientName() + "' operation in '" + name
+						+ "' node. Recevied arguments: " + msgNoSender);
 			}
 		}
 	}

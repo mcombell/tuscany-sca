@@ -21,6 +21,8 @@ package org.apache.tuscany.sca.binding.erlang.testing;
 
 import org.apache.tuscany.sca.binding.erlang.impl.types.TypeHelpersProxy;
 
+import com.ericsson.otp.erlang.OtpErlangObject;
+import com.ericsson.otp.erlang.OtpErlangTuple;
 import com.ericsson.otp.erlang.OtpMbox;
 import com.ericsson.otp.erlang.OtpMsg;
 
@@ -58,22 +60,27 @@ public class MboxListener implements Runnable {
 		}
 	}
 
-	public OtpMsg getMsg() {
-		// Sometimes clients tries to get message which isn't fully received.
-		// If so - give it more tries. This sometimes caused
-		// NullPointerException in
-		// ReferenceServiceTestCase.testMultipleArguments().
-		for (int i = 0; i < 3; i++) {
-			if (msg != null) {
-				return msg;
-			} else {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
+	public OtpErlangObject getMsg() {
+		try {
+			// Sometimes clients tries to get message which isn't fully
+			// received.
+			// If so - give it more tries. This sometimes caused
+			// NullPointerException in
+			// ReferenceServiceTestCase.testMultipleArguments().
+			for (int i = 0; i < 3; i++) {
+				if (msg != null) {
+					return ((OtpErlangTuple) msg.getMsg()).elementAt(1);
+				} else {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
 				}
 			}
-		}
-		return msg;
-	}
+			return msg.getMsg();
+		} catch (Exception e) {
 
+		}
+		return null;
+	}
 }
