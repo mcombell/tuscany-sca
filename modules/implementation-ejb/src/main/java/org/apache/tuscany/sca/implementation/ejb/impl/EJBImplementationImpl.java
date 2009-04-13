@@ -18,15 +18,13 @@
  */
 package org.apache.tuscany.sca.implementation.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.tuscany.sca.assembly.Component;
 import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
 import org.apache.tuscany.sca.assembly.builder.ComponentPreProcessor;
+import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 import org.apache.tuscany.sca.implementation.ejb.EJBImplementation;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
@@ -36,42 +34,28 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
  *
  * @version $Rev$ $Date$
  */
-class EJBImplementationImpl implements EJBImplementation, ComponentPreProcessor {
+class EJBImplementationImpl extends ImplementationImpl implements EJBImplementation, ComponentPreProcessor {
 
-    private List<Property> properties = new ArrayList<Property>(); 
-    private List<Service> services = new ArrayList<Service>(); 
-    private List<Reference> references = new ArrayList<Reference>(); 
     private String ejbLink;
-    private String uri;
-    private boolean unresolved;
 
     /**
      * Constructs a new EJB implementation.
      */
     EJBImplementationImpl() {
+        super();
     }
 
+    @Override
     public ConstrainingType getConstrainingType() {
         // The EJB implementation does not support constrainingTypes
         return null;
-    }
-
-    public List<Property> getProperties() {
-        return properties;
-    }
-
-    public List<Service> getServices() {
-        return services;
-    }
-    
-    public List<Reference> getReferences() {
-        return references;
     }
 
     public String getEJBLink() {
         return ejbLink;
     }
     
+    @Override
     public void setConstrainingType(ConstrainingType constrainingType) {
         // The EJB implementation does not support constrainingTypes
     }
@@ -80,22 +64,6 @@ class EJBImplementationImpl implements EJBImplementation, ComponentPreProcessor 
         this.ejbLink = ejbLink;
     }
     
-    public String getURI() {
-        return uri;
-    }
-    
-    public void setURI(String uri) {
-        this.uri = uri;
-    }
-    
-    public boolean isUnresolved() {
-        return unresolved;
-    }
-
-    public void setUnresolved(boolean unresolved) {
-        this.unresolved = unresolved;
-    }
-
     /**
      * Use preProcess to add any references and properties dynamically
      */

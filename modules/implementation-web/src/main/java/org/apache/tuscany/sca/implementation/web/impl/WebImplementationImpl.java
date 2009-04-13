@@ -18,16 +18,16 @@
  */
 package org.apache.tuscany.sca.implementation.web.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.tuscany.sca.assembly.ConstrainingType;
-import org.apache.tuscany.sca.assembly.builder.ComponentPreProcessor;
 import org.apache.tuscany.sca.assembly.Component;
+import org.apache.tuscany.sca.assembly.ConstrainingType;
 import org.apache.tuscany.sca.assembly.Property;
 import org.apache.tuscany.sca.assembly.Reference;
 import org.apache.tuscany.sca.assembly.Service;
+import org.apache.tuscany.sca.assembly.builder.ComponentPreProcessor;
+import org.apache.tuscany.sca.assembly.impl.ImplementationImpl;
 import org.apache.tuscany.sca.implementation.web.WebImplementation;
 import org.apache.tuscany.sca.runtime.RuntimeComponent;
 
@@ -35,57 +35,32 @@ import org.apache.tuscany.sca.runtime.RuntimeComponent;
 /**
  * The model representing an Web implementation in an SCA assembly model.
  */
-class WebImplementationImpl implements WebImplementation, ComponentPreProcessor {
+class WebImplementationImpl extends ImplementationImpl implements WebImplementation, ComponentPreProcessor {
 
-    private List<Property> properties = new ArrayList<Property>(); 
-    private List<Reference> references = new ArrayList<Reference>(); 
-    private String uri;
-    private boolean unresolved;
-    
     private String webURI;
 
     /**
      * Constructs a new Web implementation.
      */
     WebImplementationImpl() {
+        super();
     }
 
+    @Override
     public ConstrainingType getConstrainingType() {
         // The Web implementation does not support constrainingTypes
         return null;
     }
 
-    public List<Property> getProperties() {
-        return properties;
-    }
-
+    @Override
     public List<Service> getServices() {
         // The Web implementation does not offer services
         return Collections.emptyList();
     }
     
-    public List<Reference> getReferences() {
-        return references;
-    }
-
+    @Override
     public void setConstrainingType(ConstrainingType constrainingType) {
         // The Web implementation does not support constrainingTypes
-    }
-
-    public String getURI() {
-        return uri;
-    }
-    
-    public void setURI(String uri) {
-        this.uri = uri;
-    }
-    
-    public boolean isUnresolved() {
-        return unresolved;
-    }
-
-    public void setUnresolved(boolean unresolved) {
-        this.unresolved = unresolved;
     }
 
     public String getWebURI() {
