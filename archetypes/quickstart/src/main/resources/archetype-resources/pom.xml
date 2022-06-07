@@ -111,7 +111,7 @@
 	</build>
 	<properties>
 		<tuscany.version>2.0-SNAPSHOT</tuscany.version>
-		<jetty.version>6.1.4</jetty.version>
+		<jetty.version>6.1.17</jetty.version>
 	</properties>
 	#end
 </project>
